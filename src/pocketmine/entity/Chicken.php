@@ -41,6 +41,7 @@ class Chicken extends Animal{
 	}
 	
 	public function getDrops(){
+		$drops = [];
 		if ($this->lastDamageCause instanceof EntityDamageByEntityEvent and $this->lastDamageCause->getEntity() instanceof Player) {
 			
 				switch (\mt_rand(0, 2)) {
