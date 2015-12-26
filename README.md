@@ -1,6 +1,6 @@
 #Genisys / 创世纪
 * One Core to rule them ALL
-* This core is a modified version of PocketMine-MP made by DREAM STUDIO & iTX Technologies LLC.
+* This core is an unofficial version of PocketMine-MP made by DREAM STUDIO & iTX Technologies LLC.
 * DREAM STUDIO & iTX Technologies LLC. are both from China.
 
 #Features / 特性
@@ -40,7 +40,7 @@
 * Address:mcper.cn
 * Port: 666
 * 
-* Sao Gao Server
+* Sai Gao Server
 * Address: sgmcpe.com
 * Port: 100
 * 
