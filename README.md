@@ -1,11 +1,9 @@
-#OpenGenisys / 创世纪
+#Genisys / 创世纪
 * One Core to rule them ALL
-* Genisys is same to this version.
-* This core is a modified version of Pocketmine made by DREAM STUDIO&iTX Tech
-* DREAM STUDIO&iTX Tech are CHINESE TEAM.
-* Genisys内核由DREAM插件组&iTX Tech开发，基于Pocketmine.
+* This core is a modified version of PocketMine-MP made by DREAM STUDIO & iTX Technologies LLC.
+* DREAM STUDIO & iTX Technologies LLC. are both from China.
 
-#Feature / 特性
+#Features / 特性
 * Performance optimization(let 100+ players join in a server)
 * Bug fix in PM-MP
 * Weather
@@ -28,7 +26,7 @@
 * Hunger (Based on Katana)
 * AI (Based on MOW)
 
-#Servers / 测试服务器
+#Servers / 服务器
 * (In fact there are more than 80 servers in China using our core and most of them are better than us.Here are some servers set by us.)
 * Young Dream
 * Address: mcper.cn
@@ -53,4 +51,3 @@
 * Test Server
 * Address: mcper.cn
 * Port: 233
-* 
