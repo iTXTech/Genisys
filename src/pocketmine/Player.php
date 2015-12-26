@@ -2371,9 +2371,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				if($this->linkedEntity instanceof Entity){
 					$entity = $this->linkedEntity;
 					if($entity instanceof Boat){
-						$entity->x = $packet->x;
-						$entity->y = $packet->y;
-						$entity->z = $packet->z;
+						$entity->setPosition($this->temporalVector->setComponents($packet->x, $packet->y, $packet->z));
 					}
 					if($entity instanceof Minecart){
 						$entity->isFreeMoving = true;
