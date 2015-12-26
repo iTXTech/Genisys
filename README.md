@@ -1,11 +1,11 @@
-#OpenGenisys / ´´ÊÀ¼Í
+#OpenGenisys / åˆ›ä¸–çºª
 * One Core to rule them ALL
 * Genisys is same to this version.
 * This core is a modified version of Pocketmine made by DREAM STUDIO&iTX Tech
 * DREAM STUDIO&iTX Tech are CHINESE TEAM.
-* GenisysÄÚºËÓÉDREAM²å¼þ×é&iTX Tech¿ª·¢£¬»ùÓÚPocketmine.
+* Genisyså†…æ ¸ç”±DREAMæ’ä»¶ç»„&iTX Techå¼€å‘ï¼ŒåŸºäºŽPocketmine.
 
-#Feature / ÌØÐÔ
+#Feature / ç‰¹æ€§
 * Performance optimization(let 100+ players join in a server)
 * Bug fix in PM-MP
 * Weather
@@ -28,7 +28,7 @@
 * Hunger (Based on Katana)
 * AI (Based on MOW)
 
-#Servers / ²âÊÔ·þÎñÆ÷
+#Servers / æµ‹è¯•æœåŠ¡å™¨
 * (In fact there are more than 80 servers in China using our core and most of them are better than us.Here are some servers set by us.)
 * Young Dream
 * Address: mcper.cn
@@ -53,16 +53,4 @@
 * Test Server
 * Address: mcper.cn
 * Port: 233
-
-#For reselling this free core's People / °æÈ¨ÉùÃ÷
-* Copyright has become more and more important in the world, now in many countries, it is illegal for resell the open source tools, we hope that you can respect the results of the work of the author, please stop doing it, thanks.
-* Ìì³¯Ð¡Ñ§ÉúÄËÈË¼äÖ®º¦Ò²
-* ÊÛÇÒ±ÐÂè£¬ÈËÖ®³£ÇéÒ²
-* µ¹ÂôÖÇÕÏÄãÂè±©±Ð.    **(Do not translate it)**
-
-#!!!Hope you can focus on it / Ï£ÍûÄã¿ÉÒÔ¹Ø×¢Ëü!!! >_<
-* https://github.com/Nukkit/Nukkit
-* NUKKIT is a software for MCPE server in JAVA.As U know,it's high-performance.
-* The software architecture is similar to PM so that it's easy to develop.
-* Now it can work well with some plugins and keep updated frequently(even 10 times a day)
-* ¸øNK´ò¹ã¸æ£¬Ç°¾°ºÜºÃµÄÒ»¸ö·þÎñÆ÷Èí¼þ£¨ÊÂÊµÉÏÊÇ¹ú²ú£©£¬ÀíÂÛÉÏÀ´ËµÐ§ÂÊ±Èpm¸ßµÃ¶à£¬Èç¹ûÄã¹Ø×¢Ëü£¬Çëµã»÷Â¥ÉÏÁ´½Ó£¬¹Ø×¢°Ù¶ÈÌù°É=.=
+* 
