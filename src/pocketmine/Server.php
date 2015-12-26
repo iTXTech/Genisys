@@ -1651,19 +1651,6 @@ class Server{
 		$version = new VersionString($this->getPocketMineVersion());
 		$this->version = $version;
 
-		/*$this->aboutstring = "
-			§f* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-			§f*																   *
-			§f* §1* * * *	§2* * * *	§3* * * * *		 §5*			§6*	   *	§f*
-			§f* §1*	   *  §2*	  *   §3*				§5* *		  §6* *	 * *   §f*
-			§f* §1*	   *  §2*	  *   §3*			   §5*   *		§6*   *   *   *  §f*
-			§f* §1*	   *  §2* * * *	§3* * * * *	  §5* * * *	  §6*	 * *	 * §f*
-			§f* §1*	   *  §2*  *	   §3*			 §5*	   *	 §6*	  *	  * §f*
-			§f* §1*	   *  §2*	*	 §3*			§5*		 *	§6*			 * §f*
-			§f* §1* * * *	§2*	  *   §3* * * * *   §5*		   *   §6*			 * §f*
-			§f*																   *
-			§f* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-				§3PocketMine-iTX\n	版本：".$this->getPocketMineVersion()."\n	作者：".$this->getiTXAuthor()."\n	§3技术顾问：§eMentha Haplocalyx\n	§dPeratX QQ:1215714524 E-mail:wsa_01@126.com";*/
 
 		$this->aboutstring = "\n
 		   §5PocketMine-iTX §3Genisys §fis a fork of PocketMine-MP.
@@ -1672,7 +1659,7 @@ class Server{
 		   §fClient Version: §d0.13.1 alpha
 		   §fYou could get the lastest code on https://github.com/iTXTecho/Genisys
 		   §fDonate link: http://pl.zxda.net/plugins/203.html
-		   §f路过你在免费使用本核心，希望你可以进入上面的链接捐赠给我们，这会成为我们前进的动了。
+		   §f路过你在免费使用本核心，希望你可以进入上面的链接捐赠给我们，这会成为我们前进的动力。
 		\n";
 
 		$this->about();
