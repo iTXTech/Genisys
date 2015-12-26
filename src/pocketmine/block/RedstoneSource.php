@@ -1,0 +1,220 @@
+<?php
+/**
+ * Author: PeratX
+ * Time: 2015/12/13 8:34
+ * Copyright(C) 2011-2015 iTX Technologies LLC.
+ * All rights reserved.
+ */
+
+namespace pocketmine\block;
+
+use pocketmine\item\Item;
+use pocketmine\math\Vector3;
+
+/*
+ * This class is the power of all redstone blocks!
+ */
+
+class RedstoneSource extends Flowable{
+	protected $maxStrength = 15;
+	protected $activated = false;
+
+	public function __construct(){
+
+	}
+
+	public function getMaxStrength(){
+		return $this->maxStrength;
+	}
+
+	public function isActivated(){
+		return $this->activated;
+	}
+
+	public function canCalc(){
+		return $this->getLevel()->getServer()->redstoneEnabled;
+	}
+
+	public function activate(array $ignore = []){
+		if($this->canCalc()){
+			$this->activated = true;
+			/** @var Door $block */
+
+			$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH];
+
+			foreach($sides as $side){
+				if(!in_array($side, $ignore)){
+					$block = $this->getSide($side);
+					if(($block instanceof Door) or ($block instanceof Trapdoor)){
+						if(!$block->isOpened()) $block->onActivate(new Item(0));
+					}
+					if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
+					/** @var InactiveRedstoneLamp $block*/
+					if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn(true);
+					if($block->getId() == Block::REDSTONE_WIRE){
+						/** @var RedstoneWire $wire */
+						$wire = $block;
+						$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
+					}
+				}
+			}
+
+			if(!in_array(Vector3::SIDE_DOWN, $ignore)){
+				$block = $this->getSide(Vector3::SIDE_DOWN);
+				if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn(true);
+
+				$block = $this->getSide(Vector3::SIDE_DOWN, 2);
+				if(($block instanceof Door) or ($block instanceof Trapdoor)){
+					if(!$block->isOpened()) $block->onActivate(new Item(0));
+				}
+				if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
+				if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn();
+				if($block->getId() == Block::REDSTONE_WIRE){
+					/** @var RedstoneWire $wire */
+					$wire = $block;
+					$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
+				}
+			}
+		}
+	}
+
+	public function deactivate(array $ignore = []){
+		if($this->canCalc()){
+			$this->activated = false;
+			/** @var Door $block */
+
+			$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH];
+
+			foreach($sides as $side){
+				if(!in_array($side, $ignore)){
+					$block = $this->getSide($side);
+					if(!$this->checkPower($block)){
+						if(($block instanceof Door) or ($block instanceof Trapdoor)){
+							if($block->isOpened()) $block->onActivate(new Item(0));
+						}
+						/** @var ActiveRedstoneLamp $block*/
+						if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOff();
+					}
+					if($block->getId() == Block::REDSTONE_WIRE){
+						/** @var RedstoneWire $wire */
+						$wire = $block;
+						$wire->calcSignal(0, RedstoneWire::OFF);
+					}
+				}
+			}
+
+			if(!in_array(Vector3::SIDE_DOWN, $ignore)){
+				$block = $this->getSide(Vector3::SIDE_DOWN);
+				if(!$this->checkPower($block)){
+					if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOff();
+				}
+
+				$block = $this->getSide(Vector3::SIDE_DOWN, 2);
+				if(!$this->checkPower($block)){
+					if(($block instanceof Door) or ($block instanceof Trapdoor)){
+						if($block->isOpened()) $block->onActivate(new Item(0));
+					}
+					if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOff();
+				}
+				if($block->getId() == Block::REDSTONE_WIRE){
+					/** @var RedstoneWire $wire */
+					$wire = $block;
+					$wire->calcSignal(0, RedstoneWire::OFF);
+				}
+			}
+		}
+	}
+
+	public function isRightPlace(Vector3 $p, Vector3 $pos){
+		if($p->x == $pos->x and $p->y == $pos->y and $p->z == $pos->z) return true;
+		return false;
+	}
+
+	public function checkPower(Block $block, array $ignore = [], $ignoreWire = false){
+		$sides = [
+			Vector3::SIDE_EAST,
+			Vector3::SIDE_WEST,
+			Vector3::SIDE_SOUTH,
+			Vector3::SIDE_NORTH
+		];
+		foreach($sides as $side){
+			if(!in_array($side, $ignore)){
+				$pos = $block->getSide($side);
+				if($pos instanceof RedstoneSource){
+					if($pos->isActivated()){
+						if(($ignoreWire and $pos->getId() != self::REDSTONE_WIRE) or (!$ignoreWire and $pos->getId() != self::REDSTONE_WIRE)) return true;
+						if(!$ignoreWire and $pos->getId() == self::REDSTONE_WIRE){
+							/** @var RedstoneWire $pos */
+							$cb = $pos->getUnconnectedSide();
+							if(!$cb[0]) return false;
+							if($this->isRightPlace($this, $pos->getSide($cb[0]))) return true;
+						}
+					}
+				}
+			}
+		}
+
+		if($block->getId() == Block::ACTIVE_REDSTONE_LAMP and !in_array(Vector3::SIDE_UP, $ignore)){
+			$pos = $block->getSide(Vector3::SIDE_UP);
+			if($pos instanceof RedstoneSource and $pos->getId() != self::REDSTONE_TORCH){
+				if($pos->isActivated()) return true;
+			}
+		}
+
+		return false;
+	}
+
+
+	public function checkTorchOn(Block $pos, array $ignore = []){
+		$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP];
+		foreach($sides as $side){
+			if(!in_array($side, $ignore)){
+				/** @var RedstoneTorch $block */
+				$block = $pos->getSide($side);
+				if($block->getId() == self::REDSTONE_TORCH){
+					$faces = [
+							1 => 4,
+							2 => 5,
+							3 => 2,
+							4 => 3,
+							5 => 0,
+							6 => 0,
+							0 => 0,
+					];
+					if($this->isRightPlace($block->getSide($faces[$block->meta]), $pos)){
+						$block->turnOff();
+					}
+				}
+			}
+		}
+	}
+
+	public function checkTorchOff(Block $pos, array $ignore = []){
+		$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP];
+		foreach($sides as $side){
+			if(!in_array($side, $ignore)){
+				/** @var RedstoneTorch $block */
+				$block = $pos->getSide($side);
+				if($block->getId() == self::UNLIT_REDSTONE_TORCH){
+					$faces = [
+							1 => 4,
+							2 => 5,
+							3 => 2,
+							4 => 3,
+							5 => 0,
+							6 => 0,
+							0 => 0,
+					];
+					if($this->isRightPlace($block->getSide($faces[$block->meta]), $pos)){
+						$block->turnOn();
+					}
+				}
+			}
+		}
+	}
+
+	public function getStrength(){
+		if($this->isActivated()) return $this->maxStrength;
+		return 0;
+	}
+}
