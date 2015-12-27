@@ -25,24 +25,8 @@ namespace pocketmine\wizard;
 class InstallerLang{
 	public static $languages = [
 		"en" => "English",
-		"es" => "Español",
-		"zh" => "中文",
-		"ru" => "Pyccĸий",
-		"ja" => "日本語",
-		"de" => "Deutsch",
-		//"vi" => "Tiếng Việt",
-		"ko" => "한국어",
-		"nl" => "Nederlands",
-		"fr" => "Français",
-		"it" => "Italiano",
-		//"lv" => "Latviešu",
-		"ms" => "Melayu",
-		"no" => "Norsk",
-		//"pt" => "Português",
-		"sv" => "Svenska",
-		"fi" => "Suomi",
-		"tr" => "Türkçe",
-		//"et" => "Eesti",
+		"zh_CN" => "简体中文",
+		"zh_TW" => "繁體中文",
 	];
 	private $texts = [];
 	private $lang;
