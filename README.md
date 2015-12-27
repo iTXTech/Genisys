@@ -21,10 +21,18 @@
 * Better Crafting
 * Better Invenory
 * More Items
-* Furnace Fixed
 * Supported 0.13.1 skin format
 * Hunger (Based on Katana)
 * AI (Based on MOW)
+
+#TODO List
+* Make brewing stand works
+* Make EnchantTable works
+* Improve Minecart and Boat
+* Add a new AI for all creatures
+* Improve Nether Generator
+* Add Tripwire Hook
+* Improve Potions
 
 #Servers / 服务器
 * (In fact there are more than 80 servers in China using our core and most of them are better than us.Here are some servers set by us.)
