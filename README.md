@@ -36,6 +36,7 @@
 * Improve Nether Generator
 * Add Tripwire Hook
 * Improve Potions
+* Make it can run with PHP7
 
 #Servers / 服务器
 * (In fact there are more than 80 servers in China using our core and most of them are better than us.Here are some servers set by us.)
