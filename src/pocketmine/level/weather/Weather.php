@@ -7,6 +7,7 @@
 // This file is created by Zzm and modified by PeratX
 namespace pocketmine\level\weather;
 
+use pocketmine\event\level\WeatherChangeEvent;
 use pocketmine\level\Level;
 use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\Player;
@@ -39,13 +40,27 @@ class Weather{
 		if($this->weatherTime >= $this->level->getServer()->weatherChangeTime){
 			$this->weatherTime = 0;
 			//0晴天1下雨2雷雨3阴天雷
-			$this->weatherNow = $this->wea[mt_rand(0, count($this->wea) - 1)];
-			$this->strength1 = mt_rand(90000, 110000);
-			$this->strength2 = mt_rand(5000, 30000);
-			$this->changeWeather($this->weatherNow, $this->strength1, $this->strength2);
+			$weather = $this->wea[mt_rand(0, count($this->wea) - 1)];
+			$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $weather));
+			if(!$ev->isCancelled()){
+				return;
+			}else{
+				$this->weatherNow = $ev->getWeather();
+				$this->strength1 = mt_rand(90000, 110000);
+				$this->strength2 = mt_rand(5000, 30000);
+				$this->changeWeather($this->weatherNow, $this->strength1, $this->strength2);
+			}
 		}
 		if($this->weatherLast >= $this->level->getServer()->weatherLastTime and $this->level->getServer()->weatherLastTime > 0){
-			$this->changeWeather(0, 0, 0);
+			$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, 0));
+			if(!$ev->isCancelled()){
+				return;
+			}else{
+				$this->weatherNow = $ev->getWeather();
+				$this->strength1 = 0;
+				$this->strength2 = 0;
+				$this->changeWeather($this->weatherNow, $this->strength1, $this->strength2);
+			}
 		}
 		if(($this->weatherNow > 0) and is_int($this->weatherTime / $this->level->getServer()->lightningTime)){
 			foreach($this->level->getPlayers() as $p){

@@ -3859,11 +3859,17 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->server->broadcast($ev->getDeathMessage(), Server::BROADCAST_CHANNEL_USERS);
 		}
 
+		$pos = $this->getSpawn();
+
+		if($this->server->netherEnabled){
+			if($this->level == $this->server->netherLevel){
+				$this->teleport($pos = $this->server->getDefaultLevel()->getSafeSpawn());
+			}
+		}
 
 		$this->setHealth(0);
 
 		$pk = new RespawnPacket();
-		$pos = $this->getSpawn();
 		$pk->x = $pos->x;
 		$pk->y = $pos->y;
 		$pk->z = $pos->z;
