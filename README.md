@@ -4,7 +4,7 @@
 * DREAM STUDIO & iTX Technologies LLC. are both from China.
 
 #Jenkins CI / 自动构建的phar
-<a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">Click Here/点击这里下载</a>
+<a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">Click Here/点击这里进入自动构建页</a>
 
 #Features / 特性
 * Performance optimization(let 100+ players join in a server)
