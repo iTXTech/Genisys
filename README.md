@@ -2,7 +2,8 @@
 * One Core to rule them ALL
 * This core is an unofficial version of PocketMine-MP made by DREAM STUDIO & iTX Technologies LLC.
 * DREAM STUDIO & iTX Technologies LLC. are both from China.
-
+#Jenkins CI / 自动构建的phar
+ <a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">ClickHere/点击这里下载</a>
 #Features / 特性
 * Performance optimization(let 100+ players join in a server)
 * Bug fix in PM-MP
