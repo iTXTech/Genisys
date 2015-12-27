@@ -1801,7 +1801,7 @@ class Server{
 				$this->getCodename(),
 				$this->getApiVersion()
 		]));
-		//$this->logger->info($this->getLanguage()->translateString("pocketmine.server.license", [$this->getName()]));
+		$this->logger->info($this->getLanguage()->translateString("pocketmine.server.license", [$this->getName()]));
 
 		Timings::init();
 
