@@ -1663,7 +1663,7 @@ class Server{
 		   Â§fClient Version: Â§d0.13.1 alpha
 		   Â§fYou could get the lastest code on https://github.com/iTXTecho/Genisys
 		   Â§fDonate link: http://pl.zxda.net/plugins/203.html
-		   Â§få¦æä½ å¨åè²»ä½¿ç¨æ¬æ ¸å¿ï¼å¸æä½ å¯ä»¥é²å¥ä¸é¢çéæ¥æè´çµ¦æåï¼éææçºæååé²çååã
+		   Â§få¦æä½ å¨åè´¹ä½¿ç¨æ¬æ ¸å¿ï¼å¸æä½ å¯ä»¥è¿å¥ä¸é¢çé¾æ¥æèµ ç»æä»¬ï¼è¿ä¼æä¸ºæä»¬åè¿çå¨åã
 		\n";
 
 		$this->about();
@@ -1905,7 +1905,7 @@ class Server{
 
 		if($this->netherEnabled){
 			if(!$this->loadLevel($this->netherName)){
-				//$this->logger->info("æ­£å¨çæå°ç ".$this->netherName);
+				//$this->logger->info("æ­£å¨çæå°ç± ".$this->netherName);
 				$this->generateLevel($this->netherName, time(), Generator::getGenerator("nether"));
 			}
 			$this->netherLevel = $this->getLevelByName($this->netherName);
