@@ -327,6 +327,10 @@ class Server{
 	public $allowCraftingPotion = false;
 	public $redstoneEnabled = false;
 	public $anviletEnabled = false;
+	
+	public function getProgramName(){
+		return "Genisys";
+	}
 
 	/**
 	 * @return string
@@ -1653,13 +1657,13 @@ class Server{
 
 
 		$this->aboutstring = "\n
-		   §5PocketMine-iTX §3Genisys §fis a fork of PocketMine-MP.
-		   Powered by §5iTX Technologies LLC.
-		   §fVersion: §6" . $this->getPocketMineVersion() . "
-		   §fClient Version: §d0.13.1 alpha
-		   §fYou could get the lastest code on https://github.com/iTXTecho/Genisys
-		   §fDonate link: http://pl.zxda.net/plugins/203.html
-		   §f如果你在免费使用本核心，希望你可以进入上面的链接捐赠给我们，这会成为我们前进的动力。
+		   Â§5PocketMine-iTX Â§3Genisys Â§fis a fork of PocketMine-MP.
+		   Powered by Â§5iTX Technologies LLC.
+		   Â§fVersion: Â§6" . $this->getPocketMineVersion() . "
+		   Â§fClient Version: Â§d0.13.1 alpha
+		   Â§fYou could get the lastest code on https://github.com/iTXTecho/Genisys
+		   Â§fDonate link: http://pl.zxda.net/plugins/203.html
+		   Â§få¦æä½ å¨åè´¹ä½¿ç¨æ¬æ ¸å¿ï¼å¸æä½ å¯ä»¥è¿å¥ä¸é¢çé¾æ¥æèµ ç»æä»¬ï¼è¿ä¼æä¸ºæä»¬åè¿çå¨åã
 		\n";
 
 		$this->about();
@@ -1901,7 +1905,7 @@ class Server{
 
 		if($this->netherEnabled){
 			if(!$this->loadLevel($this->netherName)){
-				//$this->logger->info("正在生成地狱 ".$this->netherName);
+				//$this->logger->info("æ­£å¨çæå°ç± ".$this->netherName);
 				$this->generateLevel($this->netherName, time(), Generator::getGenerator("nether"));
 			}
 			$this->netherLevel = $this->getLevelByName($this->netherName);
