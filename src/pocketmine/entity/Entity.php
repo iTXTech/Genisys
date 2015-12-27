@@ -1583,6 +1583,12 @@ abstract class Entity extends Location implements Metadatable{
 		return $this->setLinked(1, $entity);
 	}
 
+	public function sendLinkedData(){
+		if($this->linkedEntity instanceof Entity){
+			$this->setLinked($this->linkedType, $this->linkedEntity);
+		}
+	}
+
 	public function setLinked($type = 0, Entity $entity = null){
 		if($type != 0 and $entity === null){
 			return false;

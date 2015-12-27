@@ -229,6 +229,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 			$pk->metadata = $this->dataProperties;
 			$player->dataPacket($pk);
 
+			$this->sendLinkedData();
+
 			$this->inventory->sendArmorContents($player);
 
 			if(!($this instanceof Player)){

@@ -327,10 +327,6 @@ class Server{
 	public $allowCraftingPotion = false;
 	public $redstoneEnabled = false;
 	public $anviletEnabled = false;
-	
-	public function getProgramName(){
-		return "Genisys";
-	}
 
 	/**
 	 * @return string

@@ -378,7 +378,7 @@ class Level implements ChunkManager, Metadatable{
 		$this->temporalVector = new Vector3(0, 0, 0);
 		$this->tickRate = 1;
 
-		if($this->server->weatherEnabled and $this->folderName != $this->server->netherName) $this->weather = new Weather($this);
+		if(($this->server->weatherEnabled and $this->folderName != $this->server->netherName) or !$this->server->netherEnabled) $this->weather = new Weather($this);
 	}
 
 	public function getWeather(){
