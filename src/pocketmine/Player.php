@@ -3166,6 +3166,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					break;
 				}
 
+				/** @var Item $item */
 				foreach($packet->input as $i => $item){
 					if($item->getDamage() === -1 or $item->getDamage() === 0xffff){
 						$item->setDamage(null);
