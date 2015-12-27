@@ -1659,7 +1659,7 @@ class Server{
 		   §fClient Version: §d0.13.1 alpha
 		   §fYou could get the lastest code on https://github.com/iTXTecho/Genisys
 		   §fDonate link: http://pl.zxda.net/plugins/203.html
-		   §f路过你在免费使用本核心，希望你可以进入上面的链接捐赠给我们，这会成为我们前进的动力。
+		   §f如果你在免费使用本核心，希望你可以进入上面的链接捐赠给我们，这会成为我们前进的动力。
 		\n";
 
 		$this->about();
