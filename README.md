@@ -1,4 +1,6 @@
 #Genisys / 创世纪
+
+[![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * One Core to rule them ALL
 * This core is an unofficial version of PocketMine-MP made by DREAM STUDIO & iTX Technologies LLC.
 * DREAM STUDIO & iTX Technologies LLC. are both from China.
