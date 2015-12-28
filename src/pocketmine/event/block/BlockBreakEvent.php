@@ -45,6 +45,9 @@ class BlockBreakEvent extends BlockEvent implements Cancellable{
 		$this->player = $player;
 		$this->instaBreak = (bool) $instaBreak;
 		$drops = $player->isSurvival() ? $block->getDrops($item) : [];
+		if($drops!=null && is_numeric($drops[0]))
+		$this->blockDrops[] = Item::get($drops[0], $drops[1], $drops[2]);
+		else
 		foreach($drops as $i){
 			$this->blockDrops[] = Item::get($i[0], $i[1], $i[2]);
 		}

@@ -3235,6 +3235,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				/** @var Item[] $ingredients */
+				$canCraft=true ;//0.13.1大量物品本地配方出现问题,无法解决,使用极端(唯一)方法修复.
 				$ingredients = $packet->input;
 				$result = $packet->output[0];
 
