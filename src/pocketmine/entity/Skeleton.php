@@ -2,7 +2,6 @@
 
 namespace pocketmine\entity;
 
-use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 use pocketmine\network\protocol\MobEquipmentPacket;
@@ -39,7 +38,7 @@ class Skeleton extends Monster implements ProjectileSource{
 		
 		$pk = new MobEquipmentPacket();
 		$pk->eid = $this->getId();
-		$pk->item = new ItemItem(281);
+		$pk->item = new ItemItem(ItemItem::ARROW);
 		$pk->slot = 0;
 		$pk->selectedSlot = 0;
 
