@@ -8,9 +8,6 @@
 #Jenkins CI / 自动构建的phar
 <a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">Click Here / 点击这里进入自动构建页</a>
 
-#Gitter / 在线交流
-<a href="https://gitter.im/iTXTech/Genisys">Click Here / 点击这里加入交流</a>
-
 #Features / 特性
 * Performance optimization(let 100+ players join in a server)
 * Bug fix in PM-MP

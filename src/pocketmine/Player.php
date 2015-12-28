@@ -898,8 +898,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->teleport($pos);
 
 		$this->server->getPluginManager()->callEvent($ev = new PlayerJoinEvent($this, new TranslationContainer(TextFormat::YELLOW . "%multiplayer.player.joined", [
-				$this->getDisplayName()
-			])));
+			$this->getDisplayName()
+		])));
 		if(strlen(trim($ev->getJoinMessage())) > 0){
 			$this->server->broadcastMessage($ev->getJoinMessage());
 		}
@@ -1428,7 +1428,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		if($this->getServer()->redstoneEnabled){
-			/** @var \pocketmine\block\PressurePlate $block **/
+			/** @var \pocketmine\block\PressurePlate $block * */
 			foreach($this->activatedPressurePlates as $key => $block){
 				if(!isset($blocksaround[$key])) $block->checkActivation();
 			}
@@ -1727,15 +1727,15 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$this->teleport($this->shouldResPos = $this->server->netherLevel->getSafeSpawn());
 							//$this->shouldSendStatus = true;
 						}elseif($this->fromPos != null){
-						/*	$pk = new ChangeDimensionPacket();
-							$pk->dimension = ChangeDimensionPacket::NORMAL;
-							$this->dataPacket($pk);*/
+							/*	$pk = new ChangeDimensionPacket();
+								$pk->dimension = ChangeDimensionPacket::NORMAL;
+								$this->dataPacket($pk);*/
 
 							$this->teleport($this->shouldResPos = $this->fromPos->add(mt_rand(-5, 5), 0, mt_rand(-5, 5)));
 
 							$this->fromPos = null;
 
-						//	$this->shouldSendStatus = true;
+							//	$this->shouldSendStatus = true;
 						}else{
 							/*$pk = new ChangeDimensionPacket();
 							$pk->dimension = ChangeDimensionPacket::NORMAL;
@@ -3235,7 +3235,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				/** @var Item[] $ingredients */
-				$canCraft=true ;//0.13.1大量物品本地配方出现问题,无法解决,使用极端(唯一)方法修复.
+				$canCraft = true;//0.13.1大量物品本地配方出现问题,无法解决,使用极端(唯一)方法修复.
 				$ingredients = $packet->input;
 				$result = $packet->output[0];
 
