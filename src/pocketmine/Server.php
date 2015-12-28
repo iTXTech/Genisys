@@ -1581,7 +1581,7 @@ class Server{
 		];
 		$this->allowCraftingPotion = $this->getAdvancedProperty("server.allow-crafting-potion", false);
 		$this->redstoneEnabled = $this->getAdvancedProperty("server.allow-redstone", false);
-		$this->anviletEnabled = $this->getAdvancedProperty("allow-anvilandenchanttable", false);
+		$this->anviletEnabled = $this->getAdvancedProperty("server.allow-anvilandenchanttable", false);
 	}
 
 	public function getDServerMaxPlayers(){
