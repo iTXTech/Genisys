@@ -43,7 +43,8 @@
 * Make it can run with PHP7
 
 #Servers / 服务器
-* (In fact there are more than 80 servers in China using our core and most of them are better than us.Here are some servers set by us.)
+(In fact there are more than 80 servers in China using our core and most of them are better than us.Here are some servers set by us.)
+
 **Young Dream**<br>
 Address: **mcper.cn**
 Port: **19132**
