@@ -148,7 +148,8 @@ abstract class Tile extends Position{
 	 * @return \pocketmine\block\Block
 	 */
 	public function getBlock(){
-		return $this->level->getBlock($this);
+if($this->level->getBlock($this) == null){ return false;} else{
+		return $this->level->getBlock($this);}
 	}
 
 	public function onUpdate(){
