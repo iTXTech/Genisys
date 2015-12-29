@@ -133,7 +133,6 @@ ticks-per:
  monster-spawns: 1
  autosave: 6000
  cache-cleanup: 900
-
 spawn-limits:
   monsters: 70
   animals: 15

@@ -14,7 +14,7 @@ class WeatherCommand extends VanillaCommand{
 	public function __construct($name){
 		parent::__construct(
 			$name,
-			"设置天气",
+			"Set weather for level",
 			"/weather <level-name> <weather>"
 		);
 		$this->setPermission("pocketmine.command.weather");
@@ -26,50 +26,50 @@ class WeatherCommand extends VanillaCommand{
 
 			return false;
 		}
-		
+
 		if($sender instanceof Player){
-			$wea = (int) $args[0];
+			$wea = (int)$args[0];
 			if($wea >= 0 and $wea <= 3){
-				if(WeatherManager::isRegistered($sender->getLevel())) {
+				if(WeatherManager::isRegistered($sender->getLevel())){
 					$sender->getLevel()->getWeather()->setWeather($wea);
-					$sender->sendMessage(TextFormat::GREEN."天气设置成功！");
+					$sender->sendMessage(TextFormat::GREEN . "Weather changed successfully for " . $sender->getLevel()->getFolderName());
 					return true;
-				} else {
-					$sender->sendMessage(TextFormat::RED."这个世界没有注册到天气管理器！");
+				}else{
+					$sender->sendMessage(TextFormat::RED . $sender->getLevel()->getFolderName() . " hasn't registered to WeatherManager.");
 					return false;
 				}
-			} else {
-				$sender->sendMessage(TextFormat::RED."无效的天气！");
+			}else{
+				$sender->sendMessage(TextFormat::RED . "Invalid weather.");
 				return false;
 			}
 		}
-		
-		if(count($args) < 2) {
-			$sender->sendMessage(TextFormat::RED."缺少参数！");
+
+		if(count($args) < 2){
+			$sender->sendMessage(TextFormat::RED . "Wrong parameters.");
 			return false;
 		}
-		
+
 		$level = $sender->getServer()->getLevelByName($args[0]);
-		if(!$level instanceof Level) {
-			$sender->sendMessage(TextFormat::RED."错误的地图名！");
+		if(!$level instanceof Level){
+			$sender->sendMessage(TextFormat::RED . "Invalid level name.");
 			return false;
 		}
-		
-		$wea = (int) $args[1];
+
+		$wea = (int)$args[1];
 		if($wea >= 0 and $wea <= 3){
-			if(WeatherManager::isRegistered($level)) {
+			if(WeatherManager::isRegistered($level)){
 				$level->getWeather()->setWeather($wea);
-				$sender->sendMessage(TextFormat::GREEN."天气设置成功！");
+				$sender->sendMessage(TextFormat::GREEN . "Weather changed successfully for " . $level->getFolderName());
 				return true;
-			} else {
-				$sender->sendMessage(TextFormat::RED."这个世界没有注册到天气管理器！");
+			}else{
+				$sender->sendMessage(TextFormat::RED . $level->getFolderName() . " hasn't registered to WeatherManager.");
 				return false;
 			}
-		} else {
-			$sender->sendMessage(TextFormat::RED."无效的天气！");
+		}else{
+			$sender->sendMessage(TextFormat::RED . "Invalid weather.");
 			return false;
 		}
-		
+
 		return true;
 	}
 }

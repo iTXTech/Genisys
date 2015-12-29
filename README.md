@@ -29,6 +29,8 @@
 * Supported 0.13.1 skin format
 * Hunger (Based on Katana)
 * AI (Based on MOW)
+* More commands (bancid bancidbyname banipbyname ms extractplugin makeplugin pardoncid weather extractphar)
+* With FolderPluginLoader
 
 #TODO List
 * Make brewing stand works
@@ -45,23 +47,23 @@
 * Young Dream
 * Address: mcper.cn
 * Port: 19132
-* 
+
 * Young Dream - Survival
 * Address: mcper.cn
 * Port: 12345
-* 
+
 * Young Dream - Happy Town
 * Address:mcper.cn
 * Port: 666
-* 
+
 * Sai Gao Server
 * Address: sgmcpe.com
 * Port: 100
-* 
+
 * That the sky
 * Address: g.mcpe.cc
 * Port: 2333
-* 
+
 * Test Server
 * Address: mcper.cn
 * Port: 233
