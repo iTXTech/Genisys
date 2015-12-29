@@ -65,3 +65,7 @@
 * Test Server
 * Address: mcper.cn
 * Port: 233
+
+* Zhy WAC Survival Server
+* Address: umcpe.com
+* Port: 888
