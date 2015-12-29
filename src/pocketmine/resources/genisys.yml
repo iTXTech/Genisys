@@ -16,7 +16,7 @@ player:
  #Minimum health when someone is attacking by being hungry
  hunger-health: 10
  #Hunger Time-Counter，Default: 80=4sec
- hunger-timer: 80
+ hunger-timer: 3000
  #Choose if turn on the experience system
  experience: true
  #Choose if keep inventory when a player died
