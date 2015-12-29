@@ -1,101 +1,101 @@
-#PocketMine-iTX Genisys 的高级配置文件
+#The PocketMine-iTX Genisys Advanced YML Configuration File
 
 level:
- #设置是否变换天气
+ #Set if turn on the weather system
  weather: true
- #天气切换时间，默认5分钟
+ #Weather switch interval
  weather-change-time: 6000
- #天气持续时间，默认1分钟
+ #Weather Duration，default as 1 min
  weather-last-time: 1200
- #随机闪电间隔，默认10秒
+ #Random lightning interval，default as 10s
  lightning-time: 200
  
 player:
- #是否打开饥饿
+ #the switch of hunger system
  hunger: true
- #饥饿值扣血下限
+ #Minimum health when someone is attacking by being hungry
  hunger-health: 10
- #饥饿值计时器，默认80=4秒
+ #Hunger Time-Counter，Default: 80=4sec
  hunger-timer: 80
- #是否打开经验系统
+ #Choose if turn on the experience system
  experience: true
- #是否开启死亡不掉落
+ #Choose if keep inventory when a player died
  keep-inventory: false
- #背包格数
+ #The space of inventory
  inventory-num: 36
- #是否开启切换模式自动清除背包
- auto-clear-inventory: true
- #TODO: 是否开启死亡经验不掉落
+ #Clear the inventory automatically when change the gamemode into creative
+ auto-clear-inventory : true
+ #TODO: Choose if keep experience when a player died
  keep-experience: false
  
 nether:
- #是否允许地狱，打开此选项会自动生成地狱地图
+ #Choose if the nether's allowed,the level of nether will generate automatically
  allow-nether: false
- #地狱地图名
+ #The name of nether's level
  level-name: "nether"
  
 server:
- #经验数据预生成，0不启用
+ #Pregenerate the experience data，0=disabled
  experience-cache: 65535
- #是否允许生成铁傀儡
+ #Choose if spawning iron golem is allowed
  allow-iron-golem: false
- #是否允许生成雪傀儡
+ #Choose if spawning snow golem is allowed
  allow-snow-golem: false
- #是否允许合成药水
+ #Choose if crafting potion is allowed
  allow-crafting-potion: false
- #是否允许红石
+ #Choose if redstone system is allowed
  allow-redstone: false
- #是否允许铁砧和附魔台
+ #Choose if anvil and enchanttable are allowed
  allow-anvilandenchanttable: false
 
 dserver:
- #多服统统一人数
+ #The count of all multi-server unified
  enable: false
- #Query自动更新
+ #Query update automatically
  query-auto-update: false
- #Query周期更新
+ #Query update periodical
  query-tick-update: true
- #Motd最大人数，0为默认
+ #The max players' number of Motd
  motd-max-players: 0
- #Query最大人数，0为默认
+ #The max players' number of query，0=Default
  query-max-players: 0
- #Motd显示总人数
+ #Show the number of all players on motd
  motd-all-players: false
- #Query显示总人数
+ #Show the number of all players on Query
  query-all-players: false
- #Motd显示人数
+ #Show the number of online players on motd
  motd-players: false
- #Query显示人数
+ #Show the number of online players on Query
  query-players: false
- #更新频率，20 = 1秒
+ #Update Frequency ,20=1s
  time: 40
- #获取失败自动重试次数
+ #Auto-retry times when failed
  retry-times: 3
- #服务器列表，用;隔开，例如 a.cn:19132;b.cn:19132
+ #the server list，Separate by ';'，e.g. a.cn:19132;b.cn:19132
  server-list: ""
  
 ai:
- #AI总开关
+ #AI switch
  enable: false
- #僵尸的AI，0为关闭，1为1.0版AI，2为新AI（不完善）
+ #Zombie'AI，0=disabled，1=AI 1.0ver，2=new AI(Faultiness)
  zombie: 1
- #僵尸猪人的AI
+ #PigZombie's AI
  pigzombie: true
- #牛和哞菇的AI
+ #the AI of cow and mushroom cow
  cow: true
- #鸡的AI
+ #Chicken's AI
  chicken: true
- #羊的AI
+ #Sheep's AI
  sheep: true
- #猪的AI
+ #Pigs' AI
  pig: true
- #骷髅的AI
+ #Skeleton's AI
  skeleton: true
- #苦力怕的AI
+ #Creeper's AI
  creeper: true
- #铁傀儡的AI
+ #Iron golem's AI
  iron-golem: true
- #雪傀儡的AI
+ #Snow golem's AI
  snow-golem: true
- #苦力怕爆炸是否破坏方块
+ #Destory blocks if creeper exploded
  creeper-explode-destroy-block: false
