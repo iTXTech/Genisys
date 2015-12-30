@@ -4,6 +4,7 @@ namespace pocketmine\entity;
 
 
 use pocketmine\level\format\FullChunk;
+use pocketmine\level\particle\SpellParticle;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
@@ -48,7 +49,7 @@ class ThrownPotion extends Projectile{
 	}
 	
 	public function kill(){
-		$this->getLevel()->addParticle(new GenericParticle($this, 25, 5));
+		$this->getLevel()->addParticle(new SpellParticle($this, 165, 23, 65));
 		$players = $this->getViewers();
 		foreach($players as $p) {
 			if($p->distance($this) <= 6){
