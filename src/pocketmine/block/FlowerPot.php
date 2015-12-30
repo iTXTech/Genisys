@@ -88,7 +88,8 @@ class FlowerPot extends Flowable{
 						$this->setDamage($item->getId());
 						$this->getLevel()->setBlock($this, $this, true, false);
 						if($player->isSurvival()){
-							$item->count--;
+							$item->setCount($item->getCount() - 1);
+							$player->inventory->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
 						}
 						return true;
 						break;
@@ -100,7 +101,7 @@ class FlowerPot extends Flowable{
 
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
-			if($this->getSide(Vector3::SIDE_DOWN)->getId() === Item::AIR){
+			if($this->getSide(Vector3::SIDE_DOWN)->isTransparent()){
 				$this->getLevel()->useBreakOn($this);
 				return Level::BLOCK_UPDATE_NORMAL;
 			}
