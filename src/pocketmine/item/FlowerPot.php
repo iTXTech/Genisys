@@ -14,4 +14,8 @@ class FlowerPot extends Item {
 		$this->block = Block::get(Item::FLOWER_POT_BLOCK);
 		parent::__construct(self::FLOWER_POT, 0, $count, "Flower Pot");
 	}
+
+	public function getMaxStackSize(){
+		return 64;
+	}
 } 

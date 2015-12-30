@@ -641,6 +641,7 @@ class Item {
 			self::$list[self::QUARTZ] = Quartz::class;
 			//self::$list[self::CAMERA] = Camera::class;
 			self::$list[self::BEETROOT] = Beetroot::class;
+			self::$list[self::FLOWER_POT] = FlowerPot::class;
 
 			for ($i = 0; $i < 256; ++$i) {
 				if (Block::$list[$i] !== null) {
