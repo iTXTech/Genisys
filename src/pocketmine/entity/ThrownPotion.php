@@ -49,7 +49,8 @@ class ThrownPotion extends Projectile{
 	}
 	
 	public function kill(){
-		$this->getLevel()->addParticle(new SpellParticle($this, 165, 23, 65));
+		$color = Potion::getColor($this->getData());
+		$this->getLevel()->addParticle(new SpellParticle($this, $color[0], $color[1], $color[2]));
 		$players = $this->getViewers();
 		foreach($players as $p) {
 			if($p->distance($this) <= 6){

@@ -5,7 +5,7 @@ namespace pocketmine\entity;
 
 use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\tag\Compound;
-use pocketmine\network\Network;
+use pocketmine\level\particle\SpellParticle;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
@@ -41,6 +41,7 @@ class ThrownExpBottle extends Projectile{
 		if($this->onGround) {
 			$this->kill();
 			$this->close();
+			$this->getLevel()->addParticle(new SpellParticle($this, 46, 82, 153));
 			if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0,1,0), mt_rand(3,11));
 		}
 

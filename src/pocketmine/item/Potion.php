@@ -1,6 +1,8 @@
 <?php
 namespace pocketmine\item;
 
+use pocketmine\entity\Effect;
+
 class Potion extends Item{
 	
 	const WATER_BOTTLE = 0;
@@ -55,6 +57,43 @@ class Potion extends Item{
 	
 	public function __construct($meta = 0, $count = 1){
 		parent::__construct(self::POTION, $meta, $count, $this->getNameByMeta($meta));
+	}
+
+	public static function getColor($meta){
+		switch($meta){
+			case self::INVISIBILITY:
+			case self::INVISIBILITY_T:
+				return (Effect::getEffect(Effect::INVISIBILITY)->getColor());
+			case self::LEAPING:
+			case self::LEAPING_T:
+			case self::LEAPING_TWO:
+				return (Effect::getEffect(Effect::JUMP)->getColor());
+			case self::FIRE_RESISTANCE:
+			case self::FIRE_RESISTANCE_T:
+				return (Effect::getEffect(Effect::FIRE_RESISTANCE)->getColor());
+			case self::SPEED:
+			case self::SPEED_T:
+			case self::SPEED_TWO:
+				return (Effect::getEffect(Effect::SPEED)->getColor());
+			case self::SLOWNESS:
+			case self::SLOWNESS_T:
+				return (Effect::getEffect(Effect::SLOWNESS)->getColor());
+			case self::WATER_BREATHING:
+			case self::WATER_BREATHING_T:
+				return (Effect::getEffect(Effect::WATER_BREATHING)->getColor());
+			case self::HARMING:
+			case self::HARMING_TWO:
+				return (Effect::getEffect(Effect::HARMING)->getColor());
+			case self::POISON:
+			case self::POISON_T:
+			case self::POISON_TWO:
+				return (Effect::getEffect(Effect::POISON)->getColor());
+			case self::HEALING:
+			case self::HEALING_TWO:
+				return (Effect::getEffect(Effect::HEALING)->getColor());
+			default:
+				return (Effect::getEffect(Effect::WATER_BREATHING)->getColor());
+		}
 	}
 	
 	public function getNameByMeta($meta){

@@ -2,8 +2,8 @@
 
 [![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * One Core to rule them ALL
-* This core is an unofficial version of PocketMine-MP made by DREAM STUDIO & iTX Technologies LLC.
-* DREAM STUDIO & iTX Technologies LLC. are both from China.
+* This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
+* Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 
 #Jenkins CI / 自动构建的phar
 <a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">Click Here / 点击这里进入自动构建页</a>
