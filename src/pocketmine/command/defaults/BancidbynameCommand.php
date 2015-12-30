@@ -12,8 +12,8 @@ class BancidbynameCommand extends VanillaCommand{
 	public function __construct($name){
 		parent::__construct(
 			$name,
-			"用用户名ban掉熊孩子的设备id",
-			"/bancidbyname <player>"
+			"%pocketmine.command.bancidbyname.description",
+			"%commands.bancidbyname.usage"
 		);
 		$this->setPermission("pocketmine.command.bancidbyname");
 	}
@@ -38,10 +38,10 @@ class BancidbynameCommand extends VanillaCommand{
 		$sender->getServer()->getCIDBans()->addBan($target->getClientId(), $reason, \null, $sender->getName());
 
 		if(($player = $sender->getServer()->getPlayerExact($name)) instanceof Player){
-			$player->kick($reason !== "" ? "被ban: " . $reason : "好好反省自己！");
+			$player->kick($reason !== "" ? "Banned by admin. Reason:" . $reason : "Banned by admin.");
 		}
 
-		Command::broadcastCommandMessage($sender, new TranslationContainer("%commands.ban.success", [$player !== \null ? $player->getName() : $name]));
+		Command::broadcastCommandMessage($sender, new TranslationContainer("%commands.bancidbyname.success", [$player !== \null ? $player->getName() : $name]));
 
 		return \true;
 	}
