@@ -9,8 +9,8 @@ class ExtractPharCommand extends VanillaCommand{
 	public function __construct($name){
 		parent::__construct(
 			$name,
-			"解包Phar",
-			"/extractphar <Phar文件名>"
+			"Extracts the source code from a Phar file",
+			"/extractphar <Phar file Name>"
 		);
 		$this->setPermission("pocketmine.command.extractphar");
 	}
@@ -21,13 +21,13 @@ class ExtractPharCommand extends VanillaCommand{
 		}
 
 		if(count($args) === 0){
-			$sender->sendMessage(TextFormat::RED . "用法: ".$this->usageMessage);
+			$sender->sendMessage(TextFormat::RED . "Usage: ".$this->usageMessage);
 			return true;
 		}
 		if(!isset($args[0]) or !file_exists($args[0])) return \false;
-		$folderPath = $sender->getServer()->getPluginPath().DIRECTORY_SEPARATOR . "PocketMine-iTX" . DIRECTORY_SEPARATOR . basename($args[0]);
+		$folderPath = $sender->getServer()->getPluginPath().DIRECTORY_SEPARATOR . "iTX-Genisys" . DIRECTORY_SEPARATOR . basename($args[0]);
 		if(file_exists($folderPath)){
-			$sender->sendMessage("文件夹已存在，正在覆盖。");
+			$sender->sendMessage("Phar already exists, overwriting...");
 		}else{
 			@mkdir($folderPath);
 		}
@@ -37,9 +37,8 @@ class ExtractPharCommand extends VanillaCommand{
 		foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($pharPath)) as $fInfo){
 			$path = $fInfo->getPathname();
 			@mkdir(dirname($folderPath . str_replace($pharPath, "", $path)), 0755, true);
-			$sender->sendMessage("[PocketMine-iTX] 正在解包 $path");
 			file_put_contents($folderPath . str_replace($pharPath, "", $path), file_get_contents($path));
 		}
-		$sender->sendMessage("Phar归档 $args[0] 已被成功解包到 $folderPath");
+		$sender->sendMessage("Source Phar $args[0] has been created on $folderPath");
 	}
 }
