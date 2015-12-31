@@ -1,0 +1,101 @@
+#PocketMine-iTX Genisys 的高級配置文件
+
+level:
+ #設置是否變換天氣
+ weather: true
+ #天氣切換時間，默認5分鐘
+ weather-change-time: 6000
+ #天氣持續時間，默認1分鐘
+ weather-last-time: 1200
+ #隨機閃電間隔，默認10秒
+ lightning-time: 200
+ 
+player:
+ #是否打開饑餓
+ hunger: true
+ #飢餓值扣血下限
+ hunger-health: 10
+ #飢餓值饥饿值计时器，默认80=4秒
+ hunger-timer: 3000
+ #是否打開經驗系統
+ experience: true
+ #是否開啟死亡不掉落
+ keep-inventory: false
+ #背包格數
+ inventory-num: 36
+ #是否開啟切換模式自動清除背包
+ auto-clear-inventory: true
+ #TODO: 是否開啟死亡經驗不掉落
+ keep-experience: false
+ 
+nether:
+ #是否允許地獄，打開此選項會自動生成地獄地圖
+ allow-nether: false
+ #地獄地圖名
+ level-name: "nether"
+ 
+server:
+ #經驗數據預生成，0不啟用
+ experience-cache: 65535
+ #是否允許生成鐵傀儡
+ allow-iron-golem: false
+ #是否允许生成雪傀儡
+ allow-snow-golem: false
+ #是否允許合成藥水
+ allow-crafting-potion: false
+ #是否允許紅石
+ allow-redstone: false
+ #是否允許鐵砧和附魔臺
+ allow-anvilandenchanttable: false
+
+dserver:
+ #多服統統壹人數
+ enable: false
+ #Query自動更新
+ query-auto-update: false
+ #Query週期更新
+ query-tick-update: true
+ #Motd最大人數，0為默認
+ motd-max-players: 0
+ #Query最大人數，0為默認
+ query-max-players: 0
+ #Motd顯示總人數
+ motd-all-players: false
+ #Query顯示總人數
+ query-all-players: false
+ #Motd顯示人數
+ motd-players: false
+ #Query顯示人數
+ query-players: false
+ #更新頻率，20 = 1秒
+ time: 40
+ #獲取失敗自動重試次數
+ retry-times: 3
+ #服務器列表，用;隔開，例如 a.cn:19132;b.cn:19132
+ server-list: ""
+ 
+ai:
+ #AI總開關
+ enable: false
+ #僵屍的AI，0為關閉，1為1.0版AI，2為新AI（不完善）
+ zombie: 1
+ #僵屍豬人的AI
+ pigzombie: true
+ #牛和哞菇的AI
+ cow: true
+ #雞的AI
+ chicken: true
+ #羊的AI
+ sheep: true
+ #豬的AI
+ pig: true
+ #骷髏的AI
+ skeleton: true
+ #苦力怕的AI
+ creeper: true
+ #铁傀儡的AI
+ iron-golem: true
+ #雪傀儡的AI
+ snow-golem: true
+ #苦力怕爆炸是否破壞方塊
+ creeper-explode-destroy-block: false

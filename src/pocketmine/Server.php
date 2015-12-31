@@ -1678,7 +1678,19 @@ class Server{
 
 		$this->logger->info("Loading genisys.yml...");
 		if(!file_exists($this->dataPath . "genisys.yml")){
-			$content = file_get_contents($this->filePath . "src/pocketmine/resources/genisys.yml");
+			switch($this->getProperty("settings.language")){
+				case "chs":
+					$content = file_get_contents($this->filePath . "src/pocketmine/resources/genisys_chs.yml");
+					break;
+				case "zho":
+					$content = file_get_contents($this->filePath . "src/pocketmine/resources/genisys_zho.yml");
+					break;
+				case "jpn":
+					$content = file_get_contents($this->filePath . "src/pocketmine/resources/genisys_jpn.yml");
+					break;
+				default:
+					$content = file_get_contents($this->filePath . "src/pocketmine/resources/genisys.yml");
+			}
 			@file_put_contents($this->dataPath . "genisys.yml", $content);
 		}
 		$this->advancedConfig = new Config($this->dataPath . "genisys.yml", Config::YAML, []);
