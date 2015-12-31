@@ -50,7 +50,7 @@ class MakeServerCommand extends VanillaCommand{
 				continue;
 			}
 			$phar->addFile($file, $path);
-			$sender->sendMessage("[iTX-Genisys] Adding $path");
+			$sender->sendMessage("[PocketMine-iTX] Adding $path");
 		}
 		foreach($phar as $file => $finfo){
 			/** @var \PharFileInfo $finfo */
