@@ -16,7 +16,7 @@ player:
  #饥饿值扣血下限
  hunger-health: 10
  #饥饿值计时器，默认80=4秒
- hunger-timer: 80
+ hunger-timer: 3000
  #是否打开经验系统
  experience: true
  #是否开启死亡不掉落
