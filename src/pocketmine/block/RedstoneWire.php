@@ -155,61 +155,70 @@ class RedstoneWire extends RedstoneSource{
 			$side = $this->getUnconnectedSide();
 
 			$sides = [Vector3::SIDE_WEST, Vector3::SIDE_EAST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH];
-			foreach($sides as $s){
-				if(!in_array($s, $side[1])) {
-					$block = $this->getSide(Vector3::SIDE_DOWN)->getSide($s);
-					/** @var Door $block */
-					if(($block instanceof Door) or ($block instanceof Trapdoor)){
-						if(!$block->isOpened()) $block->onActivate(new Item(0));
-					}
-					if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
-					/** @var ActiveRedstoneLamp $block*/
-					if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn();
-					if($block->getId() == Block::REDSTONE_WIRE){
-						/** @var RedstoneWire $wire */
-						$wire = $block;
-						$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
-					}
-				}
-			}
 
-			if($side[0] == false) return;
-			$block = $this->getSide($side[0]);
-			/** @var Door $block */
-			if(($block instanceof Door) or ($block instanceof Trapdoor)){
-				if(!$block->isOpened()) $block->onActivate(new Item(0));
-			}
-			if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
-			/** @var ActiveRedstoneLamp $block */
-			if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn();
-
-
-			if(!$block->isTransparent()){
-				$sides = [Vector3::SIDE_WEST, Vector3::SIDE_EAST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP, Vector3::SIDE_DOWN];
+			$below = $this->getSide(Vector3::SIDE_DOWN);
+			if(!in_array($hash = Level::blockHash($below->x, $below->y, $below->z), $ignore)){
+				if(!$block instanceof RedstoneSource) $ignore[] = $hash;
 				foreach($sides as $s){
-					if($s != $this->getOppositeSide($side[0])){
-						$e = $block->getSide($s);
+					if(!in_array($s, $side[1])){
+						$block = $below->getSide($s);
 						/** @var Door $block */
-						if(($e instanceof Door) or ($e instanceof Trapdoor)){
-							if(!$e->isOpened()) $e->onActivate(new Item(0));
+						if(($block instanceof Door) or ($block instanceof Trapdoor)){
+							if(!$block->isOpened()) $block->onActivate(new Item(0));
 						}
-						if($e->getId() == Block::TNT) $e->onActivate(new Item(Item::FLINT_AND_STEEL));
-						/** @var ActiveRedstoneLamp $e */
-						if($e->getId() == Block::INACTIVE_REDSTONE_LAMP) $e->turnOn();
+						if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
+						/** @var ActiveRedstoneLamp $block */
+						if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn();
+						if($block->getId() == Block::REDSTONE_WIRE){
+							/** @var RedstoneWire $wire */
+							$wire = $block;
+							$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
+						}
 					}
 				}
 			}
 
-			$this->checkTorchOn($block, [$this->getOppositeSide($side)]);
+			if($side[0] == false) return $ignore;
+			$block = $this->getSide($side[0]);
+			if(!in_array($hash = Level::blockHash($block->x, $block->y, $block->z), $ignore)){
+				if(!$block instanceof RedstoneSource) $ignore[] = $hash;
+				/** @var Door $block */
+				if(($block instanceof Door) or ($block instanceof Trapdoor)){
+					if(!$block->isOpened()) $block->onActivate(new Item(0));
+				}
+				if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
+				/** @var ActiveRedstoneLamp $block */
+				if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn();
+
+
+				if(!$block->isTransparent()){
+					$sides = [Vector3::SIDE_WEST, Vector3::SIDE_EAST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP, Vector3::SIDE_DOWN];
+					foreach($sides as $s){
+						if($s != $this->getOppositeSide($side[0])){
+							$e = $block->getSide($s);
+							/** @var Door $block */
+							if(($e instanceof Door) or ($e instanceof Trapdoor)){
+								if(!$e->isOpened()) $e->onActivate(new Item(0));
+							}
+							if($e->getId() == Block::TNT) $e->onActivate(new Item(Item::FLINT_AND_STEEL));
+							/** @var ActiveRedstoneLamp $e */
+							if($e->getId() == Block::INACTIVE_REDSTONE_LAMP) $e->turnOn();
+						}
+					}
+				}
+
+				$this->checkTorchOn($block, [$this->getOppositeSide($side)]);
+			}
 
 			unset($connected, $notConnected);
 		}
+		return $ignore;
 	}
 
 	public function deactivate(array $ignore = []){
 		if($this->canCalc()){
 			$block = $this->getSide(Vector3::SIDE_DOWN);
-			if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) {
+			if($block->getId() == Block::ACTIVE_REDSTONE_LAMP){
 				/** @var ActiveRedstoneLamp $block */
 				if(!$this->checkPower($block, [Vector3::SIDE_UP], true)) $block->turnOff();
 			}
@@ -217,64 +226,73 @@ class RedstoneWire extends RedstoneSource{
 			$side = $this->getUnconnectedSide();
 
 			$sides = [Vector3::SIDE_WEST, Vector3::SIDE_EAST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH];
-			foreach($sides as $s){
-				if(!in_array($s, $side[1])) {
-					$block = $this->getSide(Vector3::SIDE_DOWN)->getSide($s);
-					if(!$this->checkPower($block)){
-						/** @var Door $block */
-						if(($block instanceof Door) or ($block instanceof Trapdoor)){
-							if($block->isOpened()) $block->onActivate(new Item(0));
-						}
-						/** @var ActiveRedstoneLamp $block*/
-						if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOff();
-					}
-					if($block->getId() == Block::REDSTONE_WIRE){
-						/** @var RedstoneWire $wire */
-						$wire = $block;
-						$wire->calcSignal(0, RedstoneWire::OFF);
-					}
-				}
-			}
 
-			if($side[0] == false) return;
-			$block = $this->getSide($side[0]);
-			/** @var Door $block */
-			if(!$this->checkPower($block)){
-				if(($block instanceof Door) or ($block instanceof Trapdoor)){
-					if($block->isOpened()) $block->onActivate(new Item(0));
-				}
-				/** @var ActiveRedstoneLamp $block */
-				if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOff();
-			}
-
-			if(!$block->isTransparent()){
-				$sides = [Vector3::SIDE_WEST, Vector3::SIDE_EAST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP, Vector3::SIDE_DOWN];
+			$below = $this->getSide(Vector3::SIDE_DOWN);
+			if(!in_array($hash = Level::blockHash($below->x, $below->y, $below->z), $ignore)){
+				if(!$block instanceof RedstoneSource) $ignore[] = $hash;
 				foreach($sides as $s){
-					if($s != $this->getOppositeSide($side[0])){
-						$e = $block->getSide($s);
-						if(!$this->checkPower($e)){
-							/** @var Door $e */
-							if(($e instanceof Door) or ($e instanceof Trapdoor)){
-								if($e->isOpened()) $e->onActivate(new Item(0));
+					if(!in_array($s, $side[1])){
+						$block = $below->getSide($s);
+						if(!$this->checkPower($block)){
+							/** @var Door $block */
+							if(($block instanceof Door) or ($block instanceof Trapdoor)){
+								if($block->isOpened()) $block->onActivate(new Item(0));
 							}
-							/** @var ActiveRedstoneLamp $e */
-							if($e->getId() == Block::ACTIVE_REDSTONE_LAMP) $e->turnOff();
+							/** @var ActiveRedstoneLamp $block */
+							if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOff();
+						}
+						if($block->getId() == Block::REDSTONE_WIRE){
+							/** @var RedstoneWire $wire */
+							$wire = $block;
+							$wire->calcSignal(0, RedstoneWire::OFF);
 						}
 					}
 				}
 			}
 
-			$this->checkTorchOff($block, [$this->getOppositeSide($side)]);
+			if($side[0] == false) return $ignore;
+			$block = $this->getSide($side[0]);
+			if(!in_array($hash = Level::blockHash($block->x, $block->y, $block->z), $ignore)){
+				if(!$block instanceof RedstoneSource) $ignore[] = $hash;
+				/** @var Door $block */
+				if(!$this->checkPower($block)){
+					if(($block instanceof Door) or ($block instanceof Trapdoor)){
+						if($block->isOpened()) $block->onActivate(new Item(0));
+					}
+					/** @var ActiveRedstoneLamp $block */
+					if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOff();
+				}
+
+				if(!$block->isTransparent()){
+					$sides = [Vector3::SIDE_WEST, Vector3::SIDE_EAST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP, Vector3::SIDE_DOWN];
+					foreach($sides as $s){
+						if($s != $this->getOppositeSide($side[0])){
+							$e = $block->getSide($s);
+							if(!$this->checkPower($e)){
+								/** @var Door $e */
+								if(($e instanceof Door) or ($e instanceof Trapdoor)){
+									if($e->isOpened()) $e->onActivate(new Item(0));
+								}
+								/** @var ActiveRedstoneLamp $e */
+								if($e->getId() == Block::ACTIVE_REDSTONE_LAMP) $e->turnOff();
+							}
+						}
+					}
+				}
+
+				$this->checkTorchOff($block, [$this->getOppositeSide($side)]);
+			}
 
 			unset($connected, $notConnected);
 		}
+		return $ignore;
 	}
 
-	public function getPowerSources(RedstoneWire $wire, array $powers = [], array $hasUpdated = [], $isStart = false){
+	public function getPowerSources(RedstoneWire $wire, array $powers = [], array $hasUpdated = [], $isStart = false, array $ignore = []){
 		if(!$isStart){
 			$wire->meta = 0;
 			$wire->getLevel()->setBlock($wire, $wire, true, false);
-			$wire->deactivate();
+			$ignore = $wire->deactivate($ignore);
 		}
 		$hasChecked = [
 			Vector3::SIDE_WEST => false,
@@ -284,7 +302,7 @@ class RedstoneWire extends RedstoneSource{
 		];
 		$hash = Level::blockHash($wire->x, $wire->y, $wire->z);
 		if(!isset($hasUpdated[$hash])) $hasUpdated[$hash] = true;
-		else return [$powers, $hasUpdated];
+		else return [$powers, $hasUpdated, $ignore];
 
 		//check blocks around
 		foreach($hasChecked as $side => $bool){
@@ -295,9 +313,10 @@ class RedstoneWire extends RedstoneSource{
 					if($block->getId() != $this->id){
 						$powers[] = $block;
 					}else{
-						$result = $this->getPowerSources($block, $powers, $hasUpdated);
+						$result = $this->getPowerSources($block, $powers, $hasUpdated, false, $ignore);
 						$powers = $result[0];
 						$hasUpdated = $result[1];
+						$ignore = $result[2];
 					}
 					$hasChecked[$side] = true;
 				}
@@ -312,9 +331,10 @@ class RedstoneWire extends RedstoneSource{
 				if($block instanceof RedstoneSource){
 					if($block->isActivated()){
 						if($block->getId() == $this->id){
-							$result = $this->getPowerSources($block, $powers, $hasUpdated);
+							$result = $this->getPowerSources($block, $powers, $hasUpdated, false, $ignore);
 							$powers = $result[0];
 							$hasUpdated = $result[1];
+							$ignore = $result[2];
 							$hasChecked[$side] = true;
 						}
 					}
@@ -330,9 +350,10 @@ class RedstoneWire extends RedstoneSource{
 				if($block instanceof RedstoneSource){
 					if($block->isActivated()){
 						if($block->getId() == $this->id){
-							$result = $this->getPowerSources($block, $powers, $hasUpdated);
+							$result = $this->getPowerSources($block, $powers, $hasUpdated, false, $ignore);
 							$powers = $result[0];
 							$hasUpdated = $result[1];
+							$ignore = $result[2];
 							$hasChecked[$side] = true;
 						}
 					}
@@ -340,10 +361,10 @@ class RedstoneWire extends RedstoneSource{
 			}
 		}
 
-		return [$powers, $hasUpdated];
+		return [$powers, $hasUpdated, $ignore];
 	}
 
-	public function calcSignal($strength = 15, $type = self::ON, array $hasUpdated = []){
+	public function calcSignal($strength = 15, $type = self::ON, array $hasUpdated = [], array $ignore = []){
 		//This algorithm is provided by Stary and written by PeratX
 		$hash = Level::blockHash($this->x, $this->y, $this->z);
 		if(!in_array($hash, $hasUpdated)){
@@ -352,7 +373,7 @@ class RedstoneWire extends RedstoneSource{
 				$this->meta = $strength;
 				$this->getLevel()->setBlock($this, $this, true, false);
 				if($type == self::DESTROY) $this->getLevel()->setBlock($this, new Air(), true, false);
-				if($strength <= 0) $this->deactivate();
+				if($strength <= 0) $ignore = $this->deactivate($ignore);
 				$powers = $this->getPowerSources($this, [], [], true);
 				/** @var RedstoneSource $power */
 				foreach($powers[0] as $power){
@@ -365,7 +386,7 @@ class RedstoneWire extends RedstoneSource{
 				if($this->getStrength() < $strength){
 					$this->meta = $strength;
 					$this->getLevel()->setBlock($this, $this, true, false);
-					$this->activate();
+					$ignore = $this->activate($ignore);
 
 					$hasChecked = [
 						Vector3::SIDE_WEST => false,
@@ -377,9 +398,10 @@ class RedstoneWire extends RedstoneSource{
 					foreach($hasChecked as $side => $bool){
 						$needUpdate = $this->getSide($side);
 						if(!in_array(Level::blockHash($needUpdate->x, $needUpdate->y, $needUpdate->z), $hasUpdated)){
-							$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated);
-							if(count($result) != count($hasUpdated)){
-								$hasUpdated = $result;
+							$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore);
+							if(count($result[0]) != count($hasUpdated)){
+								$hasUpdated = $result[0];
+								$ignore = $result[1];
 								$hasChecked[$side] = true;
 							}
 						}
@@ -390,9 +412,10 @@ class RedstoneWire extends RedstoneSource{
 						if(!$bool){
 							$needUpdate = $this->getLevel()->getBlock($baseBlock->getSide($side));
 							if(!in_array(Level::blockHash($needUpdate->x, $needUpdate->y, $needUpdate->z), $hasUpdated)){
-								$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated);
-								if(count($result) != count($hasUpdated)){
-									$hasUpdated = $result;
+								$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore);
+								if(count($result[0]) != count($hasUpdated)){
+									$hasUpdated = $result[0];
+									$ignore = $result[1];
 									$hasChecked[$side] = true;
 								}
 							}
@@ -404,9 +427,10 @@ class RedstoneWire extends RedstoneSource{
 						if(!$bool){
 							$needUpdate = $this->getLevel()->getBlock($baseBlock->getSide($side));
 							if(!in_array(Level::blockHash($needUpdate->x, $needUpdate->y, $needUpdate->z), $hasUpdated)){
-								$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated);
-								if(count($result) != count($hasUpdated)){
-									$hasUpdated = $result;
+								$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore);
+								if(count($result[0]) != count($hasUpdated)){
+									$hasUpdated = $result[0];
+									$ignore = $result[1];
 									$hasChecked[$side] = true;
 								}
 							}
@@ -417,17 +441,17 @@ class RedstoneWire extends RedstoneSource{
 		}
 
 
-		return $hasUpdated;
+		return [$hasUpdated, $ignore];
 	}
 
-	public function updateNormalWire(Block $block, $strength, $type, array $hasUpdated){
+	public function updateNormalWire(Block $block, $strength, $type, array $hasUpdated, array $ignore){
 		/** @var RedstoneWire $block */
 		if($block->getId() == Block::REDSTONE_WIRE){
 			if($block->getStrength() < $strength){
-				return $block->calcSignal($strength, $type, $hasUpdated);
+				return $block->calcSignal($strength, $type, $hasUpdated, $ignore);
 			}
 		}
-		return $hasUpdated;
+		return [$hasUpdated, $ignore];
 	}
 
 	public function onUpdate($type){

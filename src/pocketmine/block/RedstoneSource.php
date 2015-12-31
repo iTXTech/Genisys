@@ -9,6 +9,7 @@
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
+use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 
 /*
@@ -50,7 +51,7 @@ class RedstoneSource extends Flowable{
 					}
 					if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
 					/** @var InactiveRedstoneLamp $block*/
-					if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn(true);
+					if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn();
 					if($block->getId() == Block::REDSTONE_WIRE){
 						/** @var RedstoneWire $wire */
 						$wire = $block;
@@ -61,7 +62,7 @@ class RedstoneSource extends Flowable{
 
 			if(!in_array(Vector3::SIDE_DOWN, $ignore)){
 				$block = $this->getSide(Vector3::SIDE_DOWN);
-				if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn(true);
+				if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn();
 
 				$block = $this->getSide(Vector3::SIDE_DOWN, 2);
 				if(($block instanceof Door) or ($block instanceof Trapdoor)){
@@ -182,7 +183,8 @@ class RedstoneSource extends Flowable{
 							0 => 0,
 					];
 					if($this->isRightPlace($block->getSide($faces[$block->meta]), $pos)){
-						$block->turnOff();
+						$ignoreBlock = $this->getSide($this->getOppositeSide($faces[$block->meta]));
+						$block->turnOff(Level::blockHash($ignoreBlock->x, $ignoreBlock->y, $ignoreBlock->z));
 					}
 				}
 			}
@@ -206,7 +208,8 @@ class RedstoneSource extends Flowable{
 							0 => 0,
 					];
 					if($this->isRightPlace($block->getSide($faces[$block->meta]), $pos)){
-						$block->turnOn();
+						$ignoreBlock = $this->getSide($this->getOppositeSide($faces[$block->meta]));
+						$block->turnOn(Level::blockHash($ignoreBlock->x, $ignoreBlock->y, $ignoreBlock->z));
 					}
 				}
 			}

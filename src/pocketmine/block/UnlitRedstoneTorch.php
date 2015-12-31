@@ -18,11 +18,11 @@ class UnlitRedstoneTorch extends RedstoneTorch{
 		return false;
 	}
 
-	public function turnOff(){
+	public function turnOff($ignore = ""){
 		return true;
 	}
 
-	public function turnOn(){
+	public function turnOn($ignore = ""){
 		$faces = [
 			1 => 4,
 			2 => 5,
@@ -35,7 +35,7 @@ class UnlitRedstoneTorch extends RedstoneTorch{
 		$this->getLevel()->setBlock($this, new RedstoneTorch($this->meta), true);
 		/** @var RedstoneTorch $block */
 		$block = $this->getLevel()->getBlock($this);
-		$block->activate([$faces[$this->meta]]);
+		$block->activateTorch([$faces[$this->meta]], [$ignore]);
 		return true;
 	}
 }
