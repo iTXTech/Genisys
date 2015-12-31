@@ -12,7 +12,7 @@ class MakeServerCommand extends VanillaCommand{
 	public function __construct($name){
 		parent::__construct(
 			$name,
-			"打包核心",
+			"Creates a PocketMine Phar",
 			"/makeserver"
 		);
 		$this->setPermission("pocketmine.command.makeserver");
@@ -24,9 +24,9 @@ class MakeServerCommand extends VanillaCommand{
 		}
 
 		$server = $sender->getServer();
-		$pharPath = Server::getInstance()->getPluginPath().DIRECTORY_SEPARATOR . "PocketMine-iTX" . DIRECTORY_SEPARATOR . $server->getName()."_".$server->getPocketMineVersion().".phar";
+		$pharPath = Server::getInstance()->getPluginPath().DIRECTORY_SEPARATOR . "iTX-Genisys" . DIRECTORY_SEPARATOR . $server->getName()."_".$server->getPocketMineVersion().".phar";
 		if(file_exists($pharPath)){
-			$sender->sendMessage("Phar文件已存在，正在覆盖...");
+			$sender->sendMessage("Phar file already exists, overwriting...");
 			@unlink($pharPath);
 		}
 		$phar = new \Phar($pharPath);
@@ -50,7 +50,7 @@ class MakeServerCommand extends VanillaCommand{
 				continue;
 			}
 			$phar->addFile($file, $path);
-			$sender->sendMessage("[PocketMine-iTX] 正在添加 $path");
+			$sender->sendMessage("[iTX-Genisys] Adding $path");
 		}
 		foreach($phar as $file => $finfo){
 			/** @var \PharFileInfo $finfo */
@@ -61,7 +61,7 @@ class MakeServerCommand extends VanillaCommand{
 		$phar->compressFiles(\Phar::GZ);
 		$phar->stopBuffering();
 
-		$sender->sendMessage($server->getName() . " " . $server->getPocketMineVersion() . " Phar文件已保存到 ".$pharPath);
+		$sender->sendMessage($server->getName() . " " . $server->getPocketMineVersion() . " Phar file has been created on ".$pharPath);
 
 		return true;
 	}

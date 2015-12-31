@@ -14,8 +14,8 @@ class WeatherCommand extends VanillaCommand{
 	public function __construct($name){
 		parent::__construct(
 			$name,
-			"Set weather for level",
-			"/weather <level-name> <weather>"
+			"%pocketmine.command.weather.description",
+			"%commands.bancid.usage"
 		);
 		$this->setPermission("pocketmine.command.weather");
 	}
@@ -36,26 +36,26 @@ class WeatherCommand extends VanillaCommand{
 			if($wea >= 0 and $wea <= 3){
 				if(WeatherManager::isRegistered($sender->getLevel())){
 					$sender->getLevel()->getWeather()->setWeather($wea);
-					$sender->sendMessage(TextFormat::GREEN . "Weather changed successfully for " . $sender->getLevel()->getFolderName());
+					$sender->sendMessage(TextFormat::GREEN . "%pocketmine.command.weather.changed" . $sender->getLevel()->getFolderName());
 					return true;
 				}else{
-					$sender->sendMessage(TextFormat::RED . $sender->getLevel()->getFolderName() . " hasn't registered to WeatherManager.");
+					$sender->sendMessage(TextFormat::RED . $sender->getLevel()->getFolderName() . "%pocketmine.command.weather.noregistered");
 					return false;
 				}
 			}else{
-				$sender->sendMessage(TextFormat::RED . "Invalid weather.");
+				$sender->sendMessage(TextFormat::RED . "%pocketmine.command.weather.invalid");
 				return false;
 			}
 		}
 
 		if(count($args) < 2){
-			$sender->sendMessage(TextFormat::RED . "Wrong parameters.");
+			$sender->sendMessage(TextFormat::RED . "%pocketmine.command.weather.wrong");
 			return false;
 		}
 
 		$level = $sender->getServer()->getLevelByName($args[0]);
 		if(!$level instanceof Level){
-			$sender->sendMessage(TextFormat::RED . "Invalid level name.");
+			$sender->sendMessage(TextFormat::RED . "%pocketmine.command.weather.invalid.level");
 			return false;
 		}
 
@@ -63,14 +63,14 @@ class WeatherCommand extends VanillaCommand{
 		if($wea >= 0 and $wea <= 3){
 			if(WeatherManager::isRegistered($level)){
 				$level->getWeather()->setWeather($wea);
-				$sender->sendMessage(TextFormat::GREEN . "Weather changed successfully for " . $level->getFolderName());
+				$sender->sendMessage(TextFormat::GREEN . "%pocketmine.command.weather.changed" . $level->getFolderName());
 				return true;
 			}else{
-				$sender->sendMessage(TextFormat::RED . $level->getFolderName() . " hasn't registered to WeatherManager.");
+				$sender->sendMessage(TextFormat::RED . $level->getFolderName() . "%pocketmine.command.weather.noregistered");
 				return false;
 			}
 		}else{
-			$sender->sendMessage(TextFormat::RED . "Invalid weather.");
+			$sender->sendMessage(TextFormat::RED . "%pocketmine.command.weather.invalid");
 			return false;
 		}
 
