@@ -224,6 +224,8 @@ class Block extends Position implements Metadatable{
 
 	const WOODEN_BUTTON = 143;
 
+	const SKULL_BLOCK = 144;
+
 	const ANVIL = 145;
 	const TRAPPED_CHEST = 146;
 
@@ -529,6 +531,7 @@ class Block extends Position implements Metadatable{
 			self::$list[self::DAYLIGHT_SENSOR] = DaylightDetector::class;
 			self::$list[self::DAYLIGHT_SENSOR_INVERTED] = DaylightDetectorInverted::class;
 			self::$list[self::NOTEBLOCK] = Noteblock::class;
+			self::$list[self::SKULL_BLOCK] = SkullBlock::class;
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){

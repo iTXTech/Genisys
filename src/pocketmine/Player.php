@@ -36,7 +36,7 @@ use pocketmine\event\inventory\CraftItemEvent;
 use pocketmine\event\inventory\InventoryCloseEvent;
 use pocketmine\event\inventory\InventoryPickupArrowEvent;
 use pocketmine\event\inventory\InventoryPickupItemEvent;
-use pocketmine\event\player\MessagePreSendEvent;
+use pocketmine\event\player\PlayerTextPreSendEvent;
 use pocketmine\event\player\PlayerAchievementAwardedEvent;
 use pocketmine\event\player\PlayerAnimationEvent;
 use pocketmine\event\player\PlayerBedEnterEvent;
@@ -3505,39 +3505,39 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * Sends a direct chat message to a player
 	 *
 	 * @param string|TextContainer $message
+	 * @return bool
 	 */
 	public function sendMessage($message){
-					
+
 
 		if($message instanceof TextContainer){
-		
+
 			if($message instanceof TranslationContainer){
 				$this->sendTranslation($message->getText(), $message->getParameters());
-				return;
+				return false;
 			}
-			
+
 			$message = $message->getText();
-			
+
 		}
-		
+
 		$mes = explode("\n", $this->server->getLanguage()->translateString($message));
-		
-		
-		
+
 		foreach($mes as $m){
 			if($m !== ""){
-				$mep=new MessagePreSendEvent($this, $m);
-				$this->server->getPluginManager()->callEvent($mep);
-				if($mep->isCancelled())
-				{
-					return false;
-				}
+				$ev = new PlayerTextPreSendEvent($this, $m, PlayerTextPreSendEvent::MESSAGE);
+				$this->server->getPluginManager()->callEvent($ev);
+				if($ev->isCancelled()) return false;
+
 				$pk = new TextPacket();
 				$pk->type = TextPacket::TYPE_RAW;
-				$pk->message = $mep->getMessage();
+				$pk->message = $ev->getMessage();
 				$this->dataPacket($pk);
+				return true;
 			}
 		}
+
+		return false;
 	}
 
 	public function sendTranslation($message, array $parameters = []){
@@ -3553,22 +3553,41 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$pk->type = TextPacket::TYPE_RAW;
 			$pk->message = $this->server->getLanguage()->translateString($message, $parameters);
 		}
+
+		$ev = new PlayerTextPreSendEvent($this, $pk->message, PlayerTextPreSendEvent::TRANSLATED_MESSAGE);
+		$this->server->getPluginManager()->callEvent($ev);
+		if($ev->isCancelled()) return false;
+
 		$this->dataPacket($pk);
+
+		return true;
 	}
 
 	public function sendPopup($message, $subtitle = ""){
+		$ev = new PlayerTextPreSendEvent($this, $message, PlayerTextPreSendEvent::POPUP);
+		$this->server->getPluginManager()->callEvent($ev);
+		if($ev->isCancelled()) return false;
+
 		$pk = new TextPacket();
 		$pk->type = TextPacket::TYPE_POPUP;
 		$pk->source = $message;
 		$pk->message = $subtitle;
 		$this->dataPacket($pk);
+
+		return true;
 	}
 
 	public function sendTip($message){
+		$ev = new PlayerTextPreSendEvent($this, $message, PlayerTextPreSendEvent::TIP);
+		$this->server->getPluginManager()->callEvent($ev);
+		if($ev->isCancelled()) return false;
+
 		$pk = new TextPacket();
 		$pk->type = TextPacket::TYPE_TIP;
 		$pk->message = $message;
 		$this->dataPacket($pk);
+
+		return true;
 	}
 
 	/**

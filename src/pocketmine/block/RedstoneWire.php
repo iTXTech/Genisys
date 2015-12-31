@@ -164,7 +164,7 @@ class RedstoneWire extends RedstoneSource{
 					}
 					if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
 					/** @var ActiveRedstoneLamp $block*/
-					if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn(true);
+					if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn();
 					if($block->getId() == Block::REDSTONE_WIRE){
 						/** @var RedstoneWire $wire */
 						$wire = $block;
@@ -194,8 +194,8 @@ class RedstoneWire extends RedstoneSource{
 							if(!$e->isOpened()) $e->onActivate(new Item(0));
 						}
 						if($e->getId() == Block::TNT) $e->onActivate(new Item(Item::FLINT_AND_STEEL));
-						/** @var ActiveRedstoneLamp $block */
-						if($e->getId() == Block::INACTIVE_REDSTONE_LAMP) $e->turnOn(true);
+						/** @var ActiveRedstoneLamp $e */
+						if($e->getId() == Block::INACTIVE_REDSTONE_LAMP) $e->turnOn();
 					}
 				}
 			}

@@ -9,7 +9,7 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\level\Level;
-use pocketmine\level\sound\ClickSound;
+use pocketmine\level\sound\ButtonClickSound;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 
@@ -25,7 +25,7 @@ class WoodenButton extends RedstoneSource{
 			if($this->isActivated()) {
 				$this->meta ^= 0x08;
 				$this->getLevel()->setBlock($this, $this, true, false);
-				$this->getLevel()->addSound(new ClickSound($this));
+				$this->getLevel()->addSound(new ButtonClickSound($this));
 				$this->deactivate();
 			}
 			return Level::BLOCK_UPDATE_SCHEDULED;
@@ -184,7 +184,7 @@ class WoodenButton extends RedstoneSource{
 		if(!$this->isActivated()){
 			$this->meta ^= 0x08;
 			$this->getLevel()->setBlock($this, $this, true, false);
-			$this->getLevel()->addSound(new ClickSound($this));
+			$this->getLevel()->addSound(new ButtonClickSound($this));
 			$this->activate();
 			$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage() * 2);
 		}

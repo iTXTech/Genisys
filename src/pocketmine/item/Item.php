@@ -248,6 +248,8 @@ class Item {
 
 	const WOODEN_BUTTON = 143;
 
+	const SKULL_BLOCK = 144;
+
 	const TRAPPED_CHEST = 146;
 	const ANVIL = 145;
 
@@ -465,25 +467,36 @@ class Item {
 	const BAKED_POTATO = 393;
 	const BAKED_POTATOES = 393;
 
+	const POISONOUS_POTATO = 394;
+	const GOLDEN_CARROT = 396;
+	const SKULL = 397;
 	const PUMPKIN_PIE = 400;
-
+	const ENCHANTED_BOOK = 403;
 	const NETHER_BRICK = 405;
 	const QUARTZ = 406;
 	const NETHER_QUARTZ = 406;
-
+	const RAW_RABBIT = 411;
+	const COOKED_RABBIT = 412;
+	const RABBIT_STEW = 413;
+	const RABBIT_FOOT = 414;
+	const RABBIT_HIDE = 415;
 	const SPRUCE_DOOR = 427;
 	const BIRCH_DOOR = 428;
 	const JUNGLE_DOOR = 429;
 	const ACACIA_DOOR = 430;
 	const DARK_OAK_DOOR = 431;
+	const SPLASH_POTION = 438;
+	const SPRUCE_BOAT = 444;
+	const BIRCH_BOAT = 445;
+	const JUNGLE_BOAT = 446;
+	const ACACIA_BOAT = 447;
+	const DARK_OAK_BOAT = 448;
 
 	const CAMERA = 456;
 	const BEETROOT = 457;
 	const BEETROOT_SEEDS = 458;
 	const BEETROOT_SEED = 458;
 	const BEETROOT_SOUP = 459;
-
-	const SPLASH_POTION = 438;
 
 	const NETHER_BRICK_FENCE = 113;
 
@@ -642,6 +655,7 @@ class Item {
 			//self::$list[self::CAMERA] = Camera::class;
 			self::$list[self::BEETROOT] = Beetroot::class;
 			self::$list[self::FLOWER_POT] = FlowerPot::class;
+			self::$list[self::SKULL] = Skull::class;
 
 			for ($i = 0; $i < 256; ++$i) {
 				if (Block::$list[$i] !== null) {
@@ -860,6 +874,11 @@ class Item {
 		self::addCreativeItem(Item::get(Item::LEAVES2, 0));
 		self::addCreativeItem(Item::get(Item::LEAVES2, 1));
 		self::addCreativeItem(Item::get(Item::CAKE, 0));
+		self::addCreativeItem(Item::get(Item::SKULL, Skull::SKELETON)); // Skeleton
+		self::addCreativeItem(Item::get(Item::SKULL, Skull::WITHER_SKELETON)); // Wither Skeleton
+		self::addCreativeItem(Item::get(Item::SKULL, Skull::ZOMBIE)); // Zombie
+		self::addCreativeItem(Item::get(Item::SKULL, Skull::STEVE)); // Head (Steve)
+		self::addCreativeItem(Item::get(Item::SKULL, Skull::CREEPER)); // Creeper
 		self::addCreativeItem(Item::get(Item::SIGN, 0));
 		self::addCreativeItem(Item::get(Item::FLOWER_POT, 0));
 		self::addCreativeItem(Item::get(Item::MONSTER_SPAWNER, 0));

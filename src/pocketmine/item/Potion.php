@@ -91,6 +91,9 @@ class Potion extends Item{
 			case self::HEALING:
 			case self::HEALING_TWO:
 				return (Effect::getEffect(Effect::HEALING)->getColor());
+			case self::NIGHT_VISION:
+			case self::NIGHT_VISION_T:
+				return (Effect::getEffect(Effect::NIGHT_VISION)->getColor());
 			default:
 				return (Effect::getEffect(Effect::WATER_BREATHING)->getColor());
 		}
@@ -142,6 +145,9 @@ class Potion extends Item{
 				return "Potion of Healing";
 			case self::HEALING_TWO:
 				return "Potion of Healing II";
+			case self::NIGHT_VISION:
+			case self::NIGHT_VISION_T:
+				return "Potion os Night Vision";
 			default:
 				return "Potion";
 		}

@@ -8,8 +8,6 @@
 
 namespace pocketmine\block;
 
-use pocketmine\math\Vector3;
-
 class InactiveRedstoneLamp extends ActiveRedstoneLamp{
 	protected $id = self::INACTIVE_REDSTONE_LAMP;
 
@@ -25,13 +23,13 @@ class InactiveRedstoneLamp extends ActiveRedstoneLamp{
 		return false;
 	}
 
-	public function turnOn($isLightedByAround = false){
-		if($isLightedByAround){
-			$this->getLevel()->setBlock($this, new ActiveRedstoneLamp(1), true, false);
-		}else{
+	public function turnOn(){
+		//if($isLightedByAround){
+		$this->getLevel()->setBlock($this, new ActiveRedstoneLamp(), true, false);
+		/*}else{
 			$this->getLevel()->setBlock($this, new ActiveRedstoneLamp(), true, false);
-			$this->lightAround();
-		}
+			//$this->lightAround();
+		}*/
 		return true;
 	}
 
