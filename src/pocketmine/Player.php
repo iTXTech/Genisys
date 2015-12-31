@@ -36,6 +36,7 @@ use pocketmine\event\inventory\CraftItemEvent;
 use pocketmine\event\inventory\InventoryCloseEvent;
 use pocketmine\event\inventory\InventoryPickupArrowEvent;
 use pocketmine\event\inventory\InventoryPickupItemEvent;
+use pocketmine\event\player\MessagePreSendEvent;
 use pocketmine\event\player\PlayerAchievementAwardedEvent;
 use pocketmine\event\player\PlayerAnimationEvent;
 use pocketmine\event\player\PlayerBedEnterEvent;
@@ -3506,21 +3507,34 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @param string|TextContainer $message
 	 */
 	public function sendMessage($message){
+					
+
 		if($message instanceof TextContainer){
+		
 			if($message instanceof TranslationContainer){
 				$this->sendTranslation($message->getText(), $message->getParameters());
 				return;
 			}
+			
 			$message = $message->getText();
-
+			
 		}
-
+		
 		$mes = explode("\n", $this->server->getLanguage()->translateString($message));
+		
+		
+		
 		foreach($mes as $m){
 			if($m !== ""){
+				$mep=new MessagePreSendEvent($this, $m);
+				$this->server->getPluginManager()->callEvent($mep);
+				if($mep->isCancelled())
+				{
+					return false;
+				}
 				$pk = new TextPacket();
 				$pk->type = TextPacket::TYPE_RAW;
-				$pk->message = $m;
+				$pk->message = $mep->getMessage();
 				$this->dataPacket($pk);
 			}
 		}
