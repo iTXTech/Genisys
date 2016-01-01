@@ -15,7 +15,7 @@ class WeatherCommand extends VanillaCommand{
 		parent::__construct(
 			$name,
 			"%pocketmine.command.weather.description",
-			"%commands.bancid.usage"
+			"%pocketmine.command.bancid.usage"
 		);
 		$this->setPermission("pocketmine.command.weather");
 	}
@@ -36,10 +36,10 @@ class WeatherCommand extends VanillaCommand{
 			if($wea >= 0 and $wea <= 3){
 				if(WeatherManager::isRegistered($sender->getLevel())){
 					$sender->getLevel()->getWeather()->setWeather($wea);
-					$sender->sendMessage(TextFormat::GREEN . "%pocketmine.command.weather.changed" . $sender->getLevel()->getFolderName());
+					$sender->sendMessage(TextFormat::GREEN . "%pocketmine.command.weather.changed " . $sender->getLevel()->getFolderName());
 					return true;
 				}else{
-					$sender->sendMessage(TextFormat::RED . $sender->getLevel()->getFolderName() . "%pocketmine.command.weather.noregistered");
+					$sender->sendMessage(TextFormat::RED . $sender->getLevel()->getFolderName() . " %pocketmine.command.weather.noregistered");
 					return false;
 				}
 			}else{
@@ -63,10 +63,10 @@ class WeatherCommand extends VanillaCommand{
 		if($wea >= 0 and $wea <= 3){
 			if(WeatherManager::isRegistered($level)){
 				$level->getWeather()->setWeather($wea);
-				$sender->sendMessage(TextFormat::GREEN . "%pocketmine.command.weather.changed" . $level->getFolderName());
+				$sender->sendMessage(TextFormat::GREEN . "%pocketmine.command.weather.changed " . $level->getFolderName());
 				return true;
 			}else{
-				$sender->sendMessage(TextFormat::RED . $level->getFolderName() . "%pocketmine.command.weather.noregistered");
+				$sender->sendMessage(TextFormat::RED . $level->getFolderName() . " %pocketmine.command.weather.noregistered");
 				return false;
 			}
 		}else{

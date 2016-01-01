@@ -128,7 +128,7 @@ class Session{
 
     public function update($time){
         if(!$this->isActive and ($this->lastUpdate + 10) < $time){
-            $this->disconnect("超时");
+            $this->disconnect("timeout");
 
             return;
         }
@@ -410,7 +410,7 @@ class Session{
 					}
 				}
 			}elseif($id === CLIENT_DISCONNECT_DataPacket::$ID){
-				$this->disconnect("客户端断开连接");
+				$this->disconnect("client disconnect");
 			}elseif($id === PING_DataPacket::$ID){
 				$dataPacket = new PING_DataPacket;
 				$dataPacket->buffer = $packet->buffer;
