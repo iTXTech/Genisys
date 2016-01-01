@@ -255,10 +255,10 @@ class Item {
 
 	const LIGHT_WEIGHTED_PRESSURE_PLATE = 147;
 	const HEAVY_WEIGHTED_PRESSURE_PLATE = 148;
+	const DAYLIGHT_SENSOR = 151;
 	const REDSTONE_BLOCK = 152;
 
-	const DAYLIGHT_SENSOR = 151;
-
+	const NETHER_QUARTZ_ORE = 153;
 	const QUARTZ_BLOCK = 155;
 	const QUARTZ_STAIRS = 156;
 	const DOUBLE_WOOD_SLAB = 157;
@@ -608,7 +608,7 @@ class Item {
 			self::$list[self::RAW_FISH] = Fish::class;
 			self::$list[self::COOKED_FISH] = CookedFish::class;
 
-			//self::$list[self::QUARTZ] = NetherQuartz::class;
+			self::$list[self::NETHER_QUARTZ] = NetherQuartz::class;
 			self::$list[self::POTION] = Potion::class;
 			self::$list[self::GLASS_BOTTLE] = GlassBottle::class;
 			self::$list[self::SPLASH_POTION] = SplashPotion::class;
@@ -760,6 +760,7 @@ class Item {
 		self::addCreativeItem(Item::get(Item::QUARTZ_BLOCK, 0));
 		self::addCreativeItem(Item::get(Item::QUARTZ_BLOCK, 1));
 		self::addCreativeItem(Item::get(Item::QUARTZ_BLOCK, 2));
+		self::addCreativeItem(Item::get(Item::NETHER_QUARTZ_ORE, 0));
 		self::addCreativeItem(Item::get(Item::COAL_ORE, 0));
 		self::addCreativeItem(Item::get(Item::IRON_ORE, 0));
 		self::addCreativeItem(Item::get(Item::GOLD_ORE, 0));

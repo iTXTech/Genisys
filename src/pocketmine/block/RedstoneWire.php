@@ -366,51 +366,38 @@ class RedstoneWire extends RedstoneSource{
 
 	public function calcSignal($strength = 15, $type = self::ON, array $hasUpdated = [], array $ignore = []){
 		//This algorithm is provided by Stary and written by PeratX
-		$hash = Level::blockHash($this->x, $this->y, $this->z);
-		if(!in_array($hash, $hasUpdated)){
-			$hasUpdated[] = $hash;
-			if($type == self::DESTROY or $type == self::OFF){
-				$this->meta = $strength;
-				$this->getLevel()->setBlock($this, $this, true, false);
-				if($type == self::DESTROY) $this->getLevel()->setBlock($this, new Air(), true, false);
-				if($strength <= 0) $ignore = $this->deactivate($ignore);
-				$powers = $this->getPowerSources($this, [], [], true);
-				/** @var RedstoneSource $power */
-				foreach($powers[0] as $power){
-					$power->activate();
-				}
-			}else{
-				if($strength <= 0) return $hasUpdated;
-				if($type == self::PLACE) $strength = $this->getHighestStrengthAround() - 1;
-				if($type == self::ON) $type = self::PLACE;
-				if($this->getStrength() < $strength){
+		if($this->canCalc()){
+			$hash = Level::blockHash($this->x, $this->y, $this->z);
+			if(!in_array($hash, $hasUpdated)){
+				$hasUpdated[] = $hash;
+				if($type == self::DESTROY or $type == self::OFF){
 					$this->meta = $strength;
 					$this->getLevel()->setBlock($this, $this, true, false);
-					$ignore = $this->activate($ignore);
-
-					$hasChecked = [
-						Vector3::SIDE_WEST => false,
-						Vector3::SIDE_EAST => false,
-						Vector3::SIDE_NORTH => false,
-						Vector3::SIDE_SOUTH => false
-					];
-
-					foreach($hasChecked as $side => $bool){
-						$needUpdate = $this->getSide($side);
-						if(!in_array(Level::blockHash($needUpdate->x, $needUpdate->y, $needUpdate->z), $hasUpdated)){
-							$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore);
-							if(count($result[0]) != count($hasUpdated)){
-								$hasUpdated = $result[0];
-								$ignore = $result[1];
-								$hasChecked[$side] = true;
-							}
-						}
+					if($type == self::DESTROY) $this->getLevel()->setBlock($this, new Air(), true, false);
+					if($strength <= 0) $ignore = $this->deactivate($ignore);
+					$powers = $this->getPowerSources($this, [], [], true);
+					/** @var RedstoneSource $power */
+					foreach($powers[0] as $power){
+						$power->activate();
 					}
+				}else{
+					if($strength <= 0) return $hasUpdated;
+					if($type == self::PLACE) $strength = $this->getHighestStrengthAround() - 1;
+					if($type == self::ON) $type = self::PLACE;
+					if($this->getStrength() < $strength){
+						$this->meta = $strength;
+						$this->getLevel()->setBlock($this, $this, true, false);
+						$ignore = $this->activate($ignore);
 
-					$baseBlock = $this->add(0, 1, 0);
-					foreach($hasChecked as $side => $bool){
-						if(!$bool){
-							$needUpdate = $this->getLevel()->getBlock($baseBlock->getSide($side));
+						$hasChecked = [
+							Vector3::SIDE_WEST => false,
+							Vector3::SIDE_EAST => false,
+							Vector3::SIDE_NORTH => false,
+							Vector3::SIDE_SOUTH => false
+						];
+
+						foreach($hasChecked as $side => $bool){
+							$needUpdate = $this->getSide($side);
 							if(!in_array(Level::blockHash($needUpdate->x, $needUpdate->y, $needUpdate->z), $hasUpdated)){
 								$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore);
 								if(count($result[0]) != count($hasUpdated)){
@@ -420,18 +407,33 @@ class RedstoneWire extends RedstoneSource{
 								}
 							}
 						}
-					}
 
-					$baseBlock = $this->add(0, -1, 0);
-					foreach($hasChecked as $side => $bool){
-						if(!$bool){
-							$needUpdate = $this->getLevel()->getBlock($baseBlock->getSide($side));
-							if(!in_array(Level::blockHash($needUpdate->x, $needUpdate->y, $needUpdate->z), $hasUpdated)){
-								$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore);
-								if(count($result[0]) != count($hasUpdated)){
-									$hasUpdated = $result[0];
-									$ignore = $result[1];
-									$hasChecked[$side] = true;
+						$baseBlock = $this->add(0, 1, 0);
+						foreach($hasChecked as $side => $bool){
+							if(!$bool){
+								$needUpdate = $this->getLevel()->getBlock($baseBlock->getSide($side));
+								if(!in_array(Level::blockHash($needUpdate->x, $needUpdate->y, $needUpdate->z), $hasUpdated)){
+									$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore);
+									if(count($result[0]) != count($hasUpdated)){
+										$hasUpdated = $result[0];
+										$ignore = $result[1];
+										$hasChecked[$side] = true;
+									}
+								}
+							}
+						}
+
+						$baseBlock = $this->add(0, -1, 0);
+						foreach($hasChecked as $side => $bool){
+							if(!$bool){
+								$needUpdate = $this->getLevel()->getBlock($baseBlock->getSide($side));
+								if(!in_array(Level::blockHash($needUpdate->x, $needUpdate->y, $needUpdate->z), $hasUpdated)){
+									$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore);
+									if(count($result[0]) != count($hasUpdated)){
+										$hasUpdated = $result[0];
+										$ignore = $result[1];
+										$hasChecked[$side] = true;
+									}
 								}
 							}
 						}

@@ -3593,7 +3593,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/**
 	 * @param string $tranferedTo
 	 */
-	/*public final function setTransfered($tranferedTo = "") {
+	/*public final function setTransfered($transferedTo = "") {
 		if ($this->connected and !$this->closed) {
 			foreach ($this->usedChunks as $index => $d) {
 				Level::getXZ($index, $chunkX, $chunkZ);
@@ -3615,7 +3615,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				TextFormat::AQUA . $this->getName() . TextFormat::WHITE,
 				$this->ip,
 				$this->port,
-				$tranferedTo
+				$transferedTo
 			]));
 			$this->hasTransfered = true;
 		}

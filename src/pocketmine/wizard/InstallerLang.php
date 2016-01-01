@@ -27,7 +27,7 @@ class InstallerLang{
 		"en" => "English",
 		"chs" => "简体中文",
 		"cht" => "繁體中文",
-                "jpn" => "日本語",
+		"jpn" => "日本語",
 	];
 	private $texts = [];
 	private $lang;
