@@ -27,13 +27,13 @@ class NetherQuartzOre extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-public function getDrops(Item $item){
-	if($item->isPickaxe() >= Tool::TIER_WOODEN){
-		return [
-			[Item::NETHER_QUARTZ, 0, 1],
-		];
-	}else{
-		return [];
+	public function getDrops(Item $item){
+		if($item->isPickaxe() >= Tool::TIER_WOODEN){
+			return [
+				[Item::NETHER_QUARTZ, 0, 1],
+			];
+		}else{
+			return [];
+		}
 	}
-}
 }
