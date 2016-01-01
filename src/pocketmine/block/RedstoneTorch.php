@@ -29,6 +29,7 @@ use pocketmine\math\Vector3;
 class RedstoneTorch extends RedstoneSource{
 
 	protected $id = self::REDSTONE_TORCH;
+	public $lastUpdateTime = 0;
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
@@ -36,6 +37,12 @@ class RedstoneTorch extends RedstoneSource{
 
 	public function getLightLevel(){
 		return 7;
+	}
+
+	public function canCalc(){
+		if(!parent::canCalc()) return false;
+		if($this->getLevel()->getServer()->getTick() != $this->lastUpdateTime) return true;
+		return false;
 	}
 
 	public function getName(){
@@ -47,7 +54,8 @@ class RedstoneTorch extends RedstoneSource{
 	}
 
 	public function turnOff($ignore = ""){
-		$faces = [
+		if($this->canCalc()){
+			$faces = [
 				1 => 4,
 				2 => 5,
 				3 => 2,
@@ -55,10 +63,15 @@ class RedstoneTorch extends RedstoneSource{
 				5 => 0,
 				6 => 0,
 				0 => 0,
-		];
-		$this->getLevel()->setBlock($this, new UnlitRedstoneTorch($this->meta), true);
-		$this->deactivateTorch([$faces[$this->meta]], [$ignore]);
-		return true;
+			];
+			$this->getLevel()->setBlock($this, new UnlitRedstoneTorch($this->meta), true);
+			/** @var RedstoneTorch $block */
+			$block = $this->getLevel()->getBlock($this);
+			$block->lastUpdateTime = $this->getLevel()->getServer()->getTick();
+			$this->deactivateTorch([$faces[$this->meta]], [$ignore]);
+			return true;
+		}
+		return false;
 	}
 
 	public function activateTorch(array $ignore = [], $notCheck = []){
@@ -105,6 +118,7 @@ class RedstoneTorch extends RedstoneSource{
 					}
 				}
 			}
+			$this->lastUpdateTime = $this->getLevel()->getServer()->getTick();
 		}
 	}
 
@@ -164,6 +178,7 @@ class RedstoneTorch extends RedstoneSource{
 					}
 				}
 			}
+			$this->lastUpdateTime = $this->getLevel()->getServer()->getTick();
 		}
 	}
 

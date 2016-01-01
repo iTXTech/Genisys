@@ -22,6 +22,7 @@
 namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
+use pocketmine\level\Level;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Utils;
 
@@ -106,13 +107,18 @@ class StatusCommand extends VanillaCommand{
 		if($server->getProperty("memory.global-limit") > 0){
 			$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.status.Maxmemorymanager " . TextFormat::RED . number_format(round($server->getProperty("memory.global-limit"), 2)) . " MB.");
 		}
+
+		/** @var Level $level */
 		foreach($server->getLevels() as $level){
+			$chunks = $level->getProvider()->getLoadedChunks();
+			$count = 0;
+			foreach($chunks as $chunk){
+				$count += count($chunk->getTiles());
+			}
+
 			$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.status.World \"" . $level->getFolderName() . "\"" . ($level->getFolderName() !== $level->getName() ? " (" . $level->getName() . ")" : "") . ": " .
-				$cks=$level->provider->getLoadedChunks();
-				TextFormat::RED . number_format(count($cks)) . TextFormat::GREEN . " %pocketmine.command.status.chunks " .
+				TextFormat::RED . number_format(count($chunks)) . TextFormat::GREEN . " %pocketmine.command.status.chunks " .
 				TextFormat::RED . number_format(count($level->getEntities())) . TextFormat::GREEN . " %pocketmine.command.status.entities " .
-				$count=0;			
-				foreach($cks as $ck)$count+=\count($ck->getTiles());
 				TextFormat::RED . number_format($count) . TextFormat::GREEN . " %pocketmine.command.status.tiles " .
 				"%pocketmine.command.status.Time " . (($level->getTickRate() > 1 or $level->getTickRateTime() > 40) ? TextFormat::RED : TextFormat::YELLOW) . round($level->getTickRateTime(), 2) . "%pocketmine.command.status.ms" . ($level->getTickRate() > 1 ? " (tick rate " . $level->getTickRate() . ")" : "")
 			);
