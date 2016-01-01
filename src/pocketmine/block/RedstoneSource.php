@@ -166,7 +166,7 @@ class RedstoneSource extends Flowable{
 	}
 
 
-	public function checkTorchOn(Block $pos, array $ignore = [] ,array $ignoredBlock = []){
+	public function checkTorchOn(Block $pos, array $ignore = []){
 		$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP];
 		foreach($sides as $side){
 			if(!in_array($side, $ignore)){
@@ -184,16 +184,14 @@ class RedstoneSource extends Flowable{
 					];
 					if($this->isRightPlace($block->getSide($faces[$block->meta]), $pos)){
 						$ignoreBlock = $this->getSide($this->getOppositeSide($faces[$block->meta]));
-						$ignoredBlock[] = Level::blockHash($ignoreBlock->x, $ignoreBlock->y, $ignoreBlock->z);
-						$ignoredBlock = $block->turnOff($ignoredBlock);
+						$block->turnOff(Level::blockHash($ignoreBlock->x, $ignoreBlock->y, $ignoreBlock->z));
 					}
 				}
 			}
 		}
-		return $ignoredBlock;
 	}
 
-	public function checkTorchOff(Block $pos, array $ignore = [], array $ignoredBlock = []){
+	public function checkTorchOff(Block $pos, array $ignore = []){
 		$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP];
 		foreach($sides as $side){
 			if(!in_array($side, $ignore)){
@@ -211,13 +209,11 @@ class RedstoneSource extends Flowable{
 					];
 					if($this->isRightPlace($block->getSide($faces[$block->meta]), $pos)){
 						$ignoreBlock = $this->getSide($this->getOppositeSide($faces[$block->meta]));
-						$ignoredBlock[] = Level::blockHash($ignoreBlock->x, $ignoreBlock->y, $ignoreBlock->z);
-						$ignoredBlock = $block->turnOn($ignoredBlock);
+						$block->turnOn(Level::blockHash($ignoreBlock->x, $ignoreBlock->y, $ignoreBlock->z));
 					}
 				}
 			}
 		}
-		return $ignoredBlock;
 	}
 
 	public function getStrength(){

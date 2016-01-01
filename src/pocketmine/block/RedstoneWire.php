@@ -147,10 +147,6 @@ class RedstoneWire extends RedstoneSource{
 	}
 
 	public function activate(array $ignore = []){
-		$this->activateWire($ignore);
-	}
-
-	public function activateWire(array $ignore = [], array $ignoredBlock = []){
 		if($this->canCalc()){
 			$block = $this->getSide(Vector3::SIDE_DOWN);
 			/** @var ActiveRedstoneLamp $block */
@@ -176,15 +172,13 @@ class RedstoneWire extends RedstoneSource{
 						if($block->getId() == Block::REDSTONE_WIRE){
 							/** @var RedstoneWire $wire */
 							$wire = $block;
-							$result = $wire->calcSignal($this->maxStrength, RedstoneWire::ON, [], [], $ignoredBlock);
-							$ignore = $result[1];
-							$ignoredBlock = $result[2];
+							$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
 						}
 					}
 				}
 			}
 
-			if($side[0] == false) return [$ignore, $ignoredBlock];
+			if($side[0] == false) return $ignore;
 			$block = $this->getSide($side[0]);
 			if(!in_array($hash = Level::blockHash($block->x, $block->y, $block->z), $ignore)){
 				if(!$block instanceof RedstoneSource) $ignore[] = $hash;
@@ -213,19 +207,15 @@ class RedstoneWire extends RedstoneSource{
 					}
 				}
 
-				$ignoredBlock = $this->checkTorchOn($block, [$this->getOppositeSide($side)], $ignoredBlock);
+				$this->checkTorchOn($block, [$this->getOppositeSide($side)]);
 			}
 
 			unset($connected, $notConnected);
 		}
-		return [$ignore, $ignoredBlock];
+		return $ignore;
 	}
 
 	public function deactivate(array $ignore = []){
-		$this->deactivateWire($ignore);
-	}
-
-	public function deactivateWire(array $ignore = [], array $ignoredBlock = []){
 		if($this->canCalc()){
 			$block = $this->getSide(Vector3::SIDE_DOWN);
 			if($block->getId() == Block::ACTIVE_REDSTONE_LAMP){
@@ -254,15 +244,13 @@ class RedstoneWire extends RedstoneSource{
 						if($block->getId() == Block::REDSTONE_WIRE){
 							/** @var RedstoneWire $wire */
 							$wire = $block;
-							$result = $wire->calcSignal(0, RedstoneWire::OFF, [], [], $ignoredBlock);
-							$ignore = $result[1];
-							$ignoredBlock = $result[2];
+							$wire->calcSignal(0, RedstoneWire::OFF);
 						}
 					}
 				}
 			}
 
-			if($side[0] == false) return [$ignore, $ignoredBlock];
+			if($side[0] == false) return $ignore;
 			$block = $this->getSide($side[0]);
 			if(!in_array($hash = Level::blockHash($block->x, $block->y, $block->z), $ignore)){
 				if(!$block instanceof RedstoneSource) $ignore[] = $hash;
@@ -292,19 +280,19 @@ class RedstoneWire extends RedstoneSource{
 					}
 				}
 
-				$ignoredBlock = $this->checkTorchOff($block, [$this->getOppositeSide($side)], $ignoredBlock);
+				$this->checkTorchOff($block, [$this->getOppositeSide($side)]);
 			}
 
 			unset($connected, $notConnected);
 		}
-		return [$ignore, $ignoredBlock];
+		return $ignore;
 	}
 
 	public function getPowerSources(RedstoneWire $wire, array $powers = [], array $hasUpdated = [], $isStart = false, array $ignore = []){
 		if(!$isStart){
 			$wire->meta = 0;
 			$wire->getLevel()->setBlock($wire, $wire, true, false);
-			$ignore = $wire->deactivateWire($ignore)[0];
+			$ignore = $wire->deactivate($ignore);
 		}
 		$hasChecked = [
 			Vector3::SIDE_WEST => false,
@@ -376,7 +364,7 @@ class RedstoneWire extends RedstoneSource{
 		return [$powers, $hasUpdated, $ignore];
 	}
 
-	public function calcSignal($strength = 15, $type = self::ON, array $hasUpdated = [], array $ignore = [], array $ignoredBlock = []){
+	public function calcSignal($strength = 15, $type = self::ON, array $hasUpdated = [], array $ignore = []){
 		//This algorithm is provided by Stary and written by PeratX
 		if($this->canCalc()){
 			$hash = Level::blockHash($this->x, $this->y, $this->z);
@@ -386,11 +374,7 @@ class RedstoneWire extends RedstoneSource{
 					$this->meta = $strength;
 					$this->getLevel()->setBlock($this, $this, true, false);
 					if($type == self::DESTROY) $this->getLevel()->setBlock($this, new Air(), true, false);
-					if($strength <= 0){
-						$result = $this->deactivateWire($ignore, $ignoredBlock);
-						$ignore = $result[0];
-						$ignoredBlock = $result[1];
-					}
+					if($strength <= 0) $ignore = $this->deactivate($ignore);
 					$powers = $this->getPowerSources($this, [], [], true);
 					/** @var RedstoneSource $power */
 					foreach($powers[0] as $power){
@@ -403,9 +387,7 @@ class RedstoneWire extends RedstoneSource{
 					if($this->getStrength() < $strength){
 						$this->meta = $strength;
 						$this->getLevel()->setBlock($this, $this, true, false);
-						$result = $this->activateWire($ignore, $ignoredBlock);
-						$ignore = $result[0];
-						$ignoredBlock = $result[1];
+						$ignore = $this->activate($ignore);
 
 						$hasChecked = [
 							Vector3::SIDE_WEST => false,
@@ -417,11 +399,10 @@ class RedstoneWire extends RedstoneSource{
 						foreach($hasChecked as $side => $bool){
 							$needUpdate = $this->getSide($side);
 							if(!in_array(Level::blockHash($needUpdate->x, $needUpdate->y, $needUpdate->z), $hasUpdated)){
-								$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore, $ignoredBlock);
+								$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore);
 								if(count($result[0]) != count($hasUpdated)){
 									$hasUpdated = $result[0];
 									$ignore = $result[1];
-									$ignoredBlock = $result[2];
 									$hasChecked[$side] = true;
 								}
 							}
@@ -432,11 +413,10 @@ class RedstoneWire extends RedstoneSource{
 							if(!$bool){
 								$needUpdate = $this->getLevel()->getBlock($baseBlock->getSide($side));
 								if(!in_array(Level::blockHash($needUpdate->x, $needUpdate->y, $needUpdate->z), $hasUpdated)){
-									$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore, $ignoredBlock);
+									$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore);
 									if(count($result[0]) != count($hasUpdated)){
 										$hasUpdated = $result[0];
 										$ignore = $result[1];
-										$ignoredBlock = $result[2];
 										$hasChecked[$side] = true;
 									}
 								}
@@ -448,11 +428,10 @@ class RedstoneWire extends RedstoneSource{
 							if(!$bool){
 								$needUpdate = $this->getLevel()->getBlock($baseBlock->getSide($side));
 								if(!in_array(Level::blockHash($needUpdate->x, $needUpdate->y, $needUpdate->z), $hasUpdated)){
-									$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore, $ignoredBlock);
+									$result = $this->updateNormalWire($needUpdate, $strength - 1, $type, $hasUpdated, $ignore);
 									if(count($result[0]) != count($hasUpdated)){
 										$hasUpdated = $result[0];
 										$ignore = $result[1];
-										$ignoredBlock = $result[2];
 										$hasChecked[$side] = true;
 									}
 								}
@@ -464,17 +443,17 @@ class RedstoneWire extends RedstoneSource{
 		}
 
 
-		return [$hasUpdated, $ignore, $ignoredBlock];
+		return [$hasUpdated, $ignore];
 	}
 
-	public function updateNormalWire(Block $block, $strength, $type, array $hasUpdated, array $ignore, array $ignoredBlock){
+	public function updateNormalWire(Block $block, $strength, $type, array $hasUpdated, array $ignore){
 		/** @var RedstoneWire $block */
 		if($block->getId() == Block::REDSTONE_WIRE){
 			if($block->getStrength() < $strength){
-				return $block->calcSignal($strength, $type, $hasUpdated, $ignore, $ignoredBlock);
+				return $block->calcSignal($strength, $type, $hasUpdated, $ignore);
 			}
 		}
-		return [$hasUpdated, $ignore, $ignoredBlock];
+		return [$hasUpdated, $ignore];
 	}
 
 	public function onUpdate($type){

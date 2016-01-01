@@ -42,11 +42,11 @@ class RedstoneTorch extends RedstoneSource{
 		return "Redstone Torch";
 	}
 
-	public function turnOn($ignore = []){
+	public function turnOn($ignore = ""){
 		return true;
 	}
 
-	public function turnOff($ignore = []){
+	public function turnOff($ignore = ""){
 		$faces = [
 				1 => 4,
 				2 => 5,
@@ -57,7 +57,8 @@ class RedstoneTorch extends RedstoneSource{
 				0 => 0,
 		];
 		$this->getLevel()->setBlock($this, new UnlitRedstoneTorch($this->meta), true);
-		return $this->deactivateTorch([$faces[$this->meta]], $ignore);
+		$this->deactivateTorch([$faces[$this->meta]], [$ignore]);
+		return true;
 	}
 
 	public function activateTorch(array $ignore = [], $notCheck = []){
@@ -80,7 +81,7 @@ class RedstoneTorch extends RedstoneSource{
 						if($block->getId() == Block::REDSTONE_WIRE){
 							/** @var RedstoneWire $wire */
 							$wire = $block;
-							$notCheck = $wire->calcSignal($this->maxStrength, RedstoneWire::ON, [], [], $notCheck)[2];
+							$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
 						}
 					}
 				}
@@ -100,12 +101,11 @@ class RedstoneTorch extends RedstoneSource{
 					if($block->getId() == Block::REDSTONE_WIRE){
 						/** @var RedstoneWire $wire */
 						$wire = $block;
-						$notCheck = $wire->calcSignal($this->maxStrength, RedstoneWire::ON, [], [], $notCheck)[2];
+						$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
 					}
 				}
 			}
 		}
-		return $notCheck;
 	}
 
 	public function activate(array $ignore = []){
@@ -137,7 +137,7 @@ class RedstoneTorch extends RedstoneSource{
 						if($block->getId() == Block::REDSTONE_WIRE){
 							/** @var RedstoneWire $wire */
 							$wire = $block;
-							$notCheck = $wire->calcSignal($this->maxStrength, RedstoneWire::OFF, [], [], $notCheck)[2];
+							$wire->calcSignal(0, RedstoneWire::OFF);
 						}
 					}
 				}
@@ -160,12 +160,11 @@ class RedstoneTorch extends RedstoneSource{
 					if($block->getId() == Block::REDSTONE_WIRE){
 						/** @var RedstoneWire $wire */
 						$wire = $block;
-						$notCheck = $wire->calcSignal($this->maxStrength, RedstoneWire::OFF, [], [], $notCheck)[2];
+						$wire->calcSignal(0, RedstoneWire::OFF);
 					}
 				}
 			}
 		}
-		return $notCheck;
 	}
 
 	public function onUpdate($type){
