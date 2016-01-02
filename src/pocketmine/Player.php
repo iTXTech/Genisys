@@ -2547,9 +2547,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 								new Double("", $this->z)
 							]),
 							"Motion" => new Enum("Motion", [
-								new Double("", $aimPos->x),
+								/*new Double("", $aimPos->x),
 								new Double("", $aimPos->y),
-								new Double("", $aimPos->z)
+								new Double("", $aimPos->z)*/
+								//TODO: remove this because of a broken client
+								new Double("", -sin($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI)),
+								new Double("", -sin($this->pitch / 180 * M_PI)),
+								new Double("", cos($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI))
 							]),
 							"Rotation" => new Enum("Rotation", [
 								new Float("", $this->yaw),
