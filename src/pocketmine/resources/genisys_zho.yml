@@ -1,6 +1,6 @@
-#Genisys高級配置檔案
+#Genisys進階設定檔案
 
-#配置檔案版本
+#設定檔案版本
 config:
  version: 2
 
@@ -53,7 +53,7 @@ server:
 redstone:
  #是否允許红石系统
  enable: false
- #是否允许虚假低频脉冲
+ #是否允許虛擬低頻脈衝
  allow-fake-low-frequency-pulse: false
 
 dserver:
