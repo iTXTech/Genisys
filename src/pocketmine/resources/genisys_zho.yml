@@ -1,4 +1,8 @@
-#PocketMine-iTX Genisys 的高級配置檔案
+#Genisys高級配置檔案
+
+#配置檔案版本
+config:
+ version: 2
 
 level:
  #設定是否變換天氣
@@ -43,10 +47,14 @@ server:
  allow-snow-golem: false
  #是否允許合成藥水
  allow-crafting-potion: false
- #是否允許紅石
- allow-redstone: false
  #是否允許鐵砧和附魔臺
  allow-anvilandenchanttable: false
+
+redstone:
+ #是否允許红石系统
+ enable: false
+ #是否允许虚假低频脉冲
+ allow-fake-low-frequency-pulse: false
 
 dserver:
  #多服統一人數
