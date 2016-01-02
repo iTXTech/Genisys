@@ -3,6 +3,7 @@
 #配置文件版本
 config:
  version: 2
+ 
 level:
  #设置是否变换天气
  weather: true
