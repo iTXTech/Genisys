@@ -53,7 +53,7 @@ server:
 redstone:
  #Choose if redstone system is allowed
  enable: false
- #Choose if allow fake low ferquancy pulse
+ #Choose if allow fake low frequancy pulse
  allow-fake-low-frequency-pulse: false
 
 dserver:

@@ -30,6 +30,8 @@ class RedstoneTorch extends RedstoneSource{
 
 	protected $id = self::REDSTONE_TORCH;
 	public $lastUpdateTime = 0;
+	protected $needTurnOn = false;
+	protected $ignore = "";
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
@@ -39,10 +41,14 @@ class RedstoneTorch extends RedstoneSource{
 		return 7;
 	}
 
-	public function canCalc(){
+	public function canCalcTurn(){
 		if(!parent::canCalc()) return false;
 		if($this->getLevel()->getServer()->getTick() != $this->lastUpdateTime) return true;
-		return false;
+		return ($this->canScheduleUpdate() ? Level::BLOCK_UPDATE_SCHEDULED : false);
+	}
+
+	public function canScheduleUpdate(){
+		return $this->getLevel()->getServer()->allowFakeLowFrequencyPulse;
 	}
 
 	public function getName(){
@@ -50,11 +56,41 @@ class RedstoneTorch extends RedstoneSource{
 	}
 
 	public function turnOn($ignore = ""){
-		return true;
+		$result = $this->canCalcTurn();
+		$this->lastUpdateTime = $this->getLevel()->getServer()->getTick();
+		if($result === true){
+			$faces = [
+				1 => 4,
+				2 => 5,
+				3 => 2,
+				4 => 3,
+				5 => 0,
+				6 => 0,
+				0 => 0,
+			];
+			$this->getLevel()->setBlock($this, new RedstoneTorch($this->meta), true);
+			/** @var RedstoneTorch $block */
+			$block = $this->getLevel()->getBlock($this);
+			$block->lastUpdateTime = $this->getLevel()->getServer()->getTick();
+			$block->activateTorch([$faces[$this->meta]], [$ignore]);
+			return true;
+		}elseif($result === Level::BLOCK_UPDATE_SCHEDULED){
+			$this->ignore = $ignore;
+			/*$this->getLevel()->setBlock($this, new RedstoneTorch($this->meta), true);
+			/** @var RedstoneTorch $block
+			$block = $this->getLevel()->getBlock($this);
+			$block->lastUpdateTime = $this->getLevel()->getServer()->getTick();*/
+			$this->needTurnOn = true;
+			$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage());
+			return true;
+		}
+		return false;
 	}
 
 	public function turnOff($ignore = ""){
-		if($this->canCalc()){
+		$result = $this->canCalcTurn();
+		$this->lastUpdateTime = $this->getLevel()->getServer()->getTick();
+		if($result === true){
 			$faces = [
 				1 => 4,
 				2 => 5,
@@ -68,7 +104,16 @@ class RedstoneTorch extends RedstoneSource{
 			/** @var RedstoneTorch $block */
 			$block = $this->getLevel()->getBlock($this);
 			$block->lastUpdateTime = $this->getLevel()->getServer()->getTick();
-			$this->deactivateTorch([$faces[$this->meta]], [$ignore]);
+			$block->deactivateTorch([$faces[$this->meta]], [$ignore]);
+			return true;
+		}elseif($result === Level::BLOCK_UPDATE_SCHEDULED){
+			$this->ignore = $ignore;
+			/*$this->getLevel()->setBlock($this, new UnlitRedstoneTorch($this->meta), true);
+			/** @var RedstoneTorch $block
+			$block = $this->getLevel()->getBlock($this);
+			$block->lastUpdateTime = $this->getLevel()->getServer()->getTick();*/
+			$this->needTurnOn = false;
+			$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage());
 			return true;
 		}
 		return false;
@@ -183,18 +228,18 @@ class RedstoneTorch extends RedstoneSource{
 	}
 
 	public function onUpdate($type){
+		$faces = [
+			1 => 4,
+			2 => 5,
+			3 => 2,
+			4 => 3,
+			5 => 0,
+			6 => 0,
+			0 => 0,
+		];
 		if($type === Level::BLOCK_UPDATE_NORMAL){
 			$below = $this->getSide(0);
 			$side = $this->getDamage();
-			$faces = [
-				1 => 4,
-				2 => 5,
-				3 => 2,
-				4 => 3,
-				5 => 0,
-				6 => 0,
-				0 => 0,
-			];
 
 			if($this->getSide($faces[$side])->isTransparent() === true and
 					!($side === 0 and ($below->getId() === self::FENCE or
@@ -206,6 +251,14 @@ class RedstoneTorch extends RedstoneSource{
 				return Level::BLOCK_UPDATE_NORMAL;
 			}
 			$this->activate([$faces[$side]]);
+		}
+
+		if($type == Level::BLOCK_UPDATE_SCHEDULED){
+			if($this->needTurnOn) $this->turnOn();
+			else $this->turnOff();
+			$this->needTurnOn = !$this->needTurnOn;
+			$this->lastUpdateTime = $this->getLevel()->getServer()->getTick();
+			return Level::BLOCK_UPDATE_SCHEDULED;
 		}
 
 		return false;
@@ -257,7 +310,7 @@ class RedstoneTorch extends RedstoneSource{
 
 	public function getDrops(Item $item){
 		return [
-			[$this->id, 0, 1],
+			[Item::REDSTONE_TORCH, 0, 1],
 		];
 	}
 

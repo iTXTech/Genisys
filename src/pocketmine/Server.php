@@ -328,6 +328,7 @@ class Server{
 	public $dserverAllPlayers = 0;
 	public $allowCraftingPotion = false;
 	public $redstoneEnabled = false;
+	public $allowFakeLowFrequencyPulse = false;
 	public $anviletEnabled = false;
 
 	/**
@@ -1582,7 +1583,8 @@ class Server{
 			"serverList" => explode(";", $this->getAdvancedProperty("dserver.server-list", ""))
 		];
 		$this->allowCraftingPotion = $this->getAdvancedProperty("server.allow-crafting-potion", false);
-		$this->redstoneEnabled = $this->getAdvancedProperty("server.allow-redstone", false);
+		$this->redstoneEnabled = $this->getAdvancedProperty("redstone.enable", false);
+		$this->allowFakeLowFrequencyPulse = $this->getAdvancedProperty("redstone.allow-fake-low-frequency-pulse", false);
 		$this->anviletEnabled = $this->getAdvancedProperty("server.allow-anvilandenchanttable", false);
 	}
 
@@ -1693,7 +1695,8 @@ class Server{
 		$cfgVer = $this->getAdvancedProperty("config.version", 0, $internelConfig);
 		$advVer = $this->getAdvancedProperty("config.version", 0);
 		if($cfgVer != $advVer){
-			
+			$this->logger->notice("You genisys.yml needs update.");
+			$this->logger->notice("Current Version: $advVer       Latest Version: $cfgVer");
 		}
 
 		$this->loadAdvancedConfig();
