@@ -89,6 +89,7 @@ use pocketmine\plugin\ScriptPluginLoader;
 use pocketmine\scheduler\FileWriteTask;
 use pocketmine\scheduler\SendUsageTask;
 use pocketmine\scheduler\ServerScheduler;
+use pocketmine\tile\BrewingStand;
 use pocketmine\tile\Chest;
 use pocketmine\tile\EnchantTable;
 use pocketmine\tile\FlowerPot;
@@ -2936,6 +2937,7 @@ private function lookupAddress($address) {
 	}
 
 	private function registerTiles(){
+		Tile::registerTile(BrewingStand::class);
 		Tile::registerTile(Chest::class);
 		Tile::registerTile(Furnace::class);
 		Tile::registerTile(Sign::class);

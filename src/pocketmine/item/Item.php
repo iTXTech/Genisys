@@ -211,8 +211,9 @@ class Item {
 	const LILY_PAD = 111;
 	const NETHER_BRICKS = 112;
 	const NETHER_BRICK_BLOCK = 112;
-
+	const NETHER_BRICK_FENCE = 113;
 	const NETHER_BRICKS_STAIRS = 114;
+	const NETHER_WART_BLOCK = 115;
 
 	const ENCHANTING_TABLE = 116;
 	const ENCHANT_TABLE = 116;
@@ -444,6 +445,8 @@ class Item {
 	const GOLD_NUGGET = 371;
 	const GOLDEN_NUGGET = 371;
 
+	const NETHER_WART = 372;
+
 	const POTION = 373;
 	const GLASS_BOTTLE = 374;
 
@@ -497,8 +500,6 @@ class Item {
 	const BEETROOT_SEEDS = 458;
 	const BEETROOT_SEED = 458;
 	const BEETROOT_SOUP = 459;
-
-	const NETHER_BRICK_FENCE = 113;
 
 	const RAIL = 66;
 	const POWERED_RAIL = 27;
