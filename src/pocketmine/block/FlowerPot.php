@@ -89,7 +89,7 @@ class FlowerPot extends Flowable{
 						$this->getLevel()->setBlock($this, $this, true, false);
 						if($player->isSurvival()){
 							$item->setCount($item->getCount() - 1);
-							$player->inventory->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
+							$player->getInventory()->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
 						}
 						return true;
 						break;
