@@ -736,7 +736,7 @@ class Level implements ChunkManager, Metadatable{
 		$this->timings->tileEntityTick->stopTiming();
 
 		$this->timings->doTickTiles->startTiming();
-		$this->tickChunks();
+		if(($currentTick % 2) === 0) $this->tickChunks();
 		$this->timings->doTickTiles->stopTiming();
 
 		if(count($this->changedBlocks) > 0){
@@ -1546,7 +1546,7 @@ class Level implements ChunkManager, Metadatable{
 				return false;
 			}
 
-			$breakTime = $target->getBreakTime($item);
+			/*$breakTime = $target->getBreakTime($item);
 
 			if($player->isCreative() and $breakTime > 0.15){
 				$breakTime = 0.15;
@@ -1564,7 +1564,7 @@ class Level implements ChunkManager, Metadatable{
 
 			if(!$ev->getInstaBreak() and ($player->lastBreak + $breakTime) > microtime(true)){
 				return false;
-			}
+			}*/
 
 			$player->lastBreak = microtime(true);
 

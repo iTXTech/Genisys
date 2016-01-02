@@ -1128,7 +1128,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		$this->sleeping = clone $pos;
-		$this->teleport(new Position($pos->x + 0.5, $pos->y - 0.5, $pos->z + 0.5, $this->level));
+		$this->teleport(new Position($pos->x + 0.5, $pos->y - 1, $pos->z + 0.5, $this->level));
 
 		$this->setDataProperty(self::DATA_PLAYER_BED_POSITION, self::DATA_TYPE_POS, [$pos->x, $pos->y, $pos->z]);
 		$this->setDataFlag(self::DATA_PLAYER_FLAGS, self::DATA_PLAYER_FLAG_SLEEP, true);
@@ -1437,7 +1437,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	protected function checkNearEntities($tickDiff){
-		foreach($this->level->getNearbyEntities($this->boundingBox->grow(1, 0.5, 1), $this) as $entity){
+		foreach($this->level->getNearbyEntities($this->boundingBox->grow(0.5, 0.5, 0.5), $this) as $entity){
 			$entity->scheduleUpdate();
 
 			if(!$entity->isAlive()){
@@ -2372,7 +2372,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				if($this->linkedEntity instanceof Entity){
 					$entity = $this->linkedEntity;
 					if($entity instanceof Boat){
-						$entity->setPosition($this->temporalVector->setComponents($packet->x, $packet->y - 0.5, $packet->z));
+						$entity->setPosition($this->temporalVector->setComponents($packet->x, $packet->y - 0.3, $packet->z));
 					}
 					if($entity instanceof Minecart){
 						$entity->isFreeMoving = true;
@@ -2764,7 +2764,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$pk = new EntityEventPacket();
 							$pk->eid = $this->getId();
 							$pk->event = EntityEventPacket::USE_ITEM;
-							$pk;
+							//$pk;
 							$this->dataPacket($pk);
 							Server::broadcastPacket($this->getViewers(), $pk);
 
