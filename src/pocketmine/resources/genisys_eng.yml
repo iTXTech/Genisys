@@ -1,4 +1,8 @@
-#The PocketMine-iTX Genisys Advanced YML Configuration File
+#Genisys Advanced Configuration File
+
+#Version of this file
+config:
+ version: 2
 
 level:
  #Set if turn on the weather system
@@ -43,10 +47,14 @@ server:
  allow-snow-golem: false
  #Choose if crafting potion is allowed
  allow-crafting-potion: false
- #Choose if redstone system is allowed
- allow-redstone: false
  #Choose if anvil and enchanttable are allowed
  allow-anvilandenchanttable: false
+
+redstone:
+ #Choose if redstone system is allowed
+ enable: false
+ #Choose if allow fake low ferquancy pulse
+ allow-fake-low-frequency-pulse: false
 
 dserver:
  #The count of all multi-server unified

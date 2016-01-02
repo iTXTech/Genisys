@@ -3527,13 +3527,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			if($m !== ""){
 				$ev = new PlayerTextPreSendEvent($this, $m, PlayerTextPreSendEvent::MESSAGE);
 				$this->server->getPluginManager()->callEvent($ev);
-				if($ev->isCancelled()) return false;
-
-				$pk = new TextPacket();
-				$pk->type = TextPacket::TYPE_RAW;
-				$pk->message = $ev->getMessage();
-				$this->dataPacket($pk);
-				return true;
+				if(!$ev->isCancelled()){
+					$pk = new TextPacket();
+					$pk->type = TextPacket::TYPE_RAW;
+					$pk->message = $ev->getMessage();
+					$this->dataPacket($pk);
+				}
 			}
 		}
 
