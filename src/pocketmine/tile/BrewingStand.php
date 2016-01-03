@@ -7,13 +7,11 @@
  *
  * OpenGenisys Project
  *
- * Merged from ImagicalMine
+ * Translated from Nukkit and improved by PeratX
  */
 namespace pocketmine\tile;
 
-use pocketmine\event\inventory\BrewingStandBrewEvent;
 use pocketmine\inventory\BrewingInventory;
-use pocketmine\inventory\BrewingRecipe;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
@@ -30,6 +28,8 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 	const MAX_BREW_TIME = 400;
 	/** @var BrewingInventory */
 	protected $inventory;
+
+	public static $ingredients = [];
 
 	public function __construct(FullChunk $chunk, Compound $nbt){
 		parent::__construct($chunk, $nbt);
@@ -163,6 +163,11 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		return $this->inventory;
 	}
 
+	public function checkIngredient(Item $item){
+		if(isset(self::$ingredients[$item->getId()])) return true;
+		return false;
+	}
+
 	public function onUpdate(){
 		if($this->closed === true){
 			return false;
@@ -183,7 +188,8 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		}
 
 		if($this->namedtag["CookTime"] <= self::MAX_BREW_TIME and $canBrew and $ingredient->getCount() > 0){
-
+			//if(!$this->checkIngredient($ingredient)) $canBrew = false;
+			//TODO: check ingredients
 		} else $canBrew = false;
 
 		if($canBrew){
