@@ -441,6 +441,10 @@ class Item {
 
 	const RAW_CHICKEN = 365;
 	const COOKED_CHICKEN = 366;
+	const ROTTEN_FLESH = 367;
+
+	const BLAZE_ROD = 369;
+	const GHAST_TEAR = 370;
 
 	const GOLD_NUGGET = 371;
 	const GOLDEN_NUGGET = 371;
@@ -452,6 +456,9 @@ class Item {
 
 	const SPIDER_EYE = 375;
 	const FERMENTED_SPIDER_EYE = 376;
+
+	const BLAZE_POWDER = 377;
+	const MAGMA_CREAM = 378;
 
 	const GLISTERING_MELON = 382;
 

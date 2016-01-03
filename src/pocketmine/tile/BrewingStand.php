@@ -26,6 +26,7 @@ use pocketmine\nbt\tag\Int;
 use pocketmine\network\protocol\ContainerSetDataPacket;
 
 class BrewingStand extends Spawnable implements InventoryHolder, Container, Nameable{
+	const MAX_BREW_TIME = 400;
 	/** @var BrewingInventory */
 	protected $inventory;
 
@@ -198,12 +199,13 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 				$pk = new ContainerSetDataPacket();
 				$pk->windowid = $windowId;
 				$pk->property = 0; //Brew
+				$pk->value = $this->namedtag["BrewTime"];
 				$player->dataPacket($pk);
 
-				$pk = new ContainerSetDataPacket();
+				/*$pk = new ContainerSetDataPacket();
 				$pk->windowid = $windowId;
 				$pk->property = 1; //Bubble Icon
-				$player->dataPacket($pk);
+				$player->dataPacket($pk);*/
 			}
 
 		}
@@ -221,6 +223,7 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 			new Int("x", (int) $this->x),
 			new Int("y", (int) $this->y),
 			new Int("z", (int) $this->z),
+			new Short("CookTime", self::MAX_BREW_TIME),
 		]);
 
 		if($this->hasName()){
