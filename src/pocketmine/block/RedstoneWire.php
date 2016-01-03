@@ -451,7 +451,8 @@ class RedstoneWire extends RedstoneSource{
 	}
 
 	public function onBreak(Item $item){
-		$this->calcSignal(0, self::DESTROY);
+		if($this->canCalc()) $this->calcSignal(0, self::DESTROY);
+		else $this->getLevel()->setBlock($this, new Air());
 	}
 
 	public function getDrops(Item $item){
