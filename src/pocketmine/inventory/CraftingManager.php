@@ -990,14 +990,13 @@ class CraftingManager{
 
 	/**
 	 * @param Item $input
+	 * @param Item $potion
 	 *
 	 * @return BrewingRecipe
 	 */
-	public function matchBrewingRecipe(Item $input){
-		if(isset($this->brewingRecipes[$input->getId() . ":" . $input->getDamage()])){
-			return $this->brewingRecipes[$input->getId() . ":" . $input->getDamage()];
-		}elseif(isset($this->brewingRecipes[$input->getId() . ":?"])){
-			return $this->brewingRecipes[$input->getId() . ":?"];
+	public function matchBrewingRecipe(Item $input, Item $potion){
+		if(isset($this->brewingRecipes[$input->getId() . ":" . ($potion->getDamage() === null ? "0" : $potion->getDamage())])){
+			return $this->brewingRecipes[$input->getId() . ":" . ($potion->getDamage() === null ? "0" : $potion->getDamage())];
 		}
 		return null;
 	}
@@ -1050,7 +1049,8 @@ class CraftingManager{
 	 */
 	public function registerBrewingRecipe(BrewingRecipe $recipe){
 		$input = $recipe->getInput();
-		$this->brewingRecipes[$input->getId() . ":" . ($input->getDamage() === null ? "?" : $input->getDamage())] = $recipe;
+		$potion = $recipe->getPotion();
+		$this->brewingRecipes[$input->getId() . ":" . ($potion->getDamage() === null ? "0" : $potion->getDamage())] = $recipe;
 	}
 
 	/**

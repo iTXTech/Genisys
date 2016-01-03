@@ -26,16 +26,22 @@ class BrewingRecipe implements Recipe{
 	private $ingredient;
 
 	/** @var Item  */
-	private $bottle;
+	private $potion;
 
 	/**
+	 * BrewingRecipe constructor.
 	 * @param Item $result
 	 * @param Item $ingredient
+	 * @param Item $potion
 	 */
-	public function __construct(Item $result, Item $ingredient, Item $bottle){
+	public function __construct(Item $result, Item $ingredient, Item $potion){
 		$this->output = clone $result;
 		$this->ingredient = clone $ingredient;
-		$this->bottle = clone $bottle;
+		$this->potion = clone $potion;
+	}
+
+	public function getPotion(){
+		return clone $this->potion;
 	}
 
 	public function getId(){
