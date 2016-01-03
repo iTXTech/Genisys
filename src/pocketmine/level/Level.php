@@ -1494,7 +1494,7 @@ class Level implements ChunkManager, Metadatable{
 
 				"Motion" => new Enum("Motion", [
 					new Double("", $motion->x),
-					new Double("", $motion->y + 0.1),
+					new Double("", $motion->y),
 					new Double("", $motion->z)
 				]),
 				"Rotation" => new Enum("Rotation", [
