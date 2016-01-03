@@ -48,7 +48,7 @@ class CraftingManager{
 
 	private static $RECIPE_COUNT = 0;
 
-	public function __construct($allowCraftingPotion = false){
+	public function __construct(){
 		$this->registerStonecutter();
 		$this->registerFurnace();
 		$this->registerDyes();

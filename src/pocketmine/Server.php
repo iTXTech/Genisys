@@ -143,7 +143,6 @@ use pocketmine\entity\Boat;
 use pocketmine\entity\Minecart;
 use pocketmine\entity\ThrownPotion;
 use pocketmine\entity\Painting;
-use pocketmine\scheduler\AsyncTask;
 use pocketmine\scheduler\DServerTask;
 use pocketmine\scheduler\CallbackTask;
 
@@ -327,7 +326,6 @@ class Server{
 	public $dserverConfig = [];
 	public $dserverPlayers = 0;
 	public $dserverAllPlayers = 0;
-	public $allowCraftingPotion = false;
 	public $redstoneEnabled = false;
 	public $allowFakeLowFrequencyPulse = false;
 	public $anviletEnabled = false;
@@ -1583,7 +1581,6 @@ class Server{
 			"retryTimes" => $this->getAdvancedProperty("dserver.retry-times", 3),
 			"serverList" => explode(";", $this->getAdvancedProperty("dserver.server-list", ""))
 		];
-		$this->allowCraftingPotion = $this->getAdvancedProperty("server.allow-crafting-potion", false);
 		$this->redstoneEnabled = $this->getAdvancedProperty("redstone.enable", false);
 		$this->allowFakeLowFrequencyPulse = $this->getAdvancedProperty("redstone.allow-fake-low-frequency-pulse", false);
 		$this->anviletEnabled = $this->getAdvancedProperty("server.allow-anvilandenchanttable", false);
@@ -1839,7 +1836,7 @@ class Server{
 		Attribute::init();
 		/** TODO: @deprecated */
 		TextWrapper::init();
-		$this->craftingManager = new CraftingManager($this->allowCraftingPotion);
+		$this->craftingManager = new CraftingManager();
 
 		$this->pluginManager = new PluginManager($this, $this->commandMap);
 		$this->pluginManager->subscribeToPermission(Server::BROADCAST_CHANNEL_ADMINISTRATIVE, $this->consoleSender);
