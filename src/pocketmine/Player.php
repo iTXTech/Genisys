@@ -4275,15 +4275,17 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pk->chunkZ = $chunkZ;
 		$pk->order = $ordering;
 		$pk->data = $payload;
-		$pk->encode();
-
-		$batch = new BatchPacket();
-		$batch->payload = zlib_encode(Binary::writeInt(strlen($pk->getBuffer())) . $pk->getBuffer(), ZLIB_ENCODING_DEFLATE, Server::getInstance()->networkCompressionLevel);
-
-		$batch;
-		$batch->encode();
-		$batch->isEncoded = true;
-		return $batch;
+		if(\pocketmine\network\Network::$BATCH_THRESHOLD>=0)
+		{
+			$pk->encode();
+			$batch = new BatchPacket();
+			$batch->payload = zlib_encode(Binary::writeInt(strlen($pk->getBuffer())) . $pk->getBuffer(), ZLIB_ENCODING_DEFLATE, Server::getInstance()->networkCompressionLevel);
+			$batch->encode();
+			$batch->isEncoded = true;
+			return $batch;
+		}
+		return $pk;
 	}
+
 
 }
