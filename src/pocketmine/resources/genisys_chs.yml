@@ -53,7 +53,7 @@ server:
 redstone:
  #是否开启红石系统
  enable: false
- #是否允许虚假低频脉冲
+ #是否允许伪低频
  allow-fake-low-frequency-pulse: false
  
 dserver:
