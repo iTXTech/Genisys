@@ -45,8 +45,6 @@ server:
  allow-iron-golem: false
  #Choose if spawning snow golem is allowed
  allow-snow-golem: false
- #Choose if crafting potion is allowed
- allow-crafting-potion: false
  #Choose if anvil and enchanttable are allowed
  allow-anvilandenchanttable: false
 

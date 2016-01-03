@@ -97,6 +97,7 @@ use pocketmine\nbt\tag\Int;
 use pocketmine\nbt\tag\Long;
 use pocketmine\nbt\tag\Short;
 use pocketmine\nbt\tag\String;
+use pocketmine\network\Network;
 use pocketmine\network\protocol\AdventureSettingsPacket;
 use pocketmine\network\protocol\AnimatePacket;
 use pocketmine\network\protocol\BatchPacket;
@@ -393,7 +394,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	public function setAllowFlight($value){
-		$this->allowFlight = (bool)$value;
+		$this->allowFlight = (bool) $value;
 		$this->sendSettings();
 	}
 
@@ -437,7 +438,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @param bool $remove
 	 */
 	public function setRemoveFormat($remove = true){
-		$this->removeFormat = (bool)$remove;
+		$this->removeFormat = (bool) $remove;
 	}
 
 	/**
@@ -602,8 +603,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->port = $port;
 		$this->clientID = $clientID;
 		$this->loaderId = Level::generateChunkLoaderId($this);
-		$this->chunksPerTick = (int)$this->server->getProperty("chunk-sending.per-tick", 4);
-		$this->spawnThreshold = (int)$this->server->getProperty("chunk-sending.spawn-threshold", 56);
+		$this->chunksPerTick = (int) $this->server->getProperty("chunk-sending.per-tick", 4);
+		$this->spawnThreshold = (int) $this->server->getProperty("chunk-sending.spawn-threshold", 56);
 		$this->spawnPosition = null;
 		$this->gamemode = $this->server->getGamemode();
 		$this->setLevel($this->server->getDefaultLevel());
@@ -1155,9 +1156,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 		$this->spawnPosition = new Position($pos->x, $pos->y, $pos->z, $level);
 		$pk = new SetSpawnPositionPacket();
-		$pk->x = (int)$this->spawnPosition->x;
-		$pk->y = (int)$this->spawnPosition->y;
-		$pk->z = (int)$this->spawnPosition->z;
+		$pk->x = (int) $this->spawnPosition->x;
+		$pk->y = (int) $this->spawnPosition->y;
+		$pk->z = (int) $this->spawnPosition->z;
 		$this->dataPacket($pk);
 	}
 
@@ -1225,7 +1226,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			return false;
 		}
 
-		$this->server->getPluginManager()->callEvent($ev = new PlayerGameModeChangeEvent($this, (int)$gm));
+		$this->server->getPluginManager()->callEvent($ev = new PlayerGameModeChangeEvent($this, (int) $gm));
 		if($ev->isCancelled()){
 			return false;
 		}
@@ -2186,9 +2187,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pk->x = $this->x;
 		$pk->y = $this->y;
 		$pk->z = $this->z;
-		$pk->spawnX = (int)$spawnPosition->x;
-		$pk->spawnY = (int)$spawnPosition->y;
-		$pk->spawnZ = (int)$spawnPosition->z;
+		$pk->spawnX = (int) $spawnPosition->x;
+		$pk->spawnY = (int) $spawnPosition->y;
+		$pk->spawnZ = (int) $spawnPosition->z;
 		$pk->generator = 1; //0 old, 1 infinite, 2 flat
 		$pk->gamemode = $this->gamemode & 0x01;
 		$pk->eid = 0; //Always use EntityID as zero for the actual player
@@ -2202,9 +2203,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->dataPacket($pk);
 
 		$pk = new SetSpawnPositionPacket();
-		$pk->x = (int)$spawnPosition->x;
-		$pk->y = (int)$spawnPosition->y;
-		$pk->z = (int)$spawnPosition->z;
+		$pk->x = (int) $spawnPosition->x;
+		$pk->y = (int) $spawnPosition->y;
+		$pk->z = (int) $spawnPosition->z;
 		$this->dataPacket($pk);
 
 		$pk = new SetHealthPacket();
@@ -3635,7 +3636,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public final function close($message = "", $reason = "generic reason", $notify = true){
 
 		if($this->connected and !$this->closed){
-			if($notify and strlen((string)$reason) > 0){
+			if($notify and strlen((string) $reason) > 0){
 				$pk = new DisconnectPacket;
 				$pk->message = $reason;
 				$this->directDataPacket($pk);
@@ -3733,9 +3734,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->namedtag->Level = new String("Level", $this->level->getName());
 			if($this->spawnPosition instanceof Position and $this->spawnPosition->getLevel() instanceof Level){
 				$this->namedtag["SpawnLevel"] = $this->spawnPosition->getLevel()->getName();
-				$this->namedtag["SpawnX"] = (int)$this->spawnPosition->x;
-				$this->namedtag["SpawnY"] = (int)$this->spawnPosition->y;
-				$this->namedtag["SpawnZ"] = (int)$this->spawnPosition->z;
+				$this->namedtag["SpawnX"] = (int) $this->spawnPosition->x;
+				$this->namedtag["SpawnY"] = (int) $this->spawnPosition->y;
+				$this->namedtag["SpawnZ"] = (int) $this->spawnPosition->z;
 			}
 
 			foreach($this->achievements as $achievement => $status){
@@ -4195,7 +4196,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		if($forceId === null){
 			$this->windowCnt = $cnt = max(2, ++$this->windowCnt % 99);
 		}else{
-			$cnt = (int)$forceId;
+			$cnt = (int) $forceId;
 		}
 		$this->windowIndex[$cnt] = $inventory;
 		$this->windows->attach($inventory, $cnt);
@@ -4263,11 +4264,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	/**
-	 * @param $chunkX
-	 * @param $chunkZ
-	 * @param $payload
-	 *
-	 * @return DataPacket
+	 * @param     $chunkX
+	 * @param     $chunkZ
+	 * @param     $payload
+	 * @param int $ordering
+	 * @return BatchPacket|FullChunkDataPacket
 	 */
 	public static function getChunkCacheFromData($chunkX, $chunkZ, $payload, $ordering = FullChunkDataPacket::ORDER_COLUMNS){
 		$pk = new FullChunkDataPacket();
@@ -4275,8 +4276,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pk->chunkZ = $chunkZ;
 		$pk->order = $ordering;
 		$pk->data = $payload;
-		if(\pocketmine\network\Network::$BATCH_THRESHOLD>=0)
-		{
+		if(Network::$BATCH_THRESHOLD >= 0){
 			$pk->encode();
 			$batch = new BatchPacket();
 			$batch->payload = zlib_encode(Binary::writeInt(strlen($pk->getBuffer())) . $pk->getBuffer(), ZLIB_ENCODING_DEFLATE, Server::getInstance()->networkCompressionLevel);
