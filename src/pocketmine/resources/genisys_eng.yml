@@ -19,7 +19,7 @@ player:
  hunger: true
  #Minimum health when someone is attacking by being hungry
  hunger-health: 10
- #Hunger Time-Counter，Default: 80=4sec
+ #Hunger Time-Counter, Default: 80=4sec
  hunger-timer: 3000
  #Choose if turn on the experience system
  experience: true
@@ -53,7 +53,7 @@ redstone:
  enable: false
  #Choose if allow fake low frequancy pulse
  allow-fake-low-frequency-pulse: false
- #Set the frequency of pulse, Deafult 1s
+ #Set the frequency of pulse, Default: 1s
  pulse-frequency: 1
 
 dserver:
