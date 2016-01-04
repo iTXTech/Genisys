@@ -46,6 +46,10 @@ class RedstoneTorch extends RedstoneSource{
 		return $this->getLevel()->getServer()->allowFakeLowFrequencyPulse;
 	}
 
+	public function getFrequency(){
+		return $this->getLevel()->getServer()->pulseFrequency;
+	}
+
 	public function getName(){
 		return "Redstone Torch";
 	}
@@ -69,7 +73,7 @@ class RedstoneTorch extends RedstoneSource{
 			return true;
 		}elseif($result === Level::BLOCK_UPDATE_SCHEDULED){
 			$this->ignore = $ignore;
-			$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage());
+			$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage() * $this->getFrequency());
 			return true;
 		}
 		return false;
@@ -94,7 +98,7 @@ class RedstoneTorch extends RedstoneSource{
 			return true;
 		}elseif($result === Level::BLOCK_UPDATE_SCHEDULED){
 			$this->ignore = $ignore;
-			$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage());
+			$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage() * $this->getFrequency());
 			return true;
 		}
 		return false;

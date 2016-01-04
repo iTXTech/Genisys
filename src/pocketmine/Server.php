@@ -329,6 +329,7 @@ class Server{
 	public $redstoneEnabled = false;
 	public $allowFakeLowFrequencyPulse = false;
 	public $anviletEnabled = false;
+	public $pulseFrequency = 20;
 
 	/**
 	 * @return string
@@ -1583,6 +1584,7 @@ class Server{
 		];
 		$this->redstoneEnabled = $this->getAdvancedProperty("redstone.enable", false);
 		$this->allowFakeLowFrequencyPulse = $this->getAdvancedProperty("redstone.allow-fake-low-frequency-pulse", false);
+		$this->pulseFrequency = $this->getAdvancedProperty("redstone.pulse-frequency", 20);
 		$this->anviletEnabled = $this->getAdvancedProperty("server.allow-anvilandenchanttable", false);
 	}
 
