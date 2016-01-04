@@ -211,8 +211,9 @@ class Item {
 	const LILY_PAD = 111;
 	const NETHER_BRICKS = 112;
 	const NETHER_BRICK_BLOCK = 112;
-
+	const NETHER_BRICK_FENCE = 113;
 	const NETHER_BRICKS_STAIRS = 114;
+	const NETHER_WART_BLOCK = 115;
 
 	const ENCHANTING_TABLE = 116;
 	const ENCHANT_TABLE = 116;
@@ -248,15 +249,17 @@ class Item {
 
 	const WOODEN_BUTTON = 143;
 
+	const SKULL_BLOCK = 144;
+
 	const TRAPPED_CHEST = 146;
 	const ANVIL = 145;
 
 	const LIGHT_WEIGHTED_PRESSURE_PLATE = 147;
 	const HEAVY_WEIGHTED_PRESSURE_PLATE = 148;
+	const DAYLIGHT_SENSOR = 151;
 	const REDSTONE_BLOCK = 152;
 
-	const DAYLIGHT_SENSOR = 151;
-
+	const NETHER_QUARTZ_ORE = 153;
 	const QUARTZ_BLOCK = 155;
 	const QUARTZ_STAIRS = 156;
 	const DOUBLE_WOOD_SLAB = 157;
@@ -438,15 +441,24 @@ class Item {
 
 	const RAW_CHICKEN = 365;
 	const COOKED_CHICKEN = 366;
+	const ROTTEN_FLESH = 367;
+
+	const BLAZE_ROD = 369;
+	const GHAST_TEAR = 370;
 
 	const GOLD_NUGGET = 371;
 	const GOLDEN_NUGGET = 371;
+
+	const NETHER_WART = 372;
 
 	const POTION = 373;
 	const GLASS_BOTTLE = 374;
 
 	const SPIDER_EYE = 375;
 	const FERMENTED_SPIDER_EYE = 376;
+
+	const BLAZE_POWDER = 377;
+	const MAGMA_CREAM = 378;
 
 	const GLISTERING_MELON = 382;
 
@@ -465,27 +477,36 @@ class Item {
 	const BAKED_POTATO = 393;
 	const BAKED_POTATOES = 393;
 
+	const POISONOUS_POTATO = 394;
+	const GOLDEN_CARROT = 396;
+	const SKULL = 397;
 	const PUMPKIN_PIE = 400;
-
+	const ENCHANTED_BOOK = 403;
 	const NETHER_BRICK = 405;
 	const QUARTZ = 406;
 	const NETHER_QUARTZ = 406;
-
+	const RAW_RABBIT = 411;
+	const COOKED_RABBIT = 412;
+	const RABBIT_STEW = 413;
+	const RABBIT_FOOT = 414;
+	const RABBIT_HIDE = 415;
 	const SPRUCE_DOOR = 427;
 	const BIRCH_DOOR = 428;
 	const JUNGLE_DOOR = 429;
 	const ACACIA_DOOR = 430;
 	const DARK_OAK_DOOR = 431;
+	const SPLASH_POTION = 438;
+	const SPRUCE_BOAT = 444;
+	const BIRCH_BOAT = 445;
+	const JUNGLE_BOAT = 446;
+	const ACACIA_BOAT = 447;
+	const DARK_OAK_BOAT = 448;
 
 	const CAMERA = 456;
 	const BEETROOT = 457;
 	const BEETROOT_SEEDS = 458;
 	const BEETROOT_SEED = 458;
 	const BEETROOT_SOUP = 459;
-
-	const SPLASH_POTION = 438;
-
-	const NETHER_BRICK_FENCE = 113;
 
 	const RAIL = 66;
 	const POWERED_RAIL = 27;
@@ -595,7 +616,7 @@ class Item {
 			self::$list[self::RAW_FISH] = Fish::class;
 			self::$list[self::COOKED_FISH] = CookedFish::class;
 
-			//self::$list[self::QUARTZ] = NetherQuartz::class;
+			self::$list[self::NETHER_QUARTZ] = NetherQuartz::class;
 			self::$list[self::POTION] = Potion::class;
 			self::$list[self::GLASS_BOTTLE] = GlassBottle::class;
 			self::$list[self::SPLASH_POTION] = SplashPotion::class;
@@ -641,6 +662,8 @@ class Item {
 			self::$list[self::QUARTZ] = Quartz::class;
 			//self::$list[self::CAMERA] = Camera::class;
 			self::$list[self::BEETROOT] = Beetroot::class;
+			self::$list[self::FLOWER_POT] = FlowerPot::class;
+			self::$list[self::SKULL] = Skull::class;
 
 			for ($i = 0; $i < 256; ++$i) {
 				if (Block::$list[$i] !== null) {
@@ -745,6 +768,7 @@ class Item {
 		self::addCreativeItem(Item::get(Item::QUARTZ_BLOCK, 0));
 		self::addCreativeItem(Item::get(Item::QUARTZ_BLOCK, 1));
 		self::addCreativeItem(Item::get(Item::QUARTZ_BLOCK, 2));
+		self::addCreativeItem(Item::get(Item::NETHER_QUARTZ_ORE, 0));
 		self::addCreativeItem(Item::get(Item::COAL_ORE, 0));
 		self::addCreativeItem(Item::get(Item::IRON_ORE, 0));
 		self::addCreativeItem(Item::get(Item::GOLD_ORE, 0));
@@ -859,6 +883,11 @@ class Item {
 		self::addCreativeItem(Item::get(Item::LEAVES2, 0));
 		self::addCreativeItem(Item::get(Item::LEAVES2, 1));
 		self::addCreativeItem(Item::get(Item::CAKE, 0));
+		self::addCreativeItem(Item::get(Item::SKULL, Skull::SKELETON)); // Skeleton
+		self::addCreativeItem(Item::get(Item::SKULL, Skull::WITHER_SKELETON)); // Wither Skeleton
+		self::addCreativeItem(Item::get(Item::SKULL, Skull::ZOMBIE)); // Zombie
+		self::addCreativeItem(Item::get(Item::SKULL, Skull::STEVE)); // Head (Steve)
+		self::addCreativeItem(Item::get(Item::SKULL, Skull::CREEPER)); // Creeper
 		self::addCreativeItem(Item::get(Item::SIGN, 0));
 		self::addCreativeItem(Item::get(Item::FLOWER_POT, 0));
 		self::addCreativeItem(Item::get(Item::MONSTER_SPAWNER, 0));

@@ -89,10 +89,13 @@ use pocketmine\plugin\ScriptPluginLoader;
 use pocketmine\scheduler\FileWriteTask;
 use pocketmine\scheduler\SendUsageTask;
 use pocketmine\scheduler\ServerScheduler;
+use pocketmine\tile\BrewingStand;
 use pocketmine\tile\Chest;
 use pocketmine\tile\EnchantTable;
+use pocketmine\tile\FlowerPot;
 use pocketmine\tile\Furnace;
 use pocketmine\tile\Sign;
+use pocketmine\tile\Skull;
 use pocketmine\tile\Tile;
 use pocketmine\updater\AutoUpdater;
 use pocketmine\utils\Binary;
@@ -140,7 +143,6 @@ use pocketmine\entity\Boat;
 use pocketmine\entity\Minecart;
 use pocketmine\entity\ThrownPotion;
 use pocketmine\entity\Painting;
-use pocketmine\scheduler\AsyncTask;
 use pocketmine\scheduler\DServerTask;
 use pocketmine\scheduler\CallbackTask;
 
@@ -324,9 +326,10 @@ class Server{
 	public $dserverConfig = [];
 	public $dserverPlayers = 0;
 	public $dserverAllPlayers = 0;
-	public $allowCraftingPotion = false;
 	public $redstoneEnabled = false;
+	public $allowFakeLowFrequencyPulse = false;
 	public $anviletEnabled = false;
+	public $pulseFrequency = 20;
 
 	/**
 	 * @return string
@@ -446,7 +449,7 @@ class Server{
 	 * @param bool $value
 	 */
 	public function setAutoSave($value){
-		$this->autoSave = (bool)$value;
+		$this->autoSave = (bool) $value;
 		foreach($this->getLevels() as $level){
 			$level->setAutoSave($this->autoSave);
 		}
@@ -488,7 +491,7 @@ class Server{
 	 * @return string
 	 */
 	public static function getGamemodeString($mode){
-		switch((int)$mode){
+		switch((int) $mode){
 			case Player::SURVIVAL:
 				return "%gameMode.survival";
 			case Player::CREATIVE:
@@ -511,22 +514,22 @@ class Server{
 	 */
 	public static function getGamemodeFromString($str){
 		switch(strtolower(trim($str))){
-			case (string)Player::SURVIVAL:
+			case (string) Player::SURVIVAL:
 			case "survival":
 			case "s":
 				return Player::SURVIVAL;
 
-			case (string)Player::CREATIVE:
+			case (string) Player::CREATIVE:
 			case "creative":
 			case "c":
 				return Player::CREATIVE;
 
-			case (string)Player::ADVENTURE:
+			case (string) Player::ADVENTURE:
 			case "adventure":
 			case "a":
 				return Player::ADVENTURE;
 
-			case (string)Player::SPECTATOR:
+			case (string) Player::SPECTATOR:
 			case "spectator":
 			case "view":
 			case "v":
@@ -831,42 +834,42 @@ class Server{
 		}
 		$spawn = $this->getDefaultLevel()->getSafeSpawn();
 		$nbt = new Compound("", [
-				new Long("firstPlayed", floor(microtime(true) * 1000)),
-				new Long("lastPlayed", floor(microtime(true) * 1000)),
-				new Enum("Pos", [
-						new Double(0, $spawn->x),
-						new Double(1, $spawn->y),
-						new Double(2, $spawn->z)
-				]),
-				new String("Level", $this->getDefaultLevel()->getName()),
+			new Long("firstPlayed", floor(microtime(true) * 1000)),
+			new Long("lastPlayed", floor(microtime(true) * 1000)),
+			new Enum("Pos", [
+				new Double(0, $spawn->x),
+				new Double(1, $spawn->y),
+				new Double(2, $spawn->z)
+			]),
+			new String("Level", $this->getDefaultLevel()->getName()),
 			//new String("SpawnLevel", $this->getDefaultLevel()->getName()),
 			//new Int("SpawnX", (int) $spawn->x),
 			//new Int("SpawnY", (int) $spawn->y),
 			//new Int("SpawnZ", (int) $spawn->z),
 			//new Byte("SpawnForced", 1), //TODO
-				new Enum("Inventory", []),
-				new Compound("Achievements", []),
-				new Int("playerGameType", $this->getGamemode()),
-				new Enum("Motion", [
-						new Double(0, 0.0),
-						new Double(1, 0.0),
-						new Double(2, 0.0)
-				]),
-				new Enum("Rotation", [
-						new Float(0, 0.0),
-						new Float(1, 0.0)
-				]),
-				new Float("FallDistance", 0.0),
-				new Short("Fire", 0),
-				new Short("Air", 300),
-				new Byte("OnGround", 1),
-				new Byte("Invulnerable", 0),
-				new String("NameTag", $name),
-				new Short("Hunger", 20),
-				new Short("Health", 20),
-				new Short("MaxHealth", 20),
-				new Long("Experience", 0),
-				new Long("ExpLevel", 0),
+			new Enum("Inventory", []),
+			new Compound("Achievements", []),
+			new Int("playerGameType", $this->getGamemode()),
+			new Enum("Motion", [
+				new Double(0, 0.0),
+				new Double(1, 0.0),
+				new Double(2, 0.0)
+			]),
+			new Enum("Rotation", [
+				new Float(0, 0.0),
+				new Float(1, 0.0)
+			]),
+			new Float("FallDistance", 0.0),
+			new Short("Fire", 0),
+			new Short("Air", 300),
+			new Byte("OnGround", 1),
+			new Byte("Invulnerable", 0),
+			new String("NameTag", $name),
+			new Short("Hunger", 20),
+			new Short("Health", 20),
+			new Short("MaxHealth", 20),
+			new Long("Experience", 0),
+			new Long("ExpLevel", 0),
 		]);
 		$nbt->Pos->setTagType(NBT::TAG_Double);
 		$nbt->Inventory->setTagType(NBT::TAG_Compound);
@@ -875,24 +878,24 @@ class Server{
 
 		if(file_exists($path . "$name.yml")){ //Importing old PocketMine-MP files
 			$data = new Config($path . "$name.yml", Config::YAML, []);
-			$nbt["playerGameType"] = (int)$data->get("gamemode");
+			$nbt["playerGameType"] = (int) $data->get("gamemode");
 			$nbt["Level"] = $data->get("position")["level"];
 			$nbt["Pos"][0] = $data->get("position")["x"];
 			$nbt["Pos"][1] = $data->get("position")["y"];
 			$nbt["Pos"][2] = $data->get("position")["z"];
 			$nbt["SpawnLevel"] = $data->get("spawn")["level"];
-			$nbt["SpawnX"] = (int)$data->get("spawn")["x"];
-			$nbt["SpawnY"] = (int)$data->get("spawn")["y"];
-			$nbt["SpawnZ"] = (int)$data->get("spawn")["z"];
+			$nbt["SpawnX"] = (int) $data->get("spawn")["x"];
+			$nbt["SpawnY"] = (int) $data->get("spawn")["y"];
+			$nbt["SpawnZ"] = (int) $data->get("spawn")["z"];
 			$this->logger->notice($this->getLanguage()->translateString("pocketmine.data.playerOld", [$name]));
 			foreach($data->get("inventory") as $slot => $item){
 				if(count($item) === 3){
 					$nbt->Inventory[$slot + 9] = new Compound("", [
-							new Short("id", $item[0]),
-							new Short("Damage", $item[1]),
-							new Byte("Count", $item[2]),
-							new Byte("Slot", $slot + 9),
-							new Byte("TrueSlot", $slot + 9)
+						new Short("id", $item[0]),
+						new Short("Damage", $item[1]),
+						new Byte("Count", $item[2]),
+						new Byte("Slot", $slot + 9),
+						new Byte("TrueSlot", $slot + 9)
 					]);
 				}
 			}
@@ -900,21 +903,21 @@ class Server{
 				if(isset($nbt->Inventory[$itemSlot + 9])){
 					$item = $nbt->Inventory[$itemSlot + 9];
 					$nbt->Inventory[$slot] = new Compound("", [
-							new Short("id", $item["id"]),
-							new Short("Damage", $item["Damage"]),
-							new Byte("Count", $item["Count"]),
-							new Byte("Slot", $slot),
-							new Byte("TrueSlot", $item["TrueSlot"])
+						new Short("id", $item["id"]),
+						new Short("Damage", $item["Damage"]),
+						new Byte("Count", $item["Count"]),
+						new Byte("Slot", $slot),
+						new Byte("TrueSlot", $item["TrueSlot"])
 					]);
 				}
 			}
 			foreach($data->get("armor") as $slot => $item){
 				if(count($item) === 2){
 					$nbt->Inventory[$slot + 100] = new Compound("", [
-							new Short("id", $item[0]),
-							new Short("Damage", $item[1]),
-							new Byte("Count", 1),
-							new Byte("Slot", $slot + 100)
+						new Short("id", $item[0]),
+						new Short("Damage", $item[1]),
+						new Byte("Count", 1),
+						new Byte("Slot", $slot + 100)
 					]);
 				}
 			}
@@ -1188,7 +1191,7 @@ class Server{
 			return false;
 		}
 
-		$seed = $seed === null ? Binary::readInt(@Utils::getRandomBytes(4, false)) : (int)$seed;
+		$seed = $seed === null ? Binary::readInt(@Utils::getRandomBytes(4, false)) : (int) $seed;
 
 		if(!isset($options["preset"])){
 			$options["preset"] = $this->getConfigString("generator-settings", "");
@@ -1289,7 +1292,7 @@ class Server{
 	public function getConfigString($variable, $defaultValue = ""){
 		$v = getopt("", ["$variable::"]);
 		if(isset($v[$variable])){
-			return (string)$v[$variable];
+			return (string) $v[$variable];
 		}
 
 		return $this->properties->exists($variable) ? $this->properties->get($variable) : $defaultValue;
@@ -1331,10 +1334,10 @@ class Server{
 	public function getConfigInt($variable, $defaultValue = 0){
 		$v = getopt("", ["$variable::"]);
 		if(isset($v[$variable])){
-			return (int)$v[$variable];
+			return (int) $v[$variable];
 		}
 
-		return $this->properties->exists($variable) ? (int)$this->properties->get($variable) : (int)$defaultValue;
+		return $this->properties->exists($variable) ? (int) $this->properties->get($variable) : (int) $defaultValue;
 	}
 
 	/**
@@ -1342,7 +1345,7 @@ class Server{
 	 * @param int    $value
 	 */
 	public function setConfigInt($variable, $value){
-		$this->properties->set($variable, (int)$value);
+		$this->properties->set($variable, (int) $value);
 	}
 
 	/**
@@ -1547,17 +1550,17 @@ class Server{
 		$this->expWriteAhead = $this->getAdvancedProperty("server.experience-cache", 200);
 		$this->aiEnabled = $this->getAdvancedProperty("ai.enable", false);
 		$this->aiConfig = array(
-				"cow" => $this->getAdvancedProperty("ai.cow", true),
-				"chicken" => $this->getAdvancedProperty("ai.chicken", true),
-				"zombie" => $this->getAdvancedProperty("ai.zombie", 1),
-				"skeleton" => $this->getAdvancedProperty("ai.skeleton", true),
-				"pig" => $this->getAdvancedProperty("ai.pig", true),
-				"sheep" => $this->getAdvancedProperty("ai.sheep", true),
-				"creeper" => $this->getAdvancedProperty("ai.creeper", true),
-				"irongolem" => $this->getAdvancedProperty("ai.iron-golem", true),
-				"snowgolem" => $this->getAdvancedProperty("ai.snow-golem", true),
-				"pigzombie" => $this->getAdvancedProperty("ai.pigzombie", true),
-				"creeperexplode" => $this->getAdvancedProperty("ai.creeper-explode-destroy-block", false)
+			"cow" => $this->getAdvancedProperty("ai.cow", true),
+			"chicken" => $this->getAdvancedProperty("ai.chicken", true),
+			"zombie" => $this->getAdvancedProperty("ai.zombie", 1),
+			"skeleton" => $this->getAdvancedProperty("ai.skeleton", true),
+			"pig" => $this->getAdvancedProperty("ai.pig", true),
+			"sheep" => $this->getAdvancedProperty("ai.sheep", true),
+			"creeper" => $this->getAdvancedProperty("ai.creeper", true),
+			"irongolem" => $this->getAdvancedProperty("ai.iron-golem", true),
+			"snowgolem" => $this->getAdvancedProperty("ai.snow-golem", true),
+			"pigzombie" => $this->getAdvancedProperty("ai.pigzombie", true),
+			"creeperexplode" => $this->getAdvancedProperty("ai.creeper-explode-destroy-block", false)
 		);
 		$this->inventoryNum = $this->getAdvancedProperty("player.inventory-num", 36);
 		$this->hungerTimer = $this->getAdvancedProperty("player.hunger-timer", 80);
@@ -1566,22 +1569,23 @@ class Server{
 		$this->allowIronGolem = $this->getAdvancedProperty("server.allow-iron-golem", false);
 		$this->autoClearInv = $this->getAdvancedProperty("player.auto-clear-inventory", true);
 		$this->dserverConfig = [
-				"enable" => $this->getAdvancedProperty("dserver.enable", false),
-				"queryAutoUpdate" => $this->getAdvancedProperty("dserver.query-auto-update", false),
-				"queryTickUpdate" => $this->getAdvancedProperty("dserver.query-tick-update", true),
-				"motdMaxPlayers" => $this->getAdvancedProperty("dserver.motd-max-players", 0),
-				"queryMaxPlayers" => $this->getAdvancedProperty("dserver.query-max-players", 0),
-				"motdAllPlayers" => $this->getAdvancedProperty("dserver.motd-all-players", false),
-				"queryAllPlayers" => $this->getAdvancedProperty("dserver.query-all-players", false),
-				"motdPlayers" => $this->getAdvancedProperty("dserver.motd-players", false),
-				"queryPlayers" => $this->getAdvancedProperty("dserver.query-players", false),
-				"timer" => $this->getAdvancedProperty("dserver.time", 40),
-				"retryTimes" => $this->getAdvancedProperty("dserver.retry-times", 3),
-				"serverList" => explode(";", $this->getAdvancedProperty("dserver.server-list", ""))
+			"enable" => $this->getAdvancedProperty("dserver.enable", false),
+			"queryAutoUpdate" => $this->getAdvancedProperty("dserver.query-auto-update", false),
+			"queryTickUpdate" => $this->getAdvancedProperty("dserver.query-tick-update", true),
+			"motdMaxPlayers" => $this->getAdvancedProperty("dserver.motd-max-players", 0),
+			"queryMaxPlayers" => $this->getAdvancedProperty("dserver.query-max-players", 0),
+			"motdAllPlayers" => $this->getAdvancedProperty("dserver.motd-all-players", false),
+			"queryAllPlayers" => $this->getAdvancedProperty("dserver.query-all-players", false),
+			"motdPlayers" => $this->getAdvancedProperty("dserver.motd-players", false),
+			"queryPlayers" => $this->getAdvancedProperty("dserver.query-players", false),
+			"timer" => $this->getAdvancedProperty("dserver.time", 40),
+			"retryTimes" => $this->getAdvancedProperty("dserver.retry-times", 3),
+			"serverList" => explode(";", $this->getAdvancedProperty("dserver.server-list", ""))
 		];
-		$this->allowCraftingPotion = $this->getAdvancedProperty("server.allow-crafting-potion", false);
-		$this->redstoneEnabled = $this->getAdvancedProperty("server.allow-redstone", false);
-		$this->anviletEnabled = $this->getAdvancedProperty("allow-anvilandenchanttable", false);
+		$this->redstoneEnabled = $this->getAdvancedProperty("redstone.enable", false);
+		$this->allowFakeLowFrequencyPulse = $this->getAdvancedProperty("redstone.allow-fake-low-frequency-pulse", false);
+		$this->pulseFrequency = $this->getAdvancedProperty("redstone.pulse-frequency", 20);
+		$this->anviletEnabled = $this->getAdvancedProperty("server.allow-anvilandenchanttable", false);
 	}
 
 	public function getDServerMaxPlayers(){
@@ -1675,11 +1679,25 @@ class Server{
 		$this->config = new Config($this->dataPath . "pocketmine.yml", Config::YAML, []);
 
 		$this->logger->info("Loading genisys.yml...");
+
+		$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
+		if(file_exists($this->filePath . "src/pocketmine/resources/genisys_$lang.yml")){
+			$content = file_get_contents($file = $this->filePath . "src/pocketmine/resources/genisys_$lang.yml");
+		}else{
+			$content = file_get_contents($file = $this->filePath . "src/pocketmine/resources/genisys_eng.yml");
+		}
+
 		if(!file_exists($this->dataPath . "genisys.yml")){
-			$content = file_get_contents($this->filePath . "src/pocketmine/resources/genisys.yml");
 			@file_put_contents($this->dataPath . "genisys.yml", $content);
 		}
+		$internelConfig = new Config($file, Config::YAML, []);
 		$this->advancedConfig = new Config($this->dataPath . "genisys.yml", Config::YAML, []);
+		$cfgVer = $this->getAdvancedProperty("config.version", 0, $internelConfig);
+		$advVer = $this->getAdvancedProperty("config.version", 0);
+		if($cfgVer != $advVer){
+			$this->logger->notice("You genisys.yml needs update.");
+			$this->logger->notice("Current Version: $advVer       Latest Version: $cfgVer");
+		}
 
 		$this->loadAdvancedConfig();
 
@@ -1687,28 +1705,28 @@ class Server{
 
 		$this->logger->info("Loading server properties...");
 		$this->properties = new Config($this->dataPath . "server.properties", Config::PROPERTIES, [
-				"motd" => "Minecraft: PE Server",
-				"server-port" => 19132,
-				"white-list" => false,
-				"announce-player-achievements" => true,
-				"spawn-protection" => 16,
-				"max-players" => 20,
-				"allow-flight" => false,
-				"spawn-animals" => true,
-				"spawn-mobs" => true,
-				"gamemode" => 0,
-				"force-gamemode" => false,
-				"hardcore" => false,
-				"pvp" => true,
-				"difficulty" => 1,
-				"generator-settings" => "",
-				"level-name" => "world",
-				"level-seed" => "",
-				"level-type" => "DEFAULT",
-				"enable-query" => true,
-				"enable-rcon" => false,
-				"rcon.password" => substr(base64_encode(@Utils::getRandomBytes(20, false)), 3, 10),
-				"auto-save" => true,
+			"motd" => "Minecraft: PE Server",
+			"server-port" => 19132,
+			"white-list" => false,
+			"announce-player-achievements" => true,
+			"spawn-protection" => 16,
+			"max-players" => 20,
+			"allow-flight" => false,
+			"spawn-animals" => true,
+			"spawn-mobs" => true,
+			"gamemode" => 0,
+			"force-gamemode" => false,
+			"hardcore" => false,
+			"pvp" => true,
+			"difficulty" => 1,
+			"generator-settings" => "",
+			"level-name" => "world",
+			"level-seed" => "",
+			"level-type" => "DEFAULT",
+			"enable-query" => true,
+			"enable-rcon" => false,
+			"rcon.password" => substr(base64_encode(@Utils::getRandomBytes(20, false)), 3, 10),
+			"auto-save" => true,
 		]);
 
 		$this->forceLanguage = $this->getProperty("settings.force-language", false);
@@ -1731,17 +1749,17 @@ class Server{
 		ServerScheduler::$WORKERS = $poolSize;
 
 		if($this->getProperty("network.batch-threshold", 256) >= 0){
-			Network::$BATCH_THRESHOLD = (int)$this->getProperty("network.batch-threshold", 256);
+			Network::$BATCH_THRESHOLD = (int) $this->getProperty("network.batch-threshold", 256);
 		}else{
 			Network::$BATCH_THRESHOLD = -1;
 		}
 		$this->networkCompressionLevel = $this->getProperty("network.compression-level", 7);
 		$this->networkCompressionAsync = $this->getProperty("network.async-compression", true);
 
-		$this->autoTickRate = (bool)$this->getProperty("level-settings.auto-tick-rate", true);
-		$this->autoTickRateLimit = (int)$this->getProperty("level-settings.auto-tick-rate-limit", 20);
-		$this->alwaysTickPlayers = (int)$this->getProperty("level-settings.always-tick-players", false);
-		$this->baseTickRate = (int)$this->getProperty("level-settings.base-tick-rate", 1);
+		$this->autoTickRate = (bool) $this->getProperty("level-settings.auto-tick-rate", true);
+		$this->autoTickRateLimit = (int) $this->getProperty("level-settings.auto-tick-rate-limit", 20);
+		$this->alwaysTickPlayers = (int) $this->getProperty("level-settings.always-tick-players", false);
+		$this->baseTickRate = (int) $this->getProperty("level-settings.base-tick-rate", 1);
 
 		$this->scheduler = new ServerScheduler();
 
@@ -1775,7 +1793,7 @@ class Server{
 			$this->setConfigInt("difficulty", 3);
 		}
 
-		define("pocketmine\\DEBUG", (int)$this->getProperty("debug.level", 1));
+		define("pocketmine\\DEBUG", (int) $this->getProperty("debug.level", 1));
 		if($this->logger instanceof MainLogger){
 			$this->logger->setLogDebug(\pocketmine\DEBUG > 1);
 		}
@@ -1796,10 +1814,10 @@ class Server{
 
 
 		$this->logger->info($this->getLanguage()->translateString("pocketmine.server.info", [
-				$this->getName(),
-				$this->getPocketMineVersion(),
-				$this->getCodename(),
-				$this->getApiVersion()
+			$this->getName(),
+			$this->getPocketMineVersion(),
+			$this->getCodename(),
+			$this->getApiVersion()
 		]));
 		$this->logger->info($this->getLanguage()->translateString("pocketmine.server.license", [$this->getName()]));
 
@@ -1820,12 +1838,12 @@ class Server{
 		Attribute::init();
 		/** TODO: @deprecated */
 		TextWrapper::init();
-		$this->craftingManager = new CraftingManager($this->allowCraftingPotion);
+		$this->craftingManager = new CraftingManager();
 
 		$this->pluginManager = new PluginManager($this, $this->commandMap);
 		$this->pluginManager->subscribeToPermission(Server::BROADCAST_CHANNEL_ADMINISTRATIVE, $this->consoleSender);
 		$this->pluginManager->setUseTimings($this->getProperty("settings.enable-profiling", false));
-		$this->profilingTickRate = (float)$this->getProperty("settings.profile-report-trigger", 20);
+		$this->profilingTickRate = (float) $this->getProperty("settings.profile-report-trigger", 20);
 		$this->pluginManager->registerInterface(PharPluginLoader::class);
 		$this->pluginManager->registerInterface(FolderPluginLoader::class);
 		$this->pluginManager->registerInterface(ScriptPluginLoader::class);
@@ -1857,14 +1875,14 @@ class Server{
 		Generator::addGenerator(Nether::class, "hell");
 		Generator::addGenerator(Nether::class, "nether");
 
-		foreach((array)$this->getProperty("worlds", []) as $name => $worldSetting){
+		foreach((array) $this->getProperty("worlds", []) as $name => $worldSetting){
 			if($this->loadLevel($name) === false){
 				$seed = $this->getProperty("worlds.$name.seed", time());
 				$options = explode(":", $this->getProperty("worlds.$name.generator", Generator::getGenerator("default")));
 				$generator = Generator::getGenerator(array_shift($options));
 				if(count($options) > 0){
 					$options = [
-							"preset" => implode(":", $options),
+						"preset" => implode(":", $options),
 					];
 				}else{
 					$options = [];
@@ -1908,15 +1926,15 @@ class Server{
 		}
 
 		if($this->getProperty("ticks-per.autosave", 6000) > 0){
-			$this->autoSaveTicks = (int)$this->getProperty("ticks-per.autosave", 6000);
+			$this->autoSaveTicks = (int) $this->getProperty("ticks-per.autosave", 6000);
 		}
 
 		$this->enablePlugins(PluginLoadOrder::POSTWORLD);
 
 		if($this->aiEnabled) $this->aiHolder = new AIHolder($this);
 		if($this->dserverConfig["enable"] and ($this->getAdvancedProperty("dserver.server-list", "") != "")) $this->scheduler->scheduleRepeatingTask(new CallbackTask([
-				$this,
-				"updateDServerInfo"
+			$this,
+			"updateDServerInfo"
 		]), $this->dserverConfig["timer"]);
 
 		$this->start();
@@ -2421,12 +2439,12 @@ private function lookupAddress($address) {
 		}
 
 		$lastError = [
-				"type" => $type,
-				"message" => $errstr,
-				"fullFile" => $e->getFile(),
-				"file" => $errfile,
-				"line" => $errline,
-				"trace" => @getTrace(1, $trace)
+			"type" => $type,
+			"message" => $errstr,
+			"fullFile" => $e->getFile(),
+			"file" => $errfile,
+			"line" => $errline,
+			"trace" => @getTrace(1, $trace)
 		];
 
 		global $lastExceptionError, $lastError;
@@ -2473,10 +2491,10 @@ private function lookupAddress($address) {
 
 			if($report){
 				$reply = Utils::postURL("http://" . $this->getProperty("auto-report.host", "crash.pocketmine.net") . "/submit/api", [
-						"report" => "yes",
-						"name" => $this->getName() . " " . $this->getPocketMineVersion(),
-						"email" => "crash@pocketmine.net",
-						"reportPaste" => base64_encode($dump->getEncodedData())
+					"report" => "yes",
+					"name" => $this->getName() . " " . $this->getPocketMineVersion(),
+					"email" => "crash@pocketmine.net",
+					"reportPaste" => base64_encode($dump->getEncodedData())
 				]);
 
 				if(($data = json_decode($reply)) !== false and isset($data->crashId)){
@@ -2699,13 +2717,13 @@ private function lookupAddress($address) {
 		$usage = round(($u[0] / 1024) / 1024, 2) . "/" . round(($d[0] / 1024) / 1024, 2) . "/" . round(($u[1] / 1024) / 1024, 2) . "/" . round(($u[2] / 1024) / 1024, 2) . " MB @ " . Utils::getThreadCount() . " threads";
 
 		echo "\x1b]0;" . $this->getName() . " " .
-				$this->getGameVersion() . "-#" . $this->getBuild() .
-				" | Online " . count($this->players) . "/" . $this->getMaxPlayers() .
-				" | Memory " . $usage .
-				" | U " . round($this->network->getUpload() / 1024, 2) .
-				" D " . round($this->network->getDownload() / 1024, 2) .
-				" kB/s | TPS " . $this->getTicksPerSecondAverage() .
-				" | Load " . $this->getTickUsageAverage() . "%\x07";
+			$this->getGameVersion() . "-#" . $this->getBuild() .
+			" | Online " . count($this->players) . "/" . $this->getMaxPlayers() .
+			" | Memory " . $usage .
+			" | U " . round($this->network->getUpload() / 1024, 2) .
+			" D " . round($this->network->getDownload() / 1024, 2) .
+			" kB/s | TPS " . $this->getTicksPerSecondAverage() .
+			" | Load " . $this->getTickUsageAverage() . "%\x07";
 
 		$this->network->resetStatistics();
 	}
@@ -2734,11 +2752,12 @@ private function lookupAddress($address) {
 		//TODO: add raw packet events
 	}
 
-	public function getAdvancedProperty($variable, $defaultValue = \null){
+	public function getAdvancedProperty($variable, $defaultValue = null, Config $cfg = null){
 		$vars = explode(".", $variable);
 		$base = array_shift($vars);
-		if($this->advancedConfig->exists($base)){
-			$base = $this->advancedConfig->get($base);
+		if($cfg == null) $cfg = $this->advancedConfig;
+		if($cfg->exists($base)){
+			$base = $cfg->get($base);
 		}else{
 			return $defaultValue;
 		}
@@ -2917,9 +2936,12 @@ private function lookupAddress($address) {
 	}
 
 	private function registerTiles(){
+		Tile::registerTile(BrewingStand::class);
 		Tile::registerTile(Chest::class);
 		Tile::registerTile(Furnace::class);
 		Tile::registerTile(Sign::class);
 		Tile::registerTile(EnchantTable::class);
+		Tile::registerTile(FlowerPot::class);
+		Tile::registerTile(Skull::class);
 	}
 }

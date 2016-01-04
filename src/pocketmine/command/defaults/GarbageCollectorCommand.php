@@ -58,12 +58,12 @@ class GarbageCollectorCommand extends VanillaCommand{
 		}
 
 		$cyclesCollected = $sender->getServer()->getMemoryManager()->triggerGarbageCollector();
-		$sender->sendMessage(TextFormat::GREEN . "---- " . TextFormat::WHITE . "垃圾回收结果" . TextFormat::GREEN . " ----");
-		$sender->sendMessage(TextFormat::GOLD . "区块: " . TextFormat::RED . \number_format($chunksCollected));
-		$sender->sendMessage(TextFormat::GOLD . "实体: " . TextFormat::RED . \number_format($entitiesCollected));
-		$sender->sendMessage(TextFormat::GOLD . "Tiles: " . TextFormat::RED . \number_format($tilesCollected));
-		$sender->sendMessage(TextFormat::GOLD . "循环: " . TextFormat::RED . \number_format($cyclesCollected));
-		$sender->sendMessage(TextFormat::GOLD . "释放内存: " . TextFormat::RED . \number_format(\round((($memory - \memory_get_usage()) / 1024) / 1024, 2))." MB");
+		$sender->sendMessage(TextFormat::GREEN . "---- " . TextFormat::WHITE . "%pocketmine.command.gc.title" . TextFormat::GREEN . " ----");
+		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.gc.chunks" . TextFormat::RED . \number_format($chunksCollected));
+		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.gc.entities" . TextFormat::RED . \number_format($entitiesCollected));
+		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.gc.tiles" . TextFormat::RED . \number_format($tilesCollected));
+		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.gc.cycles" . TextFormat::RED . \number_format($cyclesCollected));
+		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.gc.memory" . TextFormat::RED . \number_format(\round((($memory - \memory_get_usage()) / 1024) / 1024, 2))." MB");
 		return true;
 	}
 }

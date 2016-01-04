@@ -4,6 +4,7 @@ namespace pocketmine\entity;
 
 
 use pocketmine\level\format\FullChunk;
+use pocketmine\level\particle\SpellParticle;
 use pocketmine\nbt\tag\Compound;
 use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
@@ -31,8 +32,9 @@ class ThrownPotion extends Projectile{
 		if(isset($this->namedtag->Data)){
 			$this->data = $this->namedtag["Data"];
 		}
-		
-		$this->setDataProperty(FallingSand::DATA_BLOCK_INFO, self::DATA_TYPE_INT, $this->getData());
+
+		$color = Potion::getColor($this->getData());
+		$this->setDataProperty(FallingSand::DATA_BLOCK_INFO, self::DATA_TYPE_LONG, (($color[0] & 0xff) << 16) | (($color[1] & 0xff) << 8) | ($color[2] & 0xff));
 	}
 
 	public function __construct(FullChunk $chunk, Compound $nbt, Entity $shootingEntity = null){
@@ -48,7 +50,8 @@ class ThrownPotion extends Projectile{
 	}
 	
 	public function kill(){
-		$this->getLevel()->addParticle(new GenericParticle($this, 25, 5));
+		$color = Potion::getColor($this->getData());
+		$this->getLevel()->addParticle(new SpellParticle($this, $color[0], $color[1], $color[2]));
 		$players = $this->getViewers();
 		foreach($players as $p) {
 			if($p->distance($this) <= 6){

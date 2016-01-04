@@ -67,7 +67,7 @@ class ActiveRedstoneLamp extends Solid implements ElectricalAppliance{
 			/** @var InactiveRedstoneLamp $block */
 			$block = $this->getSide($side);
 			if($block->getId() == self::INACTIVE_REDSTONE_LAMP){
-				$block->turnOn(true);
+				$block->turnOn();
 			}
 		}
 	}
@@ -91,17 +91,19 @@ class ActiveRedstoneLamp extends Solid implements ElectricalAppliance{
 	}
 
 	public function turnOn(){
-		if($this->isLightedByAround()){
+		/*if($this->isLightedByAround()){
 			$this->meta = 0;
 			$this->getLevel()->setBlock($this, $this, true, false);
 			$this->lightAround();
-		}
+		}*/
+		$this->meta = 0;
+		$this->getLevel()->setBlock($this, $this, true, false);
 		return true;
 	}
 
 	public function turnOff(){
 		$this->getLevel()->setBlock($this, new InactiveRedstoneLamp(), true, false);
-		$this->turnAroundOff();
+		//$this->turnAroundOff();
 		return true;
 	}
 }

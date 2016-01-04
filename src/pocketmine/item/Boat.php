@@ -46,7 +46,7 @@ class Boat extends Item{
 			$count = $item->getCount();
 			if(--$count <= 0){
 				$player->getInventory()->setItemInHand(Item::get(Item::AIR));
-				return;
+				return true;
 			}
 
 			$item->setCount($count);

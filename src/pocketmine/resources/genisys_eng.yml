@@ -1,0 +1,109 @@
+#Genisys Advanced Configuration File
+
+#Version of this file
+config:
+ version: 3
+
+level:
+ #Set if turn on the weather system
+ weather: true
+ #Weather switch interval
+ weather-change-time: 6000
+ #Weather Duration，default as 1 min
+ weather-last-time: 1200
+ #Random lightning interval，default as 10s
+ lightning-time: 200
+ 
+player:
+ #the switch of hunger system
+ hunger: true
+ #Minimum health when someone is attacking by being hungry
+ hunger-health: 10
+ #Hunger Time-Counter, Default: 80=4sec
+ hunger-timer: 3000
+ #Choose if turn on the experience system
+ experience: true
+ #Choose if keep inventory when a player died
+ keep-inventory: false
+ #The space of inventory
+ inventory-num: 36
+ #Clear the inventory automatically when change the gamemode into creative
+ auto-clear-inventory : true
+ #TODO: Choose if keep experience when a player died
+ keep-experience: false
+ 
+nether:
+ #Choose if the nether's allowed,the level of nether will generate automatically
+ allow-nether: false
+ #The name of nether's level
+ level-name: "nether"
+ 
+server:
+ #Pregenerate the experience data，0=disabled
+ experience-cache: 65535
+ #Choose if spawning iron golem is allowed
+ allow-iron-golem: false
+ #Choose if spawning snow golem is allowed
+ allow-snow-golem: false
+ #Choose if anvil and enchanttable are allowed
+ allow-anvilandenchanttable: false
+
+redstone:
+ #Choose if redstone system is allowed
+ enable: false
+ #Choose if allow fake low frequancy pulse
+ allow-fake-low-frequency-pulse: false
+ #Set the frequency of pulse, Default: 1s
+ pulse-frequency: 1
+
+dserver:
+ #The count of all multi-server unified
+ enable: false
+ #Query update automatically
+ query-auto-update: false
+ #Query update periodical
+ query-tick-update: true
+ #The max players' number of Motd
+ motd-max-players: 0
+ #The max players' number of query，0=Default
+ query-max-players: 0
+ #Show the number of all players on motd
+ motd-all-players: false
+ #Show the number of all players on Query
+ query-all-players: false
+ #Show the number of online players on motd
+ motd-players: false
+ #Show the number of online players on Query
+ query-players: false
+ #Update Frequency ,20=1s
+ time: 40
+ #Auto-retry times when failed
+ retry-times: 3
+ #the server list，Separate by ';'，e.g. a.cn:19132;b.cn:19132
+ server-list: ""
+ 
+ai:
+ #AI switch
+ enable: false
+ #Zombie'AI，0=disabled，1=AI 1.0ver，2=new AI(Faultiness)
+ zombie: 1
+ #PigZombie's AI
+ pigzombie: true
+ #the AI of cow and mushroom cow
+ cow: true
+ #Chicken's AI
+ chicken: true
+ #Sheep's AI
+ sheep: true
+ #Pigs' AI
+ pig: true
+ #Skeleton's AI
+ skeleton: true
+ #Creeper's AI
+ creeper: true
+ #Iron golem's AI
+ iron-golem: true
+ #Snow golem's AI
+ snow-golem: true
+ #Destory blocks if creeper exploded
+ creeper-explode-destroy-block: false

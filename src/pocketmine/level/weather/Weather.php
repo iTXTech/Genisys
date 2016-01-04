@@ -47,7 +47,7 @@ class Weather{
 			}else{
 				$this->weatherNow = $ev->getWeather();
 				$this->strength1 = mt_rand(90000, 110000);
-				$this->strength2 = mt_rand(5000, 30000);
+				$this->strength2 = mt_rand(30000, 40000);
 				$this->changeWeather($this->weatherNow, $this->strength1, $this->strength2);
 			}
 		}
@@ -76,7 +76,7 @@ class Weather{
 		$this->weatherTime = 0;
 		$this->weatherNow = $wea;
 		$this->strength1 = mt_rand(90000, 110000);
-		$this->strength2 = mt_rand(5000, 30000);
+		$this->strength2 = mt_rand(30000, 40000);
 		$this->changeWeather($wea, $this->strength1, $this->strength2);
 	}
 

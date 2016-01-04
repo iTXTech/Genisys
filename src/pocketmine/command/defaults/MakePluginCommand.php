@@ -12,8 +12,8 @@ class MakePluginCommand extends VanillaCommand{
 	public function __construct($name){
 		parent::__construct(
 			$name,
-			"打包源码插件",
-			"/makeplugin <插件名称>"
+			"Creates a Phar plugin from a unarchived",
+			"/makeplugin <pluginName>"
 		);
 		$this->setPermission("pocketmine.command.makeplugin");
 	}
@@ -24,25 +24,25 @@ class MakePluginCommand extends VanillaCommand{
 		}
 
 		if(count($args) === 0){
-			$sender->sendMessage(TextFormat::RED . "用法: ".$this->usageMessage);
+			$sender->sendMessage(TextFormat::RED . "Usage: ".$this->usageMessage);
 			return true;
 		}
 		
 		$pluginName = trim(implode(" ", $args));
 		if($pluginName === "" or !(($plugin = Server::getInstance()->getPluginManager()->getPlugin($pluginName)) instanceof Plugin)){
-			$sender->sendMessage(TextFormat::RED . "插件名称错误，请检查。");
+			$sender->sendMessage(TextFormat::RED . "Invalid plugin name, check the name case.");
 			return true;
 		}
 		$description = $plugin->getDescription();
 
 		if(!($plugin->getPluginLoader() instanceof FolderPluginLoader)){
-			$sender->sendMessage(TextFormat::RED . "插件 ".$description->getName()." 不是一个源码插件。");
+			$sender->sendMessage(TextFormat::RED . "Plugin ".$description->getName()." is not in folder structure.");
 			return true;
 		}
 
 		$pharPath = Server::getInstance()->getPluginPath().DIRECTORY_SEPARATOR . "PocketMine-iTX" . DIRECTORY_SEPARATOR . $description->getName()."_v".$description->getVersion().".phar";
 		if(file_exists($pharPath)){
-			$sender->sendMessage("Phar插件已存在，正在覆盖...");
+			$sender->sendMessage("Phar plugin already exists, overwriting...");
 			@unlink($pharPath);
 		}
 		$phar = new \Phar($pharPath);
@@ -74,7 +74,7 @@ class MakePluginCommand extends VanillaCommand{
 				continue;
 			}
 			$phar->addFile($file, $path);
-			$sender->sendMessage("[PocketMine-iTX] 正在添加 $path");
+			$sender->sendMessage("[PocketMine-iTX] Adding $path");
 		}
 
 		foreach($phar as $file => $finfo){
@@ -85,7 +85,7 @@ class MakePluginCommand extends VanillaCommand{
 		}
 		$phar->compressFiles(\Phar::GZ);
 		$phar->stopBuffering();
-		$sender->sendMessage("Phar插件 ".$description->getName() ." v".$description->getVersion()." 已经被创建到 ".$pharPath);
+		$sender->sendMessage("Phar plugin ".$description->getName() ." v".$description->getVersion()." has been created on ".$pharPath);
 		return true;
 	}
 }

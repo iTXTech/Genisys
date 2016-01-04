@@ -120,9 +120,9 @@ class Item extends Entity{
 
 			$this->motionY -= $this->gravity;
 
-			/*if($this->checkObstruction($this->x, $this->y, $this->z)){
+			if($this->checkObstruction($this->x, $this->y, $this->z)){
 				$hasUpdate = true;
-			}*/
+			}
 
 			$this->move($this->motionX, $this->motionY, $this->motionZ);
 
@@ -140,7 +140,7 @@ class Item extends Entity{
 				$this->motionY *= -0.5;
 			}
 
-			if($currentTick%5==0)
+			if($currentTick % 5 ==0)
 				$this->updateMovement();
 
 			if($this->age > 2000){
