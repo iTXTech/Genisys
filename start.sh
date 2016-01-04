@@ -34,14 +34,16 @@ if [ "$PHP_BINARY" == "" ]; then
 fi
 
 if [ "$POCKETMINE_FILE" == "" ]; then
-	if [ -f ./PocketMine-ITX.phar ]; then
-		POCKETMINE_FILE="./PocketMine-ITX.phar"
+	if [ -f ./PocketMine-iTX.phar ]; then
+		POCKETMINE_FILE="./PocketMine-iTX.phar"
+	elif [ -f ./Genisys_1.0dev_#*.phar ]; then
+	    POCKETMINE_FILE="./Genisys_1.0dev_*.phar"
 	elif [ -f ./PocketMine-MP.phar ]; then
 		POCKETMINE_FILE="./PocketMine-MP.phar"
 	elif [ -f ./src/pocketmine/PocketMine.php ]; then
 		POCKETMINE_FILE="./src/pocketmine/PocketMine.php"
 	else
-		echo "Couldn't find a valid PocketMine-MP installation"
+		echo "Couldn't find a valid Genisys installation"
 		exit 1
 	fi
 fi

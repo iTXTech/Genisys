@@ -24,7 +24,7 @@ if exist PocketMine-iTX.phar (
 		    if exist Genisys_1.0dev_*.phar (
 			set POCKETMINE_FILE=Genisys_1.0dev_*.phar
 			   ) else (
-		echo "Couldn't find a valid PocketMine-iTX installation"
+		echo "Couldn't find a valid Genisys installation"
 		pause
 		exit 8
 	)
