@@ -29,9 +29,6 @@ use pocketmine\math\Vector3;
 class RedstoneTorch extends RedstoneSource{
 
 	protected $id = self::REDSTONE_TORCH;
-	public $lastUpdateTime = 0;
-	protected $needTurnOn = false;
-	protected $ignore = "";
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
@@ -41,9 +38,17 @@ class RedstoneTorch extends RedstoneSource{
 		return 7;
 	}
 
+	public function getLastUpdateTime(){
+		return $this->getLevel()->getBlockTempData($this);
+	}
+
+	public function setLastUpdateTimeNow(){
+		$this->getLevel()->setBlockTempData($this, $this->getLevel()->getServer()->getTick());
+	}
+
 	public function canCalcTurn(){
 		if(!parent::canCalc()) return false;
-		if($this->getLevel()->getServer()->getTick() != $this->lastUpdateTime) return true;
+		if($this->getLevel()->getServer()->getTick() != $this->getLastUpdateTime()) return true;
 		return ($this->canScheduleUpdate() ? Level::BLOCK_UPDATE_SCHEDULED : false);
 	}
 
@@ -57,7 +62,7 @@ class RedstoneTorch extends RedstoneSource{
 
 	public function turnOn($ignore = ""){
 		$result = $this->canCalcTurn();
-		$this->lastUpdateTime = $this->getLevel()->getServer()->getTick();
+		$this->setLastUpdateTimeNow();
 		if($result === true){
 			$faces = [
 				1 => 4,
@@ -68,19 +73,12 @@ class RedstoneTorch extends RedstoneSource{
 				6 => 0,
 				0 => 0,
 			];
-			$this->getLevel()->setBlock($this, new RedstoneTorch($this->meta), true);
-			/** @var RedstoneTorch $block */
-			$block = $this->getLevel()->getBlock($this);
-			$block->lastUpdateTime = $this->getLevel()->getServer()->getTick();
-			$block->activateTorch([$faces[$this->meta]], [$ignore]);
+			$this->id = self::REDSTONE_TORCH;
+			$this->getLevel()->setBlock($this, $this, true);
+			$this->activateTorch([$faces[$this->meta]], [$ignore]);
 			return true;
 		}elseif($result === Level::BLOCK_UPDATE_SCHEDULED){
 			$this->ignore = $ignore;
-			/*$this->getLevel()->setBlock($this, new RedstoneTorch($this->meta), true);
-			/** @var RedstoneTorch $block
-			$block = $this->getLevel()->getBlock($this);
-			$block->lastUpdateTime = $this->getLevel()->getServer()->getTick();*/
-			$this->needTurnOn = true;
 			$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage());
 			return true;
 		}
@@ -89,7 +87,7 @@ class RedstoneTorch extends RedstoneSource{
 
 	public function turnOff($ignore = ""){
 		$result = $this->canCalcTurn();
-		$this->lastUpdateTime = $this->getLevel()->getServer()->getTick();
+		$this->setLastUpdateTimeNow();
 		if($result === true){
 			$faces = [
 				1 => 4,
@@ -100,19 +98,12 @@ class RedstoneTorch extends RedstoneSource{
 				6 => 0,
 				0 => 0,
 			];
-			$this->getLevel()->setBlock($this, new UnlitRedstoneTorch($this->meta), true);
-			/** @var RedstoneTorch $block */
-			$block = $this->getLevel()->getBlock($this);
-			$block->lastUpdateTime = $this->getLevel()->getServer()->getTick();
-			$block->deactivateTorch([$faces[$this->meta]], [$ignore]);
+			$this->id = self::UNLIT_REDSTONE_TORCH;
+			$this->getLevel()->setBlock($this, $this, true);
+			$this->deactivateTorch([$faces[$this->meta]], [$ignore]);
 			return true;
 		}elseif($result === Level::BLOCK_UPDATE_SCHEDULED){
 			$this->ignore = $ignore;
-			/*$this->getLevel()->setBlock($this, new UnlitRedstoneTorch($this->meta), true);
-			/** @var RedstoneTorch $block
-			$block = $this->getLevel()->getBlock($this);
-			$block->lastUpdateTime = $this->getLevel()->getServer()->getTick();*/
-			$this->needTurnOn = false;
 			$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage());
 			return true;
 		}
@@ -163,7 +154,7 @@ class RedstoneTorch extends RedstoneSource{
 					}
 				}
 			}
-			$this->lastUpdateTime = $this->getLevel()->getServer()->getTick();
+			//$this->lastUpdateTime = $this->getLevel()->getServer()->getTick();
 		}
 	}
 
@@ -223,7 +214,7 @@ class RedstoneTorch extends RedstoneSource{
 					}
 				}
 			}
-			$this->lastUpdateTime = $this->getLevel()->getServer()->getTick();
+			//$this->lastUpdateTime = $this->getLevel()->getServer()->getTick();
 		}
 	}
 
@@ -254,10 +245,8 @@ class RedstoneTorch extends RedstoneSource{
 		}
 
 		if($type == Level::BLOCK_UPDATE_SCHEDULED){
-			if($this->needTurnOn) $this->turnOn();
-			else $this->turnOff();
-			$this->needTurnOn = !$this->needTurnOn;
-			$this->lastUpdateTime = $this->getLevel()->getServer()->getTick();
+			if($this->id == self::UNLIT_REDSTONE_TORCH) $this->turnOn($this->ignore);
+			else $this->turnOff($this->ignore);
 			return Level::BLOCK_UPDATE_SCHEDULED;
 		}
 

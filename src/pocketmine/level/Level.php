@@ -278,6 +278,27 @@ class Level implements ChunkManager, Metadatable{
 
 	public $weather = null;
 
+	public $blockTempData = [];
+
+	/**
+	 * @param Vector3 $pos
+	 * @param         $data
+	 */
+	public function setBlockTempData(Vector3 $pos, $data){
+		$this->blockTempData[self::blockHash($pos->x, $pos->y, $pos->z)] = (int) $data;
+	}
+
+	/**
+	 * @param Vector3 $pos
+	 * @return int
+	 */
+	public function getBlockTempData(Vector3 $pos){
+		if(isset($this->blockTempData[self::blockHash($pos->x, $pos->y, $pos->z)])){
+			return $this->blockTempData[self::blockHash($pos->x, $pos->y, $pos->z)];
+		}
+		return 0;
+	}
+
 	/**
 	 * Returns the chunk unique hash/key
 	 *
