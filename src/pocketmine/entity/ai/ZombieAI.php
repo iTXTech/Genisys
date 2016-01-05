@@ -34,7 +34,7 @@ class ZombieAI{
 			$this->plugin->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
 				$this,
 				"ZombieRandomWalk"
-			] ), 1);
+			] ), 2);
 
 			$this->plugin->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
 				$this,
@@ -147,19 +147,22 @@ class ZombieAI{
 							//$width = $this->width;
 							$pos = new Vector3 ($zom['x'] + $zom['motionx'], floor($zo->getY()) + 1,$zom['z'] + $zom['motionz']);  //目标坐标
 							$zy = $this->plugin->ifjump($zo->getLevel(),$pos);
-							if ($zy === false) {  //前方不可前进
 								$pos2 = new Vector3 ($zom['x'], $zom['y'] ,$zom['z']);  //目标坐标
+
 								if ($this->plugin->ifjump($zo->getLevel(),$pos2) === false) { //原坐标依然是悬空
+
 									$pos2 = new Vector3 ($zom['x'], $zom['y']-1,$zom['z']);  //下降
 									$zom['up'] = 1;
 									$zom['yup'] = 0;
 								}
-								else {
+								if ($zy === false) {  //前方不可前进
+							
+							//	else {
 									$zom['motionx'] = - $zom['motionx'];
 									$zom['motionz'] = - $zom['motionz'];
 									//转向180度，向身后走
 									$zom['up'] = 0;
-								}
+								//}
 							}
 							else {
 								$pos2 = new Vector3 ($zom['x'] + $zom['motionx'], $zy - 1 ,$zom['z'] + $zom['motionz']);  //目标坐标
@@ -252,6 +255,7 @@ class ZombieAI{
 							$zom['canjump'] = true;
 
 							//僵尸碰撞检测 by boybook
+							/*
 							foreach ($level->getEntities() as $zo0) {
 								if ($zo0 instanceof Zombie and !($zo0 == $zo)) {
 									if ($zo->distance($zo0) <= $this->width * 2) {
@@ -274,7 +278,7 @@ class ZombieAI{
 									}
 								}
 
-							}
+							}*/
 
 							if ($zom['IsChasing'] !== false) {
 								//echo ("是属于仇恨模式\n");
@@ -300,32 +304,31 @@ class ZombieAI{
 									}else{
 										$bi = 0;
 									}
-
+$xxx =0;$zzz=0;
 									//根据wiki：僵尸掉血后走路更快
-									if ($zo->getHealth() == $zo->getMaxHealth()) {
+							
 										$zzz = sqrt(($this->zo_hate_v / 2.5) / ($bi * $bi + 1));
-									}else{
-										$zzz = sqrt(($this->zo_hate_v / 2) / ($bi * $bi + 1));
-									}
+					
 
 									if ($zz < 0) $zzz = -$zzz;
 									$xxx = $zzz * $bi;
-
+	
 									$zo_v2 = new Vector2($zo->getX(),$zo->getZ());
 									$p_v2 = new Vector2($p->getX(),$p->getZ());
 									if ($zo_v2->distance($p_v2) <= $this->zo_hate_v/2) {
 										$xxx = $xx;
 										$zzz = $zz;
 									}
-
+ //严重加速bug	
 									$zom['xxx'] = $xxx;
 									$zom['zzz'] = $zzz;
 
 									//计算y轴
 									//$width = $this->width;
 									$pos0 = new Vector3 ($zo->getX(), $zo->getY() + 1, $zo->getZ());  //原坐标
-									$pos = new Vector3 ($zo->getX() + $xxx, $zo->getY() + 1, $zo->getZ() + $zzz);  //目标坐标
-									//用来写僵尸宽度的
+									$pos = new Vector3 ($zo->getX() + $xxx, $zo->getY() + 1, $zo->getZ()+  $zzz);  //目标坐标
+		
+			//用来写僵尸宽度的
 									//$v = $this->zo_hate_v/2;
 									//$pos_front = new Vector3 ($zo->getX() + ($xxx/$v*($v+$this->width)), $zo->getY() + 1, $zo->getZ() + ($zzz/$v*($v+$this->width)));  //前方坐标
 									//$pos_back = new Vector3 ($zo->getX() + (-$xxx/$v*(-$v-$this->width)), $zo->getY() + 1, $zo->getZ() + (-$zzz/$v*(-$v-$this->width)));  //后方坐标
@@ -338,6 +341,7 @@ class ZombieAI{
 												$zom['drop'] = 0;  //僵尸下落的速度
 											}
 											$pos2 = new Vector3 ($zo->getX(), $zo->getY() - ($zom['drop'] / 2 + 1.25), $zo->getZ());  //下降
+											
 										} else {
 											$zom['drop'] = false;
 											if ($this->plugin->whatBlock($level, $pos0) == "climb") {  //梯子
@@ -364,6 +368,7 @@ class ZombieAI{
 
 									$pos3 = $pos2;
 									$pos3->y = $pos3->y + 2.62;
+									
 									$ppos = $p->getLocation();
 									$ppos->y = $ppos->y + $p->getEyeHeight();
 									$pitch = $this->plugin->getpitch($pos3,$ppos);
@@ -403,36 +408,17 @@ class ZombieAI{
 						//echo ($zom['IsChasing']."\n");
 
 						//真正的自由落体 by boybook
+			$drop = $zom['drop'];
+
 						if ($zom['drop'] !== false) {
-							$olddrop = $zom['drop'];
-							$zom['drop'] += 0.5;
-							$drop = $zom['drop'];
-							//echo $drop."\n";
-							$dropy = $zo->getY() - ($olddrop * 0.05 + 0.0125);
-							$posd0 = new Vector3 (floor($zo->getX()), floor($dropy), floor($zo->getZ()));
-							$posd = new Vector3 ($zo->getX(), $dropy, $zo->getZ());
-							if ($this->plugin->whatBlock($zo->getLevel(), $posd0) == "air") {
-								$zo->setPosition($posd);  //下降
-							} else {
-								for ($i = 1; $i <= $drop; $i++) {
-									$posd0->y++;
-									if ($this->plugin->whatBlock($zo->getLevel(), $posd0) != "block") {
-										$posd->y = $posd0->y;
-										$zo->setPosition($posd);  //下降完成
-										$h = $zom['drop'] * $zom['drop'] / 20;
-										$damage = $h - 3;
-										//echo($h . ": " . $damage . "\n");
-										if ($damage > 0) {
-											//$zo->attack($damage, EntityDamageEvent::CAUSE_FALL);
-											$zo->setHealth($zo->getHealth() - $damage);
-										}
-										$zom['drop'] = false;
-										break;
-									}
-								}
-							}
+							
+						
+							//$zo->motionY=	$zom['drop'] = $zo->onGround?-0.04,-(abs(1+$zo->motionY)*1.5-1);
+						$zom['drop']+=0.01;
+						//	print($zom['drop']);
 						} else {
 							$drop = 0;
+							
 						}
 
 						if ($zom['IsChasing'] !== false) {
@@ -451,14 +437,14 @@ class ZombieAI{
 								if(abs($zo->getY() - $zom['oldv3']->y) == 1 and $zom['canjump'] === true){
 									//var_dump("跳");
 									$zom['canjump'] = false;
-									$zom['jump'] = 0.5;
+									$zom['jump'] = 0.3;
 								}
 								else {
 									if ($zom['jump'] > 0.01) {
 										$zom['jump'] -= 0.1;
 									}
 									else {
-										$zom['jump'] = 0.01;
+										$zom['jump'] = 0;
 									}
 								}
 
@@ -466,7 +452,7 @@ class ZombieAI{
 
 								$pk3 = new SetEntityMotionPacket;
 								$pk3->entities = [
-									[$zo->getID(), $zom['xxx'] / 10, -$zom['swim'] / 100 + $zom['jump'] - $drop, $zom['zzz'] / 10]
+									[$zo->getID(), $zom['xxx'] / 10, $zom['jump'] - $zo->onGround?0.04:0, $zom['zzz'] / 10]
 								];
 								foreach ($zo->getViewers() as $pl) {
 									$pl->dataPacket($pk3);
@@ -501,7 +487,7 @@ class ZombieAI{
 								if ($zom['yup'] <= 10) {
 									$pk3 = new SetEntityMotionPacket;
 									$pk3->entities = [
-										[$zo->getID(), $zom['motionx'] / 10, $zom['motiony'] / 10, $zom['motionz'] / 10]
+										[$zo->getID(), $zom['motionx']/10 , $zom['motiony'] , $zom['motionz']/10 ]
 									];
 									foreach ($zo->getViewers() as $pl) {
 										$pl->dataPacket($pk3);
@@ -509,7 +495,7 @@ class ZombieAI{
 								} else {
 									$pk3 = new SetEntityMotionPacket;
 									$pk3->entities = [
-										[$zo->getID(), $zom['motionx'] / 10 - $zom['motiony'] / 10, $zom['motionz'] / 10]
+										[$zo->getID(), $zom['motionx']/10 ,  $zom['motiony'] , $zom['motionz']/10 ]
 									];
 									foreach ($zo->getViewers() as $pl) {
 										$pl->dataPacket($pk3);
@@ -519,7 +505,7 @@ class ZombieAI{
 
 								$pk3 = new SetEntityMotionPacket;
 								$pk3->entities = [
-									[$zo->getID(), $zom['motionx'] / 10, -$zom['motiony'] / 10, $zom['motionz'] / 10]
+									[$zo->getID(), $zom['motionx']/10, $zom['motiony'] , $zom['motionz']/10 ]
 								];
 								foreach ($zo->getViewers() as $pl) {
 									$pl->dataPacket($pk3);
