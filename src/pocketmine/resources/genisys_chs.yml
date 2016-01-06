@@ -2,7 +2,7 @@
 
 #配置文件版本
 config:
- version: 2
+ version: 3
  
 level:
  #设置是否变换天气
@@ -55,6 +55,8 @@ redstone:
  enable: false
  #是否允许伪低频
  allow-fake-low-frequency-pulse: false
+ #设置脉冲频率, 默认: 1s
+ pulse-frequency: 1
  
 dserver:
  #多服统统一人数
