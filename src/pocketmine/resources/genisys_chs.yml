@@ -45,8 +45,6 @@ server:
  allow-iron-golem: false
  #是否允许生成雪傀儡
  allow-snow-golem: false
- #是否允许合成药水
- allow-crafting-potion: false
  #是否允许铁砧和附魔台
  allow-anvilandenchanttable: false
 
