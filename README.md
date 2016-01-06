@@ -5,6 +5,21 @@
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 
+#Acknowledgements / 鸣谢
+* Skull, FlowerPot are based on @ImagicalCorp ImagicalMine's work
+* AIs are based on @Zzm317's amazing MyOwnWorld.
+* Painting and Brewing Stand are translated from Nukkit Project
+* Furnace was fixed by @MagicDroidX
+* Rail and Powered Rails were written by @happy163
+* Nether door was written by JJLeo
+* Base food system is based on Katana
+* Base weather system was written by @Zzm317 and rewritten by @PeratX
+* @FENGberd's encouragement
+* Our leader @ishitatsuyuki and @jasonczc
+
+#Declaration / 声明
+* We have never copy ANY codes from PxxxxxMxxxPxxxPxxx
+
 #Jenkins CI / 自动构建的phar
 <a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">Click Here / 点击这里进入自动构建页</a>
 
