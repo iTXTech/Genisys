@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 2
+ version: 3
 
 level:
  #Set if turn on the weather system
@@ -55,6 +55,8 @@ redstone:
  enable: false
  #Choose if allow fake low frequancy pulse
  allow-fake-low-frequency-pulse: false
+ #Set the frequency of pulse, Default: 1s
+ pulse-frequency: 1
 
 dserver:
  #The count of all multi-server unified
