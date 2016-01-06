@@ -958,7 +958,8 @@ class AIHolder{
 					$array[$entity->getId()]['y'] = $entity->getY() + $high;
 					$array[$entity->getId()]['z'] = $array[$entity->getId()]['z'] - $array[$entity->getId()]['zzz'] * $back;
 					$pos = new Vector3 ($array[$entity->getId()]['x'], $array[$entity->getId()]['y'], $array[$entity->getId()]['z']);  //目标坐标
-					$entity->setPosition($pos);
+					//$entity->setPosition($pos);
+					$entity->knockBack($entity, 0, $array[$entity->getId()]['xxx'] * $back, $array[$entity->getId()]['zzz'] * $back);
 					if(isset($array[$entity->getId()])){
 						$zom = &$array[$entity->getId()];
 						$zom['IsChasing'] = $p->getName();
