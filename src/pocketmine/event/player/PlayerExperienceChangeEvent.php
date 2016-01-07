@@ -12,7 +12,7 @@ class PlayerExperienceChangeEvent extends PlayerEvent implements Cancellable{
 	
 	public $exp;
 	public $expLevel;
-	public $auction;
+	public $action;
 
 	public function __construct(Player $player, $exp, $expLevel, $action = PlayerExperienceChangeEvent::SET_EXPERIENCE){
 		$this->exp = $exp;
