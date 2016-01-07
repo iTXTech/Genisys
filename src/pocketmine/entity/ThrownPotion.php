@@ -165,6 +165,8 @@ class ThrownPotion extends Projectile{
 
 		$hasUpdate = parent::onUpdate($currentTick);
 
+		$this->age++;
+
 		if($this->age > 1200 or $this->isCollided){
 			$this->kill();
 			$this->close();

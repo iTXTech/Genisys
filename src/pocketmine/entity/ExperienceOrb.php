@@ -8,9 +8,9 @@ use pocketmine\Player;
 class ExperienceOrb extends Entity{
 	const NETWORK_ID = 69;
 
-	public $width = 0.25;
-	public $length = 0.25;
-	public $height = 0.25;
+	public $width = 0.1;
+	public $length = 0.1;
+	public $height = 0.1;
 
 	protected $gravity = 0;
 	protected $drag = 0;
@@ -36,6 +36,14 @@ class ExperienceOrb extends Entity{
 		$this->timings->startTiming();
 		
 		$hasUpdate = $this->entityBaseTick($tickDiff);
+
+		$this->age++;
+
+		if($this->age > 1200){
+			$this->kill();
+			$this->close();
+			$hasUpdate = true;
+		}
 		
 		$minDistance = PHP_INT_MAX;
 		foreach($this->getLevel()->getEntities() as $e){
@@ -46,9 +54,10 @@ class ExperienceOrb extends Entity{
 				}
 			} 
 		}
-		
+
+		$hasFollower = false;
 		if($minDistance < PHP_INT_MAX){
-			$moveSpeed = 0.3;
+			$moveSpeed = 0.7;
 			$motX = ($expectedPos->getX() - $this->x) / 8;
 			$motY = ($expectedPos->getY() + $expectedPos->getEyeHeight() - $this->y) / 8;
 			$motZ = ($expectedPos->getZ() - $this->z) / 8;
@@ -56,12 +65,16 @@ class ExperienceOrb extends Entity{
 			$motC = 1 - $motSqrt;
 		
 			if($motC > 0){
+				$hasFollower = true;
 				$motC *= $motC;
 				$this->motionX = $motX / $motSqrt * $motC * $moveSpeed;
 				$this->motionY = $motY / $motSqrt * $motC * $moveSpeed;
 				$this->motionZ = $motZ / $motSqrt * $motC * $moveSpeed;
 			}
 		}
+
+		//if(!$hasFollower and !$this->onGround) $this->motionY -= 0.04;
+		//TODO: Add gravity pull
 			/*if($expectedPos->getX() > $this->x) $this->motionX = $moveSpeed;
 			
 			if($expectedPos->getX() < $this->x) $this->motionX = -$moveSpeed;
@@ -89,6 +102,10 @@ class ExperienceOrb extends Entity{
 		$this->timings->stopTiming();
 
 		return $hasUpdate or !$this->onGround or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001;
+	}
+
+	public function canCollideWith(Entity $entity){
+		return false;
 	}
 	
 	public function setExperience($exp){

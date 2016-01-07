@@ -32,17 +32,19 @@ class ThrownExpBottle extends Projectile{
 
 		$hasUpdate = parent::onUpdate($currentTick);
 
+		$this->age++;
+
 		if($this->age > 1200 or $this->isCollided){
 			$this->kill();
 			$this->close();
 			$hasUpdate = true;
 		}
-		
-		if($this->onGround) {
+
+		if($this->onGround){
 			$this->kill();
 			$this->close();
 			$this->getLevel()->addParticle(new SpellParticle($this, 46, 82, 153));
-			if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0,1,0), mt_rand(3,11));
+			if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0, 0.2, 0), mt_rand(3, 11));
 		}
 
 		$this->timings->stopTiming();
