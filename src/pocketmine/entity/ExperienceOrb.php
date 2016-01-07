@@ -100,6 +100,7 @@ class ExperienceOrb extends Entity{
 	}
 
 	public function spawnTo(Player $player){
+		$this->setDataProperty(self::DATA_NO_AI, self::DATA_TYPE_BYTE, 1);
 		$pk = new AddEntityPacket();
 		$pk->type = ExperienceOrb::NETWORK_ID;
 		$pk->eid = $this->getId();

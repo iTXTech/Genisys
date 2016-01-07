@@ -21,6 +21,7 @@ use pocketmine\entity\Attribute;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 use pocketmine\entity\FallingSand;
+use pocketmine\entity\FishingHook;
 use pocketmine\entity\Human;
 use pocketmine\entity\Item as DroppedItem;
 use pocketmine\entity\PrimedTNT;
@@ -2931,6 +2932,7 @@ private function lookupAddress($address) {
 		Entity::registerEntity(Minecart::class);
 		Entity::registerEntity(ThrownPotion::class);
 		Entity::registerEntity(Painting::class);
+		Entity::registerEntity(FishingHook::class);
 
 		Entity::registerEntity(Human::class, true);
 	}

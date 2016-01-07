@@ -206,9 +206,9 @@ abstract class Entity extends Location implements Metadatable{
 	protected $isPlayer = false;
 
 	/** @var Entity */
-	protected $linkedEntity = \Null;
+	protected $linkedEntity = null;
 	/** 0 no linked 1 linked other 2 be linked */
-	protected $linkedType = \Null;
+	protected $linkedType = null;
 
 	protected $riding = null;
 

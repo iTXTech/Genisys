@@ -18,6 +18,7 @@ use pocketmine\entity\AttributeManager;
 use pocketmine\entity\Boat;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
+use pocketmine\entity\FishingHook;
 use pocketmine\entity\Human;
 use pocketmine\entity\Item as DroppedItem;
 use pocketmine\entity\Living;
@@ -2273,7 +2274,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			return;
 		}
 
-
 		$timings = Timings::getReceiveDataPacketTimings($packet);
 
 		$timings->startTiming();
@@ -2540,6 +2540,28 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					if($ev->isCancelled()){
 						$this->inventory->sendHeldItem($this);
 						break;
+					}
+
+					if($item->getId() === Item::FISHING_ROD){
+						$nbt = new Compound("", [
+							"Pos" => new Enum("Pos", [
+								new Double("", $this->x),
+								new Double("", $this->y + $this->getEyeHeight()),
+								new Double("", $this->z)
+							]),
+							"Motion" => new Enum("Motion", [
+								new Double("", -sin($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI)),
+								new Double("", -sin($this->pitch / 180 * M_PI)),
+								new Double("", cos($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI))
+							]),
+							"Rotation" => new Enum("Rotation", [
+								new Float("", $this->yaw),
+								new Float("", $this->pitch)
+							])
+						]);
+						$hook = new FishingHook($this->chunk, $nbt);
+						$hook->spawnToAll();
+						$hook->linkEntity($this);
 					}
 
 					if($item->getId() === Item::SNOWBALL){
