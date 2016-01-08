@@ -259,7 +259,6 @@ class MainLogger extends \AttachableThreadedLogger{
 				$this->synchronized(function (){
 					while($this->logStream->count() > 0){
 						$chunk = $this->logStream->shift();
-						fwrite($this->logResource, $chunk);
 						$this->logResource = file_put_contents($this->logFile, $chunk, FILE_APPEND);
 					}
 
