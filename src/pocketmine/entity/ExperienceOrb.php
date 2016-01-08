@@ -71,6 +71,16 @@ class ExperienceOrb extends Entity{
 				$this->motionY = $motY / $motSqrt * $motC * $moveSpeed;
 				$this->motionZ = $motZ / $motSqrt * $motC * $moveSpeed;
 			}
+
+			if($minDistance <= 1.8){
+				if($this->getLevel()->getServer()->expEnabled){
+					if($this->getExperience() > 0){
+						$this->kill();
+						$this->close();
+						$expectedPos->addExperience($this->getExperience());
+					}
+				}
+			}
 		}
 
 		//if(!$hasFollower and !$this->onGround) $this->motionY -= 0.04;

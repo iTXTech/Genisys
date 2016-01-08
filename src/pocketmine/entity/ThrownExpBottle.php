@@ -17,7 +17,7 @@ class ThrownExpBottle extends Projectile{
 	public $height = 0.25;
 
 	protected $gravity = 0.1;
-	protected $drag = 0.05;
+	protected $drag = 0.15;
 
 	public function __construct(FullChunk $chunk, Compound $nbt, Entity $shootingEntity = null){
 		parent::__construct($chunk, $nbt, $shootingEntity);
@@ -37,14 +37,13 @@ class ThrownExpBottle extends Projectile{
 		if($this->age > 1200 or $this->isCollided){
 			$this->kill();
 			$this->close();
-			$hasUpdate = true;
-		}
-
-		if($this->onGround){
-			$this->kill();
-			$this->close();
 			$this->getLevel()->addParticle(new SpellParticle($this, 46, 82, 153));
-			if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0, 0.2, 0), mt_rand(3, 11));
+			if($this->getLevel()->getServer()->expEnabled){
+				$this->getLevel()->addExperienceOrb($this->add(0, 0.2, 0), mt_rand(1, 4));
+				$this->getLevel()->addExperienceOrb($this->add(-0.1, 0.2, 0), mt_rand(1, 4));
+				$this->getLevel()->addExperienceOrb($this->add(0, 0.2, -0.1), mt_rand(1, 4));
+			}
+			$hasUpdate = true;
 		}
 
 		$this->timings->stopTiming();

@@ -1615,15 +1615,15 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 					//	}
 
-					if($this->server->expEnabled){
-						/** @var \pocketmine\entity\ExperienceOrb $e */
+					/*if($this->server->expEnabled){
+						/** @var \pocketmine\entity\ExperienceOrb $e *
 						foreach($this->level->getNearbyExperienceOrb(new AxisAlignedBB($this->x - 1, $this->y - 1, $this->z - 1, $this->x + 1, $this->y + 2, $this->z + 1)) as $e){
 							if($e->getExperience() > 0){
 								$e->close();
 								$this->addExperience($e->getExperience());
 							}
 						}
-					}
+					}*/
 				}
 			}
 
