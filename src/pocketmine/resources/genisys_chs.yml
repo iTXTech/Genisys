@@ -107,3 +107,5 @@ ai:
  snow-golem: true
  #苦力怕爆炸是否破坏方块
  creeper-explode-destroy-block: false
+ #是否允许自动生成生物
+ mobgenerate: false
