@@ -224,6 +224,10 @@ class MainLogger extends \AttachableThreadedLogger{
 			}
 
 			while($this->shutdown === false){
+				if(!$this->write) {
+					fclose($this->logResource);
+					break;
+				}
 				$this->synchronized(function(){
 					while($this->logStream->count() > 0){
 						$chunk = $this->logStream->shift();
