@@ -18,7 +18,8 @@
 * Our leader @ishitatsuyuki and @jasonczc
 
 #Declaration / 声明
-* We have never copy ANY codes from PxxxxxMxxxPxxxPxxx/我们没有从PxxxxxMxxxPxxxPxxx抄袭任何代码，并且此前也不曾听闻该项目
+* We have never copy ANY codes from PxxxxxMxxxPxxxPxxx
+* 我们没有从PxxxxxMxxxPxxxPxxx抄袭任何代码，并且此前也不曾听闻该项目
 
 #Jenkins CI / 自动构建的phar
 <a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">Click Here / 点击这里进入自动构建页</a>
@@ -35,7 +36,7 @@
 * Minecart (can't follow rails)
 * Boat
 * More Doors
-* Potions (Brewing is not supported)
+* Potions
 * Splash Potions
 * Anvil
 * Better Crafting
@@ -53,7 +54,11 @@
 * Nether Generator (improve)
 * Potions (improve)
 * Redstone (improve)
+* Anvil (improve)
 * Fishing
+* Enchantment
+* New AI for all creatures
+* LevelDB support for Windows
 * PHP7 support
 
 #Servers / 服务器
