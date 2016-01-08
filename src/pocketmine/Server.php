@@ -212,7 +212,7 @@ class Server{
 
 	/** @var CommandReader */
 	private $console = null;
-	private $consoleThreaded;
+	//private $consoleThreaded;
 
 	/** @var SimpleCommandMap */
 	private $commandMap = null;
