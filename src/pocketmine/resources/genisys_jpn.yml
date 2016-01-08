@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 3
+ version: 3.1
 
 level:
  #Set if turn on the weather system
@@ -107,3 +107,5 @@ ai:
  snow-golem: true
  #Destory blocks if creeper exploded
  creeper-explode-destroy-block: false
+ #Choose if allow mob auto generate
+ mobgenerate: false
