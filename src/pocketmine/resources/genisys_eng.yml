@@ -107,3 +107,5 @@ ai:
  snow-golem: true
  #Destory blocks if creeper exploded
  creeper-explode-destroy-block: false
+ #Choose if allow mob auto generate
+ mobgenerate: false

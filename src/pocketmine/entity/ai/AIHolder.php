@@ -91,10 +91,12 @@ class AIHolder{
 	public function __construct(Server $server){
 		$this->server = $server;
 
-		/*$this->tasks['ZombieGenerate'] = $this->getServer()->getScheduler()->scheduleRepeatingTask(new CallbackTask([
-			$this,
-			"MobGenerate"
-		]), 20 * 45);*/
+		if($this->server->aiConfig["mobgenerate"]){
+			$this->tasks['ZombieGenerate'] = $this->getServer()->getScheduler()->scheduleRepeatingTask(new CallbackTask([
+				$this,
+				"MobGenerate"
+			]), 20 * 45);
+		}
 
 
 		$this->getServer()->getScheduler()->scheduleRepeatingTask(new CallbackTask([

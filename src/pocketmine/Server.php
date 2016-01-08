@@ -1561,7 +1561,8 @@ class Server{
 			"irongolem" => $this->getAdvancedProperty("ai.iron-golem", true),
 			"snowgolem" => $this->getAdvancedProperty("ai.snow-golem", true),
 			"pigzombie" => $this->getAdvancedProperty("ai.pigzombie", true),
-			"creeperexplode" => $this->getAdvancedProperty("ai.creeper-explode-destroy-block", false)
+			"creeperexplode" => $this->getAdvancedProperty("ai.creeper-explode-destroy-block", false),
+			"mobgenerate" => $this->getAdvancedProperty("ai.mobgenerate", false),
 		);
 		$this->inventoryNum = $this->getAdvancedProperty("player.inventory-num", 36);
 		$this->hungerTimer = $this->getAdvancedProperty("player.hunger-timer", 80);
