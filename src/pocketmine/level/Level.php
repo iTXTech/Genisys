@@ -1593,26 +1593,26 @@ class Level implements ChunkManager, Metadatable{
 
 			if($player->isSurvival() and $this->getServer()->expEnabled){
 				switch($target->getId()){
-					case 16:
+					case Block::COAL_ORE:
 						$exp = mt_rand(0, 2);
 						if($exp > 0) $this->addExperienceOrb($vector->add(0, 1, 0), $exp);
 						break;
-					case 56:
-					case 129:
+					case Block::DIAMOND_ORE:
+					case Block::EMERALD_ORE:
 						$exp = mt_rand(3, 7);
 						if($exp > 0) $this->addExperienceOrb($vector->add(0, 1, 0), $exp);
 						break;
-					case 153:
-					case 21:
+					case Block::NETHER_QUARTZ_ORE:
+					case Block::LAPIS_ORE:
 						$exp = mt_rand(2, 5);
 						if($exp > 0) $this->addExperienceOrb($vector->add(0, 1, 0), $exp);
 						break;
-					case 73:
-					case 74:
+					case Block::REDSTONE_ORE:
+					case Block::GLOWING_REDSTONE_ORE:
 						$exp = mt_rand(1, 5);
 						if($exp > 0) $this->addExperienceOrb($vector->add(0, 1, 0), $exp);
 						break;
-					case 52:
+					case Block::MONSTER_SPAWNER:
 						$exp = mt_rand(15, 43);
 						if($exp > 0) $this->addExperienceOrb($vector->add(0, 1, 0), $exp);
 						break;

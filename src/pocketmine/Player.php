@@ -1781,46 +1781,48 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 			}*/
 
-			if($this->starvationTick >= 20){
-				$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_CUSTOM, 1);
-				if($this->getHealth() > $this->server->hungerHealth) $this->attack(1, $ev);
-				$this->starvationTick = 0;
-			}
-			if($this->getFood() <= 0){
-				$this->starvationTick++;
-			}
-
-			if($this->isMoving() && $this->isSurvival()){
-				if($this->isSprinting()){
-					$this->foodUsageTime += 500;
-				}else{
-					$this->foodUsageTime += 250;
+			if($this->foodEnabled){
+				if($this->starvationTick >= 20){
+					$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_CUSTOM, 1);
+					if($this->getHealth() > $this->server->hungerHealth) $this->attack(1, $ev);
+					$this->starvationTick = 0;
 				}
-			}
+				if($this->getFood() <= 0){
+					$this->starvationTick++;
+				}
 
-			if($this->foodUsageTime >= 200000 && $this->foodEnabled && $this->server->foodEnabled){
-				$this->foodUsageTime -= 200000;
-				$this->subtractFood(1);
-			}
-
-			if((($currentTick % 20) == 0) and $this->getHealth() < $this->getMaxHealth() && $this->getFood() >= 18 && $this->foodEnabled && $this->server->foodEnabled){
-				$ev = new EntityRegainHealthEvent($this, 1, EntityRegainHealthEvent::CAUSE_EATING);
-				$this->heal(1, $ev);
-			}
-
-			if($this->foodTick >= $this->server->hungerTimer){
-				if($this->foodEnabled && $this->server->foodEnabled){
-					if($this->foodDepletion >= 2){
-						$this->subtractFood(1);
-						$this->foodDepletion = 0;
+				if($this->isMoving() && $this->isSurvival()){
+					if($this->isSprinting()){
+						$this->foodUsageTime += 500;
 					}else{
-						$this->foodDepletion++;
+						$this->foodUsageTime += 250;
 					}
 				}
-				$this->foodTick = 0;
-			}
-			if($this->getHealth() < $this->getMaxHealth()){
-				$this->foodTick++;
+
+				if($this->foodUsageTime >= 200000 && $this->foodEnabled){
+					$this->foodUsageTime -= 200000;
+					$this->subtractFood(1);
+				}
+
+				if((($currentTick % 20) == 0) and $this->getHealth() < $this->getMaxHealth() && $this->getFood() >= 18 && $this->foodEnabled){
+					$ev = new EntityRegainHealthEvent($this, 1, EntityRegainHealthEvent::CAUSE_EATING);
+					$this->heal(1, $ev);
+				}
+
+				if($this->foodTick >= $this->server->hungerTimer){
+					if($this->foodEnabled && $this->server->foodEnabled){
+						if($this->foodDepletion >= 2){
+							$this->subtractFood(1);
+							$this->foodDepletion = 0;
+						}else{
+							$this->foodDepletion++;
+						}
+					}
+					$this->foodTick = 0;
+				}
+				if($this->getHealth() < $this->getMaxHealth()){
+					$this->foodTick++;
+				}
 			}
 		}
 

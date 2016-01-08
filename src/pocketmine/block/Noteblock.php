@@ -12,6 +12,7 @@ namespace pocketmine\block;
 use pocketmine\item\Tool;
 use pocketmine\item\Item;
 use pocketmine\level\sound\NoteblockSound;
+use pocketmine\math\Vector3;
 use pocketmine\Player;
 
 class Noteblock extends Solid implements ElectricalAppliance{
@@ -42,6 +43,37 @@ class Noteblock extends Solid implements ElectricalAppliance{
 		else $this->meta = 0;
 		$this->getLevel()->setBlock($this, $this);
 		return $this->meta * 1;
+	}
+
+	public function getInstrument(){
+		$below = $this->getSide(Vector3::SIDE_DOWN);
+		switch($below->getId()){
+			case self::WOODEN_PLANK:
+			case self::NOTEBLOCK:
+			case self::CRAFTING_TABLE:
+				return NoteblockSound::INSTRUMENT_BASS;
+			case self::SAND:
+			case self::SANDSTONE:
+			case self::SOUL_SAND:
+				return NoteblockSound::INSTRUMENT_TABOUR;
+			case self::GLASS:
+			case self::GLASS_PANEL:
+			case self::GLOWSTONE_BLOCK:
+				return NoteblockSound::INSTRUMENT_CLICK;
+			case self::COAL_ORE:
+			case self::DIAMOND_ORE:
+			case self::EMERALD_ORE:
+			case self::GLOWING_REDSTONE_ORE:
+			case self::GOLD_ORE:
+			case self::IRON_ORE:
+			case self::LAPIS_ORE:
+			case self::LIT_REDSTONE_ORE:
+			case self::NETHER_QUARTZ_ORE:
+			case self::REDSTONE_ORE:
+				return NoteblockSound::INSTRUMENT_BASS_DRUM;
+			default:
+				return NoteblockSound::INSTRUMENT_PIANO;
+		}
 	}
 
 	public function onActivate(Item $item, Player $player = null){
