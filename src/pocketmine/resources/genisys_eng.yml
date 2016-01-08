@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 3.1
+ version: 4
 
 level:
  #Set if turn on the weather system
@@ -47,6 +47,8 @@ server:
  allow-snow-golem: false
  #Choose if anvil and enchanttable are allowed
  allow-anvilandenchanttable: false
+ #Choose if disable server.log
+ disable-log: false
 
 redstone:
  #Choose if redstone system is allowed

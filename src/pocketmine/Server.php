@@ -299,6 +299,7 @@ class Server{
 
 	public $aboutstring = "";
 
+	/** Advanced Config */
 	public $advancedConfig = null;
 
 	public $weatherEnabled = true;
@@ -626,7 +627,7 @@ class Server{
 	}
 
 	/**
-	 * @return \AttachableThreadedLogger
+	 * @return MainLogger
 	 */
 	public function getLogger(){
 		return $this->logger;
@@ -1588,12 +1589,23 @@ class Server{
 		$this->allowFakeLowFrequencyPulse = $this->getAdvancedProperty("redstone.allow-fake-low-frequency-pulse", false);
 		$this->pulseFrequency = $this->getAdvancedProperty("redstone.pulse-frequency", 20);
 		$this->anviletEnabled = $this->getAdvancedProperty("server.allow-anvilandenchanttable", false);
+		$this->getLogger()->setWrite(!$this->getAdvancedProperty("server.disable-log", false));
 	}
 
+	/**
+	 * @return int
+	 *
+	 * Get DServer max players
+	 */
 	public function getDServerMaxPlayers(){
 		return ($this->dserverAllPlayers + $this->getMaxPlayers());
 	}
 
+	/**
+	 * @return int
+	 *
+	 * Get DServer all online player count
+	 */
 	public function getDServerOnlinePlayers(){
 		return ($this->dserverPlayers + count($this->getOnlinePlayers()));
 	}
@@ -1663,7 +1675,7 @@ class Server{
 		   Powered by §5iTX Technologies LLC.
 		   §fVersion: §6" . $this->getPocketMineVersion() . "
 		   §fClient Version: §d0.13.1 alpha
-		   §fYou could get the lastest code on https://github.com/iTXTecho/Genisys
+		   §fYou could get the lastest code on https://github.com/iTXTech/Genisys
 		   §fDonate link: http://pl.zxda.net/plugins/203.html
 		   §f如果你在免费使用本核心，希望你可以进入上面的链接捐赠给我们，这会成为我们前进的动力。
 		\n";
@@ -1696,10 +1708,6 @@ class Server{
 		$this->advancedConfig = new Config($this->dataPath . "genisys.yml", Config::YAML, []);
 		$cfgVer = $this->getAdvancedProperty("config.version", 0, $internelConfig);
 		$advVer = $this->getAdvancedProperty("config.version", 0);
-		if($cfgVer != $advVer){
-			$this->logger->notice("You genisys.yml needs update.");
-			$this->logger->notice("Current Version: $advVer       Latest Version: $cfgVer");
-		}
 
 		$this->loadAdvancedConfig();
 
@@ -1938,6 +1946,11 @@ class Server{
 			$this,
 			"updateDServerInfo"
 		]), $this->dserverConfig["timer"]);
+
+		if($cfgVer != $advVer){
+			$this->logger->notice("You genisys.yml needs update");
+			$this->logger->notice("Current Version: $advVer   Latest Version: $cfgVer");
+		}
 
 		$this->start();
 	}
