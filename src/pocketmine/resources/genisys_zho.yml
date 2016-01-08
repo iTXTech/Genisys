@@ -2,7 +2,7 @@
 
 #設定檔案版本
 config:
- version: 3
+ version: 3.1
 
 level:
  #設定是否變換天氣
@@ -107,3 +107,5 @@ ai:
  snow-golem: true
  #苦力帕爆炸是否破壞方塊
  creeper-explode-destroy-block: false
+ #是否允許自动生成生物
+ mobgenerate: false
