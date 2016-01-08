@@ -2499,15 +2499,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}else{
 						$item = $this->inventory->getItemInHand();
 						$oldItem = clone $item;
-						//TODO: Implement adventure mode checks
-						if(!$this->isAdventure() and !$this->isSpectator()){
-							if($this->level->useItemOn($blockVector, $item, $packet->face, $packet->fx, $packet->fy, $packet->fz, $this)){
-								if(!$item->deepEquals($oldItem) or $item->getCount() !== $oldItem->getCount()){
-									$this->inventory->setItemInHand($item);
-									$this->inventory->sendHeldItem($this->hasSpawned);
-								}
-								break;
+						if($this->level->useItemOn($blockVector, $item, $packet->face, $packet->fx, $packet->fy, $packet->fz, $this)){
+							if(!$item->deepEquals($oldItem) or $item->getCount() !== $oldItem->getCount()){
+								$this->inventory->setItemInHand($item);
+								$this->inventory->sendHeldItem($this->hasSpawned);
 							}
+							break;
 						}
 					}
 
@@ -2915,16 +2912,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 				$oldItem = clone $item;
 
-				if(!$this->isAdventure() and !$this->isSpectator()){
-					if($this->canInteract($vector->add(0.5, 0.5, 0.5), $this->isCreative() ? 13 : 6) and $this->level->useBreakOn($vector, $item, $this, true)){
-						if($this->isSurvival()){
-							if(!$item->equals($oldItem) or $item->getCount() !== $oldItem->getCount()){
-								$this->inventory->setItemInHand($item);
-								$this->inventory->sendHeldItem($this);
-							}
+				if($this->canInteract($vector->add(0.5, 0.5, 0.5), $this->isCreative() ? 13 : 6) and $this->level->useBreakOn($vector, $item, $this, true)){
+					if($this->isSurvival()){
+						if(!$item->equals($oldItem) or $item->getCount() !== $oldItem->getCount()){
+							$this->inventory->setItemInHand($item);
+							$this->inventory->sendHeldItem($this);
 						}
-						break;
 					}
+					break;
 				}
 
 				$this->inventory->sendContents($this);

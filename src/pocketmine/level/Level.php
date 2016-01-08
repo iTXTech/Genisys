@@ -1551,6 +1551,7 @@ class Level implements ChunkManager, Metadatable{
 		}
 
 		if($player !== null){
+			if($player->isAdventure() or $player->isSpectator()) return true;
 			$ev = new BlockBreakEvent($player, $target, $item, $player->isCreative() ? true : false);
 
 			if($player->isSurvival() and $item instanceof Item and !$target->isBreakable($item)){
@@ -1748,6 +1749,7 @@ class Level implements ChunkManager, Metadatable{
 			}else{
 				return false;
 			}
+			if($player->isAdventure() or $player->isSpectator()) return true;
 		}elseif($target->canBeActivated() === true and $target->onActivate($item, $player) === true){
 			return true;
 		}
