@@ -37,6 +37,8 @@ use pocketmine\command\defaults\HelpCommand;
 use pocketmine\command\defaults\KickCommand;
 use pocketmine\command\defaults\KillCommand;
 use pocketmine\command\defaults\ListCommand;
+use pocketmine\command\defaults\LoadPluginCommand;
+use pocketmine\command\defaults\LvdatCommand;
 use pocketmine\command\defaults\MeCommand;
 use pocketmine\command\defaults\OpCommand;
 use pocketmine\command\defaults\PardonCommand;
@@ -103,6 +105,9 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new MakePluginCommand("makeplugin"));
 		$this->register("pocketmine", new MakeServerCommand("ms"));
 		//$this->register("pocketmine", new MakeServerCommand("makeserver"));
+
+		$this->register("pocketmine", new LoadPluginCommand("loadplugin"));
+		$this->register("pocketmine", new LvdatCommand("lvdat"));
 		
 		$this->register("pocketmine", new VersionCommand("version"));
 		$this->register("pocketmine", new PluginsCommand("plugins"));

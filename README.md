@@ -44,18 +44,17 @@
 * Supported 0.13.1 skin format
 * Hunger (Based on Katana)
 * AI (Based on MOW)
-* More commands (bancid bancidbyname banipbyname ms extractplugin makeplugin pardoncid weather extractphar)
+* More commands (bancid bancidbyname banipbyname ms extractplugin
+* makeplugin pardoncid weather extractphar loadplugin lvdat)
 * With FolderPluginLoader
 
 #TODO List
-* Make brewing stand works
-* Make EnchantTable works
-* Improve Minecart and Boat
-* Add a new AI for all creatures
-* Improve Nether Generator
-* Add Tripwire Hook
-* Improve Potions
-* Make it can run with PHP7
+* Boat and Minecart (improve)
+* Nether Generator (improve)
+* Potions (improve)
+* Redstone (improve)
+* Fishing
+* PHP7 support
 
 #Servers / 服务器
 (In fact there are more than 80 servers in China using our core and most of them are better than us.Here are some servers set by us.)
