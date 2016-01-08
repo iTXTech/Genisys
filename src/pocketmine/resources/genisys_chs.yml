@@ -2,7 +2,7 @@
 
 #配置文件版本
 config:
- version: 3
+ version: 3.1
  
 level:
  #设置是否变换天气
