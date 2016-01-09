@@ -47,19 +47,19 @@ server:
  allow-snow-golem: false
  #是否允許鐵砧和附魔臺
  allow-anvilandenchanttable: false
- #是否禁用server.log
+ #是否停用server.log
  disable-log: false
- #玩家进出伺服器消息提醒方式。0为Message，1为Tip，2为Popup
+ #玩家進出伺服器訊息提醒方式。0為Message，1為Tip，2為Popup
  player-msg-type: 0
- login-msg: "§3@player 加入了游戏"
- logout-msg: "§3@player 退出了游戏"
+ login-msg: "§3@player 加入了遊戲"
+ logout-msg: "§3@player 離開了遊戲"
 
 redstone:
  #是否允許红石系统
  enable: false
  #是否允許虛擬低頻脈衝
  allow-fake-low-frequency-pulse: false
- #设置脈衝频率, 預設: 1s
+ #設定脈衝頻率, 預設: 1s
  pulse-frequency: 1
 
 dserver:
