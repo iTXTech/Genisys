@@ -64,7 +64,7 @@ class LvdatCommand extends VanillaCommand{
 				$sender->sendMessage("/lvdat %commands.generic.level seed %commands.generic.seed");
 				$sender->sendMessage("/lvdat %commands.generic.level name %commands.generic.name");
 				$sender->sendMessage("/lvdat %commands.generic.level generator %commands.generic.generator");
-				$sender->sendMessage("/lvdat %commands.generic.level preset 生成器选项（预设）");
+				$sender->sendMessage("/lvdat %commands.generic.level preset %pocketmine.command.lvdat.preset");
 				break;
 			case "seed":
 				if($p == ""){
