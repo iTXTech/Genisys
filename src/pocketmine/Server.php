@@ -154,8 +154,9 @@ class Server{
 	const BROADCAST_CHANNEL_ADMINISTRATIVE = "pocketmine.broadcast.admin";
 	const BROADCAST_CHANNEL_USERS = "pocketmine.broadcast.user";
 
-
-	public $pmsg;
+	const PLAYER_MSG_TYPE_MESSAGE = 0;
+	const PLAYER_MSG_TYPE_TIP = 1;
+	const PLAYER_MSG_TYPE_POPUP = 2;
 
 	/** @var Server */
 	private static $instance = null;
@@ -335,6 +336,9 @@ class Server{
 	public $allowFakeLowFrequencyPulse = false;
 	public $anviletEnabled = false;
 	public $pulseFrequency = 20;
+	public $playerMsgType = self::PLAYER_MSG_TYPE_MESSAGE;
+	public $playerLoginMsg = "";
+	public $playerLogoutMsg = "";
 
 	/**
 	 * @return string
@@ -1543,9 +1547,9 @@ class Server{
 	}
 
 	public function loadAdvancedConfig(){
-		$this->pmsg = $this->getAdvancedProperty("player.pmsg",0);
-		$this->pimsg=$this->getAdvancedProperty("player.login-msg","§3@player joined the game");
-		$this->pomsg=$this->getAdvancedProperty("player.logout-msg","§3@player left the game");
+		$this->playerMsgType = $this->getAdvancedProperty("server.player-msg-type", self::PLAYER_MSG_TYPE_MESSAGE);
+		$this->playerLoginMsg = $this->getAdvancedProperty("server.login-msg", "§3@player joined the game");
+		$this->playerLogoutMsg = $this->getAdvancedProperty("server.logout-msg", "§3@player left the game");
 		$this->weatherEnabled = $this->getAdvancedProperty("level.weather", true);
 		$this->foodEnabled = $this->getAdvancedProperty("player.hunger", true);
 		$this->expEnabled = $this->getAdvancedProperty("player.experience", true);

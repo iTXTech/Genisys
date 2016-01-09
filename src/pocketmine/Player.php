@@ -860,7 +860,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->spawned = true;
 
 		$this->sendSettings();
-		$this->setSpeed(0.1);
+		$this->setMovementSpeed(0.1);
 		$this->sendPotionEffects($this);
 		$this->sendData($this);
 		$this->inventory->sendContents($this);
@@ -904,11 +904,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->getDisplayName()
 		])));
 		if(strlen(trim($ev->getJoinMessage())) > 0){
-			if($this->server->pmsg==0) $this->server->broadcastMessage($ev->getJoinMessage());
-			if($this->server->pmsg==1) $this->server->broadcastTip(str_replace("@player",$this->getName(),$this->server->pimsg));
-			if($this->server->pmsg==2) $this->server->broadcastPopup(str_replace("@player",$this->getName(),$this->server->pimsg));
-
-	}
+			if($this->server->playerMsgType === Server:: PLAYER_MSG_TYPE_MESSAGE) $this->server->broadcastMessage($ev->getJoinMessage());
+			elseif($this->server->playerMsgType === Server::PLAYER_MSG_TYPE_TIP) $this->server->broadcastTip(str_replace("@player",$this->getName(),$this->server->playerLoginMsg));
+			elseif($this->server->playerMsgType === Server::PLAYER_MSG_TYPE_POPUP) $this->server->broadcastPopup(str_replace("@player",$this->getName(),$this->server->playerLoginMsg));
+		}
 
 		$this->setAllowFlight($this->gamemode == 3 || $this->gamemode == 1);
 
@@ -2837,7 +2836,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						//$this->getAttribute()->resetAll();
 						$this->setHealth($this->getMaxHealth());
 						$this->setFood(20);
-						$this->setSpeed(0.1);
+						$this->setMovementSpeed(0.1);
 						if($this->server->expEnabled) $this->updateExperience();
 
 						$this->starvationTick = 0;
@@ -3538,7 +3537,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 */
 	public function sendMessage($message){
 
-
 		if($message instanceof TextContainer){
 
 			if($message instanceof TranslationContainer){
@@ -3554,8 +3552,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		foreach($mes as $m){
 			if($m !== ""){
-				$ev = new PlayerTextPreSendEvent($this, $m, PlayerTextPreSendEvent::MESSAGE);
-				$this->server->getPluginManager()->callEvent($ev);
+				$this->server->getPluginManager()->callEvent($ev = new PlayerTextPreSendEvent($this, $m, PlayerTextPreSendEvent::MESSAGE));
 				if(!$ev->isCancelled()){
 					$pk = new TextPacket();
 					$pk->type = TextPacket::TYPE_RAW;
@@ -3565,7 +3562,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	public function sendTranslation($message, array $parameters = []){
@@ -3704,10 +3701,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->loggedIn = false;
 
 			if(isset($ev) and $this->username != "" and $this->spawned !== false and $ev->getQuitMessage() != ""){
-				if($this->server->pmsg==0) $this->server->broadcastMessage($ev->getQuitMessage());
-				if($this->server->pmsg==1) $this->server->broadcastTip(str_replace("@player",$this->getName(),$this->server->pomsg));
-				if($this->server->pmsg==2) $this->server->broadcastPopup(str_replace("@player",$this->getName(),$this->server->pomsg));
-
+				if($this->server->playerMsgType === Server::PLAYER_MSG_TYPE_MESSAGE) $this->server->broadcastMessage($ev->getQuitMessage());
+				elseif($this->server->playerMsgType === Server::PLAYER_MSG_TYPE_TIP) $this->server->broadcastTip(str_replace("@player",$this->getName(),$this->server->playerLogoutMsg));
+				elseif($this->server->playerMsgType === Server::PLAYER_MSG_TYPE_POPUP) $this->server->broadcastPopup(str_replace("@player",$this->getName(),$this->server->playerLogoutMsg));
 			}
 
 			$this->server->getPluginManager()->unsubscribeFromPermission(Server::BROADCAST_CHANNEL_USERS, $this);
@@ -3956,12 +3952,22 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	protected $movementSpeed = 0.1;
 
-	public function setSpeed($amount){
+	/**
+	 * Set movement speed to the player
+	 *
+	 * @param $amount
+	 */
+	public function setMovementSpeed($amount){
 		$this->movementSpeed = $amount;
 		$this->getAttribute()->getAttribute(AttributeManager::MOVEMENTSPEED)->setValue($amount);
 	}
 
-	public function getSpeed(){
+	/**
+	 * Get movement speed of the player
+	 *
+	 * @return float
+	 */
+	public function getMovementSpeed(){
 		return $this->movementSpeed;
 	}
 

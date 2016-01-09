@@ -276,10 +276,10 @@ class Effect{
 				}
 				break;
 			case Effect::SPEED:
-				if($entity instanceof Player) $entity->setSpeed(0.1 + ($this->amplifier + 1) * 0.01);
+				if($entity instanceof Player) $entity->setMovementSpeed(0.1 + ($this->amplifier + 1) * 0.01);
 				break;
 			case Effect::SLOWNESS:
-				if($entity instanceof Player) $entity->setSpeed(0.1 - ($this->amplifier + 1) * 0.01);
+				if($entity instanceof Player) $entity->setMovementSpeed(0.1 - ($this->amplifier + 1) * 0.01);
 				break;
 		}
 	}
@@ -309,11 +309,11 @@ class Effect{
 			$entity->dataPacket($pk);
 			
 			if($this->id === Effect::SPEED){
-				if($entity instanceof Player) $entity->setSpeed(0.1 + ($this->amplifier + 1) * 0.01);
+				if($entity instanceof Player) $entity->setMovementSpeed(0.1 + ($this->amplifier + 1) * 0.01);
 			}
 			
 			if($this->id === Effect::SLOWNESS){
-				if($entity instanceof Player) $entity->setSpeed(0.1 - ($this->amplifier + 1) * 0.01);
+				if($entity instanceof Player) $entity->setMovementSpeed(0.1 - ($this->amplifier + 1) * 0.01);
 			}
 		}
 
@@ -333,7 +333,7 @@ class Effect{
 			$entity->dataPacket($pk);
 			
 			if($this->id === Effect::SPEED or $this->id === Effect::SLOWNESS){
-				if($entity instanceof Player) $entity->setSpeed(0.1);
+				if($entity instanceof Player) $entity->setMovementSpeed(0.1);
 			}
 		}
 

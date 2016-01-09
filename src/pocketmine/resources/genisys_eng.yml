@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 4
+ version: 5
 
 level:
  #Set if turn on the weather system
@@ -31,8 +31,9 @@ player:
  auto-clear-inventory : true
  #TODO: Choose if keep experience when a player died
  keep-experience: false
- #Choose how to remind player when a player join.0 is message,1 is tip,2 is popup
- pmsg: 0
+ #Choose how to remind player when a player join
+ #0 = Message, 1 = Tip, 2 = Popup
+ player-msg-type: 0
  login-msg: "§3@player joined the game"
  logout-msg: "§3@player left the game"
 

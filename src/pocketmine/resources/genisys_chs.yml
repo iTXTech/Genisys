@@ -2,7 +2,7 @@
 
 #配置文件版本
 config:
- version: 4
+ version: 5
  
 level:
  #设置是否变换天气
@@ -31,10 +31,6 @@ player:
  auto-clear-inventory: true
  #TODO: 是否开启死亡经验不掉落
  keep-experience: false
- #玩家进出服务器消息提醒方式。0为Message，1为Tip，2为Popup
- pmsg: 0
- login-msg: "§3@player 加入了游戏"
- logout-msg: "§3@player 退出了游戏"
  
 nether:
  #是否允许地狱，打开此选项会自动生成地狱地图
@@ -53,6 +49,10 @@ server:
  allow-anvilandenchanttable: false
  #是否禁用server.log
  disable-log: false
+ #玩家进出服务器消息提醒方式。0为Message，1为Tip，2为Popup
+ player-msg-type: 0
+ login-msg: "§3@player 加入了游戏"
+ logout-msg: "§3@player 退出了游戏"
 
 redstone:
  #是否开启红石系统
