@@ -31,7 +31,11 @@ player:
  auto-clear-inventory : true
  #TODO: Choose if keep experience when a player died
  keep-experience: false
- 
+ #Choose how to remind player when a player join.0 is message,1 is tip,2 is popup
+ pmsg: 0
+ login-msg: "§3@player joined the game"
+ logout-msg: "§3@player left the game"
+
 nether:
  #Choose if the nether's allowed,the level of nether will generate automatically
  allow-nether: false

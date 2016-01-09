@@ -904,8 +904,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->getDisplayName()
 		])));
 		if(strlen(trim($ev->getJoinMessage())) > 0){
-			$this->server->broadcastMessage($ev->getJoinMessage());
-		}
+			if($this->server->pmsg==0) $this->server->broadcastMessage($ev->getJoinMessage());
+			if($this->server->pmsg==1) $this->server->broadcastTip(str_replace("@player",$this->getName(),$this->server->pimsg));
+			if($this->server->pmsg==2) $this->server->broadcastPopup(str_replace("@player",$this->getName(),$this->server->pimsg));
+
+	}
 
 		$this->setAllowFlight($this->gamemode == 3 || $this->gamemode == 1);
 
@@ -3701,7 +3704,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->loggedIn = false;
 
 			if(isset($ev) and $this->username != "" and $this->spawned !== false and $ev->getQuitMessage() != ""){
-				$this->server->broadcastMessage($ev->getQuitMessage());
+				if($this->server->pmsg==0) $this->server->broadcastMessage($ev->getQuitMessage());
+				if($this->server->pmsg==1) $this->server->broadcastTip(str_replace("@player",$this->getName(),$this->server->pomsg));
+				if($this->server->pmsg==2) $this->server->broadcastPopup(str_replace("@player",$this->getName(),$this->server->pomsg));
+
 			}
 
 			$this->server->getPluginManager()->unsubscribeFromPermission(Server::BROADCAST_CHANNEL_USERS, $this);

@@ -154,6 +154,9 @@ class Server{
 	const BROADCAST_CHANNEL_ADMINISTRATIVE = "pocketmine.broadcast.admin";
 	const BROADCAST_CHANNEL_USERS = "pocketmine.broadcast.user";
 
+
+	public $pmsg;
+
 	/** @var Server */
 	private static $instance = null;
 
@@ -1540,6 +1543,9 @@ class Server{
 	}
 
 	public function loadAdvancedConfig(){
+		$this->pmsg = $this->getAdvancedProperty("player.pmsg",0);
+		$this->pimsg=$this->getAdvancedProperty("player.login-msg","§3@player joined the game");
+		$this->pomsg=$this->getAdvancedProperty("player.logout-msg","§3@player left the game");
 		$this->weatherEnabled = $this->getAdvancedProperty("level.weather", true);
 		$this->foodEnabled = $this->getAdvancedProperty("player.hunger", true);
 		$this->expEnabled = $this->getAdvancedProperty("player.experience", true);
