@@ -879,7 +879,9 @@ class AIHolder{
 
 
 					if($level->getBlock($v3_1)->getID() == 0 and $level->getBlock($v3_2)->getID() == 0){  //找到地面
+						/** @var Entity[] $zoC */
 						$zoC = [];
+						/** @var Entity[] $cowc */
 						$cowc = [];
 						foreach($level->getEntities() as $zo){
 							if($zo instanceof Zombie) $zoC[] = $zo;
@@ -888,7 +890,7 @@ class AIHolder{
 
 
 						if(count($zoC) > $max){
-							for($i = 0; $i < (count($zoC) - $max); $i++) $zoC[$i]->forcekill();
+							for($i = 0; $i < (count($zoC) - $max); $i++) $zoC[$i]->kill();
 						}else
 							if($random == 0 && $level->getTime() >= 13500){
 
@@ -900,7 +902,7 @@ class AIHolder{
 							}
 
 						if(count($cowc) > $max){
-							for($i = 0; $i < (count($cowc) - $max); $i++) $cowc[$i]->forcekill();
+							for($i = 0; $i < (count($cowc) - $max); $i++) $cowc[$i]->kill();
 						}else if($random == 1){
 
 							$pos = new Position($v3->x, $v3->y, $v3->z, $level);
@@ -908,10 +910,6 @@ class AIHolder{
 							//$this->server->getLogger()->info("生成1牛");
 						}
 						break;
-						print(count($zoC) . "/");
-						print(count($cowc) . "|");
-
-
 					}
 				}
 			}
