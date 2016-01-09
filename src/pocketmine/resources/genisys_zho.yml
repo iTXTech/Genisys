@@ -2,7 +2,7 @@
 
 #設定檔案版本
 config:
- version: 3.1
+ version: 4
 
 level:
  #設定是否變換天氣
@@ -31,7 +31,7 @@ player:
  auto-clear-inventory: true
  #TODO: 是否開啟死亡經驗不掉落
  keep-experience: false
- #玩家进出服务器消息提醒方式。0为Message，1为Tip，2为Popup
+ #玩家进出伺服器消息提醒方式。0为Message，1为Tip，2为Popup
  pmsg: 0
  login-msg: "§3@player 加入了游戏"
  logout-msg: "§3@player 退出了游戏"
@@ -51,6 +51,8 @@ server:
  allow-snow-golem: false
  #是否允許鐵砧和附魔臺
  allow-anvilandenchanttable: false
+ #是否禁用server.log
+ disable-log: false
 
 redstone:
  #是否允許红石系统
