@@ -25,7 +25,7 @@ class LvdatCommand extends VanillaCommand{
 	public function __construct($name){
 		parent::__construct(
 			$name,
-			"Change properties of a map",
+			"%pocketmine.command.lvdat.description",
 			"/lvdat <level-name> <opts|help>"
 		);
 		$this->setPermission("pocketmine.command.lvdat");
@@ -35,49 +35,75 @@ class LvdatCommand extends VanillaCommand{
 		if(!$this->testPermission($sender)){
 			return false;
 		}
-
-		if(count($args) < 1){
+		$levname = array_shift($args);
+		if($levname == ""){
 			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
 			return false;
 		}
-		if(!$this->autoLoad($sender, $args[0])) return false;
-		else{
-			$level = $sender->getServer()->getLevelByName($args[0]);
-			if(!$level) return false;
-			/** @var BaseLevelProvider $provider */
-			$provider = $level->getProvider();
-			if(!isset($args[1])) return false;
-			$p = 0;
-			if(strstr($args[1], "=")){
-				$opt = explode("=", $args[1]);
-				list($o, $p) = $opt;
-			}else $o = $args[1];
-			if($o == "seed"){
-				$provider->setSeed($p);
-				$sender->sendMessage("对世界 " . $level->getFolderName() . " 的修改已保存，部分属性可能需要重启服务器后生效。");
-			}elseif($o == "name"){
-				$provider->getLevelData()->LevelName = new String("LevelName", $p);
-				$sender->sendMessage("对世界 " . $level->getFolderName() . " 的修改已保存，部分属性可能需要重启服务器后生效。");
-			}elseif($o == "generator"){
-				$provider->getLevelData()->generatorName = new String("generatorName", $p);
-				$sender->sendMessage("对世界 " . $level->getFolderName() . " 的修改已保存，部分属性可能需要重启服务器后生效。");
-			}elseif($o == "preset"){
-				$provider->getLevelData()->generatorOptions = new String("generatorOptions", $p);
-				$sender->sendMessage("对世界 " . $level->getFolderName() . " 的修改已保存，部分属性可能需要重启服务器后生效。");
-			}elseif($args[1] == "fixname"){
-				$provider->getLevelData()->LevelName = new String("LevelName", $level->getFolderName());
-				$sender->sendMessage("对世界 " . $level->getFolderName() . " 的修改已保存，部分属性可能需要重启服务器后生效。");
-			}elseif($args[1] == "help"){
-				$sender->sendMessage("/lvdat用法");
-				$sender->sendMessage("/lvdat 地图文件夹名称 fixname");
-				$sender->sendMessage("/lvdat 地图文件夹名称 seed=种子");
-				$sender->sendMessage("/lvdat 地图文件夹名称 name=名称");
-				$sender->sendMessage("/lvdat 地图文件夹名称 generator=生成器名称");
-				$sender->sendMessage("/lvdat 地图文件夹名称 preset=生成器选项（预设）");
-			}else return false;
-			$provider->saveLevelData();
+		if(!$this->autoLoad($sender, $levname)){
+			$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.nofound", [$levname]));
+			return false;
 		}
-		return false;
+		$level = $sender->getServer()->getLevelByName($levname);
+		if(!$level){
+			$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.nofound", [$levname]));
+			return false;
+		} 
+		/** @var BaseLevelProvider $provider */
+		$provider = $level->getProvider();
+		$o = array_shift($args);
+		$p = array_shift($args);
+		switch($o){
+			case "fixname":
+				$provider->getLevelData()->LevelName = new String("LevelName", $level->getFolderName());
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.fixname", [$level->getFolderName()]));
+				break;
+			case "help":
+				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+				$sender->sendMessage("/lvdat %commands.generic.level fixname");
+				$sender->sendMessage("/lvdat %commands.generic.level seed %commands.generic.seed");
+				$sender->sendMessage("/lvdat %commands.generic.level name %commands.generic.name");
+				$sender->sendMessage("/lvdat %commands.generic.level generator %commands.generic.generator");
+				$sender->sendMessage("/lvdat %commands.generic.level preset %pocketmine.command.lvdat.preset");
+				break;
+			case "seed":
+				if($p == ""){
+					$sender->sendMessage("%commands.generic.opt.missing");
+					return false;
+				}
+				$provider->setSeed($p);
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(),$o]));
+				break;
+			case "name":
+				if($p == ""){
+					$sender->sendMessage("%commands.generic.opt.missing");
+					return false;
+				}
+				$provider->getLevelData()->LevelName = new String("LevelName", $p);
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(),$o]));
+				break;
+			case "generator":
+				if($p == ""){
+					$sender->sendMessage("%commands.generic.opt.missing");
+					return false;
+				}
+				$provider->getLevelData()->generatorName = new String("generatorName", $p);
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(),$o]));
+				break;
+			case "preset":
+				if($p == ""){
+					$sender->sendMessage("%commands.generic.opt.missing");
+					return false;
+				}
+				$provider->getLevelData()->generatorOptions = new String("generatorOptions", $p);
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(),$o]));
+				break;
+			default:
+				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+				return false;
+		}
+		$provider->saveLevelData();
+		return true;
 	}
 
 	public function autoLoad(CommandSender $c, $world){
