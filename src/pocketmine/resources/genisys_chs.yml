@@ -2,7 +2,7 @@
 
 #配置文件版本
 config:
- version: 3.2
+ version: 4
  
 level:
  #设置是否变换天气
@@ -51,6 +51,8 @@ server:
  allow-snow-golem: false
  #是否允许铁砧和附魔台
  allow-anvilandenchanttable: false
+ #是否禁用server.log
+ disable-log: false
 
 redstone:
  #是否开启红石系统
