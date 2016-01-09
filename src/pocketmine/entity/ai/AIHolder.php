@@ -5,18 +5,9 @@
 
 namespace pocketmine\entity\ai;
 
-use pocketmine\entity\ai\ZombieAI;
-use pocketmine\entity\ai\CreeperAI;
-use pocketmine\entity\ai\SkeletonAI;
-use pocketmine\entity\ai\CowAI;
-use pocketmine\entity\ai\PigAI;
-use pocketmine\entity\ai\SheepAI;
-use pocketmine\entity\ai\ChickenAI;
-
 use pocketmine\level\Position;
 use pocketmine\level\Level;
 use pocketmine\item\Item;
-use pocketmine\block\Block;
 use pocketmine\Player;
 use pocketmine\math\Vector3;
 use pocketmine\entity\Entity;
@@ -68,21 +59,7 @@ class AIHolder{
 
 	public $tasks = [];
 
-	public static $obj = null;
-
 	public $server;
-
-	/**
-	 * @return MonsterAIAPI
-	 * API调用
-	 */
-	public static function getInstance(){
-		return self::$obj;
-	}
-
-	public function onLoad(){
-		self::$obj = $this;
-	}
 
 	public function getServer(){
 		return $this->server;
