@@ -46,7 +46,7 @@ class RedstoneSource extends Flowable{
 			foreach($sides as $side){
 				if(!in_array($side, $ignore)){
 					$block = $this->getSide($side);
-					if(($block instanceof Door) or ($block instanceof Trapdoor)){
+					if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
 						if(!$block->isOpened()) $block->onActivate(new Item(0));
 					}
 					if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
@@ -65,7 +65,7 @@ class RedstoneSource extends Flowable{
 				if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn();
 
 				$block = $this->getSide(Vector3::SIDE_DOWN, 2);
-				if(($block instanceof Door) or ($block instanceof Trapdoor)){
+				if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
 					if(!$block->isOpened()) $block->onActivate(new Item(0));
 				}
 				if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
@@ -90,7 +90,7 @@ class RedstoneSource extends Flowable{
 				if(!in_array($side, $ignore)){
 					$block = $this->getSide($side);
 					if(!$this->checkPower($block)){
-						if(($block instanceof Door) or ($block instanceof Trapdoor)){
+						if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
 							if($block->isOpened()) $block->onActivate(new Item(0));
 						}
 						/** @var ActiveRedstoneLamp $block*/
@@ -112,7 +112,7 @@ class RedstoneSource extends Flowable{
 
 				$block = $this->getSide(Vector3::SIDE_DOWN, 2);
 				if(!$this->checkPower($block)){
-					if(($block instanceof Door) or ($block instanceof Trapdoor)){
+					if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
 						if($block->isOpened()) $block->onActivate(new Item(0));
 					}
 					if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOff();

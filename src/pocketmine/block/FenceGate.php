@@ -27,7 +27,7 @@ use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
 use pocketmine\level\sound\DoorSound;
 
-class FenceGate extends Transparent{
+class FenceGate extends Transparent implements ElectricalAppliance{
 
 	protected $id = self::FENCE_GATE;
 
@@ -59,7 +59,7 @@ class FenceGate extends Transparent{
 		}
 
 		$i = ($this->getDamage() & 0x03);
-		if($i === 2 and $i === 0){
+		if($i === 2 or $i === 0){
 			return new AxisAlignedBB(
 				$this->x,
 				$this->y,
@@ -93,6 +93,10 @@ class FenceGate extends Transparent{
 		return true;
 	}
 
+	public function isOpened(){
+		return (($this->getDamage() & 0x04) > 0);
+	}
+
 	public function getDrops(Item $item){
 		return [
 			[$this->id, 0, 1],
@@ -106,7 +110,9 @@ class FenceGate extends Transparent{
 			2 => 1,
 			3 => 2,
 		];
-		$this->meta = ($faces[$player instanceof Player ? $player->getDirection() : 0] & 0x03) | ((~$this->meta) & 0x04);
+		//$this->meta = ($faces[$player instanceof Player ? $player->getDirection() : 0] & 0x03) | ((~$this->meta) & 0x04);
+		//$this->meta = ($faces[0] & 0x03) | ((~$this->meta) & 0x04);
+		$this->meta ^= 0x04;
 		$this->getLevel()->setBlock($this, $this, true);
 		$this->level->addSound(new DoorSound($this));
 		return true;

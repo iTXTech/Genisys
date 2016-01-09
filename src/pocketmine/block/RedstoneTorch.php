@@ -109,13 +109,13 @@ class RedstoneTorch extends RedstoneSource{
 			$this->activated = true;
 			/** @var Door $block */
 
-			$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH];
+			$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP];
 
 			foreach($sides as $side){
 				if(!in_array($side, $ignore)){
 					$block = $this->getSide($side);
 					if(!in_array($hash = Level::blockHash($block->x, $block->y, $block->z), $notCheck)){
-						if(($block instanceof Door) or ($block instanceof Trapdoor)){
+						if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
 							if(!$block->isOpened()) $block->onActivate(new Item(0));
 						}
 						if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
@@ -136,7 +136,7 @@ class RedstoneTorch extends RedstoneSource{
 					if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn();
 
 					$block = $this->getSide(Vector3::SIDE_DOWN, 2);
-					if(($block instanceof Door) or ($block instanceof Trapdoor)){
+					if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
 						if(!$block->isOpened()) $block->onActivate(new Item(0));
 					}
 					if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
@@ -172,7 +172,7 @@ class RedstoneTorch extends RedstoneSource{
 					$block = $this->getSide($side);
 					if(!in_array($hash = Level::blockHash($block->x, $block->y, $block->z), $notCheck)){
 						if(!$this->checkPower($block)){
-							if(($block instanceof Door) or ($block instanceof Trapdoor)){
+							if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
 								if($block->isOpened()) $block->onActivate(new Item(0));
 							}
 							/** @var ActiveRedstoneLamp $block */
@@ -196,7 +196,7 @@ class RedstoneTorch extends RedstoneSource{
 
 					$block = $this->getSide(Vector3::SIDE_DOWN, 2);
 					if(!$this->checkPower($block)){
-						if(($block instanceof Door) or ($block instanceof Trapdoor)){
+						if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
 							if($block->isOpened()) $block->onActivate(new Item(0));
 						}
 						if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOff();

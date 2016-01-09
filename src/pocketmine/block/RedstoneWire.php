@@ -159,7 +159,7 @@ class RedstoneWire extends RedstoneSource{
 				if(!in_array($s, $side[1])) {
 					$block = $this->getSide(Vector3::SIDE_DOWN)->getSide($s);
 					/** @var Door $block */
-					if(($block instanceof Door) or ($block instanceof Trapdoor)){
+					if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
 						if(!$block->isOpened()) $block->onActivate(new Item(0));
 					}
 					if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
@@ -176,7 +176,7 @@ class RedstoneWire extends RedstoneSource{
 			if($side[0] == false) return;
 			$block = $this->getSide($side[0]);
 			/** @var Door $block */
-			if(($block instanceof Door) or ($block instanceof Trapdoor)){
+			if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
 				if(!$block->isOpened()) $block->onActivate(new Item(0));
 			}
 			if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
@@ -190,7 +190,7 @@ class RedstoneWire extends RedstoneSource{
 					if($s != $this->getOppositeSide($side[0])){
 						$e = $block->getSide($s);
 						/** @var Door $block */
-						if(($e instanceof Door) or ($e instanceof Trapdoor)){
+						if(($e instanceof Door) or ($e instanceof Trapdoor) or ($e instanceof FenceGate)){
 							if(!$e->isOpened()) $e->onActivate(new Item(0));
 						}
 						if($e->getId() == Block::TNT) $e->onActivate(new Item(Item::FLINT_AND_STEEL));
@@ -222,7 +222,7 @@ class RedstoneWire extends RedstoneSource{
 					$block = $this->getSide(Vector3::SIDE_DOWN)->getSide($s);
 					if(!$this->checkPower($block)){
 						/** @var Door $block */
-						if(($block instanceof Door) or ($block instanceof Trapdoor)){
+						if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
 							if($block->isOpened()) $block->onActivate(new Item(0));
 						}
 						/** @var ActiveRedstoneLamp $block*/
@@ -240,7 +240,7 @@ class RedstoneWire extends RedstoneSource{
 			$block = $this->getSide($side[0]);
 			/** @var Door $block */
 			if(!$this->checkPower($block)){
-				if(($block instanceof Door) or ($block instanceof Trapdoor)){
+				if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
 					if($block->isOpened()) $block->onActivate(new Item(0));
 				}
 				/** @var ActiveRedstoneLamp $block */
@@ -254,7 +254,7 @@ class RedstoneWire extends RedstoneSource{
 						$e = $block->getSide($s);
 						if(!$this->checkPower($e)){
 							/** @var Door $e */
-							if(($e instanceof Door) or ($e instanceof Trapdoor)){
+							if(($e instanceof Door) or ($e instanceof Trapdoor) or ($e instanceof FenceGate)){
 								if($e->isOpened()) $e->onActivate(new Item(0));
 							}
 							/** @var ActiveRedstoneLamp $e */
