@@ -8,7 +8,7 @@
  *
  * OpenGenisys Project
  *
- * Copied from Weaather_boybook
+ * Copied from Weather_boybook
  */
 namespace pocketmine\command\defaults;
 

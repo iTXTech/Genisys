@@ -24,6 +24,7 @@ namespace pocketmine\command;
 use pocketmine\command\defaults\BanCommand;
 use pocketmine\command\defaults\BanIpCommand;
 use pocketmine\command\defaults\BanListCommand;
+use pocketmine\command\defaults\BiomeCommand;
 use pocketmine\command\defaults\DefaultGamemodeCommand;
 use pocketmine\command\defaults\DeopCommand;
 use pocketmine\command\defaults\DifficultyCommand;
@@ -108,6 +109,8 @@ class SimpleCommandMap implements CommandMap{
 
 		$this->register("pocketmine", new LoadPluginCommand("loadplugin"));
 		$this->register("pocketmine", new LvdatCommand("lvdat"));
+
+		$this->register("pocketkine", new BiomeCommand("biome"));
 		
 		$this->register("pocketmine", new VersionCommand("version"));
 		$this->register("pocketmine", new PluginsCommand("plugins"));
