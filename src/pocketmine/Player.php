@@ -259,6 +259,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/** @var FishingHook */
 	public $fishingHook = null;
 
+	public $selectedPos = [];
+
 	public function getAttribute(){
 		return $this->attribute;
 	}
@@ -1822,7 +1824,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				if($this->foodTick >= $this->server->hungerTimer){
-					if($this->foodEnabled && $this->server->foodEnabled){
+					if($this->foodEnabled){
 						if($this->foodDepletion >= 2){
 							$this->subtractFood(1);
 							$this->foodDepletion = 0;

@@ -34,7 +34,8 @@ class ThrownPotion extends Projectile{
 		}
 
 		$color = Potion::getColor($this->getData());
-		$this->setDataProperty(FallingSand::DATA_BLOCK_INFO, self::DATA_TYPE_LONG, (($color[0] & 0xff) << 16) | (($color[1] & 0xff) << 8) | ($color[2] & 0xff));
+		$this->setDataProperty(self::DATA_POTION_COLOR, self::DATA_TYPE_INT, (($color[0] & 0xff) << 16) | (($color[1] & 0xff) << 8) | ($color[2] & 0xff));
+		$this->setDataProperty(self::DATA_POTION_AMBIENT, Entity::DATA_TYPE_BYTE, 0);
 	}
 
 	public function __construct(FullChunk $chunk, Compound $nbt, Entity $shootingEntity = null){
