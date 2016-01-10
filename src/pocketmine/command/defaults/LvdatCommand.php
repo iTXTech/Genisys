@@ -48,7 +48,7 @@ class LvdatCommand extends VanillaCommand{
 		if(!$level){
 			$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.nofound", [$levname]));
 			return false;
-		} 
+		}
 		/** @var BaseLevelProvider $provider */
 		$provider = $level->getProvider();
 		$o = array_shift($args);
@@ -72,7 +72,7 @@ class LvdatCommand extends VanillaCommand{
 					return false;
 				}
 				$provider->setSeed($p);
-				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(),$o]));
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(), $o]));
 				break;
 			case "name":
 				if($p == ""){
@@ -80,7 +80,7 @@ class LvdatCommand extends VanillaCommand{
 					return false;
 				}
 				$provider->getLevelData()->LevelName = new String("LevelName", $p);
-				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(),$o]));
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(), $o]));
 				break;
 			case "generator":
 				if($p == ""){
@@ -88,7 +88,7 @@ class LvdatCommand extends VanillaCommand{
 					return false;
 				}
 				$provider->getLevelData()->generatorName = new String("generatorName", $p);
-				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(),$o]));
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(), $o]));
 				break;
 			case "preset":
 				if($p == ""){
@@ -96,7 +96,7 @@ class LvdatCommand extends VanillaCommand{
 					return false;
 				}
 				$provider->getLevelData()->generatorOptions = new String("generatorOptions", $p);
-				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(),$o]));
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(), $o]));
 				break;
 			default:
 				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));

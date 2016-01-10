@@ -10,27 +10,107 @@
  */
 namespace pocketmine\entity;
 
+use pocketmine\item\Item as ItemItem;
 use pocketmine\network\protocol\AddEntityPacket;
+use pocketmine\level\format\FullChunk;
+use pocketmine\nbt\tag\Compound;
 use pocketmine\Player;
 
-class FishingHook extends Entity{
+class FishingHook extends Projectile{
 	const NETWORK_ID = 77;
 
-	public $width = 0.25;
-	public $length = 0.25;
-	public $height = 0.25;
+	public $width = 0.2;
+	public $length = 0.2;
+	public $height = 0.2;
 	protected $gravity = 0.04;
-	protected $drag = 0.02;
+	protected $drag = 0.04;
 
-	public $canCollide = false;
+	//public $canCollide = false;
+	public $owner = null;
+
+	public $results = [
+		[ItemItem::RAW_FISH, 0, 1],
+	];
 
 	public function getName(){
 		return "Fishing Hook";
 	}
 
+	public function __construct(FullChunk $chunk, Compound $nbt, Entity $shootingEntity = null){
+		parent::__construct($chunk, $nbt, $shootingEntity);
+	}
 
+	public function initEntity(){
+		parent::initEntity();
+
+		$this->setMaxHealth(1);
+		$this->setHealth(1);
+	}
+
+	public function close(){
+		parent::close();
+
+		if($this->owner instanceof Player){
+			$this->owner->fishingHook = null;
+		}
+	}
+
+	public function onUpdate($currentTick){
+		if($this->closed){
+			return false;
+		}
+
+		$this->timings->startTiming();
+
+		//$hasUpdate = parent::onUpdate($currentTick);
+		$hasUpdate = false;
+
+		$this->age++;
+
+		if($this->age > 1200 or $this->owner == null){
+			$this->close();
+			$hasUpdate = true;
+			if($this->owner instanceof  Player){
+				if($this->isInsideOfWater()){
+					//TODO: send results
+				}
+			}
+		}
+
+		if($this->isOnGround() or $this->isCollided){
+			$this->motionX = 0;
+			$this->motionY = 0;
+			$this->motionZ = 0;
+		}
+
+		if($this->isInsideOfWater()) $this->motionY += 0.02;
+
+		if(!$this->isOnGround() and !$this->isCollided) $this->motionY -= $this->gravity;
+
+		$this->move($this->motionX, $this->motionY, $this->motionZ);
+
+		if(!$this->onGround or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001){
+			$f = sqrt(($this->motionX ** 2) + ($this->motionZ ** 2));
+			$this->yaw = (atan2($this->motionX, $this->motionZ) * 180 / M_PI);
+			$this->pitch = (atan2($this->motionY, $f) * 180 / M_PI);
+			$hasUpdate = true;
+		}
+
+		$this->updateMovement();
+
+		$friction = 1 - $this->drag;
+
+		$this->motionX *= $friction;
+		$this->motionY *= 1 - $this->drag;
+		$this->motionZ *= $friction;
+
+		$this->timings->stopTiming();
+
+		return $hasUpdate;
+	}
 
 	public function spawnTo(Player $player){
+		$this->setDataProperty(self::DATA_NO_AI, self::DATA_TYPE_BYTE, 1);
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
 		$pk->type = FishingHook::NETWORK_ID;

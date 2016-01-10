@@ -256,6 +256,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	private $shouldSendStatus = false;
 	private $shouldResPos;
 
+	/** @var FishingHook */
+	public $fishingHook = null;
+
 	public function getAttribute(){
 		return $this->attribute;
 	}
@@ -1615,6 +1618,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}else{
 						$this->level->addEntityMovement($this->x >> 4, $this->z >> 4, $this->getId(), $this->x, $this->y + $this->getEyeHeight(), $this->z, $this->yaw, $this->pitch, $this->yaw);
 					}
+
+					if($this->fishingHook instanceof FishingHook){
+						if($this->distance($this->fishingHook) > 20 or $this->inventory->getItemInHand()->getId() !== Item::FISHING_ROD){
+							$this->fishingHook->close();
+							$this->fishingHook = null;
+						}
+					}
 					//	}
 
 					/*if($this->server->expEnabled){
@@ -2544,25 +2554,33 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 
 					if($item->getId() === Item::FISHING_ROD){
-						$nbt = new Compound("", [
-							"Pos" => new Enum("Pos", [
-								new Double("", $this->x),
-								new Double("", $this->y + $this->getEyeHeight()),
-								new Double("", $this->z)
-							]),
-							"Motion" => new Enum("Motion", [
-								new Double("", -sin($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI)),
-								new Double("", -sin($this->pitch / 180 * M_PI)),
-								new Double("", cos($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI))
-							]),
-							"Rotation" => new Enum("Rotation", [
-								new Float("", $this->yaw),
-								new Float("", $this->pitch)
-							])
-						]);
-						$hook = new FishingHook($this->chunk, $nbt);
-						$hook->spawnToAll();
-						$hook->linkEntity($this);
+						if($this->fishingHook instanceof FishingHook){
+							$this->fishingHook->close();
+							$this->fishingHook = null;
+						}else{
+							$nbt = new Compound("", [
+								"Pos" => new Enum("Pos", [
+									new Double("", $this->x),
+									new Double("", $this->y + $this->getEyeHeight()),
+									new Double("", $this->z)
+								]),
+								"Motion" => new Enum("Motion", [
+									new Double("", -sin($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI)),
+									new Double("", -sin($this->pitch / 180 * M_PI)),
+									new Double("", cos($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI))
+								]),
+								"Rotation" => new Enum("Rotation", [
+									new Float("", $this->yaw),
+									new Float("", $this->pitch)
+								])
+							]);
+
+							$f = 0.6;
+							$this->fishingHook = new FishingHook($this->chunk, $nbt, $this);
+							$this->fishingHook->setMotion($this->fishingHook->getMotion()->multiply($f));
+							$this->fishingHook->owner = $this;
+							$this->fishingHook->spawnToAll();
+						}
 					}
 
 					if($item->getId() === Item::SNOWBALL){
@@ -3664,6 +3682,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			}
 
 			//$this->setLinked();
+
+			if($this->fishingHook instanceof FishingHook){
+				$this->fishingHook->close();
+				$this->fishingHook = null;
+			}
 
 			$this->connected = false;
 			if(strlen($this->getName()) > 0){

@@ -42,7 +42,7 @@ class Weather{
 			//0晴天1下雨2雷雨3阴天雷
 			$weather = $this->wea[mt_rand(0, count($this->wea) - 1)];
 			$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $weather));
-			if(!$ev->isCancelled()){
+			if($ev->isCancelled()){
 				return;
 			}else{
 				$this->weatherNow = $ev->getWeather();
@@ -53,7 +53,7 @@ class Weather{
 		}
 		if($this->weatherLast >= $this->level->getServer()->weatherLastTime and $this->level->getServer()->weatherLastTime > 0){
 			$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, 0));
-			if(!$ev->isCancelled()){
+			if($ev->isCancelled()){
 				return;
 			}else{
 				$this->weatherNow = $ev->getWeather();
