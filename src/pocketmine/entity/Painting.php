@@ -13,7 +13,7 @@ use pocketmine\Player;
 
 class Painting extends Hanging{
 	const NETWORK_ID = 83;
-	
+
 	private $motive;
 	
 	public function initEntity(){

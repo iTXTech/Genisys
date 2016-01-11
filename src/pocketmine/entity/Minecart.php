@@ -9,7 +9,7 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\math\Vector3;
 
-class Minecart extends Entity{
+class Minecart extends Vehicle{
 	const NETWORK_ID = 84;
 	
 	public $height = 0.9;
