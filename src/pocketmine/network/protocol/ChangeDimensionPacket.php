@@ -13,8 +13,8 @@ namespace pocketmine\network\protocol;
 class ChangeDimensionPacket extends DataPacket{
 	const NETWORK_ID = Info::CHANGE_DIMENSION_PACKET;
 
-	const NORMAL = 0;
-	const NETHER = 1;
+	const DIMENSION_NORMAL = 0;
+	const DIMENSION_NETHER = 1;
 
 	public $dimension;
 

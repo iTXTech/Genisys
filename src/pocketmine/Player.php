@@ -248,12 +248,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	public $weatherData = [0, 0, 0];
 
+	/** @var Vector3 */
 	public $fromPos = null;
 	private $portalTime = 0;
 	private $clientSecretId;
 	private $exp;
 	private $hasTransfered = false;
 	private $shouldSendStatus = false;
+	/** @var  Position */
 	private $shouldResPos;
 
 	/** @var FishingHook */
@@ -735,12 +737,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			if($this->server->netherEnabled){
 				if($targetLevel == $this->server->netherLevel){
 					$pk = new ChangeDimensionPacket();
-					$pk->dimension = ChangeDimensionPacket::NETHER;
+					$pk->dimension = ChangeDimensionPacket::DIMENSION_NETHER;
 					$this->dataPacket($pk);
 					$this->shouldSendStatus = true;
 				}elseif($oldLevel == $this->server->netherLevel){
 					$pk = new ChangeDimensionPacket();
-					$pk->dimension = ChangeDimensionPacket::NORMAL;
+					$pk->dimension = ChangeDimensionPacket::DIMENSION_NORMAL;
 					$this->dataPacket($pk);
 					$this->shouldSendStatus = true;
 				}
@@ -1742,25 +1744,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						if($this->getLevel() != $this->server->netherLevel){
 							$this->fromPos = $this->getPosition();
 							$this->teleport($this->shouldResPos = $this->server->netherLevel->getSafeSpawn());
-							//$this->shouldSendStatus = true;
 						}elseif($this->fromPos != null){
-							/*	$pk = new ChangeDimensionPacket();
-								$pk->dimension = ChangeDimensionPacket::NORMAL;
-								$this->dataPacket($pk);*/
-
 							$this->teleport($this->shouldResPos = $this->fromPos->add(mt_rand(-5, 5), 0, mt_rand(-5, 5)));
-
 							$this->fromPos = null;
-
-							//	$this->shouldSendStatus = true;
 						}else{
-							/*$pk = new ChangeDimensionPacket();
-							$pk->dimension = ChangeDimensionPacket::NORMAL;
-							$this->dataPacket($pk);*/
-
 							$this->teleport($this->shouldResPos = $this->server->getDefaultLevel()->getSafeSpawn());
-
-							//$this->shouldSendStatus = true;
 						}
 						$this->portalTime = 0;
 					}
@@ -2260,7 +2248,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		if($this->server->netherEnabled){
 			if($this->getLevel() == $this->server->netherLevel){
 				$pk = new ChangeDimensionPacket();
-				$pk->dimension = ChangeDimensionPacket::NETHER;
+				$pk->dimension = ChangeDimensionPacket::DIMENSION_NETHER;
 				$this->dataPacket($pk);
 			}
 		}
