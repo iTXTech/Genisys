@@ -1553,6 +1553,7 @@ class Item {
 			]);
 		}
 
+		$this->setNamedTag($tag);
 		return $this;
 	}
 
