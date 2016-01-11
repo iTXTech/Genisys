@@ -1795,7 +1795,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 			}*/
 
-			if($this->foodEnabled){
+			if($this->server->foodEnabled){
 				if($this->starvationTick >= 20){
 					$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_CUSTOM, 1);
 					if($this->getHealth() > $this->server->hungerHealth) $this->attack(1, $ev);
