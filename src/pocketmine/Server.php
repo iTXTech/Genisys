@@ -340,6 +340,9 @@ class Server{
 	public $playerLoginMsg = "";
 	public $playerLogoutMsg = "";
 
+	/** @var CraftingDataPacket */
+	private $recipeList = null;
+
 	/**
 	 * @return string
 	 */
@@ -802,6 +805,7 @@ class Server{
 
 	public function addRecipe(Recipe $recipe){
 		$this->craftingManager->registerRecipe($recipe);
+		$this->generateRecipeList();
 	}
 
 	/**
@@ -1962,6 +1966,8 @@ class Server{
 			$this->logger->notice("Current Version: $advVer   Latest Version: $cfgVer");
 		}
 
+		$this->generateRecipeList();
+
 		$this->start();
 	}
 
@@ -2613,7 +2619,8 @@ private function lookupAddress($address) {
 		$p->dataPacket($pk);
 	}
 
-	public function sendRecipeList(Player $p){
+	public function generateRecipeList(){
+
 		$pk = new CraftingDataPacket();
 		$pk->cleanRecipes = true;
 
@@ -2629,7 +2636,14 @@ private function lookupAddress($address) {
 			$pk->addFurnaceRecipe($recipe);
 		}
 
-		$p->dataPacket($pk);
+		$pk->encode();
+		$pk->isEncoded = true;
+
+		$this->recipeList = $pk;
+	}
+
+	public function sendRecipeList(Player $p){
+		$p->dataPacket(clone $this->recipeList);
 	}
 
 	private function checkTickUpdates($currentTick, $tickTime){

@@ -75,7 +75,7 @@ memory:
 network:
  #Threshold for batching packets, in bytes. Only these packets will be compressed
  #Set to 0 to compress everything, -1 to disable.
- batch-threshold: 64
+ batch-threshold: 256
  #Compression level used when sending batched packets. Higher = more CPU, less bandwidth usage
  compression-level: 2
  #Use AsyncTasks for compression. Adds half/one tick delay, less CPU load on main thread
