@@ -18,7 +18,7 @@
 abstract class ThreadedLoggerAttachment extends \Threaded implements \LoggerAttachment{
 
     /** @var \ThreadedLoggerAttachment */
-    protected $attachment = \null;
+    protected $attachment = null;
 
     /**
      * @param mixed  $level
@@ -48,7 +48,7 @@ abstract class ThreadedLoggerAttachment extends \Threaded implements \LoggerAtta
     public function removeAttachment(\ThreadedLoggerAttachment $attachment){
         if($this->attachment instanceof \ThreadedLoggerAttachment){
             if($this->attachment === $attachment){
-                $this->attachment = \null;
+                $this->attachment = null;
                 foreach($attachment->getAttachments() as $attachment){
                     $this->addAttachment($attachment);
                 }
@@ -59,7 +59,7 @@ abstract class ThreadedLoggerAttachment extends \Threaded implements \LoggerAtta
     public function removeAttachments(){
         if($this->attachment instanceof \ThreadedLoggerAttachment){
             $this->attachment->removeAttachments();
-            $this->attachment = \null;
+            $this->attachment = null;
         }
     }
 

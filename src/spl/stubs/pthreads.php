@@ -4,62 +4,64 @@
  *
  * WARNING: Do not include this file
  *
- * @author  Lisachenko Alexander <lisachenko.it@gmail.com>
- * @version 2.0.0
+ * @author  Lisachenko Alexander <lisachenko.it@gmail.com>, updated by Shoghi Cervantes <shoghicp@gmail.com>
+ * @version 3.0.0
  * @link    https://github.com/krakjoe/pthreads/blob/master/examples/stub.php
  */
 
 /**
  * The default inheritance mask used when starting Threads and Workers
  */
-\define('PTHREADS_INHERIT_ALL', 0x111111);
+define('PTHREADS_INHERIT_ALL', 0x111111);
 
 /**
  * Nothing will be inherited by the new context
  */
-\define('PTHREADS_INHERIT_NONE', 0);
+define('PTHREADS_INHERIT_NONE', 0);
 
 /**
  * Determines whether the ini entries are inherited by the new context
  */
-\define('PTHREADS_INHERIT_INI', 0x1);
+define('PTHREADS_INHERIT_INI', 0x1);
 
 /**
  * Determines whether the constants are inherited by the new context
  */
-\define('PTHREADS_INHERIT_CONSTANTS', 0x10);
+define('PTHREADS_INHERIT_CONSTANTS', 0x10);
 
 /**
  * Determines whether the class table is inherited by the new context
  */
-\define('PTHREADS_INHERIT_CLASSES', 0x100);
+define('PTHREADS_INHERIT_CLASSES', 0x100);
 
 /**
  * Determines whether the function table is inherited by the new context
  */
-\define('PTHREADS_INHERIT_FUNCTIONS', 0x100);
+define('PTHREADS_INHERIT_FUNCTIONS', 0x100);
 
 /**
  * Determines whether the included_files table is inherited by the new context
  */
-\define('PTHREADS_INHERIT_INCLUDES', 0x10000);
+define('PTHREADS_INHERIT_INCLUDES', 0x10000);
 
 /**
  * Determines whether the comments are inherited by the new context
  */
-\define('PTHREADS_INHERIT_COMMENTS', 0x100000);
+define('PTHREADS_INHERIT_COMMENTS', 0x100000);
 
 /**
  * Allow output headers from the threads
  */
-\define('PTHREADS_ALLOW_HEADERS', 0x1000000);
+define('PTHREADS_ALLOW_HEADERS', 0x1000000);
 
 /**
  * Allow global inheritance for new threads
  */
-\define('PTHREADS_ALLOW_GLOBALS', 0x10000000);
+define('PTHREADS_ALLOW_GLOBALS', 0x10000000);
 
 class Collectable extends Threaded{
+
+    protected $garbage;
 
 	/**
 	 * @return bool
@@ -71,6 +73,11 @@ class Collectable extends Threaded{
 	 */
 	public function setGarbage(){}
 }
+
+class Volatile extends Threaded{
+
+}
+
 
 /**
  * Threaded class
@@ -85,6 +92,14 @@ class Collectable extends Threaded{
  * @since 2.0.0
  */
 class Threaded implements Traversable, Countable, ArrayAccess{
+
+    /**
+     * @param object $obj
+     */
+    public static function extend($obj){
+
+    }
+
     /**
      * Fetches a chunk of the objects properties table of the given size
      *
@@ -100,15 +115,6 @@ class Threaded implements Traversable, Countable, ArrayAccess{
      * {@inheritdoc}
      */
     public function count(){
-    }
-
-    /**
-     * Retrieves terminal error information from the referenced object
-     *
-     * @link http://www.php.net/manual/en/threaded.getterminationinfo.php
-     * @return array|bool array containing the termination conditions of the referenced object
-     */
-    public function getTerminationInfo(){
     }
 
     /**
@@ -130,24 +136,6 @@ class Threaded implements Traversable, Countable, ArrayAccess{
     }
 
     /**
-     * Tell if the referenced object is waiting for notification
-     *
-     * @link http://www.php.net/manual/en/threaded.iswaiting.php
-     * @return bool A boolean indication of state
-     */
-    public function isWaiting(){
-    }
-
-    /**
-     * Lock the referenced objects property table
-     *
-     * @link http://www.php.net/manual/en/threaded.lock.php
-     * @return bool A boolean indication of state
-     */
-    public function lock(){
-    }
-
-    /**
      * Merges data into the current object
      *
      * @param mixed $from      The data to merge
@@ -156,7 +144,7 @@ class Threaded implements Traversable, Countable, ArrayAccess{
      * @link http://www.php.net/manual/en/threaded.merge.php
      * @return bool A boolean indication of success
      */
-    public function merge($from, $overwrite = \true){
+    public function merge($from, $overwrite = true){
     }
 
     /**
@@ -228,16 +216,7 @@ class Threaded implements Traversable, Countable, ArrayAccess{
      * @link http://www.php.net/manual/en/threaded.synchronized.php
      * @return mixed The return value from the block
      */
-    public function synchronized(\Closure $function, $args = \null){
-    }
-
-    /**
-     * Unlock the referenced objects storage for the calling context
-     *
-     * @link http://www.php.net/manual/en/threaded.unlock.php
-     * @return bool A boolean indication of success
-     */
-    public function unlock(){
+    public function synchronized(\Closure $function, $args = null){
     }
 
     /**
@@ -250,6 +229,18 @@ class Threaded implements Traversable, Countable, ArrayAccess{
      */
     public function wait($timeout){
     }
+
+    /**
+     * @return int
+     */
+    public function getRefCount(){
+    }
+
+    public function addRef(){
+    }
+
+    public function delRef(){
+    }
 }
 
 /**
@@ -261,14 +252,6 @@ class Threaded implements Traversable, Countable, ArrayAccess{
  * @link http://www.php.net/manual/en/class.thread.php
  */
 class Thread extends Threaded{
-
-    /**
-     * Detaches a thread
-     *
-     * @return bool A boolean indication of success
-     */
-    public function detach(){
-    }
 
     /**
      * Will return the identity of the Thread that created the referenced Thread
@@ -332,12 +315,8 @@ class Thread extends Threaded{
     public function join(){
     }
 
-    /**
-     * Kills the referenced thread, dangerously !
-     *
-     * @link http://www.php.net/manual/en/thread.kill.php
-     */
-    public function kill(){
+    public function __destruct(){
+
     }
 
     /**
@@ -348,19 +327,7 @@ class Thread extends Threaded{
      * @link http://www.php.net/manual/en/thread.start.php
      * @return bool A boolean indication of success
      */
-    public function start($options = PTHREADS_INHERIT_ALL){
-    }
-
-    /**
-     * Will execute the Callable in the global scope
-     *
-     * @param Callable $block The code to execute
-     * @param ...      $args    Variable length list of arguments to pass to the Callable upon execution
-     *
-     * @link  http://www.php.net/manual/en/thread.start.php
-     * @return bool A boolean indication of success
-     */
-    public static function globally(Callable $block, $args = \null){
+    public function start(int $options = PTHREADS_INHERIT_ALL){
     }
 }
 
@@ -380,6 +347,19 @@ class Thread extends Threaded{
  * @link http://www.php.net/manual/en/class.worker.php
  */
 class Worker extends Thread{
+
+    /**
+     * @return int
+     */
+    public function getThreadId(){
+    }
+
+    /**
+     * @return int
+     */
+    public function getCreatorId(){
+    }
+
 
     /**
      * Returns the number of threaded tasks waiting to be executed by the referenced Worker
@@ -420,164 +400,32 @@ class Worker extends Thread{
     /**
      * Appends the referenced object to the stack of the referenced Worker
      *
-     * @param Threaded $work Threaded object to be executed by the referenced Worker
+     * @param Collectable $work Collectable object to be executed by the referenced Worker
      *
      * @link http://www.php.net/manual/en/worker.stack.php
      * @return int The new length of the stack
      */
-    public function stack(Threaded &$work){
+    public function stack(Collectable &$work){
     }
 
     /**
-     * Removes the referenced object ( or all objects if parameter is null ) from stack of the referenced Worker
-     *
-     * @param Threaded $work Threaded object previously stacked onto Worker
+     * Removes the first item from the stack
      *
      * @link http://www.php.net/manual/en/worker.unstack.php
      * @return int The new length of the stack
      */
-    public function unstack(Threaded &$work = \null){
-    }
-}
-
-/**
- * Mutex class
- *
- * The static methods contained in the Mutex class provide direct access to Posix Mutex functionality.
- *
- * @link http://www.php.net/manual/en/class.mutex.php
- */
-class Mutex{
-
-    /**
-     * Create, and optionally lock a new Mutex for the caller
-     *
-     * @param bool $lock Setting lock to true will lock the Mutex for the caller before returning the handle
-     *
-     * @link http://www.php.net/manual/en/mutex.create.php
-     * @return int A newly created and optionally locked Mutex handle
-     */
-    final public static function create($lock = \false){
+    public function unstack(){
     }
 
     /**
-     * Destroy mutex
+     * Collects finished objects
      *
-     * Destroying Mutex handles must be carried out explicitly by the programmer when they are
-     * finished with the Mutex handle.
+     * @param callable $function
      *
-     * @param int $mutex A handle returned by a previous call to Mutex::create().
-     *
-     * @link http://www.php.net/manual/en/mutex.destroy.php
-     * @return bool A boolean indication of success
+     * @link http://www.php.net/manual/en/worker.collect.php
+     * @return void
      */
-    final public static function destroy($mutex){
-    }
-
-    /**
-     * Attempt to lock the Mutex for the caller.
-     *
-     * An attempt to lock a Mutex owned (locked) by another Thread will result in blocking.
-     *
-     * @param int $mutex A handle returned by a previous call to Mutex::create().
-     *
-     * @link http://www.php.net/manual/en/mutex.lock.php
-     * @return bool A boolean indication of success
-     */
-    final public static function lock($mutex){
-    }
-
-    /**
-     * Attempt to lock the Mutex for the caller without blocking if the Mutex is owned (locked) by another Thread.
-     *
-     * @param int $mutex A handle returned by a previous call to Mutex::create().
-     *
-     * @link http://www.php.net/manual/en/mutex.trylock.php
-     * @return bool A boolean indication of success
-     */
-    final public static function trylock($mutex){
-    }
-
-    /**
-     * Release mutex
-     *
-     * Attempts to unlock the Mutex for the caller, optionally destroying the Mutex handle.
-     * The calling thread should own the Mutex at the time of the call.
-     *
-     * @param int  $mutex   A handle returned by a previous call to Mutex::create().
-     * @param bool $destroy When true pthreads will destroy the Mutex after a successful unlock.
-     *
-     * @link http://www.php.net/manual/en/mutex.unlock.php
-     * @return bool A boolean indication of success
-     */
-    final public static function unlock($mutex, $destroy = \false){
-    }
-}
-
-/**
- * Condition class
- *
- * The static methods contained in the Cond class provide direct access to Posix Condition Variables.
- *
- * @link http://www.php.net/manual/en/class.cond.php
- */
-class Cond{
-    /**
-     * Broadcast to all Threads blocking on a call to Cond::wait().
-     *
-     * @param int $condition A handle to a Condition Variable returned by a previous call to Cond::create()
-     *
-     * @link http://www.php.net/manual/en/cond.broadcast.php
-     * @return bool A boolean indication of success
-     */
-    final public static function broadcast($condition){
-    }
-
-    /**
-     * Creates a new Condition Variable for the caller.
-     *
-     * @link http://www.php.net/manual/en/cond.create.php
-     * @return int A handle to a Condition Variable
-     */
-    final public static function create(){
-    }
-
-    /**
-     * Destroy a condition
-     *
-     * Destroying Condition Variable handles must be carried out explicitly by the programmer when they are
-     * finished with the Condition Variable.
-     * No Threads should be blocking on a call to Cond::wait() when the call to Cond::destroy() takes place.
-     *
-     * @param int $condition A handle to a Condition Variable returned by a previous call to Cond::create()
-     *
-     * @link http://www.php.net/manual/en/cond.destroy.php
-     * @return bool A boolean indication of success
-     */
-    final public static function destroy($condition){
-    }
-
-    /**
-     * Signal a Condition
-     *
-     * @param int $condition A handle to a Condition Variable returned by a previous call to Cond::create()
-     *
-     * @link http://www.php.net/manual/en/cond.signal.php
-     * @return bool A boolean indication of success
-     */
-    final public static function signal($condition){
-    }
-
-    /**
-     * Wait for a signal on a Condition Variable, optionally specifying a timeout to limit waiting time.
-     *
-     * @param int $condition A handle to a Condition Variable returned by a previous call to Cond::create()
-     * @param int $mutex     A handle returned by a previous call to Mutex::create() and owned (locked) by the caller.
-     * @param int $timeout   An optional timeout, in microseconds
-     *
-     * @return bool A boolean indication of success
-     */
-    final public static function wait($condition, $mutex, $timeout = \null){
+    public function collect(callable $function){
     }
 }
 
@@ -611,13 +459,6 @@ class Pool{
      * @var array|Worker[]
      */
     protected $workers;
-
-    /**
-     * The array of Stackables submitted to this Pool for execution
-     *
-     * @var array|Threaded[]
-     */
-    protected $work;
 
     /**
      * The constructor arguments to be passed by this Pool to new Workers upon construction

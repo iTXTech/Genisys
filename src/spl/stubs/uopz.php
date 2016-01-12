@@ -12,43 +12,43 @@
 /**
  * Invoked by exit() and die(), recieves no arguments. Return boolean TRUE to exit, FALSE to continue
  */
-\define('ZEND_EXIT', 79);
+define('ZEND_EXIT', 79);
 
 /**
  * Invoked by object construction, receives the class of object being created as the only argument
  */
-\define('ZEND_NEW', 68);
+define('ZEND_NEW', 68);
 
 /**
  * Invoked by the throw construct, receives the class of exception being thrown as the only argument
  */
-\define('ZEND_THROW', 108);
+define('ZEND_THROW', 108);
 
 /**
  * Determines whether the constants are inherited by the new context
  */
-\define('ZEND_FETCH_CLASS', 109);
+define('ZEND_FETCH_CLASS', 109);
 
 /**
  * Invoked upon composure,
  * recieves the class the trait is being added to as the first argument,
  * and the name of the trait as the second argument
  */
-\define('ZEND_ADD_TRAIT', 154);
+define('ZEND_ADD_TRAIT', 154);
 
 /**
  * Invoked upon composure,
  * recieves the class the interface is being added to as the first argument,
  * and the name of the interface as the second argument
  */
-\define('ZEND_ADD_INTERFACE', 144);
+define('ZEND_ADD_INTERFACE', 144);
 
 /**
  * Invoked by instanceof operator,
  * recieves the object being verified as the first argument,
  * and the name of the class which that object should be as the second argument
  */
-\define('ZEND_INSTANCEOF', 138);
+define('ZEND_INSTANCEOF', 138);
 
 
 // Modifiers
@@ -56,32 +56,32 @@
 /**
  * Advance 1 opcode and continue
  */
-\define('ZEND_USER_OPCODE_CONTINUE', \null); //??
+define('ZEND_USER_OPCODE_CONTINUE', null); //??
 
 /**
  * Enter into new op_array without recursion
  */
-\define('ZEND_USER_OPCODE_ENTER', \null); //??
+define('ZEND_USER_OPCODE_ENTER', null); //??
 
 /**
  * Return to calling op_array within the same executor
  */
-\define('ZEND_USER_OPCODE_LEAVE', \null); //??
+define('ZEND_USER_OPCODE_LEAVE', null); //??
 
 /**
  * Dispatch to original opcode handler
  */
-\define('ZEND_USER_OPCODE_DISPATCH', \null); //??
+define('ZEND_USER_OPCODE_DISPATCH', null); //??
 
 /**
  * Dispatch to a specific handler (OR'd with ZEND opcode constant)
  */
-\define('ZEND_USER_OPCODE_DISPATCH_TO', \null); //??
+define('ZEND_USER_OPCODE_DISPATCH_TO', null); //??
 
 /**
  * Exit from executor (return from function)
  */
-\define('ZEND_USER_OPCODE_RETURN', \null); //??
+define('ZEND_USER_OPCODE_RETURN', null); //??
 
 
 //Modifiers
@@ -90,47 +90,47 @@
 /**
  * Mark function as public, the default
  */
-\define('ZEND_USER_ACC_PUBLIC', \null); //??
+define('ZEND_USER_ACC_PUBLIC', null); //??
 
 /**
  * Mark function as protected
  */
-\define('ZEND_USER_ACC_PROTECTED', \null); //??
+define('ZEND_USER_ACC_PROTECTED', null); //??
 
 /**
  * Mark function as private
  */
-\define('ZEND_USER_ACC_PRIVATE', \null); //??
+define('ZEND_USER_ACC_PRIVATE', null); //??
 
 /**
  * Mark function as static
  */
-\define('ZEND_USER_ACC_STATIC', \null); //??
+define('ZEND_USER_ACC_STATIC', null); //??
 
 /**
  * Mark function as abstract
  */
-\define('ZEND_USER_ACC_ABSTRACT', \null); //??
+define('ZEND_USER_ACC_ABSTRACT', null); //??
 
 /**
  * Dummy registered for consistency, the default kind of class entry
  */
-\define('ZEND_USER_ACC_CLASS', \null); //??
+define('ZEND_USER_ACC_CLASS', null); //??
 
 /**
  * Mark class as interface
  */
-\define('ZEND_USER_ACC_INTERFACE', \null); //??
+define('ZEND_USER_ACC_INTERFACE', null); //??
 
 /**
  * Mark class as trait
  */
-\define('ZEND_USER_ACC_TRAIT', \null); //??
+define('ZEND_USER_ACC_TRAIT', null); //??
 
 /**
  * Used for getting flags only
  */
-\define('ZEND_USER_ACC_FLAGS', \null); //??
+define('ZEND_USER_ACC_FLAGS', null); //??
 
 /**
  * Backup a function at runtime, to be restored on shutdown
@@ -140,7 +140,7 @@
  *
  * @return void
  */
-function uopz_backup($name, $classMethod = \null){
+function uopz_backup($name, $classMethod = null){
 }
 
 /**
@@ -163,7 +163,7 @@ function uopz_compose($name, array $classes, array $methods = [], array $propert
  *
  * @return Closure
  */
-function uopz_copy($name, $classMethod = \null){
+function uopz_copy($name, $classMethod = null){
 }
 
 /**
@@ -174,7 +174,7 @@ function uopz_copy($name, $classMethod = \null){
  *
  * @return void
  */
-function uopz_delete($name, $classMethod = \null){
+function uopz_delete($name, $classMethod = null){
 }
 
 /**
@@ -195,7 +195,7 @@ function uopz_extend($class, $parent){
  *
  * @return void
  */
-function uopz_flags($name, $classMethod = \null, $flags = \null){
+function uopz_flags($name, $classMethod = null, $flags = null){
 }
 
 /**
@@ -208,7 +208,7 @@ function uopz_flags($name, $classMethod = \null, $flags = \null){
  *
  * @return void
  */
-function uopz_function($name, $classMethod = \null, Closure $handler, $modifiers = ZEND_USER_ACC_PUBLIC){
+function uopz_function($name, $classMethod = null, Closure $handler, $modifiers = ZEND_USER_ACC_PUBLIC){
 }
 
 /**
@@ -253,7 +253,7 @@ function uopz_redefine($name, $classConstant, $value){
  *
  * @return void
  */
-function uopz_rename($name, $classMethod = \null, $rename){
+function uopz_rename($name, $classMethod = null, $rename){
 }
 
 /**
@@ -264,7 +264,7 @@ function uopz_rename($name, $classMethod = \null, $rename){
  *
  * @return void
  */
-function uopz_restore($name, $classMethod = \null){
+function uopz_restore($name, $classMethod = null){
 }
 
 /**
@@ -275,5 +275,5 @@ function uopz_restore($name, $classMethod = \null){
  *
  * @return void
  */
-function uopz_undefine($name, $classMethod = \null){
+function uopz_undefine($name, $classMethod = null){
 }

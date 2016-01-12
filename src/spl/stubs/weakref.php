@@ -13,7 +13,7 @@ class WeakRef{
      *
      * @param object $object
      */
-    public function __construct($object = \null){
+    public function __construct($object = null){
     }
 
     /**

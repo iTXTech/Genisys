@@ -1953,7 +1953,7 @@ class Server{
 			$this->autoSaveTicks = (int) $this->getProperty("ticks-per.autosave", 6000);
 		}
 
-		//$this->enablePlugins(PluginLoadOrder::POSTWORLD);
+		$this->enablePlugins(PluginLoadOrder::POSTWORLD);
 
 		if($this->aiEnabled) $this->aiHolder = new AIHolder($this);
 		if($this->dserverConfig["enable"] and ($this->getAdvancedProperty("dserver.server-list", "") != "")) $this->scheduler->scheduleRepeatingTask(new CallbackTask([
@@ -2203,7 +2203,7 @@ private function lookupAddress($address) {
 
 		if($type === PluginLoadOrder::POSTWORLD){
 			$this->commandMap->registerServerAliases();
-			DefaultPermissions::registerCorePermissions();
+			//DefaultPermissions::registerCorePermissions();
 		}
 	}
 
