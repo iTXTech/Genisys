@@ -2188,7 +2188,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$pk = new StartGamePacket();
 		$pk->seed = -1;
-		$pk->dimension = 0;
+		$pk->dimension = ChangeDimensionPacket::DIMENSION_NORMAL;
+		if($this->server->netherEnabled){
+			if($this->getLevel() == $this->server->netherLevel){
+				$pk->dimension = ChangeDimensionPacket::DIMENSION_NETHER;
+			}
+		}
 		$pk->x = $this->x;
 		$pk->y = $this->y;
 		$pk->z = $this->z;
@@ -2244,14 +2249,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->dataPacket($pk);
 		}
 		$this->forceMovement = $this->teleportPosition = $this->getPosition();
-
-		if($this->server->netherEnabled){
-			if($this->getLevel() == $this->server->netherLevel){
-				$pk = new ChangeDimensionPacket();
-				$pk->dimension = ChangeDimensionPacket::DIMENSION_NETHER;
-				$this->dataPacket($pk);
-			}
-		}
 	}
 
 	public function getProtocol(){
