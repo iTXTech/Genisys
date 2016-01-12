@@ -62,7 +62,7 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 	 * @param int       $cause
 	 * @param int|int[] $damage
 	 *
-	 * @throws \Exception
+	 * @throws \Throwable
 	 */
 	public function __construct(Entity $entity, $cause, $damage){
 		$this->entity = $entity;

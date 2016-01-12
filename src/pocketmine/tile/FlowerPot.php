@@ -18,19 +18,19 @@ namespace pocketmine\tile;
 
 use pocketmine\block\Block;
 use pocketmine\level\format\FullChunk;
-use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Int;
-use pocketmine\nbt\tag\Short;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\ShortTag;
+use pocketmine\nbt\tag\StringTag;
 
 class FlowerPot extends Spawnable{
 
-	public function __construct(FullChunk $chunk, Compound $nbt){
+	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		if(!isset($nbt->item)){
-			$nbt->item = new Short("item", 0);
+			$nbt->item = new ShortTag("item", 0);
 		}
 		if(!isset($nbt->data)){
-			$nbt->data = new Int("data", 0);
+			$nbt->data = new IntTag("data", 0);
 		}
 		parent::__construct($chunk, $nbt);
 	}
@@ -44,8 +44,8 @@ class FlowerPot extends Spawnable{
 	}
 
 	public function setFlowerPotData($item, $data){
-		$this->namedtag->item = new Short("item", (int) $item);
-		$this->namedtag->data = new Int("data", (int) $data);
+		$this->namedtag->item = new ShortTag("item", (int) $item);
+		$this->namedtag->data = new IntTag("data", (int) $data);
 		$this->spawnToAll();
 		if($this->chunk){
 			$this->chunk->setChanged();
@@ -59,13 +59,13 @@ class FlowerPot extends Spawnable{
 	}
 
 	public function getSpawnCompound(){
-		return new Compound("", [
-			new String("id", Tile::FLOWER_POT),
-			new Int("x", (int) $this->x),
-			new Int("y", (int) $this->y),
-			new Int("z", (int) $this->z),
-			new Short("item", (int) $this->namedtag["item"]),
-			new Int("data", (int) $this->namedtag["data"])
+		return new CompoundTag("", [
+			new StringTag("id", Tile::FLOWER_POT),
+			new IntTag("x", (int) $this->x),
+			new IntTag("y", (int) $this->y),
+			new IntTag("z", (int) $this->z),
+			new ShortTag("item", (int) $this->namedtag["item"]),
+			new IntTag("data", (int) $this->namedtag["data"])
 		]);
 	}
 }

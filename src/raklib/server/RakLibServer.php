@@ -23,7 +23,7 @@ class RakLibServer extends \Thread{
     protected $logger;
     protected $loader;
 
-    public $loadPaths = [];
+    public $loadPaths;
 
     protected $shutdown;
 
@@ -40,12 +40,12 @@ class RakLibServer extends \Thread{
 	 * @param int             $port
 	 * @param string          $interface
 	 *
-	 * @throws \Exception
+	 * @throws \Throwable
 	 */
     public function __construct(\ThreadedLogger $logger, \ClassLoader $loader, $port, $interface = "0.0.0.0"){
         $this->port = (int) $port;
         if($port < 1 or $port > 65536){
-            throw new \Exception("Invalid port range");
+            throw new \Throwable("Invalid port range");
         }
 
         $this->interface = $interface;
@@ -54,23 +54,22 @@ class RakLibServer extends \Thread{
         $loadPaths = [];
         $this->addDependency($loadPaths, new \ReflectionClass($logger));
         $this->addDependency($loadPaths, new \ReflectionClass($loader));
-        $this->loadPaths = \array_reverse($loadPaths);
-        $this->shutdown = \false;
+        $this->loadPaths = array_reverse($loadPaths);
+        $this->shutdown = false;
 
-        $this->externalQueue = \ThreadedFactory::create();
-        $this->internalQueue = \ThreadedFactory::create();
+        $this->externalQueue = new \Threaded;
+        $this->internalQueue = new \Threaded;
 
-	    if(\Phar::running(\true) !== ""){
-		    $this->mainPath = \Phar::running(\true);
+	    if(\Phar::running(true) !== ""){
+		    $this->mainPath = \Phar::running(true);
 	    }else{
 		    $this->mainPath = \getcwd() . DIRECTORY_SEPARATOR;
 	    }
-
-        $this->start(PTHREADS_INHERIT_NONE);
+        $this->start();
     }
 
     protected function addDependency(array &$loadPaths, \ReflectionClass $dep){
-        if($dep->getFileName() !== \false){
+        if($dep->getFileName() !== false){
             $loadPaths[$dep->getName()] = $dep->getFileName();
         }
 
@@ -84,11 +83,11 @@ class RakLibServer extends \Thread{
     }
 
     public function isShutdown(){
-        return $this->shutdown === \true;
+        return $this->shutdown === true;
     }
 
     public function shutdown(){
-        $this->shutdown = \true;
+        $this->shutdown = true;
     }
 
     public function getPort(){
@@ -137,14 +136,14 @@ class RakLibServer extends \Thread{
     }
 
 	public function shutdownHandler(){
-		if($this->shutdown !== \true){
-			$this->getLogger()->emergency("[RakLib Thread #". \Thread::getCurrentThreadId() ."] RakLib crashed!");
+		if($this->shutdown !== true){
+			$this->getLogger()->emergency("RakLib crashed!");
 		}
 	}
 
-	public function errorHandler($errno, $errstr, $errfile, $errline, $context, $trace = \null){
-		if(\error_reporting() === 0){
-			return \false;
+	public function errorHandler($errno, $errstr, $errfile, $errline, $context, $trace = null){
+		if(error_reporting() === 0){
+			return false;
 		}
 		$errorConversion = [
 			E_ERROR => "E_ERROR",
@@ -164,27 +163,27 @@ class RakLibServer extends \Thread{
 			E_USER_DEPRECATED => "E_USER_DEPRECATED",
 		];
 		$errno = isset($errorConversion[$errno]) ? $errorConversion[$errno] : $errno;
-		if(($pos = \strpos($errstr, "\n")) !== \false){
-			$errstr = \substr($errstr, 0, $pos);
+		if(($pos = strpos($errstr, "\n")) !== false){
+			$errstr = substr($errstr, 0, $pos);
 		}
 		$oldFile = $errfile;
 		$errfile = $this->cleanPath($errfile);
 
-		$this->getLogger()->debug("[RakLib Thread #". \Thread::getCurrentThreadId() ."] An $errno error happened: \"$errstr\" in \"$errfile\" at line $errline");
+		$this->getLogger()->debug("An $errno error happened: \"$errstr\" in \"$errfile\" at line $errline");
 
-		foreach(($trace = $this->getTrace($trace === \null ? 3 : 0, $trace)) as $i => $line){
+		foreach(($trace = $this->getTrace($trace === null ? 3 : 0, $trace)) as $i => $line){
 			$this->getLogger()->debug($line);
 		}
 
-		return \true;
+		return true;
 	}
 
-	public function getTrace($start = 1, $trace = \null){
-		if($trace === \null){
-			if(\function_exists("xdebug_get_function_stack")){
-				$trace = \array_reverse(xdebug_get_function_stack());
+	public function getTrace($start = 1, $trace = null){
+		if($trace === null){
+			if(function_exists("xdebug_get_function_stack")){
+				$trace = array_reverse(xdebug_get_function_stack());
 			}else{
-				$e = new \Exception();
+				$e = new \Throwable();
 				$trace = $e->getTrace();
 			}
 		}
@@ -200,35 +199,35 @@ class RakLibServer extends \Thread{
 					$args = $trace[$i]["params"];
 				}
 				foreach($args as $name => $value){
-					$params .= (\is_object($value) ? \get_class($value) . " " . (\method_exists($value, "__toString") ? $value->__toString() : "object") : \gettype($value) . " " . @\strval($value)) . ", ";
+					$params .= (is_object($value) ? get_class($value) . " " . (method_exists($value, "__toString") ? $value->__toString() : "object") : gettype($value) . " " . @strval($value)) . ", ";
 				}
 			}
-			$messages[] = "#$j " . (isset($trace[$i]["file"]) ? $this->cleanPath($trace[$i]["file"]) : "") . "(" . (isset($trace[$i]["line"]) ? $trace[$i]["line"] : "") . "): " . (isset($trace[$i]["class"]) ? $trace[$i]["class"] . (($trace[$i]["type"] === "dynamic" or $trace[$i]["type"] === "->") ? "->" : "::") : "") . $trace[$i]["function"] . "(" . \substr($params, 0, -2) . ")";
+			$messages[] = "#$j " . (isset($trace[$i]["file"]) ? $this->cleanPath($trace[$i]["file"]) : "") . "(" . (isset($trace[$i]["line"]) ? $trace[$i]["line"] : "") . "): " . (isset($trace[$i]["class"]) ? $trace[$i]["class"] . (($trace[$i]["type"] === "dynamic" or $trace[$i]["type"] === "->") ? "->" : "::") : "") . $trace[$i]["function"] . "(" . substr($params, 0, -2) . ")";
 		}
 
 		return $messages;
 	}
 
 	public function cleanPath($path){
-		return \rtrim(\str_replace(["\\", ".php", "phar://", \rtrim(\str_replace(["\\", "phar://"], ["/", ""], $this->mainPath), "/")], ["/", "", "", ""], $path), "/");
+		return rtrim(str_replace(["\\", ".php", "phar://", rtrim(str_replace(["\\", "phar://"], ["/", ""], $this->mainPath), "/")], ["/", "", "", ""], $path), "/");
 	}
 
     public function run(){
         //Load removed dependencies, can't use require_once()
         foreach($this->loadPaths as $name => $path){
-            if(!\class_exists($name, \false) and !\interface_exists($name, \false)){
+            if(!class_exists($name, false) and !interface_exists($name, false)){
                 require($path);
             }
         }
-        $this->loader->register(\true);
+        $this->loader->register(true);
 
-	    \gc_enable();
-	    \error_reporting(-1);
-	    \ini_set("display_errors", 1);
-	    \ini_set("display_startup_errors", 1);
+	    gc_enable();
+	    error_reporting(-1);
+	    ini_set("display_errors", 1);
+	    ini_set("display_startup_errors", 1);
 
-	    \set_error_handler([$this, "errorHandler"], E_ALL);
-	    \register_shutdown_function([$this, "shutdownHandler"]);
+	    set_error_handler([$this, "errorHandler"], E_ALL);
+	    register_shutdown_function([$this, "shutdownHandler"]);
 
 
         $socket = new UDPServerSocket($this->getLogger(), $this->port, $this->interface);

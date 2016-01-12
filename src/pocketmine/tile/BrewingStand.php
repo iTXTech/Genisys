@@ -16,11 +16,11 @@ use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Short;
-use pocketmine\nbt\tag\String;
-use pocketmine\nbt\tag\Int;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ShortTag;
+use pocketmine\nbt\tag\StringTag;
+use pocketmine\nbt\tag\IntTag;
 use pocketmine\network\protocol\ContainerSetDataPacket;
 use pocketmine\Server;
 
@@ -31,12 +31,12 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 
 	public static $ingredients = [];
 
-	public function __construct(FullChunk $chunk, Compound $nbt){
+	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new BrewingInventory($this);
 
-		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof Enum)){
-			$this->namedtag->Items = new Enum("Items", []);
+		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof EnumTag)){
+			$this->namedtag->Items = new EnumTag("Items", []);
 			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		}
 
@@ -45,7 +45,7 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		}
 
 		if(!isset($this->namedtag->CookedTime)){
-			$this->namedtag->CookedTime = new Short("CookedTime", self::MAX_BREW_TIME);
+			$this->namedtag->CookedTime = new ShortTag("CookedTime", self::MAX_BREW_TIME);
 		}
 
 		if($this->namedtag["CookTime"] < self::MAX_BREW_TIME){
@@ -67,7 +67,7 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 			return;
 		}
 
-		$this->namedtag->CustomName = new String("CustomName", $str);
+		$this->namedtag->CustomName = new StringTag("CustomName", $str);
 	}
 
 	public function close(){
@@ -80,7 +80,7 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 	}
 
 	public function saveNBT(){
-		$this->namedtag->Items = new Enum("Items", []);
+		$this->namedtag->Items = new EnumTag("Items", []);
 		$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		for($index = 0; $index < $this->getSize(); ++$index){
 			$this->setItem($index, $this->inventory->getItem($index));
@@ -193,7 +193,7 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		} else $canBrew = false;
 
 		if($canBrew){
-			$this->namedtag->CookTime = new Short("CookTime", $this->namedtag["CookTime"] - 1);
+			$this->namedtag->CookTime = new ShortTag("CookTime", $this->namedtag["CookTime"] - 1);
 
 			if($this->namedtag["CookTime"] <= 0){
 				for($i = 1; $i <= 3; $i++){
@@ -221,7 +221,7 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 			}
 
 			$ret = true;
-		}else $this->namedtag->CookTime = new Short("CookTime", self::MAX_BREW_TIME);
+		}else $this->namedtag->CookTime = new ShortTag("CookTime", self::MAX_BREW_TIME);
 
 		$this->lastUpdate = microtime(true);
 
@@ -231,12 +231,12 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 	}
 
 	public function getSpawnCompound(){
-		$nbt = new Compound("", [
-			new String("id", Tile::BREWING_STAND),
-			new Int("x", (int) $this->x),
-			new Int("y", (int) $this->y),
-			new Int("z", (int) $this->z),
-			new Short("CookTime", self::MAX_BREW_TIME),
+		$nbt = new CompoundTag("", [
+			new StringTag("id", Tile::BREWING_STAND),
+			new IntTag("x", (int) $this->x),
+			new IntTag("y", (int) $this->y),
+			new IntTag("z", (int) $this->z),
+			new ShortTag("CookTime", self::MAX_BREW_TIME),
 		]);
 
 		if($this->hasName()){

@@ -216,7 +216,7 @@ class Permission{
 	 *
 	 * @return Permission
 	 *
-	 * @throws \Exception
+	 * @throws \Throwable
 	 */
 	public static function loadPermission($name, array $data, $default = self::DEFAULT_OP, &$output = []){
 		$desc = null;

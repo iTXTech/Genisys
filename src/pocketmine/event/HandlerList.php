@@ -83,7 +83,7 @@ class HandlerList{
 	/**
 	 * @param RegisteredListener $listener
 	 *
-	 * @throws \Exception
+	 * @throws \Throwable
 	 */
 	public function register(RegisteredListener $listener){
 		if($listener->getPriority() < EventPriority::MONITOR or $listener->getPriority() > EventPriority::LOWEST){

@@ -29,12 +29,12 @@ class UDPServerSocket{
     public function __construct(\ThreadedLogger $logger, $port = 19132, $interface = "0.0.0.0"){
         $this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
         //socket_set_option($this->socket, SOL_SOCKET, SO_BROADCAST, 1); //Allow sending broadcast messages
-        if(@socket_bind($this->socket, $interface, $port) === \true){
+        if(@socket_bind($this->socket, $interface, $port) === true){
             socket_set_option($this->socket, SOL_SOCKET, SO_REUSEADDR, 0);
             $this->setSendBuffer(1024 * 1024 * 8)->setRecvBuffer(1024 * 1024 * 8);
         }else{
-            $logger->critical("**** FAILED TO BIND TO " . $interface . ":" . $port . "!", \true, \true, 0);
-            $logger->critical("Perhaps a server is already running on that port?", \true, \true, 0);
+            $logger->critical("**** FAILED TO BIND TO " . $interface . ":" . $port . "!", true, true, 0);
+            $logger->critical("Perhaps a server is already running on that port?", true, true, 0);
             exit(1);
         }
         socket_set_nonblock($this->socket);
@@ -67,7 +67,7 @@ class UDPServerSocket{
      * @return int
      */
     public function writePacket($buffer, $dest, $port){
-        return socket_sendto($this->socket, $buffer, \strlen($buffer), 0, $dest, $port);
+        return socket_sendto($this->socket, $buffer, strlen($buffer), 0, $dest, $port);
     }
 
     /**

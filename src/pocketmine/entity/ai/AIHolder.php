@@ -15,10 +15,10 @@ use pocketmine\entity\Zombie;
 use pocketmine\level\format\FullChunk;
 use pocketmine\scheduler\CallbackTask;
 use pocketmine\event\entity\EntityDeathEvent;
-use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Double;
-use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Float;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\DoubleTag;
+use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\scheduler\TaskHandler;
@@ -421,20 +421,20 @@ class AIHolder{
 	 * 返回一个空的实体通用NBT
 	 */
 	public function getNBT(){
-		$nbt = new Compound("", [
-			"Pos" => new Enum("Pos", [
-				new Double("", 0),
-				new Double("", 0),
-				new Double("", 0)
+		$nbt = new CompoundTag("", [
+			"Pos" => new EnumTag("Pos", [
+				new DoubleTag("", 0),
+				new DoubleTag("", 0),
+				new DoubleTag("", 0)
 			]),
-			"Motion" => new Enum("Motion", [
-				new Double("", 0),
-				new Double("", 0),
-				new Double("", 0)
+			"Motion" => new EnumTag("Motion", [
+				new DoubleTag("", 0),
+				new DoubleTag("", 0),
+				new DoubleTag("", 0)
 			]),
-			"Rotation" => new Enum("Rotation", [
-				new Float("", 0),
-				new Float("", 0)
+			"Rotation" => new EnumTag("Rotation", [
+				new FloatTag("", 0),
+				new FloatTag("", 0)
 			]),
 		]);
 		return $nbt;

@@ -59,15 +59,15 @@ use pocketmine\metadata\EntityMetadataStore;
 use pocketmine\metadata\LevelMetadataStore;
 use pocketmine\metadata\PlayerMetadataStore;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Byte;
-use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Double;
-use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Float;
-use pocketmine\nbt\tag\Int;
-use pocketmine\nbt\tag\Long;
-use pocketmine\nbt\tag\Short;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\ByteTag;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\DoubleTag;
+use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\LongTag;
+use pocketmine\nbt\tag\ShortTag;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\CompressBatchedTask;
 use pocketmine\network\Network;
 use pocketmine\network\protocol\BatchPacket;
@@ -838,7 +838,7 @@ class Server{
 				$nbt->readCompressed(file_get_contents($path . "$name.dat"));
 
 				return $nbt->getData();
-			}catch(\Exception $e){ //zlib decode error / corrupt data
+			}catch(\Throwable $e){ //zlib decode error / corrupt data
 				rename($path . "$name.dat", $path . "$name.dat.bak");
 				$this->logger->notice($this->getLanguage()->translateString("pocketmine.data.playerCorrupted", [$name]));
 			}
@@ -846,43 +846,43 @@ class Server{
 			$this->logger->notice($this->getLanguage()->translateString("pocketmine.data.playerNotFound", [$name]));
 		}
 		$spawn = $this->getDefaultLevel()->getSafeSpawn();
-		$nbt = new Compound("", [
-			new Long("firstPlayed", floor(microtime(true) * 1000)),
-			new Long("lastPlayed", floor(microtime(true) * 1000)),
-			new Enum("Pos", [
-				new Double(0, $spawn->x),
-				new Double(1, $spawn->y),
-				new Double(2, $spawn->z)
+		$nbt = new CompoundTag("", [
+			new LongTag("firstPlayed", floor(microtime(true) * 1000)),
+			new LongTag("lastPlayed", floor(microtime(true) * 1000)),
+			new EnumTag("Pos", [
+				new DoubleTag(0, $spawn->x),
+				new DoubleTag(1, $spawn->y),
+				new DoubleTag(2, $spawn->z)
 			]),
-			new String("Level", $this->getDefaultLevel()->getName()),
-			//new String("SpawnLevel", $this->getDefaultLevel()->getName()),
-			//new Int("SpawnX", (int) $spawn->x),
-			//new Int("SpawnY", (int) $spawn->y),
-			//new Int("SpawnZ", (int) $spawn->z),
-			//new Byte("SpawnForced", 1), //TODO
-			new Enum("Inventory", []),
-			new Compound("Achievements", []),
-			new Int("playerGameType", $this->getGamemode()),
-			new Enum("Motion", [
-				new Double(0, 0.0),
-				new Double(1, 0.0),
-				new Double(2, 0.0)
+			new StringTag("Level", $this->getDefaultLevel()->getName()),
+			//new StringTag("SpawnLevel", $this->getDefaultLevel()->getName()),
+			//new IntTag("SpawnX", (int) $spawn->x),
+			//new IntTag("SpawnY", (int) $spawn->y),
+			//new IntTag("SpawnZ", (int) $spawn->z),
+			//new ByteTag("SpawnForced", 1), //TODO
+			new EnumTag("Inventory", []),
+			new CompoundTag("Achievements", []),
+			new IntTag("playerGameType", $this->getGamemode()),
+			new EnumTag("Motion", [
+				new DoubleTag(0, 0.0),
+				new DoubleTag(1, 0.0),
+				new DoubleTag(2, 0.0)
 			]),
-			new Enum("Rotation", [
-				new Float(0, 0.0),
-				new Float(1, 0.0)
+			new EnumTag("Rotation", [
+				new FloatTag(0, 0.0),
+				new FloatTag(1, 0.0)
 			]),
-			new Float("FallDistance", 0.0),
-			new Short("Fire", 0),
-			new Short("Air", 300),
-			new Byte("OnGround", 1),
-			new Byte("Invulnerable", 0),
-			new String("NameTag", $name),
-			new Short("Hunger", 20),
-			new Short("Health", 20),
-			new Short("MaxHealth", 20),
-			new Long("Experience", 0),
-			new Long("ExpLevel", 0),
+			new FloatTag("FallDistance", 0.0),
+			new ShortTag("Fire", 0),
+			new ShortTag("Air", 300),
+			new ByteTag("OnGround", 1),
+			new ByteTag("Invulnerable", 0),
+			new StringTag("NameTag", $name),
+			new ShortTag("Hunger", 20),
+			new ShortTag("Health", 20),
+			new ShortTag("MaxHealth", 20),
+			new LongTag("Experience", 0),
+			new LongTag("ExpLevel", 0),
 		]);
 		$nbt->Pos->setTagType(NBT::TAG_Double);
 		$nbt->Inventory->setTagType(NBT::TAG_Compound);
@@ -903,39 +903,39 @@ class Server{
 			$this->logger->notice($this->getLanguage()->translateString("pocketmine.data.playerOld", [$name]));
 			foreach($data->get("inventory") as $slot => $item){
 				if(count($item) === 3){
-					$nbt->Inventory[$slot + 9] = new Compound("", [
-						new Short("id", $item[0]),
-						new Short("Damage", $item[1]),
-						new Byte("Count", $item[2]),
-						new Byte("Slot", $slot + 9),
-						new Byte("TrueSlot", $slot + 9)
+					$nbt->Inventory[$slot + 9] = new CompoundTag("", [
+						new ShortTag("id", $item[0]),
+						new ShortTag("Damage", $item[1]),
+						new ByteTag("Count", $item[2]),
+						new ByteTag("Slot", $slot + 9),
+						new ByteTag("TrueSlot", $slot + 9)
 					]);
 				}
 			}
 			foreach($data->get("hotbar") as $slot => $itemSlot){
 				if(isset($nbt->Inventory[$itemSlot + 9])){
 					$item = $nbt->Inventory[$itemSlot + 9];
-					$nbt->Inventory[$slot] = new Compound("", [
-						new Short("id", $item["id"]),
-						new Short("Damage", $item["Damage"]),
-						new Byte("Count", $item["Count"]),
-						new Byte("Slot", $slot),
-						new Byte("TrueSlot", $item["TrueSlot"])
+					$nbt->Inventory[$slot] = new CompoundTag("", [
+						new ShortTag("id", $item["id"]),
+						new ShortTag("Damage", $item["Damage"]),
+						new ByteTag("Count", $item["Count"]),
+						new ByteTag("Slot", $slot),
+						new ByteTag("TrueSlot", $item["TrueSlot"])
 					]);
 				}
 			}
 			foreach($data->get("armor") as $slot => $item){
 				if(count($item) === 2){
-					$nbt->Inventory[$slot + 100] = new Compound("", [
-						new Short("id", $item[0]),
-						new Short("Damage", $item[1]),
-						new Byte("Count", 1),
-						new Byte("Slot", $slot + 100)
+					$nbt->Inventory[$slot + 100] = new CompoundTag("", [
+						new ShortTag("id", $item[0]),
+						new ShortTag("Damage", $item[1]),
+						new ByteTag("Count", 1),
+						new ByteTag("Slot", $slot + 100)
 					]);
 				}
 			}
 			foreach($data->get("achievements") as $achievement => $status){
-				$nbt->Achievements[$achievement] = new Byte($achievement, $status == true ? 1 : 0);
+				$nbt->Achievements[$achievement] = new ByteTag($achievement, $status == true ? 1 : 0);
 			}
 			unlink($path . "$name.yml");
 		}
@@ -947,10 +947,10 @@ class Server{
 
 	/**
 	 * @param string   $name
-	 * @param Compound $nbtTag
+	 * @param CompoundTag $nbtTag
 	 * @param bool     $async
 	 */
-	public function saveOfflinePlayerData($name, Compound $nbtTag, $async = false){
+	public function saveOfflinePlayerData($name, CompoundTag $nbtTag, $async = false){
 		$nbt = new NBT(NBT::BIG_ENDIAN);
 		try{
 			$nbt->setData($nbtTag);
@@ -960,7 +960,7 @@ class Server{
 			}else{
 				file_put_contents($this->getDataPath() . "players/" . strtolower($name) . ".dat", $nbt->writeCompressed());
 			}
-		}catch(\Exception $e){
+		}catch(\Throwable $e){
 			$this->logger->critical($this->getLanguage()->translateString("pocketmine.data.saveError", [$name, $e->getMessage()]));
 			if(\pocketmine\DEBUG > 1 and $this->logger instanceof MainLogger){
 				$this->logger->logException($e);
@@ -1169,7 +1169,7 @@ class Server{
 
 		try{
 			$level = new Level($this, $name, $path, $provider);
-		}catch(\Exception $e){
+		}catch(\Throwable $e){
 
 			$this->logger->error($this->getLanguage()->translateString("pocketmine.level.loadError", [$name, $e->getMessage()]));
 			if($this->logger instanceof MainLogger){
@@ -1229,7 +1229,7 @@ class Server{
 			$level->initLevel();
 
 			$level->setTickRate($this->baseTickRate);
-		}catch(\Exception $e){
+		}catch(\Throwable $e){
 			$this->logger->error($this->getLanguage()->translateString("pocketmine.level.generateError", [$name, $e->getMessage()]));
 			if($this->logger instanceof MainLogger){
 				$this->logger->logException($e);
@@ -2246,7 +2246,7 @@ private function lookupAddress($address) {
 	 *
 	 * @return bool
 	 *
-	 * @throws \Exception
+	 * @throws \Throwable
 	 */
 	public function dispatchCommand(CommandSender $sender, $commandLine){
 		if(!($sender instanceof CommandSender)){
@@ -2380,7 +2380,7 @@ private function lookupAddress($address) {
 			$this->memoryManager->doObjectCleanup();
 
 			gc_collect_cycles();
-		}catch(\Exception $e){
+		}catch(\Throwable $e){
 			$this->logger->emergency("Crashed while crashing, killing process");
 			@kill(getmypid());
 		}
@@ -2442,7 +2442,7 @@ private function lookupAddress($address) {
 		}
 	}
 
-	public function exceptionHandler(\Exception $e, $trace = null){
+	public function exceptionHandler(\Throwable $e, $trace = null){
 		if($e === null){
 			return;
 		}
@@ -2497,7 +2497,7 @@ private function lookupAddress($address) {
 		$this->logger->emergency($this->getLanguage()->translateString("pocketmine.crash.create"));
 		try{
 			$dump = new CrashDump($this);
-		}catch(\Exception $e){
+		}catch(\Throwable $e){
 			$this->logger->critical($this->getLanguage()->translateString("pocketmine.crash.error", $e->getMessage()));
 			return;
 		}
@@ -2557,7 +2557,7 @@ private function lookupAddress($address) {
 			if($next > microtime(true)){
 				try{
 					time_sleep_until($next);
-				}catch(\Exception $e){
+				}catch(\Throwable $e){
 					//Sometimes $next is less than the current time. High load?
 				}
 			}
@@ -2684,7 +2684,7 @@ private function lookupAddress($address) {
 						$level->tickRateCounter = $level->getTickRate();
 					}
 				}
-			}catch(\Exception $e){
+			}catch(\Throwable $e){
 				$this->logger->critical($this->getLanguage()->translateString("pocketmine.level.tickError", [$level->getName(), $e->getMessage()]));
 				if(\pocketmine\DEBUG > 1 and $this->logger instanceof MainLogger){
 					$this->logger->logException($e);
@@ -2779,7 +2779,7 @@ private function lookupAddress($address) {
 			if(strlen($payload) > 2 and substr($payload, 0, 2) === "\xfe\xfd" and $this->queryHandler instanceof QueryHandler){
 				$this->queryHandler->handle($address, $port, $payload);
 			}
-		}catch(\Exception $e){
+		}catch(\Throwable $e){
 			if(\pocketmine\DEBUG > 1){
 				if($this->logger instanceof MainLogger){
 					$this->logger->logException($e);
@@ -2819,7 +2819,7 @@ private function lookupAddress($address) {
 			if($this->queryHandler !== null){
 				$this->queryHandler->regenerateInfo();
 			}
-		}catch(\Exception $e){
+		}catch(\Throwable $e){
 			if($this->logger instanceof MainLogger){
 				$this->logger->logException($e);
 			}

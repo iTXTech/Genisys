@@ -15,9 +15,9 @@ use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\tile\Tile;
 use pocketmine\math\AxisAlignedBB;
-use pocketmine\nbt\tag\String;
-use pocketmine\nbt\tag\Int;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\StringTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\tile\FlowerPot as FlowerPotTile;
 
 class FlowerPot extends Flowable{
@@ -49,13 +49,13 @@ class FlowerPot extends Flowable{
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		if($this->getSide(Vector3::SIDE_DOWN)->isTransparent() === false){
 			$this->getLevel()->setBlock($block, $this, true, true);
-			$nbt = new Compound("", [
-				new String("id", Tile::FLOWER_POT),
-				new Int("x", $block->x),
-				new Int("y", $block->y),
-				new Int("z", $block->z),
-				new Int("item", 0),
-				new Int("data", 0),
+			$nbt = new CompoundTag("", [
+				new StringTag("id", Tile::FLOWER_POT),
+				new IntTag("x", $block->x),
+				new IntTag("y", $block->y),
+				new IntTag("z", $block->z),
+				new IntTag("item", 0),
+				new IntTag("data", 0),
 			]);
 			$pot = Tile::createTile("FlowerPot", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 			return true;

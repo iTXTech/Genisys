@@ -27,7 +27,7 @@ use pocketmine\level\format\FullChunk;
 use pocketmine\level\format\LevelProvider;
 use pocketmine\level\generator\biome\Biome;
 use pocketmine\level\Level;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use pocketmine\tile\Tile;
 
@@ -134,7 +134,7 @@ abstract class BaseFullChunk implements FullChunk{
 			if($this->NBTentities !== null){
 				$this->getProvider()->getLevel()->timings->syncChunkLoadEntitiesTimer->startTiming();
 				foreach($this->NBTentities as $nbt){
-					if($nbt instanceof Compound){
+					if($nbt instanceof CompoundTag){
 						if(!isset($nbt->id)){
 							$this->setChanged();
 							continue;
@@ -157,7 +157,7 @@ abstract class BaseFullChunk implements FullChunk{
 
 				$this->getProvider()->getLevel()->timings->syncChunkLoadTileEntitiesTimer->startTiming();
 				foreach($this->NBTtiles as $nbt){
-					if($nbt instanceof Compound){
+					if($nbt instanceof CompoundTag){
 						if(!isset($nbt->id)){
 							$changed = true;
 							continue;

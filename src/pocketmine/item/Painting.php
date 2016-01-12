@@ -11,11 +11,11 @@ use pocketmine\block\Block;
 use pocketmine\level\Level;
 use pocketmine\Player;
 use pocketmine\entity\Painting as PaintingEntity;
-use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\String;
-use pocketmine\nbt\tag\Double;
-use pocketmine\nbt\tag\Float;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\StringTag;
+use pocketmine\nbt\tag\DoubleTag;
+use pocketmine\nbt\tag\FloatTag;
 
 class Painting extends Item{
 	public function __construct($meta = 0, $count = 1){
@@ -73,21 +73,21 @@ class Painting extends Item{
 				"Motive" => $motive[0],
 			];
 			
-			$nbt = new Compound("", [
-				"Motive" => new String("Motive", $data["Motive"]),
-				"Pos" => new Enum("Pos", [
-					new Double("", $data["x"]),
-					new Double("", $data["y"]),
-					new Double("", $data["z"])
+			$nbt = new CompoundTag("", [
+				"Motive" => new StringTag("Motive", $data["Motive"]),
+				"Pos" => new EnumTag("Pos", [
+					new DoubleTag("", $data["x"]),
+					new DoubleTag("", $data["y"]),
+					new DoubleTag("", $data["z"])
 				]),
-				"Motion" => new Enum("Motion", [
-					new Double("", 0),
-					new Double("", 0),
-					new Double("", 0)
+				"Motion" => new EnumTag("Motion", [
+					new DoubleTag("", 0),
+					new DoubleTag("", 0),
+					new DoubleTag("", 0)
 				]),
-				"Rotation" => new Enum("Rotation", [
-					new Float("", $data["yaw"]),
-					new Float("", 0)
+				"Rotation" => new EnumTag("Rotation", [
+					new FloatTag("", $data["yaw"]),
+					new FloatTag("", 0)
 				]),
 			]);
 			

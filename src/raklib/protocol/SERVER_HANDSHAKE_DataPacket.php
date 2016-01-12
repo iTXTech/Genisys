@@ -21,15 +21,7 @@
 
 namespace raklib\protocol;
 
-use raklib\Binary;
-
-
-
-
-
-
-
-
+#include <rules/RakLibPacket.h>
 
 class SERVER_HANDSHAKE_DataPacket extends Packet{
     public static $ID = 0x10;
@@ -55,13 +47,13 @@ class SERVER_HANDSHAKE_DataPacket extends Packet{
     public function encode(){
         parent::encode();
         $this->putAddress($this->address, $this->port, 4);
-        $this->buffer .= \pack("n", 0);
+        $this->putShort(0);
         for($i = 0; $i < 10; ++$i){
 			$this->putAddress($this->systemAddresses[$i][0], $this->systemAddresses[$i][1], $this->systemAddresses[$i][2]);
 		}
 		
-        $this->buffer .= Binary::writeLong($this->sendPing);
-        $this->buffer .= Binary::writeLong($this->sendPong);
+        $this->putLong($this->sendPing);
+        $this->putLong($this->sendPong);
     }
 
     public function decode(){

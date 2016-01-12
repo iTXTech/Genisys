@@ -32,36 +32,38 @@ class ServerHandler{
     }
 
     public function sendEncapsulated($identifier, EncapsulatedPacket $packet, $flags = RakLib::PRIORITY_NORMAL){
-        $buffer = \chr(RakLib::PACKET_ENCAPSULATED) . \chr(\strlen($identifier)) . $identifier . \chr($flags) . $packet->toBinary(\true);
+        $buffer = chr(RakLib::PACKET_ENCAPSULATED) . chr(strlen($identifier)) . $identifier . chr($flags) . $packet->toBinary(true);
         $this->server->pushMainToThreadPacket($buffer);
     }
 
     public function sendRaw($address, $port, $payload){
-        $buffer = \chr(RakLib::PACKET_RAW) . \chr(\strlen($address)) . $address . \pack("n", $port) . $payload;
+        $buffer = chr(RakLib::PACKET_RAW) . chr(strlen($address)) . $address . Binary::writeShort($port) . $payload;
         $this->server->pushMainToThreadPacket($buffer);
     }
 
     public function closeSession($identifier, $reason){
-        $buffer = \chr(RakLib::PACKET_CLOSE_SESSION) . \chr(\strlen($identifier)) . $identifier . \chr(\strlen($reason)) . $reason;
+        $buffer = chr(RakLib::PACKET_CLOSE_SESSION) . chr(strlen($identifier)) . $identifier . chr(strlen($reason)) . $reason;
         $this->server->pushMainToThreadPacket($buffer);
     }
 
     public function sendOption($name, $value){
-        $buffer = \chr(RakLib::PACKET_SET_OPTION) . \chr(\strlen($name)) . $name . $value;
+        $buffer = chr(RakLib::PACKET_SET_OPTION) . chr(strlen($name)) . $name . $value;
         $this->server->pushMainToThreadPacket($buffer);
     }
 
     public function blockAddress($address, $timeout){
-        $buffer = \chr(RakLib::PACKET_BLOCK_ADDRESS) . \chr(\strlen($address)) . $address . \pack("N", $timeout);
+        $buffer = chr(RakLib::PACKET_BLOCK_ADDRESS) . chr(strlen($address)) . $address . Binary::writeInt($timeout);
         $this->server->pushMainToThreadPacket($buffer);
     }
 
     public function shutdown(){
-	    $this->server->shutdown();
-        $buffer = \chr(RakLib::PACKET_SHUTDOWN);
+        $buffer = chr(RakLib::PACKET_SHUTDOWN);
         $this->server->pushMainToThreadPacket($buffer);
-		\usleep(50000); //Sleep for 1 tick
-		$this->server->kill();
+        $this->server->shutdown();
+        $this->server->synchronized(function(){
+            $this->server->wait(20000);
+        });
+        $this->server->join();
     }
 
     public function emergencyShutdown(){
@@ -70,7 +72,7 @@ class ServerHandler{
     }
 
     protected function invalidSession($identifier){
-        $buffer = \chr(RakLib::PACKET_INVALID_SESSION) . \chr(\strlen($identifier)) . $identifier;
+        $buffer = chr(RakLib::PACKET_INVALID_SESSION) . chr(strlen($identifier)) . $identifier;
         $this->server->pushMainToThreadPacket($buffer);
     }
 
@@ -78,63 +80,63 @@ class ServerHandler{
      * @return bool
      */
     public function handlePacket(){
-        if(\strlen($packet = $this->server->readThreadToMainPacket()) > 0){
-            $id = \ord($packet{0});
+        if(strlen($packet = $this->server->readThreadToMainPacket()) > 0){
+            $id = ord($packet{0});
             $offset = 1;
             if($id === RakLib::PACKET_ENCAPSULATED){
-                $len = \ord($packet{$offset++});
-                $identifier = \substr($packet, $offset, $len);
+                $len = ord($packet{$offset++});
+                $identifier = substr($packet, $offset, $len);
                 $offset += $len;
-                $flags = \ord($packet{$offset++});
-                $buffer = \substr($packet, $offset);
-                $this->instance->handleEncapsulated($identifier, EncapsulatedPacket::fromBinary($buffer, \true), $flags);
+                $flags = ord($packet{$offset++});
+                $buffer = substr($packet, $offset);
+                $this->instance->handleEncapsulated($identifier, EncapsulatedPacket::fromBinary($buffer, true), $flags);
             }elseif($id === RakLib::PACKET_RAW){
-                $len = \ord($packet{$offset++});
-                $address = \substr($packet, $offset, $len);
+                $len = ord($packet{$offset++});
+                $address = substr($packet, $offset, $len);
                 $offset += $len;
-                $port = \unpack("n", \substr($packet, $offset, 2))[1];
+                $port = Binary::readShort(substr($packet, $offset, 2));
                 $offset += 2;
-                $payload = \substr($packet, $offset);
+                $payload = substr($packet, $offset);
                 $this->instance->handleRaw($address, $port, $payload);
             }elseif($id === RakLib::PACKET_SET_OPTION){
-                $len = \ord($packet{$offset++});
-                $name = \substr($packet, $offset, $len);
+                $len = ord($packet{$offset++});
+                $name = substr($packet, $offset, $len);
                 $offset += $len;
-                $value = \substr($packet, $offset);
+                $value = substr($packet, $offset);
                 $this->instance->handleOption($name, $value);
             }elseif($id === RakLib::PACKET_OPEN_SESSION){
-                $len = \ord($packet{$offset++});
-                $identifier = \substr($packet, $offset, $len);
+                $len = ord($packet{$offset++});
+                $identifier = substr($packet, $offset, $len);
                 $offset += $len;
-                $len = \ord($packet{$offset++});
-                $address = \substr($packet, $offset, $len);
+                $len = ord($packet{$offset++});
+                $address = substr($packet, $offset, $len);
                 $offset += $len;
-                $port = \unpack("n", \substr($packet, $offset, 2))[1];
+                $port = Binary::readShort(substr($packet, $offset, 2));
                 $offset += 2;
-                $clientID = Binary::readLong(\substr($packet, $offset, 8));
+                $clientID = Binary::readLong(substr($packet, $offset, 8));
                 $this->instance->openSession($identifier, $address, $port, $clientID);
             }elseif($id === RakLib::PACKET_CLOSE_SESSION){
-                $len = \ord($packet{$offset++});
-                $identifier = \substr($packet, $offset, $len);
+                $len = ord($packet{$offset++});
+                $identifier = substr($packet, $offset, $len);
                 $offset += $len;
-                $len = \ord($packet{$offset++});
-                $reason = \substr($packet, $offset, $len);
+                $len = ord($packet{$offset++});
+                $reason = substr($packet, $offset, $len);
                 $this->instance->closeSession($identifier, $reason);
             }elseif($id === RakLib::PACKET_INVALID_SESSION){
-                $len = \ord($packet{$offset++});
-                $identifier = \substr($packet, $offset, $len);
+                $len = ord($packet{$offset++});
+                $identifier = substr($packet, $offset, $len);
                 $this->instance->closeSession($identifier, "Invalid session");
             }elseif($id === RakLib::PACKET_ACK_NOTIFICATION){
-                $len = \ord($packet{$offset++});
-                $identifier = \substr($packet, $offset, $len);
+                $len = ord($packet{$offset++});
+                $identifier = substr($packet, $offset, $len);
                 $offset += $len;
-                $identifierACK = (\PHP_INT_SIZE === 8 ? \unpack("N", \substr($packet, $offset, 4))[1] << 32 >> 32 : \unpack("N", \substr($packet, $offset, 4))[1]);
+                $identifierACK = Binary::readInt(substr($packet, $offset, 4));
                 $this->instance->notifyACK($identifier, $identifierACK);
             }
 
-            return \true;
+            return true;
         }
 
-        return \false;
+        return false;
     }
 }

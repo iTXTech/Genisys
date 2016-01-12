@@ -24,7 +24,7 @@ namespace pocketmine\level\format\generic;
 use pocketmine\level\format\Chunk;
 use pocketmine\level\format\ChunkSection;
 use pocketmine\level\format\LevelProvider;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\utils\Binary;
 use pocketmine\utils\ChunkException;
 

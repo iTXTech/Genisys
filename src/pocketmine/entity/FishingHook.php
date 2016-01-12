@@ -13,7 +13,7 @@ namespace pocketmine\entity;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\level\format\FullChunk;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 
 class FishingHook extends Projectile{
@@ -36,7 +36,7 @@ class FishingHook extends Projectile{
 		return "Fishing Hook";
 	}
 
-	public function __construct(FullChunk $chunk, Compound $nbt, Entity $shootingEntity = null){
+	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
 		parent::__construct($chunk, $nbt, $shootingEntity);
 	}
 

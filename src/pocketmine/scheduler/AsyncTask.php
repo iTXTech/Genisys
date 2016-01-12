@@ -39,29 +39,25 @@ abstract class AsyncTask extends \Collectable{
 	/** @var int */
 	private $taskId = null;
 
-	private $canBeGarbage = true;
-
-	public function setCanBeGarbage($canBeGarbage = true){
-		$this->canBeGarbage = $canBeGarbage;
-	}
+	private $crashed = false;
 
 	public function run(){
 		$this->result = null;
 
 		if($this->cancelRun !== true){
-			$this->onRun();
+			try{
+				$this->onRun();
+			}catch(\Throwable $e){
+				$this->crashed = true;
+				//$this->worker->handleException($e);
+			}
 		}
 
-		if($this->canBeGarbage) $this->setGarbage();
+		$this->setGarbage();
 	}
 
-	/**
-	 * @deprecated
-	 *
-	 * @return bool
-	 */
-	public function isFinished(){
-		return $this->isGarbage();
+	public function isCrashed(){
+		return $this->crashed;
 	}
 
 	/**
@@ -150,7 +146,9 @@ abstract class AsyncTask extends \Collectable{
 
 	public function cleanObject(){
 		foreach($this as $p => $v){
-			$this->{$p} = null;
+			if(!($v instanceof \Threaded)){
+				$this->{$p} = null;
+			}
 		}
 	}
 

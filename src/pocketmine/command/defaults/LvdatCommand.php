@@ -14,10 +14,10 @@ use pocketmine\event\TranslationContainer;
 use pocketmine\level\format\generic\BaseLevelProvider;
 use pocketmine\level\generator\Generator;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Int;
-use pocketmine\nbt\tag\String;
-use pocketmine\nbt\tag\Long;
-use pocketmine\nbt\tag\Compound;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\StringTag;
+use pocketmine\nbt\tag\LongTag;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\math\Vector3;
 
 class LvdatCommand extends VanillaCommand{
@@ -55,7 +55,7 @@ class LvdatCommand extends VanillaCommand{
 		$p = array_shift($args);
 		switch($o){
 			case "fixname":
-				$provider->getLevelData()->LevelName = new String("LevelName", $level->getFolderName());
+				$provider->getLevelData()->LevelName = new StringTag("LevelName", $level->getFolderName());
 				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.fixname", [$level->getFolderName()]));
 				break;
 			case "help":
@@ -79,7 +79,7 @@ class LvdatCommand extends VanillaCommand{
 					$sender->sendMessage("%commands.generic.opt.missing");
 					return false;
 				}
-				$provider->getLevelData()->LevelName = new String("LevelName", $p);
+				$provider->getLevelData()->LevelName = new StringTag("LevelName", $p);
 				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(), $o]));
 				break;
 			case "generator":
@@ -87,7 +87,7 @@ class LvdatCommand extends VanillaCommand{
 					$sender->sendMessage("%commands.generic.opt.missing");
 					return false;
 				}
-				$provider->getLevelData()->generatorName = new String("generatorName", $p);
+				$provider->getLevelData()->generatorName = new StringTag("generatorName", $p);
 				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(), $o]));
 				break;
 			case "preset":
@@ -95,7 +95,7 @@ class LvdatCommand extends VanillaCommand{
 					$sender->sendMessage("%commands.generic.opt.missing");
 					return false;
 				}
-				$provider->getLevelData()->generatorOptions = new String("generatorOptions", $p);
+				$provider->getLevelData()->generatorOptions = new StringTag("generatorOptions", $p);
 				$sender->sendMessage(new TranslationContainer("pocketmine.command.lvdat.changed", [$level->getFolderName(), $o]));
 				break;
 			default:

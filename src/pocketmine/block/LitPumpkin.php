@@ -15,10 +15,10 @@ use pocketmine\item\Tool;
 use pocketmine\Player;
 use pocketmine\entity\IronGolem;
 use pocketmine\entity\SnowGolem;
-use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Double;
-use pocketmine\nbt\tag\Float;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\DoubleTag;
+use pocketmine\nbt\tag\FloatTag;
 
 class LitPumpkin extends Solid{
 
@@ -58,20 +58,20 @@ class LitPumpkin extends Solid{
 					$level->setBlock($block, new Air());
 					$level->setBlock($block0, new Air());
 					$level->setBlock($block1, new Air());
-					$golem = new SnowGolem($player->getLevel()->getChunk($this->getX() >> 4, $this->getZ() >> 4), new Compound("", [
-						"Pos" => new Enum("Pos", [
-							new Double("", $this->x),
-							new Double("", $this->y),
-							new Double("", $this->z)
+					$golem = new SnowGolem($player->getLevel()->getChunk($this->getX() >> 4, $this->getZ() >> 4), new CompoundTag("", [
+						"Pos" => new EnumTag("Pos", [
+							new DoubleTag("", $this->x),
+							new DoubleTag("", $this->y),
+							new DoubleTag("", $this->z)
 						]),
-						"Motion" => new Enum("Motion", [
-							new Double("", 0),
-							new Double("", 0),
-							new Double("", 0)
+						"Motion" => new EnumTag("Motion", [
+							new DoubleTag("", 0),
+							new DoubleTag("", 0),
+							new DoubleTag("", 0)
 						]),
-						"Rotation" => new Enum("Rotation", [
-							new Float("", 0),
-							new Float("", 0)
+						"Rotation" => new EnumTag("Rotation", [
+							new FloatTag("", 0),
+							new FloatTag("", 0)
 						]),
 					]));
 					$golem->spawnToAll();
@@ -95,20 +95,20 @@ class LitPumpkin extends Solid{
 					$level->setBlock($block, new Air());
 					$level->setBlock($block0, new Air());
 					$level->setBlock($block1, new Air());
-					$golem = new IronGolem($player->getLevel()->getChunk($this->getX() >> 4, $this->getZ() >> 4), new Compound("", [
-						"Pos" => new Enum("Pos", [
-							new Double("", $this->x),
-							new Double("", $this->y),
-							new Double("", $this->z)
+					$golem = new IronGolem($player->getLevel()->getChunk($this->getX() >> 4, $this->getZ() >> 4), new CompoundTag("", [
+						"Pos" => new EnumTag("Pos", [
+							new DoubleTag("", $this->x),
+							new DoubleTag("", $this->y),
+							new DoubleTag("", $this->z)
 						]),
-						"Motion" => new Enum("Motion", [
-							new Double("", 0),
-							new Double("", 0),
-							new Double("", 0)
+						"Motion" => new EnumTag("Motion", [
+							new DoubleTag("", 0),
+							new DoubleTag("", 0),
+							new DoubleTag("", 0)
 						]),
-						"Rotation" => new Enum("Rotation", [
-							new Float("", 0),
-							new Float("", 0)
+						"Rotation" => new EnumTag("Rotation", [
+							new FloatTag("", 0),
+							new FloatTag("", 0)
 						]),
 					]));
 					$golem->spawnToAll();

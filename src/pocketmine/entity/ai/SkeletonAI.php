@@ -13,13 +13,13 @@ use pocketmine\network\protocol\SetEntityMotionPacket;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Entity\EntityShootBowEvent;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\Byte;
-use pocketmine\nbt\tag\Compound;
-use pocketmine\nbt\tag\Double;
-use pocketmine\nbt\tag\Enum;
-use pocketmine\nbt\tag\Float;
-use pocketmine\nbt\tag\Int;
-use pocketmine\nbt\tag\String;
+use pocketmine\nbt\tag\ByteTag;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\DoubleTag;
+use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\item\Item;
 
 class SkeletonAI{
@@ -477,20 +477,20 @@ class SkeletonAI{
 									$d = $p->distance($posnn);
 									$pitch = $this->getmypitch($my, $d);
 						
-									$nbt2 = new Compound("", [
-										"Pos" => new Enum("Pos", [
-											new Double("", $zo->getX()),
-											new Double("", $zo->getY()),
-											new Double("", $zo->getZ())
+									$nbt2 = new CompoundTag("", [
+										"Pos" => new EnumTag("Pos", [
+											new DoubleTag("", $zo->getX()),
+											new DoubleTag("", $zo->getY()),
+											new DoubleTag("", $zo->getZ())
 										]),
-										"Motion" => new Enum("Motion", [
-											new Double("", -\sin($zom['yaw']) * \cos($pitch / 180 * M_PI)),
-											new Double("", -\sin($pitch / 180 * M_PI)),
-											new Double("", \cos($zom['yaw'] / 180 * M_PI) * \cos($pitch / 180 * M_PI))
+										"Motion" => new EnumTag("Motion", [
+											new DoubleTag("", -\sin($zom['yaw']) * \cos($pitch / 180 * M_PI)),
+											new DoubleTag("", -\sin($pitch / 180 * M_PI)),
+											new DoubleTag("", \cos($zom['yaw'] / 180 * M_PI) * \cos($pitch / 180 * M_PI))
 										]),
-										"Rotation" => new Enum("Rotation", [
-											new Float("", $zom['yaw']),
-											new Float("", $pitch)
+										"Rotation" => new EnumTag("Rotation", [
+											new FloatTag("", $zom['yaw']),
+											new FloatTag("", $pitch)
 										]),
 									]);
 									$f = 1.5;  

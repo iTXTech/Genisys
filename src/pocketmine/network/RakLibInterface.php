@@ -88,7 +88,7 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 		if($this->rakLib->isTerminated()){
 			$info = $this->rakLib->getTerminationInfo();
 			$this->network->unregisterInterface($this);
-			\ExceptionHandler::handler(E_ERROR, "RakLib Thread crashed [" . $info["scope"] . "]: " . (isset($info["message"]) ? $info["message"] : ""), $info["file"], $info["line"]);
+			\ThrowableHandler::handler(E_ERROR, "RakLib Thread crashed [" . $info["scope"] . "]: " . (isset($info["message"]) ? $info["message"] : ""), $info["file"], $info["line"]);
 		}
 
 		return $work;
@@ -143,7 +143,7 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 						$this->players[$identifier]->handleDataPacket($pk);
 					}
 				}
-			}catch(\Exception $e){
+			}catch(\Throwable $e){
 				if(\pocketmine\DEBUG > 1 and isset($pk)){
 					$logger = $this->server->getLogger();
 					if($logger instanceof MainLogger){
