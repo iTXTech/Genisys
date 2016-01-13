@@ -190,7 +190,7 @@ class NBT{
 				$data = self::parseCompound($data, $offset);
 				return new CompoundTag("", $data);
 			}elseif($c !== " " and $c !== "\r" and $c !== "\n" and $c !== "\t"){
-				throw new \Throwable("Syntax error: unexpected '$c' at offset $offset");
+				throw new \Exception("Syntax error: unexpected '$c' at offset $offset");
 			}
 		}
 
@@ -332,14 +332,14 @@ class NBT{
 				if($type === null){
 					$type = self::TAG_String;
 				}elseif($inQuotes){
-					throw new \Throwable("Syntax error: invalid quote at offset $offset");
+					throw new \Exception("Syntax error: invalid quote at offset $offset");
 				}
 			}elseif($c === "\\"){
 				$value .= isset($data{$offset + 1}) ? $data{$offset + 1} : "";
 				++$offset;
 			}elseif($c === "{" and !$inQuotes){
 				if($value !== ""){
-					throw new \Throwable("Syntax error: invalid compound start at offset $offset");
+					throw new \Exception("Syntax error: invalid compound start at offset $offset");
 				}
 				++$offset;
 				$value = self::parseCompound($data, $offset);
@@ -347,7 +347,7 @@ class NBT{
 				break;
 			}elseif($c === "[" and !$inQuotes){
 				if($value !== ""){
-					throw new \Throwable("Syntax error: invalid list start at offset $offset");
+					throw new \Exception("Syntax error: invalid list start at offset $offset");
 				}
 				++$offset;
 				$value = self::parseList($data, $offset);
@@ -359,7 +359,7 @@ class NBT{
 		}
 
 		if($value === ""){
-			throw new \Throwable("Syntax error: invalid empty value at offset $offset");
+			throw new \Exception("Syntax error: invalid empty value at offset $offset");
 		}
 
 		if($type === null and strlen($value) > 0){
@@ -426,7 +426,7 @@ class NBT{
 		}
 
 		if($key === ""){
-			throw new \Throwable("Syntax error: invalid empty key at offset $offset");
+			throw new \Exception("Syntax error: invalid empty key at offset $offset");
 		}
 
 		return $key;

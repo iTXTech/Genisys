@@ -79,7 +79,7 @@ class SessionManager{
         $this->socket = $socket;
         $this->registerPackets();
 
-	    $this->serverId = mt_rand(0, PHP_INT_MAX);
+        $this->serverId = mt_rand(0, PHP_INT_MAX);
 
         $this->run();
     }
@@ -103,55 +103,55 @@ class SessionManager{
             $start = microtime(true);
             $max = 5000;
             while(--$max and $this->receivePacket());
-	        while($this->receiveStream());
-			$time = microtime(true) - $start;
-			if($time < 0.05){
-				time_sleep_until(microtime(true) + 0.05 - $time);
-			}
-			$this->tick();
+            while($this->receiveStream());
+            $time = microtime(true) - $start;
+            if($time < 0.05){
+                time_sleep_until(microtime(true) + 0.05 - $time);
+            }
+            $this->tick();
         }
     }
 
-	private function tick(){
-		$time = microtime(true);
-		foreach($this->sessions as $session){
-			$session->update($time);
-		}
+    private function tick(){
+        $time = microtime(true);
+        foreach($this->sessions as $session){
+            $session->update($time);
+        }
 
-		foreach($this->ipSec as $address => $count){
-			if($count >= $this->packetLimit){
-				$this->blockAddress($address);
-			}
-		}
-		$this->ipSec = [];
+        foreach($this->ipSec as $address => $count){
+            if($count >= $this->packetLimit){
+                $this->blockAddress($address);
+            }
+        }
+        $this->ipSec = [];
 
 
 
-		if(($this->ticks & 0b1111) === 0){
-			$diff = max(0.005, $time - $this->lastMeasure);
-			$this->streamOption("bandwidth", serialize([
-				"up" => $this->sendBytes / $diff,
-				"down" => $this->receiveBytes / $diff
-			]));
-			$this->lastMeasure = $time;
-			$this->sendBytes = 0;
-			$this->receiveBytes = 0;
+        if(($this->ticks & 0b1111) === 0){
+            $diff = max(0.005, $time - $this->lastMeasure);
+            $this->streamOption("bandwidth", serialize([
+                "up" => $this->sendBytes / $diff,
+                "down" => $this->receiveBytes / $diff
+            ]));
+            $this->lastMeasure = $time;
+            $this->sendBytes = 0;
+            $this->receiveBytes = 0;
 
-			if(count($this->block) > 0){
-				asort($this->block);
-				$now = microtime(true);
-				foreach($this->block as $address => $timeout){
-					if($timeout <= $now){
-						unset($this->block[$address]);
-					}else{
-						break;
-					}
-				}
-			}
-		}
+            if(count($this->block) > 0){
+                asort($this->block);
+                $now = microtime(true);
+                foreach($this->block as $address => $timeout){
+                    if($timeout <= $now){
+                        unset($this->block[$address]);
+                    }else{
+                        break;
+                    }
+                }
+            }
+        }
 
-		++$this->ticks;
-	}
+        ++$this->ticks;
+    }
 
 
     private function receivePacket(){
@@ -172,7 +172,7 @@ class SessionManager{
             if(($packet = $this->getPacketFromPool($pid)) !== null){
                 $packet->buffer = $buffer;
                 $this->getSession($source, $port)->handlePacket($packet);
-	            return true;
+                return true;
             }elseif($pid === UNCONNECTED_PING::$ID){
                 //No need to create a session for just pings
                 $packet = new UNCONNECTED_PING;
@@ -186,9 +186,9 @@ class SessionManager{
                 $this->sendPacket($pk, $source, $port);
             }elseif($buffer !== ""){
                 $this->streamRaw($source, $port, $buffer);
-	            return true;
+                return true;
             }else{
-	            return false;
+                return false;
             }
         }
 
@@ -319,7 +319,7 @@ class SessionManager{
             }elseif($id === RakLib::PACKET_EMERGENCY_SHUTDOWN){
                 $this->shutdown = true;
             }else{
-	            return false;
+                return false;
             }
 
             return true;
@@ -383,22 +383,22 @@ class SessionManager{
         return $this->serverId;
     }
 
-	private function registerPacket($id, $class){
-		$this->packetPool[$id] = new $class;
-	}
+    private function registerPacket($id, $class){
+        $this->packetPool[$id] = new $class;
+    }
 
-	/**
-	 * @param $id
-	 *
-	 * @return Packet
-	 */
-	public function getPacketFromPool($id){
-		if(isset($this->packetPool[$id])){
-			return clone $this->packetPool[$id];
-		}
+    /**
+     * @param $id
+     *
+     * @return Packet
+     */
+    public function getPacketFromPool($id){
+        if(isset($this->packetPool[$id])){
+            return clone $this->packetPool[$id];
+        }
 
-		return null;
-	}
+        return null;
+    }
 
     private function registerPackets(){
         //$this->registerPacket(UNCONNECTED_PING::$ID, UNCONNECTED_PING::class);

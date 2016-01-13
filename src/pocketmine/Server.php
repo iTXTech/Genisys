@@ -1872,7 +1872,7 @@ class Server{
 		$this->pluginManager->registerInterface(FolderPluginLoader::class);
 		$this->pluginManager->registerInterface(ScriptPluginLoader::class);
 
-		set_exception_handler([$this, "exceptionHandler"]);
+		//set_exception_handler([$this, "exceptionHandler"]);
 		register_shutdown_function([$this, "crashDump"]);
 
 		$this->queryRegenerateTask = new QueryRegenerateEvent($this, 5);
@@ -2316,11 +2316,11 @@ private function lookupAddress($address) {
 				}
 			}
 		}*/
-		if($this->isRunning){
+		/*if($this->isRunning){
 			$killer = new ServerKiller(90);
 			$killer->start();
-			$killer->detach();
-		}
+			$killer->kill();
+		}*/
 		$this->isRunning = false;
 	}
 
@@ -2369,7 +2369,8 @@ private function lookupAddress($address) {
 			$this->properties->save();
 
 			$this->getLogger()->debug("Closing console");
-			$this->console->kill();
+			$this->console->shutdown();
+			$this->console->notify();
 
 			$this->getLogger()->debug("Stopping network interfaces");
 			foreach($this->network->getInterfaces() as $interface){
@@ -2381,6 +2382,7 @@ private function lookupAddress($address) {
 
 			gc_collect_cycles();
 		}catch(\Throwable $e){
+			$this->logger->logException($e);
 			$this->logger->emergency("Crashed while crashing, killing process");
 			@kill(getmypid());
 		}
@@ -2820,9 +2822,7 @@ private function lookupAddress($address) {
 				$this->queryHandler->regenerateInfo();
 			}
 		}catch(\Throwable $e){
-			if($this->logger instanceof MainLogger){
-				$this->logger->logException($e);
-			}
+			$this->logger->logException($e);
 		}
 	}
 

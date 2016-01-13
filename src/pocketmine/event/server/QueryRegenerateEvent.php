@@ -53,7 +53,7 @@ class QueryRegenerateEvent extends ServerEvent{
 
 	public function __construct(Server $server, $timeout = 5){
 		$this->timeout = $timeout;
-		$this->serverName = $server->getServerName();
+		$this->serverName = $server->getMotd();
 		$this->listPlugins = $server->getProperty("settings.query-plugins", true);
 		$this->plugins = $server->getPluginManager()->getPlugins();
 		$this->players = [];
@@ -62,11 +62,11 @@ class QueryRegenerateEvent extends ServerEvent{
 				$this->players[] = $player;
 			}
 		}
-		
+
 		if($server->isDServerEnabled() and $server->dserverConfig["queryMaxPlayers"]) $pc = $server->dserverConfig["queryMaxPlayers"];
 		elseif($server->isDServerEnabled() and $server->dserverConfig["queryAllPlayers"]) $pc = $server->getDServerMaxPlayers();
 		else $pc = $server->getMaxPlayers();
-		
+
 		if($server->isDServerEnabled() and $server->dserverConfig["queryPlayers"]) $poc = $server->getDServerOnlinePlayers();
 		else $poc = count($this->players);
 
