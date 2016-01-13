@@ -1,31 +1,31 @@
-##中文版本
+#中文版本
 
-#创世纪
+##创世纪
 
 [![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * 管理员完全管理权。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX 科技有限责任公司 联合优化。
 * 创世纪 仅为 PocketMine-MP 项目的分支，且 PocketMine-MP 所有原代码均由 PocketMine 小组编写。
 
-#鸣谢
-* 头颅、花盆的相关代码由 @ImagicalCorp ImagicalMine 编写；
-* 生物 AI 的相关代码基于 @Zzm317 的 amazing MyOwnWorld 编写；
-* 画、酿造台的相关代码从 Nukkit 项目重写；
-* 熔炉的相关代码及其 Bug 由 @MagicDroidX 编写与修复；
-* 铁轨、充能铁轨的相关代码由 @happy163 编写；
-* 地狱门的相关代码由 JJLeo 编写；
-* 饥饿系统的相关代码基于 Katana 的代码编写；
-* 基本天气系统的相关代码由 @Zzm317 编写，由 @PeratX 重写；
-* @FENGberd 的支持与鼓励；
-* 我们的项目负责人为 @ishitatsuyuki 及 @jasonczc。
+##鸣谢
+* 头颅、花盆的相关代码由 **@ImagicalCorp** ImagicalMine 编写；
+* 生物 AI 的相关代码基于 **@Zzm317** 的 amazing MyOwnWorld 编写；
+* 画、酿造台的相关代码从 **Nukkit** 项目重写；
+* 熔炉的相关代码及其 Bug 由 **@MagicDroidX** 编写与修复；
+* 铁轨、充能铁轨的相关代码由 **@happy163** 编写；
+* 地狱门的相关代码由 **JJLeo** 编写；
+* 饥饿系统的相关代码基于 **Katana** 的代码编写；
+* 基本天气系统的相关代码由 **@Zzm317** 编写，由 **@PeratX** 重写；
+* **@FENGberd** 的支持与鼓励；
+* 我们的项目负责人为 **@ishitatsuyuki** 及 **@jasonczc**。
 
-#声明
+##声明
 * 我们没有从PxxxxxMxxxPxxxPxxx抄袭任何代码，并且此前也不曾听闻该项目
 
-#自动构建的服务器内核 .phar
-<a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">点击这里进入自动构建页</a>
+##自动构建的服务器内核 .phar
+<a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">**点击这里进入自动构建页**</a>
 
-#特性
+##特性
 * 性能提升（允许 100+ 的玩家加入服务器）
 * 修复 PocketMine-MP 的 Bug
 * 天气系统
@@ -49,7 +49,7 @@
 * 更多的指令（bancid（按设备编号或玩家 ID），banip（按 IP 或玩家 ID），ms，devTools 相关指令（打包与解包插件），pardoncid，weather，loadplugin，lvdat）
 * 文件夹插件加载器
 
-#计划表
+##计划表
 * 提升 船 与 矿车
 * 提升 下界地图生成器
 * 提升 药水
@@ -61,7 +61,7 @@
 * Windows 的 LevelDB 支持
 * php7 的支持
 
-#服务器
+##服务器
 （事实上，有超过 80 个中国的 Minecraft PE 服务器在使用我们的服务器内核且大部分的服务器都比我们架设的好。这些是我们架设的服务器）
 
 **Young Dream**<br>
@@ -93,34 +93,34 @@
 端口: **888**
 
 
-##English Version
+#English Version
 
-#Genisys
+##Genisys
 
 [![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * One Core to rule them ALL
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 
-#Acknowledgements
-* Skull, FlowerPot are based on @ImagicalCorp ImagicalMine's work
-* AIs are based on @Zzm317's amazing MyOwnWorld.
-* Painting and Brewing Stand are translated from Nukkit Project
-* Furnace was fixed by @MagicDroidX
-* Rail and Powered Rails were written by @happy163
-* Nether door was written by JJLeo
-* Base food system is based on Katana
-* Base weather system was written by @Zzm317 and rewritten by @PeratX
+##Acknowledgements
+* Skull, FlowerPot are based on **@ImagicalCorp** ImagicalMine's work
+* AIs are based on **@Zzm317**'s amazing MyOwnWorld.
+* Painting and Brewing Stand are translated from **Nukkit** Project
+* Furnace was fixed by **@MagicDroidX**
+* Rail and Powered Rails were written by **@happy163**
+* Nether door was written by **JJLeo**
+* Base food system is based on **Katana**
+* Base weather system was written by **@Zzm317** and rewritten by **@PeratX**
 * @FENGberd's encouragement
-* Our leaders are @ishitatsuyuki and @jasonczc
+* Our leaders are **@ishitatsuyuki** and **@jasonczc**
 
-#Declaration
-* We have never copy ANY codes from PxxxxxMxxxPxxxPxxx
+##Declaration
+* We have never copy **ANY** codes from PxxxxxMxxxPxxxPxxx and we even don't know about that project either.
 
-#Jenkins CI
-<a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">Click Here to go to Jenkins CI Page</a>
+##Jenkins CI
+<a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">**Click Here to go to Jenkins CI Page**</a>
 
-#Features
+##Features
 * Performance optimization (Let 100+ players join in a server)
 * Bug fix in PocketMine-MP
 * Weather
@@ -144,7 +144,7 @@
 * More commands (bancid bancidbyname banipbyname ms extractplugin makeplugin pardoncid weather extractphar loadplugin lvdat)
 * With FolderPluginLoader
 
-#To-Do List
+##To-Do List
 * Boat and Minecart (Improve)
 * Nether Generator (Improve)
 * Potions (Improve)
@@ -156,7 +156,7 @@
 * LevelDB support for Windows
 * php7 support
 
-#Servers
+##Servers
 (In fact there are more than 80 servers in China using our core and most of them are better than us. Here are some servers set by us.)
 
 **Young Dream**<br>
