@@ -342,6 +342,7 @@ class Server{
 	public $playerMsgType = self::PLAYER_MSG_TYPE_MESSAGE;
 	public $playerLoginMsg = "";
 	public $playerLogoutMsg = "";
+	public $antiFly = false;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -1613,6 +1614,7 @@ class Server{
 		$this->pulseFrequency = $this->getAdvancedProperty("redstone.pulse-frequency", 20);
 		$this->anviletEnabled = $this->getAdvancedProperty("server.allow-anvilandenchanttable", false);
 		$this->getLogger()->setWrite(!$this->getAdvancedProperty("server.disable-log", false));
+		$this->antiFly = $this->getAdvancedProperty("server.anti-fly", true);
 	}
 
 	/**

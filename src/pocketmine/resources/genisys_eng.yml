@@ -54,6 +54,8 @@ server:
  allow-anvilandenchanttable: false
  #Choose if disable server.log
  disable-log: false
+ #Choose if enable auto anti fly
+ anti-fly: true
 
 redstone:
  #Choose if redstone system is allowed
