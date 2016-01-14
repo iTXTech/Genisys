@@ -1039,11 +1039,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			return false;
 		}
 
-		if(!isset($this->batchedPackets[$packet->getChannel()])){
-			$this->batchedPackets[$packet->getChannel()] = [];
+		if(!isset($this->batchedPackets)){
+			$this->batchedPackets = [];
 		}
 
-		$this->batchedPackets[$packet->getChannel()][] = clone $packet;
+		$this->batchedPackets[] = clone $packet;
 		$timings->stopTiming();
 		return true;
 	}
@@ -2033,8 +2033,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		if(count($this->batchedPackets) > 0){
-			foreach($this->batchedPackets as $channel => $list){
-				$this->server->batchPackets([$this], $list, false, $channel);
+			foreach($this->batchedPackets as $list){
+				$this->server->batchPackets([$this], $list, false);
 			}
 			$this->batchedPackets = [];
 		}

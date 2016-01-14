@@ -21,7 +21,6 @@
 
 namespace pocketmine\scheduler;
 
-use pocketmine\Collectable;
 use pocketmine\Server;
 
 /**
@@ -50,7 +49,7 @@ abstract class AsyncTask extends \Threaded{
 				$this->onRun();
 			}catch(\Throwable $e){
 				$this->crashed = true;
-				//$this->worker->handleException($e);
+				$this->worker->handleException($e);
 			}
 		}
 

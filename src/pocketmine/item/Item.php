@@ -32,15 +32,11 @@ use pocketmine\nbt\NBT;
 use pocketmine\block\Fence;
 
 class Item {
-
+	/** @var NBT */
 	private static $cachedParser = null;
 
-	/**
-	 * @param $tag
-	 * @return Compound
-	 */
-	private static function parseCompoundTag($tag) {
-		if (self::$cachedParser === null) {
+	private static function parseCompoundTag(string $tag) : CompoundTag{
+		if(self::$cachedParser === null){
 			self::$cachedParser = new NBT(NBT::LITTLE_ENDIAN);
 		}
 
@@ -48,12 +44,8 @@ class Item {
 		return self::$cachedParser->getData();
 	}
 
-	/**
-	 * @param CompoundTag $tag
-	 * @return string
-	 */
-	private static function writeCompoundTag(CompoundTag $tag) {
-		if (self::$cachedParser === null) {
+	private static function writeCompoundTag(CompoundTag $tag) : string{
+		if(self::$cachedParser === null){
 			self::$cachedParser = new NBT(NBT::LITTLE_ENDIAN);
 		}
 
@@ -1212,24 +1204,24 @@ class Item {
 		Item::$creative = [];
 	}
 
-	public static function getCreativeItems() {
+	public static function getCreativeItems() : array{
 		return Item::$creative;
 	}
 
-	public static function addCreativeItem(Item $item) {
+	public static function addCreativeItem(Item $item){
 		Item::$creative[] = Item::get($item->getId(), $item->getDamage());
 	}
 
-	public static function removeCreativeItem(Item $item) {
+	public static function removeCreativeItem(Item $item){
 		$index = self::getCreativeItemIndex($item);
-		if ($index !== -1) {
+		if($index !== -1){
 			unset(Item::$creative[$index]);
 		}
 	}
 
-	public static function isCreativeItem(Item $item) {
-		foreach (Item::$creative as $i => $d) {
-			if ($item->equals($d, !$item->isTool())) {
+	public static function isCreativeItem(Item $item) : bool{
+		foreach(Item::$creative as $i => $d){
+			if($item->equals($d, !$item->isTool())){
 				return true;
 			}
 		}
@@ -1241,17 +1233,13 @@ class Item {
 	 * @param $index
 	 * @return Item
 	 */
-	public static function getCreativeItem($index) {
+	public static function getCreativeItem(int $index){
 		return isset(Item::$creative[$index]) ? Item::$creative[$index] : null;
 	}
 
-	/**
-	 * @param Item $item
-	 * @return int
-	 */
-	public static function getCreativeItemIndex(Item $item) {
-		foreach (Item::$creative as $i => $d) {
-			if ($item->equals($d, !$item->isTool())) {
+	public static function getCreativeItemIndex(Item $item) : int{
+		foreach(Item::$creative as $i => $d){
+			if($item->equals($d, !$item->isTool())){
 				return $i;
 			}
 		}
@@ -1259,43 +1247,48 @@ class Item {
 		return -1;
 	}
 
-	public static function get($id, $meta = 0, $count = 1, $tags = "") {
-		try {
+	public static function get(int $id, $meta = 0, int $count = 1, $tags = "") : Item{
+		try{
 			$class = self::$list[$id];
-			if ($class === null) {
+			if($class === null){
 				return (new Item($id, $meta, $count))->setCompoundTag($tags);
-			} elseif ($id < 256) {
+			}elseif($id < 256){
 				return (new ItemBlock(new $class($meta), $meta, $count))->setCompoundTag($tags);
-			} else {
+			}else{
 				return (new $class($meta, $count))->setCompoundTag($tags);
 			}
-		} catch (\RuntimeException $e) {
+		}catch(\RuntimeException $e){
 			return (new Item($id, $meta, $count))->setCompoundTag($tags);
 		}
 	}
 
-	public static function fromString($str, $multiple = false) {
-		if ($multiple === true) {
+	/**
+	 * @param string $str
+	 * @param bool $multiple
+	 * @return Item[]|Item
+	 */
+	public static function fromString(string $str, bool $multiple = false){
+		if($multiple === true){
 			$blocks = [];
-			foreach (explode(",", $str) as $b) {
+			foreach(explode(",", $str) as $b){
 				$blocks[] = self::fromString($b, false);
 			}
 
 			return $blocks;
-		} else {
+		}else{
 			$b = explode(":", str_replace([" ", "minecraft:"], ["_", ""], trim($str)));
-			if (!isset($b[1])) {
+			if(!isset($b[1])){
 				$meta = 0;
-			} else {
+			}else{
 				$meta = $b[1] & 0xFFFF;
 			}
 
-			if (defined(Item::class . "::" . strtoupper($b[0]))) {
+			if(defined(Item::class . "::" . strtoupper($b[0]))){
 				$item = self::get(constant(Item::class . "::" . strtoupper($b[0])), $meta);
-				if ($item->getId() === self::AIR and strtoupper($b[0]) !== "AIR") {
+				if($item->getId() === self::AIR and strtoupper($b[0]) !== "AIR"){
 					$item = self::get($b[0] & 0xFFFF, $meta);
 				}
-			} else {
+			}else{
 				$item = self::get($b[0] & 0xFFFF, $meta);
 			}
 
@@ -1303,21 +1296,21 @@ class Item {
 		}
 	}
 
-	public function __construct($id, $meta = 0, $count = 1, $name = "Unknown") {
+	public function __construct(int $id, $meta = 0, int $count = 1, string $name = "Unknown"){
 		$this->id = $id & 0xffff;
 		$this->meta = $meta !== null ? $meta & 0xffff : null;
-		$this->count = (int)$count;
+		$this->count = $count;
 		$this->name = $name;
-		if (!isset($this->block) and $this->id <= 0xff and isset(Block::$list[$this->id])) {
+		if(!isset($this->block) and $this->id <= 0xff and isset(Block::$list[$this->id])){
 			$this->block = Block::get($this->id, $this->meta);
 			$this->name = $this->block->getName();
 		}
 	}
 
-	public function setCompoundTag($tags) {
-		if ($tags instanceof CompoundTag) {
+	public function setCompoundTag($tags){
+		if($tags instanceof CompoundTag){
 			$this->setNamedTag($tags);
-		} else {
+		}else{
 			$this->tags = $tags;
 			$this->cachedNBT = null;
 		}
@@ -1328,34 +1321,34 @@ class Item {
 	/**
 	 * @return string
 	 */
-	public function getCompoundTag() {
+	public function getCompoundTag(){
 		return $this->tags;
 	}
 
-	public function hasCompoundTag() {
+	public function hasCompoundTag() : bool{
 		return $this->tags !== "" and $this->tags !== null;
 	}
 
-	public function hasCustomBlockData() {
-		if (!$this->hasCompoundTag()) {
+	public function hasCustomBlockData() : bool{
+		if(!$this->hasCompoundTag()){
 			return false;
 		}
 
 		$tag = $this->getNamedTag();
-		if (isset($tag->BlockEntityTag) and $tag->BlockEntityTag instanceof CompoundTag) {
+		if(isset($tag->BlockEntityTag) and $tag->BlockEntityTag instanceof CompoundTag){
 			return true;
 		}
 
 		return false;
 	}
 
-	public function clearCustomBlockData() {
-		if (!$this->hasCompoundTag()) {
+	public function clearCustomBlockData(){
+		if(!$this->hasCompoundTag()){
 			return $this;
 		}
 		$tag = $this->getNamedTag();
 
-		if (isset($tag->BlockEntityTag) and $tag->BlockEntityTag instanceof CompoundTag) {
+		if(isset($tag->BlockEntityTag) and $tag->BlockEntityTag instanceof CompoundTag){
 			unset($tag->display->BlockEntityTag);
 			$this->setNamedTag($tag);
 		}
@@ -1363,13 +1356,13 @@ class Item {
 		return $this;
 	}
 
-	public function setCustomBlockData(CompoundTag $compound) {
+	public function setCustomBlockData(CompoundTag $compound){
 		$tags = clone $compound;
 		$tags->setName("BlockEntityTag");
 
-		if (!$this->hasCompoundTag()) {
+		if(!$this->hasCompoundTag()){
 			$tag = new CompoundTag("", []);
-		} else {
+		}else{
 			$tag = $this->getNamedTag();
 		}
 
@@ -1379,28 +1372,28 @@ class Item {
 		return $this;
 	}
 
-	public function getCustomBlockData() {
-		if (!$this->hasCompoundTag()) {
+	public function getCustomBlockData(){
+		if(!$this->hasCompoundTag()){
 			return null;
 		}
 
 		$tag = $this->getNamedTag();
-		if (isset($tag->BlockEntityTag) and $tag->BlockEntityTag instanceof CompoundTag) {
+		if(isset($tag->BlockEntityTag) and $tag->BlockEntityTag instanceof CompoundTag){
 			return $tag->BlockEntityTag;
 		}
 
 		return null;
 	}
 
-	public function hasEnchantments() {
-		if (!$this->hasCompoundTag()) {
+	public function hasEnchantments() : bool{
+		if(!$this->hasCompoundTag()){
 			return false;
 		}
 
 		$tag = $this->getNamedTag();
-		if (isset($tag->ench)) {
+		if(isset($tag->ench)){
 			$tag = $tag->ench;
-			if ($tag instanceof EnumTag) {
+			if($tag instanceof ListTag){
 				return true;
 			}
 		}
@@ -1412,13 +1405,13 @@ class Item {
 	 * @param $id
 	 * @return Enchantment|null
 	 */
-	public function getEnchantment($id) {
-		if (!$this->hasEnchantments()) {
+	public function getEnchantment(int $id){
+		if(!$this->hasEnchantments()){
 			return null;
 		}
 
-		foreach ($this->getNamedTag()->ench as $entry) {
-			if ($entry["id"] === $id) {
+		foreach($this->getNamedTag()->ench as $entry){
+			if($entry["id"] === $id){
 				$e = Enchantment::getEnchantment($entry["id"]);
 				$e->setLevel($entry["lvl"]);
 				return $e;
@@ -1431,22 +1424,22 @@ class Item {
 	/**
 	 * @param Enchantment $ench
 	 */
-	public function addEnchantment(Enchantment $ench) {
-		if (!$this->hasCompoundTag()) {
+	public function addEnchantment(Enchantment $ench){
+		if(!$this->hasCompoundTag()){
 			$tag = new CompoundTag("", []);
-		} else {
+		}else{
 			$tag = $this->getNamedTag();
 		}
 
-		if (!isset($tag->ench)) {
-			$tag->ench = new EnumTag("ench", []);
+		if(!isset($tag->ench)){
+			$tag->ench = new ListTag("ench", []);
 			$tag->ench->setTagType(NBT::TAG_Compound);
 		}
 
 		$found = false;
 
-		foreach ($tag->ench as $k => $entry) {
-			if ($entry["id"] === $ench->getId()) {
+		foreach($tag->ench as $k => $entry){
+			if($entry["id"] === $ench->getId()){
 				$tag->ench->{$k} = new CompoundTag("", [
 					"id" => new ShortTag("id", $ench->getId()),
 					"lvl" => new ShortTag("lvl", $ench->getLevel())
@@ -1456,7 +1449,7 @@ class Item {
 			}
 		}
 
-		if (!$found) {
+		if(!$found){
 			$tag->ench->{count($tag->ench) + 1} = new CompoundTag("", [
 				"id" => new ShortTag("id", $ench->getId()),
 				"lvl" => new ShortTag("lvl", $ench->getLevel())
@@ -1469,14 +1462,14 @@ class Item {
 	/**
 	 * @return Enchantment[]
 	 */
-	public function getEnchantments() {
-		if (!$this->hasEnchantments()) {
+	public function getEnchantments() : array{
+		if(!$this->hasEnchantments()){
 			return [];
 		}
 
 		$enchantments = [];
 
-		foreach ($this->getNamedTag()->ench as $entry) {
+		foreach($this->getNamedTag()->ench as $entry){
 			$e = Enchantment::getEnchantment($entry["id"]);
 			$e->setLevel($entry["lvl"]);
 			$enchantments[] = $e;
@@ -1485,15 +1478,15 @@ class Item {
 		return $enchantments;
 	}
 
-	public function hasCustomName() {
-		if (!$this->hasCompoundTag()) {
+	public function hasCustomName() : bool{
+		if(!$this->hasCompoundTag()){
 			return false;
 		}
 
 		$tag = $this->getNamedTag();
-		if (isset($tag->display)) {
+		if(isset($tag->display)){
 			$tag = $tag->display;
-			if ($tag instanceof CompoundTag and isset($tag->Name) and $tag->Name instanceof StringTag) {
+			if($tag instanceof CompoundTag and isset($tag->Name) and $tag->Name instanceof StringTag){
 				return true;
 			}
 		}
@@ -1501,31 +1494,15 @@ class Item {
 		return false;
 	}
 
-	public function getRepairCost() {
-		if (!$this->hasCompoundTag()) {
+	public function getCustomName() : string{
+		if(!$this->hasCompoundTag()){
 			return "";
 		}
 
 		$tag = $this->getNamedTag();
-		if (isset($tag->RepairCost)) {
-			$tag = $tag->RepairCost;
-			if ($tag instanceof CompoundTag and isset($tag->Name) and $tag->Name instanceof StringTag) {
-				return 1;
-			}
-		}
-
-		return "";
-	}
-
-	public function getCustomName() {
-		if (!$this->hasCompoundTag()) {
-			return "";
-		}
-
-		$tag = $this->getNamedTag();
-		if (isset($tag->display)) {
+		if(isset($tag->display)){
 			$tag = $tag->display;
-			if ($tag instanceof CompoundTag and isset($tag->Name) and $tag->Name instanceof StringTag) {
+			if($tag instanceof CompoundTag and isset($tag->Name) and $tag->Name instanceof StringTag){
 				return $tag->Name->getValue();
 			}
 		}
@@ -1533,38 +1510,37 @@ class Item {
 		return "";
 	}
 
-	public function setCustomName($name) {
-		if ((string)$name === "") {
+	public function setCustomName(string $name){
+		if($name === ""){
 			$this->clearCustomName();
 		}
 
-		if (!$this->hasCompoundTag()) {
+		if(!$this->hasCompoundTag()){
 			$tag = new CompoundTag("", []);
-		} else {
+		}else{
 			$tag = $this->getNamedTag();
 		}
 
-		if (isset($tag->display) and $tag->display instanceof CompoundTag) {
+		if(isset($tag->display) and $tag->display instanceof CompoundTag){
 			$tag->display->Name = new StringTag("Name", $name);
-		} else {
+		}else{
 			$tag->display = new CompoundTag("display", [
 				"Name" => new StringTag("Name", $name)
 			]);
 		}
 
-		$this->setNamedTag($tag);
 		return $this;
 	}
 
-	public function clearCustomName() {
-		if (!$this->hasCompoundTag()) {
+	public function clearCustomName(){
+		if(!$this->hasCompoundTag()){
 			return $this;
 		}
 		$tag = $this->getNamedTag();
 
-		if (isset($tag->display) and $tag->display instanceof CompoundTag) {
+		if(isset($tag->display) and $tag->display instanceof CompoundTag){
 			unset($tag->display->Name);
-			if ($tag->display->getCount() === 0) {
+			if($tag->display->getCount() === 0){
 				unset($tag->display);
 			}
 
@@ -1574,26 +1550,26 @@ class Item {
 		return $this;
 	}
 
-	public function getNamedTagEntry($name) {
+	public function getNamedTagEntry($name){
 		$tag = $this->getNamedTag();
-		if ($tag !== null) {
+		if($tag !== null){
 			return isset($tag->{$name}) ? $tag->{$name} : null;
 		}
 
 		return null;
 	}
 
-	public function getNamedTag() {
-		if (!$this->hasCompoundTag()) {
+	public function getNamedTag(){
+		if(!$this->hasCompoundTag()){
 			return null;
-		} elseif ($this->cachedNBT !== null) {
+		}elseif($this->cachedNBT !== null){
 			return $this->cachedNBT;
 		}
 		return $this->cachedNBT = self::parseCompoundTag($this->tags);
 	}
 
-	public function setNamedTag(CompoundTag $tag) {
-		if ($tag->getCount() === 0) {
+	public function setNamedTag(CompoundTag $tag){
+		if($tag->getCount() === 0){
 			return $this->clearNamedTag();
 		}
 
@@ -1603,59 +1579,55 @@ class Item {
 		return $this;
 	}
 
-	public function clearNamedTag() {
+	public function clearNamedTag(){
 		return $this->setCompoundTag("");
 	}
 
-	public function getCount() {
+	public function getCount() : int{
 		return $this->count;
 	}
 
-	public function setCount($count) {
-		$this->count = (int)$count;
+	public function setCount(int $count){
+		$this->count = $count;
 	}
 
-	final public function getName() {
+	final public function getName() : string{
 		return $this->hasCustomName() ? $this->getCustomName() : $this->name;
 	}
 
-	final public function canBePlaced() {
+	final public function canBePlaced() : bool{
 		return $this->block !== null and $this->block->canBePlaced();
 	}
 
-	final public function isPlaceable() {
-		$this->canBePlaced();
-	}
-
-	public function getBlock() {
-		if ($this->block instanceof Block) {
+	public function getBlock() : Block{
+		if($this->block instanceof Block){
 			return clone $this->block;
-		} else {
+		}else{
 			return Block::get(self::AIR);
 		}
 	}
 
-	final public function getId() {
+	final public function getId() : int{
 		return $this->id;
 	}
 
-	final public function getDamage() {
+	final public function getDamage(){
 		return $this->meta;
 	}
 
-	public function setDamage($meta) {
+	public function setDamage($meta){
 		$this->meta = $meta !== null ? $meta & 0xFFFF : null;
 	}
 
-	public function getMaxStackSize() {
+	public function getMaxStackSize(){
 		return 64;
 	}
 
-	final public function getFuelTime() {
-		if (!isset(Fuel::$duration[$this->id])) {
+	final public function getFuelTime(){
+		if(!isset(Fuel::$duration[$this->id])){
 			return null;
 		}
-		if ($this->id !== self::BUCKET or $this->meta === 10) {
+		if($this->id !== self::BUCKET or $this->meta === 10){
 			return Fuel::$duration[$this->id];
 		}
 
@@ -1667,61 +1639,61 @@ class Item {
 	 *
 	 * @return bool
 	 */
-	public function useOn($object) {
+	public function useOn($object){
 		return false;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function isTool() {
+	public function isTool(){
 		return false;
 	}
 
 	/**
 	 * @return int|bool
 	 */
-	public function getMaxDurability() {
+	public function getMaxDurability(){
 		return false;
 	}
 
-	public function isPickaxe() {
+	public function isPickaxe(){
 		return false;
 	}
 
-	public function isAxe() {
+	public function isAxe(){
 		return false;
 	}
 
-	public function isSword() {
+	public function isSword(){
 		return false;
 	}
 
-	public function isShovel() {
+	public function isShovel(){
 		return false;
 	}
 
-	public function isHoe() {
+	public function isHoe(){
 		return false;
 	}
 
-	public function isShears() {
+	public function isShears(){
 		return false;
 	}
 
-	final public function __toString() {
-		return "Item " . $this->name . " (" . $this->id . ":" . ($this->meta === null ? "?" : $this->meta) . ")x" . $this->count . ($this->hasCompoundTag() ? " tags:0x" . bin2hex($this->getCompoundTag()) : "");
+	final public function __toString() : string{
+		return "Item " . $this->name . " (" . $this->id . ":" . ($this->meta === null ? "?" : $this->meta) . ")x" . $this->count . ($this->hasCompoundTag() ? " tags:0x".bin2hex($this->getCompoundTag()) : "");
 	}
 
-	public function getDestroySpeed(Block $block, Player $player) {
+	public function getDestroySpeed(Block $block, Player $player){
 		return 1;
 	}
 
-	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz) {
+	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
 		return false;
 	}
 
-	public final function equals(Item $item, $checkDamage = true, $checkCompound = true) {
+	public final function equals(Item $item, bool $checkDamage = true, bool $checkCompound = true) : bool{
 		return $this->id === $item->getId() and ($checkDamage === false or $this->getDamage() === $item->getDamage()) and ($checkCompound === false or $this->getCompoundTag() === $item->getCompoundTag());
 	}
 

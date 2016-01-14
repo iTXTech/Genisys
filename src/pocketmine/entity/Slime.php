@@ -4,7 +4,7 @@ namespace pocketmine\entity;
 use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
-use pocketmine\entity\Living;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\item\Item as ItemItem;
 
 class Slime extends Living{
@@ -35,7 +35,7 @@ class Slime extends Living{
 		$pk->yaw = $this->yaw;
 		$pk->pitch = $this->pitch;
 		$pk->metadata = $this->dataProperties;
-		$player->dataPacket($pk->setChannel(Network::CHANNEL_ENTITY_SPAWNING));
+		$player->dataPacket($pk);
 		parent::spawnTo($player);
 	}
 	
