@@ -27,7 +27,6 @@ use pocketmine\Server;
 class PluginLogger implements \AttachableLogger{
 
 	private $pluginName;
-	private $name;
 
 	/** @var \LoggerAttachment[] */
 	private $attachments = [];
@@ -54,7 +53,6 @@ class PluginLogger implements \AttachableLogger{
 	public function __construct(Plugin $context){
 		$prefix = $context->getDescription()->getPrefix();
 		$this->pluginName = $prefix != null ? "[$prefix] " : "[" . $context->getDescription()->getName() . "] ";
-		$this->name = $context->getDescription()->getName();
 	}
 
 	public function emergency($message){
@@ -87,6 +85,10 @@ class PluginLogger implements \AttachableLogger{
 
 	public function debug($message){
 		$this->log(LogLevel::DEBUG, $message);
+	}
+
+	public function logException(\Throwable $e, $trace = null){
+		Server::getInstance()->getLogger()->logException($e, $trace);
 	}
 
 	public function log($level, $message){

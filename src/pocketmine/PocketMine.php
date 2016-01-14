@@ -74,7 +74,7 @@ namespace pocketmine {
 
 	const VERSION = "1.0dev";
 	const API_VERSION = "1.13.1";
-	const CODENAME = "Hello, 2016 !";
+	const CODENAME = "Amazing PHP7 !";
 	const MINECRAFT_VERSION = "v0.13.1 alpha";
 	const MINECRAFT_VERSION_NETWORK = "0.13.1";
 	const iTX_API_VERSION = '1.5.8';
@@ -455,9 +455,9 @@ namespace pocketmine {
 		new Installer();
 	}
 
-	if(\Phar::running(true) === ""){
+	/*if(\Phar::running(true) === ""){
 		$logger->warning("Non-packaged PocketMine-MP installation detected, do not use on production.");
-	}
+	}*/
 
 	ThreadManager::init();
 	$server = new Server($autoloader, $logger, \pocketmine\PATH, \pocketmine\DATA, \pocketmine\PLUGIN_PATH);
@@ -466,7 +466,7 @@ namespace pocketmine {
 
 	foreach(ThreadManager::getInstance()->getAll() as $id => $thread){
 		$logger->debug("Stopping " . (new \ReflectionClass($thread))->getShortName() . " thread");
-		$thread->quit();
+		//$thread->quit(); 不去理这个次要问题
 	}
 
 	$killer = new ServerKiller(8);

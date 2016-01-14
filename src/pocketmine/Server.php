@@ -1980,7 +1980,7 @@ class Server{
 
 			$this->start();
 		}catch(\Throwable $e){
-			$this->logger->logException($e);
+			$this->exceptionHandler($e);
 		}
 	}
 
@@ -2175,7 +2175,8 @@ private function lookupAddress($address) {
 		$targets = [];
 		foreach($players as $p){
 			if($p->isConnected()){
-				$targets[] = $this->identifiers[spl_object_hash($p)];
+				//$targets[] = $this->identifiers[spl_object_hash($p)];
+				$targets[] = $p->getName();
 			}
 		}
 
@@ -2215,7 +2216,7 @@ private function lookupAddress($address) {
 
 		if($type === PluginLoadOrder::POSTWORLD){
 			$this->commandMap->registerServerAliases();
-			//DefaultPermissions::registerCorePermissions();
+			DefaultPermissions::registerCorePermissions();
 		}
 	}
 
@@ -2390,7 +2391,7 @@ private function lookupAddress($address) {
 				$this->network->unregisterInterface($interface);
 			}
 
-			$this->memoryManager->doObjectCleanup();
+			//$this->memoryManager->doObjectCleanup();
 
 			gc_collect_cycles();
 		}catch(\Throwable $e){

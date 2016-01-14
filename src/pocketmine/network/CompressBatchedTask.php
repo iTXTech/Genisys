@@ -21,6 +21,7 @@
 
 namespace pocketmine\network;
 
+use pocketmine\Player;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
 
@@ -29,7 +30,6 @@ class CompressBatchedTask extends AsyncTask{
 	public $level = 7;
 	public $data;
 	public $final;
-	public $channel = 0;
 	public $targets = [];
 
 	public function __construct($data, array $targets, $level = 7){
@@ -48,6 +48,11 @@ class CompressBatchedTask extends AsyncTask{
 	}
 
 	public function onCompletion(Server $server){
-		$server->broadcastPacketsCallback($this->final, $this->targets);
+		$targets = [];
+		foreach($this->targets as $target){
+			$p = $server->getPlayer($target);
+			if($p instanceof Player) $targets[] = $p;
+		}
+		$server->broadcastPacketsCallback($this->final, $targets);
 	}
 }

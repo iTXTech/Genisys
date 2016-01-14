@@ -29,7 +29,7 @@ use pocketmine\utils\PluginException;
 
 abstract class MetadataStore{
 	/** @var \WeakMap[] */
-	private $metadataMap = [];
+	private $metadataMap;
 
 	/**
 	 * Adds a metadata value to an object.
@@ -38,7 +38,7 @@ abstract class MetadataStore{
 	 * @param string        $metadataKey
 	 * @param MetadataValue $newMetadataValue
 	 *
-	 * @throws \Throwable
+	 * @throws \Exception
 	 */
 	public function setMetadata($subject, $metadataKey, MetadataValue $newMetadataValue){
 		$owningPlugin = $newMetadataValue->getOwningPlugin();
@@ -48,8 +48,8 @@ abstract class MetadataStore{
 
 		$key = $this->disambiguate($subject, $metadataKey);
 		if(!isset($this->metadataMap[$key])){
-			$entry = new \WeakMap();
-			$this->metadataMap[$key] = $entry;
+			//$entry = new \WeakMap();
+			$this->metadataMap[$key] = new \SplObjectStorage();//$entry;
 		}else{
 			$entry = $this->metadataMap[$key];
 		}
@@ -65,7 +65,7 @@ abstract class MetadataStore{
 	 *
 	 * @return MetadataValue[]
 	 *
-	 * @throws \Throwable
+	 * @throws \Exception
 	 */
 	public function getMetadata($subject, $metadataKey){
 		$key = $this->disambiguate($subject, $metadataKey);
@@ -84,7 +84,7 @@ abstract class MetadataStore{
 	 *
 	 * @return bool
 	 *
-	 * @throws \Throwable
+	 * @throws \Exception
 	 */
 	public function hasMetadata($subject, $metadataKey){
 		return isset($this->metadataMap[$this->disambiguate($subject, $metadataKey)]);
@@ -97,7 +97,7 @@ abstract class MetadataStore{
 	 * @param string $metadataKey
 	 * @param Plugin $owningPlugin
 	 *
-	 * @throws \Throwable
+	 * @throws \Exception
 	 */
 	public function removeMetadata($subject, $metadataKey, Plugin $owningPlugin){
 		$key = $this->disambiguate($subject, $metadataKey);
