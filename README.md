@@ -98,27 +98,27 @@ Port: **888**
 ##创世纪
 
 [![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-* 管理员完全管理权。
-* 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX 科技有限责任公司 联合优化。
-* 创世纪 仅为 PocketMine-MP 项目的分支，且 PocketMine-MP 所有原代码均由 PocketMine 小组编写。
+* 一个核心统治一切。
+* 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
+* 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原代码均由 PocketMine 小组编写。
 
 ##鸣谢
 * 头颅、花盆的相关代码由 **@ImagicalCorp** ImagicalMine 编写；
-* 生物 AI 的相关代码基于 **@Zzm317** 的 amazing MyOwnWorld 编写；
+* 生物 AI 的相关代码基于 **@Zzm317**  令人惊奇的 MyOwnWorld 编写；
 * 画、酿造台的相关代码从 **Nukkit** 项目重写；
 * 熔炉的相关代码及其 Bug 由 **@MagicDroidX** 编写与修复；
 * 铁轨、充能铁轨的相关代码由 **@happy163** 编写；
 * 地狱门的相关代码由 **JJLeo** 编写；
 * 饥饿系统的相关代码基于 **Katana** 的代码编写；
 * 基本天气系统的相关代码由 **@Zzm317** 编写，由 **@PeratX** 重写；
-* **@FENGberd** 的支持与鼓励；
+* 感谢 **@FENGberd** 的支持与鼓励；
 * 我们的项目负责人为 **@ishitatsuyuki** 及 **@jasonczc**。
 
 ##声明
 * 我们没有从PxxxxxMxxxPxxxPxxx抄袭任何代码，并且此前也不曾听闻该项目
 
-##自动构建的服务器内核 .phar
-<a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">**点击这里进入自动构建页**</a>
+##自动构建的.phar内核
+<a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">**点击这里进入下载**</a>
 
 ##特性
 * 性能提升（允许 100+ 的玩家加入服务器）
@@ -145,11 +145,11 @@ Port: **888**
 * 文件夹插件加载器
 
 ##计划表
-* 提升 船 与 矿车
-* 提升 下界地图生成器
-* 提升 药水
-* 提升 红石系统
-* 提升 铁毡
+* 完善 船 与 矿车
+* 完善 下界地图生成器
+* 完善 药水
+* 完善 红石系统
+* 完善 铁毡
 * 加入 钓鱼
 * 加入 附魔
 * 用于所有生物的新 AI
@@ -157,7 +157,7 @@ Port: **888**
 * php7 的支持
 
 ##服务器
-（事实上，有超过 80 个中国的 Minecraft PE 服务器在使用我们的服务器内核且大部分的服务器都比我们架设的好。这些是我们架设的服务器）
+（事实上，有超过 80 个中国的 Minecraft PE 服务器在使用我们的服务器内核，且大部分的服务器都比我们架设的好。这些是我们架设的服务器）
 
 **Young Dream**<br>
 地址: **mcper.cn**<br>
