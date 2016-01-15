@@ -5,14 +5,12 @@ namespace pocketmine\entity;
 
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\particle\SpellParticle;
+use pocketmine\level\particle\ItemBreakParticle;
+use pocketmine\item\Item as ItemItem;
 use pocketmine\nbt\tag\Compound;
-use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 use pocketmine\item\Potion;
-use pocketmine\entity\Effect;
-use pocketmine\level\particle\Particle;
-use pocketmine\level\particle\GenericParticle;
 
 class ThrownPotion extends Projectile{
 	const NETWORK_ID = 86;
@@ -52,6 +50,7 @@ class ThrownPotion extends Projectile{
 	public function kill(){
 		$color = Potion::getColor($this->getData());
 		$this->getLevel()->addParticle(new SpellParticle($this, $color[0], $color[1], $color[2]));
+		$this->getLevel()->addParticle(new ItemBreakParticle($this, ItemItem::get(ItemItem::GLASS_BOTTLE)));
 		$players = $this->getViewers();
 		foreach($players as $p) {
 			if($p->distance($this) <= 6){
