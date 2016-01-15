@@ -51,7 +51,7 @@ class AnvilInventory extends ContainerInventory{
 	}*/
 
 	public function onClose(Player $who){
-		$who->calcExpLevel();
+		$who->updateExperience();
 		parent::onClose($who);
 		
 		$this->getHolder()->getLevel()->dropItem($this->getHolder()->add(0.5, 0.5, 0.5), $this->getItem(1));
