@@ -19,6 +19,7 @@ use pocketmine\command\SimpleCommandMap;
 use pocketmine\entity\Arrow;
 use pocketmine\entity\Attribute;
 use pocketmine\entity\Effect;
+use pocketmine\entity\Egg;
 use pocketmine\entity\Entity;
 use pocketmine\entity\FallingSand;
 use pocketmine\entity\FishingHook;
@@ -29,6 +30,7 @@ use pocketmine\entity\Snowball;
 use pocketmine\entity\Squid;
 use pocketmine\entity\Villager;
 use pocketmine\entity\Zombie;
+use pocketmine\entity\ZombieVillager;
 use pocketmine\event\HandlerList;
 use pocketmine\event\level\LevelInitEvent;
 use pocketmine\event\level\LevelLoadEvent;
@@ -2988,6 +2990,8 @@ private function lookupAddress($address) {
 		Entity::registerEntity(ThrownPotion::class);
 		Entity::registerEntity(Painting::class);
 		Entity::registerEntity(FishingHook::class);
+		Entity::registerEntity(Egg::class);
+		Entity::registerEntity(ZombieVillager::class);
 
 		Entity::registerEntity(Human::class, true);
 	}
