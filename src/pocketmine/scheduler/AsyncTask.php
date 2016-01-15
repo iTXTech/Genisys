@@ -41,6 +41,16 @@ abstract class AsyncTask extends \Threaded implements \Collectable{
 
 	private $crashed = false;
 
+	private $isGarbage = false;
+
+	public function isGarbage() : bool{
+		return $this->isGarbage;
+	}
+
+	public function setGarbage(){
+		$this->isGarbage = true;
+	}
+
 	public function run(){
 		$this->result = null;
 
