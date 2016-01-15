@@ -28,7 +28,7 @@ use pocketmine\Server;
  *
  * WARNING: Do not call PocketMine-MP API methods, or save objects from/on other Threads!!
  */
-abstract class AsyncTask extends \Threaded{
+abstract class AsyncTask extends \Threaded implements \Collectable{
 
 	/** @var AsyncWorker $worker */
 	public $worker = null;
