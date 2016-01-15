@@ -2177,17 +2177,19 @@ private function lookupAddress($address) {
 		$targets = [];
 		foreach($players as $p){
 			if($p->isConnected()){
-				//$targets[] = $this->identifiers[spl_object_hash($p)];
-				$targets[] = $p->getName();
+				$targets[] = $this->identifiers[spl_object_hash($p)];
+				//$targets[] = $p->getName();
 			}
 		}
 
-		if(!$forceSync and $this->networkCompressionAsync){
+		$this->broadcastPacketsCallback(zlib_encode($str, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel), $targets);//临时修复
+
+		/*if(!$forceSync and $this->networkCompressionAsync){
 			$task = new CompressBatchedTask($str, $targets, $this->networkCompressionLevel);
 			$this->getScheduler()->scheduleAsyncTask($task);
 		}else{
 			$this->broadcastPacketsCallback(zlib_encode($str, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel), $targets);
-		}
+		}*/
 
 		Timings::$playerNetworkTimer->stopTiming();
 	}
