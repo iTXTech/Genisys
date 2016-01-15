@@ -19,6 +19,7 @@ use pocketmine\command\SimpleCommandMap;
 use pocketmine\entity\Arrow;
 use pocketmine\entity\Attribute;
 use pocketmine\entity\Effect;
+use pocketmine\entity\Egg;
 use pocketmine\entity\Entity;
 use pocketmine\entity\FallingSand;
 use pocketmine\entity\FishingHook;
@@ -2973,6 +2974,7 @@ private function lookupAddress($address) {
 		Entity::registerEntity(ThrownPotion::class);
 		Entity::registerEntity(Painting::class);
 		Entity::registerEntity(FishingHook::class);
+		Entity::registerEntity(Egg::class);
 
 		Entity::registerEntity(Human::class, true);
 	}
