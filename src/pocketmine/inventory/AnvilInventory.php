@@ -23,7 +23,6 @@ namespace pocketmine\inventory;
 
 use pocketmine\level\Position;
 use pocketmine\Player;
-use pocketmine\item\Item;
 
 class AnvilInventory extends ContainerInventory{
 	public function __construct(Position $pos){
