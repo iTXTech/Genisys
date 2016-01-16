@@ -48,11 +48,6 @@ class CompressBatchedTask extends AsyncTask{
 	}
 
 	public function onCompletion(Server $server){
-		$targets = [];
-		foreach($this->targets as $target){
-			$p = $server->getPlayer($target);
-			if($p instanceof Player) $targets[] = $p;
-		}
-		$server->broadcastPacketsCallback($this->final, $targets);
+		$server->broadcastPacketsCallback($this->final, $this->targets);
 	}
 }
