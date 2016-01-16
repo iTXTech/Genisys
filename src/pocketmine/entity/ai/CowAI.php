@@ -2,6 +2,8 @@
 
 namespace pocketmine\entity\ai;
 
+use pocketmine\entity\Pig;
+use pocketmine\entity\Sheep;
 use pocketmine\math\Vector3;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Cow;
@@ -42,7 +44,7 @@ class CowAI{
 		//$this->getLogger()->info("牛数量：".count($this->plugin->Cow));
 		foreach($this->plugin->getServer()->getLevels() as $level){
 			foreach($level->getEntities() as $zo){
-				if(($zo::NETWORK_ID == Cow::NETWORK_ID) or ($zo::NETWORK_ID == Mooshroom::NETWORK_ID)){
+				if(($zo::NETWORK_ID == Cow::NETWORK_ID) or ($zo::NETWORK_ID == Mooshroom::NETWORK_ID) or ($zo::NETWORK_ID == Pig::NETWORK_ID) or ($zo::NETWORK_ID == Sheep::NETWORK_ID)){
 					if($this->plugin->willMove($zo)){
 						if(!isset($this->plugin->Cow[$zo->getId()])){
 							$this->plugin->Cow[$zo->getId()] = array(
@@ -169,7 +171,7 @@ class CowAI{
 	public function CowRandomWalk(){
 		foreach($this->plugin->getServer()->getLevels() as $level){
 			foreach($level->getEntities() as $zo){
-				if(($zo::NETWORK_ID == Cow::NETWORK_ID) or ($zo::NETWORK_ID == Mooshroom::NETWORK_ID)){
+				if(($zo::NETWORK_ID == Cow::NETWORK_ID) or ($zo::NETWORK_ID == Mooshroom::NETWORK_ID) or ($zo::NETWORK_ID == Pig::NETWORK_ID) or ($zo::NETWORK_ID == Sheep::NETWORK_ID)){
 					if(isset($this->plugin->Cow[$zo->getId()])){
 						$zom = &$this->plugin->Cow[$zo->getId()];
 						if($zom['canAttack'] != 0){

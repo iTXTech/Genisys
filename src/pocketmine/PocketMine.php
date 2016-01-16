@@ -466,7 +466,7 @@ namespace pocketmine {
 
 	foreach(ThreadManager::getInstance()->getAll() as $id => $thread){
 		$logger->debug("Stopping " . (new \ReflectionClass($thread))->getShortName() . " thread");
-		//$thread->quit(); 不去理这个次要问题
+		$thread->quit();
 	}
 
 	$killer = new ServerKiller(8);

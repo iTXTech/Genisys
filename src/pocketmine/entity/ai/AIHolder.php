@@ -85,8 +85,8 @@ class AIHolder{
 
 		$this->ZombieAI = new ZombieAI($this);
 		$this->CowAI = new CowAI($this);
-		$this->PigAI = new PigAI($this);
-		$this->SheepAI = new SheepAI($this);
+		//$this->PigAI = new PigAI($this);
+		//$this->SheepAI = new SheepAI($this);
 		//TODO: improve AIs below
 		$this->ChickenAI = new ChickenAI($this);
 		$this->CreeperAI = new CreeperAI($this);
@@ -417,10 +417,10 @@ class AIHolder{
 	}
 
 	/**
-	 * @return Compound
+	 * @return CompoundTag
 	 * 返回一个空的实体通用NBT
 	 */
-	public function getNBT(){
+	public function getNBT() : CompoundTag{
 		$nbt = new CompoundTag("", [
 			"Pos" => new EnumTag("Pos", [
 				new DoubleTag("", 0),
