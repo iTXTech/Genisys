@@ -2050,7 +2050,7 @@ class Level implements ChunkManager, Metadatable{
 	 *
 	 * @return int 0-255
 	 */
-	public function getBlockIdAt($x, $y, $z){
+	public function getBlockIdAt(int $x, int $y, int $z) :int {
 		return $this->getChunk($x >> 4, $z >> 4, true)->getBlockId($x & 0x0f, $y & 0x7f, $z & 0x0f);
 	}
 
@@ -2062,7 +2062,7 @@ class Level implements ChunkManager, Metadatable{
 	 * @param int $z
 	 * @param int $id 0-255
 	 */
-	public function setBlockIdAt($x, $y, $z, $id){
+	public function setBlockIdAt(int $x, int $y, int $z, int $id){
 		unset($this->blockCache[Level::blockHash($x, $y, $z)]);
 		$this->getChunk($x >> 4, $z >> 4, true)->setBlockId($x & 0x0f, $y & 0x7f, $z & 0x0f, $id & 0xff);
 
@@ -2112,7 +2112,7 @@ class Level implements ChunkManager, Metadatable{
 	 *
 	 * @return int 0-15
 	 */
-	public function getBlockDataAt($x, $y, $z){
+	public function getBlockDataAt(int $x, int $y, int $z) : int{
 		return $this->getChunk($x >> 4, $z >> 4, true)->getBlockData($x & 0x0f, $y & 0x7f, $z & 0x0f);
 	}
 
@@ -2124,7 +2124,7 @@ class Level implements ChunkManager, Metadatable{
 	 * @param int $z
 	 * @param int $data 0-15
 	 */
-	public function setBlockDataAt($x, $y, $z, $data){
+	public function setBlockDataAt(int $x, int $y, int $z, int $data){
 		unset($this->blockCache[Level::blockHash($x, $y, $z)]);
 		$this->getChunk($x >> 4, $z >> 4, true)->setBlockData($x & 0x0f, $y & 0x7f, $z & 0x0f, $data & 0x0f);
 
@@ -2262,7 +2262,7 @@ class Level implements ChunkManager, Metadatable{
 	 *
 	 * @return FullChunk|Chunk
 	 */
-	public function getChunk($x, $z, $create = false){
+	public function getChunk(int $x, int $z, bool $create = false){
 		if(isset($this->chunks[$index = Level::chunkHash($x, $z)])){
 			return $this->chunks[$index];
 		}elseif($this->loadChunk($x, $z, $create)){
@@ -2323,7 +2323,7 @@ class Level implements ChunkManager, Metadatable{
 	 * @param FullChunk $chunk
 	 * @param bool      $unload
 	 */
-	public function setChunk($chunkX, $chunkZ, FullChunk $chunk = null, $unload = true){
+	public function setChunk(int $chunkX, int $chunkZ, FullChunk $chunk = null, bool $unload = true){
 		if($chunk === null){
 			return;
 		}
@@ -2936,7 +2936,7 @@ class Level implements ChunkManager, Metadatable{
 	 *
 	 * @return int
 	 */
-	public function getSeed(){
+	public function getSeed() : int{
 		return $this->provider->getSeed();
 	}
 
