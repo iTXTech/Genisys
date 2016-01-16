@@ -1220,7 +1220,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/**
 	 * @return int
 	 */
-	public function getGamemode(){
+	public function getGamemode() : int{
 		return $this->gamemode;
 	}
 
@@ -1231,12 +1231,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 *
 	 * @return bool
 	 */
-	public function setGamemode($gm){
+	public function setGamemode(int $gm){
 		if($gm < 0 or $gm > 3 or $this->gamemode === $gm){
 			return false;
 		}
 
-		$this->server->getPluginManager()->callEvent($ev = new PlayerGameModeChangeEvent($this, (int) $gm));
+		$this->server->getPluginManager()->callEvent($ev = new PlayerGameModeChangeEvent($this, $gm));
 		if($ev->isCancelled()){
 			return false;
 		}
@@ -4254,7 +4254,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 *
 	 * @return int
 	 */
-	public function getWindowId(Inventory $inventory){
+	public function getWindowId(Inventory $inventory) : int{
 		if($this->windows->contains($inventory)){
 			return $this->windows[$inventory];
 		}
@@ -4270,7 +4270,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 *
 	 * @return int
 	 */
-	public function addWindow(Inventory $inventory, $forceId = null){
+	public function addWindow(Inventory $inventory, int $forceId = null) : int{
 		if($this->windows->contains($inventory)){
 			return $this->windows[$inventory];
 		}

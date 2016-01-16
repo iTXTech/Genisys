@@ -2043,7 +2043,7 @@ private function lookupAddress($address) {
 	 *
 	 * @return int
 	 */
-	public function broadcastMessage($message, $recipients = null){
+	public function broadcastMessage($message, $recipients = null) : int{
 		if(!is_array($recipients)){
 			return $this->broadcast($message, self::BROADCAST_CHANNEL_USERS);
 		}
@@ -2062,7 +2062,7 @@ private function lookupAddress($address) {
 	 *
 	 * @return int
 	 */
-	public function broadcastTip($tip, $recipients = null){
+	public function broadcastTip(string $tip, $recipients = null) : int{
 		if(!is_array($recipients)){
 			/** @var Player[] $recipients */
 			$recipients = [];
@@ -2088,7 +2088,7 @@ private function lookupAddress($address) {
 	 *
 	 * @return int
 	 */
-	public function broadcastPopup($popup, $recipients = null){
+	public function broadcastPopup(string $popup, $recipients = null) : int{
 		if(!is_array($recipients)){
 			/** @var Player[] $recipients */
 			$recipients = [];
@@ -2114,7 +2114,7 @@ private function lookupAddress($address) {
 	 *
 	 * @return int
 	 */
-	public function broadcast($message, $permissions){
+	public function broadcast($message, string $permissions) : int{
 		/** @var CommandSender[] $recipients */
 		$recipients = [];
 		foreach(explode(";", $permissions) as $permission){
@@ -2213,7 +2213,7 @@ private function lookupAddress($address) {
 	/**
 	 * @param int $type
 	 */
-	public function enablePlugins($type){
+	public function enablePlugins(int $type){
 		foreach($this->pluginManager->getPlugins() as $plugin){
 			if(!$plugin->isEnabled() and $plugin->getDescription()->getOrder() === $type){
 				$this->enablePlugin($plugin);
@@ -2812,6 +2812,12 @@ private function lookupAddress($address) {
 		//TODO: add raw packet events
 	}
 
+	/**
+	 * @param             $variable
+	 * @param null        $defaultValue
+	 * @param Config|null $cfg
+	 * @return bool|mixed|null
+	 */
 	public function getAdvancedProperty($variable, $defaultValue = null, Config $cfg = null){
 		$vars = explode(".", $variable);
 		$base = array_shift($vars);
