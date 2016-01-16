@@ -2,16 +2,12 @@
 
 namespace pocketmine\entity\ai;
 
-use pocketmine\entity\ai\AIHolder;
-use pocketmine\Player;
 use pocketmine\math\Vector3;
-use pocketmine\math\Vector2;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Cow;
 use pocketmine\entity\Mooshroom;
 use pocketmine\scheduler\CallbackTask;
 use pocketmine\network\protocol\SetEntityMotionPacket;
-use pocketmine\event\entity\EntityDamageEvent;
 
 class CowAI{
 
@@ -46,7 +42,7 @@ class CowAI{
 		//$this->getLogger()->info("牛数量：".count($this->plugin->Cow));
 		foreach($this->plugin->getServer()->getLevels() as $level){
 			foreach($level->getEntities() as $zo){
-				if(($zo instanceof Cow) or ($zo instanceof Mooshroom)){
+				if(($zo::NETWORK_ID == Cow::NETWORK_ID) or ($zo::NETWORK_ID == Mooshroom::NETWORK_ID)){
 					if($this->plugin->willMove($zo)){
 						if(!isset($this->plugin->Cow[$zo->getId()])){
 							$this->plugin->Cow[$zo->getId()] = array(
@@ -173,13 +169,12 @@ class CowAI{
 	public function CowRandomWalk(){
 		foreach($this->plugin->getServer()->getLevels() as $level){
 			foreach($level->getEntities() as $zo){
-				if(($zo instanceof Cow) or ($zo instanceof Mooshroom)){
+				if(($zo::NETWORK_ID == Cow::NETWORK_ID) or ($zo::NETWORK_ID == Mooshroom::NETWORK_ID)){
 					if(isset($this->plugin->Cow[$zo->getId()])){
 						$zom = &$this->plugin->Cow[$zo->getId()];
 						if($zom['canAttack'] != 0){
 							$zom['canAttack'] -= 1;
 						}
-						$pos = $zo->getLocation();
 						//echo ($zom['IsChasing']."\n");
 
 						//真正的自由落体 by boybook
