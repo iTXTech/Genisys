@@ -37,7 +37,7 @@ use pocketmine\utils\BinaryStream;
 
 class Chunk extends BaseFullChunk{
 
-	/** @var Compound */
+	/** @var CompoundTag */
 	protected $nbt;
 
 	public function __construct($level, CompoundTag $nbt = null){
