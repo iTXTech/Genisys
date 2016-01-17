@@ -418,7 +418,7 @@ abstract class Entity extends Location implements Metadatable{
 	/**
 	 * @param int|string $type
 	 * @param FullChunk  $chunk
-	 * @param Compound   $nbt
+	 * @param CompoundTag   $nbt
 	 * @param            $args
 	 *
 	 * @return Entity
