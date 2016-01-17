@@ -48,7 +48,7 @@ abstract class Spawnable extends Tile{
 	}
 
 	/**
-	 * @return Compound
+	 * @return CompoundTag
 	 */
 	public abstract function getSpawnCompound();
 

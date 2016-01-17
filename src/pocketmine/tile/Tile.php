@@ -21,7 +21,6 @@
 
 /**
  * All the Tile classes and related classes
- * TODO: Add Nether Reactor tile
  */
 namespace pocketmine\tile;
 
@@ -71,7 +70,7 @@ abstract class Tile extends Position{
 	/**
 	 * @param string    $type
 	 * @param FullChunk $chunk
-	 * @param Compound  $nbt
+	 * @param CompoundTag  $nbt
 	 * @param           $args
 	 *
 	 * @return Tile

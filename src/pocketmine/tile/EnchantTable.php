@@ -24,12 +24,13 @@ namespace pocketmine\tile;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
+use pocketmine\network\protocol\CraftingDataPacket;
 
 class EnchantTable extends Spawnable implements Nameable{
 
 
 	public function getName(){
-		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Chest";
+		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Enchant Table";
 	}
 
 	public function hasName(){
@@ -43,6 +44,10 @@ class EnchantTable extends Spawnable implements Nameable{
 		}
 
 		$this->namedtag->CustomName = new StringTag("CustomName", $str);
+	}
+
+	public function onUpdate(){
+		return false;
 	}
 
 	public function getSpawnCompound(){
