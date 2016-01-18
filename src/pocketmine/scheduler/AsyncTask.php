@@ -59,6 +59,7 @@ abstract class AsyncTask extends \Threaded implements \Collectable{
 
 	public function run(){
 		$this->result = null;
+		$this->isGarbage = false;
 
 		if($this->cancelRun !== true){
 			try{
