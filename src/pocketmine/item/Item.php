@@ -1393,7 +1393,7 @@ class Item {
 		$tag = $this->getNamedTag();
 		if(isset($tag->ench)){
 			$tag = $tag->ench;
-			if($tag instanceof ListTag){
+			if($tag instanceof EnumTag){
 				return true;
 			}
 		}
@@ -1432,7 +1432,7 @@ class Item {
 		}
 
 		if(!isset($tag->ench)){
-			$tag->ench = new ListTag("ench", []);
+			$tag->ench = new EnumTag("ench", []);
 			$tag->ench->setTagType(NBT::TAG_Compound);
 		}
 
@@ -1597,6 +1597,10 @@ class Item {
 
 	final public function canBePlaced() : bool{
 		return $this->block !== null and $this->block->canBePlaced();
+	}
+
+	final public function isPlaceable() : bool{
+		return $this->canBePlaced();
 	}
 
 	public function getBlock() : Block{
