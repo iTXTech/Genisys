@@ -43,12 +43,18 @@ abstract class AsyncTask extends \Threaded implements \Collectable{
 
 	private $isGarbage = false;
 
+	private $isFinished = false;
+
 	public function isGarbage() : bool{
 		return $this->isGarbage;
 	}
 
 	public function setGarbage(){
 		$this->isGarbage = true;
+	}
+
+	public function isFinished() : bool{
+		return $this->isFinished;
 	}
 
 	public function run(){
@@ -63,7 +69,8 @@ abstract class AsyncTask extends \Threaded implements \Collectable{
 			}
 		}
 
-		$this->setGarbage();
+		$this->isFinished = true;
+		//$this->setGarbage();
 	}
 
 	public function isCrashed(){

@@ -2034,7 +2034,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		if(count($this->batchedPackets) > 0){
-				$this->server->batchPackets([$this], $this->batchedPackets, false);
+			$this->server->batchPackets([$this], $this->batchedPackets, false);
 			$this->batchedPackets = [];
 		}
 

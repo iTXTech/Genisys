@@ -2184,14 +2184,14 @@ private function lookupAddress($address) {
 			}
 		}
 
-		$this->broadcastPacketsCallback(zlib_encode($str, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel), $targets);//临时修复
+		//$this->broadcastPacketsCallback(zlib_encode($str, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel), $targets);//临时修复
 
-		/*if(!$forceSync and $this->networkCompressionAsync){
+		if(!$forceSync and $this->networkCompressionAsync){
 			$task = new CompressBatchedTask($str, $targets, $this->networkCompressionLevel);
 			$this->getScheduler()->scheduleAsyncTask($task);
 		}else{
 			$this->broadcastPacketsCallback(zlib_encode($str, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel), $targets);
-		}*/
+		}
 
 		Timings::$playerNetworkTimer->stopTiming();
 	}

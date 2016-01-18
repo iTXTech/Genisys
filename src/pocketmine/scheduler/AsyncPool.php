@@ -142,12 +142,13 @@ class AsyncPool{
 		Timings::$schedulerAsyncTimer->startTiming();
 
 		foreach($this->tasks as $task){
-			if($task->isGarbage() and !$task->isRunning() and !$task->isCrashed()){
+			if($task->isFinished() and !$task->isRunning() and !$task->isCrashed()){
 
 				if(!$task->hasCancelledRun()){
 					$task->onCompletion($this->server);
 				}
 
+				$task->setGarbage();
 				$this->removeTask($task);
 			}elseif($task->isTerminated() or $task->isCrashed()){
 				$this->server->getLogger()->critical("Could not execute asynchronous task " . (new \ReflectionClass($task))->getShortName() . ": Task crashed");
