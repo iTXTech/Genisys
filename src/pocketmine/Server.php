@@ -345,6 +345,7 @@ class Server{
 	public $playerLoginMsg = "";
 	public $playerLogoutMsg = "";
 	public $antiFly = false;
+	public $asyncChunkRequest = true;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -1617,6 +1618,7 @@ class Server{
 		$this->anviletEnabled = $this->getAdvancedProperty("server.allow-anvilandenchanttable", false);
 		$this->getLogger()->setWrite(!$this->getAdvancedProperty("server.disable-log", false));
 		$this->antiFly = $this->getAdvancedProperty("server.anti-fly", true);
+		$this->asyncChunkRequest = $this->getAdvancedProperty("server.async-chunk-request", true);
 	}
 
 	/**

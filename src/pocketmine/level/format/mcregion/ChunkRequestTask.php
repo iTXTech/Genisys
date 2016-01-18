@@ -19,7 +19,7 @@
  *
 */
 
-namespace pocketmine\level\format\anvil;
+namespace pocketmine\level\format\mcregion;
 
 use pocketmine\level\Level;
 use pocketmine\nbt\NBT;
