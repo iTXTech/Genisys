@@ -105,6 +105,7 @@ class AsyncPool{
 	}
 
 	private function removeTask(AsyncTask $task, $force = false){
+		$task->setGarbage();
 		if(isset($this->taskWorkers[$task->getTaskId()])){
 			if(!$force and ($task->isRunning() or !$task->isGarbage())){
 				return;
@@ -148,7 +149,6 @@ class AsyncPool{
 					$task->onCompletion($this->server);
 				}
 
-				$task->setGarbage();
 				$this->removeTask($task);
 			}elseif($task->isTerminated() or $task->isCrashed()){
 				$this->server->getLogger()->critical("Could not execute asynchronous task " . (new \ReflectionClass($task))->getShortName() . ": Task crashed");
