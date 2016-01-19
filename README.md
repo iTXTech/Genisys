@@ -1,6 +1,6 @@
 <img width='360' src='http://i8.tietuku.com/d17e0a2bdc91db85.jpg'></img>
-#Genisys - iTX Core Offical GitHub
-#Genisys - 创世纪 iTX 内核 官方 GitHub
+#Genisys - iTX Core Offical GitHub Repository
+#Genisys - 创世纪 iTX 核心 官方 GitHub 仓库
 
 #使用前必读 - Read before using
 
@@ -65,7 +65,7 @@
 * Enchantment
 * New AI for all creatures
 * LevelDB support for Windows
-* php7 support
+* PHP 7 support
 
 ##Servers
 (In fact there are more than 80 servers in China using our core and most of them are better than us. Here are some servers set by us.)
@@ -106,7 +106,7 @@ Port: **888**
 [![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * 一个核心统治一切。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
-* 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原代码均由 PocketMine 小组编写。
+* 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
 
 ##鸣谢
 * 头颅、花盆的相关代码由 **@ImagicalCorp** ImagicalMine 编写；
@@ -160,7 +160,7 @@ Port: **888**
 * 加入 附魔
 * 用于所有生物的新 AI
 * Windows 的 LevelDB 支持
-* php7 的支持
+* PHP 7 的支持
 
 ##服务器
 （事实上，有超过 80 个中国的 Minecraft PE 服务器在使用我们的服务器内核，且大部分的服务器都比我们架设的好。这些是我们架设的服务器）
