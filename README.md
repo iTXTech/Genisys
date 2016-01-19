@@ -1,3 +1,9 @@
+<img width='360' src='http://i8.tietuku.com/d17e0a2bdc91db85.jpg'></img>
+#Genisys - iTX Core Offical GitHub
+#Genisys - 创世纪 iTX 内核 官方 GitHub
+
+#使用前必读 - Read before using
+
 #English Version
 
 ##Genisys
@@ -186,5 +192,3 @@ Port: **888**
 **Zhy WAC Survival Server**<br>
 地址: **umcpe.com**<br>
 端口: **888**
-
-
