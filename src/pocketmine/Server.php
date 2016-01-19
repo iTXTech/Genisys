@@ -97,6 +97,7 @@ use pocketmine\tile\Chest;
 use pocketmine\tile\EnchantTable;
 use pocketmine\tile\FlowerPot;
 use pocketmine\tile\Furnace;
+use pocketmine\tile\MobSpawner;
 use pocketmine\tile\Sign;
 use pocketmine\tile\Skull;
 use pocketmine\tile\Tile;
@@ -3012,5 +3013,6 @@ private function lookupAddress($address) {
 		Tile::registerTile(EnchantTable::class);
 		Tile::registerTile(FlowerPot::class);
 		Tile::registerTile(Skull::class);
+		Tile::registerTile(MobSpawner::class);
 	}
 }

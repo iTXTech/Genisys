@@ -5,6 +5,9 @@
 
 namespace pocketmine\entity\ai;
 
+use pocketmine\entity\IronGolem;
+use pocketmine\entity\Mooshroom;
+use pocketmine\entity\SnowGolem;
 use pocketmine\level\Position;
 use pocketmine\level\Level;
 use pocketmine\item\Item;
@@ -476,7 +479,8 @@ class AIHolder{
 	public function RotationTimer(){
 		foreach($this->getServer()->getLevels() as $level){
 			foreach($level->getEntities() as $entity){
-				if($entity instanceof Zombie or $entity instanceof Creeper or $entity instanceof Skeleton or $entity instanceof Cow or $entity instanceof Pig or $entity instanceof Sheep or $entity instanceof Chicken){
+				if($entity instanceof Zombie or $entity instanceof Creeper or $entity instanceof Skeleton or $entity instanceof Cow or $entity instanceof Pig or $entity instanceof Sheep or $entity
+					instanceof Chicken or $entity instanceof Mooshroom){
 					if(count($entity->getViewers()) != 0){
 						if($entity instanceof Zombie){
 							$array = &$this->zombie;
@@ -484,7 +488,7 @@ class AIHolder{
 							$array = &$this->Creeper;
 						}elseif($entity instanceof Skeleton){
 							$array = &$this->Skeleton;
-						}elseif($entity instanceof Cow){
+						}elseif($entity instanceof Cow or $entity instanceof Mooshroom or $entity instanceof Pig or $entity instanceof Sheep){
 							$array = &$this->Cow;
 						}elseif($entity instanceof Pig){
 							$array = &$this->Pig;
@@ -492,6 +496,10 @@ class AIHolder{
 							$array = &$this->Sheep;
 						}elseif($entity instanceof Chicken){
 							$array = &$this->Chicken;
+						}elseif($entity instanceof IronGolem){
+							$array = &$this->irongolem;
+						}elseif($entity instanceof SnowGolem){
+							$array = &$this->snowgolem;
 						}
 						if(isset($array[$entity->getId()])){
 							$yaw0 = $entity->yaw;  //实际yaw

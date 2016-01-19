@@ -31,6 +31,7 @@ use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
+use pocketmine\tile\MobSpawner;
 
 class SpawnEgg extends Item{
 	public function __construct($meta = 0, $count = 1){
@@ -42,42 +43,50 @@ class SpawnEgg extends Item{
 	}
 
 	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
-		$entity = null;
-		$chunk = $level->getChunk($block->getX() >> 4, $block->getZ() >> 4);
-
-		if(!($chunk instanceof FullChunk)){
-			return false;
-		}
-
-		$nbt = new CompoundTag("", [
-			"Pos" => new EnumTag("Pos", [
-				new DoubleTag("", $block->getX() + 0.5),
-				new DoubleTag("", $block->getY()),
-				new DoubleTag("", $block->getZ() + 0.5)
-			]),
-			"Motion" => new EnumTag("Motion", [
-				new DoubleTag("", 0),
-				new DoubleTag("", 0),
-				new DoubleTag("", 0)
-			]),
-			"Rotation" => new EnumTag("Rotation", [
-				new FloatTag("", lcg_value() * 360),
-				new FloatTag("", 0)
-			]),
-		]);
-
-		if($this->hasCustomName()){
-			$nbt->CustomName = new StringTag("CustomName", $this->getCustomName());
-		}
-
-		$entity = Entity::createEntity($this->meta, $chunk, $nbt);
-
-		if($entity instanceof Entity){
-			if($player->isSurvival()){
-				--$this->count;
+		//var_dump($block->getId());
+		if($block->getId() == Block::MONSTER_SPAWNER){
+			$tile = $level->getTile($block);
+			if($tile instanceof MobSpawner){
+				return true;
 			}
-			$entity->spawnToAll();
-			return true;
+		}else{
+			$entity = null;
+			$chunk = $level->getChunk($block->getX() >> 4, $block->getZ() >> 4);
+
+			if(!($chunk instanceof FullChunk)){
+				return false;
+			}
+
+			$nbt = new CompoundTag("", [
+				"Pos" => new EnumTag("Pos", [
+					new DoubleTag("", $block->getX() + 0.5),
+					new DoubleTag("", $block->getY()),
+					new DoubleTag("", $block->getZ() + 0.5)
+				]),
+				"Motion" => new EnumTag("Motion", [
+					new DoubleTag("", 0),
+					new DoubleTag("", 0),
+					new DoubleTag("", 0)
+				]),
+				"Rotation" => new EnumTag("Rotation", [
+					new FloatTag("", lcg_value() * 360),
+					new FloatTag("", 0)
+				]),
+			]);
+
+			if($this->hasCustomName()){
+				$nbt->CustomName = new StringTag("CustomName", $this->getCustomName());
+			}
+
+			$entity = Entity::createEntity($this->meta, $chunk, $nbt);
+
+			if($entity instanceof Entity){
+				if($player->isSurvival()){
+					--$this->count;
+				}
+				$entity->spawnToAll();
+				return true;
+			}
 		}
 
 		return false;

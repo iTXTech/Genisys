@@ -209,9 +209,9 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 			}*/
 
 
-			if(!($this instanceof Player)){
+			/*if(!($this instanceof Player)){
 				$this->server->updatePlayerListData($this->getUniqueId(), $this->getId(), $this->getName(), $this->skinName, $this->skin, [$player]);
-			}
+			}*/
 			
 			$this->server->updatePlayerListData($this->getUniqueId(), $this->getId(), $this->getName(), $this->skinName, $this->skin, [$player]);
 
