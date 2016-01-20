@@ -1,4 +1,6 @@
-<img src='http://i4.tietuku.com/1fa42b968529b853.jpg'></img>
+![PocketMine-iTX Logo]
+(http://i4.tietuku.com/1fa42b968529b853.jpg)
+
 #Genisys - iTX Core Offical GitHub Repository
 #Genisys - 创世纪 iTX 核心 官方 GitHub 仓库
 <br>
@@ -29,7 +31,7 @@
 * We have never copy **ANY** codes from PxxxxxMxxxPxxxPxxx and we even don't know about that project either.
 
 ###Jenkins CI
-<a href="http://mcper.cn:8080/job/Genisys/">**Click Here to go to Jenkins CI Page**</a>
+[**Click Here to go to Jenkins CI Page**](http://mcper.cn:8080/job/Genisys/)
 
 ###Features
 * Performance optimization (Let 100+ players join in a server)
@@ -124,7 +126,7 @@ Port: **888**
 * 我们没有从PxxxxxMxxxPxxxPxxx抄袭任何代码，并且此前也不曾听闻该项目
 
 ###自动构建的 .phar 内核
-<a href="http://mcper.cn:8080/job/Genisys/">**点击这里进入下载**</a>
+[**点击这里进入下载**](http://mcper.cn:8080/job/Genisys/)
 
 ###特性
 * 性能提升（允许 100+ 的玩家加入服务器）
