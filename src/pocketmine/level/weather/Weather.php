@@ -100,7 +100,7 @@ class Weather{
 		if($this->getWeather() == 3){ return true; }else{ return false; }
 	}
 
-	public function getStrength(){
+	public function getStrength() : array{
 		return [$this->strength1, $this->strength2];
 	}
 
