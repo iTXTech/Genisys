@@ -84,6 +84,22 @@ class Weather{
 		return $this->weatherNow;
 	}
 
+	public function isSunny(){
+		if($this->getWeather() == 0){ return true; }else{ return false; }
+	}
+
+	public function isRainy(){
+		if($this->getWeather() == 1){ return true; }else{ return false; }
+	}
+
+	public function isRainyThunder(){
+		if($this->getWeather() == 2){ return true; }else{ return false; }
+	}
+
+	public function isThunder(){
+		if($this->getWeather() == 3){ return true; }else{ return false; }
+	}
+
 	public function getStrength(){
 		return [$this->strength1, $this->strength2];
 	}
