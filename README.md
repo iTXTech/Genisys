@@ -1,5 +1,5 @@
 ![PocketMine-iTX Logo]
-(http://i4.tietuku.com/1fa42b968529b853.jpg)
+(http://i4.tietuku.com/1c74c5b8e34793de.jpg)
 
 #Genisys - iTX Core Offical GitHub Repository
 #Genisys - 创世纪 iTX 核心 官方 GitHub 仓库
