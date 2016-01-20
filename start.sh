@@ -1,8 +1,22 @@
 #!/bin/bash
+
+# start.sh for Genisys #
+#
+# Please input ./start.sh to start server #
+
+# Variable define
+
 DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 cd "$DIR"
 
+# Loop starting
+# Do not edit without knowing what are you doing!
+
 DO_LOOP="no"
+
+###########################################
+# DO NOT EDIT ANY THING BEHIND THIS LINE! #
+###########################################
 
 while getopts "p:f:l" OPTION 2> /dev/null; do
 	case ${OPTION} in
