@@ -1,4 +1,4 @@
-<img width='360' src='http://i4.tietuku.com/617f4ac0b4574645.jpg'></img>
+<img src='http://i4.tietuku.com/617f4ac0b4574645.jpg'></img>
 #Genisys - iTX Core Offical GitHub Repository
 #Genisys - 创世纪 iTX 核心 官方 GitHub 仓库
 
