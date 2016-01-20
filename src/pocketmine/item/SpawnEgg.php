@@ -43,12 +43,8 @@ class SpawnEgg extends Item{
 	}
 
 	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
-		//var_dump($block->getId());
-		if($block->getId() == Block::MONSTER_SPAWNER){
-			$tile = $level->getTile($block);
-			if($tile instanceof MobSpawner){
-				return true;
-			}
+		if($target->getId() == Block::MONSTER_SPAWNER){
+			return true;
 		}else{
 			$entity = null;
 			$chunk = $level->getChunk($block->getX() >> 4, $block->getZ() >> 4);

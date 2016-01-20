@@ -55,11 +55,12 @@ class MonsterSpawner extends Solid{
 	}
 
 	public function onActivate(Item $item, Player $player = null){
-		if($this->getDamage() !== 0){
+		if($this->getDamage() == 0){
 			if($item->getId() == Item::SPAWN_EGG){
 				$tile = $this->getLevel()->getTile($this);
 				if($tile instanceof MobSpawner){
 					$this->meta = $item->getDamage();
+					//$this->getLevel()->setBlock($this, $this, true, false);
 					$tile->setData($this->meta);
 				}
 				return true;
