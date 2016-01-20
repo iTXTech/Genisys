@@ -36,9 +36,9 @@ while getopts "p:f:l" OPTION 2> /dev/null; do
 done
 
 if [ "$PHP_BINARY" == "" ]; then
-	if [ -f ./bin/php5/bin/php ]; then
+	if [ -f ./bin/php7/bin/php ]; then
 		export PHPRC=""
-		PHP_BINARY="./bin/php5/bin/php"
+		PHP_BINARY="./bin/php7/bin/php"
 	elif [ type php 2>/dev/null ]; then
 		PHP_BINARY=$(type -p php)
 	else
