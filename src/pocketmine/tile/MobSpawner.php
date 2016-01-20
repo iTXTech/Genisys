@@ -26,20 +26,20 @@ use pocketmine\Player;
 class MobSpawner extends Spawnable implements Nameable{
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
-		if(!isset($nbt->Data)){
-			$nbt->Data = new IntTag("Data", 0);
+		if(!isset($nbt->EntityId)){
+			$nbt->Data = new IntTag("EntityId", 0);
 		}
 		parent::__construct($chunk, $nbt);
 		$this->lastUpdate = $this->getLevel()->getServer()->getTick();
-		if($this->getData() > 0) $this->scheduleUpdate();
+		if($this->getEntityId() > 0) $this->scheduleUpdate();
 	}
 
-	public function getData(){
-		return $this->namedtag["Data"];
+	public function getEntityId(){
+		return $this->namedtag["EntityId"];
 	}
 
-	public function setData($data){
-		$this->namedtag->Data = new IntTag("Data", $data);
+	public function setEntityId($id){
+		$this->namedtag->EntityId = new IntTag("EntityId", $id);
 		$this->spawnToAll();
 		if($this->chunk instanceof FullChunk){
 			$this->chunk->setChanged();
@@ -66,14 +66,14 @@ class MobSpawner extends Spawnable implements Nameable{
 	}
 
 	public function canUpdate() : bool{
-		if($this->getData() === 0) return false;
+		if($this->getEntityId() === 0) return false;
 		$hasPlayer = false;
 		$count = 0;
 		foreach($this->getLevel()->getEntities() as $e){
 			if($e instanceof Player){
 				if($e->distance($this->getBlock()) <= 15) $hasPlayer = true;
 			}
-			if($e::NETWORK_ID == $this->getData()) $count ++;
+			if($e::NETWORK_ID == $this->getEntityId()) $count++;
 		}
 		if($hasPlayer and $count < 15) return true; // Spawn limit = 15
 		return false;
@@ -110,7 +110,7 @@ class MobSpawner extends Spawnable implements Nameable{
 							new FloatTag("", 0)
 						]),
 					]);
-					$entity = Entity::createEntity($this->getData(), $this->chunk, $nbt);
+					$entity = Entity::createEntity($this->getEntityId(), $this->chunk, $nbt);
 					$entity->spawnToAll();
 				}
 			}
@@ -127,7 +127,7 @@ class MobSpawner extends Spawnable implements Nameable{
 			new IntTag("x", (int) $this->x),
 			new IntTag("y", (int) $this->y),
 			new IntTag("z", (int) $this->z),
-			new IntTag("data", (int) $this->getData())
+			new IntTag("EntityId", (int) $this->getEntityId())
 		]);
 
 		if($this->hasName()){

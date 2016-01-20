@@ -61,7 +61,7 @@ class MonsterSpawner extends Solid{
 				if($tile instanceof MobSpawner){
 					$this->meta = $item->getDamage();
 					//$this->getLevel()->setBlock($this, $this, true, false);
-					$tile->setData($this->meta);
+					$tile->setEntityId($this->meta);
 				}
 				return true;
 			}
@@ -77,7 +77,7 @@ class MonsterSpawner extends Solid{
 			new IntTag("x", $block->x),
 			new IntTag("y", $block->y),
 			new IntTag("z", $block->z),
-			new IntTag("Data", 0),
+			new IntTag("EntityId", 0),
 		]);
 		Tile::createTile(Tile::MOB_SPAWNER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 		return true;
