@@ -1,8 +1,8 @@
-<img src='http://i4.tietuku.com/617f4ac0b4574645.jpg'></img>
+<img src='http://i4.tietuku.com/1fa42b968529b853.jpg'></img>
 #Genisys - iTX Core Offical GitHub Repository
 #Genisys - 创世纪 iTX 核心 官方 GitHub 仓库
-
-**使用前必读 - Read before using**
+<br>
+#使用前必读 - Read before using
 
 ##English Version
 
