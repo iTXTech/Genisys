@@ -67,7 +67,7 @@
 * Enchantment
 * New AI for all creatures
 * LevelDB support for Windows
-* PHP 7 support
+* php7 support
 
 ###Servers
 (In fact there are more than 80 servers in China using our core and most of them are better than us. Here are some servers set by us.)
@@ -162,7 +162,7 @@ Port: **888**
 * 加入 附魔
 * 用于所有生物的新 AI
 * Windows 的 LevelDB 支持
-* php 7 的支持
+* php7 的支持
 
 ###服务器
 （事实上，有超过 80 个中国的 Minecraft PE 服务器在使用我们的服务器内核，且大部分的服务器都比我们架设的好。这些是我们架设的服务器）
