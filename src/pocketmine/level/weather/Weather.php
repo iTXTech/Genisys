@@ -80,11 +80,27 @@ class Weather{
 		$this->changeWeather($wea, $this->strength1, $this->strength2);
 	}
 
-	public function getWeather(){
+	public function getWeather() : int {
 		return $this->weatherNow;
 	}
 
-	public function getStrength(){
+	public function isSunny() : bool{
+		if($this->getWeather() == 0){ return true; }else{ return false; }
+	}
+
+	public function isRainy() : bool{
+		if($this->getWeather() == 1){ return true; }else{ return false; }
+	}
+
+	public function isRainyThunder() : bool{
+		if($this->getWeather() == 2){ return true; }else{ return false; }
+	}
+
+	public function isThunder() : bool{
+		if($this->getWeather() == 3){ return true; }else{ return false; }
+	}
+
+	public function getStrength() : array{
 		return [$this->strength1, $this->strength2];
 	}
 
