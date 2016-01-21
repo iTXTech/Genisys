@@ -25,6 +25,7 @@ use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
+use pocketmine\level\sound\DoorSound;
 
 class Trapdoor extends Transparent{
 
@@ -43,7 +44,7 @@ class Trapdoor extends Transparent{
 	}
 
 	public function canBeActivated(){
-		return \true;
+		return true;
 	}
 
 	protected function recalculateBoundingBox(){
@@ -138,7 +139,7 @@ class Trapdoor extends Transparent{
 			$this->getLevel()->setBlock($block, $this, true, true);
 			return true;
 		}
-		return \false;
+		return false;
 	}
 
 	public function getDrops(Item $item){
@@ -149,7 +150,7 @@ class Trapdoor extends Transparent{
 
 	public function onActivate(Item $item, Player $player = \null){
 		$this->meta ^= 0b00001000;
-		$this->getLevel()->setBlock($this, $this, \true);
+		$this->getLevel()->setBlock($this, $this, true);
 		$this->level->addSound(new DoorSound($this));
 		return \true;
 	}
