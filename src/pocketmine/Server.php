@@ -954,9 +954,9 @@ class Server{
 	}
 
 	/**
-	 * @param string   $name
+	 * @param string      $name
 	 * @param CompoundTag $nbtTag
-	 * @param bool     $async
+	 * @param bool        $async
 	 */
 	public function saveOfflinePlayerData($name, CompoundTag $nbtTag, $async = false){
 		$nbt = new NBT(NBT::BIG_ENDIAN);
@@ -1870,7 +1870,7 @@ class Server{
 			$this->registerEntities();
 			$this->registerTiles();
 
-			InventoryType::init($this->inventoryNum);
+			InventoryType::init(min(32, $this->inventoryNum)); //Bigger than 32 with cause problems
 			Block::init();
 			Item::init();
 			Biome::init();
