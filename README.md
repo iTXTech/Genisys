@@ -1,13 +1,21 @@
-#English Version
+![PocketMine-iTX Logo]
+(http://i4.tietuku.com/1c74c5b8e34793de.jpg)
 
-##Genisys
+#Genisys - iTX Core Offical GitHub Repository
+#Genisys - 创世纪 iTX 核心 官方 GitHub 仓库
+<br>
+#使用前必读 - Read before using
+
+##English Version
+
+###Genisys
 
 [![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * One Core to rule them ALL
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 
-##Acknowledgements
+###Acknowledgements
 * Skull, FlowerPot are based on **@ImagicalCorp** ImagicalMine's work
 * AIs are based on **@Zzm317**'s amazing MyOwnWorld.
 * Painting and Brewing Stand are translated from **Nukkit** Project
@@ -19,13 +27,13 @@
 * @FENGberd's encouragement
 * Our leaders are **@ishitatsuyuki** and **@jasonczc**
 
-##Declaration
+###Declaration
 * We have never copy **ANY** codes from PxxxxxMxxxPxxxPxxx and we even don't know about that project either.
 
-##Jenkins CI
-<a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">**Click Here to go to Jenkins CI Page**</a>
+###Jenkins CI
+[**Click Here to go to Jenkins CI Page**](http://mcper.cn:8080/job/Genisys/)
 
-##Features
+###Features
 * Performance optimization (Let 100+ players join in a server)
 * Bug fix in PocketMine-MP
 * Weather
@@ -49,7 +57,7 @@
 * More commands (bancid bancidbyname banipbyname ms extractplugin makeplugin pardoncid weather extractphar loadplugin lvdat)
 * With FolderPluginLoader
 
-##To-Do List
+###To-Do List
 * Boat and Minecart (Improve)
 * Nether Generator (Improve)
 * Potions (Improve)
@@ -61,7 +69,7 @@
 * LevelDB support for Windows
 * php7 support
 
-##Servers
+###Servers
 (In fact there are more than 80 servers in China using our core and most of them are better than us. Here are some servers set by us.)
 
 **Young Dream**<br>
@@ -93,16 +101,16 @@ Address: **umcpe.com**<br>
 Port: **888**
 
 
-#中文版本
+##中文版本
 
-##创世纪
+###创世纪
 
 [![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * 一个核心统治一切。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
-* 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原代码均由 PocketMine 小组编写。
+* 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
 
-##鸣谢
+###鸣谢
 * 头颅、花盆的相关代码由 **@ImagicalCorp** ImagicalMine 编写；
 * 生物 AI 的相关代码基于 **@Zzm317**  令人惊奇的 MyOwnWorld 编写；
 * 画、酿造台的相关代码从 **Nukkit** 项目重写；
@@ -114,13 +122,13 @@ Port: **888**
 * 感谢 **@FENGberd** 的支持与鼓励；
 * 我们的项目负责人为 **@ishitatsuyuki** 及 **@jasonczc**。
 
-##声明
+###声明
 * 我们没有从PxxxxxMxxxPxxxPxxx抄袭任何代码，并且此前也不曾听闻该项目
 
-##自动构建的.phar内核
-<a href="http://jenkins.mcper.cn:8181/job/iTX-Genisys/">**点击这里进入下载**</a>
+###自动构建的 .phar 内核
+[**点击这里进入下载**](http://mcper.cn:8080/job/Genisys/)
 
-##特性
+###特性
 * 性能提升（允许 100+ 的玩家加入服务器）
 * 修复 PocketMine-MP 的 Bug
 * 天气系统
@@ -144,7 +152,7 @@ Port: **888**
 * 更多的指令（bancid（按设备编号或玩家 ID），banip（按 IP 或玩家 ID），ms，devTools 相关指令（打包与解包插件），pardoncid，weather，loadplugin，lvdat）
 * 文件夹插件加载器
 
-##计划表
+###计划表
 * 完善 船 与 矿车
 * 完善 下界地图生成器
 * 完善 药水
@@ -156,7 +164,7 @@ Port: **888**
 * Windows 的 LevelDB 支持
 * php7 的支持
 
-##服务器
+###服务器
 （事实上，有超过 80 个中国的 Minecraft PE 服务器在使用我们的服务器内核，且大部分的服务器都比我们架设的好。这些是我们架设的服务器）
 
 **Young Dream**<br>
@@ -186,5 +194,3 @@ Port: **888**
 **Zhy WAC Survival Server**<br>
 地址: **umcpe.com**<br>
 端口: **888**
-
-
