@@ -750,7 +750,7 @@ class Item {
 		self::addCreativeItem(Item::get(Item::SLAB, 0));
 		self::addCreativeItem(Item::get(Item::SLAB, 3));
 		self::addCreativeItem(Item::get(Item::WOODEN_SLAB, 0));
-		self::addCreativeItem(Item::get(Item::WOODEN_SLAB, 3));
+		self::addCreativeItem(Item::get(Item::WOODEN_SLAB, 1));
 		self::addCreativeItem(Item::get(Item::WOODEN_SLAB, 2));
 		self::addCreativeItem(Item::get(Item::WOODEN_SLAB, 3));
 		self::addCreativeItem(Item::get(Item::WOODEN_SLAB, 4));
