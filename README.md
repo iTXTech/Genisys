@@ -53,8 +53,10 @@
 * Supported 0.13.1 skin format
 * Hunger (Based on Katana)
 * AI (Based on MOW)
-* More commands (bancid bancidbyname banipbyname ms extractplugin makeplugin pardoncid weather extractphar loadplugin lvdat)
+* More commands (bancid bancidbyname banipbyname ms extractplugin makeplugin
+  pardoncid weather extractphar loadplugin lvdat biome)
 * With FolderPluginLoader
+* Monster Spawner
 
 ###To-Do List
 * Boat and Minecart (Improve)
@@ -66,7 +68,6 @@
 * Enchantment
 * New AI for all creatures
 * LevelDB support for Windows
-* php7 support
 
 ###Servers
 (In fact there are more than 80 servers in China using our core and most of them are better than us. Here are some servers set by us.)
