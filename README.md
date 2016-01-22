@@ -1,8 +1,14 @@
-<a href=''> ![Genisys - PocketMine-iTX Core](http://i8.tietuku.com/6600adf65e57e2f3.jpg) </a>
+[
+![Genisys - PocketMine-iTX Core]
+(http://i8.tietuku.com/6600adf65e57e2f3.jpg)
+]
+(#)
 
 #Genisys - iTX Core Offical GitHub Repository
 #Genisys - 创世纪 iTX 核心 官方 GitHub 仓库
+
 <br>
+
 #使用前必读 - Read before using
 
 ##English Version
