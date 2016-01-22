@@ -1,5 +1,4 @@
-![PocketMine-iTX Logo]
-(http://i4.tietuku.com/1c74c5b8e34793de.jpg)
+![Genisys - PocketMine-iTX Core](http://i8.tietuku.com/6600adf65e57e2f3.jpg)
 
 #Genisys - iTX Core Offical GitHub Repository
 #Genisys - 创世纪 iTX 核心 官方 GitHub 仓库
@@ -100,6 +99,7 @@ Port: **233**
 Address: **umcpe.com**<br>
 Port: **888**
 
+<br><br>
 
 ##中文版本
 
