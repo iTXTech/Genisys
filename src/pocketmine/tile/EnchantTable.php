@@ -27,7 +27,9 @@ use pocketmine\item\enchantment\EnchantmentEntry;
 use pocketmine\item\enchantment\EnchantmentList;
 use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
+use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\CraftingDataPacket;
@@ -39,6 +41,8 @@ class EnchantTable extends Spawnable implements InventoryHolder, Container, Name
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new EnchantInventory($this);
+		$this->namedtag->Items = new EnumTag("Items", []);
+		$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		$this->scheduleUpdate();
 	}
 
@@ -68,6 +72,11 @@ class EnchantTable extends Spawnable implements InventoryHolder, Container, Name
 		}
 	}
 
+	public function saveNBT(){
+		parent::saveNBT();
+		unset($this->namedtag->Items);
+	}
+
 	/**
 	 * @return int
 	 */
@@ -82,12 +91,67 @@ class EnchantTable extends Spawnable implements InventoryHolder, Container, Name
 		return $this->inventory;
 	}
 
-	public function setItem($index, Item $item){
-		// TODO: Implement setItem() method.
+
+	/**
+	 * @param $index
+	 *
+	 * @return int
+	 */
+	protected function getSlotIndex($index){
+		foreach($this->namedtag->Items as $i => $slot){
+			if($slot["Slot"] === $index){
+				return $i;
+			}
+		}
+
+		return -1;
 	}
 
+	/**
+	 * This method should not be used by plugins, use the Inventory
+	 *
+	 * @param int $index
+	 *
+	 * @return Item
+	 */
 	public function getItem($index){
-		// TODO: Implement getItem() method.
+		$i = $this->getSlotIndex($index);
+		if($i < 0){
+			return Item::get(Item::AIR, 0, 0);
+		}else{
+			return NBT::getItemHelper($this->namedtag->Items[$i]);
+		}
+	}
+
+	/**
+	 * This method should not be used by plugins, use the Inventory
+	 *
+	 * @param int  $index
+	 * @param Item $item
+	 *
+	 * @return bool
+	 */
+	public function setItem($index, Item $item){
+		$i = $this->getSlotIndex($index);
+
+		$d = NBT::putItemHelper($item, $index);
+
+		if($item->getId() === Item::AIR or $item->getCount() <= 0){
+			if($i >= 0){
+				unset($this->namedtag->Items[$i]);
+			}
+		}elseif($i < 0){
+			for($i = 0; $i <= $this->getSize(); ++$i){
+				if(!isset($this->namedtag->Items[$i])){
+					break;
+				}
+			}
+			$this->namedtag->Items[$i] = $d;
+		}else{
+			$this->namedtag->Items[$i] = $d;
+		}
+
+		return true;
 	}
 
 
