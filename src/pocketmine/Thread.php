@@ -52,7 +52,7 @@ abstract class Thread extends \Thread{
 		}
 	}
 
-	public function start(int $options = null){
+	public function start(int $options = PTHREADS_INHERIT_ALL){
 		ThreadManager::getInstance()->add($this);
 
 		if(!$this->isRunning() and !$this->isJoined() and !$this->isTerminated()){
