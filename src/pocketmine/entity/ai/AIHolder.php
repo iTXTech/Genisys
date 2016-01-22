@@ -7,7 +7,10 @@ namespace pocketmine\entity\ai;
 
 use pocketmine\entity\IronGolem;
 use pocketmine\entity\Mooshroom;
+use pocketmine\entity\Ocelot;
+use pocketmine\entity\PigZombie;
 use pocketmine\entity\SnowGolem;
+use pocketmine\entity\Wolf;
 use pocketmine\level\Position;
 use pocketmine\level\Level;
 use pocketmine\item\Item;
@@ -96,7 +99,7 @@ class AIHolder{
 		$this->SkeletonAI = new SkeletonAI($this);
 
 		$this->IronGolemAI = new IronGolemAI($this);
-		$this->PigZombieAI = new PigZombieAI($this);
+		//$this->PigZombieAI = new PigZombieAI($this);
 	}
 
 	/*
@@ -480,15 +483,15 @@ class AIHolder{
 		foreach($this->getServer()->getLevels() as $level){
 			foreach($level->getEntities() as $entity){
 				if($entity instanceof Zombie or $entity instanceof Creeper or $entity instanceof Skeleton or $entity instanceof Cow or $entity instanceof Pig or $entity instanceof Sheep or $entity
-					instanceof Chicken or $entity instanceof Mooshroom){
+					instanceof Chicken or $entity instanceof Mooshroom or $entity instanceof Ocelot or $entity instanceof Wolf or $entity instanceof PigZombie){
 					if(count($entity->getViewers()) != 0){
-						if($entity instanceof Zombie){
+						if($entity instanceof Zombie or $entity instanceof PigZombie){
 							$array = &$this->zombie;
 						}elseif($entity instanceof Creeper){
 							$array = &$this->Creeper;
 						}elseif($entity instanceof Skeleton){
 							$array = &$this->Skeleton;
-						}elseif($entity instanceof Cow or $entity instanceof Mooshroom or $entity instanceof Pig or $entity instanceof Sheep){
+						}elseif($entity instanceof Cow or $entity instanceof Mooshroom or $entity instanceof Pig or $entity instanceof Sheep or $entity instanceof Ocelot or $entity instanceof Wolf){
 							$array = &$this->Cow;
 						}elseif($entity instanceof Pig){
 							$array = &$this->Pig;
