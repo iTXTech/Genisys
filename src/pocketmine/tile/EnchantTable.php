@@ -22,6 +22,9 @@
 namespace pocketmine\tile;
 
 use pocketmine\inventory\EnchantInventory;
+use pocketmine\inventory\InventoryHolder;
+use pocketmine\item\enchantment\EnchantmentEntry;
+use pocketmine\item\enchantment\EnchantmentList;
 use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\tag\CompoundTag;
