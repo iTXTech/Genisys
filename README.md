@@ -19,6 +19,7 @@
 * One Core to rule them ALL
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
+* [**Click Here to get PHP 7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
 
 ###Acknowledgements
 * Skull, FlowerPot are based on **@ImagicalCorp** ImagicalMine's work
@@ -169,7 +170,7 @@ Port: **888**
 * 加入 附魔
 * 用于所有生物的新 AI
 * Windows 的 LevelDB 支持
-* php7 的支持
+
 
 ###服务器
 （事实上，有超过 80 个中国的 Minecraft PE 服务器在使用我们的服务器内核，且大部分的服务器都比我们架设的好。这些是我们架设的服务器）
