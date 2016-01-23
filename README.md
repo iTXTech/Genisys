@@ -5,7 +5,7 @@
 (#)
 
 #Genisys - iTX Core Offical GitHub Repository
-#Genisys - 创世纪 iTX 核心 官方 GitHub 仓库
+#Genisys - 创世纪 iTX 核心 官方 GitHub
 
 <br>
 
@@ -20,6 +20,7 @@
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 * [**Click Here to get PHP 7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
+* Be free to creat a pull request or open an issue. English and Chinese are both recommended.
 
 ###Acknowledgements
 * Skull, FlowerPot are based on **@ImagicalCorp** ImagicalMine's work
@@ -117,6 +118,8 @@ Port: **888**
 * 一个核心统治一切。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
 * 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
+* [**点击获取 PHP 7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
+* 欢迎创建pull request。使用中文或者英文进行交流。
 
 ###鸣谢
 * 头颅、花盆的相关代码由 **@ImagicalCorp** ImagicalMine 编写；
