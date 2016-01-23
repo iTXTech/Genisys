@@ -69,7 +69,7 @@ class BanEntry{
 	}
 
 	public function hasExpired(){
-		$now = time();
+		$now = new \DateTime();
 
 		return $this->expirationDate === null ? false : $this->expirationDate < $now;
 	}
@@ -90,7 +90,7 @@ class BanEntry{
 		$str .= "|";
 		$str .= $this->getSource();
 		$str .= "|";
-		$str .= $this->getExpires() === null ? "Forever" : $this->getExpires();
+		$str .= $this->getExpires() === null ? "Forever" : $this->getExpires()->format(self::$format);
 		$str .= "|";
 		$str .= $this->getReason();
 
@@ -115,7 +115,7 @@ class BanEntry{
 					if(count($str) > 0){
 						$expire = trim(array_shift($str));
 						if(strtolower($expire) !== "forever" and strlen($expire) > 0){
-							$entry->setExpires($expire);
+							$entry->setExpires(\DateTime::createFromFormat(self::$format, $expire));
 						}
 						if(count($str) > 0){
 							$entry->setReason(trim(array_shift($str)));
