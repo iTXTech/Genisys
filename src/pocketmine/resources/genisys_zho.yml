@@ -2,7 +2,7 @@
 
 #設定檔案版本
 config:
- version: 5
+ version: 6
 
 level:
  #設定是否變換天氣
@@ -49,6 +49,10 @@ server:
  allow-anvilandenchanttable: false
  #是否停用server.log
  disable-log: false
+ #是否启用反飞行作弊
+ anti-fly: true
+ #是否启用异步方式发送区块
+ async-chunk-request: true
  #玩家進出伺服器訊息提醒方式。0為Message，1為Tip，2為Popup
  player-msg-type: 0
  login-msg: "§3@player 加入了遊戲"
