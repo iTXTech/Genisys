@@ -23,6 +23,7 @@ namespace pocketmine\tile;
 
 use pocketmine\inventory\EnchantInventory;
 use pocketmine\inventory\InventoryHolder;
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentEntry;
 use pocketmine\item\enchantment\EnchantmentList;
 use pocketmine\item\Item;
@@ -33,10 +34,14 @@ use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\CraftingDataPacket;
+use pocketmine\Player;
 
 class EnchantTable extends Spawnable implements InventoryHolder, Container, Nameable{
 	/** @var EnchantInventory */
 	protected $inventory;
+
+	/** @var Item */
+	protected $item;
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
@@ -156,7 +161,25 @@ class EnchantTable extends Spawnable implements InventoryHolder, Container, Name
 
 
 	public function onUpdate(){
-		return false;
+		if(($this->getLevel()->getServer()->getTick() % $this->getLevel()->getServer()->getTicksPerSecondAverage()) == 0){ //Update per second
+			$item = $this->inventory->getItem(0);
+			if(!isset($this->item) or !$item->deepEquals($this->item)){
+				$this->item = $item;
+				$enchantmentList = new EnchantmentList(3);
+				for($i = 0;$i < 3;$i++){
+					$enchantmentList->setSlot($i, new EnchantmentEntry([Enchantment::getEnchantment(mt_rand(0, 24))], 1, "Test"));
+				}
+				$pk = new CraftingDataPacket();
+				$pk->entries = [$enchantmentList];
+				foreach($this->getInventory()->getViewers() as $player){
+					$windowId = $player->getWindowId($this->getInventory());
+					if($windowId > 0){
+						$player->dataPacket($pk);
+					}
+				}
+			}
+		}
+		return true;
 	}
 
 	public function getSpawnCompound(){
