@@ -2,7 +2,7 @@
 
 #設定檔案版本
 config:
- version: 6
+ version: 6.1
 
 level:
  #設定是否變換天氣
