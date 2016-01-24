@@ -44,7 +44,7 @@ class BurningFurnace extends Solid{
 		return "Burning Furnace";
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

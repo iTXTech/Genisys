@@ -29,7 +29,7 @@ class SpruceDoor extends Item{
 		parent::__construct(self::SPRUCE_DOOR, 0, $count, "Spruce Door");
 	}
 
-	public function getMaxStackSize(){
+	public function getMaxStackSize() : int {
 		return 1;
 	}
 }

@@ -15,7 +15,7 @@ class FlowerPot extends Item {
 		parent::__construct(self::FLOWER_POT, 0, $count, "Flower Pot");
 	}
 
-	public function getMaxStackSize(){
+	public function getMaxStackSize() : int{
 		return 64;
 	}
 } 

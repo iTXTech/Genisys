@@ -29,7 +29,7 @@ class DarkOakDoor extends Item{
 		parent::__construct(self::DARK_OAK_DOOR, 0, $count, "Dark Oak Door");
 	}
 
-	public function getMaxStackSize(){
+	public function getMaxStackSize() : int{
 		return 1;
 	}
 }

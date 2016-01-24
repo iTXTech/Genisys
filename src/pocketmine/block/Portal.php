@@ -28,7 +28,7 @@ class Portal extends Flowable{
 		return Tool::TYPE_PICKAXE;
 	}
 	
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

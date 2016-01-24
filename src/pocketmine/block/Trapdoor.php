@@ -43,7 +43,7 @@ class Trapdoor extends Transparent{
 		return 3;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

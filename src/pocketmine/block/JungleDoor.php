@@ -36,7 +36,7 @@ class JungleDoor extends Door{
 		return "Jungle Door Block";
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

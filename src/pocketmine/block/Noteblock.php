@@ -34,7 +34,7 @@ class Noteblock extends Solid implements ElectricalAppliance{
 		return Tool::TYPE_AXE;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

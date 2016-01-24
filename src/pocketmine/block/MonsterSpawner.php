@@ -50,7 +50,7 @@ class MonsterSpawner extends Solid{
 		return "Monster Spawner";
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 
