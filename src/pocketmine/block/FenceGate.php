@@ -43,7 +43,7 @@ class FenceGate extends Transparent implements ElectricalAppliance{
 		return 2;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

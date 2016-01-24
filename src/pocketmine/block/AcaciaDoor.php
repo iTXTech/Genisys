@@ -36,7 +36,7 @@ class AcaciaDoor extends Door{
 		return "Acacia Door Block";
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

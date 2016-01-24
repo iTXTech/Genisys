@@ -36,7 +36,7 @@ class WoodDoor extends Door{
 		return "Wood Door Block";
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

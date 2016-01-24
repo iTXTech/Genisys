@@ -42,7 +42,7 @@ class Stonecutter extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

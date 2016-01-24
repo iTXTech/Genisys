@@ -36,7 +36,7 @@ class SpruceDoor extends Door{
 		return "Spruce Door Block";
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

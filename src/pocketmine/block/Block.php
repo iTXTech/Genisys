@@ -755,7 +755,7 @@ class Block extends Position implements Metadatable{
 	 *
 	 * @return bool
 	 */
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return false;
 	}
 

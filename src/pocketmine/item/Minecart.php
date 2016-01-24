@@ -16,7 +16,7 @@ class Minecart extends Item{
 		parent::__construct(self::MINECART, $meta, $count, "Minecart");
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

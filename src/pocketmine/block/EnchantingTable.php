@@ -63,7 +63,7 @@ class EnchantingTable extends Transparent{
 		return true;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

@@ -21,7 +21,7 @@ class Lever extends RedstoneSource{
 		$this->meta = $meta;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

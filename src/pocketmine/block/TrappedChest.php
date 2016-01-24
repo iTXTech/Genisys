@@ -42,7 +42,7 @@ class TrappedChest extends RedstoneSource{
 		return false;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 
