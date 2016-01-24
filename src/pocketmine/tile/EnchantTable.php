@@ -51,7 +51,7 @@ class EnchantTable extends Spawnable implements InventoryHolder, Container, Name
 		$this->scheduleUpdate();
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Enchanting Table";
 	}
 

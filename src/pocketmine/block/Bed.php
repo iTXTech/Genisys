@@ -39,11 +39,11 @@ class Bed extends Transparent{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.2;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Bed Block";
 	}
 

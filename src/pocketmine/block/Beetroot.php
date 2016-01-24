@@ -31,7 +31,7 @@ class Beetroot extends Crops{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Beetroot Block";
 	}
 

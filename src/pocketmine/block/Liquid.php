@@ -363,7 +363,7 @@ abstract class Liquid extends Transparent{
 		return $cost;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 100;
 	}
 

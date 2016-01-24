@@ -31,11 +31,11 @@ class Glass extends Transparent{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Glass";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.3;
 	}
 

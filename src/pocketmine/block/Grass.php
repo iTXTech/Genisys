@@ -43,11 +43,11 @@ class Grass extends Solid{
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Grass";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.6;
 	}
 

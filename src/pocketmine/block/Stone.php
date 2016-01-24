@@ -40,7 +40,7 @@ class Stone extends Solid{
 
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 1.5;
 	}
 
@@ -48,7 +48,7 @@ class Stone extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		static $names = [
 			self::NORMAL => "Stone",
 			self::GRANITE => "Granite",

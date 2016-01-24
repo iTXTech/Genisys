@@ -24,7 +24,7 @@ class NetherBrickFence extends Transparent {
 		}
 	}
 	
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2;
 	}
         
@@ -33,7 +33,7 @@ class NetherBrickFence extends Transparent {
 		return Tool::TYPE_PICKAXE;
 	}
 	
-	public function getName(){
+	public function getName() : string{
 		return "Nether Brick Fence";
 	}
 	

@@ -35,7 +35,7 @@ class SkullBlock extends Transparent{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 1;
 	}
 
@@ -84,7 +84,7 @@ class SkullBlock extends Transparent{
 		return 5;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		static $names = [
 			0 => "Skeleton Skull",
 			1 => "Wither Skeleton Skull",

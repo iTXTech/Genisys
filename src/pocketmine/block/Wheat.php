@@ -31,7 +31,7 @@ class Wheat extends Crops{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Wheat Block";
 	}
 

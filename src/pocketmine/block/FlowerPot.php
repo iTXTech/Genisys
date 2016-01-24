@@ -31,7 +31,7 @@ class FlowerPot extends Flowable{
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Flower Pot Block";
 	}
 

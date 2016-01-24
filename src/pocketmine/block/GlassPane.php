@@ -32,11 +32,11 @@ class GlassPane extends Thin{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Glass Pane";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.3;
 	}
 

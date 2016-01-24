@@ -22,7 +22,7 @@ class Noteblock extends Solid implements ElectricalAppliance{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.8;
 	}
 
@@ -81,7 +81,7 @@ class Noteblock extends Solid implements ElectricalAppliance{
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Noteblock";
 	}
 }

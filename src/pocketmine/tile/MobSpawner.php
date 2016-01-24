@@ -48,7 +48,7 @@ class MobSpawner extends Spawnable implements Nameable{
 		$this->scheduleUpdate();
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Monster Spawner";
 	}
 

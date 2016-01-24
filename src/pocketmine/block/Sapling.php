@@ -45,7 +45,7 @@ class Sapling extends Flowable{
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		static $names = [
 			0 => "Oak Sapling",
 			1 => "Spruce Sapling",

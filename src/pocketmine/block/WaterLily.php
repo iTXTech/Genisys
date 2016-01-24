@@ -41,11 +41,11 @@ class WaterLily extends Flowable{
 		return false;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Lily Pad";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.6;
 	}
 

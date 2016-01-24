@@ -26,7 +26,7 @@ class Furnace extends BurningFurnace{
 
 	protected $id = self::FURNACE;
 
-	public function getName(){
+	public function getName() : string{
 		return "Furnace";
 	}
 }

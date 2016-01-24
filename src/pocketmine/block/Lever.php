@@ -25,7 +25,7 @@ class Lever extends RedstoneSource{
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Lever";
 	}
 

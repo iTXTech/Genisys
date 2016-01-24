@@ -88,7 +88,7 @@ class Nether extends Generator{
 		}
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "normal";
 	}
 

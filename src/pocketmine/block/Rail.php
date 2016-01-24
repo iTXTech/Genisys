@@ -24,7 +24,7 @@ class Rail extends Flowable{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Rail";
 	}
 
@@ -188,7 +188,7 @@ class Rail extends Flowable{
 		return $connected;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.6;
 	}
 

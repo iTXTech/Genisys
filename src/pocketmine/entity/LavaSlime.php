@@ -29,7 +29,7 @@ use pocketmine\Player;
 class LavaSlime extends Living{
 	const NETWORK_ID = 42;
 	
-	public function getName(){
+	public function getName() : string{
 		return "LavaSlime";
 	}
 	

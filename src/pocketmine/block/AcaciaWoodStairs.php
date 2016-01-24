@@ -32,7 +32,7 @@ class AcaciaWoodStairs extends Stair{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Acacia Wood Stairs";
 	}
 
@@ -42,7 +42,7 @@ class AcaciaWoodStairs extends Stair{
 		];
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2;
 	}
 

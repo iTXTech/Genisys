@@ -133,7 +133,7 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		parent::initEntity();
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return $this->getNameTag();
 	}
 

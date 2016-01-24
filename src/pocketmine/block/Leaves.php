@@ -42,7 +42,7 @@ class Leaves extends Transparent{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.2;
 	}
 
@@ -50,7 +50,7 @@ class Leaves extends Transparent{
 		return Tool::TYPE_SHEARS;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		static $names = [
 			self::OAK => "Oak Leaves",
 			self::SPRUCE => "Spruce Leaves",

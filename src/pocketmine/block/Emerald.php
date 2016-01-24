@@ -32,7 +32,7 @@ class Emerald extends Solid{
 
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 5;
 	}
 
@@ -40,7 +40,7 @@ class Emerald extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Emerald Block";
 	}
 

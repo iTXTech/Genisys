@@ -33,11 +33,11 @@ class Farmland extends Solid{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Farmland";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.6;
 	}
 

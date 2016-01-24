@@ -45,11 +45,11 @@ class Chest extends Transparent{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2.5;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Chest";
 	}
 

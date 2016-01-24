@@ -32,11 +32,11 @@ class Netherrack extends Solid{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Netherrack";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2;
 	}
 

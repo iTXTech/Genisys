@@ -36,11 +36,11 @@ class Cobblestone extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Cobblestone";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2;
 	}
 

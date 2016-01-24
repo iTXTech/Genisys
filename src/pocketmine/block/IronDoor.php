@@ -32,7 +32,7 @@ class IronDoor extends Door{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Iron Door Block";
 	}
 
@@ -40,7 +40,7 @@ class IronDoor extends Door{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 5;
 	}
 

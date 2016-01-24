@@ -37,7 +37,7 @@ class TallGrass extends Flowable{
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		static $names = [
 			0 => "Dead Shrub",
 			1 => "Tall Grass",

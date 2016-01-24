@@ -50,7 +50,7 @@ class Squid extends WaterAnimal implements Ageable{
 		parent::initEntity();
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Squid";
 	}
 	

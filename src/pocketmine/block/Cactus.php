@@ -40,7 +40,7 @@ class Cactus extends Transparent{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.4;
 	}
 
@@ -48,7 +48,7 @@ class Cactus extends Transparent{
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Cactus";
 	}
 

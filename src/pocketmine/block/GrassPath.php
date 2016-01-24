@@ -37,7 +37,7 @@ class GrassPath extends Transparent{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Grass Path";
 	}
 
@@ -56,7 +56,7 @@ class GrassPath extends Transparent{
 		);
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.6;
 	}
 

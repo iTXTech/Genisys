@@ -46,7 +46,7 @@ class TrappedChest extends RedstoneSource{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2.5;
 	}
 
@@ -54,7 +54,7 @@ class TrappedChest extends RedstoneSource{
 		return $this->getHardness() * 5;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Trapped Chest";
 	}
 

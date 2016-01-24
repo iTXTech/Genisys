@@ -42,7 +42,7 @@ class Anvil extends Fallable{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 5;
 	}
 
@@ -50,7 +50,7 @@ class Anvil extends Fallable{
 		return 6000;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Anvil";
 	}
 

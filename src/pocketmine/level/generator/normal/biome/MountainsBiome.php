@@ -46,7 +46,7 @@ class MountainsBiome extends GrassyBiome{
 		$this->rainfall = 0.5;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Mountains";
 	}
 }

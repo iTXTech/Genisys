@@ -32,11 +32,11 @@ class Diamond extends Solid{
 
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 5;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Diamond Block";
 	}
 

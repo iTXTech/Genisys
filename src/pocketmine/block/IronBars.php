@@ -32,11 +32,11 @@ class IronBars extends Thin{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Iron Bars";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 5;
 	}
 

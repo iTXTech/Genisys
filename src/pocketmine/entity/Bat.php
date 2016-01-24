@@ -25,7 +25,7 @@ class Bat extends Animal{
 
 	private $switchDirectionTicker = 0;
 	
-	public function getName(){
+	public function getName() : string{
 		return "Bat";
 	}
 	

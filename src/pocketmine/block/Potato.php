@@ -31,7 +31,7 @@ class Potato extends Crops{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Potato Block";
 	}
 

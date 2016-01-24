@@ -43,11 +43,11 @@ class Slab extends Transparent{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		static $names = [
 			0 => "Stone",
 			1 => "Sandstone",

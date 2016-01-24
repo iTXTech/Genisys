@@ -32,11 +32,11 @@ class GoldOre extends Solid{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Gold Ore";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 3;
 	}
 

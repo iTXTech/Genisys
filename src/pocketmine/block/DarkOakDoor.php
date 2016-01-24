@@ -32,7 +32,7 @@ class DarkOakDoor extends Door{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Dark Oak Door Block";
 	}
 
@@ -40,7 +40,7 @@ class DarkOakDoor extends Door{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 3;
 	}
 

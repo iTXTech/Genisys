@@ -40,7 +40,7 @@ class Fence extends Transparent{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2;
 	}
 
@@ -49,7 +49,7 @@ class Fence extends Transparent{
 	}
 
 
-	public function getName(){
+	public function getName() : string{
 		static $names = [
 			0 => "Oak Fence",
 			1 => "Spruce Fence",

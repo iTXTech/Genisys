@@ -32,7 +32,7 @@ class JungleWoodStairs extends Stair{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Jungle Wood Stairs";
 	}
 

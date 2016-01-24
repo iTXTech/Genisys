@@ -34,7 +34,7 @@ class SnowLayer extends Flowable{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Snow Layer";
 	}
 
@@ -42,7 +42,7 @@ class SnowLayer extends Flowable{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.1;
 	}
 

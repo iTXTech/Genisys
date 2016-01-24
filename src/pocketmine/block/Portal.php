@@ -16,11 +16,11 @@ class Portal extends Flowable{
 		
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Portal";
 	}
 	
-	public function getHardness(){
+	public function getHardness() : int {
 		return 20;
 	}
 

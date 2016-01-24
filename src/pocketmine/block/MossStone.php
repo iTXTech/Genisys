@@ -32,11 +32,11 @@ class MossStone extends Solid{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Moss Stone";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2;
 	}
 

@@ -45,11 +45,11 @@ class StoneWall extends Transparent{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		if($this->meta === 0x01){
 			return "Mossy Cobblestone Wall";
 		}

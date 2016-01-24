@@ -182,7 +182,7 @@ class Chest extends Spawnable implements InventoryHolder, Container, Nameable{
 		}
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Chest";
 	}
 

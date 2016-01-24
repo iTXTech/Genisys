@@ -101,7 +101,7 @@ class Normal extends Generator{
 		}
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return self::NAME;
 	}
 

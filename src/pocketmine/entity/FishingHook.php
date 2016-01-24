@@ -32,7 +32,7 @@ class FishingHook extends Projectile{
 		[ItemItem::RAW_FISH, 0, 1],
 	];
 
-	public function getName(){
+	public function getName() : string{
 		return "Fishing Hook";
 	}
 

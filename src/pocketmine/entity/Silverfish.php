@@ -29,7 +29,7 @@ use pocketmine\Player;
 class Silverfish extends Monster{
 	const NETWORK_ID = 39;
 	
-	public function getName(){
+	public function getName() : string{
 		return "Silverfish";
 	}
 	

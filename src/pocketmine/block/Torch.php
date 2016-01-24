@@ -37,7 +37,7 @@ class Torch extends Flowable{
 		return 15;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Torch";
 	}
 

@@ -676,7 +676,7 @@ class Block extends Position implements Metadatable{
 	/**
 	 * @return int
 	 */
-	public function getHardness(){
+	public function getHardness() : int {
 		return 10;
 	}
 
@@ -770,7 +770,7 @@ class Block extends Position implements Metadatable{
 	/**
 	 * @return string
 	 */
-	public function getName(){
+	public function getName() : string{
 		return "Unknown";
 	}
 

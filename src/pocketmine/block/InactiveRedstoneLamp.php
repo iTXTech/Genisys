@@ -15,7 +15,7 @@ class InactiveRedstoneLamp extends ActiveRedstoneLamp{
 		return 0;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Inactive Redstone Lamp";
 	}
 

@@ -35,7 +35,7 @@ class Leaves2 extends Leaves{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		static $names = [
 			self::ACACIA => "Acacia Leaves",
 			self::DARK_OAK => "Dark Oak Leaves",

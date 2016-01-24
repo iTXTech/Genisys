@@ -34,7 +34,7 @@ class SignPost extends Transparent{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 1;
 	}
 
@@ -42,7 +42,7 @@ class SignPost extends Transparent{
 		return false;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Sign Post";
 	}
 

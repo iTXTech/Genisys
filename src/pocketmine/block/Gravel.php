@@ -32,11 +32,11 @@ class Gravel extends Fallable{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Gravel";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.6;
 	}
 

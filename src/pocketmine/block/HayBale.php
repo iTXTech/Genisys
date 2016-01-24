@@ -32,11 +32,11 @@ class HayBale extends Solid{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Hay Bale";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.5;
 	}
 
