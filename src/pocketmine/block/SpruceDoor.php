@@ -32,7 +32,7 @@ class SpruceDoor extends Door{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Spruce Door Block";
 	}
 
@@ -40,7 +40,7 @@ class SpruceDoor extends Door{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 3;
 	}
 
@@ -48,7 +48,7 @@ class SpruceDoor extends Door{
 		return Tool::TYPE_AXE;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::SPRUCE_DOOR, 0, 1],
 		];

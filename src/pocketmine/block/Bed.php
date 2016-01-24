@@ -39,15 +39,15 @@ class Bed extends Transparent{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.2;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Bed Block";
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 		return new AxisAlignedBB(
 			$this->x,
 			$this->y,
@@ -156,7 +156,7 @@ class Bed extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::BED, 0, 1],
 		];

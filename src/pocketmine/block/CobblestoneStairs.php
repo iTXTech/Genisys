@@ -32,7 +32,7 @@ class CobblestoneStairs extends Stair{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2;
 	}
 
@@ -40,7 +40,7 @@ class CobblestoneStairs extends Stair{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Cobblestone Stairs";
 	}
 

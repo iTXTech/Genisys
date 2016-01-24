@@ -26,7 +26,7 @@ class RedstoneWire extends RedstoneSource{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Redstone Wire";
 	}
 
@@ -455,7 +455,7 @@ class RedstoneWire extends RedstoneSource{
 		else $this->getLevel()->setBlock($this, new Air());
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::REDSTONE, 0, 1]
 		];

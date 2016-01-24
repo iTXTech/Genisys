@@ -33,11 +33,11 @@ class SoulSand extends Solid{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Soul Sand";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.5;
 	}
 
@@ -45,7 +45,7 @@ class SoulSand extends Solid{
 		return Tool::TYPE_SHOVEL;
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 
 		return new AxisAlignedBB(
 			$this->x,

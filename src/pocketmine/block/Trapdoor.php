@@ -35,11 +35,11 @@ class Trapdoor extends Transparent{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Wooden Trapdoor";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 3;
 	}
 
@@ -47,7 +47,7 @@ class Trapdoor extends Transparent{
 		return true;
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 
 		$damage = $this->getDamage();
 
@@ -142,7 +142,7 @@ class Trapdoor extends Transparent{
 		return false;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[$this->id, 0, 1],
 		];

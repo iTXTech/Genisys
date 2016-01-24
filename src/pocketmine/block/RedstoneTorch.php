@@ -50,7 +50,7 @@ class RedstoneTorch extends RedstoneSource{
 		return $this->getLevel()->getServer()->pulseFrequency;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Redstone Torch";
 	}
 
@@ -291,7 +291,7 @@ class RedstoneTorch extends RedstoneSource{
 		return false;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::REDSTONE_TORCH, 0, 1],
 		];

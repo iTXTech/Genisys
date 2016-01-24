@@ -34,7 +34,7 @@ class PumpkinStem extends Crops{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Pumpkin Stem";
 	}
 
@@ -79,7 +79,7 @@ class PumpkinStem extends Crops{
 		return false;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::PUMPKIN_SEEDS, 0, mt_rand(0, 2)],
 		];

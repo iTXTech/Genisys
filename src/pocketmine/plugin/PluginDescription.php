@@ -181,7 +181,7 @@ class PluginDescription{
 	/**
 	 * @return string
 	 */
-	public function getName(){
+	public function getName() : string{
 		return $this->name;
 	}
 

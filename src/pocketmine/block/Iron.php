@@ -32,7 +32,7 @@ class Iron extends Solid{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Iron Block";
 	}
 
@@ -40,11 +40,11 @@ class Iron extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 5;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 3){
 			return [
 				[Item::IRON_BLOCK, 0, 1],

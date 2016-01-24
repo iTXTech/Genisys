@@ -10,7 +10,7 @@ use pocketmine\Player;
 class Creeper extends Monster{
 	const NETWORK_ID = 33;
 	
-	public function getName(){
+	public function getName() : string{
 		return "Creeper";
 	}
 	

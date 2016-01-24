@@ -32,7 +32,7 @@ class SwampBiome extends GrassyBiome{
 		$this->rainfall = 0.9;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Swamp";
 	}
 

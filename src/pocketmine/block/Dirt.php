@@ -37,7 +37,7 @@ class Dirt extends Solid{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.5;
 	}
 
@@ -45,7 +45,7 @@ class Dirt extends Solid{
 		return Tool::TYPE_SHOVEL;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Dirt";
 	}
 

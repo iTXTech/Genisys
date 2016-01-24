@@ -32,11 +32,11 @@ class Ice extends Transparent{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Ice";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.5;
 	}
 
@@ -50,7 +50,7 @@ class Ice extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [];
 	}
 }

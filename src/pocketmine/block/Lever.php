@@ -25,7 +25,7 @@ class Lever extends RedstoneSource{
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Lever";
 	}
 
@@ -165,7 +165,7 @@ class Lever extends RedstoneSource{
 		return (($this->meta & 0x08) === 0x08);
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[$this->id, 0 ,1],
 		];

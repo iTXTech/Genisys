@@ -33,7 +33,7 @@ class Obsidian extends Solid{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Obsidian";
 	}
 
@@ -41,11 +41,11 @@ class Obsidian extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 50;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 5){
 			return [
 				[Item::OBSIDIAN, 0, 1],

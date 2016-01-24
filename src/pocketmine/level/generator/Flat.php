@@ -53,7 +53,7 @@ class Flat extends Generator{
 		return $this->options;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "flat";
 	}
 

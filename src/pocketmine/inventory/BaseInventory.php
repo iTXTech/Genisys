@@ -95,7 +95,7 @@ abstract class BaseInventory implements Inventory{
 		return $this->maxStackSize;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return $this->name;
 	}
 

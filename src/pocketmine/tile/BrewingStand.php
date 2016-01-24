@@ -53,7 +53,7 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		}
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return $this->hasName() ? $this->namedtag->CustomName->getValue() : "Brewing Stand";
 	}
 

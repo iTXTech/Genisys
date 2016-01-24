@@ -24,7 +24,7 @@ class NetherBrickFence extends Transparent {
 		}
 	}
 	
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2;
 	}
         
@@ -33,7 +33,7 @@ class NetherBrickFence extends Transparent {
 		return Tool::TYPE_PICKAXE;
 	}
 	
-	public function getName(){
+	public function getName() : string{
 		return "Nether Brick Fence";
 	}
 	
@@ -42,7 +42,7 @@ class NetherBrickFence extends Transparent {
 		return ($block instanceof NetherBrickFence /* or $block instanceof NetherBrickFenceGate */) ? true : $block->isSolid() and !$block->isTransparent();
 	}
 	
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			return [
 				[Item::NETHER_BRICK_FENCE, $this->meta, 1],

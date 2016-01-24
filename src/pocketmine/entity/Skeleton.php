@@ -10,7 +10,7 @@ use pocketmine\item\Item as ItemItem;
 class Skeleton extends Monster implements ProjectileSource{
 	const NETWORK_ID = 34;
 	
-	public function getName(){
+	public function getName() : string{
 		return "Skeleton";
 	}
 	

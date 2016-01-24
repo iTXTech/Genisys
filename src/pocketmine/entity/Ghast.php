@@ -29,7 +29,7 @@ use pocketmine\Player;
 class Ghast extends Monster{
 	const NETWORK_ID = 41;
 	
-	public function getName(){
+	public function getName() : string{
 		return "Ghast";
 	}
 	

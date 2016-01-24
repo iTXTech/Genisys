@@ -146,11 +146,11 @@ class WoodenButton extends RedstoneSource{
 		$this->checkTorchOn($this->getSide($faces[$side]),[$this->getOppositeSide($faces[$side])]);
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Wooden Button";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.5;
 	}
 

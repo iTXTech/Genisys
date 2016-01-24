@@ -43,11 +43,11 @@ class Grass extends Solid{
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Grass";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.6;
 	}
 
@@ -55,7 +55,7 @@ class Grass extends Solid{
 		return Tool::TYPE_SHOVEL;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::DIRT, 0, 1],
 		];

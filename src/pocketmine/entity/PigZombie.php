@@ -31,7 +31,7 @@ use pocketmine\item\Item as ItemItem;
 class PigZombie extends Monster{
 	const NETWORK_ID = 36;
 	
-	public function getName(){
+	public function getName() : string{
 		return "PigZombie";
 	}
 	

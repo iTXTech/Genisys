@@ -33,7 +33,7 @@ class DesertBiome extends SandyBiome{
 		$this->rainfall = 0;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Desert";
 	}
 }

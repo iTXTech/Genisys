@@ -67,7 +67,7 @@ class EnchantingTable extends Transparent{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 5;
 	}
 
@@ -75,7 +75,7 @@ class EnchantingTable extends Transparent{
 		return 6000;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Enchanting Table";
 	}
 
@@ -97,7 +97,7 @@ class EnchantingTable extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[$this->id, 0, 1],

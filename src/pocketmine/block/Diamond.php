@@ -32,11 +32,11 @@ class Diamond extends Solid{
 
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 5;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Diamond Block";
 	}
 
@@ -44,7 +44,7 @@ class Diamond extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 4){
 			return [
 				[Item::DIAMOND_BLOCK, 0, 1],

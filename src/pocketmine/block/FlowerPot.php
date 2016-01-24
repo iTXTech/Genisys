@@ -31,7 +31,7 @@ class FlowerPot extends Flowable{
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Flower Pot Block";
 	}
 
@@ -109,7 +109,7 @@ class FlowerPot extends Flowable{
 		return false;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		$items = array([Item::FLOWER_POT, 0, 1]);
 		/** @var FlowerPotTile $tile */
 		if(($tile = $this->getLevel()->getTile($this)) instanceof FlowerPotTile){

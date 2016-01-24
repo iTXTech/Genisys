@@ -39,11 +39,11 @@ class TNT extends Solid{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "TNT";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0;
 	}
 

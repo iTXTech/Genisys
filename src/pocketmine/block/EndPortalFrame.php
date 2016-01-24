@@ -36,11 +36,11 @@ class EndPortalFrame extends Solid{
 		return 1;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "End Portal Frame";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return -1;
 	}
 
@@ -52,7 +52,7 @@ class EndPortalFrame extends Solid{
 		return false;
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 
 		return new AxisAlignedBB(
 			$this->x,

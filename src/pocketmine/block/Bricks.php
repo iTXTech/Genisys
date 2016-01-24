@@ -32,7 +32,7 @@ class Bricks extends Solid{
 
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2;
 	}
 
@@ -44,11 +44,11 @@ class Bricks extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Bricks";
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[Item::BRICKS_BLOCK, 0, 1],

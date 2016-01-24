@@ -41,11 +41,11 @@ class WaterLily extends Flowable{
 		return false;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Lily Pad";
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.6;
 	}
 
@@ -53,7 +53,7 @@ class WaterLily extends Flowable{
 		return true;
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 		return new AxisAlignedBB(
 			$this->x,
 			$this->y,
@@ -88,7 +88,7 @@ class WaterLily extends Flowable{
 		return false;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[$this->id, 0, 1]
 		];

@@ -46,7 +46,7 @@ class TrappedChest extends RedstoneSource{
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 2.5;
 	}
 
@@ -54,7 +54,7 @@ class TrappedChest extends RedstoneSource{
 		return $this->getHardness() * 5;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Trapped Chest";
 	}
 
@@ -62,7 +62,7 @@ class TrappedChest extends RedstoneSource{
 		return Tool::TYPE_AXE;
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 		return new AxisAlignedBB(
 				$this->x + 0.0625,
 				$this->y,
@@ -178,7 +178,7 @@ class TrappedChest extends RedstoneSource{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 				[$this->id, 0, 1],
 		];

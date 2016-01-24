@@ -37,7 +37,7 @@ class TallGrass extends Flowable{
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		static $names = [
 			0 => "Dead Shrub",
 			1 => "Tall Grass",
@@ -71,7 +71,7 @@ class TallGrass extends Flowable{
 		return false;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if(mt_rand(0, 15) === 0){
 			return [Item::WHEAT_SEEDS, 0, 1];
 		}

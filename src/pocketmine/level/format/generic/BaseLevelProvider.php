@@ -75,7 +75,7 @@ abstract class BaseLevelProvider implements LevelProvider{
 		return $this->level;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return $this->levelData["LevelName"];
 	}
 

@@ -34,7 +34,7 @@ class Carpet extends Flowable{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness() : int {
 		return 0.1;
 	}
 
@@ -42,7 +42,7 @@ class Carpet extends Flowable{
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		static $names = [
 			0 => "White Carpet",
 			1 => "Orange Carpet",
@@ -64,7 +64,7 @@ class Carpet extends Flowable{
 		return $names[$this->meta & 0x0f];
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 
 		return new AxisAlignedBB(
 			$this->x,

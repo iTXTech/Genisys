@@ -132,7 +132,7 @@ class Effect{
 		$this->setColor($r, $g, $b);
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return $this->name;
 	}
 
