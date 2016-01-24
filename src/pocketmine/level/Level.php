@@ -1696,8 +1696,6 @@ class Level implements ChunkManager, Metadatable{
 			        if($drop->getCount() > 0){
 			            $this->dropItem($vector->add(0.5, 0.5, 0.5), $drop);
 			        }
-			    } else{
-			        $this->dropItem($vector->add(0.5, 0.5, 0.5), $drop);
 			    }
 			}
 		}
