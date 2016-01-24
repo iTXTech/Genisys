@@ -132,7 +132,13 @@ class FallingSand extends Entity{
 				}else{
 					$this->server->getPluginManager()->callEvent($ev = new EntityBlockChangeEvent($this, $block, Block::get($this->getBlock(), $this->getDamage())));
 					if(!$ev->isCancelled()){
-						$this->getLevel()->setBlock($pos, $ev->getTo(), true);
+					    if(($block->getId() !== ItemItem::CHEST) && ($block->getId() !== ItemItem::TRAPPED_CHEST)){
+					        $this->getLevel()->setBlock($pos, $ev->getTo(), true);
+					    } else{
+					        $pos -> setComponents ($pos -> getX (), round ($pos -> getY () + 1), $pos -> getZ ());
+					        $this->getLevel()->setBlock($pos, $ev->getTo(), true);
+					        $this->kill();
+					    }
 					}
 				}
 				$hasUpdate = true;
