@@ -23,7 +23,7 @@ class PackedIce extends Solid {
 		return "Packed Ice";
 	}
 
-	public function getHardness() : double {
+	public function getHardness() {
 		return 0.5;
 	}
 

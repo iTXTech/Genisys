@@ -36,7 +36,7 @@ class StoneBrickStairs extends Stair{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 1.5;
 	}
 

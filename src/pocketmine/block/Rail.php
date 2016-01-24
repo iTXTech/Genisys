@@ -188,7 +188,7 @@ class Rail extends Flowable{
 		return $connected;
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 0.6;
 	}
 

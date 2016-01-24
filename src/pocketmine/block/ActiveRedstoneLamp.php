@@ -23,7 +23,7 @@ class ActiveRedstoneLamp extends Solid implements ElectricalAppliance{
 		return "Active Redstone Lamp";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 0.3;
 	}
 

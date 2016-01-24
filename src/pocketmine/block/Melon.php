@@ -36,7 +36,7 @@ class Melon extends Transparent{
 		return "Melon Block";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 1;
 	}
 

@@ -28,7 +28,7 @@ class LitPumpkin extends Solid{
 		return 15;
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 1;
 	}
 

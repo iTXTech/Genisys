@@ -36,7 +36,7 @@ class HayBale extends Solid{
 		return "Hay Bale";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 0.5;
 	}
 

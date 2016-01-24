@@ -44,7 +44,7 @@ class Vine extends Transparent{
 		return "Vines";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 0.2;
 	}
 

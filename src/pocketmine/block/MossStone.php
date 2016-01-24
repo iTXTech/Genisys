@@ -36,7 +36,7 @@ class MossStone extends Solid{
 		return "Moss Stone";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 2;
 	}
 

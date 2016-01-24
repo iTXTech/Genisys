@@ -45,7 +45,7 @@ class StoneWall extends Transparent{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 2;
 	}
 

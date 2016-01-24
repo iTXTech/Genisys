@@ -150,7 +150,7 @@ class WoodenButton extends RedstoneSource{
 		return "Wooden Button";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 0.5;
 	}
 

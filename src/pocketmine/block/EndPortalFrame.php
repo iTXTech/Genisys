@@ -40,7 +40,7 @@ class EndPortalFrame extends Solid{
 		return "End Portal Frame";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return -1;
 	}
 

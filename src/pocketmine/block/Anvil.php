@@ -42,7 +42,7 @@ class Anvil extends Fallable{
 		return true;
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 5;
 	}
 

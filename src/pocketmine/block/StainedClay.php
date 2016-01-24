@@ -32,7 +32,7 @@ class StainedClay extends Solid{
 		$this->meta = $meta;
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 1.25;
 	}
 

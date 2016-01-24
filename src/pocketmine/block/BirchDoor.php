@@ -40,7 +40,7 @@ class BirchDoor extends Door{
 		return true;
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 3;
 	}
 

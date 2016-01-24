@@ -36,7 +36,7 @@ class Ice extends Transparent{
 		return "Ice";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 0.5;
 	}
 

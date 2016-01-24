@@ -39,7 +39,7 @@ class Trapdoor extends Transparent{
 		return "Wooden Trapdoor";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 3;
 	}
 
