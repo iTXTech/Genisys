@@ -46,7 +46,7 @@ class WoodStairs extends Stair{
 		];
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 2;
 	}
 }

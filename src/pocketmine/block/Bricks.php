@@ -32,7 +32,7 @@ class Bricks extends Solid{
 
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 2;
 	}
 

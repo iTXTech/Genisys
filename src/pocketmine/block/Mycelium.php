@@ -44,7 +44,7 @@ class Mycelium extends Solid{
 		return Tool::TYPE_SHOVEL;
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 0.6;
 	}
 

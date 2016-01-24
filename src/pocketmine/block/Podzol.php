@@ -39,7 +39,7 @@ class Podzol extends Solid{
 		return "Podzol";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 2.5;
 	}
 }

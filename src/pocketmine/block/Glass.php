@@ -35,7 +35,7 @@ class Glass extends Transparent{
 		return "Glass";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 0.3;
 	}
 

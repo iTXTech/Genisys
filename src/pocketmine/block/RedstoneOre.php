@@ -37,7 +37,7 @@ class RedstoneOre extends Solid{
 		return "Redstone Ore";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 3;
 	}
 

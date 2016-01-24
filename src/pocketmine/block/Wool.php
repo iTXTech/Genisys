@@ -32,7 +32,7 @@ class Wool extends Solid{
 		$this->meta = $meta;
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 0.8;
 	}
 

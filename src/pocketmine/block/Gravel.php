@@ -36,7 +36,7 @@ class Gravel extends Fallable{
 		return "Gravel";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 0.6;
 	}
 

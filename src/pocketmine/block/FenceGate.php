@@ -39,7 +39,7 @@ class FenceGate extends Transparent implements ElectricalAppliance{
 		return "Oak Fence Gate";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 2;
 	}
 

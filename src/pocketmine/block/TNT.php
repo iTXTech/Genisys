@@ -43,7 +43,7 @@ class TNT extends Solid{
 		return "TNT";
 	}
 
-	public function getHardness() : int {
+	public function getHardness() {
 		return 0;
 	}
 

@@ -20,7 +20,7 @@ class Portal extends Flowable{
 		return "Portal";
 	}
 	
-	public function getHardness() : int {
+	public function getHardness() {
 		return 20;
 	}
 
