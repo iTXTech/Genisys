@@ -60,7 +60,11 @@ server:
  logout-msg: "§3@player left the game"
 
 redstone:
- #Choose if redstone system is allowed
+ ##########################################
+ ###Choose if redstone system is allowed###
+ ##########################################
+ #If not true then the redstone won't work#
+ ##########################################
  enable: false
  #Choose if allow fake low frequancy pulse
  allow-fake-low-frequency-pulse: false
