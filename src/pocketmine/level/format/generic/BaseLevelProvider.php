@@ -36,7 +36,7 @@ abstract class BaseLevelProvider implements LevelProvider{
 	protected $level;
 	/** @var string */
 	protected $path;
-	/** @var Compound */
+	/** @var CompoundTag */
 	protected $levelData;
 
 	public function __construct(Level $level, $path){

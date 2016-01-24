@@ -1,9 +1,14 @@
-![PocketMine-iTX Logo]
-(http://i4.tietuku.com/1c74c5b8e34793de.jpg)
+[
+![Genisys - PocketMine-iTX Core]
+(http://i8.tietuku.com/6600adf65e57e2f3.jpg)
+]
+(#)
 
 #Genisys - iTX Core Offical GitHub Repository
-#Genisys - 创世纪 iTX 核心 官方 GitHub 仓库
+#Genisys - 创世纪 iTX 核心 官方 GitHub
+
 <br>
+
 #使用前必读 - Read before using
 
 ##English Version
@@ -14,6 +19,8 @@
 * One Core to rule them ALL
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
+* [**Click Here to get PHP 7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
+* Be free to creat a pull request or open an issue. English and Chinese are both recommended.
 
 ###Acknowledgements
 * Skull, FlowerPot are based on **@ImagicalCorp** ImagicalMine's work
@@ -54,8 +61,10 @@
 * Supported 0.13.1 skin format
 * Hunger (Based on Katana)
 * AI (Based on MOW)
-* More commands (bancid bancidbyname banipbyname ms extractplugin makeplugin pardoncid weather extractphar loadplugin lvdat)
+* More commands (bancid bancidbyname banipbyname ms extractplugin makeplugin
+  pardoncid weather extractphar loadplugin lvdat biome)
 * With FolderPluginLoader
+* Monster Spawner
 
 ###To-Do List
 * Boat and Minecart (Improve)
@@ -67,7 +76,6 @@
 * Enchantment
 * New AI for all creatures
 * LevelDB support for Windows
-* php7 support
 
 ###Servers
 (In fact there are more than 80 servers in China using our core and most of them are better than us. Here are some servers set by us.)
@@ -100,6 +108,7 @@ Port: **233**
 Address: **umcpe.com**<br>
 Port: **888**
 
+<br><br>
 
 ##中文版本
 
@@ -109,6 +118,8 @@ Port: **888**
 * 一个核心统治一切。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
 * 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
+* [**点击获取 PHP 7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
+* 欢迎创建pull request。使用中文或者英文进行交流。
 
 ###鸣谢
 * 头颅、花盆的相关代码由 **@ImagicalCorp** ImagicalMine 编写；
@@ -162,7 +173,7 @@ Port: **888**
 * 加入 附魔
 * 用于所有生物的新 AI
 * Windows 的 LevelDB 支持
-* php7 的支持
+
 
 ###服务器
 （事实上，有超过 80 个中国的 Minecraft PE 服务器在使用我们的服务器内核，且大部分的服务器都比我们架设的好。这些是我们架设的服务器）

@@ -686,7 +686,10 @@ class Level implements ChunkManager, Metadatable{
 		if($this->stopTime == true){
 			return;
 		}else{
-			$this->time += 1.25;
+			$this->time += 1;
+			if($this->time > self::TIME_FULL){
+ 				$this->time = 0;
+ 			}
 		}
 	}
 
@@ -716,7 +719,7 @@ class Level implements ChunkManager, Metadatable{
 
 		$this->checkTime();
 
-		if(++$this->sendTimeTicker === 200){
+		if(++$this->sendTimeTicker === 280){
 			$this->sendTime();
 			$this->sendTimeTicker = 0;
 		}

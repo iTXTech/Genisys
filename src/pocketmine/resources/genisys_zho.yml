@@ -2,7 +2,7 @@
 
 #設定檔案版本
 config:
- version: 5
+ version: 6.1
 
 level:
  #設定是否變換天氣
@@ -34,7 +34,7 @@ player:
 
 nether:
  #是否允許地獄，打開此選項會自動生成地獄地圖
- allow-nether: false
+ allow-nether: true
  #地獄地圖名
  level-name: "nether"
  
@@ -49,13 +49,21 @@ server:
  allow-anvilandenchanttable: false
  #是否停用server.log
  disable-log: false
+ #是否启用反飞行作弊
+ anti-fly: true
+ #是否启用异步方式发送区块
+ async-chunk-request: true
  #玩家進出伺服器訊息提醒方式。0為Message，1為Tip，2為Popup
  player-msg-type: 0
  login-msg: "§3@player 加入了遊戲"
  logout-msg: "§3@player 離開了遊戲"
 
 redstone:
- #是否允許红石系统
+ ##############################
+ #######是否開啟紅石系統#######
+ ##############################
+ #如果不該為true將無法使用紅石#
+ ##############################
  enable: false
  #是否允許虛擬低頻脈衝
  allow-fake-low-frequency-pulse: false
@@ -85,7 +93,7 @@ dserver:
  time: 40
  #獲取失敗自動重試次數
  retry-times: 3
- #伺服器列表，用;隔開，例如 a.cn:19132;b.cn:19132
+ #伺服器列表，用;隔開，例如 1.example.com:19132;2.example.com:19133
  server-list: ""
  
 ai:
