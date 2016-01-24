@@ -1692,9 +1692,13 @@ class Level implements ChunkManager, Metadatable{
 
 		if($player === null or $player->isSurvival()){
 			foreach($drops as $drop){
-				if($drop->getCount() > 0){
-					$this->dropItem($vector->add(0.5, 0.5, 0.5), $drop);
-				}
+			    if (is_array ($drop)){
+			        if($drop->getCount() > 0){
+			            $this->dropItem($vector->add(0.5, 0.5, 0.5), $drop);
+			        }
+			    } else{
+			        $this->dropItem($vector->add(0.5, 0.5, 0.5), $drop);
+			    }
 			}
 		}
 
