@@ -34,7 +34,7 @@ player:
 
 nether:
  #是否允許地獄，打開此選項會自動生成地獄地圖
- allow-nether: false
+ allow-nether: true
  #地獄地圖名
  level-name: "nether"
  
@@ -89,7 +89,7 @@ dserver:
  time: 40
  #獲取失敗自動重試次數
  retry-times: 3
- #伺服器列表，用;隔開，例如 a.cn:19132;b.cn:19132
+ #伺服器列表，用;隔開，例如 1.example.com:19132;2.example.com:19133
  server-list: ""
  
 ai:
