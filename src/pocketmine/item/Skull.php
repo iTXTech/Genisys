@@ -25,7 +25,7 @@ class Skull extends Item{
 		parent::__construct(self::SKULL, $meta, $count, "Skull");
 	}
 
-	public function getMaxStackSize(){
+	public function getMaxStackSize() : int {
 		return 64;
 	}
 

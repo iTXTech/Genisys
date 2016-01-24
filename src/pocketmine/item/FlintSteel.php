@@ -33,7 +33,7 @@ class FlintSteel extends Tool{
 		parent::__construct(self::FLINT_STEEL, $meta, $count, "Flint and Steel");
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool{
 		return true;
 	}
 

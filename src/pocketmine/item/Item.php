@@ -522,7 +522,7 @@ class Item {
 	protected $durability = 0;
 	protected $name;
 
-	public function canBeActivated() {
+	public function canBeActivated() :bool {
 		return false;
 	}
 
@@ -1032,10 +1032,7 @@ class Item {
 		self::addCreativeItem(Item::get(Item::GOLDEN_APPLE, 0));
 		self::addCreativeItem(Item::get(Item::ENCHANTING_GOLDEN_APPLE, 0));
 		self::addCreativeItem(Item::get(Item::RAW_FISH, 0));
-		for ($i = 0; $i <= 2; $i++)
-		  {
-		   self::addCreativeItem(Item::get(460 + $i, 0));//All kinds of fish
-		  }
+		for ($i = 0; $i <= 2; $i++) {self::addCreativeItem(Item::get(460 + $i, 0));}//All kinds of fish
 		self::addCreativeItem(Item::get(Item::COOKED_FISH, 0));
 		self::addCreativeItem(Item::get(463, 0));//Cooked Fish
 		self::addCreativeItem(Item::get(Item::ROTTEN_FLESH, 0));
@@ -1089,12 +1086,8 @@ class Item {
 		self::addCreativeItem(Item::get(Item::DYE, 2));
 		self::addCreativeItem(Item::get(Item::DYE, 6));
 		self::addCreativeItem(Item::get(Item::GLASS_BOTTLE, 0));
-		for ($i = 0; $i <= 35; $i++){
-		    self::addCreativeItem(Item::get(Item::POTION, $i));
-		}
-		for ($i = 0; $i <= 35; $i++){
-		    self::addCreativeItem(Item::get(Item::SPLASH_POTION, $i));
-		}
+		for ($i = 0; $i <= 35; $i++){self::addCreativeItem(Item::get(Item::POTION, $i));}
+		for ($i = 0; $i <= 35; $i++){self::addCreativeItem(Item::get(Item::SPLASH_POTION, $i));}
 	}
 
 	public static function clearCreativeItems() {
@@ -1520,7 +1513,7 @@ class Item {
 		$this->meta = $meta !== null ? $meta & 0xFFFF : null;
 	}
 
-	public function getMaxStackSize(){
+	public function getMaxStackSize() : int {
 		return 64;
 	}
 
@@ -1582,7 +1575,7 @@ class Item {
 		return false;
 	}
 
-	final public function __toString() : string{
+	final public function __toString(){ //Get error here..
 		return "Item " . $this->name . " (" . $this->id . ":" . ($this->meta === null ? "?" : $this->meta) . ")x" . $this->count . ($this->hasCompoundTag() ? " tags:0x".bin2hex($this->getCompoundTag()) : "");
 	}
 
