@@ -34,7 +34,7 @@ player:
  
 nether:
  #是否允许地狱，打开此选项会自动生成地狱地图
- allow-nether: false
+ allow-nether: true
  #地狱地图名
  level-name: "nether"
  
@@ -59,7 +59,11 @@ server:
  logout-msg: "§3@player 退出了游戏"
 
 redstone:
- #是否开启红石系统
+ ##############################
+ #######是否开启红石系统#######
+ ##############################
+ #如果不改为true将无法使用红石#
+ ##############################
  enable: false
  #是否允许伪低频
  allow-fake-low-frequency-pulse: false
@@ -89,7 +93,7 @@ dserver:
  time: 40
  #获取失败自动重试次数
  retry-times: 3
- #服务器列表，用;隔开，例如 a.cn:19132;b.cn:19132
+ #服务器列表，用;隔开，例如 1.example.com:19132;2.example.com:19133
  server-list: ""
  
 ai:

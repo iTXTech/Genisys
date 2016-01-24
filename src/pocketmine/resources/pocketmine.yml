@@ -9,6 +9,7 @@ settings:
  language: "eng"
  #Whether to send all strings translated to server locale or let the device handle them
  force-language: false
+ #When server shut down, the players will get kicked and this is what will show on there screen.
  shutdown-message: "Server closed"
  #Allow listing plugins via Query
  query-plugins: true
@@ -76,7 +77,7 @@ network:
  #Threshold for batching packets, in bytes. Only these packets will be compressed
  #Set to 0 to compress everything, -1 to disable.
  batch-threshold: 256
- #Compression level used when sending batched packets. Higher = more CPU, less bandwidth usage
+ #Compression level used when sending batched packets. Higher = Uses More CPU, Less = More Bandwidth Usage
  compression-level: 2
  #Use AsyncTasks for compression. Adds half/one tick delay, less CPU load on main thread
  async-compression: true
@@ -153,14 +154,14 @@ anonymous-statistics:
  host: stats.pocketmine.net
 
 auto-updater:
- enabled: true
+ enabled: false
  on-update:
-  warn-console: true
-  warn-ops: true
+  warn-console: false
+  warn-ops: false
  #Can be development, beta or stable.
  preferred-channel: stable
  #If using a development version, it will suggest changing the channel
- suggest-channels: true
+ suggest-channels: false
  host: www.pocketmine.net
 
 aliases:

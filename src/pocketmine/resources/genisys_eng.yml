@@ -34,7 +34,7 @@ player:
 
 nether:
  #Choose if the nether's allowed,the level of nether will generate automatically
- allow-nether: false
+ allow-nether: true
  #The name of nether's level
  level-name: "nether"
  
@@ -60,7 +60,11 @@ server:
  logout-msg: "§3@player left the game"
 
 redstone:
- #Choose if redstone system is allowed
+ ##########################################
+ ###Choose if redstone system is allowed###
+ ##########################################
+ #If not true then the redstone won't work#
+ ##########################################
  enable: false
  #Choose if allow fake low frequancy pulse
  allow-fake-low-frequency-pulse: false
@@ -90,7 +94,7 @@ dserver:
  time: 40
  #Auto-retry times when failed
  retry-times: 3
- #the server list，Separate by ';'，e.g. a.cn:19132;b.cn:19132
+ #the server list，Separate by ';'，e.g. 1.example.com:19132;2.example.com:19133
  server-list: ""
  
 ai:
