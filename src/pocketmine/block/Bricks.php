@@ -48,7 +48,7 @@ class Bricks extends Solid{
 		return "Bricks";
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[Item::BRICKS_BLOCK, 0, 1],

@@ -104,7 +104,7 @@ class SkullBlock extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		/** @var Skull $tile */
 		if(($tile = $this->getLevel()->getTile($this)) instanceof Skull){
 			return [[Item::SKULL, $tile->getSkullType(), 1]];

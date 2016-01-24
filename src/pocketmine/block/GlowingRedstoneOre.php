@@ -59,7 +59,7 @@ class GlowingRedstoneOre extends Solid{
 		return false;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 4){
 			return [
 				[Item::REDSTONE_DUST, 0, mt_rand(4, 5)],

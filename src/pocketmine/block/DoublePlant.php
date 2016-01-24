@@ -61,7 +61,7 @@ class DoublePlant extends Flowable{
 		return false;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		//TODO
 
 		return [];

@@ -55,7 +55,7 @@ class Grass extends Solid{
 		return Tool::TYPE_SHOVEL;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::DIRT, 0, 1],
 		];

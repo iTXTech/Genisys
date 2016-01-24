@@ -54,7 +54,7 @@ class DoubleSlab extends Solid{
 		return "Double " . $names[$this->meta & 0x07] . " Slab";
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[Item::SLAB, $this->meta & 0x07, 2],

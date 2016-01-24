@@ -54,7 +54,7 @@ class Stonecutter extends Solid{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[Item::STONECUTTER, 0, 1],

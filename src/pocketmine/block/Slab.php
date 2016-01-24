@@ -61,7 +61,7 @@ class Slab extends Transparent{
 		return (($this->meta & 0x08) > 0 ? "Upper " : "") . $names[$this->meta & 0x07] . " Slab";
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 
 		if(($this->meta & 0x08) > 0){
 			return new AxisAlignedBB(
@@ -133,7 +133,7 @@ class Slab extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[$this->id, $this->meta & 0x07, 1],

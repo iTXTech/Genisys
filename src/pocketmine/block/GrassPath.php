@@ -45,7 +45,7 @@ class GrassPath extends Transparent{
 		return Tool::TYPE_SHOVEL;
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 		return new AxisAlignedBB(
 			$this->x,
 			$this->y,
@@ -60,7 +60,7 @@ class GrassPath extends Transparent{
 		return 0.6;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::DIRT, 0, 1],
 		];

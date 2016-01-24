@@ -48,7 +48,7 @@ class BirchDoor extends Door{
 		return Tool::TYPE_AXE;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::BIRCH_DOOR, 0, 1],
 		];

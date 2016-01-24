@@ -57,7 +57,7 @@ class Ladder extends Transparent{
 		$entity->onGround = true;
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 
 		$f = 0.125;
 
@@ -138,7 +138,7 @@ class Ladder extends Transparent{
 		return Tool::TYPE_AXE;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[$this->id, 0, 1],
 		];

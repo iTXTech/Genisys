@@ -45,7 +45,7 @@ class SoulSand extends Solid{
 		return Tool::TYPE_SHOVEL;
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 
 		return new AxisAlignedBB(
 			$this->x,

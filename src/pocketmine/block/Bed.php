@@ -47,7 +47,7 @@ class Bed extends Transparent{
 		return "Bed Block";
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 		return new AxisAlignedBB(
 			$this->x,
 			$this->y,
@@ -156,7 +156,7 @@ class Bed extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::BED, 0, 1],
 		];

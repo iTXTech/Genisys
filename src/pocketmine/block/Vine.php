@@ -60,7 +60,7 @@ class Vine extends Transparent{
 		$entity->resetFallDistance();
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 
 		$f1 = 1;
 		$f2 = 1;
@@ -154,7 +154,7 @@ class Vine extends Transparent{
 		return false;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isShears()){
 			return [
 				[$this->id, 0, 1],

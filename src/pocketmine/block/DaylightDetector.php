@@ -108,7 +108,7 @@ class DaylightDetector extends RedstoneSource{
 		if($this->isActivated()) $this->deactivate();
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[self::DAYLIGHT_SENSOR, 0, 1]
 		];

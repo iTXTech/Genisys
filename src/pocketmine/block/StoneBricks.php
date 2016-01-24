@@ -55,7 +55,7 @@ class StoneBricks extends Solid{
 		return $names[$this->meta & 0x03];
 	}
 	
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[Item::STONE_BRICKS, $this->meta & 0x03, 1],

@@ -44,7 +44,7 @@ class Emerald extends Solid{
 		return "Emerald Block";
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 4){
 			return [
 				[Item::EMERALD_BLOCK, 0, 1],

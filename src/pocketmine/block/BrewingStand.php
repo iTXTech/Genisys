@@ -98,7 +98,7 @@ class BrewingStand extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		$drops = [];
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			$drops[] = [Item::BREWING_STAND, 0, 1];

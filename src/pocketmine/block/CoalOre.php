@@ -44,7 +44,7 @@ class CoalOre extends Solid{
 		return "Coal Ore";
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[Item::COAL, 0, 1],

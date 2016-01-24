@@ -44,7 +44,7 @@ class NetherBrick extends Solid{
 		return 2;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[Item::NETHER_BRICKS, 0, 1],

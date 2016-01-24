@@ -45,7 +45,7 @@ class Obsidian extends Solid{
 		return 50;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 5){
 			return [
 				[Item::OBSIDIAN, 0, 1],

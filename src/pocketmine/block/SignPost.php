@@ -93,7 +93,7 @@ class SignPost extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::SIGN, 0, 1],
 		];

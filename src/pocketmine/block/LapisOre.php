@@ -44,7 +44,7 @@ class LapisOre extends Solid{
 		return "Lapis Lazuli Ore";
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 3){
 			return [
 				[Item::DYE, 4, mt_rand(4, 8)],

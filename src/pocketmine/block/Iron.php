@@ -44,7 +44,7 @@ class Iron extends Solid{
 		return 5;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 3){
 			return [
 				[Item::IRON_BLOCK, 0, 1],

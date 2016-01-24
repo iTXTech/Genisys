@@ -44,7 +44,7 @@ class Diamond extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 4){
 			return [
 				[Item::DIAMOND_BLOCK, 0, 1],

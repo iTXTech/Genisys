@@ -36,7 +36,7 @@ class BirchWoodStairs extends Stair{
 		return "Birch Wood Stairs";
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[$this->id, 0, 1],
 		];

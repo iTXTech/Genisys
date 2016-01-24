@@ -35,7 +35,7 @@ class ActiveRedstoneLamp extends Solid implements ElectricalAppliance{
 		return 15;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::INACTIVE_REDSTONE_LAMP, 0 ,1],
 		];

@@ -52,7 +52,7 @@ class FenceGate extends Transparent implements ElectricalAppliance{
 	}
 
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() : AxisAlignedBB {
 
 		if(($this->getDamage() & 0x04) > 0){
 			return null;
@@ -97,7 +97,7 @@ class FenceGate extends Transparent implements ElectricalAppliance{
 		return (($this->getDamage() & 0x04) > 0);
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[$this->id, 0, 1],
 		];

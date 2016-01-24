@@ -157,7 +157,7 @@ class Leaves extends Transparent{
 		$this->getLevel()->setBlock($this, $this, true);
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		$drops = [];
 		if($item->isShears()){
 			$drops[] = [Item::LEAVES, $this->meta & 0x03, 1];

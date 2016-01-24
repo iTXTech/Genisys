@@ -56,7 +56,7 @@ class Quartz extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[Item::QUARTZ_BLOCK, $this->meta & 0x03, 1],

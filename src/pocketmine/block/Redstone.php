@@ -44,7 +44,7 @@ class Redstone extends Solid{
 		return "Redstone Block";
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[Item::REDSTONE_BLOCK, 0, 1],

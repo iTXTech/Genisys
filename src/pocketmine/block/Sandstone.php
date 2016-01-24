@@ -54,7 +54,7 @@ class Sandstone extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[Item::SANDSTONE, $this->meta & 0x03, 1],

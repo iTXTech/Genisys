@@ -44,7 +44,7 @@ class IronBars extends Thin{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[Item::IRON_BARS, 0, 1],
