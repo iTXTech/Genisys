@@ -667,7 +667,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 *
 	 * @return string
 	 */
-	public function getDisplayName() : string{
+	public function getDisplayName(){
 		return $this->displayName;
 	}
 
@@ -3832,7 +3832,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 *
 	 * @return string
 	 */
-	public function getName() : string{
+	public function getName(){
 		return $this->username;
 	}
 

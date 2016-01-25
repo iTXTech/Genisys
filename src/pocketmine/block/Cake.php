@@ -48,7 +48,7 @@ class Cake extends Transparent{
 		return "Cake Block";
 	}
 
-	protected function recalculateBoundingBox() : AxisAlignedBB {
+	protected function recalculateBoundingBox() {
 
 		$f = (1 + $this->getDamage() * 2) / 16;
 

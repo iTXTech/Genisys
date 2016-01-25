@@ -60,7 +60,7 @@ abstract class Door extends Transparent implements ElectricalAppliance{
 		return $down & 0x07 | ($isUp ? 8 : 0) | ($isRight ? 0x10 : 0);
 	}
 
-	protected function recalculateBoundingBox() : AxisAlignedBB {
+	protected function recalculateBoundingBox() {
 
 		$f = 0.1875;
 		$damage = $this->getFullDamage();

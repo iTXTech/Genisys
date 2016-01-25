@@ -53,7 +53,7 @@ class WaterLily extends Flowable{
 		return true;
 	}
 
-	protected function recalculateBoundingBox() : AxisAlignedBB {
+	protected function recalculateBoundingBox() {
 		return new AxisAlignedBB(
 			$this->x,
 			$this->y,

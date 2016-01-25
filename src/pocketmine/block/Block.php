@@ -935,7 +935,7 @@ class Block extends Position implements Metadatable{
 	/**
 	 * @return AxisAlignedBB
 	 */
-	protected function recalculateBoundingBox() : AxisAlignedBB {
+	protected function recalculateBoundingBox() {
 		return new AxisAlignedBB(
 			$this->x,
 			$this->y,
