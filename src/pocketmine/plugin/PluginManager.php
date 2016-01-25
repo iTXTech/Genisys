@@ -222,7 +222,7 @@ class PluginManager{
 								$version = array_map("intval", explode(".", $version));
 								$apiVersion = array_map("intval", explode(".", $this->server->getApiVersion()));
 								//Completely different API version
-								if($version[0] !== $apiVersion[0]){
+								if($version[0] > $apiVersion[0]){
 									continue;
 								}
 								//If the plugin requires new API features, being backwards compatible
