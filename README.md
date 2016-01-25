@@ -34,11 +34,11 @@
 * @FENGberd's encouragement
 * Our leaders are **@ishitatsuyuki** and **@jasonczc**
 
-###Declaration
-* We have never copy **ANY** codes from PxxxxxMxxxPxxxPxxx and we even don't know about that project either.
-
 ###Jenkins CI
 [**Click Here to go to Jenkins CI Page**](http://mcper.cn:8080/job/Genisys/)
+
+###Documentation
+[**Click Here to go to Genisys Documentation Page**](http://mcper.cn/Genisys-Docs/)
 
 ###Features
 * Performance optimization (Let 100+ players join in a server)
@@ -134,11 +134,11 @@ Port: **888**
 * 感谢 **@FENGberd** 的支持与鼓励；
 * 我们的项目负责人为 **@ishitatsuyuki** 及 **@jasonczc**。
 
-###声明
-* 我们没有从PxxxxxMxxxPxxxPxxx抄袭任何代码，并且此前也不曾听闻该项目
-
-###自动构建的 .phar 内核
+###自动构建的核心
 [**点击这里进入下载**](http://mcper.cn:8080/job/Genisys/)
+
+###开发文档
+[**点击这里进入文档首页**](http://mcper.cn/Genisys-Docs/)
 
 ###特性
 * 性能提升（允许 100+ 的玩家加入服务器）
