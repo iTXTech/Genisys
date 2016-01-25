@@ -148,11 +148,15 @@ class Trapdoor extends Transparent{
 		];
 	}
 
+	public function isOpened(){
+		return (($this->meta & 0b00001000) === 0);
+	}
+
 	public function onActivate(Item $item, Player $player = \null){
 		$this->meta ^= 0b00001000;
 		$this->getLevel()->setBlock($this, $this, true);
 		$this->level->addSound(new DoorSound($this));
-		return \true;
+		return true;
 	}
 
 	public function getToolType(){
