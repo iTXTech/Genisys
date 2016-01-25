@@ -20,7 +20,7 @@
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 * [**Click Here to get PHP 7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
-* Be free to creat a pull request or open an issue. English and Chinese are both recommended.
+* Be free to create a pull request or open an issue. English and Chinese are both recommended.
 
 ###Acknowledgements
 * Skull, FlowerPot are based on **@ImagicalCorp** ImagicalMine's work
