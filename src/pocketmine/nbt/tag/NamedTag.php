@@ -28,7 +28,7 @@ abstract class NamedTag extends Tag{
 
 	/**
 	 * @param string                                                      $name
-	 * @param bool|float|double|int|byte|short|array|Compound|Enum|string $value
+	 * @param bool|float|double|int|byte|short|array|CompoundTag|EnumTag|string $value
 	 */
 	public function __construct($name = "", $value = null){
 		$this->__name = ($name === null or $name === false) ? "" : $name;
@@ -37,7 +37,7 @@ abstract class NamedTag extends Tag{
 		}
 	}
 
-	public function getName() : string{
+	public function getName(){
 		return $this->__name;
 	}
 
