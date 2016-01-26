@@ -19,8 +19,8 @@
 * One Core to rule them ALL
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
-* [**Click Here to get PHP 7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
-* Be free to create a pull request or open an issue. English and Chinese are both recommended.
+* [**Click Here to get php7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
+* Be free to create a _Pull Request_ or open an _Issue_. English and Chinese are both recommended.
 
 ###Acknowledgements
 * Skull, FlowerPot are based on **@ImagicalCorp** ImagicalMine's work
@@ -65,7 +65,7 @@
   pardoncid weather extractphar loadplugin lvdat biome)
 * With FolderPluginLoader
 * Monster Spawner
-* NOTICE: Please edit **genisys.yml** to enable all the features, including RedStone, MobAI, Nether and so on.
+* NOTICE: Please edit **genisys.yml** to enable all the features, including Redstone, MobAI, Nether and so on.
 
 ###To-Do List
 * Boat and Minecart (Improve)
@@ -119,8 +119,8 @@ Port: **888**
 * 一个核心统治一切。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
 * 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
-* [**点击获取 PHP 7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
-* 欢迎创建pull request。使用中文或者英文进行交流。
+* [**点击获取 php7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
+* 欢迎创建 Pull Request。请使用中文或者英文进行交流（但为了交流方便，请尽量使用英文进行交流）。
 
 ###鸣谢
 * 头颅、花盆的相关代码由 **@ImagicalCorp** ImagicalMine 编写；
@@ -163,7 +163,7 @@ Port: **888**
 * 生物 AI（基于 MOW 的代码）
 * 更多的指令（bancid（按设备编号或玩家 ID），banip（按 IP 或玩家 ID），ms，devTools 相关指令（打包与解包插件），pardoncid，weather，loadplugin，lvdat）
 * 文件夹插件加载器
-* 注意: 请编辑**genisys.yml**来启用红石、生物AI和地狱等功能。
+* 注意: 请编辑 **genisys.yml** 来启用红石、生物AI和地狱等功能。
 
 ###计划表
 * 完善 船 与 矿车
