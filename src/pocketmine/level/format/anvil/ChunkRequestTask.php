@@ -23,6 +23,7 @@ namespace pocketmine\level\format\anvil;
 
 use pocketmine\level\Level;
 use pocketmine\nbt\NBT;
+use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
 use pocketmine\tile\Spawnable;
@@ -83,7 +84,7 @@ class ChunkRequestTask extends AsyncTask{
 	public function onCompletion(Server $server){
 		$level = $server->getLevel($this->levelId);
 		if($level instanceof Level and $this->hasResult()){
-			$level->chunkRequestCallback($this->chunkX, $this->chunkZ, $this->getResult());
+			$level->chunkRequestCallback($this->chunkX, $this->chunkZ, $this->getResult(), FullChunkDataPacket::ORDER_LAYERED);
 		}
 	}
 

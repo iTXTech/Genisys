@@ -102,11 +102,11 @@ class Chunk extends BaseChunk{
 			$count = $stream->getInt();
 			for($i = 0; $i < $count; ++$i){
 				$key = $stream->getInt();
-				$extraData[$key] = $stream->getShort(false);
+				$extraData[$key] = $stream->getShort();
 			}
 		}
 
-		parent::__construct($level, (int) $this->nbt["xPos"], (int) $this->nbt["zPos"], $sections, $this->nbt->BiomeColors->getValue(), $this->nbt->HeightMap->getValue(), $this->nbt->Entities->getValue(), $this->nbt->TileEntities->getValue(), $extraData);
+		parent::__construct($level, (int) $this->nbt["xPos"], (int) $this->nbt["zPos"], $sections, $this->nbt->BiomeColors->getValue(), $this->nbt->HeightMap->getValue(), $this->nbt->Entities->getValue(), $this->nbt->TileEntities->getValue());
 
 		if(isset($this->nbt->Biomes)){
 			$this->checkOldBiomes($this->nbt->Biomes->getValue());
@@ -156,7 +156,7 @@ class Chunk extends BaseChunk{
 	}
 
 	/**
-	 * @return Compound
+	 * @return CompoundTag
 	 */
 	public function getNBT(){
 		return $this->nbt;

@@ -40,8 +40,8 @@ abstract class BaseChunk extends BaseFullChunk implements Chunk{
 	 * @param ChunkSection[] $sections
 	 * @param int[]          $biomeColors
 	 * @param int[]          $heightMap
-	 * @param Compound[]     $entities
-	 * @param Compound[]     $tiles
+	 * @param CompoundTag[]     $entities
+	 * @param CompoundTag[]     $tiles
 	 *
 	 * @throws ChunkException
 	 */
