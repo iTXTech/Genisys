@@ -57,7 +57,7 @@ class CraftingManager{
 			$recipes = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/recipes.json", Config::JSON, []);
 
 			MainLogger::getLogger()->Info("Loading recipes...");
-			foreach($recipes->getAll() as $recipe){ echo "A";
+			foreach($recipes->getAll() as $recipe){
 				switch($recipe["Type"]){
 					case 0:
 						// TODO: handle multiple result items
