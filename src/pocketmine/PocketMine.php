@@ -72,12 +72,12 @@ namespace pocketmine {
 	use pocketmine\utils\Utils;
 	use pocketmine\wizard\Installer;
 
-	const VERSION = "1.0dev";
+	const VERSION = "1.1dev";
 	const API_VERSION = "2.0.0";
 	const CODENAME = "Amazing PHP7 !";
-	const MINECRAFT_VERSION = "v0.13.1 alpha";
-	const MINECRAFT_VERSION_NETWORK = "0.13.1";
-	const iTX_API_VERSION = '1.5.8';
+	const MINECRAFT_VERSION = "v0.14.0 alpha";
+	const MINECRAFT_VERSION_NETWORK = "0.14.0";
+	const iTX_API_VERSION = '1.6.0';
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
