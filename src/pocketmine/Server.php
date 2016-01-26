@@ -347,6 +347,7 @@ class Server{
 	public $playerLogoutMsg = "";
 	public $antiFly = false;
 	public $asyncChunkRequest = true;
+	public $readRecipesFromJson = false;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -1620,6 +1621,7 @@ class Server{
 		$this->getLogger()->setWrite(!$this->getAdvancedProperty("server.disable-log", false));
 		$this->antiFly = $this->getAdvancedProperty("server.anti-fly", true);
 		$this->asyncChunkRequest = $this->getAdvancedProperty("server.async-chunk-request", true);
+		$this->readRecipesFromJson = $this->getAdvancedProperty("server.read-recipes-from-json", false);
 	}
 
 	/**
@@ -1879,7 +1881,7 @@ class Server{
 			Attribute::init();
 			/** TODO: @deprecated */
 			//TextWrapper::init();
-			$this->craftingManager = new CraftingManager();
+			$this->craftingManager = new CraftingManager($this->readRecipesFromJson);
 
 			$this->pluginManager = new PluginManager($this, $this->commandMap);
 			$this->pluginManager->subscribeToPermission(Server::BROADCAST_CHANNEL_ADMINISTRATIVE, $this->consoleSender);
