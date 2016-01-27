@@ -16,6 +16,7 @@
 ###Genisys
 
 [![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](http://mcper.cn:8080/job/Genisys/lastBuild/badge/icon)](http://mcper.cn:8080/job/Genisys/lastBuild/)
 * One Core to rule them ALL
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
