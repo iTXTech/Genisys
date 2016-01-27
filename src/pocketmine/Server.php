@@ -1707,7 +1707,7 @@ class Server{
 		   §5PocketMine-iTX §3Genisys §fis a fork of PocketMine-MP.
 		   Powered by §5iTX Technologies LLC.
 		   §fVersion: §6" . $this->getPocketMineVersion() . "
-		   §fClient Version: §d0.13.1 alpha
+		   §fClient Version: §d". \pocketmine\MINECRAFT_VERSION ."
 		   §fYou could get the lastest code on https://github.com/iTXTech/Genisys
 		   §fDonate link: http://pl.zxda.net/plugins/203.html
 		   §f如果你在免费使用本核心，希望你可以进入上面的链接捐赠给我们，这会成为我们前进的动力。
@@ -2185,11 +2185,8 @@ private function lookupAddress($address) {
 		foreach($players as $p){
 			if($p->isConnected()){
 				$targets[] = $this->identifiers[spl_object_hash($p)];
-				//$targets[] = $p->getName();
 			}
 		}
-
-		//$this->broadcastPacketsCallback(zlib_encode($str, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel), $targets);//临时修复
 
 		if(!$forceSync and $this->networkCompressionAsync){
 			$task = new CompressBatchedTask($str, $targets, $this->networkCompressionLevel);
