@@ -26,13 +26,12 @@ namespace pocketmine\network\protocol;
 
 
 interface Info{
-//TODO: All changed for 0.14!
 	/**
 	 * Actual Minecraft: PE protocol version
 	 */
 	const CURRENT_PROTOCOL = 41;
 
-	const LOGIN_PACKET = 0x8e;
+	const LOGIN_PACKET = 0x8f;
 	const PLAY_STATUS_PACKET = 0x90;
 	const DISCONNECT_PACKET = 0x91;
 	const BATCH_PACKET = 0x92;
@@ -87,6 +86,10 @@ interface Info{
 	const PLAYER_LIST_PACKET = 0xc3;
 	const TELEMETRY_EVENT_PACKET = 0xc4;
 	const SPAWN_EXPERIENCE_ORB_PACKET = 0xc5;
+	// const CLIENTBOUND_MAP_ITEM_DATA_PACKET = 0xc6;
+	// const MAP_INFO_REQUEST_PACKET = 0xc7;
+	// const REQUEST_CHUNK_RADIUS_PACKET = 0xc8;
+	// const CHUNK_RADIUS_UPDATE_PACKET = 0xc9;
 }
 
 
