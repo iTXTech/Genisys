@@ -161,7 +161,7 @@ class EnchantTable extends Spawnable implements InventoryHolder, Container, Name
 
 
 	public function onUpdate(){
-		if(($this->getLevel()->getServer()->getTick() % $this->getLevel()->getServer()->getTicksPerSecondAverage()) == 0){ //Update per second
+		if(($this->getLevel()->getServer()->getTick() % 20) == 0){ //Update per second
 			$item = $this->inventory->getItem(0);
 			if(!isset($this->item) or !$item->deepEquals($this->item)){
 				$this->item = $item;
