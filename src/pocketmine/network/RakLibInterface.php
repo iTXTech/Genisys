@@ -215,10 +215,10 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 				if(!isset($packet->__encapsulatedPacket)){
 					$packet->__encapsulatedPacket = new CachedEncapsulatedPacket;
 					$packet->__encapsulatedPacket->identifierACK = null;
-					$packet->__encapsulatedPacket->buffer = $packet->buffer;
+					$packet->__encapsulatedPacket->buffer =  chr("0x8e") . $packet->buffer;
 					if($packet->getChannel() !== 0){
 						$packet->__encapsulatedPacket->reliability = 3;
-						$packet->__encapsulatedPacket->orderChannel = $packet->getChannel();
+						$packet->__encapsulatedPacket->orderChannel = chr("0x8e") . $packet->getChannel();
 						$packet->__encapsulatedPacket->orderIndex = 0;
 					}else{
 						$packet->__encapsulatedPacket->reliability = 2;
@@ -237,7 +237,7 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 
 			if($pk === null){
 				$pk = new EncapsulatedPacket();
-				$pk->buffer = $packet->buffer;
+				$pk->buffer =  chr("0x8e") . $packet->buffer;
 				if($packet->getChannel() !== 0){
 					$packet->reliability = 3;
 					$packet->orderChannel = $packet->getChannel();
@@ -260,12 +260,12 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 	}
 
 	private function getPacket($buffer){
-		$pid = ord($buffer{0});
+		$pid = ord($buffer{1});
 
 		if(($data = $this->network->getPacket($pid)) === null){
 			return null;
 		}
-		$data->setBuffer($buffer, 1);
+		$data->setBuffer($buffer, 2);
 
 		return $data;
 	}
