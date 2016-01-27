@@ -6,6 +6,7 @@
 
 #Genisys - iTX Core Offical GitHub Repository
 #Genisys - 创世纪 iTX 核心 官方 GitHub
+#Jenkins server is transfering to a better computer room.So you couldn't use it for a few days.
 
 <br>
 
