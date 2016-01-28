@@ -49,9 +49,9 @@ server:
  allow-anvilandenchanttable: false
  #是否停用server.log
  disable-log: false
- #是否启用反飞行作弊
+ #是否啟用反飛行作弊
  anti-fly: true
- #是否启用异步方式发送区块
+ #是否啟用異步發送區塊
  async-chunk-request: true
  #玩家進出伺服器訊息提醒方式。0為Message，1為Tip，2為Popup
  player-msg-type: 0
@@ -62,7 +62,7 @@ redstone:
  ##############################
  #######是否開啟紅石系統#######
  ##############################
- #如果不該為true將無法使用紅石#
+ #如果不改為true將無法使用紅石#
  ##############################
  enable: false
  #是否允許虛擬低頻脈衝
@@ -121,5 +121,5 @@ ai:
  snow-golem: true
  #苦力帕爆炸是否破壞方塊
  creeper-explode-destroy-block: false
- #是否允許自动生成生物
+ #是否允許自動生成生物
  mobgenerate: false
