@@ -42,20 +42,6 @@ class Minecart extends Vehicle{
 		//parent::onUpdate($currentTick);
 
 		if($this->isAlive()){
-			/*$expectedPos = new Vector3($this->x + $this->motionX, $this->y + $this->motionY, $this->z + $this->motionZ);
-			$expBlock0 = $this->getLevel()->getBlock($expectedPos->add(0, -1, 0)->round());
-			$expBlock1 = $this->getLevel()->getBlock($expectedPos->add(0, 0, 0)->round());
-
-			if($expBlock0->getId() == 0){
-				$this->motionY -= $this->gravity;//重力计算
-				$this->motionX = 0;
-				$this->motionZ = 0;
-			}else $this->motionY = 0;
-
-			if($expBlock1->getId() != 0){
-				$this->motionY += 0.1;
-			}*/
-
 			$this->motionY -= $this->gravity;
 
 			if($this->checkObstruction($this->x, $this->y, $this->z)){
@@ -63,6 +49,7 @@ class Minecart extends Vehicle{
 			}
 
 			$this->move($this->motionX, $this->motionY, $this->motionZ);
+			$this->updateMovement();
 
 			$friction = 1 - $this->drag;
 
@@ -84,11 +71,9 @@ class Minecart extends Vehicle{
 				$this->isFreeMoving = false;
 			}
 
-			$f = sqrt(($this->motionX ** 2) + ($this->motionZ ** 2));
+			/*$f = sqrt(($this->motionX ** 2) + ($this->motionZ ** 2));
 			$this->yaw = (-atan2($this->motionX, $this->motionZ) * 180 / M_PI); //视角计算
-			//$this->pitch = (-atan2($f, $this->motionY) * 180 / M_PI);
-
-			$this->updateMovement();
+			$this->pitch = (-atan2($f, $this->motionY) * 180 / M_PI);*/
 		}
 
 		$this->timings->stopTiming();
