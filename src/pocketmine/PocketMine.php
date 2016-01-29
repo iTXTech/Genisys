@@ -475,7 +475,7 @@ namespace pocketmine {
 	$logger->shutdown();
 	$logger->join();
 
-	echo Terminal::$FORMAT_RESET . "\n";
+	echo "Server has stopped" . Terminal::$FORMAT_RESET . "\n";
 
 	exit(0);
 

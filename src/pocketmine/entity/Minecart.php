@@ -11,71 +11,71 @@ use pocketmine\math\Vector3;
 
 class Minecart extends Vehicle{
 	const NETWORK_ID = 84;
-	
+
 	public $height = 0.9;
-	
+	public $width = 1.1;
+
 	public $drag = 0.1;
-	public $gravity = 0.05;
-	
+	public $gravity = 0.5;
+
 	public $isMoving = false;
 	public $moveSpeed = 0.4;
-	
+
 	public $isFreeMoving = false;
-	
+
 	public function initEntity(){
 		$this->setMaxHealth(1);
 		$this->setHealth($this->getMaxHealth());
 		parent::initEntity();
 	}
-	
+
 	public function onUpdate($currentTick){
 		if($this->closed !== false){
 			return false;
 		}
-		
+
 		$this->lastUpdate = $currentTick;
 
 		$this->timings->startTiming();
 
-		$hasUpdate = true;
+		$hasUpdate = false;;
 		//parent::onUpdate($currentTick);
-		
+
 		if($this->isAlive()){
-			$expectedPos = new Vector3($this->x + $this->motionX, $this->y + $this->motionY, $this->z + $this->motionZ);
-			$expBlock0 = $this->getLevel()->getBlock($expectedPos->add(0, -1, 0)->round());
-			$expBlock1 = $this->getLevel()->getBlock($expectedPos->add(0, 0, 0)->round());
-			
-			if($expBlock0->getId() == 0){
-				$this->motionY -= $this->gravity;//重力计算
-				$this->motionX = 0;
-				$this->motionZ = 0;
-			}else $this->motionY = 0;
-			
-			if($expBlock1->getId() != 0){
-				$this->motionY += 0.1;
+			$this->motionY -= $this->gravity;
+
+			if($this->checkObstruction($this->x, $this->y, $this->z)){
+				$hasUpdate = true;
 			}
 
 			$this->move($this->motionX, $this->motionY, $this->motionZ);
-			
+			$this->updateMovement();
+
+			$friction = 1 - $this->drag;
+
+			if($this->onGround and (abs($this->motionX) > 0.00001 or abs($this->motionZ) > 0.00001)){
+				$friction = $this->getLevel()->getBlock($this->temporalVector->setComponents((int) floor($this->x), (int) floor($this->y - 1), (int) floor($this->z) - 1))->getFrictionFactor() * $friction;
+			}
+
+			$this->motionX *= $friction;
+			$this->motionY *= 1 - $this->drag;
+			$this->motionZ *= $friction;
+
+			if($this->onGround){
+				$this->motionY *= -0.5;
+			}
+
 			if($this->isFreeMoving){
 				$this->motionX = 0;
 				$this->motionZ = 0;
 				$this->isFreeMoving = false;
 			}
-			
-			/*$friction = 1 - $this->drag;
 
-			$this->motionX *= $friction;
-			$this->motionY *= 1 - $this->drag;
-			$this->motionZ *= $friction;*/
-
-			$f = sqrt(($this->motionX ** 2) + ($this->motionZ ** 2));
+			/*$f = sqrt(($this->motionX ** 2) + ($this->motionZ ** 2));
 			$this->yaw = (-atan2($this->motionX, $this->motionZ) * 180 / M_PI); //视角计算
-			//$this->pitch = (-atan2($f, $this->motionY) * 180 / M_PI);
-			
-			$this->updateMovement();
+			$this->pitch = (-atan2($f, $this->motionY) * 180 / M_PI);*/
 		}
-		
+
 		$this->timings->stopTiming();
 
 		return $hasUpdate or !$this->onGround or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001;
