@@ -79,6 +79,8 @@ class Block extends Position implements Metadatable{
 
 	const BED_BLOCK = 26;
 
+	const POWERED_RAIL = 27;
+	const DETECTOR_RAIL = 28;
 	const COBWEB = 30;
 	const TALL_GRASS = 31;
 	const BUSH = 32;
@@ -169,8 +171,13 @@ class Block extends Position implements Metadatable{
 	const WOODEN_TRAPDOOR = 96;
 	const WOOD_TRAPDOOR = 96;
 
+	const MONSTER_EGG_BLOCK = 97;
+
 	const STONE_BRICKS = 98;
 	const STONE_BRICK = 98;
+
+	const BROWN_MUSHROOM_BLOCK = 99;
+	const RED_MUSHROOM_BLOCK = 100;
 
 	const IRON_BAR = 101;
 	const IRON_BARS = 101;
@@ -203,9 +210,13 @@ class Block extends Position implements Metadatable{
 	const INACTIVE_REDSTONE_LAMP = 123;
 	const ACTIVE_REDSTONE_LAMP = 124;
 
+	const ACTIVATOR_RAIL = 126;
+	const COCOA_BLOCK = 127;
 	const SANDSTONE_STAIRS = 128;
 	const EMERALD_ORE = 129;
 
+	const TRIPWIRE_HOOK = 131;
+	const TRIPWIRE = 132;
 	const EMERALD_BLOCK = 133;
 	const SPRUCE_WOOD_STAIRS = 134;
 	const SPRUCE_WOODEN_STAIRS = 134;
@@ -291,7 +302,6 @@ class Block extends Position implements Metadatable{
 	const NETHER_BRICK_FENCE = 113;
 	
 	const RAIL = 66;
-	const POWERED_RAIL = 27;
 
 	/** @var \SplFixedArray */
 	public static $list = null;
@@ -534,6 +544,11 @@ class Block extends Position implements Metadatable{
 			self::$list[self::NOTEBLOCK] = Noteblock::class;
 			self::$list[self::SKULL_BLOCK] = SkullBlock::class;
 			self::$list[self::NETHER_QUARTZ_ORE] = NetherQuartzOre::class;
+			self::$list[self::ACTIVATOR_RAIL] = ActivatorRail::class;
+			self::$list[self::COCOA_BLOCK] = CocoaBlock::class;
+			self::$list[self::DETECTOR_RAIL] = DetectorRail::class;
+			self::$list[self::TRIPWIRE] = Tripwire::class;
+			self::$list[self::TRIPWIRE_HOOK] = TripwireHook::class;
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){
