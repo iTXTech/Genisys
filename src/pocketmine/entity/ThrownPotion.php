@@ -60,19 +60,19 @@ class ThrownPotion extends Projectile{
 						$p->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::NIGHT_VISION_T:
-						$p->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::INVISIBILITY:
 						$p->addEffect(Effect::getEffect(Effect::INVISIBILITY)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::INVISIBILITY_T:
-						$p->addEffect(Effect::getEffect(Effect::INVISIBILITY)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::INVISIBILITY)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::LEAPING:
 						$p->addEffect(Effect::getEffect(Effect::JUMP)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::LEAPING_T:
-						$p->addEffect(Effect::getEffect(Effect::JUMP)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::JUMP)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::LEAPING_TWO:
 						$p->addEffect(Effect::getEffect(Effect::JUMP)->setAmplifier(1)->setDuration(1.5 * 60 * 20));
@@ -81,13 +81,13 @@ class ThrownPotion extends Projectile{
 						$p->addEffect(Effect::getEffect(Effect::FIRE_RESISTANCE)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::FIRE_RESISTANCE_T:
-						$p->addEffect(Effect::getEffect(Effect::FIRE_RESISTANCE)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::FIRE_RESISTANCE)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::SPEED:
 						$p->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::SPEED_T:
-						$p->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::SPEED_TWO:
 						$p->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(1)->setDuration(1.5 * 60 * 20));
@@ -102,7 +102,7 @@ class ThrownPotion extends Projectile{
 						$p->addEffect(Effect::getEffect(Effect::WATER_BREATHING)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::WATER_BREATHING_T:
-						$p->addEffect(Effect::getEffect(Effect::WATER_BREATHING)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::WATER_BREATHING)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::POISON:
 						$p->addEffect(Effect::getEffect(Effect::POISON)->setAmplifier(0)->setDuration(45 * 20));
@@ -126,7 +126,7 @@ class ThrownPotion extends Projectile{
 						$p->addEffect(Effect::getEffect(Effect::STRENGTH)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::STRENGTH_T:
-						$p->addEffect(Effect::getEffect(Effect::STRENGTH)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::STRENGTH)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::STRENGTH_TWO:
 						$p->addEffect(Effect::getEffect(Effect::STRENGTH)->setAmplifier(1)->setDuration(1.5 * 60 * 20));
