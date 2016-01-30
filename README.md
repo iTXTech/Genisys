@@ -32,7 +32,7 @@
 * Nether door was written by **JJLeo**
 * Base food system is based on **Katana**
 * Base weather system was written by **@Zzm317** and rewritten by **@PeratX**
-* @FENGberd's encouragement
+* **@FENGberd**'s encouragement
 * Our leaders are **@ishitatsuyuki** and **@jasonczc**
 
 ###Jenkins CI
