@@ -1,4 +1,4 @@
-<font color="red">Jenkins server is transfering to a better computer room so it will not be available for a few days.<br>Genisys 的 Jenkins 服务器正在转移到一个更好的机房。因此在若干天内，该服务将不可用。</font>
+<font color="#FF0000">Jenkins server is transfering to a better computer room so it will not be available for a few days.<br>Genisys 的 Jenkins 服务器正在转移到一个更好的机房。因此在若干天内，该服务将不可用。</font>
 
 [
 ![Genisys - PocketMine-iTX Core]
@@ -23,7 +23,7 @@
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 * [**Click Here to get php7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
-* Be free to create a _Pull Request_ or open an _Issue_. English and Chinese are both recommended.
+* Be free to create a _Pull Request_ or open an _Issue_. English and Chinese are both recommended. (Please do your best to use English because it is easy to communicate with worldwide.)
 
 ###Acknowledgements
 * Skull, FlowerPot are based on **@ImagicalCorp** ImagicalMine's work
