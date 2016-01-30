@@ -1,7 +1,4 @@
-<font color="red">
-Jenkins server is transfering to a better computer room so it will not be available for a few days.
-Genisys 的 Jenkins 服务器正在转移到一个更好的机房。因此在若干天内，该服务将不可用。
-</font>
+<font color="red">Jenkins server is transfering to a better computer room so it will not be available for a few days.<br>Genisys 的 Jenkins 服务器正在转移到一个更好的机房。因此在若干天内，该服务将不可用。</font>
 
 [
 ![Genisys - PocketMine-iTX Core]
