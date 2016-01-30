@@ -56,6 +56,8 @@ class Effect{
 	const ABSORPTION = 22;
 	const SATURATION = 23;
 
+	const MAX_DURATION = 2147483648;
+
 	/** @var Effect[] */
 	protected static $effects;
 
@@ -141,7 +143,7 @@ class Effect{
 	}
 
 	public function setDuration($ticks){
-		$this->duration = $ticks;
+		$this->duration = (($ticks > self::MAX_DURATION) ? self::MAX_DURATION : $ticks);
 		return $this;
 	}
 
