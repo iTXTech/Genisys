@@ -29,10 +29,10 @@ class Painting extends Item{
 	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
 		if($target->isTransparent() === false and $face > 1 and $block->isSolid() === false){
 			$faces = [
-				2 => 0,
-				3 => 2,
-				4 => 1,
-				5 => 3,
+				2 => 1,
+				3 => 3,
+				4 => 0,
+				5 => 2,
 			];
 			$motives = [
 				// Motive Width Height
@@ -66,7 +66,7 @@ class Painting extends Item{
 			$motive = $motives[mt_rand(0, count($motives) - 1)];
 			$data = [
 				"x" => $target->x,
-				"y" => $target->y + 0.4,
+				"y" => $target->y,
 				"z" => $target->z,
 				"yaw" => $faces[$face] * 90,
 				"Motive" => $motive[0],

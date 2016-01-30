@@ -19,17 +19,10 @@
  *
 */
 
-namespace pocketmine\block;
+namespace pocketmine\item;
 
-class ActivatorRail extends PoweredRail {
-
-    protected $id = self::ACTIVATOR_RAIL;
-
-    public function __construct($meta = 0){
-        $this->meta = $meta;
-    }
-
-    public function getName() : string {
-        return "Activator Rail";
+class BrewingStand extends Item {
+    public function __construct($meta = 0, $count =1){
+        parent::__construct(self::BREWING_STAND, $meta, $count, "Brewing Stand");
     }
 }

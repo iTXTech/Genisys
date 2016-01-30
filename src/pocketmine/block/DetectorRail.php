@@ -29,7 +29,7 @@ class DetectorRail extends PoweredRail{
         $this->meta = $meta;
     }
 
-    public function getName(){
+    public function getName() : string {
         return "Detector Rail";
     }
 }
