@@ -20,7 +20,7 @@ class Pig extends Animal{
 	
 	public function kill(){
 		parent::kill();
-		$this->getLevel()->addExperienceOrb($this->add(0, 1, 0), mt_rand(1, 3));
+		if($this->getLevel()->getServer()->expEnabled)$this->getLevel()->addExperienceOrb($this->add(0, 1, 0), mt_rand(1, 3));
 	}
 	
 	public function spawnTo(Player $player){
