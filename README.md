@@ -36,13 +36,12 @@
 * Our leaders are **@ishitatsuyuki** and **@jasonczc**
 
 ###Jenkins CI
-Jenkins Server is moving and Jenkins server won't be available.
+Jenkins Server is moving and Jenkins server won't be available.<br>
 [**Click Here to go to Jenkins CI Page**](http://mcper.cn:8080/job/Genisys/)
 
-Temporary webdisk download:
-China Baidu: http://pan.baidu.com/share/link?shareid=641012570&uk=2065873628
+Temporary webdisk download:<br>
+China Baidu: http://pan.baidu.com/share/link?shareid=641012570&uk=2065873628 <br>
 Worldwide Google: https://drive.google.com/file/d/0B47xKpOkRL7JaU9ZNE9CRDVXTTA/view?usp=sharing
-
 
 ###Documentation
 [**Click Here to go to Genisys Documentation Page**](http://mcper.cn/Genisys-Docs/)
@@ -143,11 +142,11 @@ Port: **888**
 * 我们的项目负责人为 **@ishitatsuyuki** 及 **@jasonczc**。
 
 ###自动构建的核心
-Genisys 的 Jenkins 服务器正在转移到一个更好的机房。因此在若干天内，该服务将不可用。
+Genisys 的 Jenkins 服务器正在转移到一个更好的机房。因此在若干天内，该服务将不可用。<br>
 [**点击这里进入下载**](http://mcper.cn:8080/job/Genisys/)
 
-临时网盘下载：
-中国 百度云: http://pan.baidu.com/share/link?shareid=641012570&uk=2065873628
+临时网盘下载：<br>
+中国 百度云: http://pan.baidu.com/share/link?shareid=641012570&uk=2065873628 <br>
 全球 Google: https://drive.google.com/file/d/0B47xKpOkRL7JaU9ZNE9CRDVXTTA/view?usp=sharing
 
 ###开发文档
