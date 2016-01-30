@@ -77,8 +77,13 @@ class Noteblock extends Solid implements ElectricalAppliance{
 	}
 
 	public function onActivate(Item $item, Player $player = null){
-		$this->getLevel()->addSound(new NoteblockSound($this, NoteblockSound::INSTRUMENT_PIANO, $this->getStrength()));
-		return true;
+		$up = $this->getSide(Vector3::SIDE_UP);
+		if($up->getId() == 0){
+			$this->getLevel()->addSound(new NoteblockSound($this, $this->getInstrument(), $this->getStrength()));
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	public function getName() : string{
