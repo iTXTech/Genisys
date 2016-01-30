@@ -1,6 +1,5 @@
-##Jenkins server is transfering to a better computer room so it will not be available for a few days.
-<br>
-##Genisys 的 Jenkins 服务器正在转移到一个更好的机房。因此在若干天内，该服务将不可用。
+###Jenkins server is transfering to a better computer room so it will not be available for a few days.
+###Genisys 的 Jenkins 服务器正在转移到一个更好的机房。因此在若干天内，该服务将不可用。
 
 [
 ![Genisys - PocketMine-iTX Core]
@@ -121,6 +120,7 @@ Port: **888**
 ###创世纪
 
 [![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](http://mcper.cn:8080/job/Genisys/lastBuild/badge/icon)](http://mcper.cn:8080/job/Genisys/lastBuild/)
 * 一个核心统治一切。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
 * 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
