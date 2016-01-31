@@ -26,6 +26,7 @@ class FishingHook extends Projectile{
 	protected $drag = 0.04;
 
 	//public $canCollide = false;
+	/** @var Player */
 	public $owner = null;
 
 	public $results = [
@@ -110,7 +111,12 @@ class FishingHook extends Projectile{
 	}
 
 	public function spawnTo(Player $player){
+		if(!$this->owner instanceof Player){
+			$this->close();
+			return;
+		}
 		$this->setDataProperty(self::DATA_NO_AI, self::DATA_TYPE_BYTE, 1);
+		$this->setDataProperty(23, self::DATA_TYPE_LONG, $this->owner->getId());
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
 		$pk->type = FishingHook::NETWORK_ID;

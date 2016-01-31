@@ -23,11 +23,11 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\level\format\FullChunk;
 use pocketmine\Player;
 
-class MobSpawner extends Spawnable implements Nameable{
+class MobSpawner extends Spawnable{
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		if(!isset($nbt->EntityId)){
-			$nbt->Data = new IntTag("EntityId", 0);
+			$nbt->EntityId = new IntTag("EntityId", 0);
 		}
 		parent::__construct($chunk, $nbt);
 		$this->lastUpdate = $this->getLevel()->getServer()->getTick();
@@ -49,20 +49,7 @@ class MobSpawner extends Spawnable implements Nameable{
 	}
 
 	public function getName() : string{
-		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Monster Spawner";
-	}
-
-	public function hasName(){
-		return isset($this->namedtag->CustomName);
-	}
-
-	public function setName($str){
-		if($str === ""){
-			unset($this->namedtag->CustomName);
-			return;
-		}
-
-		$this->namedtag->CustomName = new StringTag("CustomName", $str);
+		return "Monster Spawner";
 	}
 
 	public function canUpdate() : bool{
@@ -129,10 +116,6 @@ class MobSpawner extends Spawnable implements Nameable{
 			new IntTag("z", (int) $this->z),
 			new IntTag("EntityId", (int) $this->getEntityId())
 		]);
-
-		if($this->hasName()){
-			$c->CustomName = $this->namedtag->CustomName;
-		}
 
 		return $c;
 	}

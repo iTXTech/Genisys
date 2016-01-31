@@ -293,6 +293,8 @@ class Block extends Position implements Metadatable{
 
 	const GRASS_PATH = 198;
 
+	const ITEM_FRAME_BLOCK = 199;
+
 	const PODZOL = 243;
 	const BEETROOT_BLOCK = 244;
 	const STONECUTTER = 245;
@@ -549,6 +551,7 @@ class Block extends Position implements Metadatable{
 			self::$list[self::DETECTOR_RAIL] = DetectorRail::class;
 			self::$list[self::TRIPWIRE] = Tripwire::class;
 			self::$list[self::TRIPWIRE_HOOK] = TripwireHook::class;
+			self::$list[self::ITEM_FRAME_BLOCK] = ItemFrame::class;
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){

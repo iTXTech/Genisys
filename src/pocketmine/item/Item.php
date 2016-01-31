@@ -299,6 +299,8 @@ class Item{
 
 	const GRASS_PATH = 198;
 
+	const ITEM_FRAME_BLOCK = 199;
+
 	const PODZOL = 243;
 	const BEETROOT_BLOCK = 244;
 	const STONECUTTER = 245;
@@ -450,6 +452,8 @@ class Item{
 	const ENCHANTING_BOTTLE = 384;
 
 	const EMERALD = 388;
+
+	const ITEM_FRAME = 389;
 
 	const FLOWER_POT = 390;
 	const CARROT = 391;
@@ -656,6 +660,7 @@ class Item{
 			self::$list[self::MAGMA_CREAM] = MagmaCream::class;
 			self::$list[self::BREWING_STAND] = BrewingStand::class;
 			self::$list[self::GLISTERING_MELON] = GlisteringMelon::class;
+			self::$list[self::ITEM_FRAME] = ItemFrame::class;
 
 			for($i = 0; $i < 256; ++$i){
 				if(Block::$list[$i] !== null){
@@ -815,6 +820,7 @@ class Item{
 		self::addCreativeItem(Item::get(Item::BED, 0));
 		self::addCreativeItem(Item::get(Item::BOOKSHELF, 0));
 		self::addCreativeItem(Item::get(Item::PAINTING, 0));
+		self::addCreativeItem(Item::get(Item::ITEM_FRAME,0));
 		self::addCreativeItem(Item::get(Item::WORKBENCH, 0));
 		self::addCreativeItem(Item::get(Item::STONECUTTER, 0));
 		self::addCreativeItem(Item::get(Item::CHEST, 0));
