@@ -24,7 +24,7 @@ class NoteblockSound extends GenericSound{
 	const INSTRUMENT_BASS = 4;
 
 	public function __construct(Vector3 $pos, $instrument = self::INSTRUMENT_PIANO, $pitch = 0){
-		parent::__construct($pos, 0, $pitch);
+		parent::__construct($pos, $instrument, $pitch);
 		$this->instrument = $instrument;
 		$this->pitch = $pitch;
 	}
