@@ -38,6 +38,10 @@ class SkullBlock extends Transparent{
 	public function getHardness() {
 		return 1;
 	}
+	
+	public function isHelmet(){
+		return true;
+	}
 
 	public function isSolid(){
 		return false;
