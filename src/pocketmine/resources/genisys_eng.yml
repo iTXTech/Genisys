@@ -58,7 +58,7 @@ server:
  player-msg-type: 0
  login-msg: "§3@player joined the game"
  logout-msg: "§3@player left the game"
- #To do：If read recipes from json
+ #If read recipes from json
  read-recipes-from-json: false
 
 redstone:
