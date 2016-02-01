@@ -59,6 +59,7 @@ use pocketmine\network\protocol\MobEffectPacket;
 use pocketmine\network\protocol\RemoveEntityPacket;
 use pocketmine\network\protocol\SetEntityDataPacket;
 use pocketmine\network\protocol\SetEntityLinkPacket;
+use pocketmine\network\protocol\PlayerActionPacket;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\Server;
@@ -1725,4 +1726,26 @@ abstract class Entity extends Location implements Metadatable{
 		return (new \ReflectionClass($this))->getShortName() . "(" . $this->getId() . ")";
 	}
 
+	/*
+ 	 * onPlayerAction
+ 	 * use this method in entity classes to handle specific logic
+ 	 * this method is added to remove entity based logic from Player class
+ 	 * can be called in Player for individual logic required for an entity
+ 	 * example:
+ 	 * if ($playerAction == PlayerActionPacket::ACTION_JUMP) {
+ 	 *     //do something
+ 	 * }
+ 	 *
+ 	 * @param Player $player
+ 	 * @param int    $playerAction - defined in PlayerActionPacket
+ 	 *
+ 	 * @return bool
+ 	 */
+ 	public function onPlayerAction(Player $player, $playerAction) {
+ 		//override in specific item class
+ 		//if ($playerAction == PlayerActionPacket::ACTION_JUMP) {
+ 		//do something
+ 		//}
+ 		return true;
+ 	}
 }

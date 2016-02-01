@@ -1,67 +1,41 @@
 <?php
-
-/*
- * PocketMine-iTX Genisys
- * @author PocketMine-iTX Team & iTX Technologies LLC.
- * @link http://mcper.cn 
- *       http://mcpe.asia 
- *       http://pl.zxda.net
-*/
-
 namespace pocketmine\block;
-
 use pocketmine\item\Item;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
-
 class Rail extends Flowable{
-
 	protected $id = self::RAIL;
-	/** @var Vector3 [] */
 	protected $connected = [];
-
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
-
-	public function getName() : string{
+	public function getName(){
 		return "Rail";
 	}
-
 	protected function update(){
 		return true;
 	}
-
-	/**
-	 * @param Rail $block
-	 * @return bool
-	 */
 	public function canConnect(Rail $block){
 		if($this->distanceSquared($block) > 2){
 			return false;
 		}
-		/** @var Vector3 [] $blocks */
 		if(count($blocks = self::check($this)) == 2){
 			return false;
 		}
 		return $blocks;
 	}
-
 	public function isBlock(Block $block){
 		if($block instanceof AIR){
 			return false;
 		}
 		return $block;
 	}
-
 	public function connect(Rail $rail, $force = false){
-
 		if(!$force){
 			$connected = $this->canConnect($rail);
 			if(!is_array($connected)){
 				return false;
 			}
-			/** @var Vector3 [] $connected */
 			$connected[] = $rail;
 			switch(count($connected)){
 				case  1:
@@ -90,18 +64,13 @@ class Rail extends Flowable{
 		$this->level->setBlock($this, Block::get($this->id, $this->meta), true, true);
 		return true;
 	}
-
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$downBlock = $this->getSide(Vector3::SIDE_DOWN);
-
-		if($downBlock instanceof Rail or !$this->isBlock($downBlock)){//判断是否可以放置
+		if($downBlock instanceof Rail or !$this->isBlock($downBlock)){//�ж��Ƿ���Է���
 			return false;
 		}
-
 		$arrayXZ = [[1, 0], [0, 1], [-1, 0], [0, -1]];
 		$arrayY = [0, 1, -1];
-
-		/** @var Vector3 [] $connected */
 		$connected = [];
 		foreach($arrayXZ as $xz){
 			$x = $xz[0];
@@ -146,11 +115,6 @@ class Rail extends Flowable{
 		$this->level->setBlock($this, Block::get($this->id, $this->meta), true, true);
 		return true;
 	}
-
-	/**
-	 * @param Rail $rail
-	 * @return array
-	 */
 	public static function check(Rail $rail){
 		$array = [
 			[[0, 1], [0, -1]],
@@ -171,7 +135,7 @@ class Rail extends Flowable{
 			$v3 = new Vector3($rail->x + $blocks[0][0], $rail->y + $y, $rail->z + $blocks[0][1]);
 			$id = $rail->getLevel()->getBlockIdAt($v3->x, $v3->y, $v3->z);
 			$meta = $rail->getLevel()->getBlockDataAt($v3->x, $v3->y, $v3->z);
-			if(($id == self::RAIL or $id == self::POWERED_RAIL) and in_array([$rail->x - $v3->x, $rail->z - $v3->z], $array[$meta])){
+			if(in_array($id, array(self::RAIL, self::POWERED_RAIL, self::ACTIVATOR_RAIL, self::DETECTOR_RAIL)) and in_array([$rail->x - $v3->x, $rail->z - $v3->z], $array[$meta])){
 				$connected[] = $v3;
 				break;
 			}
@@ -180,19 +144,21 @@ class Rail extends Flowable{
 			$v3 = new Vector3($rail->x + $blocks[1][0], $rail->y + $y, $rail->z + $blocks[1][1]);
 			$id = $rail->getLevel()->getBlockIdAt($v3->x, $v3->y, $v3->z);
 			$meta = $rail->getLevel()->getBlockDataAt($v3->x, $v3->y, $v3->z);
-			if(($id == self::RAIL or $id == self::POWERED_RAIL) and in_array([$rail->x - $v3->x, $rail->z - $v3->z], $array[$meta])){
+			if(in_array($id, array(self::RAIL, self::POWERED_RAIL, self::ACTIVATOR_RAIL, self::DETECTOR_RAIL)) and in_array([$rail->x - $v3->x, $rail->z - $v3->z], $array[$meta])){
 				$connected[] = $v3;
 				break;
 			}
 		}
 		return $connected;
 	}
-
-	public function getHardness() {
+	public function getHardness(){
 		return 0.6;
 	}
-
 	public function canPassThrough(){
 		return true;
+	}
+	
+	public function getDrops(Item $item){
+		return [[$this->id,0,1]];
 	}
 }

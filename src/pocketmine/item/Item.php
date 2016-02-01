@@ -28,6 +28,7 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\NBT;
+use pocketmine\network\protocol\PlayerActionPacket;
 
 use pocketmine\block\Fence;
 
@@ -1600,4 +1601,28 @@ class Item {
 
 		return false;
 	}
+
+	/*
+ 	 * onPlayerAction
+ 	 * use this method in item classes to handle specific logic
+ 	 * this method is added to remove item based logic from Player class
+ 	 * can be called in Player for individual logic required for an item
+ 	 * example:
+ 	 * if ($playerAction == PlayerActionPacket::ACTION_JUMP) {
+ 	 *     //do something
+ 	 * }
+ 	 *
+ 	 * @param Player $player
+ 	 * @param int	$playerAction - defined in PlayerActionPacket
+ 	 *
+ 	 * @return bool
+ 	 */
+ 	public function onPlayerAction(Player $player, $playerAction) {
+ 		//override in specific item class
+ 		//if ($playerAction == PlayerActionPacket::ACTION_JUMP) {
+ 			//do something
+ 		//}
+ 		return true;
+ 	}
+ 
 }
