@@ -151,14 +151,14 @@ class Rail extends Flowable{
 		}
 		return $connected;
 	}
-	public function getHardness(){
+	public function getHardness() : int{
 		return 0.6;
 	}
 	public function canPassThrough(){
 		return true;
 	}
 	
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array{
 		return [[$this->id,0,1]];
 	}
 }
