@@ -57,7 +57,7 @@ server:
  player-msg-type: 0
  login-msg: "§3@player 加入了游戏"
  logout-msg: "§3@player 退出了游戏"
- #计划实现：是否从recipes.json读取合成公式
+ #是否从recipes.json读取合成公式
  read-recipes-from-json: false
 
 redstone:
