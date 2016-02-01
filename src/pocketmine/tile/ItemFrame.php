@@ -16,6 +16,7 @@ use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\NBT;
@@ -28,6 +29,9 @@ class ItemFrame extends Spawnable{
 		}
 		if(!isset($nbt->ItemRotation)){
 			$nbt->ItemRotation = new ByteTag("ItemRotation", 0);
+		}
+		if(!isset($nbt->ItemDropChance)){
+			$nbt->ItemDropChance = new FloatTag("ItemDropChance", 1.0);
 		}
 		parent::__construct($chunk, $nbt);
 	}
@@ -54,6 +58,14 @@ class ItemFrame extends Spawnable{
 		$this->setChanged();
 	}
 
+	public function getItemDropChance(){
+		return $this->namedtag["ItemDropChance"];
+	}
+
+	public function setItemDropChance($chance = 1.0){
+		$this->namedtag->ItemDropChance = new FloatTag("ItemDropChance", $chance);
+	}
+
 	private function setChanged(){
 		$this->spawnToAll();
 		if($this->chunk instanceof FullChunk){
@@ -73,7 +85,8 @@ class ItemFrame extends Spawnable{
 				new IntTag("x", (int) $this->x),
 				new IntTag("y", (int) $this->y),
 				new IntTag("z", (int) $this->z),
-				new ByteTag("ItemRotation", 0)
+				new ByteTag("ItemRotation", 0),
+				new FloatTag("ItemDropChance", (float) $this->getItemDropChance())
 			]);
 		}else{
 			return new CompoundTag("", [
@@ -82,7 +95,8 @@ class ItemFrame extends Spawnable{
 				new IntTag("y", (int) $this->y),
 				new IntTag("z", (int) $this->z),
 				$nbtItem,
-				new ByteTag("ItemRotation", (int) $this->getItemRotation())
+				new ByteTag("ItemRotation", (int) $this->getItemRotation()),
+				new FloatTag("ItemDropChance", (float) $this->getItemDropChance())
 			]);
 		}
 	}

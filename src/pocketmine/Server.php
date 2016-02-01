@@ -45,6 +45,7 @@ use pocketmine\inventory\Recipe;
 use pocketmine\inventory\ShapedRecipe;
 use pocketmine\inventory\ShapelessRecipe;
 use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\enchantment\EnchantmentLevelTable;
 use pocketmine\item\Item;
 use pocketmine\lang\BaseLang;
 use pocketmine\level\format\anvil\Anvil;
@@ -1880,7 +1881,7 @@ class Server{
 			Effect::init();
 			Enchantment::init();
 			Attribute::init();
-			/** TODO: @deprecated */
+			EnchantmentLevelTable::init();
 			//TextWrapper::init();
 			$this->craftingManager = new CraftingManager($this->readRecipesFromJson);
 
