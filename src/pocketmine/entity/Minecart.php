@@ -2,6 +2,7 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\item\Item;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\event\entity\EntityDeathEvent;
 use pocketmine\Player;
@@ -42,7 +43,15 @@ class Minecart extends Vehicle{
 		//parent::onUpdate($currentTick);
 
 		if($this->isAlive()){
-			$this->motionY -= $this->gravity;
+			$p = $this->getLinkedEntity();
+			if($p instanceof Player){
+				$this->motionX = -sin($p->getYaw() / 180 * M_PI);
+				$this->motionZ = cos($p->getYaw() / 180 * M_PI);
+			}
+			$target = $this->getLevel()->getBlock($this->add($this->motionX, 0, $this->motionZ)->round());
+			$target2 = $this->getLevel()->getBlock($this->add($this->motionX, 0, $this->motionZ)->floor());
+			if($target->getId() != Item::AIR or $target2->getId() != Item::AIR) $this->motionY = $this->gravity * 3;
+			else $this->motionY -= $this->gravity;
 
 			if($this->checkObstruction($this->x, $this->y, $this->z)){
 				$hasUpdate = true;
@@ -63,12 +72,6 @@ class Minecart extends Vehicle{
 
 			if($this->onGround){
 				$this->motionY *= -0.5;
-			}
-
-			if($this->isFreeMoving){
-				$this->motionX = 0;
-				$this->motionZ = 0;
-				$this->isFreeMoving = false;
 			}
 
 			/*$f = sqrt(($this->motionX ** 2) + ($this->motionZ ** 2));

@@ -1624,6 +1624,8 @@ abstract class Entity extends Location implements Metadatable{
 				}
 				$this->linkedEntity = $entity;
 				$this->linkedType = 1;
+				$entity->linkedEntity = $this;
+				$entity->linkedType = 1;
 				$pk = new SetEntityLinkPacket();
 				$pk->from = $entity->getId();
 				$pk->to = $this->getId();
