@@ -25,6 +25,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\command\ConsoleCommandSender;
 use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
+use pocketmine\entity\Entity;
 use pocketmine\utils\TextFormat;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
@@ -149,7 +150,7 @@ class SummonCommand extends VanillaCommand{
 			$sender->sendMessage(TextFormat::RED . "An error occured when spawning the entity $type");
 			return false;
 		}
-		
+
 		return true;
 	}
 }
