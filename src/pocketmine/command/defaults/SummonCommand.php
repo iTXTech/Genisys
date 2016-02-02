@@ -34,6 +34,7 @@ use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\Level;
+use pocketmine\tile\MobSpawner;
 
 class SummonCommand extends VanillaCommand{
 
@@ -64,7 +65,7 @@ class SummonCommand extends VanillaCommand{
 			}elseif(strcmp($args[1], "~") >= 0){	//x is given with a "~"
 				$offset_x = trim($args[1], "~");
 				if($sender instanceof Player){			//using in-game
-					$x = is_numeric($offset_x) ? ($sender->$x + $offset_x) : $sender->$x;
+					$x = is_numeric($offset_x) ? ($sender->x + $offset_x) : $sender->x;
 				}else{															//using in console
 					$sender->sendMessage(TextFormat::RED . "You must specify a poisition where the entity is spawned to when using in console");
 					return false;
@@ -80,7 +81,7 @@ class SummonCommand extends VanillaCommand{
 			}elseif(strcmp($args[2], "~") >= 0){	//y is given with a "~"
 				$offset_y = trim($args[2], "~");
 				if($sender instanceof Player){			//using in-game
-					$y = is_numeric($offset_y) ? ($sender->$y + $offset_y) : $sender->$y;
+					$y = is_numeric($offset_y) ? ($sender->y + $offset_y) : $sender->y;
 					if($y < 0) $y = 0;								//in case y is outside the range of [0,128]
 					if($y > 128) $y = 128;
 				}else{															//using in console
@@ -98,7 +99,7 @@ class SummonCommand extends VanillaCommand{
 			}elseif(strcmp($args[3], "~") >= 0){	//z is given with a "~"
 				$offset_z = trim($args[3], "~");
 				if($sender instanceof Player){			//using in-game
-					$z = is_numeric($offset_z) ? ($sender->$z + $offset_z) : $sender->$z;
+					$z = is_numeric($offset_z) ? ($sender->z + $offset_z) : $sender->z;
 				}else{															//using in console
 					$sender->sendMessage(TextFormat::RED . "You must specify a poisition where the entity is spawned to when using in console");
 					return false;
@@ -111,9 +112,9 @@ class SummonCommand extends VanillaCommand{
 
 		if(count($args) == 1){
 			if($sender instanceof Player){
-				$x = $sender->$x;
-				$y = $sender->$y;
-				$z = $sender->$z;
+				$x = $sender->x;
+				$y = $sender->y;
+				$z = $sender->z;
 			}else{
 				$sender->sendMessage(TextFormat::RED . "You must specify a poisition where the entity is spawned to when using in console");
 				return false;
@@ -123,7 +124,7 @@ class SummonCommand extends VanillaCommand{
 		$entity = null;
 		$type = $args[0];
 		$level = ($sender instanceof Player) ? $sender->getLevel() : $sender->getServer()->getDefaultLevel();
-		$chunk = $level->getChunk(round($x, 0) >> 4, round($z, 0) >> 4);
+		$chunk = $level->getChunk(round($x) >> 4, round($z) >> 4);
 		$nbt = new CompoundTag("", [
 			"Pos" => new EnumTag("Pos", [
 				new DoubleTag("", $x),
@@ -145,6 +146,7 @@ class SummonCommand extends VanillaCommand{
 		$entity = Entity::createEntity($type, $chunk, $nbt);
 		if($entity instanceof Entity){
 			$entity->spawnToAll();
+			$sender->sendMessage("Successfully spawned entity $type at ($x, $y, $z)");
 			return true;
 		}else{
 			$sender->sendMessage(TextFormat::RED . "An error occured when spawning the entity $type");
