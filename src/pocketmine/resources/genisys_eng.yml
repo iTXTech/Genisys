@@ -60,6 +60,9 @@ server:
  logout-msg: "§3@player left the game"
  #If read recipes from json
  read-recipes-from-json: false
+ #Choose if minecart is free moving, follow rails or disable
+ #-1=disable, 0=free moving, 1=follow rails
+ minecart-moving-type: 0
 
 redstone:
  ##########################################

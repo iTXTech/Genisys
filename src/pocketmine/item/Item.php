@@ -661,6 +661,7 @@ class Item{
 			self::$list[self::BREWING_STAND] = BrewingStand::class;
 			self::$list[self::GLISTERING_MELON] = GlisteringMelon::class;
 			self::$list[self::ITEM_FRAME] = ItemFrame::class;
+			self::$list[self::ENCHANTED_BOOK] = EnchantedBook::class;
 
 			for($i = 0; $i < 256; ++$i){
 				if(Block::$list[$i] !== null){
@@ -1321,7 +1322,7 @@ class Item{
 	/**
 	 * @param Enchantment $ench
 	 */
-	public function addEnchantment(Enchantment $ench){
+	public function addEnchantment(Enchantment ...$enchs){
 		if(!$this->hasCompoundTag()){
 			$tag = new CompoundTag("", []);
 		}else{
@@ -1333,24 +1334,26 @@ class Item{
 			$tag->ench->setTagType(NBT::TAG_Compound);
 		}
 
-		$found = false;
+		foreach($enchs as $ench){
+			$found = false;
 
-		foreach($tag->ench as $k => $entry){
-			if($entry["id"] === $ench->getId()){
-				$tag->ench->{$k} = new CompoundTag("", [
+			foreach($tag->ench as $k => $entry){
+				if($entry["id"] === $ench->getId()){
+					$tag->ench->{$k} = new CompoundTag("", [
+						"id" => new ShortTag("id", $ench->getId()),
+						"lvl" => new ShortTag("lvl", $ench->getLevel())
+					]);
+					$found = true;
+					break;
+				}
+			}
+
+			if(!$found){
+				$tag->ench->{count($tag->ench) + 1} = new CompoundTag("", [
 					"id" => new ShortTag("id", $ench->getId()),
 					"lvl" => new ShortTag("lvl", $ench->getLevel())
 				]);
-				$found = true;
-				break;
 			}
-		}
-
-		if(!$found){
-			$tag->ench->{count($tag->ench) + 1} = new CompoundTag("", [
-				"id" => new ShortTag("id", $ench->getId()),
-				"lvl" => new ShortTag("lvl", $ench->getLevel())
-			]);
 		}
 
 		$this->setNamedTag($tag);

@@ -350,6 +350,7 @@ class Server{
 	public $antiFly = false;
 	public $asyncChunkRequest = true;
 	public $readRecipesFromJson = false;
+	public $minecartMovingType = 0;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -1624,6 +1625,7 @@ class Server{
 		$this->antiFly = $this->getAdvancedProperty("server.anti-fly", true);
 		$this->asyncChunkRequest = $this->getAdvancedProperty("server.async-chunk-request", true);
 		$this->readRecipesFromJson = $this->getAdvancedProperty("server.read-recipes-from-json", false);
+		$this->minecartMovingType = $this->getAdvancedProperty("server.minecart-moving-type", 0);
 	}
 
 	/**

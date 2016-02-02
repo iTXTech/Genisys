@@ -23,18 +23,11 @@ namespace pocketmine\tile;
 
 use pocketmine\inventory\EnchantInventory;
 use pocketmine\inventory\InventoryHolder;
-use pocketmine\item\enchantment\Enchantment;
-use pocketmine\item\enchantment\EnchantmentEntry;
-use pocketmine\item\enchantment\EnchantmentList;
 use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
-use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\network\protocol\CraftingDataPacket;
-use pocketmine\Player;
 
 class EnchantTable extends Spawnable implements InventoryHolder, Nameable{
 	/** @var EnchantInventory */

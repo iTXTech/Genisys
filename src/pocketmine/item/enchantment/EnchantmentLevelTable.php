@@ -176,6 +176,11 @@ class EnchantmentLevelTable{
 		];
 	}
 
+	/**
+	 * @param Item $item
+	 * @param int  $modifiedLevel
+	 * @return Enchantment[]
+	 */
 	public static function getPossibleEnchantments(Item $item, int $modifiedLevel){
 		$result = [];
 
@@ -212,13 +217,13 @@ class EnchantmentLevelTable{
 			$enchantmentIds[] = Enchantment::TYPE_MINING_SILK_TOUCH; 
 			$enchantmentIds[] = Enchantment::TYPE_MINING_FORTUNE; 
 
-		}else if($item->getId() == Item::BOW){
+		}elseif($item->getId() == Item::BOW){
 			$enchantmentIds[] = Enchantment::TYPE_BOW_POWER; 
 			$enchantmentIds[] = Enchantment::TYPE_BOW_KNOCKBACK; 
 			$enchantmentIds[] = Enchantment::TYPE_BOW_FLAME; 
 			$enchantmentIds[] = Enchantment::TYPE_BOW_INFINITY; 
 
-		}else if($item->getId() == Item::FISHING_ROD){
+		}elseif($item->getId() == Item::FISHING_ROD){
 			$enchantmentIds[] = Enchantment::TYPE_FISHING_FORTUNE; 
 			$enchantmentIds[] = Enchantment::TYPE_FISHING_LURE; 
 
@@ -236,7 +241,7 @@ class EnchantmentLevelTable{
 			foreach($ranges as $range) {
 	            $i++;
 	            if($range->isInRange($modifiedLevel)){
-		            $result[] = [$enchantmentId, $enchantment->setLevel($i)];
+		            $result[$enchantmentId] = $enchantment->setLevel($i);
 	            }
             }
         }

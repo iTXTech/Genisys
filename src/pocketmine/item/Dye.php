@@ -22,6 +22,23 @@
 namespace pocketmine\item;
 
 class Dye extends Item{
+	const BLACK = 0;
+	const RED = 1;
+	const GREEN = 2;
+	const BROWN = 3;
+	const BLUE = 4;
+	const PURPLE = 5;
+	const CYAN = 6;
+	const SILVER = 7;
+	const GRAY = 8;
+	const PINK = 9;
+	const LIME = 10;
+	const YELLOW = 11;
+	const LIGHT_BLUE = 12;
+	const MAGENTA = 13;
+	const ORANGE = 14;
+	const WHITE = 15;
+
 	public function __construct($meta = 0, $count = 1){
 		parent::__construct(self::DYE, $meta, $count, "Dye");
 	}

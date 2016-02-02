@@ -310,7 +310,7 @@ class Enchantment{
 		return $this;
 	}
 
-	public function generateName(){
+	public static function generateName(){
 		$count = mt_rand(3, 6);
 		$set = [];
 		while(count($set) < $count){
