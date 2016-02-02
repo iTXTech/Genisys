@@ -7,7 +7,7 @@ $server = proc_open(PHP_BINARY . " src/pocketmine/PocketMine.php --no-wizard --d
 fwrite($pipes[0], "version\nms\nstop\n\n");
 while(!feof($pipes[1])){
 	echo $con = fgets($pipes[1]);
-	if(strpos($con, "Server has stopped") >= 0){
+	if(strpos($con, "stopped") > 0){
 		fclose($pipes[0]);
 		fclose($pipes[1]);
 		fclose($pipes[2]);
