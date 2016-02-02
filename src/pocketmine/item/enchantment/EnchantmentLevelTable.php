@@ -183,7 +183,7 @@ class EnchantmentLevelTable{
 
 		if($item->getId() == Item::BOOK){
 			$enchantmentIds = self::$map;
-		}elseif($item instanceof Armor){
+		}elseif($item->isArmor()){
 			$enchantmentIds[] = Enchantment::TYPE_ARMOR_PROTECTION; 
 			$enchantmentIds[] = Enchantment::TYPE_ARMOR_FIRE_PROTECTION; 
 			$enchantmentIds[] = Enchantment::TYPE_ARMOR_EXPLOSION_PROTECTION; 

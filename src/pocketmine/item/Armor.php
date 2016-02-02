@@ -31,20 +31,4 @@ abstract class Armor extends Item{
 	public function isArmor(){
 		return true;
 	}
-
-	public function isBoots(){
-		return false;
-	}
-
-	public function isHelmet(){
-		return false;
-	}
-
-	public function isLegging(){
-		return false;
-	}
-
-	public function isChestplate(){
-		return false;
-	}
 }
