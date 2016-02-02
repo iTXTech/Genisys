@@ -389,11 +389,11 @@ class PlayerInventory extends BaseInventory{
 		$holder = $this->getHolder();
 		if($holder instanceof Player and $holder->isCreative()){
 			for($current = 0; $current < $this->getSize(); ++$current){
-				$pk->hotbar[$current] = $this->getItem($current);
+				$pk->slots[$current] = $this->getItem($current);
 			}
-			foreach(Item::getCreativeItems() as $i => $item){
+			/*foreach(Item::getCreativeItems() as $i => $item){
 				$pk->slots[$i + $current] = Item::getCreativeItem($i);
-			}
+			}*/
 		}else{
 			for($i = 0; $i < $this->getSize(); ++$i){ //Do not send armor by error here
 				$pk->slots[$i] = $this->getItem($i);
