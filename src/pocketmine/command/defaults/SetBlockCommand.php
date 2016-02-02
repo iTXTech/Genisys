@@ -24,7 +24,12 @@ namespace pocketmine\command\defaults;
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
-
+use pocketmine\utils\TextFormat;
+use pocketmine\math\Vector3;
+use pocketmine\block\Block;
+use pocketmine\item\ItemBlock;
+use pocketmine\item\Item;
+use pocketmine\level\Level;
 
 class SetBlockCommand extends VanillaCommand{
 
@@ -42,6 +47,59 @@ class SetBlockCommand extends VanillaCommand{
 			return true;
 		}
 
+		if(count($args) < 4 or count($args) > 5){
+			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+			return false;
+		}
+
+		$itemblock = Item::fromString($args[3]);
+		if($itemblock instanceof ItemBlock){
+			$block = $itemblock->getBlock();
+			if((isset($args[4]) and is_integer($args[4]))) $block->setDamage($args[4]);
+
+			$x = $args[0];
+			$y = $args[1];
+			$z = $args[2];
+			if($x{0} === "~"){
+				if((is_integer(trim($x, "~")) or trim($x, "~") === "") and ($sender instanceof Player)) $x = trim($x, "~") + round($sender->x);
+			}else{
+				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+				return false;
+			}
+			if($y{0} === "~"){
+				if((is_integer(trim($y, "~")) or trim($y, "~") === "") and ($sender instanceof Player)) $y = trim($y, "~") + round($sender->y);
+				if($y < 0 or $y > 128) return false;
+			}else{
+				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+				return false;
+			}
+			if($z{0} === "~"){
+				if((is_integer(trim($z, "~")) or trim($z, "~") === "") and ($sender instanceof Player)) $z = trim($z, "~") + round($sender->z);
+			}else{
+				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+				return false;
+			}
+			if(!(is_integer($x) and is_integer($y) and is_integer($z))){
+				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+				return false;
+			}
+
+			$pos = new Vector3($x, $y, $z);
+			if($pos instanceof Vector3){
+				$level = NULL;
+				$level = ($sender instanceof Player) ? $sender->getLevel() : $sender->getServer()->getDefaultLevel();
+				if($level->setBlock($pos, $block)){
+					$sender->sendMessage("Successfully set the block at ($x, $y, $z) to block $args[3]");
+					return true;
+				}else{
+					$sender->sendMessage(TextFormat::RED . new TranslationContainer("commands.generic.exception", []));
+					return false;
+				}
+			}
+		}else{
+			$sender->sendMessage(TextFormat::RED . new TranslationContainer("command.setblock.invalidBlock", []));
+			return false;
+		}
 		return true;
 	}
 }
