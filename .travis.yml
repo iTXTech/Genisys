@@ -1,0 +1,23 @@
+#Travis CI
+
+language: php
+
+php:
+ - 7.0
+
+branches:
+ - master
+ - php7-0.14
+
+before_script:
+ - phpenv config-rm xdebug.ini
+ - mkdir plugins
+ - pecl install channel://pecl.php.net/pthreads-3.1.5
+ - pecl install channel://pecl.php.net/weakref-0.3.2
+ - echo | pecl install channel://pecl.php.net/yaml-2.0.0RC7
+
+script:
+ - php tests/Travis.php
+
+notifications:
+ email: false
