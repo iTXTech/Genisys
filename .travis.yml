@@ -14,7 +14,7 @@ before_script:
  - mkdir plugins
  - pecl install channel://pecl.php.net/pthreads-3.1.5
  - pecl install channel://pecl.php.net/weakref-0.3.2
- - echo | pecl install channel://pecl.php.net/yaml-2.0.0rc7
+ - echo | pecl install channel://pecl.php.net/yaml-2.0.0RC7
 
 script:
  - php tests/Travis.php
