@@ -127,7 +127,6 @@ class SummonCommand extends VanillaCommand{
 				new FloatTag("", 0)
 			]),
 		]);
-		//TODO: Add support for custom tags as $args[4]
 
 		$entity = Entity::createEntity($type, $chunk, $nbt);
 		if($entity instanceof Entity){
