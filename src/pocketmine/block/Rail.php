@@ -9,7 +9,7 @@ class Rail extends Flowable{
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
-	public function getName() : string{
+	public function getName(){
 		return "Rail";
 	}
 	protected function update(){
