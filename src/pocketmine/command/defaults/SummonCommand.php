@@ -1,28 +1,15 @@
 <?php
+/**
+ * Author: gaoyichuan
+ * Time: 2016/2/2 15:16
+ *
+ * OpenGenisys Project
+ */
 
-/*
- *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
- * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * @author PocketMine Team
- * @link http://www.pocketmine.net/
- *
- *
-*/
 
 namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
-use pocketmine\command\ConsoleCommandSender;
 use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
 use pocketmine\entity\Entity;
@@ -31,10 +18,6 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\FloatTag;
-use pocketmine\nbt\tag\StringTag;
-use pocketmine\level\format\FullChunk;
-use pocketmine\level\Level;
-use pocketmine\tile\MobSpawner;
 
 class SummonCommand extends VanillaCommand{
 
@@ -57,6 +40,9 @@ class SummonCommand extends VanillaCommand{
 			return true;
 		}
 
+		$x = 0;
+		$y = 0;
+		$z = 0;
 		if(count($args) == 4 or count($args) == 5){			//position is set
 			//TODO:simpilify them to one piece of code
 			//Code for setting $x
@@ -67,7 +53,7 @@ class SummonCommand extends VanillaCommand{
 				if($sender instanceof Player){			//using in-game
 					$x = is_numeric($offset_x) ? ($sender->x + $offset_x) : $sender->x;
 				}else{															//using in console
-					$sender->sendMessage(TextFormat::RED . "You must specify a poisition where the entity is spawned to when using in console");
+					$sender->sendMessage(TextFormat::RED . "You must specify a position where the entity is spawned to when using in console");
 					return false;
 				}
 			}else{																//other circumstances
@@ -85,7 +71,7 @@ class SummonCommand extends VanillaCommand{
 					if($y < 0) $y = 0;								//in case y is outside the range of [0,128]
 					if($y > 128) $y = 128;
 				}else{															//using in console
-					$sender->sendMessage(TextFormat::RED . "You must specify a poisition where the entity is spawned to when using in console");
+					$sender->sendMessage(TextFormat::RED . "You must specify a position where the entity is spawned to when using in console");
 					return false;
 				}
 			}else{																//other circumstances
@@ -101,7 +87,7 @@ class SummonCommand extends VanillaCommand{
 				if($sender instanceof Player){			//using in-game
 					$z = is_numeric($offset_z) ? ($sender->z + $offset_z) : $sender->z;
 				}else{															//using in console
-					$sender->sendMessage(TextFormat::RED . "You must specify a poisition where the entity is spawned to when using in console");
+					$sender->sendMessage(TextFormat::RED . "You must specify a position where the entity is spawned to when using in console");
 					return false;
 				}
 			}else{																//other circumstances
@@ -116,7 +102,7 @@ class SummonCommand extends VanillaCommand{
 				$y = $sender->y;
 				$z = $sender->z;
 			}else{
-				$sender->sendMessage(TextFormat::RED . "You must specify a poisition where the entity is spawned to when using in console");
+				$sender->sendMessage(TextFormat::RED . "You must specify a position where the entity is spawned to when using in console");
 				return false;
 			}
 		} //finish setting the location
@@ -149,10 +135,8 @@ class SummonCommand extends VanillaCommand{
 			$sender->sendMessage("Successfully spawned entity $type at ($x, $y, $z)");
 			return true;
 		}else{
-			$sender->sendMessage(TextFormat::RED . "An error occured when spawning the entity $type");
+			$sender->sendMessage(TextFormat::RED . "An error occurred when spawning the entity $type");
 			return false;
 		}
-
-		return true;
 	}
 }
