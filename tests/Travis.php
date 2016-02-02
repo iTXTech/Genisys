@@ -12,6 +12,7 @@ while(!feof($pipes[1])){
 		fclose($pipes[1]);
 		fclose($pipes[2]);
 		proc_close($server);
+		break;
 	}
 }
 echo "\n\nReturn value: ". proc_close($server) ."\n";
