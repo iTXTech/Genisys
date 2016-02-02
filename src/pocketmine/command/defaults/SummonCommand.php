@@ -67,7 +67,7 @@ class SummonCommand extends VanillaCommand{
 				if($sender instanceof Player){			//using in-game
 					$x = is_numeric($offset_x) ? ($sender->x + $offset_x) : $sender->x;
 				}else{															//using in console
-					$sender->sendMessage(TextFormat::RED . "You must specify a poisition where the entity is spawned to when using in console");
+					$sender->sendMessage(TextFormat::RED . "You must specify a position where the entity is spawned to when using in console");
 					return false;
 				}
 			}else{																//other circumstances
@@ -85,7 +85,7 @@ class SummonCommand extends VanillaCommand{
 					if($y < 0) $y = 0;								//in case y is outside the range of [0,128]
 					if($y > 128) $y = 128;
 				}else{															//using in console
-					$sender->sendMessage(TextFormat::RED . "You must specify a poisition where the entity is spawned to when using in console");
+					$sender->sendMessage(TextFormat::RED . "You must specify a position where the entity is spawned to when using in console");
 					return false;
 				}
 			}else{																//other circumstances
@@ -101,7 +101,7 @@ class SummonCommand extends VanillaCommand{
 				if($sender instanceof Player){			//using in-game
 					$z = is_numeric($offset_z) ? ($sender->z + $offset_z) : $sender->z;
 				}else{															//using in console
-					$sender->sendMessage(TextFormat::RED . "You must specify a poisition where the entity is spawned to when using in console");
+					$sender->sendMessage(TextFormat::RED . "You must specify a position where the entity is spawned to when using in console");
 					return false;
 				}
 			}else{																//other circumstances
@@ -116,7 +116,7 @@ class SummonCommand extends VanillaCommand{
 				$y = $sender->y;
 				$z = $sender->z;
 			}else{
-				$sender->sendMessage(TextFormat::RED . "You must specify a poisition where the entity is spawned to when using in console");
+				$sender->sendMessage(TextFormat::RED . "You must specify a position where the entity is spawned to when using in console");
 				return false;
 			}
 		} //finish setting the location
