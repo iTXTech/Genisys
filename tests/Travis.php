@@ -6,11 +6,14 @@ $server = proc_open(PHP_BINARY . " src/pocketmine/PocketMine.php --no-wizard --d
 ], $pipes);
 fwrite($pipes[0], "version\nms\nstop\n\n");
 while(!feof($pipes[1])){
-	echo fgets($pipes[1]);
+	echo $con = fgets($pipes[1]);
+	if(strpos($con, "Server has stopped") > 0){
+		fclose($pipes[0]);
+		fclose($pipes[1]);
+		fclose($pipes[2]);
+		proc_close($server);
+	}
 }
-fclose($pipes[0]);
-fclose($pipes[1]);
-fclose($pipes[2]);
 echo "\n\nReturn value: ". proc_close($server) ."\n";
 if(count(glob("plugins/PocketMine-iTX/Genisys*.phar")) === 0){
 	echo "No server phar created!\n";
