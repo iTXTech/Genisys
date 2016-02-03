@@ -85,6 +85,20 @@ class ChunkRequestTask extends AsyncTask{
 		if($level instanceof Level and $this->hasResult()){
 			$level->chunkRequestCallback($this->chunkX, $this->chunkZ, $this->getResult());
 		}
+
+		$this->levelId = null;
+		$this->chunkX = null;
+		$this->chunkZ = null;
+		$this->chunk = null;
+		$this->tiles = null;
+
+		$this->setResult(null, false);
+
+		unset($this->levelId);
+		unset($this->chunk);
+		unset($this->chunkX);
+		unset($this->chunkZ);
+		unset($this->tiles);
 	}
 
 }
