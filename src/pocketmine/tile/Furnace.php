@@ -289,19 +289,19 @@ class Furnace extends Spawnable implements InventoryHolder, Container, Nameable{
 	}
 	
 	public function getSpawnCompound(){
-        $nbt = new CompoundTag("", [
-            new StringTag("id", Tile::FURNACE),
-            new IntTag("x", (int) $this->x),
-            new IntTag("y", (int) $this->y),
-            new IntTag("z", (int) $this->z),
-            new ShortTag("BurnTime", $this->namedtag["BurnTime"]),
-            new ShortTag("CookTime", $this->namedtag["CookTime"]),
-            new ShortTag("BurnDuration", $this->namedtag["BurnTicks"])
-        ]);
-        
-        if($this->hasName()){
-            $nbt->CustomName = $this->namedtag->CustomName;
-        }
-        return $nbt;
-    }
+		$nbt = new CompoundTag("", [
+			new StringTag("id", Tile::FURNACE),
+			new IntTag("x", (int) $this->x),
+			new IntTag("y", (int) $this->y),
+			new IntTag("z", (int) $this->z),
+			new ShortTag("BurnTime", $this->namedtag["BurnTime"]),
+			new ShortTag("CookTime", $this->namedtag["CookTime"]),
+			//new ShortTag("BurnDuration", $this->namedtag["BurnTicks"])
+		]);
+		
+		if($this->hasName()){
+			$nbt->CustomName = $this->namedtag->CustomName;
+		}
+		return $nbt;
+	}
 }
