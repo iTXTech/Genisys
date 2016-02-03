@@ -75,7 +75,7 @@ namespace pocketmine {
 	const VERSION = "1.1dev";
 	const API_VERSION = "2.0.0";
 	const CODENAME = "Amazing PHP7 !";
-	const MINECRAFT_VERSION = "v0.14.0 alpha build 3";
+	const MINECRAFT_VERSION = "v0.14.0 alpha build 4";
 	const MINECRAFT_VERSION_NETWORK = "0.14.0";
 	const iTX_API_VERSION = '1.6.0';
 
