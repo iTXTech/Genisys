@@ -7,6 +7,7 @@ use pocketmine\Player;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\item\Item as ItemItem;
+use pocketmine\math\Vector3;
 
 class Boat extends Vehicle{
 	const NETWORK_ID = 90;
@@ -57,7 +58,7 @@ class Boat extends Vehicle{
 
 		$hasUpdate = $this->entityBaseTick($tickDiff);
 
-		if($this->isInsideOfWater() or $this->isInsideOfSolid()){
+		if(!$this->level->getBlock(new Vector3($this->x,$this->y-0.225,$this->z))->getBoundingBox()==null or $this->isInsideOfWater()){
 			$this->motionY = 0.1;
 		}else{
 			$this->motionY = -0.04;
