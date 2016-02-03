@@ -1872,6 +1872,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				3 => 1
 			],
 			Item::POTION => 0,
+			Item::ROTTEN_FLESH => 4,
 		];
 
 		$slot = $this->inventory->getItemInHand();
@@ -1907,6 +1908,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->addEffect(Effect::getEffect(Effect::HUNGER)->setAmplifier(2)->setDuration(15 * 20));
 					$this->addEffect(Effect::getEffect(Effect::NAUSEA)->setAmplifier(1)->setDuration(15 * 20));
 					$this->addEffect(Effect::getEffect(Effect::POISON)->setAmplifier(3)->setDuration(60 * 20));
+				}elseif($slot->getId() === Item::ROTTEN_FLESH){
+					if(mt_rand(0,4)!=0)
+					$this->addEffect(Effect::getEffect(Effect::HUNGER)->setAmplifier(0)->setDuration(30 * 20));
 				}elseif($slot->getId() === Item::GOLDEN_APPLE && $slot->getDamage() === 1){
 					$this->setFood($this->getFood() + 4);
 					//$this->addEffect(Effect::getEffect(Effect::HEALTH_BOOST)->setAmplifier(0)->setDuration(2 * 60 * 20));
