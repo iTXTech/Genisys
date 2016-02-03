@@ -36,7 +36,7 @@ class InventoryType{
 	const ANVIL = 8;
 	const ENCHANT_TABLE = 9;
 	const DROPPER = 10;
-	const TRAP = 11;
+	const DISPENSER = 11;
 
 	private static $default = [];
 
@@ -68,8 +68,8 @@ class InventoryType{
 		static::$default[static::ENCHANT_TABLE] = new InventoryType(2, "Enchant", 4); //1 INPUT/OUTPUT, 1 LAPIS
 		static::$default[static::BREWING_STAND] = new InventoryType(4, "Brewing", 5); //1 INPUT, 3 POTION
 		static::$default[static::ANVIL] = new InventoryType(3, "Anvil", 6); //2 INPUT, 1 OUTPUT
-		static::$default[static::DROPPER] = new InventoryType(9, "Dropper", 0); //9 INPUT
-		static::$default[static::TRAP] = new InventoryType(9, "Trap", 0); // 9 INPUT
+		static::$default[static::DROPPER] = new InventoryType(9, "Dropper", 0); //9 CONTAINER
+		static::$default[static::DISPENSER] = new InventoryType(9, "Dispenser", 0); // 9 CONTAINER
 	}
 
 	/**

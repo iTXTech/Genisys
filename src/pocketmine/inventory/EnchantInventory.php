@@ -28,10 +28,10 @@ use pocketmine\item\enchantment\EnchantmentEntry;
 use pocketmine\item\enchantment\EnchantmentLevelTable;
 use pocketmine\item\enchantment\EnchantmentList;
 use pocketmine\item\Item;
-use pocketmine\level\Position;
 use pocketmine\network\protocol\CraftingDataPacket;
 use pocketmine\Player;
 use pocketmine\Server;
+use pocketmine\tile\EnchantTable;
 
 class EnchantInventory extends ContainerInventory{
 	private $bookshelfAmount = 0;
@@ -40,12 +40,12 @@ class EnchantInventory extends ContainerInventory{
 	/** @var EnchantmentEntry[] */
 	private $entries = null;
 
-	public function __construct(Position $pos){
-		parent::__construct(new FakeBlockMenu($this, $pos), InventoryType::get(InventoryType::ENCHANT_TABLE));
+	public function __construct(EnchantTable $tile){
+		parent::__construct($tile, InventoryType::get(InventoryType::ENCHANT_TABLE));
 	}
 
 	/**
-	 * @return FakeBlockMenu
+	 * @return EnchantTable
 	 */
 	public function getHolder(){
 		return $this->holder;

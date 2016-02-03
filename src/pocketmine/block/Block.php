@@ -75,6 +75,8 @@ class Block extends Position implements Metadatable{
 
 	const SANDSTONE = 24;
 
+	const DISPENSER = 23;
+
 	const NOTEBLOCK = 25;
 
 	const BED_BLOCK = 26;
@@ -209,6 +211,8 @@ class Block extends Position implements Metadatable{
 
 	const INACTIVE_REDSTONE_LAMP = 123;
 	const ACTIVE_REDSTONE_LAMP = 124;
+
+	const DROPPER = 125;
 
 	const ACTIVATOR_RAIL = 126;
 	const COCOA_BLOCK = 127;
@@ -552,6 +556,7 @@ class Block extends Position implements Metadatable{
 			self::$list[self::TRIPWIRE] = Tripwire::class;
 			self::$list[self::TRIPWIRE_HOOK] = TripwireHook::class;
 			self::$list[self::ITEM_FRAME_BLOCK] = ItemFrame::class;
+			self::$list[self::DISPENSER] = Dispenser::class;
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){

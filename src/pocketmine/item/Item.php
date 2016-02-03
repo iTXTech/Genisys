@@ -86,6 +86,8 @@ class Item{
 	const LAPIS_ORE = 21;
 	const LAPIS_BLOCK = 22;
 
+	const DISPENSER = 23;
+
 	const SANDSTONE = 24;
 	const NOTEBLOCK = 25;
 	const BED_BLOCK = 26;
@@ -214,6 +216,8 @@ class Item{
 	const LIT_REDSTONE_LAMP = 123;
 	const INACTIVE_REDSTONE_LAMP = 123;
 	const ACTIVE_REDSTONE_LAMP = 124;
+
+	const DROPPER = 125;
 
 	const ACTIVATOR_RAIL = 126;
 	const COCOA_BLOCK = 127;
@@ -1002,6 +1006,8 @@ class Item{
 		self::addCreativeItem(Item::get(Item::STONE_BUTTON, 0));
 		self::addCreativeItem(Item::get(Item::DAYLIGHT_SENSOR, 0));
 		self::addCreativeItem(Item::get(Item::TRIPWIRE_HOOK, 0));
+		self::addCreativeItem(Item::get(Item::DROPPER, 0));
+		self::addCreativeItem(Item::get(Item::DISPENSER, 0));
 		self::addCreativeItem(Item::get(Item::SNOWBALL));
 		//Seeds
 		self::addCreativeItem(Item::get(Item::COAL, 0));
