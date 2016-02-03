@@ -42,6 +42,13 @@ class Boat extends Vehicle{
 			}
 		}
 	}
+	
+	public function kill(){
+		parent::kill();
+		foreach($this->getDrops() as $item){
+			$this->getLevel()->dropItem($this, $item);
+		}
+	}
 
 	public function onUpdate($currentTick){
 		if($this->closed){
