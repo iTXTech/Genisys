@@ -18,12 +18,12 @@ use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
-use pocketmine\tile\Dispenser as TileDispenser;
+use pocketmine\tile\Dropper as TileDropper;
 use pocketmine\tile\Tile;
 
-class Dispenser extends Solid{
+class Dropper extends Solid{
 
-	protected $id = self::DISPENSER;
+	protected $id = self::DROPPER;
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
@@ -38,7 +38,7 @@ class Dispenser extends Solid{
 	}
 
 	public function getName() : string{
-		return "Dispenser";
+		return "Dropper";
 	}
 
 	public function getToolType(){
@@ -53,7 +53,7 @@ class Dispenser extends Solid{
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [
 			new EnumTag("Items", []),
-			new StringTag("id", Tile::DISPENSER),
+			new StringTag("id", Tile::DROPPER),
 			new IntTag("x", $this->x),
 			new IntTag("y", $this->y),
 			new IntTag("z", $this->z)
@@ -70,7 +70,7 @@ class Dispenser extends Solid{
 			}
 		}
 
-		Tile::createTile(Tile::DISPENSER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+		Tile::createTile(Tile::DROPPER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 
 		return true;
 	}
@@ -79,24 +79,23 @@ class Dispenser extends Solid{
 		if($player instanceof Player){
 			$t = $this->getLevel()->getTile($this);
 			$dispenser = null;
-			if($t instanceof TileDispenser){
+			if($t instanceof TileDropper){
 				$dispenser = $t;
 			}else{
 				$nbt = new CompoundTag("", [
 					new EnumTag("Items", []),
-					new StringTag("id", Tile::DISPENSER),
+					new StringTag("id", Tile::DROPPER),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),
 					new IntTag("z", $this->z)
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
-				$dispenser = Tile::createTile(Tile::DISPENSER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+				$dispenser = Tile::createTile(Tile::DROPPER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 			}
 
 			if($player->isCreative()){
 				return true;
 			}
-
 			$player->addWindow($dispenser->getInventory());
 		}
 

@@ -107,6 +107,7 @@ use pocketmine\scheduler\ServerScheduler;
 use pocketmine\tile\BrewingStand;
 use pocketmine\tile\Chest;
 use pocketmine\tile\Dispenser;
+use pocketmine\tile\Dropper;
 use pocketmine\tile\EnchantTable;
 use pocketmine\tile\FlowerPot;
 use pocketmine\tile\Furnace;
@@ -3031,5 +3032,6 @@ private function lookupAddress($address) {
 		Tile::registerTile(MobSpawner::class);
 		Tile::registerTile(ItemFrame::class);
 		Tile::registerTile(Dispenser::class);
+		Tile::registerTile(Dropper::class);
 	}
 }

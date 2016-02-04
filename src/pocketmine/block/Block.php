@@ -557,6 +557,7 @@ class Block extends Position implements Metadatable{
 			self::$list[self::TRIPWIRE_HOOK] = TripwireHook::class;
 			self::$list[self::ITEM_FRAME_BLOCK] = ItemFrame::class;
 			self::$list[self::DISPENSER] = Dispenser::class;
+			self::$list[self::DROPPER] = Dropper::class;
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){
