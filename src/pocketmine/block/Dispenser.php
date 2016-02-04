@@ -46,15 +46,8 @@ class Dispenser extends Transparent{
 	}
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
-		$faces = [
-			0 => 4,
-			1 => 2,
-			2 => 5,
-			3 => 3,
-		];
-
 		$dispenser = null;
-		$this->meta = $faces[$player instanceof Player ? $player->getDirection() : 0];
+		$this->meta = $player instanceof Player ? $player->getDirection() : 0;
 
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [

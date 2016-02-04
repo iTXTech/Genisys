@@ -23,6 +23,7 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\Player;
 
 class IronDoor extends Door{
 
@@ -52,5 +53,10 @@ class IronDoor extends Door{
 		}else{
 			return [];
 		}
+	}
+
+	public function onActivate(Item $item, Player $player = null){
+		if($player instanceof Player) return true;
+		else return parent::onActivate($item, $player);
 	}
 }
