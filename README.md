@@ -39,6 +39,7 @@
 ###Jenkins CI
 Jenkins Server is moving and Jenkins server won't be available.<br>
 [**Click Here to go to Jenkins CI Page**](http://mcper.cn:8080/job/Genisys/)
+<br>
 [**Click Here to go to Travis-CI**](https://travis-ci.org/iTXTech/Genisys)
 
 Temporary webdisk download:<br>
@@ -147,6 +148,7 @@ Port: **888**
 ###自动构建的核心
 Genisys 的 Jenkins 服务器正在转移到一个更好的机房。因此在若干天内，该服务将不可用。<br>
 [**点击这里进入官方 Jenkins CI**](http://mcper.cn:8080/job/Genisys/)
+<br>
 [**点击这里进入官方 Travis-CI**](https://travis-ci.org/iTXTech/Genisys)
 
 临时网盘下载：<br>
