@@ -293,7 +293,7 @@ class RedstoneTorch extends RedstoneSource{
 
 	public function getDrops(Item $item) : array {
 		return [
-			[Item::REDSTONE_TORCH, 0, 1],
+			[Item::LIT_REDSTONE_TORCH, 0, 1],
 		];
 	}
 
