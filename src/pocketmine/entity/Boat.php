@@ -64,7 +64,7 @@ class Boat extends Vehicle{
 		if(!$this->level->getBlock(new Vector3($this->x,$this->y-0.20,$this->z))->getBoundingBox()==null or $this->isInsideOfWater()){
 			$this->motionY = 0.1;
 		}else{
-			$this->motionY = -0.04;
+			$this->motionY = -0.08;
 		}
 		$this->move($this->motionX, $this->motionY, $this->motionZ);
 		$this->updateMovement();
