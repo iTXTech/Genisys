@@ -10,11 +10,13 @@
  */
 namespace pocketmine\tile;
 
+use pocketmine\block\Block;
 use pocketmine\block\RedstoneSource;
 use pocketmine\inventory\DropperInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
+use pocketmine\level\particle\SmokeParticle;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\DoubleTag;
@@ -203,57 +205,83 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 		}
 	}
 
+	public function activate(){
+		$itemIndex = [];
+		for($i = 0; $i < $this->getSize(); $i++){
+			$item = $this->getInventory()->getItem($i);
+			if($item->getId() != Item::AIR){
+				$itemIndex[] = [$i, $item];
+			}
+		}
+		$max = count($itemIndex) - 1;
+		if($max < 0) $itemArr = null;
+		elseif($max == 0) $itemArr = $itemIndex[0];
+		else $itemArr = $itemIndex[mt_rand(0, $max)];
+
+		if(is_array($itemArr)){
+			/** @var Item $item */
+			$item = $itemArr[1];
+			$item->setCount($item->getCount() - 1);
+			$this->getInventory()->setItem($itemArr[0], $item->getCount() > 0 ? $item : Item::get(Item::AIR));
+			$motion = $this->getMotion();
+			$needItem = Item::get($item->getId());
+			$block = $this->getLevel()->getBlock($this->add($motion[0], $motion[1], $motion[2]));
+			switch($block->getId()){
+				case Block::CHEST:
+				case Block::TRAPPED_CHEST:
+				case Block::DROPPER:
+				case Block::DISPENSER:
+				case Block::BREWING_STAND:
+				case Block::FURNACE:
+					$t = $this->getLevel()->getTile($block);
+					/** @var Chest|Dispenser|Dropper|BrewingStand|Furnace $t */
+					if($t instanceof Tile){
+						if($t->getInventory()->canAddItem($needItem)){
+							$t->getInventory()->addItem($needItem);
+							return;
+						}
+					}
+			}
+
+			$itemTag = NBT::putItemHelper($needItem);
+			$itemTag->setName("Item");
+
+
+			$nbt = new CompoundTag("", [
+				"Pos" => new EnumTag("Pos", [
+					new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
+					new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
+					new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
+				]),
+				"Motion" => new EnumTag("Motion", [
+					new DoubleTag("", $motion[0]),
+					new DoubleTag("", $motion[1]),
+					new DoubleTag("", $motion[2])
+				]),
+				"Rotation" => new EnumTag("Rotation", [
+					new FloatTag("", lcg_value() * 360),
+					new FloatTag("", 0)
+				]),
+				"Health" => new ShortTag("Health", 5),
+				"Item" => $itemTag,
+				"PickupDelay" => new ShortTag("PickupDelay", 10)
+			]);
+
+			$f = 0.3;
+			$itemEntity = new ItemEntity($this->chunk, $nbt, $this);
+			$itemEntity->setMotion($itemEntity->getMotion()->multiply($f));
+			$itemEntity->spawnToAll();
+
+			for($i = 1; $i < 10; $i++){
+				$this->getLevel()->addParticle(new SmokeParticle($this->add($motion[0] * $i * 0.3 + 0.5, $motion[1] == 0 ? 0.5 : $motion[1] * $i * 0.3, $motion[2] * $i * 0.3 + 0.5)));
+			}
+		}
+	}
+
 	public function onUpdate(){
 		if($this->nextUpdate <= $this->getCurrentTick()){
 			if($this->checkPower()){
-				$itemIndex = [];
-				for($i = 0; $i < $this->getSize(); $i++){
-					$item = $this->getInventory()->getItem($i);
-					if($item->getId() != Item::AIR){
-						$itemIndex[] = [$i, $item];
-					}
-				}
-				$max = count($itemIndex) - 1;
-				if($max < 0) $itemArr = null;
-				elseif($max == 0) $itemArr = $itemIndex[0];
-				else $itemArr = $itemIndex[mt_rand(0, $max)];
-
-				if(is_array($itemArr)){
-					/** @var Item $item */
-					$item = $itemArr[1];
-					$item->setCount($item->getCount() - 1);
-					$this->getInventory()->setItem($itemArr[0] , $item->getCount() > 0 ? $item : Item::get(Item::AIR));
-
-					$itemTag = NBT::putItemHelper(Item::get($item->getId()));
-					$itemTag->setName("Item");
-
-					$motion = $this->getMotion();
-
-					$nbt = new CompoundTag("", [
-						"Pos" => new EnumTag("Pos", [
-							new DoubleTag("", $this->x + $motion[0] * 2),
-							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
-							new DoubleTag("", $this->z + $motion[2] * 2)
-						]),
-						"Motion" => new EnumTag("Motion", [
-							new DoubleTag("", $motion[0]),
-							new DoubleTag("", $motion[1]),
-							new DoubleTag("", $motion[2])
-						]),
-						"Rotation" => new EnumTag("Rotation", [
-							new FloatTag("", lcg_value() * 360),
-							new FloatTag("", 0)
-						]),
-						"Health" => new ShortTag("Health", 5),
-						"Item" => $itemTag,
-						"PickupDelay" => new ShortTag("PickupDelay", 10)
-					]);
-
-					$f = 0.5;
-					$itemEntity = new ItemEntity($this->chunk, $nbt, $this);
-					$itemEntity->setMotion($itemEntity->getMotion()->multiply($f));
-					$itemEntity->spawnToAll();
-				}
+				$this->activate();
 			}
 			$this->generateNextUpdateTick();
 		}
