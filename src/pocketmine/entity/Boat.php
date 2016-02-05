@@ -63,10 +63,10 @@ class Boat extends Vehicle{
 
 		$hasUpdate = $this->entityBaseTick($tickDiff);
 
-		if($this->isInsideOfWater() or $this->isInsideOfSolid()){
+		if(!$this->level->getBlock(new Vector3($this->x,$this->y,$this->z))->getBoundingBox()==null or $this->isInsideOfWater()){
 			$this->motionY = 0.1;
 		}else{
-			$this->motionY = -0.04;
+			$this->motionY = -0.08;
 		}
 
 		$this->move($this->motionX, $this->motionY, $this->motionZ);
