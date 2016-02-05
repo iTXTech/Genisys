@@ -997,7 +997,7 @@ class Item{
 		}
 		self::addCreativeItem(Item::get(Item::LEVER, 0));
 		self::addCreativeItem(Item::get(Item::INACTIVE_REDSTONE_LAMP, 0));
-		self::addCreativeItem(Item::get(Item::REDSTONE_TORCH, 0));
+		self::addCreativeItem(Item::get(Item::LIT_REDSTONE_TORCH, 0));
 		self::addCreativeItem(Item::get(Item::WOODEN_PRESSURE_PLATE, 0));
 		self::addCreativeItem(Item::get(Item::STONE_PRESSURE_PLATE, 0));
 		self::addCreativeItem(Item::get(Item::LIGHT_WEIGHTED_PRESSURE_PLATE, 0));
