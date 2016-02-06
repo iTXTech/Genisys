@@ -263,8 +263,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/** @var Vector3 */
 	public $fromPos = null;
 	private $portalTime = 0;
-	private $clientSecretId;
-	private $exp;
 	private $hasTransfered = false;
 	private $shouldSendStatus = false;
 	/** @var  Position */
@@ -354,7 +352,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	public function getExperience(){
-		return $this->exp;
+		return $this->experience;
 	}
 
 	public function getExpLevel() {
