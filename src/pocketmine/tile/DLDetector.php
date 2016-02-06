@@ -19,6 +19,8 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\level\Level;
 
 class DLDetector extends Spawnable{
+	private $lastType = 0;
+
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
 		$this->scheduleUpdate();
@@ -86,12 +88,15 @@ class DLDetector extends Spawnable{
 
 	public function onUpdate(){
 		if(($this->getLevel()->getServer()->getTick() % 3) == 0){ //Update per 3 ticks
-			/** @var DaylightDetector $block */
-			$block = $this->getBlock();
-			if($this->isActivated()){
-				$block->activate();
-			}else {
-				$block->deactivate();
+			if($this->getType() != $this->lastType){ //Update when changed
+				/** @var DaylightDetector $block */
+				$block = $this->getBlock();
+				if($this->isActivated()){
+					$block->activate();
+				}else{
+					$block->deactivate();
+				}
+				$this->lastType = $block->getId();
 			}
 		}
 		return true;
