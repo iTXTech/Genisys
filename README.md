@@ -25,6 +25,7 @@
 * Be free to create a _Pull Request_ or open an _Issue_. English and Chinese are both recommended. (Please do your best to use English because it is easy to communicate with worldwide.)
 
 ###Acknowledgements
+* Some features are merged from **@boybook**'s **FCCore**
 * Skull, FlowerPot are based on **@ImagicalCorp** ImagicalMine's work
 * AIs are based on **@Zzm317**'s amazing MyOwnWorld.
 * Painting and Brewing Stand are translated from **Nukkit** Project

@@ -36,44 +36,31 @@ class RedstoneSource extends Flowable{
 		return $this->getLevel()->getServer()->redstoneEnabled;
 	}
 
+	public function activateBlock(Block $block){
+		if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
+			if(!$block->isOpened()) $block->onActivate(new Item(0));
+		}
+		if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
+		/** @var InactiveRedstoneLamp $block*/
+		if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn();
+		if($block->getId() == Block::REDSTONE_WIRE){
+			/** @var RedstoneWire $wire */
+			$wire = $block;
+			$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
+		}
+	}
+
 	public function activate(array $ignore = []){
 		if($this->canCalc()){
 			$this->activated = true;
 			/** @var Door $block */
 
-			$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH];
+			$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_DOWN];
 
 			foreach($sides as $side){
 				if(!in_array($side, $ignore)){
 					$block = $this->getSide($side);
-					if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
-						if(!$block->isOpened()) $block->onActivate(new Item(0));
-					}
-					if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
-					/** @var InactiveRedstoneLamp $block*/
-					if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn();
-					if($block->getId() == Block::REDSTONE_WIRE){
-						/** @var RedstoneWire $wire */
-						$wire = $block;
-						$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
-					}
-				}
-			}
-
-			if(!in_array(Vector3::SIDE_DOWN, $ignore)){
-				$block = $this->getSide(Vector3::SIDE_DOWN);
-				if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn();
-
-				$block = $this->getSide(Vector3::SIDE_DOWN, 2);
-				if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
-					if(!$block->isOpened()) $block->onActivate(new Item(0));
-				}
-				if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
-				if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn();
-				if($block->getId() == Block::REDSTONE_WIRE){
-					/** @var RedstoneWire $wire */
-					$wire = $block;
-					$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
+					$this->activateBlock($block);
 				}
 			}
 		}

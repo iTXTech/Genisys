@@ -114,33 +114,12 @@ class WoodenButton extends RedstoneSource{
 
 		$block = $this->getSide($faces[$side])->getSide(Vector3::SIDE_UP);
 		if(!$this->isRightPlace($this, $block)){
-			if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
-				if(!$block->isOpened()) $block->onActivate(new Item(0));
-			}
-			if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
-			/** @var ActiveRedstoneLamp $block */
-			if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn();
-			if($block->getId() == Block::REDSTONE_WIRE){
-				/** @var RedstoneWire $wire */
-				$wire = $block;
-				$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
-			}
+			$this->activateBlock($block);
 		}
 
 		if($side != 1){
-			/** @var Door $block */
 			$block = $this->getSide($faces[$side], 2);
-			if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
-				if(!$block->isOpened()) $block->onActivate(new Item(0));
-			}
-			if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
-			/** @var ActiveRedstoneLamp $block */
-			if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn();
-			if($block->getId() == Block::REDSTONE_WIRE) {
-				/** @var RedstoneWire $wire */
-				$wire = $block;
-				$wire->calcSignal(15, RedstoneWire::ON);
-			}
+			$this->activateBlock($block);
 		}
 
 		$this->checkTorchOn($this->getSide($faces[$side]),[$this->getOppositeSide($faces[$side])]);

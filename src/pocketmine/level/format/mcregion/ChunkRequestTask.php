@@ -78,8 +78,6 @@ class ChunkRequestTask extends AsyncTask{
 			$this->tiles;
 
 		$this->setResult($ordered, false);
-		unset($ordered);
-		$this->chunk = null;
 	}
 
 	public function onCompletion(Server $server){
@@ -87,19 +85,6 @@ class ChunkRequestTask extends AsyncTask{
 		if($level instanceof Level and $this->hasResult()){
 			$level->chunkRequestCallback($this->chunkX, $this->chunkZ, $this->getResult());
 		}
-
-		$this->levelId = null;
-		$this->chunkX = null;
-		$this->chunkZ = null;
-		$this->tiles = null;
-
-		$this->setResult(null, false);
-
-		unset($this->levelId);
-		unset($this->chunk);
-		unset($this->chunkX);
-		unset($this->chunkZ);
-		unset($this->tiles);
 	}
 
 }
