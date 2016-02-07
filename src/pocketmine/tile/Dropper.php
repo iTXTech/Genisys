@@ -278,7 +278,7 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 		}
 	}
 
-	public function onUpdate(){
+	/*public function onUpdate(){
 		if($this->nextUpdate <= $this->getCurrentTick()){
 			if($this->checkPower()){
 				$this->activate();
@@ -286,7 +286,7 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 			$this->generateNextUpdateTick();
 		}
 		return true;
-	}
+	}*/
 
 	public function getSpawnCompound(){
 		$c = new CompoundTag("", [

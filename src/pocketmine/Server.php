@@ -355,7 +355,7 @@ class Server{
 	public $dserverPlayers = 0;
 	public $dserverAllPlayers = 0;
 	public $redstoneEnabled = false;
-	public $allowFakeLowFrequencyPulse = false;
+	public $allowFrequencyPulse = false;
 	public $anviletEnabled = false;
 	public $pulseFrequency = 20;
 	public $playerMsgType = self::PLAYER_MSG_TYPE_MESSAGE;
@@ -1632,7 +1632,7 @@ class Server{
 			"serverList" => explode(";", $this->getAdvancedProperty("dserver.server-list", ""))
 		];
 		$this->redstoneEnabled = $this->getAdvancedProperty("redstone.enable", false);
-		$this->allowFakeLowFrequencyPulse = $this->getAdvancedProperty("redstone.allow-fake-low-frequency-pulse", false);
+		$this->allowFrequencyPulse = $this->getAdvancedProperty("redstone.allow-frequency-pulse", false);
 		$this->pulseFrequency = $this->getAdvancedProperty("redstone.pulse-frequency", 20);
 		$this->anviletEnabled = $this->getAdvancedProperty("server.allow-anvilandenchanttable", false);
 		$this->getLogger()->setWrite(!$this->getAdvancedProperty("server.disable-log", false));

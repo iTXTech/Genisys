@@ -43,7 +43,7 @@ class RedstoneTorch extends RedstoneSource{
 	}
 
 	public function canScheduleUpdate(){
-		return $this->getLevel()->getServer()->allowFakeLowFrequencyPulse;
+		return $this->getLevel()->getServer()->allowFrequencyPulse;
 	}
 
 	public function getFrequency(){

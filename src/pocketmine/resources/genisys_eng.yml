@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 7
+ version: 8
 
 level:
  #Set if turn on the weather system
@@ -71,8 +71,8 @@ redstone:
  #If not true then the redstone won't work#
  ##########################################
  enable: false
- #Choose if allow fake low frequancy pulse
- allow-fake-low-frequency-pulse: false
+ #Choose if allow frequancy pulse
+ frequency-pulse: false
  #Set the frequency of pulse, Default: 1s
  pulse-frequency: 1
 
