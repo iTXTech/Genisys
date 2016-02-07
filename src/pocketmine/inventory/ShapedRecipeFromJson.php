@@ -48,9 +48,9 @@ class ShapedRecipeFromJson extends ShapedRecipe{
 	 * @throws \Exception
 	 */
 	public function __construct(Item $result, $height, $width){
-		for($h =0; $h < $height; $h++){
-			if(strlen($width) === 0 or strlen($width) > 3){
-				throw new \InvalidStateException("Crafting rows should be 1, 2, 3 characters, not " . count($width));
+		for($h = 0; $h < $height; $h++){
+			if($width === 0 or $width > 3){
+				throw new \InvalidStateException("Crafting rows should be 1, 2, 3 wide, not $width");
 			}
 			$this->ingredients[] = array_fill(0, $width, null);
 		}
