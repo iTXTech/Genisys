@@ -1,6 +1,6 @@
 [
 ![Genisys - PocketMine-iTX Core]
-(http://i8.tietuku.com/6600adf65e57e2f3.jpg)
+(http://i13.tietuku.com/aa044daf6ecb66a4.jpg)
 ]
 (#)
 
