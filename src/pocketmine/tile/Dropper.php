@@ -11,7 +11,6 @@
 namespace pocketmine\tile;
 
 use pocketmine\block\Block;
-use pocketmine\block\RedstoneSource;
 use pocketmine\inventory\DropperInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
@@ -167,24 +166,6 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 		$this->namedtag->CustomName = new StringTag("CustomName", $str);
 	}
 
-	private function getCurrentTick() : int{
-		return $this->getLevel()->getServer()->getTick();
-	}
-
-	private function generateNextUpdateTick(){
-		$this->nextUpdate = $this->getCurrentTick() + mt_rand(0, $this->getLevel()->getServer()->getTicksPerSecondAverage());
-	}
-
-	public function checkPower() : bool{
-		for($i = 0; $i < 5; $i++){
-			$block = $this->getBlock()->getSide($i);
-			if($block instanceof RedstoneSource){
-				if($block->isActivated()) return true;
-			}
-		}
-		return false;
-	}
-
 	public function getMotion(){
 		$meta = $this->getBlock()->getDamage();
 		switch($meta){
@@ -277,16 +258,6 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 			}
 		}
 	}
-
-	/*public function onUpdate(){
-		if($this->nextUpdate <= $this->getCurrentTick()){
-			if($this->checkPower()){
-				$this->activate();
-			}
-			$this->generateNextUpdateTick();
-		}
-		return true;
-	}*/
 
 	public function getSpawnCompound(){
 		$c = new CompoundTag("", [

@@ -49,7 +49,7 @@ class RedstoneSource extends Flowable{
 			$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
 		}
 		/** @var Dropper|Dispenser $block */
-		if($block->getId() == Block::DROPPER) $block->activate();
+		if($block->getId() == Block::DROPPER or $block->getId() == Block::DISPENSER) $block->activate();
 	}
 
 	public function activate(array $ignore = []){
