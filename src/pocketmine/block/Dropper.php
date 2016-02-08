@@ -47,8 +47,22 @@ class Dropper extends Solid implements ElectricalAppliance{
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$dispenser = null;
-		//$this->meta = $player instanceof Player ? $player->getDirection() : 0;
-		$this->meta = $face;
+		if($player instanceof Player){
+			$pitch = $player->getPitch();
+			if(abs($pitch) >= 25){
+				if($pitch < 0) $f = 4;
+				else $f = 5;
+			} else $f = $player->getDirection();
+		} else $f = 0;
+		$faces = [
+			3 => 3,
+			0 => 4,
+			2 => 5,
+			1 => 2,
+			4 => 0,
+			5 => 1
+		];
+		$this->meta = $faces[$f];
 
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [

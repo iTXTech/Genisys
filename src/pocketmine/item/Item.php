@@ -1006,8 +1006,8 @@ class Item{
 		self::addCreativeItem(Item::get(Item::STONE_BUTTON, 0));
 		self::addCreativeItem(Item::get(Item::DAYLIGHT_SENSOR, 0));
 		self::addCreativeItem(Item::get(Item::TRIPWIRE_HOOK, 0));
-		self::addCreativeItem(Item::get(Item::DROPPER, 0));
-		self::addCreativeItem(Item::get(Item::DISPENSER, 0));
+		self::addCreativeItem(Item::get(Item::DROPPER, 3));
+		self::addCreativeItem(Item::get(Item::DISPENSER, 3));
 		self::addCreativeItem(Item::get(Item::SNOWBALL));
 		//Seeds
 		self::addCreativeItem(Item::get(Item::COAL, 0));
