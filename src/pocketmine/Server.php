@@ -363,7 +363,8 @@ class Server{
 	public $playerLogoutMsg = "";
 	public $antiFly = false;
 	public $asyncChunkRequest = true;
-	public $readRecipesFromJson = false;
+	public $recipesFromJson = false;
+	public $creativeItemsFromJson = false;
 	public $minecartMovingType = 0;
 
 	/** @var CraftingDataPacket */
@@ -1638,7 +1639,8 @@ class Server{
 		$this->getLogger()->setWrite(!$this->getAdvancedProperty("server.disable-log", false));
 		$this->antiFly = $this->getAdvancedProperty("server.anti-fly", true);
 		$this->asyncChunkRequest = $this->getAdvancedProperty("server.async-chunk-request", true);
-		$this->readRecipesFromJson = $this->getAdvancedProperty("server.read-recipes-from-json", false);
+		$this->recipesFromJson = $this->getAdvancedProperty("server.recipes-from-json", false);
+		$this->creativeItemsFromJson = $this->getAdvancedProperty("server.creative-items-from-json", false);
 		$this->minecartMovingType = $this->getAdvancedProperty("server.minecart-moving-type", 0);
 	}
 
@@ -1892,14 +1894,14 @@ class Server{
 
 			InventoryType::init(min(32, $this->inventoryNum)); //Bigger than 32 with cause problems
 			Block::init();
-			Item::init();
+			Item::init($this->creativeItemsFromJson);
 			Biome::init();
 			Effect::init();
 			Enchantment::init();
 			Attribute::init();
 			EnchantmentLevelTable::init();
 			//TextWrapper::init();
-			$this->craftingManager = new CraftingManager($this->readRecipesFromJson);
+			$this->craftingManager = new CraftingManager($this->recipesFromJson);
 
 			$this->pluginManager = new PluginManager($this, $this->commandMap);
 			$this->pluginManager->subscribeToPermission(Server::BROADCAST_CHANNEL_ADMINISTRATIVE, $this->consoleSender);

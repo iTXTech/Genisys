@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 8
+ version: 9
 
 level:
  #Set if turn on the weather system
@@ -58,8 +58,10 @@ server:
  player-msg-type: 0
  login-msg: "§3@player joined the game"
  logout-msg: "§3@player left the game"
- #If read recipes from json
- read-recipes-from-json: false
+ #Choose if read recipes from json
+ recipes-from-json: false
+ #Choose if read creative item from json
+ creative-items-from-json: false
  #Choose if minecart is free moving, follow rails or disable
  #-1=disable, 0=free moving, 1=follow rails
  minecart-moving-type: 0
