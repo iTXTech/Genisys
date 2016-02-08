@@ -36,13 +36,13 @@
 * **@FENGberd**'s encouragement
 * Our leaders are **@ishitatsuyuki** and **@jasonczc**
 
-###Jenkins CI
-[**Click Here to go to Jenkins CI Page**](http://jenkins.mcper.cn/job/Genisys-master/)
+###Auto Build (CI) Pages
+[**Jenkins**](http://jenkins.mcper.cn/job/Genisys-master/)
 <br>
-[**Click Here to go to Travis-CI**](https://travis-ci.org/iTXTech/Genisys)
+[**Travis-CI**](https://travis-ci.org/iTXTech/Genisys)
 
-###Documentation
-[**Click Here to go to Genisys Documentation Page**](http://mcper.cn/Genisys-Docs/)
+###Official Development Documentation
+[**Click Here to go to Genisys Official Development Documentation Page**](http://mcper.cn/Genisys-Docs/)
 
 ###Features
 * Performance optimization (Let 100+ players join in a server)
@@ -140,7 +140,7 @@ Port: **888**
 * 感谢 **@FENGberd** 的支持与鼓励；
 * 我们的项目负责人为 **@ishitatsuyuki** 及 **@jasonczc**。
 
-###自动构建的核心
+###自动构建的核心 - CI
 [**点击这里进入官方 Jenkins CI**](http://jenkins.mcper.cn/job/Genisys-master)
 <br>
 [**点击这里进入官方 Travis-CI**](https://travis-ci.org/iTXTech/Genisys)
