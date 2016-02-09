@@ -19,8 +19,6 @@ use pocketmine\Player;
 
 class BiomeCommand extends VanillaCommand{
 	
-const constant = {value};
-	
 	public function __construct($name){
 		parent::__construct(
 			$name,
