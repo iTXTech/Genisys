@@ -262,6 +262,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public $fishingHook = null;
 
 	public $selectedPos = [];
+	public $selectedLev = [];
 
 	public function getAttribute(){
 		return $this->attribute;
