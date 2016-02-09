@@ -899,7 +899,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$this->server->getPluginManager()->callEvent($ev = new PlayerRespawnEvent($this, $pos));
 
-		$pos = $ev->getRespawnPosition()->add(0, 0.2, 0);
+		$pos = $ev->getRespawnPosition();
+		if($pos->getY() < 127) $pos = $pos->add(0, 0.2, 0);
 
 		$pk = new RespawnPacket();
 		$pk->x = $pos->x;
@@ -1539,8 +1540,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	protected function processMovement($tickDiff){
 		if(!$this->isAlive() or !$this->spawned or $this->newPosition === null or $this->teleportPosition !== null){
-			return;
 			$this->setMoving(false);
+			return;
 		}
 
 		$newPos = $this->newPosition;
