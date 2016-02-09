@@ -365,7 +365,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public function setBanned($value){
 		if($value === true){
 			$this->server->getNameBans()->addBan($this->getName(), null, null, null);
-			$this->kick("You have been banned");
+			$this->kick(TextFormat::RED. "You have been banned");
 		}else{
 			$this->server->getNameBans()->remove($this->getName());
 		}
@@ -2078,7 +2078,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 			return;
 		}elseif($this->server->getNameBans()->isBanned(strtolower($this->getName())) or $this->server->getIPBans()->isBanned($this->getAddress()) or $this->server->getCIDBans()->isBanned($this->randomClientId)){
-			$this->close($this->getLeaveMessage(), "You are banned");
+			$this->close($this->getLeaveMessage(), TextFormat::RED. "You are banned");
 
 			return;
 		}
