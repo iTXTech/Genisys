@@ -22,6 +22,11 @@ use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\entity\Item as ItemEntity;
+use pocketmine\entity\Egg;
+use pocketmine\entity\ThrownExpBottle;
+use pocketmine\entity\ThrownPotion;
+use pocketmine\entity\Arrow;
+use pocketmine\entity\Snowball;
 
 
 use pocketmine\nbt\tag\CompoundTag;

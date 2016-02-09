@@ -49,7 +49,7 @@ class Dispenser extends Solid{
 		$dispenser = null;
 		if($player instanceof Player){
 			$pitch = $player->getPitch();
-			if(abs($pitch) >= 25){
+			if(abs($pitch) >= 45){
 				if($pitch < 0) $f = 4;
 				else $f = 5;
 			} else $f = $player->getDirection();

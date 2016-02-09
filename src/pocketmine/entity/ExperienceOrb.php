@@ -2,6 +2,7 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\event\player\PlayerPickupExpOrbEvent;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
@@ -46,6 +47,7 @@ class ExperienceOrb extends Entity{
 		}
 		
 		$minDistance = PHP_INT_MAX;
+		$expectedPos = null;
 		foreach($this->getLevel()->getEntities() as $e){
 			if($e instanceof Player){
 				if($e->distance($this) <= $minDistance) {
@@ -55,7 +57,6 @@ class ExperienceOrb extends Entity{
 			} 
 		}
 
-		$hasFollower = false;
 		if($minDistance < PHP_INT_MAX){
 			$moveSpeed = 0.7;
 			$motX = ($expectedPos->getX() - $this->x) / 8;
@@ -65,7 +66,6 @@ class ExperienceOrb extends Entity{
 			$motC = 1 - $motSqrt;
 		
 			if($motC > 0){
-				$hasFollower = true;
 				$motC *= $motC;
 				$this->motionX = $motX / $motSqrt * $motC * $moveSpeed;
 				$this->motionY = $motY / $motSqrt * $motC * $moveSpeed;
@@ -77,7 +77,9 @@ class ExperienceOrb extends Entity{
 					if($this->getExperience() > 0){
 						$this->kill();
 						$this->close();
-						$expectedPos->addExperience($this->getExperience());
+
+						$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new PlayerPickupExpOrbEvent($expectedPos, $this->getExperience()));
+						if(!$ev->isCancelled()) $expectedPos->addExperience($this->getExperience());
 					}
 				}
 			}
