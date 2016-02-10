@@ -22,6 +22,7 @@
 namespace pocketmine\level\generator\normal\biome;
 
 use pocketmine\block\Sapling;
+use pocketmine\block\Block;
 use pocketmine\level\generator\populator\TallGrass;
 use pocketmine\level\generator\populator\Tree;
 
@@ -46,9 +47,9 @@ class TaigaBiome extends SnowyBiome{
                 $this->setGroundCover([
 			Block::get(Block::PODZOL, 0),
 			Block::get(Block::PODZOL, 0),
-			Block::get(Block::MOSSSTONE, 0),
-			Block::get(Block::MOSSSTONE, 0),
-			Block::get(Block::MOSSSTONE, 0),
+			Block::get(Block::MOSS_STONE, 0),
+			Block::get(Block::MOSS_STONE, 0),
+			Block::get(Block::MOSS_STONE, 0),
 		]);
         }
 
