@@ -49,7 +49,8 @@ class TaigaBiome extends SnowyBiome{
 			Block::get(Block::MOSSSTONE, 0),
 			Block::get(Block::MOSSSTONE, 0),
 			Block::get(Block::MOSSSTONE, 0),
-	}
+		]);
+        }
 
 	public function getName() : string{
 		return "Taiga";
