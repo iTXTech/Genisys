@@ -9,14 +9,14 @@ use pocketmine\Player;
 class ExperienceOrb extends Entity{
 	const NETWORK_ID = 69;
 
-	public $width = 0.1;
-	public $length = 0.1;
-	public $height = 0.1;
+	public $width = 0.25;
+	public $length = 0.25;
+	public $height = 0.25;
 
-	protected $gravity = 0;
+	protected $gravity = 0.04;
 	protected $drag = 0;
 	
-	public $experience = 0;
+	protected $experience = 0;
 
 	public function initEntity(){
 		parent::initEntity();
@@ -72,7 +72,9 @@ class ExperienceOrb extends Entity{
 				$this->motionZ = $motZ / $motSqrt * $motC * $moveSpeed;
 			}
 
-			if($minDistance <= 1.8){
+			$this->motionY -= $this->gravity;
+
+			if($minDistance <= 1.3){
 				if($this->getLevel()->getServer()->expEnabled){
 					if($this->getExperience() > 0){
 						$this->kill();
@@ -85,29 +87,7 @@ class ExperienceOrb extends Entity{
 			}
 		}
 
-		//if(!$hasFollower and !$this->onGround) $this->motionY -= 0.04;
-		//TODO: Add gravity pull
-			/*if($expectedPos->getX() > $this->x) $this->motionX = $moveSpeed;
-			
-			if($expectedPos->getX() < $this->x) $this->motionX = -$moveSpeed;
-			
-			if($expectedPos->getZ() > $this->z) $this->motionZ = $moveSpeed;
-			
-			if($expectedPos->getZ() < $this->z) $this->motionZ = -$moveSpeed;
-			
-			if($expectedPos->getX() == $this->x) $this->motionX = 0;
-			if($expectedPos->getZ() == $this->z) $this->motionZ = 0;
-			
-			if(($expectedPos->getY() + $expectedPos->getEyeHeight() / 2) > $this->y){
-				$this->motionY = $moveSpeed;
-			}
-			
-			if(($expectedPos->getY() + $expectedPos->getEyeHeight()) < $this->y){
-				$this->motionY = -$moveSpeed;
-			}*/
-			
 		$this->move($this->motionX, $this->motionY, $this->motionZ);
-		//}
 		
 		$this->updateMovement();
 		

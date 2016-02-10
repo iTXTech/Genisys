@@ -16,9 +16,6 @@ use pocketmine\Player;
 class PlayerPickupExpOrbEvent extends PlayerEvent implements Cancellable{
 	public static $handlerList = null;
 
-	/** @var  Player */
-	private $player;
-
 	private $amount;
 
 	public function __construct(Player $p, int $amount = 0){
