@@ -23,7 +23,7 @@ namespace pocketmine\level\generator\normal\biome;
 
 use pocketmine\block\Sapling;
 use pocketmine\block\Block;
-use pocketmine\level\generator\populator\TallGrass;
+use pocketmine\level\generator\populator\MossStone;
 use pocketmine\level\generator\populator\Tree;
 
 class TaigaBiome extends SnowyBiome{
@@ -35,10 +35,10 @@ class TaigaBiome extends SnowyBiome{
 		$trees->setBaseAmount(10);
 		$this->addPopulator($trees);
 
-		$tallGrass = new TallGrass();
-		$tallGrass->setBaseAmount(1);
+		$mossStone = new MossStone();
+		$mossStone->setBaseAmount(1);
 
-		$this->addPopulator($tallGrass);
+		$this->addPopulator($mossStone);
 
 		$this->setElevation(63, 81);
 
