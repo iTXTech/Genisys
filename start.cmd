@@ -22,7 +22,7 @@ if exist Genisys.phar (
 	       set POCKETMINE_FILE=src\pocketmine\PocketMine.php
                  ) else (
 		    if exist Genisys*.phar (
-			set POCKETMINE_FILE=Genisys.phar
+			set POCKETMINE_FILE=Genisys*.phar
 			   ) else (
 		echo "Couldn't find a valid Genisys installation"
 		pause

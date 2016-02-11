@@ -103,12 +103,14 @@ class WoodenButton extends RedstoneSource{
 	public function activate(array $ignore = []){
 		parent::activate($ignore = []);
 		$faces = [
+				0 => 1,
 				1 => 0,
 				2 => 3,
 				3 => 2,
 				4 => 5,
 				5 => 4,
 		];
+		
 		$side = $this->meta;
 		if($this->isActivated()) $side ^= 0x08;
 
