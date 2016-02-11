@@ -62,7 +62,7 @@ class TallGrass extends Flowable{
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
 			if($this->getSide(0)->isTransparent() === true){ //Replace with common break method
-				$this->getLevel()->setBlock($this, new Air(), false, false, true);
+				$this->getLevel()->setBlock($this, new Air(), false, false);
 
 				return Level::BLOCK_UPDATE_NORMAL;
 			}
@@ -73,7 +73,9 @@ class TallGrass extends Flowable{
 
 	public function getDrops(Item $item) : array {
 		if(mt_rand(0, 15) === 0){
-			return [Item::WHEAT_SEEDS, 0, 1];
+			return [
+				[Item::WHEAT_SEEDS, 0, 1]
+			];
 		}
 
 		return [];
