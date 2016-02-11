@@ -31,8 +31,8 @@ interface Info{
 	 * Accepted Minecraft: PE Protocol Versions
 	 * @author ImagicalMine
 	 */
-	const CURRENT_PROTOCOL = 37;
-	const ACCEPTED_PROTOCOLS = [37,38,39];
+	const CURRENT_PROTOCOL = 38;
+	const ACCEPTED_PROTOCOLS = [37, 38, 39];
 
 	const LOGIN_PACKET = 0x8f;
 	const PLAY_STATUS_PACKET = 0x90;

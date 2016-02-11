@@ -94,13 +94,13 @@ namespace pocketmine {
 
 	if(version_compare("7.0", PHP_VERSION) > 0){
 		echo "[CRITICAL] You must use PHP >= 7.0" . PHP_EOL;
-		echo "[CRITICAL] Please install from https://github.com/PocketMine/php-build-scripts/tree/php7" . PHP_EOL;
+		echo "[CRITICAL] Please install from https://github.com/iTXTech/php-build-scripts" . PHP_EOL;
 		exit(1);
 	}
 
 	if(!extension_loaded("pthreads")){
 		echo "[CRITICAL] Unable to find the pthreads extension." . PHP_EOL;
-		echo "[CRITICAL] Please install from https://github.com/PocketMine/php-build-scripts/tree/php7" . PHP_EOL;
+		echo "[CRITICAL] Please install from https://github.com/iTXTech/php-build-scripts" . PHP_EOL;
 		exit(1);
 	}
 
