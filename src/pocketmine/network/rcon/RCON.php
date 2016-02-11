@@ -22,16 +22,19 @@
 /**
  * Implementation of the Source RCON Protocol to allow remote console commands
  * Source: https://developer.valvesoftware.com/wiki/Source_RCON_Protocol
+ *
+ * Implementation of the GeniRCON Protocol to allow remote console access
+ * Source: https://github.com/iTXTech/GeniRCON
  */
 namespace pocketmine\network\rcon;
 
 use pocketmine\command\RemoteConsoleCommandSender;
 use pocketmine\event\server\RemoteServerCommandEvent;
 use pocketmine\Server;
-use pocketmine\utils\TextFormat;
-
 
 class RCON{
+	const PROTOCOL_VERSION = 1;
+
 	/** @var Server */
 	private $server;
 	private $socket;
@@ -61,7 +64,7 @@ class RCON{
 		socket_set_block($this->socket);
 
 		for($n = 0; $n < $this->threads; ++$n){
-			$this->workers[$n] = new RCONInstance($this->socket, $this->password, $this->clientsPerThread);
+			$this->workers[$n] = new RCONInstance($this->server->getLogger(), $this->socket, $this->password, $this->clientsPerThread);
 		}
 		socket_getsockname($this->socket, $addr, $port);
 		$this->server->getLogger()->info("RCON running on $addr:$port");
@@ -85,7 +88,7 @@ class RCON{
 			}elseif($this->workers[$n]->isWaiting()){
 				if($this->workers[$n]->response !== ""){
 					$this->server->getLogger()->info($this->workers[$n]->response);
-					$this->workers[$n]->synchronized(function (RCONInstance $thread){
+					$this->workers[$n]->synchronized(function(RCONInstance $thread){
 						$thread->notify();
 					}, $this->workers[$n]);
 				}else{
@@ -99,8 +102,8 @@ class RCON{
 						$this->server->dispatchCommand($ev->getSender(), $ev->getCommand());
 					}
 
-					$this->workers[$n]->response = TextFormat::clean($response->getMessage());
-					$this->workers[$n]->synchronized(function (RCONInstance $thread){
+					$this->workers[$n]->response = $response->getMessage();
+					$this->workers[$n]->synchronized(function(RCONInstance $thread){
 						$thread->notify();
 					}, $this->workers[$n]);
 				}

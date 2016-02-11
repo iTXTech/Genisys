@@ -38,6 +38,19 @@ class MainLogger extends \AttachableThreadedLogger{
 	/** Extra Settings */
 	protected $write = true;
 
+	public $shouldSendMsg = "";
+	public $shouldRecordMsg = false;
+
+	public function setSendMsg($b){
+		$this->shouldRecordMsg = $b;
+	}
+
+	public function getMessages(){
+		$msg = $this->shouldSendMsg;
+		$this->shouldSendMsg = "";
+		return $msg;
+	}
+
 	/**
 	 * @param string $logFile
 	 * @param bool   $logDebug
@@ -193,7 +206,12 @@ class MainLogger extends \AttachableThreadedLogger{
 			$threadName = (new \ReflectionClass($thread))->getShortName() . " thread";
 		}
 
-		$message = TextFormat::toANSI(TextFormat::AQUA . "[" . date("H:i:s", $now) . "] ". TextFormat::RESET . $color ."[" . $threadName . "/" . $prefix . "]:" . " " . $message . TextFormat::RESET);
+		if($this->shouldRecordMsg){
+			if(strlen($this->shouldSendMsg) >= 10000) $this->shouldSendMsg = "";
+			$this->shouldSendMsg .= trim($message, "\r\n") . "\n";
+		}
+
+		$message = TextFormat::toANSI(TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . TextFormat::RESET . $color . "[" . $threadName . "/" . $prefix . "]:" . " " . $message . TextFormat::RESET);
 		//$message = TextFormat::toANSI(TextFormat::AQUA . "[" . date("H:i:s") . "] ". TextFormat::RESET . $color ."<".$prefix . ">" . " " . $message . TextFormat::RESET);
 		$cleanMessage = TextFormat::clean($message);
 
@@ -256,7 +274,7 @@ class MainLogger extends \AttachableThreadedLogger{
 
 			while($this->shutdown === false){
 				if(!$this->write) break;
-				$this->synchronized(function (){
+				$this->synchronized(function(){
 					while($this->logStream->count() > 0){
 						$chunk = $this->logStream->shift();
 						$this->logResource = file_put_contents($this->logFile, $chunk, FILE_APPEND);
