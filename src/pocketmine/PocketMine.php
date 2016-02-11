@@ -74,9 +74,9 @@ namespace pocketmine {
 
 	const VERSION = "1.0dev";
 	const API_VERSION = "2.0.0";
-	const CODENAME = "Amazing PHP7 !";
-	const MINECRAFT_VERSION = "v0.13.2 alpha";
-	const MINECRAFT_VERSION_NETWORK = "0.13.2";
+	const CODENAME = "Amazing PHP7!";
+	const MINECRAFT_VERSION = "v0.13.x alpha";
+	const MINECRAFT_VERSION_NETWORK = "0.13.0";
 	const iTX_API_VERSION = '1.5.8';
 
 	/*
@@ -94,13 +94,13 @@ namespace pocketmine {
 
 	if(version_compare("7.0", PHP_VERSION) > 0){
 		echo "[CRITICAL] You must use PHP >= 7.0" . PHP_EOL;
-		echo "[CRITICAL] Please use the installer provided on the homepage." . PHP_EOL;
+		echo "[CRITICAL] Please install from https://github.com/PocketMine/php-build-scripts/tree/php7" . PHP_EOL;
 		exit(1);
 	}
 
 	if(!extension_loaded("pthreads")){
 		echo "[CRITICAL] Unable to find the pthreads extension." . PHP_EOL;
-		echo "[CRITICAL] Please use the installer provided on the homepage." . PHP_EOL;
+		echo "[CRITICAL] Please install from https://github.com/PocketMine/php-build-scripts/tree/php7" . PHP_EOL;
 		exit(1);
 	}
 
@@ -384,7 +384,7 @@ namespace pocketmine {
 	$errors = 0;
 
 	if(php_sapi_name() !== "cli"){
-		$logger->critical("You must run PocketMine-MP using the CLI.");
+		$logger->critical("You must run Genisys using the CLI.");
 		++$errors;
 	}
 
@@ -458,7 +458,7 @@ namespace pocketmine {
 	}
 
 	/*if(\Phar::running(true) === ""){
-		$logger->warning("Non-packaged PocketMine-MP installation detected, do not use on production.");
+		$logger->warning("Non-packaged Genisys installation detected, do not use on production.");
 	}*/
 
 	ThreadManager::init();

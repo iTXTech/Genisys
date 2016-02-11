@@ -1483,7 +1483,7 @@ class Server{
 	 * @return bool
 	 */
 	public function isWhitelisted($name){
-		return !$this->hasWhitelist() or $this->operators->exists($name, true) or $this->whitelist->exists($name, true);
+		return !$this->hasWhitelist() or $this->whitelist->exists($name, true);
 	}
 
 	/**
@@ -1981,7 +1981,7 @@ class Server{
 			]), $this->dserverConfig["timer"]);
 
 			if($cfgVer != $advVer){
-				$this->logger->notice("You genisys.yml needs update");
+				$this->logger->notice("Your genisys.yml needs update");
 				$this->logger->notice("Current Version: $advVer   Latest Version: $cfgVer");
 			}
 
@@ -1993,8 +1993,9 @@ class Server{
 		}
 	}
 
+    //@Deprecated
 	public function transferPlayer(Player $player, $address, $port = 19132){
-		$this->logger->error("This function (transferPlayer) has been deprecated.");
+		$this->logger->error("This function (transferPlayer) has been deprecated. A new method may be available soon");
 	}
 	/*$ev = new PlayerTransferEvent($player, $address, $port);
 	$this->getPluginManager()->callEvent($ev);

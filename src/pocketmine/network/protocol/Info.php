@@ -28,9 +28,11 @@ namespace pocketmine\network\protocol;
 interface Info{
 
 	/**
-	 * Actual Minecraft: PE protocol version
+	 * Accepted Minecraft: PE Protocol Versions
+	 * @author ImagicalMine
 	 */
-	const CURRENT_PROTOCOL = 39;
+	const CURRENT_PROTOCOL = 37;
+	const ACCEPTED_PROTOCOLS = [37,38,39];
 
 	const LOGIN_PACKET = 0x8f;
 	const PLAY_STATUS_PACKET = 0x90;
