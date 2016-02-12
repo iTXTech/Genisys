@@ -418,7 +418,7 @@ class PluginManager{
 			$this->defaultPerms[$permission->getName()] = $permission;
 			$this->dirtyPermissibles(false);
 		}
-		Timings::$permissionDefaultTimer->startTiming();
+		Timings::$permissionDefaultTimer->stopTiming();
 	}
 
 	/**
