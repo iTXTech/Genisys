@@ -20,11 +20,16 @@
 */
 
 namespace pocketmine\level\generator\normal\biome;
+use pocketmine\level\generator\populator\LilyPad;
 
 class SwampBiome extends GrassyBiome{
 
 	public function __construct(){
 		parent::__construct();
+
+		$lilypad = new LilyPad();
+		$lilypad->setBaseAmount(4);
+		$this->addPopulator($lilypad);
 
 		$this->setElevation(62, 63);
 
