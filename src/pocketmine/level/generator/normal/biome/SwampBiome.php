@@ -20,7 +20,7 @@
 */
 
 namespace pocketmine\level\generator\normal\biome;
-namespace pocketmine\level\generator\populator\LilyPad;
+use pocketmine\level\generator\populator\LilyPad;
 
 class SwampBiome extends GrassyBiome{
 
@@ -29,13 +29,12 @@ class SwampBiome extends GrassyBiome{
 
 		$lilypad = new LilyPad();
 		$lilypad->setBaseAmount(4);
+		$this->addPopulator($lilypad);
 
 		$this->setElevation(62, 63);
 
 		$this->temperature = 0.8;
 		$this->rainfall = 0.9;
-
-		$this->addPopulator($lilypad);
 	}
 
 	public function getName() : string{
