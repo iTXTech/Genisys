@@ -36,6 +36,10 @@ class SwampBiome extends GrassyBiome{
 
 		$this->addPopulator($flower);
 
+		$lilypad = new LilyPad();
+		$lilypad->setBaseAmount(4);
+		$this->addPopulator($lilypad);
+
 		$this->setElevation(62, 63);
 
 		$this->temperature = 0.8;
