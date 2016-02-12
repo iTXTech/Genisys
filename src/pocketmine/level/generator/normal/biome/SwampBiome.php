@@ -22,7 +22,7 @@
 namespace pocketmine\level\generator\normal\biome;
 namespace pocketmine\level\generator\populator\LilyPad;
 
-class SwampBiome extends GrassyBiome{
+class SwampBiome extends OceanBiome{
 
 	public function __construct(){
 		parent::__construct();
