@@ -24,7 +24,6 @@ namespace pocketmine\utils;
 use LogLevel;
 use pocketmine\Thread;
 use pocketmine\Worker;
-use pocketmine\Server;
 
 class MainLogger extends \AttachableThreadedLogger{
 	protected $logFile;
@@ -40,14 +39,17 @@ class MainLogger extends \AttachableThreadedLogger{
 
 	public $shouldSendMsg = "";
 	public $shouldRecordMsg = false;
+	private $lastGet = 0;
 
 	public function setSendMsg($b){
 		$this->shouldRecordMsg = $b;
+		$this->lastGet = time();
 	}
 
 	public function getMessages(){
 		$msg = $this->shouldSendMsg;
 		$this->shouldSendMsg = "";
+		$this->lastGet = time();
 		return $msg;
 	}
 
@@ -207,8 +209,11 @@ class MainLogger extends \AttachableThreadedLogger{
 		}
 
 		if($this->shouldRecordMsg){
-			if(strlen($this->shouldSendMsg) >= 10000) $this->shouldSendMsg = "";
-			$this->shouldSendMsg .= $color . "|" . $prefix . "|" . trim($message, "\r\n") . "\n";
+			if((time() - $this->lastGet) >= 10) $this->shouldRecordMsg = false; // 10 secs timeout
+			else{
+				if(strlen($this->shouldSendMsg) >= 10000) $this->shouldSendMsg = "";
+				$this->shouldSendMsg .= $color . "|" . $prefix . "|" . trim($message, "\r\n") . "\n";
+			}
 		}
 
 		$message = TextFormat::toANSI(TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . TextFormat::RESET . $color . "[" . $threadName . "/" . $prefix . "]:" . " " . $message . TextFormat::RESET);
