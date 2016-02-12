@@ -143,12 +143,6 @@ class RCONInstance extends Thread{
 									$this->{"status" . $n} = -1;
 									continue;
 								}
-								$this->synchronized(function(){
-									$this->waiting = true;
-									$this->wait();
-								});
-								$this->waiting = false;
-
 								$this->writePacket($client, $requestID, 0, RCON::PROTOCOL_VERSION);
 								$this->response = "";
 
@@ -159,12 +153,6 @@ class RCONInstance extends Thread{
 									$this->{"status" . $n} = -1;
 									continue;
 								}
-								$this->synchronized(function(){
-									$this->waiting = true;
-									$this->wait();
-								});
-								$this->waiting = false;
-
 								$this->writePacket($client, $requestID, 0, str_replace("\n", "\r\n", trim($this->logger->getMessages())));
 								$this->response = "";
 								break;

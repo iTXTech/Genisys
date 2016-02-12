@@ -33,7 +33,7 @@ use pocketmine\event\server\RemoteServerCommandEvent;
 use pocketmine\Server;
 
 class RCON{
-	const PROTOCOL_VERSION = 1;
+	const PROTOCOL_VERSION = 2;
 
 	/** @var Server */
 	private $server;

@@ -208,7 +208,7 @@ class MainLogger extends \AttachableThreadedLogger{
 
 		if($this->shouldRecordMsg){
 			if(strlen($this->shouldSendMsg) >= 10000) $this->shouldSendMsg = "";
-			$this->shouldSendMsg .= trim($message, "\r\n") . "\n";
+			$this->shouldSendMsg .= $color . "|" . $prefix . "|" . trim($message, "\r\n") . "\n";
 		}
 
 		$message = TextFormat::toANSI(TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . TextFormat::RESET . $color . "[" . $threadName . "/" . $prefix . "]:" . " " . $message . TextFormat::RESET);
