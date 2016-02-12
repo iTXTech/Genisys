@@ -24,6 +24,7 @@ namespace pocketmine\level\generator\normal\biome;
 use pocketmine\block\Block;
 use pocketmine\block\Flower as FlowerBlock;
 use pocketmine\level\generator\populator\Flower;
+use pocketmine\level\generator\populator\LilyPad;
 
 class SwampBiome extends GrassyBiome{
 
