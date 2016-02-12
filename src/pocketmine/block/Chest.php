@@ -41,6 +41,10 @@ class Chest extends Transparent{
 		$this->meta = $meta;
 	}
 
+	public function isSolid(){
+		return false;
+	}
+
 	public function canBeActivated(){
 		return true;
 	}
