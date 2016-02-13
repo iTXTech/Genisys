@@ -2,7 +2,7 @@
 
 #配置文件版本
 config:
- version: 7
+ version: 9
  
 level:
  #设置是否变换天气
@@ -58,7 +58,12 @@ server:
  login-msg: "§3@player 加入了游戏"
  logout-msg: "§3@player 退出了游戏"
  #是否从recipes.json读取合成公式
- read-recipes-from-json: false
+ recipes-from-json: false
+ #是否从creativeitems.json读取创造物品
+ creative-items-from-json: false
+ #设置矿车行为方式
+ #-1=禁用矿车移动, 0=自由移动, 1=沿铁轨行驶
+ minecart-moving-type: 0
 
 redstone:
  ##############################
@@ -67,8 +72,8 @@ redstone:
  #如果不改为true将无法使用红石#
  ##############################
  enable: false
- #是否允许伪低频
- allow-fake-low-frequency-pulse: false
+ #是否允许频率脉冲
+ frequency-pulse: false
  #设置脉冲频率, 默认: 1s
  pulse-frequency: 1
  
