@@ -2,7 +2,7 @@
 
 #設定檔案版本
 config:
- version: 7
+ version: 9
 
 level:
  #設定是否變換天氣
@@ -58,7 +58,12 @@ server:
  login-msg: "§3@player 加入了遊戲"
  logout-msg: "§3@player 離開了遊戲"
  #是否從recipes.json讀取合成公式
- read-recipes-from-json: false
+ recipes-from-json: false
+ #是否从creativeitems.json读取创造物品
+ creative-items-from-json: false
+ #设置矿车行为方式
+ #-1=禁用矿车移动, 0=自由移动, 1=沿铁轨行驶
+ minecart-moving-type: 0
 
 redstone:
  ##############################
@@ -67,8 +72,8 @@ redstone:
  #如果不改為true將無法使用紅石#
  ##############################
  enable: false
- #是否允許虛擬低頻脈衝
- allow-fake-low-frequency-pulse: false
+ #是否允许频率脉冲
+ frequency-pulse: false
  #設定脈衝頻率, 預設: 1s
  pulse-frequency: 1
 
