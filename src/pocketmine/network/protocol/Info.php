@@ -31,7 +31,8 @@ interface Info{
 	 * Accepted Minecraft: PE Protocol Versions
 	 * @author ImagicalMine
 	 */
-	const CURRENT_PROTOCOL = 38;
+	 
+	const CURRENT_PROTOCOL = 37;
 	const ACCEPTED_PROTOCOLS = [37, 38, 39];
 
 	const LOGIN_PACKET = 0x8f;
@@ -90,14 +91,3 @@ interface Info{
 	const TELEMETRY_EVENT_PACKET = 0xc4;
 	const SPAWN_EXPERIENCE_ORB_PACKET = 0xc5;
 }
-
-
-
-
-
-
-
-
-
-
-
