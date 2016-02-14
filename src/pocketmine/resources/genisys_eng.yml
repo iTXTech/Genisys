@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 9
+ version: 10
 
 level:
  #Set if turn on the weather system
@@ -65,6 +65,8 @@ server:
  #Choose if minecart is free moving, follow rails or disable
  #-1=disable, 0=free moving, 1=follow rails
  minecart-moving-type: 0
+ #Choose if enable movement check (no more pull back)
+ check-movement: true
 
 redstone:
  ##########################################

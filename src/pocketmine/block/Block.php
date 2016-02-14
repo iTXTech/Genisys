@@ -304,9 +304,9 @@ class Block extends Position implements Metadatable{
 	const STONECUTTER = 245;
 	const GLOWING_OBSIDIAN = 246;
 	const NETHER_REACTOR = 247;
-	
+
 	const NETHER_BRICK_FENCE = 113;
-	
+
 	const RAIL = 66;
 
 	/** @var \SplFixedArray */
@@ -528,7 +528,7 @@ class Block extends Position implements Metadatable{
 			self::$list[self::STONECUTTER] = Stonecutter::class;
 			self::$list[self::GLOWING_OBSIDIAN] = GlowingObsidian::class;
 			self::$list[self::NETHER_REACTOR] = NetherReactor::class;
-			
+
 			self::$list[self::NETHER_BRICK_FENCE] = NetherBrickFence::class;
 			self::$list[self::POWERED_RAIL] = PoweredRail::class;
 			self::$list[self::RAIL] = Rail::class;
@@ -580,6 +580,8 @@ class Block extends Position implements Metadatable{
 							}else{
 								self::$lightFilter[$id] = 1;
 							}
+						}elseif($block->getId() == Block::GLOWSTONE){
+							self::$lightFilter[$id] = 1;
 						}else{
 							self::$lightFilter[$id] = 15;
 						}
@@ -700,7 +702,7 @@ class Block extends Position implements Metadatable{
 	/**
 	 * @return int
 	 */
-	public function getHardness() {
+	public function getHardness(){
 		return 10;
 	}
 
@@ -740,7 +742,7 @@ class Block extends Position implements Metadatable{
 	public function canBePlaced(){
 		return true;
 	}
-	
+
 	public function isPlaceable(){
 		return $this->canBePlaced();
 	}
@@ -779,7 +781,7 @@ class Block extends Position implements Metadatable{
 	 *
 	 * @return bool
 	 */
-	public function canBeActivated() : bool {
+	public function canBeActivated() : bool{
 		return false;
 	}
 
@@ -843,7 +845,7 @@ class Block extends Position implements Metadatable{
 	 *
 	 * @return array
 	 */
-	public function getDrops(Item $item) : array {
+	public function getDrops(Item $item) : array{
 		if(!isset(self::$list[$this->getId()])){ //Unknown blocks
 			return [];
 		}else{
@@ -959,7 +961,7 @@ class Block extends Position implements Metadatable{
 	/**
 	 * @return AxisAlignedBB
 	 */
-	protected function recalculateBoundingBox() {
+	protected function recalculateBoundingBox(){
 		return new AxisAlignedBB(
 			$this->x,
 			$this->y,

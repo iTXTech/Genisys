@@ -40,8 +40,10 @@ class FishingHook extends Projectile{
 		return "Fishing Hook";
 	}
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
-		parent::__construct($chunk, $nbt, $shootingEntity);
+	public function __construct(FullChunk $chunk, CompoundTag $nbt, Player $owner){
+		parent::__construct($chunk, $nbt);
+
+		$this->owner = $owner;
 
 		$this->setDataProperty(self::DATA_NO_AI, self::DATA_TYPE_BYTE, 1);
 		$this->setDataProperty(self::DATA_SOURCE_UUID, self::DATA_TYPE_LONG, $this->owner->getUniqueId()->toBinary());

@@ -2952,7 +2952,6 @@ class Level implements ChunkManager, Metadatable{
 		$this->provider->setSeed($seed);
 	}
 
-
 	public function populateChunk($x, $z, $force = false){
 		if(isset($this->chunkPopulationQueue[$index = Level::chunkHash($x, $z)]) or (count($this->chunkPopulationQueue) >= $this->chunkPopulationQueueSize and !$force)){
 			return false;

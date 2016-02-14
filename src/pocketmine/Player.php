@@ -1550,19 +1550,21 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$revert = false;
 
-		if(($distanceSquared / ($tickDiff ** 2)) > 200){
-			$revert = true;
-		}else{
-			if($this->chunk === null or !$this->chunk->isGenerated()){
-				$chunk = $this->level->getChunk($newPos->x >> 4, $newPos->z >> 4, false);
-				if($chunk === null or !$chunk->isGenerated()){
-					$revert = true;
-					$this->nextChunkOrderRun = 0;
-				}else{
-					if($this->chunk !== null){
-						$this->chunk->removeEntity($this);
+		if($this->server->checkMovement){
+			if(($distanceSquared / ($tickDiff ** 2)) > 200){
+				$revert = true;
+			}else{
+				if($this->chunk === null or !$this->chunk->isGenerated()){
+					$chunk = $this->level->getChunk($newPos->x >> 4, $newPos->z >> 4, false);
+					if($chunk === null or !$chunk->isGenerated()){
+						$revert = true;
+						$this->nextChunkOrderRun = 0;
+					}else{
+						if($this->chunk !== null){
+							$this->chunk->removeEntity($this);
+						}
+						$this->chunk = $chunk;
 					}
-					$this->chunk = $chunk;
 				}
 			}
 		}
@@ -2586,7 +2588,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$f = 0.6;
 							$this->fishingHook = new FishingHook($this->chunk, $nbt, $this);
 							$this->fishingHook->setMotion($this->fishingHook->getMotion()->multiply($f));
-							$this->fishingHook->owner = $this;
+							//$this->fishingHook->owner = $this;
 							$this->fishingHook->spawnToAll();
 						}
 					}
@@ -2725,7 +2727,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 								new FloatTag("", $this->yaw),
 								new FloatTag("", $this->pitch)
 							]),
-							"Data" => new ByteTag("Data", $item->getDamage()),
+							"PotionId" => new ShortTag("PotionId", $item->getDamage()),
 						]);
 
 						$f = 1.1;

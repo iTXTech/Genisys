@@ -11,6 +11,7 @@
 namespace pocketmine\tile;
 
 use pocketmine\block\Block;
+use pocketmine\entity\Entity;
 use pocketmine\inventory\DispenserInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
@@ -209,53 +210,66 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 			$item->setCount($item->getCount() - 1);
 			$this->getInventory()->setItem($itemArr[0], $item->getCount() > 0 ? $item : Item::get(Item::AIR));
 			$motion = $this->getMotion();
-			$needItem = Item::get($item->getId());
-			$block = $this->getLevel()->getBlock($this->add($motion[0], $motion[1], $motion[2]));
-			switch($block->getId()){
-				case Block::CHEST:
-				case Block::TRAPPED_CHEST:
-				case Block::DROPPER:
-				case Block::DISPENSER:
-				case Block::BREWING_STAND:
-				case Block::FURNACE:
-					$t = $this->getLevel()->getTile($block);
-					/** @var Chest|Dispenser|Dropper|BrewingStand|Furnace $t */
-					if($t instanceof Tile){
-						if($t->getInventory()->canAddItem($needItem)){
-							$t->getInventory()->addItem($needItem);
-							return;
-						}
-					}
+			$needItem = Item::get($item->getId(), $item->getDamage());
+			switch($needItem->getId()){
+				case Item::ARROW:
+					$nbt = new CompoundTag("", [
+						"Pos" => new EnumTag("Pos", [
+							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
+							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
+							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
+						]),
+						"Motion" => new EnumTag("Motion", [
+							new DoubleTag("", $motion[0]),
+							new DoubleTag("", $motion[1]),
+							new DoubleTag("", $motion[2])
+						]),
+						"Rotation" => new EnumTag("Rotation", [
+							new FloatTag("", lcg_value() * 360),
+							new FloatTag("", 0)
+						]),
+						"Fire" => new ShortTag("Fire", 0)
+					]);
+					$arrow = Entity::createEntity("Arrow", $this->chunk, $nbt);
+					$f = 1.5;
+					$arrow->setMotion($arrow->getMotion()->multiply($f));
+					break;
+				case Item::SNOWBALL:
+					break;
+				case Item::SPLASH_POTION:
+					break;
+				case Item::ENCHANTING_BOTTLE:
+					break;
+				default:
+					$itemTag = NBT::putItemHelper($needItem);
+					$itemTag->setName("Item");
+
+					$nbt = new CompoundTag("", [
+						"Pos" => new EnumTag("Pos", [
+							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
+							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
+							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
+						]),
+						"Motion" => new EnumTag("Motion", [
+							new DoubleTag("", $motion[0]),
+							new DoubleTag("", $motion[1]),
+							new DoubleTag("", $motion[2])
+						]),
+						"Rotation" => new EnumTag("Rotation", [
+							new FloatTag("", lcg_value() * 360),
+							new FloatTag("", 0)
+						]),
+						"Health" => new ShortTag("Health", 5),
+						"Item" => $itemTag,
+						"PickupDelay" => new ShortTag("PickupDelay", 10)
+					]);
+
+					$f = 0.3;
+					$itemEntity = new ItemEntity($this->chunk, $nbt, $this);
+					$itemEntity->setMotion($itemEntity->getMotion()->multiply($f));
+					$itemEntity->spawnToAll();
+					break;
 			}
-
-			$itemTag = NBT::putItemHelper($needItem);
-			$itemTag->setName("Item");
-
-
-			$nbt = new CompoundTag("", [
-				"Pos" => new EnumTag("Pos", [
-					new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
-					new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
-					new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
-				]),
-				"Motion" => new EnumTag("Motion", [
-					new DoubleTag("", $motion[0]),
-					new DoubleTag("", $motion[1]),
-					new DoubleTag("", $motion[2])
-				]),
-				"Rotation" => new EnumTag("Rotation", [
-					new FloatTag("", lcg_value() * 360),
-					new FloatTag("", 0)
-				]),
-				"Health" => new ShortTag("Health", 5),
-				"Item" => $itemTag,
-				"PickupDelay" => new ShortTag("PickupDelay", 10)
-			]);
-
-			$f = 0.3;
-			$itemEntity = new ItemEntity($this->chunk, $nbt, $this);
-			$itemEntity->setMotion($itemEntity->getMotion()->multiply($f));
-			$itemEntity->spawnToAll();
 
 			for($i = 1; $i < 10; $i++){
 				$this->getLevel()->addParticle(new SmokeParticle($this->add($motion[0] * $i * 0.3 + 0.5, $motion[1] == 0 ? 0.5 : $motion[1] * $i * 0.3, $motion[2] * $i * 0.3 + 0.5)));

@@ -366,6 +366,7 @@ class Server{
 	public $recipesFromJson = false;
 	public $creativeItemsFromJson = false;
 	public $minecartMovingType = 0;
+	public $checkMovement = false;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -1642,6 +1643,7 @@ class Server{
 		$this->recipesFromJson = $this->getAdvancedProperty("server.recipes-from-json", false);
 		$this->creativeItemsFromJson = $this->getAdvancedProperty("server.creative-items-from-json", false);
 		$this->minecartMovingType = $this->getAdvancedProperty("server.minecart-moving-type", 0);
+		$this->checkMovement = $this->getAdvancedProperty("server.check-movement", true);
 	}
 
 	/**

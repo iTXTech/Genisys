@@ -5,6 +5,7 @@ namespace pocketmine\entity;
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\particle\SpellParticle;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\ShortTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 use pocketmine\item\Potion;
@@ -20,38 +21,28 @@ class ThrownPotion extends Projectile{
 
 	protected $gravity = 0.1;
 	protected $drag = 0.05;
-	
-	public $data = 0;
-	
-	public function initEntity(){
-		parent::initEntity();
-		
-		if(isset($this->namedtag->Data)){
-			$this->data = $this->namedtag["Data"];
-		}
-
-		$this->setDataProperty(self::DATA_POTION_ID, self::DATA_TYPE_SHORT, ($this->getData() << 8));
-	}
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
+		if(!isset($nbt->PotionId)){
+			$nbt->PotionId = new ShortTag("PotionId", Potion::AWKWARD);
+		}
+
 		parent::__construct($chunk, $nbt, $shootingEntity);
+
+		$this->setDataProperty(self::DATA_POTION_ID, self::DATA_TYPE_SHORT, Potion::getEffectId($this->getPotionId()));
 	}
 	
-	public function setData($id){
-		$this->data = $id;
-	}
-	
-	public function getData(){
-		return $this->data;
+	public function getPotionId() : int{
+		return (int) $this->namedtag["PotionId"];
 	}
 	
 	public function kill(){
-		$color = Potion::getColor($this->getData());
+		$color = Potion::getColor($this->getPotionId()); var_dump($this->getPotionId());
 		$this->getLevel()->addParticle(new SpellParticle($this, $color[0], $color[1], $color[2]));
 		$players = $this->getViewers();
 		foreach($players as $p) {
 			if($p->distance($this) <= 6){
-				switch($this->getData()) {
+				switch($this->getPotionId()) {
 					case Potion::NIGHT_VISION:
 						$p->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;

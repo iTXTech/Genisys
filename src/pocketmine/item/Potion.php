@@ -59,7 +59,7 @@ class Potion extends Item{
 		parent::__construct(self::POTION, $meta, $count, $this->getNameByMeta($meta));
 	}
 
-	public static function getColor($meta){
+	public static function getColor(int $meta){
 		switch($meta){
 			case self::INVISIBILITY:
 			case self::INVISIBILITY_T:
@@ -98,8 +98,48 @@ class Potion extends Item{
 				return (Effect::getEffect(Effect::WATER_BREATHING)->getColor());
 		}
 	}
+
+	public static function getEffectId(int $meta) : int{
+		switch($meta){
+			case self::INVISIBILITY:
+			case self::INVISIBILITY_T:
+				return Effect::INVISIBILITY;
+			case self::LEAPING:
+			case self::LEAPING_T:
+			case self::LEAPING_TWO:
+				return Effect::JUMP;
+			case self::FIRE_RESISTANCE:
+			case self::FIRE_RESISTANCE_T:
+				return Effect::FIRE_RESISTANCE;
+			case self::SPEED:
+			case self::SPEED_T:
+			case self::SPEED_TWO:
+				return Effect::SPEED;
+			case self::SLOWNESS:
+			case self::SLOWNESS_T:
+				return Effect::SLOWNESS;
+			case self::WATER_BREATHING:
+			case self::WATER_BREATHING_T:
+				return Effect::WATER_BREATHING;
+			case self::HARMING:
+			case self::HARMING_TWO:
+				return Effect::HARMING;
+			case self::POISON:
+			case self::POISON_T:
+			case self::POISON_TWO:
+				return Effect::POISON;
+			case self::HEALING:
+			case self::HEALING_TWO:
+				return Effect::HEALING;
+			case self::NIGHT_VISION:
+			case self::NIGHT_VISION_T:
+				return Effect::NIGHT_VISION;
+			default:
+				return Effect::WATER_BREATHING;
+		}
+	}
 	
-	public function getNameByMeta($meta){
+	public function getNameByMeta(int $meta) : string{
 		switch($meta){
 			case self::WATER_BOTTLE:
 				return "Water Bottle"; 

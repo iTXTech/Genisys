@@ -421,7 +421,7 @@ abstract class Entity extends Location implements Metadatable{
 	 * @param CompoundTag   $nbt
 	 * @param            $args
 	 *
-	 * @return Entity
+	 * @return Entity|Projectile
 	 */
 	public static function createEntity($type, FullChunk $chunk, CompoundTag $nbt, ...$args){
 		if(isset(self::$knownEntities[$type])){
