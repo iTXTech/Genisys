@@ -205,7 +205,7 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 			$item->setCount($item->getCount() - 1);
 			$this->getInventory()->setItem($itemArr[0], $item->getCount() > 0 ? $item : Item::get(Item::AIR));
 			$motion = $this->getMotion();
-			$needItem = Item::get($item->getId());
+			$needItem = Item::get($item->getId(), $item->getDamage());
 			$block = $this->getLevel()->getBlock($this->add($motion[0], $motion[1], $motion[2]));
 			switch($block->getId()){
 				case Block::CHEST:

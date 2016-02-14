@@ -314,7 +314,7 @@ class Enchantment{
 		$count = mt_rand(3, 6);
 		$set = [];
 		while(count($set) < $count){
-			$set[] = self::$words[mt_rand(0, count(self::$words))];
+			$set[] = self::$words[mt_rand(0, count(self::$words) - 1)];
 		}
 		return implode(" ", $set);
 	}

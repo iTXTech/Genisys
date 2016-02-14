@@ -130,7 +130,7 @@ class EnchantInventory extends ContainerInventory{
 							$v = mt_rand(0 ,51);
 							if($v <= ($modifiedLevel +1)){
 
-								$this->removeConflictEnchantment($enchantment, $possible);
+								$possible = $this->removeConflictEnchantment($enchantment, $possible);
 
 								$weights = [];
 								$total = 0;
@@ -159,9 +159,9 @@ class EnchantInventory extends ContainerInventory{
 							}else{
 								break;
 							}
-
-							$this->entries[$i] = new EnchantmentEntry($result, $level, Enchantment::generateName());
 						}
+
+						$this->entries[$i] = new EnchantmentEntry($result, $level, Enchantment::generateName());
 					}
 
 					$this->sendEnchantmentList();
@@ -197,7 +197,9 @@ class EnchantInventory extends ContainerInventory{
 					$exp = $who->getExperience();
 					$cost = $this->entries[$i]->getCost();
 					if($lapis->getId() == Item::DYE and $lapis->getDamage() == Dye::BLUE and $lapis->getCount() > $i and $level >= $cost){
-						$result->addEnchantment($enchantments);
+						foreach($enchantments as $enchantment){
+							$result->addEnchantment($enchantment);
+						}
 						$this->setItem(0, $result);
 						$lapis->setCount($lapis->getCount() - $i - 1);
 						$this->setItem(1, $lapis);
@@ -228,8 +230,9 @@ class EnchantInventory extends ContainerInventory{
 	}
 
 	/**
-	 * @param Enchantment    $enchantment
-	 * @param Enchantment[]  $enchantments
+	 * @param Enchantment      $enchantment
+	 * @param Enchantment[]    $enchantments
+	 * @return Enchantment[]
 	 */
 	public function removeConflictEnchantment(Enchantment $enchantment, array $enchantments){
 		foreach($enchantments as $e){
@@ -257,5 +260,10 @@ class EnchantInventory extends ContainerInventory{
 				continue;
 			}
 		}
+		$result = [];
+		foreach($enchantments as $enchantment){
+			$result[] = $enchantment;
+		}
+		return $result;
 	}
 }
