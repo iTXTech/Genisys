@@ -1681,9 +1681,10 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	/**
-	 * @param int  $propertyId ;
-	 * @param int  $id
+	 * @param      $propertyId
+	 * @param      $id
 	 * @param bool $value
+	 * @param int  $type
 	 */
 	public function setDataFlag($propertyId, $id, $value = true, $type = self::DATA_TYPE_BYTE){
 		if($this->getDataFlag($propertyId, $id) !== $value){

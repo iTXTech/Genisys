@@ -46,7 +46,7 @@ abstract class Packet{
     }
 
     protected function getLong($signed = true){
-        return Binary::readLong($this->get(8), $signed);
+        return Binary::readLong($this->get(8));
     }
 
     protected function getInt(){

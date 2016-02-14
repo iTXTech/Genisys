@@ -2,20 +2,17 @@
 
 namespace pocketmine\entity;
 
-
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\particle\SpellParticle;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 use pocketmine\item\Potion;
-use pocketmine\entity\Effect;
-use pocketmine\level\particle\Particle;
-use pocketmine\level\particle\GenericParticle;
 
 class ThrownPotion extends Projectile{
 	const NETWORK_ID = 86;
+
+	const DATA_POTION_ID = 16;
 
 	public $width = 0.25;
 	public $length = 0.25;
@@ -33,8 +30,7 @@ class ThrownPotion extends Projectile{
 			$this->data = $this->namedtag["Data"];
 		}
 
-		$color = Potion::getColor($this->getData());
-		$this->setDataProperty(Entity::DATA_POTION_COLOR, Entity::DATA_TYPE_INT, (($color[0] & 0xff) << 16) | (($color[1] & 0xff) << 8) | ($color[2] & 0xff));
+		$this->setDataProperty(self::DATA_POTION_ID, self::DATA_TYPE_SHORT, ($this->getData() << 8));
 	}
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){

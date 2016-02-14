@@ -19,6 +19,9 @@ use pocketmine\Player;
 class FishingHook extends Projectile{
 	const NETWORK_ID = 77;
 
+	const DATA_SOURCE_UUID = 23;
+	const DATA_TARGET_UUID = 24;
+
 	public $width = 0.2;
 	public $length = 0.2;
 	public $height = 0.2;
@@ -39,6 +42,10 @@ class FishingHook extends Projectile{
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
 		parent::__construct($chunk, $nbt, $shootingEntity);
+
+		$this->setDataProperty(self::DATA_NO_AI, self::DATA_TYPE_BYTE, 1);
+		$this->setDataProperty(self::DATA_SOURCE_UUID, self::DATA_TYPE_LONG, $this->owner->getUniqueId()->toBinary());
+		//$this->setDataProperty(self::DATA_TARGET_UUID, self::DATA_TYPE_LONG, $this->getId());
 	}
 
 	public function initEntity(){
@@ -85,8 +92,7 @@ class FishingHook extends Projectile{
 		}
 
 		if($this->isInsideOfWater()) $this->motionY += 0.02;
-
-		if(!$this->isOnGround() and !$this->isCollided) $this->motionY -= $this->gravity;
+		elseif(!$this->isOnGround() and !$this->isCollided) $this->motionY -= $this->gravity;
 
 		$this->move($this->motionX, $this->motionY, $this->motionZ);
 
@@ -115,8 +121,6 @@ class FishingHook extends Projectile{
 			$this->close();
 			return;
 		}
-		$this->setDataProperty(self::DATA_NO_AI, self::DATA_TYPE_BYTE, 1);
-		$this->setDataProperty(23, self::DATA_TYPE_LONG, $this->owner->getId());
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
 		$pk->type = FishingHook::NETWORK_ID;

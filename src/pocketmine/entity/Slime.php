@@ -9,6 +9,9 @@ use pocketmine\item\Item as ItemItem;
 
 class Slime extends Living{
 	const NETWORK_ID = 37;
+
+	const DATA_SLIME_SIZE = 16;
+
 	public $width = 0.3;
 	public $length = 0.9;
 	public $height = 5;
