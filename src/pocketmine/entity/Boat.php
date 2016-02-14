@@ -1,22 +1,45 @@
 <?php
 
+/**
+ * OpenGenisys Project
+ *
+ * @author PeratX
+ */
+
 namespace pocketmine\entity;
 
+use pocketmine\nbt\tag\IntTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 use pocketmine\math\Vector3;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\item\Item as ItemItem;
+use pocketmine\level\format\FullChunk;
+use pocketmine\nbt\tag\CompoundTag;
 
 class Boat extends Vehicle{
 	const NETWORK_ID = 90;
+
+	const DATA_WOOD_ID = 20;
 
 	public $height = 0.7;
 	public $width = 1.6;
 
 	public $gravity = 0.5;
 	public $drag = 0.1;
+
+	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+		if(!isset($nbt->WoodID)){
+			$nbt->WoodID = new IntTag("WoodID", 0);
+		}
+		parent::__construct($chunk, $nbt);
+		$this->setDataProperty(self::DATA_WOOD_ID, self::DATA_TYPE_BYTE, $this->getWoodID());
+	}
+
+	public function getWoodID() : int{
+		return (int) $this->namedtag["WoodID"];
+	}
 
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
