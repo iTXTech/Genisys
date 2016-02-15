@@ -2407,7 +2407,7 @@ class Level implements ChunkManager, Metadatable{
 		$nbt = new CompoundTag("", [
 			"Pos" => new EnumTag("Pos", [
 				new DoubleTag("", $pos->getX()),
-				new DoubleTag("", $pos->getY()),
+				new DoubleTag("", $pos->getY() + 0.5),
 				new DoubleTag("", $pos->getZ())
 			]),
 			"Motion" => new EnumTag("Motion", [

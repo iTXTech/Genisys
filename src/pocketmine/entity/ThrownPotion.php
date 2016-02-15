@@ -37,7 +37,7 @@ class ThrownPotion extends Projectile{
 	}
 	
 	public function kill(){
-		$color = Potion::getColor($this->getPotionId()); var_dump($this->getPotionId());
+		$color = Potion::getColor($this->getPotionId());
 		$this->getLevel()->addParticle(new SpellParticle($this, $color[0], $color[1], $color[2]));
 		$players = $this->getViewers();
 		foreach($players as $p) {

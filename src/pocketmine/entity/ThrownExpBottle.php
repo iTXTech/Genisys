@@ -39,9 +39,9 @@ class ThrownExpBottle extends Projectile{
 			$this->close();
 			$this->getLevel()->addParticle(new SpellParticle($this, 46, 82, 153));
 			if($this->getLevel()->getServer()->expEnabled){
-				$this->getLevel()->addExperienceOrb($this->add(0, 0.2, 0), mt_rand(1, 4));
-				$this->getLevel()->addExperienceOrb($this->add(-0.1, 0.2, 0), mt_rand(1, 4));
-				$this->getLevel()->addExperienceOrb($this->add(0, 0.2, -0.1), mt_rand(1, 4));
+				$this->getLevel()->addExperienceOrb($this->add(0, -0.2, 0), mt_rand(1, 4));
+				$this->getLevel()->addExperienceOrb($this->add(-0.1, -0.2, 0), mt_rand(1, 4));
+				$this->getLevel()->addExperienceOrb($this->add(0, -0.2, -0.1), mt_rand(1, 4));
 			}
 			$hasUpdate = true;
 		}
