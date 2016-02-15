@@ -22,6 +22,8 @@
 namespace pocketmine\level\generator\normal\biome;
 
 use pocketmine\level\generator\populator\TallGrass;
+use pocketmine\level\generator\populator\LilyPad;
+use pocketmine\level\generator\populator\WaterPit;
 
 use pocketmine\block\Block;
 use pocketmine\block\Flower as FlowerBlock;
@@ -34,6 +36,10 @@ class PlainBiome extends GrassyBiome{
 
 		$tallGrass = new TallGrass();
 		$tallGrass->setBaseAmount(12);
+		$waterPit = new WaterPit();
+		$waterPit->setBaseAmount(9999);
+		$lilyPad = new LilyPad();
+		$lilyPad->setBaseAmount(8);
 
 		$flower = new Flower();
 		$flower->setBaseAmount(2);
@@ -48,8 +54,10 @@ class PlainBiome extends GrassyBiome{
 
 		$this->addPopulator($tallGrass);
 		$this->addPopulator($flower);
+		$this->addPopulator($waterPit);
+		$this->addPopulator($lilyPad);
 
-		$this->setElevation(63, 74);
+		$this->setElevation(61, 68);
 
 		$this->temperature = 0.8;
 		$this->rainfall = 0.4;
