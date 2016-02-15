@@ -211,6 +211,7 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 			$this->getInventory()->setItem($itemArr[0], $item->getCount() > 0 ? $item : Item::get(Item::AIR));
 			$motion = $this->getMotion();
 			$needItem = Item::get($item->getId(), $item->getDamage());
+			$f = 1.5;
 			switch($needItem->getId()){
 				case Item::ARROW:
 					$nbt = new CompoundTag("", [
@@ -230,15 +231,109 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 						]),
 						"Fire" => new ShortTag("Fire", 0)
 					]);
+
 					$arrow = Entity::createEntity("Arrow", $this->chunk, $nbt);
-					$f = 1.5;
+
 					$arrow->setMotion($arrow->getMotion()->multiply($f));
+					$arrow->spawnToAll();
+
 					break;
 				case Item::SNOWBALL:
+					$nbt = new CompoundTag("", [
+						"Pos" => new EnumTag("Pos", [
+							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
+							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
+							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
+						]),
+						"Motion" => new EnumTag("Motion", [
+							new DoubleTag("", $motion[0]),
+							new DoubleTag("", $motion[1]),
+							new DoubleTag("", $motion[2])
+						]),
+						"Rotation" => new EnumTag("Rotation", [
+							new FloatTag("", lcg_value() * 360),
+							new FloatTag("", 0)
+						]),
+					]);
+
+					$snowball = Entity::createEntity("Snowball", $this->chunk, $nbt);
+
+					$snowball->setMotion($snowball->getMotion()->multiply($f));
+					$snowball->spawnToAll();
+
+					break;
+				case Item::EGG:
+					$nbt = new CompoundTag("", [
+						"Pos" => new EnumTag("Pos", [
+							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
+							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
+							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
+						]),
+						"Motion" => new EnumTag("Motion", [
+							new DoubleTag("", $motion[0]),
+							new DoubleTag("", $motion[1]),
+							new DoubleTag("", $motion[2])
+						]),
+						"Rotation" => new EnumTag("Rotation", [
+							new FloatTag("", lcg_value() * 360),
+							new FloatTag("", 0)
+						]),
+					]);
+
+					$egg = Entity::createEntity("Egg", $this->chunk, $nbt);
+
+					$egg->setMotion($egg->getMotion()->multiply($f));
+					$egg->spawnToAll();
+
 					break;
 				case Item::SPLASH_POTION:
+					$nbt = new CompoundTag("", [
+						"Pos" => new EnumTag("Pos", [
+							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
+							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
+							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
+						]),
+						"Motion" => new EnumTag("Motion", [
+							new DoubleTag("", $motion[0]),
+							new DoubleTag("", $motion[1]),
+							new DoubleTag("", $motion[2])
+						]),
+						"Rotation" => new EnumTag("Rotation", [
+							new FloatTag("", lcg_value() * 360),
+							new FloatTag("", 0)
+						]),
+						"PotionId" => new ShortTag("PotionId", $item->getDamage()),
+					]);
+
+					$thrownPotion = Entity::createEntity("ThrownPotion", $this->chunk, $nbt);
+
+					$thrownPotion->setMotion($thrownPotion->getMotion()->multiply($f));
+					$thrownPotion->spawnToAll();
+
 					break;
 				case Item::ENCHANTING_BOTTLE:
+					$nbt = new CompoundTag("", [
+						"Pos" => new EnumTag("Pos", [
+							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
+							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
+							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
+						]),
+						"Motion" => new EnumTag("Motion", [
+							new DoubleTag("", $motion[0]),
+							new DoubleTag("", $motion[1]),
+							new DoubleTag("", $motion[2])
+						]),
+						"Rotation" => new EnumTag("Rotation", [
+							new FloatTag("", lcg_value() * 360),
+							new FloatTag("", 0)
+						]),
+					]);
+
+					$thrownExpBottle = Entity::createEntity("ThrownExpBottle", $this->chunk, $nbt);
+
+					$thrownExpBottle->setMotion($thrownExpBottle->getMotion()->multiply($f));
+					$thrownExpBottle->spawnToAll();
+
 					break;
 				default:
 					$itemTag = NBT::putItemHelper($needItem);

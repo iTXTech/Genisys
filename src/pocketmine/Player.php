@@ -356,7 +356,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return $this->experience;
 	}
 
-	public function getExpLevel() {
+	public function getExpLevel(){
 		return $this->explevel;
 	}
 
@@ -385,7 +385,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public function setBanned($value){
 		if($value === true){
 			$this->server->getNameBans()->addBan($this->getName(), null, null, null);
-			$this->kick(TextFormat::RED. "You have been banned");
+			$this->kick(TextFormat::RED . "You have been banned");
 		}else{
 			$this->server->getNameBans()->remove($this->getName());
 		}
@@ -522,7 +522,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/**
 	 * @return bool
 	 */
-	public function isOp() : bool {
+	public function isOp() : bool{
 		return $this->server->isOp($this->getName());
 	}
 
@@ -2101,7 +2101,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 			return;
 		}elseif($this->server->getNameBans()->isBanned(strtolower($this->getName())) or $this->server->getIPBans()->isBanned($this->getAddress()) or $this->server->getCIDBans()->isBanned($this->randomClientId)){
-			$this->close($this->getLeaveMessage(), TextFormat::RED. "You are banned");
+			$this->close($this->getLeaveMessage(), TextFormat::RED . "You are banned");
 
 			return;
 		}
@@ -2251,7 +2251,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			TextFormat::AQUA . $this->username . TextFormat::WHITE,
 			$this->ip,
 			$this->port,
-			TextFormat::GREEN. $this->randomClientId . TextFormat::WHITE,
+			TextFormat::GREEN . $this->randomClientId . TextFormat::WHITE,
 			$this->id,
 			$this->level->getName(),
 			round($this->x, 4),
@@ -3462,9 +3462,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->craftingType = 0;
 					$inv = $this->windowIndex[$packet->windowid];
 
-					if($inv instanceof EnchantInventory and $packet->item->hasEnchantments()) {
+					if($inv instanceof EnchantInventory and $packet->item->hasEnchantments()){
 						$inv->onEnchant($this, $inv->getItem($packet->slot), $packet->item);
-                    }
+					}
 
 					$transaction = new BaseTransaction($inv, $packet->slot, $inv->getItem($packet->slot), $packet->item);
 				}else{
@@ -3718,7 +3718,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * flag set to kick without the "Kicked by admin" part instead of this method.
 	 *
 	 * @param string $message Message to be broadcasted
-	 * @param string $reason  Reason showed in console
+	 * @param string $reason Reason showed in console
 	 * @param bool   $notify
 	 */
 	public final function close($message = "", $reason = "generic reason", $notify = true){
