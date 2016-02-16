@@ -70,6 +70,10 @@
   pardoncid weather extractphar loadplugin lvdat biome)
 * With FolderPluginLoader
 * Monster Spawner
+* Item Frame
+* Dispenser and Dropper
+* Colorful Sheep
+* Different types of Boat, Villager and Rabbit
 * NOTICE: Please edit **genisys.yml** to enable all the features, including Redstone, MobAI, Nether and so on.
 
 ###To-Do List
@@ -172,6 +176,11 @@ Port: **888**
 * 生物 AI（基于 MOW 的代码）
 * 更多的指令（bancid（按设备编号或玩家 ID），banip（按 IP 或玩家 ID），ms，devTools 相关指令（打包与解包插件），pardoncid，weather，loadplugin，lvdat）
 * 文件夹插件加载器
+* 刷怪箱
+* 物品展示柜
+* 发射器和投掷器
+* 五彩缤纷的羊
+* 不同种类的船，村名和兔子
 * 注意: 请编辑 **genisys.yml** 来启用红石、生物AI和地狱等功能。
 
 ###计划表
