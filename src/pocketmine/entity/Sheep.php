@@ -85,7 +85,9 @@ class Sheep extends Animal{
 	}
 	
 	public function getDrops(){
-		$drops = array(ItemItem::get(ItemItem::WOOL, 0, 1));
+		$drops = [
+			ItemItem::get(ItemItem::WOOL, $this->getColor(), 1)
+		];
 		return $drops;
 	}
 }
