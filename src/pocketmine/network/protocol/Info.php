@@ -92,6 +92,7 @@ interface Info{
 	//const REQUEST_CHUNK_RADIUS_PACKET = 0xc8;
 	//const CHUNK_RADIUS_UPDATE_PACKET = 0xc9;
 	//const ITEM_FRAME_DROP_ITEM_PACKET = 0xca;
+	// const REPLACE_SELECTED_ITEM_PACKET = 0xcb;
 }
 
 
