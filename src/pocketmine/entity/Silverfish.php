@@ -21,21 +21,16 @@
 
 namespace pocketmine\entity;
 
-
-use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
 class Silverfish extends Monster{
 	const NETWORK_ID = 39;
+
+	public $dropExp = [5, 5];
 	
 	public function getName() : string{
 		return "Silverfish";
-	}
-	
-	public function kill(){
-		parent::kill();
-		if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0, 1, 0), 5);
 	}
 	
 	public function spawnTo(Player $player){

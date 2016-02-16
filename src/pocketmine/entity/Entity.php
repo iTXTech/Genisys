@@ -215,6 +215,8 @@ abstract class Entity extends Location implements Metadatable{
 	/** @var PressurePlate */
 	protected $activatedPressurePlates = [];
 
+	public $dropExp = [0, 0];
+
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		if($chunk === null or $chunk->getProvider() === null){
@@ -284,6 +286,20 @@ abstract class Entity extends Location implements Metadatable{
 
 		$this->scheduleUpdate();
 
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDropExpMin() : int{
+		return $this->dropExp[0];
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDropExpMax() : int{
+		return $this->dropExp[1];
 	}
 
 	/**

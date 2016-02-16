@@ -37,6 +37,7 @@ use pocketmine\entity\FishingHook;
 use pocketmine\entity\Human;
 use pocketmine\entity\Item as DroppedItem;
 use pocketmine\entity\PrimedTNT;
+use pocketmine\entity\Rabbit;
 use pocketmine\entity\Snowball;
 use pocketmine\entity\Squid;
 use pocketmine\entity\Villager;
@@ -3023,6 +3024,7 @@ private function lookupAddress($address) {
 		Entity::registerEntity(FishingHook::class);
 		Entity::registerEntity(Egg::class);
 		Entity::registerEntity(ZombieVillager::class);
+		Entity::registerEntity(Rabbit::class);
 
 		Entity::registerEntity(Human::class, true);
 	}

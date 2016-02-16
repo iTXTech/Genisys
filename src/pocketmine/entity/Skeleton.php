@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * OpenGenisys Project
+ *
+ * @author PeratX
+ */
+
+
 namespace pocketmine\entity;
 
 use pocketmine\network\protocol\AddEntityPacket;
@@ -9,14 +16,11 @@ use pocketmine\item\Item as ItemItem;
 
 class Skeleton extends Monster implements ProjectileSource{
 	const NETWORK_ID = 34;
+
+	public $dropExp = [5, 5];
 	
 	public function getName() : string{
 		return "Skeleton";
-	}
-	
-	public function kill(){
-		parent::kill();
-		if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0, 1, 0), 5);
 	}
 	
 	public function spawnTo(Player $player){

@@ -36,6 +36,8 @@ class Zombie extends Monster{
 	public $width = 0.6;
 	public $length = 0.6;
 	public $height = 1.8;
+
+	public $dropExp = [5, 5];
 	
 	public $drag = 0.2;
 	public $gravity = 0.3;
@@ -53,11 +55,6 @@ class Zombie extends Monster{
 
 	public function getName() : string{
 		return "Zombie";
-	}
-	
-	public function kill(){
-		parent::kill();
-		if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0, 1, 0), 5); //掉落经验
 	}
 	
 	public function initEntity(){

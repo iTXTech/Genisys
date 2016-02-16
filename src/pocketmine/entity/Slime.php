@@ -1,7 +1,13 @@
 <?php
+
+/**
+ * OpenGenisys Project
+ *
+ * @author PeratX
+ */
+
 namespace pocketmine\entity;
 
-use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -15,14 +21,11 @@ class Slime extends Living{
 	public $width = 0.3;
 	public $length = 0.9;
 	public $height = 5;
+
+	public $dropExp = [1, 4];
 	
 	public function getName() : string{
 		return "Slime";
-	}
-	
-	public function kill(){
-		parent::kill();
-		if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0, 1, 0), mt_rand(1, 4));
 	}
 	
 	public function spawnTo(Player $player){

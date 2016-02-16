@@ -1,21 +1,24 @@
 <?php
+
+/**
+ * OpenGenisys Project
+ *
+ * @author PeratX
+ */
+
 namespace pocketmine\entity;
 
-use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
-use pocketmine\entity\Animal;
-use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\item\Item as ItemItem;
 use pocketmine\math\Vector3;
-use pocketmine\math\Math;
 
 class Bat extends Animal{
-	
 	const NETWORK_ID = 19;
+
 	public $width = 0.3;
 	public $length = 0.9;
 	public $height = 1.8;
+
 	public $gravity = 0;
 	public $drag = 0.0001;
 	
@@ -130,6 +133,7 @@ class Bat extends Animal{
 		$pk->pitch = $this->pitch;
 		$pk->metadata = $this->dataProperties;
 		$player->dataPacket($pk);
+
 		parent::spawnTo($player);
 	}
 }

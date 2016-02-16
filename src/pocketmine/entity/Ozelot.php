@@ -18,7 +18,7 @@
  * 
  *
 */
-
+//Ozelot does not exist it MCPE, should be Ocelot
 namespace pocketmine\entity;
 
 

@@ -1,22 +1,27 @@
 <?php
 
+/**
+ * OpenGenisys Project
+ *
+ * @author PeratX
+ */
+
 namespace pocketmine\entity;
 
-
-use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
 class CaveSpider extends Monster{
 	const NETWORK_ID = 40;
-	
+
+	public $width = 1;
+	public $length = 1;
+	public $height = 0.5;
+
+	public $dropExp = [5, 5];
+
 	public function getName() : string{
-		return "CaveSpider";
-	}
-	
-	public function kill(){
-		parent::kill();
-		if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0, 1, 0), 5);
+		return "Cave Spider";
 	}
 	
 	public function spawnTo(Player $player){

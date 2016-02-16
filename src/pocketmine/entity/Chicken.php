@@ -1,26 +1,29 @@
 <?php
+
+/**
+ * OpenGenisys Project
+ *
+ * @author PeratX
+ */
+
 namespace pocketmine\entity;
 
-use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
-use pocketmine\entity\Animal;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\item\Item as ItemItem;
 
 class Chicken extends Animal{
 	const NETWORK_ID = 10;
+
 	public $width = 0.6;
 	public $length = 0.6;
 	public $height = 1.8;
+
+	public $dropExp = [1, 3];
 	
 	public function getName() : string{
 		return "Chicken";
-	}
-	
-	public function kill(){
-		parent::kill();
-		if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0, 1, 0), mt_rand(1, 3));
 	}
 	
 	public function spawnTo(Player $player){

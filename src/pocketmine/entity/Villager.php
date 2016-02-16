@@ -21,9 +21,10 @@
 
 namespace pocketmine\entity;
 
-
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\IntTag;
-use pocketmine\network\Network;
+use pocketmine\level\format\FullChunk;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
@@ -37,12 +38,24 @@ class Villager extends Creature implements NPC, Ageable{
 
 	const NETWORK_ID = 15;
 
+	const DATA_PROFESSION_ID = 16;
+
 	public $width = 0.6;
 	public $length = 0.6;
 	public $height = 1.8;
 
 	public function getName() : string{
 		return "Villager";
+	}
+
+	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+		if(!isset($nbt->Profession)){
+			$nbt->Profession = new ByteTag("Profession", mt_rand(0, 5));
+		}
+
+		parent::__construct($chunk, $nbt);
+
+		$this->setDataProperty(self::DATA_PROFESSION_ID, self::DATA_TYPE_BYTE, $this->getProfession());
 	}
 
 	protected function initEntity(){
@@ -73,14 +86,14 @@ class Villager extends Creature implements NPC, Ageable{
 	/**
 	 * Sets the villager profession
 	 *
-	 * @param $profession
+	 * @param int $profession
 	 */
-	public function setProfession($profession){
-		$this->namedtag->Profession = new IntTag("Profession", $profession);
+	public function setProfession(int $profession){
+		$this->namedtag->Profession = new ByteTag("Profession", $profession);
 	}
 
-	public function getProfession(){
-		return $this->namedtag["Profession"];
+	public function getProfession() : int{
+		return (int) $this->namedtag["Profession"];
 	}
 
 	public function isBaby(){

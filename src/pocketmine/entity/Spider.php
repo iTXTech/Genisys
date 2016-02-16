@@ -1,10 +1,15 @@
 <?php
+
+/**
+ * OpenGenisys Project
+ *
+ * @author PeratX
+ */
+
 namespace pocketmine\entity;
 
-use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
-use pocketmine\entity\Monster;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\item\Item as ItemItem;
 
@@ -13,16 +18,13 @@ class Spider extends Monster{
 	public $width = 0.3;
 	public $length = 0.9;
 	public $height = 1.9;
+
+	public $dropExp = [5, 5];
 	
 	public function getName() : string{
 		return "Spider";
 	}
-	
-	public function kill(){
-		parent::kill();
-		if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0, 1, 0), 5);
-	}
-	
+
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
@@ -37,14 +39,16 @@ class Spider extends Monster{
 		$pk->pitch = $this->pitch;
 		$pk->metadata = $this->dataProperties;
 		$player->dataPacket($pk);
+
+
 		parent::spawnTo($player);
 	}
 	
 	public function getDrops(){
 		$drops = array(ItemItem::get(ItemItem::STRING, 0, 1));
 		if ($this->lastDamageCause instanceof EntityDamageByEntityEvent and $this->lastDamageCause->getEntity() instanceof Player) {
-			if (\mt_rand(0, 199) < 5) {
-				switch (\mt_rand(0, 2)) {
+			if (mt_rand(0, 199) < 5) {
+				switch (mt_rand(0, 2)) {
 					case 0:
 						$drops[] = ItemItem::get(ItemItem::IRON_INGOT, 0, 1);
 						break;

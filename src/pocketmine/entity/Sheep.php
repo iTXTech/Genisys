@@ -16,7 +16,7 @@ use pocketmine\item\Item as ItemItem;
 use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\tag\CompoundTag;
 
-class Sheep extends Animal{
+class Sheep extends Animal implements Colorable{
 	const NETWORK_ID = 13;
 
 	const DATA_COLOR_INFO = 16;
@@ -62,9 +62,8 @@ class Sheep extends Animal{
 		return (int) $this->namedtag["Color"];
 	}
 
-	public function kill(){
-		parent::kill();
-		if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0, 1, 0), mt_rand(1, 3));
+	public function setColor(int $color){
+		$this->namedtag->Color = new ByteTag("Color", $color);
 	}
 	
 	public function spawnTo(Player $player){
@@ -81,6 +80,7 @@ class Sheep extends Animal{
 		$pk->pitch = $this->pitch;
 		$pk->metadata = $this->dataProperties;
 		$player->dataPacket($pk);
+
 		parent::spawnTo($player);
 	}
 	
