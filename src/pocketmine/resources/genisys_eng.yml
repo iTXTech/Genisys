@@ -29,7 +29,7 @@ player:
  inventory-num: 36
  #Clear the inventory automatically when change the gamemode into creative
  auto-clear-inventory : true
- #TODO: Choose if keep experience when a player died
+ #Choose if keep experience when a player died
  keep-experience: false
 
 nether:

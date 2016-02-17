@@ -3992,6 +3992,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			}
 		}
 
+		if($this->server->expEnabled and (!$ev->getKeepExperience() and !$this->server->keepInventory)){
+			$exp = $this->getExperience();
+			if($exp > 100) $exp = 100;
+			$this->getLevel()->addExperienceOrb($this->add(0, 0.2, 0), $exp);
+			$this->setExperienceAndLevel(0, 0);
+		}
+
 		if($ev->getDeathMessage() != ""){
 			$this->server->broadcast($ev->getDeathMessage(), Server::BROADCAST_CHANNEL_USERS);
 		}

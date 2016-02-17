@@ -368,6 +368,7 @@ class Server{
 	public $creativeItemsFromJson = false;
 	public $minecartMovingType = 0;
 	public $checkMovement = false;
+	public $keepExperience = false;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -1593,6 +1594,7 @@ class Server{
 		$this->foodEnabled = $this->getAdvancedProperty("player.hunger", true);
 		$this->expEnabled = $this->getAdvancedProperty("player.experience", true);
 		$this->keepInventory = $this->getAdvancedProperty("player.keep-inventory", false);
+		$this->keepExperience = $this->getAdvancedProperty("player.keep-experience", false);
 		$this->netherEnabled = $this->getAdvancedProperty("nether.allow-nether", false);
 		$this->netherName = $this->getAdvancedProperty("nether.level-name", "nether");
 		$this->weatherChangeTime = $this->getAdvancedProperty("level.weather-change-time", 12000);
