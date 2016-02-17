@@ -7,7 +7,6 @@ php:
 
 branches:
  - master
- - php7-0.14
 
 before_script:
  - phpenv config-rm xdebug.ini
