@@ -89,35 +89,11 @@
 * LevelDB support for Windows
 
 ###Servers
-(In fact there are more than 80 servers in China using our core and most of them are better than us. Here are some servers set by us.)
+For test!
 
-**Young Dream**<br>
-Address: **mcper.cn**<br>
+**Beer MC(A mini-game server)**<br>
+Address: **beermc.com**<br>
 Port: **19132**
-
-**Young Dream - Survival**<br>
-Address: **mcper.cn**<br>
-Port: **12345**
-
-**Young Dream - Happy Town**<br>
-Address: **mcper.cn**<br>
-Port: **666**
-
-**Sai Gao Server**<br>
-Address: **sgmcpe.com**<br>
-Port: **100**
-
-**That the sky**<br>
-Address: **g.mcpe.cc**<br>
-Port: **2333**
-
-**Test Server**<br>
-Address: **mcper.cn**<br>
-Port: **233**
-
-**Zhy WAC Survival Server**<br>
-Address: **umcpe.com**<br>
-Port: **888**
 
 <br><br>
 
@@ -198,32 +174,7 @@ Port: **888**
 
 
 ###服务器
-（事实上，有超过 80 个中国的 Minecraft PE 服务器在使用我们的服务器内核，且大部分的服务器都比我们架设的好。这些是我们架设的服务器）
-
-**Young Dream**<br>
-地址: **mcper.cn**<br>
+既然你们这么想装逼,那我也没办法
+**BeerMc 小游戏**<br>
+地址: **beermc.com**<br>
 端口: **19132**
-
-**Young Dream - Survival**<br>
-地址: **mcper.cn**<br>
-端口: **12345**
-
-**Young Dream - Happy Town**<br>
-地址: **mcper.cn**<br>
-端口: **666**
-
-**Sai Gao Server**<br>
-地址: **sgmcpe.com**<br>
-端口: **100**
-
-**That the sky**<br>
-地址: **g.mcpe.cc**<br>
-端口: **2333**
-
-**Test Server**<br>
-地址: **mcper.cn**<br>
-端口: **233**
-
-**Zhy WAC Survival Server**<br>
-地址: **umcpe.com**<br>
-端口: **888**
