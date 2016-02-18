@@ -3,8 +3,8 @@
  * Author: PeratX
  * QQ: 1215714524
  * Time: 2016/1/7 16:41
- * Copyright(C) 2011-2016 iTX Technologies LLC.
- * All rights reserved.
+
+
  *
  * OpenGenisys Project
  */

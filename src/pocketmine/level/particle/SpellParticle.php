@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2015/12/30 21:16
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+ ]
+
  *
  * OpenGenisys Project & Nukkit Project
  */

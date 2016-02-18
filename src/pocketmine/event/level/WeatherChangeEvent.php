@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2015/12/27 18:01
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+ ]
+
  *
  * OpenGenisys Project
  */
