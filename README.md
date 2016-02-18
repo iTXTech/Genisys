@@ -22,7 +22,7 @@
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 * [**Click Here to get php7**](https://github.com/iTXTech/PHP-Genisys/)
-* [**Click Here to read docs**](http://docs.mcper.cn/namespaces.html)
+* [**Click Here to read docs**](http://docs.mcper.cn/en-US/)
 * Be free to create a _Pull Request_ or open an _Issue_. English and Chinese are both recommended. (Please do your best to use English because it is easy to communicate with worldwide.)
 
 ###Acknowledgements
@@ -108,7 +108,7 @@ Port: **19132**
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
 * 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
 * [**点击获取 php7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
-* [**点击进入docs**](http://docs.mcper.cn/namespaces.html)
+* [**点击进入docs**](http://docs.mcper.cn/en-US/)
 * 欢迎创建 Pull Request。请使用中文或者英文进行交流（但为了交流方便，请尽量使用英文进行交流）。
 
 ###鸣谢
