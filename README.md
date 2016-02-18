@@ -89,7 +89,7 @@
 * LevelDB support for Windows
 
 ###Servers
-For test!
+(Follows are the test servers built by us.In fact other servers used Genisys may be more professional than ours.)
 
 **Beer MC(A mini-game server)**<br>
 Address: **beermc.com**<br>
@@ -174,7 +174,8 @@ Port: **19132**
 
 
 ###服务器
-既然你们这么想装逼,那我也没办法
+(以下是我们个人搭建的服务器,供测试参观.事实上,其他许多使用Genisys搭建的服务器的维护水平可能比我们更专业)
+
 **BeerMc 小游戏**<br>
 地址: **beermc.com**<br>
 端口: **19132**
