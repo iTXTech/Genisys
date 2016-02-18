@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  *  ____            _        _   __  __ _                  __  __ ____
@@ -18,27 +17,30 @@
  *
  *
  */
-
 namespace pocketmine\event\inventory;
 
 use pocketmine\event\Cancellable;
 use pocketmine\event\Event;
 use pocketmine\inventory\Recipe;
 use pocketmine\item\Item;
+use pocketmine\Player;
 
 class CraftItemEvent extends Event implements Cancellable{
 	public static $handlerList = null;
-
 	/** @var Item[] */
 	private $input = [];
 	/** @var Recipe */
 	private $recipe;
+	/** @var \pocketmine\Player */
+	private $player;
 
 	/**
-	 * @param Item[] $input
-	 * @param Recipe $recipe
+	 * @param \pocketmine\Player $player
+	 * @param Item[]             $input
+	 * @param Recipe             $recipe
 	 */
-	public function __construct(array $input, Recipe $recipe){
+	public function __construct(Player $player, array $input, Recipe $recipe){
+		$this->player = $player;
 		$this->input = $input;
 		$this->recipe = $recipe;
 	}
@@ -51,7 +53,6 @@ class CraftItemEvent extends Event implements Cancellable{
 		foreach($items as $i => $item){
 			$items[$i] = clone $item;
 		}
-
 		return $items;
 	}
 
@@ -62,4 +63,10 @@ class CraftItemEvent extends Event implements Cancellable{
 		return $this->recipe;
 	}
 
+	/**
+	 * @return \pocketmine\Player
+	 */
+	public function getPlayer(){
+		return $this->player;
+	}
 }
