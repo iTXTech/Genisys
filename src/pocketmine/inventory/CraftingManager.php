@@ -283,6 +283,35 @@ class CraftingManager{
 				"PP",
 				"PP"
 			))->setIngredient("P", Item::get(Item::WOODEN_PLANK, Planks::DARK_OAK, 6)));
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BOAT, 0, 1),
+				"PSP",
+				"PPP"
+			))->setIngredient("S", Item::get(Item::WOODEN_SHOVEL, 0, 1))->setIngredient("P", Item::get(Item::WOODEN_PLANK, Planks::OAK, 5)));
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BOAT, 1, 1),
+				"PSP",
+				"PPP",
+				"   "
+			))->setIngredient("S", Item::get(Item::WOODEN_SHOVEL, 0, 1))->setIngredient("P", Item::get(Item::WOODEN_PLANK, Planks::SPRUCE, 5))); 
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BOAT, 2, 1),
+				"PSP",
+				"PPP",
+				"   "
+			))->setIngredient("S", Item::get(Item::WOODEN_SHOVEL, 0, 1))->setIngredient("P", Item::get(Item::WOODEN_PLANK, Planks::BIRCH, 5))); 
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BOAT, 3, 1),
+				"PSP",
+				"PPP",
+				"   "
+			))->setIngredient("S", Item::get(Item::WOODEN_SHOVEL, 0, 1))->setIngredient("P", Item::get(Item::WOODEN_PLANK, Planks::JUNGLE, 5)));
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BOAT, 4, 1),
+				"PSP",
+				"PPP",
+				"   "
+			))->setIngredient("S", Item::get(Item::WOODEN_SHOVEL, 0, 1))->setIngredient("P", Item::get(Item::WOODEN_PLANK, Planks::ACACIA, 5)));
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BOAT, 5, 1),
+				"PSP",
+				"PPP",
+				"   "
+			))->setIngredient("S", Item::get(Item::WOODEN_SHOVEL, 0, 1))->setIngredient("P", Item::get(Item::WOODEN_PLANK, Planks::DARK_OAK, 5)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::WOODEN_STAIRS, 0, 4),
 				"  P",
 				" PP",
