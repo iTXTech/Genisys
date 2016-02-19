@@ -1157,7 +1157,7 @@ class Item{
 		return -1;
 	}
 
-	public static function get(int $id, $meta = 0, int $count = 1, $tags = "") : Item{
+	public static function get($id, $meta = 0, int $count = 1, $tags = "") : Item{
 		try{
 			$class = self::$list[$id];
 			if($class === null){
