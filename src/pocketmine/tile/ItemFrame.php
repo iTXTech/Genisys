@@ -9,7 +9,6 @@
  * OpenGenisys Project
  */
 
-//Warning: DO NOT COPY IT UNTIL A STABLE VERSION OF MCPE 0.14.0 RELEASE!
 namespace pocketmine\tile;
 
 use pocketmine\item\Item;
@@ -24,16 +23,19 @@ use pocketmine\nbt\NBT;
 class ItemFrame extends Spawnable{
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
-		if(!isset($nbt->Item)){
-			$nbt->Item = NBT::putItemHelper(Item::get(Item::AIR, 0, 1));
-		}
 		if(!isset($nbt->ItemRotation)){
 			$nbt->ItemRotation = new ByteTag("ItemRotation", 0);
 		}
+
 		if(!isset($nbt->ItemDropChance)){
 			$nbt->ItemDropChance = new FloatTag("ItemDropChance", 1.0);
 		}
+
 		parent::__construct($chunk, $nbt);
+
+		if(!isset($this->namedtag->Item)){
+			$this->setItem(Item::get(Item::AIR), false);
+		}
 	}
 
 	public function getName() : string{
@@ -53,9 +55,11 @@ class ItemFrame extends Spawnable{
 		return NBT::getItemHelper($this->namedtag->Item);
 	}
 
-	public function setItem(Item $item){
-		$this->namedtag->Item = NBT::putItemHelper($item);
-		$this->setChanged();
+	public function setItem(Item $item, bool $setChanged = true){
+		$nbtItem = NBT::putItemHelper($item);
+		$nbtItem->setName("Item");
+		$this->namedtag->Item = $nbtItem;
+		if($setChanged) $this->setChanged();
 	}
 
 	public function getItemDropChance(){
@@ -75,11 +79,10 @@ class ItemFrame extends Spawnable{
 	}
 
 	public function getSpawnCompound(){
-		$item = NBT::getItemHelper($this->namedtag->Item);
 		/** @var CompoundTag $nbtItem */
 		$nbtItem = clone $this->namedtag->Item;
 		$nbtItem->setName("Item");
-		if($item->getId() === 0){
+		if($nbtItem["id"] == 0){
 			return new CompoundTag("", [
 				new StringTag("id", Tile::ITEM_FRAME),
 				new IntTag("x", (int) $this->x),
