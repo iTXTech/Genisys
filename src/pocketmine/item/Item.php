@@ -654,6 +654,7 @@ class Item {
 			self::$list[self::STEAK] = Steak::class;
 			self::$list[self::RAW_CHICKEN] = RawChicken::class;
 			self::$list[self::COOKED_CHICKEN] = CookedChicken::class;
+			self::$list[self::ROTTEN_FLESH] = RottenFlesh::class;
 			self::$list[self::GOLD_NUGGET] = GoldNugget::class;
 			self::$list[self::EMERALD] = Emerald::class;
 			self::$list[self::BAKED_POTATO] = BakedPotato::class;
