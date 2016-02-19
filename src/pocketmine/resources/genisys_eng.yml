@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 10
+ version: 11
 
 level:
  #Set if turn on the weather system
@@ -67,6 +67,8 @@ server:
  minecart-moving-type: 0
  #Choose if enable movement check (no more pull back)
  check-movement: true
+ #Set if enable limited creative (cannot drop item, cannot interact Chests and so on)
+ limited-creative: true
 
 redstone:
  ##########################################
