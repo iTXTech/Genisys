@@ -16,13 +16,13 @@
 ###Genisys
 
 [![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](http://jenkins.mcper.cn/buildStatus/icon?job=Genisys-master)](http://jenkins.mcper.cn/job/Genisys-master/)
-[![Build Status](https://travis-ci.org/iTXTech/Genisys.svg?branch=master)](https://travis-ci.org/iTXTech/Genisys)
+[![Jenkins Build Status](http://jenkins.mcper.cn/buildStatus/icon?job=Genisys-master)](http://jenkins.mcper.cn/job/Genisys-master/)
+[![Travis-CI Build Status](https://travis-ci.org/iTXTech/Genisys.svg?branch=master)](https://travis-ci.org/iTXTech/Genisys)
 * One Core to rule them ALL
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 * [**Click Here to get php7**](https://github.com/iTXTech/PHP-Genisys/)
-* [**Click Here to read docs**](http://docs.mcper.cn/en-US/)
+* [**Click Here to read dev docs**](http://docs.mcper.cn/en-US/)
 * Be free to create a _Pull Request_ or open an _Issue_. English and Chinese are both recommended. (Please do your best to use English because it is easy to communicate with worldwide.)
 
 ###Acknowledgements
@@ -89,9 +89,9 @@
 * LevelDB support for Windows
 
 ###Servers
-(Follows are the test servers built by us.In fact other servers used Genisys may be more professional than ours.)
+(Follows are the test servers built by us. In fact other servers used Genisys may be more professional than ours.)
 
-**Beer MC(A mini-game server)**<br>
+**Beer MC (A mini-game server)**<br>
 Address: **beermc.com**<br>
 Port: **19132**
 
@@ -102,13 +102,13 @@ Port: **19132**
 ###创世纪
 
 [![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](http://jenkins.mcper.cn/buildStatus/icon?job=Genisys-php7-0.14)](http://jenkins.mcper.cn/job/Genisys-php7-0.14/)
-[![Build Status](https://travis-ci.org/iTXTech/Genisys.svg?branch=master)](https://travis-ci.org/iTXTech/Genisys)
+[![Jenkins Build Status](http://jenkins.mcper.cn/buildStatus/icon?job=Genisys-php7-0.14)](http://jenkins.mcper.cn/job/Genisys-php7-0.14/)
+[![Travis-CI Build Status](https://travis-ci.org/iTXTech/Genisys.svg?branch=master)](https://travis-ci.org/iTXTech/Genisys)
 * 一个核心统治一切。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
 * 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
 * [**点击获取 php7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
-* [**点击进入docs**](http://docs.mcper.cn/en-US/)
+* [**点击进入开发者文档**](http://docs.mcper.cn/en-US/)
 * 欢迎创建 Pull Request。请使用中文或者英文进行交流（但为了交流方便，请尽量使用英文进行交流）。
 
 ###鸣谢
@@ -128,8 +128,8 @@ Port: **19132**
 <br>
 [**点击这里进入官方 Travis-CI**](https://travis-ci.org/iTXTech/Genisys)
 
-###开发文档
-[**点击这里进入文档首页**](http://mcper.cn/Genisys-Docs/)
+###开发者文档
+[**点击这里进入开发者文档**](http://docs.mcper.cn/zh-CN/)
 
 ###特性
 * 性能提升（允许 100+ 的玩家加入服务器）
