@@ -273,7 +273,7 @@ class Block extends Position implements Metadatable{
 	const ACACIA_WOODEN_STAIRS = 163;
 	const DARK_OAK_WOOD_STAIRS = 164;
 	const DARK_OAK_WOODEN_STAIRS = 164;
-
+        const SLIME_BLOCK = 165;
 	const IRON_TRAPDOOR = 167;
 	const HAY_BALE = 170;
 	const CARPET = 171;
@@ -304,6 +304,7 @@ class Block extends Position implements Metadatable{
 	const STONECUTTER = 245;
 	const GLOWING_OBSIDIAN = 246;
 	const NETHER_REACTOR = 247;
+	const CAMERA = 439;
 
 	const NETHER_BRICK_FENCE = 113;
 
@@ -510,6 +511,7 @@ class Block extends Position implements Metadatable{
 			self::$list[self::ACACIA_WOOD_STAIRS] = AcaciaWoodStairs::class;
 			self::$list[self::DARK_OAK_WOOD_STAIRS] = DarkOakWoodStairs::class;
 
+self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 			self::$list[self::HAY_BALE] = HayBale::class;
 			self::$list[self::CARPET] = Carpet::class;
 			self::$list[self::HARDENED_CLAY] = HardenedClay::class;
