@@ -23,6 +23,10 @@ use pocketmine\nbt\NBT;
 class ItemFrame extends Spawnable{
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+		if(!isset($nbt->Item)){
+			$nbt->Item = NBT::putItemHelper(Item::get(Item::AIR, 0, 1));
+		}
+
 		if(!isset($nbt->ItemRotation)){
 			$nbt->ItemRotation = new ByteTag("ItemRotation", 0);
 		}
