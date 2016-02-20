@@ -62,7 +62,7 @@
 * Splash Potions
 * Anvil
 * Better Crafting
-* Better Invenory
+* Better Inventory
 * More Items
 * Supported 0.13.1 skin format
 * Hunger (Based on Katana)
