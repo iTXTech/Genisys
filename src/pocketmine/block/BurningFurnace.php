@@ -123,7 +123,7 @@ class BurningFurnace extends Solid{
 				}
 			}
 
-			if($player->isCreative()){
+			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
 

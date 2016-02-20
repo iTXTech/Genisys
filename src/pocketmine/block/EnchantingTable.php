@@ -88,7 +88,7 @@ class EnchantingTable extends Transparent{
 		if(!$this->getLevel()->getServer()->anviletEnabled) return true;
 		if($player instanceof Player){
 			//TODO lock
-			if($player->isCreative()){
+			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
 			$tile = $this->getLevel()->getTile($this);

@@ -1481,6 +1481,8 @@ abstract class Entity extends Location implements Metadatable{
 	public function kill(){
 		$this->health = 0;
 		$this->scheduleUpdate();
+
+		if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this, mt_rand($this->getDropExpMin(), $this->getDropExpMax()));
 	}
 
 	/**
