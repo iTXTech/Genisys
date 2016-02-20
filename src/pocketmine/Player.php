@@ -2570,32 +2570,39 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 
 					if($item->getId() === Item::FISHING_ROD){
-						if($this->fishingHook instanceof FishingHook){
-							$this->fishingHook->close();
-							$this->fishingHook = null;
-						}else{
-							$nbt = new CompoundTag("", [
-								"Pos" => new EnumTag("Pos", [
-									new DoubleTag("", $this->x),
-									new DoubleTag("", $this->y + $this->getEyeHeight()),
-									new DoubleTag("", $this->z)
-								]),
-								"Motion" => new EnumTag("Motion", [
-									new DoubleTag("", -sin($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI)),
-									new DoubleTag("", -sin($this->pitch / 180 * M_PI)),
-									new DoubleTag("", cos($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI))
-								]),
-								"Rotation" => new EnumTag("Rotation", [
-									new FloatTag("", $this->yaw),
-									new FloatTag("", $this->pitch)
-								])
-							]);
+						if($this->fishingHook instanceof FishingHook) {
+							$this->server->getPluginManager()->callEvent($fish = new PlayerFishEvent($this, $item, $this->fishingHook, true));
+						} else {
+							$this->server->getPluginManager()->callEvent($fish = new PlayerFishEvent($this, $item, $this->fishingHook, false));
+						}
+						if(!$fish->isCancelled()){
+							if($this->fishingHook instanceof FishingHook){
+								$this->fishingHook->close();
+								$this->fishingHook = null;
+							}else{
+								$nbt = new CompoundTag("", [
+									"Pos" => new EnumTag("Pos", [
+										new DoubleTag("", $this->x),
+										new DoubleTag("", $this->y + $this->getEyeHeight()),
+										new DoubleTag("", $this->z)
+									]),
+									"Motion" => new EnumTag("Motion", [
+										new DoubleTag("", -sin($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI)),
+										new DoubleTag("", -sin($this->pitch / 180 * M_PI)),
+										new DoubleTag("", cos($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI))
+									]),
+									"Rotation" => new EnumTag("Rotation", [
+										new FloatTag("", $this->yaw),
+										new FloatTag("", $this->pitch)
+									])
+								]);
 
-							$f = 0.6;
-							$this->fishingHook = new FishingHook($this->chunk, $nbt, $this);
-							$this->fishingHook->setMotion($this->fishingHook->getMotion()->multiply($f));
-							//$this->fishingHook->owner = $this;
-							$this->fishingHook->spawnToAll();
+								$f = 0.6;
+								$this->fishingHook = new FishingHook($this->chunk, $nbt, $this);
+								$this->fishingHook->setMotion($this->fishingHook->getMotion()->multiply($f));
+								$this->fishingHook->owner = $this;
+								$this->fishingHook->spawnToAll();
+							}
 						}
 					}
 

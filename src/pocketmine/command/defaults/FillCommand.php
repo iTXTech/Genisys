@@ -49,7 +49,7 @@ class FillCommand extends VanillaCommand{
 
 		for($a = 0; $a < 6; $a++){
 			if(isset($args[$a])){
-				if(is_integer($args[$a]) && !(stripos($args[$a], '~'))){
+				if(is_integer($args[$a])){
 					if(Item::fromString($args[6]) instanceof ItemBlock){
 						for($x = $args[0]; $x <= $args[3]; $x++){
 							for($y = $args[1]; $y <= $args[4]; $y++){
