@@ -1604,21 +1604,21 @@ class Level implements ChunkManager, Metadatable{
 					case Block::DIAMOND_ORE:
 					case Block::EMERALD_ORE:
 						$exp = mt_rand(3, 7);
-						if($exp > 0) $this->addExperienceOrb($vector->add(0, 1, 0), $exp);
+						$this->addExperienceOrb($vector->add(0, 1, 0), $exp);
 						break;
 					case Block::NETHER_QUARTZ_ORE:
 					case Block::LAPIS_ORE:
 						$exp = mt_rand(2, 5);
-						if($exp > 0) $this->addExperienceOrb($vector->add(0, 1, 0), $exp);
+						$this->addExperienceOrb($vector->add(0, 1, 0), $exp);
 						break;
 					case Block::REDSTONE_ORE:
 					case Block::GLOWING_REDSTONE_ORE:
 						$exp = mt_rand(1, 5);
-						if($exp > 0) $this->addExperienceOrb($vector->add(0, 1, 0), $exp);
+					$this->addExperienceOrb($vector->add(0, 1, 0), $exp);
 						break;
 					case Block::MONSTER_SPAWNER:
 						$exp = mt_rand(15, 43);
-						if($exp > 0) $this->addExperienceOrb($vector->add(0, 1, 0), $exp);
+						$this->addExperienceOrb($vector->add(0, 1, 0), $exp);
 						break;
 				}
 			}
@@ -1659,9 +1659,9 @@ class Level implements ChunkManager, Metadatable{
 
 		if($createParticles){
 			$players = $this->getChunkPlayers($target->x >> 4, $target->z >> 4);
-			if($player !== null){
+			/*if($player !== null){
 				unset($players[$player->getLoaderId()]);
-			}
+			}*/
 
 			$this->addParticle(new DestroyBlockParticle($target->add(0.5), $target), $players);
 		}
