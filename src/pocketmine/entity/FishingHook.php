@@ -40,7 +40,12 @@ class FishingHook extends Projectile{
 		return "Fishing Hook";
 	}
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt, Player $owner){
+	public function __construct(FullChunk $chunk, CompoundTag $nbt, Player $owner = null){
+		if($owner == null){
+			$this->close();
+			return;
+		}
+
 		parent::__construct($chunk, $nbt);
 
 		$this->owner = $owner;
