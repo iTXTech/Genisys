@@ -352,7 +352,8 @@ class CraftingManager{
 			))->setIngredient("G", Item::get(Item::GUNPOWDER, 0, 5))->setIngredient("S", Item::get(Item::SAND, null, 4)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BOWL, 0, 4),
 				"P P",
-				" P"
+				" P ",
+				"   "
 			))->setIngredient("P", Item::get(Item::WOODEN_PLANKS, null, 3)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::MINECART, 0, 1),
 				"I I",
