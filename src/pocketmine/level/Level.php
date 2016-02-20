@@ -2404,29 +2404,34 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	public function addExperienceOrb(Vector3 $pos, $exp = 2){
-		$nbt = new CompoundTag("", [
-			"Pos" => new EnumTag("Pos", [
-				new DoubleTag("", $pos->getX()),
-				new DoubleTag("", $pos->getY() + 0.5),
-				new DoubleTag("", $pos->getZ())
-			]),
-			"Motion" => new EnumTag("Motion", [
-				new DoubleTag("", 0),
-				new DoubleTag("", 0),
-				new DoubleTag("", 0)
-			]),
-			"Rotation" => new EnumTag("Rotation", [
-				new FloatTag("", 0),
-				new FloatTag("", 0)
-			]),
-			"Experience" => new LongTag("Experience", $exp),
-		]);
+		if($exp > 0){
+			$nbt = new CompoundTag("", [
+				"Pos" => new EnumTag("Pos", [
+					new DoubleTag("", $pos->getX()),
+					new DoubleTag("", $pos->getY() + 0.5),
+					new DoubleTag("", $pos->getZ())
+				]),
+				"Motion" => new EnumTag("Motion", [
+					new DoubleTag("", 0),
+					new DoubleTag("", 0),
+					new DoubleTag("", 0)
+				]),
+				"Rotation" => new EnumTag("Rotation", [
+					new FloatTag("", 0),
+					new FloatTag("", 0)
+				]),
+				"Experience" => new LongTag("Experience", $exp),
+			]);
 
-		$chunk = $this->getChunk($pos->x >> 4, $pos->z >> 4, false);
+			$chunk = $this->getChunk($pos->x >> 4, $pos->z >> 4, false);
 
-		$expBall = new ExperienceOrb($chunk, $nbt);
-		//$expBall->setExperience($exp);
-		$expBall->spawnToAll();
+			$expOrb = new ExperienceOrb($chunk, $nbt);
+			//$expBall->setExperience($exp);
+			$expOrb->spawnToAll();
+
+			return $expOrb;
+		}
+		return false;
 	}
 
 	/**
