@@ -785,6 +785,14 @@ class Block extends Position implements Metadatable{
 		return false;
 	}
 
+	public function activate(){
+		return false;
+	}
+
+	public function deactivate(){
+		return false;
+	}
+
 	public function hasEntityCollision(){
 		return false;
 	}
