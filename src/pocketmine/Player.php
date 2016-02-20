@@ -145,6 +145,7 @@ use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
 use pocketmine\utils\TextFormat;
 use raklib\Binary;
+use pocketmine\event\player\PlayerFishEvent;
 
 /**
  * Main class that handles networking, recovery, and packet sending to the server part
