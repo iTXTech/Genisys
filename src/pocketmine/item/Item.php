@@ -492,7 +492,7 @@ class Item{
 	const ACACIA_BOAT = 447;
 	const DARK_OAK_BOAT = 448;
 
-	const CAMERA = 456;
+	const CAMERA = 439;
 	const BEETROOT = 457;
 	const BEETROOT_SEEDS = 458;
 	const BEETROOT_SEED = 458;
@@ -648,7 +648,7 @@ class Item{
 			self::$list[self::NETHER_BRICK] = NetherBrick::class;
 			self::$list[self::QUARTZ] = Quartz::class;
 			self::$list[self::BREWING_STAND] = BrewingStand::class;
-			//self::$list[self::CAMERA] = Camera::class;
+			self::$list[self::CAMERA] = Camera::class;
 			self::$list[self::BEETROOT] = Beetroot::class;
 			self::$list[self::FLOWER_POT] = FlowerPot::class;
 			self::$list[self::SKULL] = Skull::class;
