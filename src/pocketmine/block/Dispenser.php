@@ -89,6 +89,13 @@ class Dispenser extends Solid{
 		return true;
 	}
 
+	public function activate(){
+		$tile = $this->getLevel()->getTile($this);
+		if($tile instanceof TileDispenser){
+			$tile->activate();
+		}
+	}
+
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
 			$t = $this->getLevel()->getTile($this);
