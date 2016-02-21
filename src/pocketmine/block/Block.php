@@ -304,6 +304,7 @@ class Block extends Position implements Metadatable{
 	const STONECUTTER = 245;
 	const GLOWING_OBSIDIAN = 246;
 	const NETHER_REACTOR = 247;
+	const CAMERA = 439;
 
 	const NETHER_BRICK_FENCE = 113;
 
