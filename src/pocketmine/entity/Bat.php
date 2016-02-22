@@ -47,7 +47,7 @@ class Bat extends Animal{
 	}
 
 
-	public function onUpdate($currentTick){
+	/*public function onUpdate($currentTick){
 		if($this->closed !== false){
 			return false;
 		}
@@ -75,7 +75,7 @@ class Bat extends Animal{
 			if(!$inWater){
 				//$this->motionY -= $this->gravity;
 				$this->swimDirection = null;
-			}else*/
+			}else*
 			if($this->swimDirection !== null){
 				if($this->motionX ** 2 + $this->motionY ** 2 + $this->motionZ ** 2 <= $this->swimDirection->lengthSquared()){
 					$this->motionX = $this->swimDirection->x * $this->swimSpeed;
@@ -117,12 +117,12 @@ class Bat extends Animal{
 		$this->timings->stopTiming();
 
 		return $hasUpdate or !$this->onGround or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001;
-	}
+	}*/
 	
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
-		$pk->type = self::NETWORK_ID;
+		$pk->type = Bat::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
 		$pk->z = $this->z;
