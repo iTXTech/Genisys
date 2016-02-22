@@ -535,6 +535,12 @@ class CraftingManager{
 				"XX ",
 				"XX "
 			))->setIngredient("X", Item::get(Item::BRICK, 0, 4)));
+			
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::FLOWER_POT, 0, 1),
+				"X X",
+				" X ",
+				"   "
+			))->setIngredient("X", Item::get(Item::BRICK, 0, 3)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SLAB, 4, 6),
 				"   ",
