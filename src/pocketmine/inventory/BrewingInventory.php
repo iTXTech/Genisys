@@ -9,6 +9,7 @@
  *
  * Merged from ImagicalMine
  */
+
 namespace pocketmine\inventory;
 
 use pocketmine\item\Item;
@@ -26,15 +27,36 @@ class BrewingInventory extends ContainerInventory{
 		return $this->holder;
 	}
 
-	public function setIngredient(Item $item){
-		$this->setItem(0, $item);
+	/**
+	 * @return Item
+	 */
+	public function getResult(){
+		return $this->getItem(1);
 	}
 
 	/**
 	 * @return Item
 	 */
 	public function getIngredient(){
-		return $this->getItem(0);
+		return $this->getItem(3);
+	}
+
+	/**
+	 * @param Item $item
+	 *
+	 * @return bool
+	 */
+	public function setResult(Item $item){
+		return $this->setItem(1, $item);
+	}
+
+	/**
+	 * @param Item $item
+	 *
+	 * @return bool
+	 */
+	public function setBrewing(Item $item){
+		return $this->setItem(0, $item);
 	}
 
 	public function onSlotChange($index, $before){
