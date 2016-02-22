@@ -23,6 +23,7 @@ namespace pocketmine\entity;
 
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\inventory\PlayerInventory;
+use pocketmine\network\protocol\PlayerListPacket;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\utils\UUID;
 use pocketmine\nbt\NBT;
@@ -213,7 +214,13 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 				$this->server->updatePlayerListData($this->getUniqueId(), $this->getId(), $this->getName(), $this->skinName, $this->skin, [$player]);
 			}*/
 			
-			$this->server->updatePlayerListData($this->getUniqueId(), $this->getId(), $this->getName(), $this->skinName, $this->skin, [$player]);
+			//$this->server->updatePlayerListData($this->getUniqueId(), $this->getId(), $this->getName(), $this->skinName, $this->skin, [$player]);
+			
+			$pk = new PlayerListPacket();
+			$pk->type = PlayerListPacket::TYPE_ADD;
+			$pk->entries[] = [$this->getUniqueId(), $this->getId(), $this->getName(), $this->skinName, $this->skin];
+			$player->dataPacket($pk);
+			//cocyri......... Steadfast2
 
 			$pk = new AddPlayerPacket();
 			$pk->uuid = $this->getUniqueId();
