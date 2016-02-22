@@ -296,6 +296,11 @@ class CraftingManager{
 				"PP ",
 				"PP "
 			))->setIngredient("P", Item::get(Item::WOODEN_PLANK, Planks::DARK_OAK, 6)));
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::IRON_DOOR, 0, 1),
+				"II ",
+				"II ",
+				"II "
+			))->setIngredient("I", Item::get(Item::IRON_INGOT, 0, 6)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BOAT, 0, 1),
 				"PSP",
 				"PPP"
