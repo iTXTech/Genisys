@@ -1556,8 +1556,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$revert = false;
 
-		if(($distanceSquared / ($tickDiff ** 2)) > 200 and $this->server->checkMovement){
-			$revert = true;
+		if(($distanceSquared / ($tickDiff ** 2)) > 200){
+			if($this->server->checkMovement) $revert = true;
 		}else{
 			if($this->chunk === null or !$this->chunk->isGenerated()){
 				$chunk = $this->level->getChunk($newPos->x >> 4, $newPos->z >> 4, false);
