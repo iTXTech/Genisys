@@ -893,8 +893,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->setMovementSpeed(0.1);
 		$this->sendPotionEffects($this);
 		$this->sendData($this);
-		$this->inventory->sendContents($this);
-		$this->inventory->sendArmorContents($this);
 
 		$pk = new SetTimePacket();
 		$pk->time = $this->level->getTime();
@@ -968,6 +966,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$pk->z = $pos->z;
 			$this->dataPacket($pk);
 		}
+
+		$this->inventory->sendContents($this);
+		$this->inventory->sendArmorContents($this);
 	}
 
 	protected function orderChunks(){
