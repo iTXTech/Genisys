@@ -175,7 +175,8 @@ class CraftingManager{
 			))->setIngredient("S", Item::get(Item::SUGARCANE, 0, 1)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BED, 0, 1),
 				"WWW",
-				"PPP"
+				"PPP",
+				"   "
 			))->setIngredient("W", Item::get(Item::WOOL, null, 3))->setIngredient("P", Item::get(Item::WOODEN_PLANK, null, 3)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::CHEST, 0, 1),
 				"PPP",
