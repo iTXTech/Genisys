@@ -273,7 +273,7 @@ class Item{
 	const ACACIA_WOODEN_STAIRS = 163;
 	const DARK_OAK_WOOD_STAIRS = 164;
 	const DARK_OAK_WOODEN_STAIRS = 164;
-
+	const SLIME_BLOCK = 165;
 	const IRON_TRAPDOOR = 167;
 
 	const HAY_BALE = 170;
@@ -745,6 +745,8 @@ class Item{
 			self::addCreativeItem(Item::get(Item::JUNGLE_WOODEN_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::ACACIA_WOODEN_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::DARK_OAK_WOODEN_STAIRS, 0));
+
+self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::BRICK_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::SANDSTONE_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::STONE_BRICK_STAIRS, 0));
