@@ -3190,7 +3190,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					break;
 				}
 				if($this->isCreative() and $this->server->limitedCreative) break;
-				$item = $this->inventory->getItemInHand();
+				$dropItem = $packet;
+				$item = $thos->inventory->contains($dropItem->item) ? $dropItem->item : $this->inventory->getItemInHand();
 				$ev = new PlayerDropItemEvent($this, $item);
 				$this->server->getPluginManager()->callEvent($ev);
 				if($ev->isCancelled()){
@@ -3198,7 +3199,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					break;
 				}
 
-				$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
+				$this->inventory->remove($item);
 				$motion = $this->getDirectionVector()->multiply(0.4);
 
 				$this->level->dropItem($this->add(0, 1.3, 0), $item, $motion, 40);
