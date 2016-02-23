@@ -72,7 +72,11 @@ class ExperienceOrb extends Entity{
 				$this->motionZ = $motZ / $motSqrt * $motC * $moveSpeed;
 			}
 
-			//if(!$this->onGround) $this->motionY -= $this->gravity;
+			$this->motionY -= $this->gravity;
+
+			if($this->checkObstruction($this->x, $this->y, $this->z)){
+				$hasUpdate = true;
+			}
 
 			if($minDistance <= 1.3){
 				if($this->getLevel()->getServer()->expEnabled){
