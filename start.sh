@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# start.sh file for Genisys #
-#
+# This is start.sh file for Genisys #
 # Please input ./start.sh to start server #
 
 # Variable define
-
 DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
+
+# Change Directory
 cd "$DIR"
 
 # Loop starting
@@ -14,9 +14,9 @@ cd "$DIR"
 
 DO_LOOP="no"
 
-###########################################
-# DO NOT EDIT ANY THING BEHIND THIS LINE! #
-###########################################
+##########################################
+# DO NOT EDIT ANYTHING BEHIND THIS LINE! #
+##########################################
 
 while getopts "p:f:l" OPTION 2> /dev/null; do
 	case ${OPTION} in
@@ -42,7 +42,7 @@ if [ "$PHP_BINARY" == "" ]; then
 	elif type php 2>/dev/null; then
 		PHP_BINARY=$(type -p php)
 	else
-		echo "Couldn't find a working PHP binary, please use the installer."
+		echo "[ERROR] Couldn't find a working PHP binary, please use the installer."
 		exit 1
 	fi
 fi
@@ -57,7 +57,7 @@ if [ "$POCKETMINE_FILE" == "" ]; then
 	elif [ -f ./src/pocketmine/PocketMine.php ]; then
 		POCKETMINE_FILE="./src/pocketmine/PocketMine.php"
 	else
-		echo "Couldn't find a valid Genisys installation"
+		echo "[ERROR] Couldn't find a valid Genisys installation."
 		exit 1
 	fi
 fi
@@ -75,5 +75,5 @@ while [ "$LOOPS" -eq 0 ] || [ "$DO_LOOP" == "yes" ]; do
 done
 
 if [ ${LOOPS} -gt 1 ]; then
-	echo "Restarted $LOOPS times"
+	echo "[INFO] Restarted $LOOPS times"
 fi

@@ -24,7 +24,7 @@ if exist Genisys.phar (
 		    if exist Genisys*.phar (
 			set POCKETMINE_FILE=Genisys*.phar
 			   ) else (
-		echo "Couldn't find a valid Genisys installation"
+		echo "[ERROR] Couldn't find a valid Genisys installation."
 		pause
 		exit 8
 	)
