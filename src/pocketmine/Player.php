@@ -123,6 +123,7 @@ use pocketmine\network\protocol\DisconnectPacket;
 use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\Info as ProtocolInfo;
+use pocketmine\network\protocol\InteractPacket;
 use pocketmine\network\protocol\MovePlayerPacket;
 use pocketmine\network\protocol\PlayerActionPacket;
 use pocketmine\network\protocol\PlayStatusPacket;
@@ -3035,6 +3036,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$target = $this->level->getEntity($packet->target);
 
 				$cancelled = false;
+
+				if($packet->action === InteractPacket::ACTION_RIGHT_CLICK){
+					// TODO handle
+					break;
+				}
 
 				if($target instanceof Player and $this->server->getConfigBoolean("pvp", true) === false
 

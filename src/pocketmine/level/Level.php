@@ -2939,8 +2939,8 @@ class Level implements ChunkManager, Metadatable{
 	 *
 	 * @return int
 	 */
-	public function getSeed() : int{
-		return (int) $this->provider->getSeed();
+	public function getSeed(){
+		return $this->provider->getSeed();
 	}
 
 	/**

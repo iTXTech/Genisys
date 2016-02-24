@@ -1425,7 +1425,7 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			$this->clearCustomName();
 		}
 
-		if(!$this->hasCompoundTag()){
+		if(!($hadCompoundTag = $this->hasCompoundTag())){
 			$tag = new CompoundTag("", []);
 		}else{
 			$tag = $this->getNamedTag();
@@ -1437,6 +1437,10 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			$tag->display = new CompoundTag("display", [
 				"Name" => new StringTag("Name", $name)
 			]);
+		}
+
+		if(!$hadCompoundTag){
+			$this->setCompoundTag($tag);
 		}
 
 		return $this;

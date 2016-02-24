@@ -1737,7 +1737,7 @@ class Server{
 		   §5PocketMine-iTX §3Genisys §fis a fork of PocketMine-MP.
 		   Powered by §5iTX Technologies LLC.
 		   §fVersion: §6" . $this->getPocketMineVersion() . "
-		   §fClient Version: §d". \pocketmine\MINECRAFT_VERSION ."
+		   §fClient Version: §d" . \pocketmine\MINECRAFT_VERSION . "
 		   §fYou could get the lastest code on https://github.com/iTXTech/Genisys
 		   §fDonate link: http://pl.zxda.net/plugins/203.html
 		   §f如果你在免费使用本核心，希望你可以进入上面的链接捐赠给我们，这会成为我们前进的动力。
@@ -1947,7 +1947,7 @@ class Server{
 			Generator::addGenerator(Normal::class, "default");
 			Generator::addGenerator(Nether::class, "hell");
 			Generator::addGenerator(Nether::class, "nether");
-			Generator::addGenerator(Void::class,"void");
+			Generator::addGenerator(Void::class, "void");
 
 			foreach((array) $this->getProperty("worlds", []) as $name => $worldSetting){
 				if($this->loadLevel($name) === false){
@@ -1974,7 +1974,12 @@ class Server{
 					$this->setConfigString("level-name", "world");
 				}
 				if($this->loadLevel($default) === false){
-					$seed = $this->getConfigInt("level-seed", time());
+					$seed = getopt("", ["level-seed::"])["level-seed"] ?? $this->properties->get("level-seed", time());
+					if(!is_numeric($seed) or bccomp($seed, "9223372036854775807") > 0){
+						$seed = Utils::javaStringHash($seed);
+					}elseif(PHP_INT_SIZE === 8){
+						$seed = (int) $seed;
+					}
 					$this->generateLevel($default, $seed === 0 ? time() : $seed);
 				}
 
@@ -2024,7 +2029,7 @@ class Server{
 		}
 	}
 
-    //@Deprecated
+	//@Deprecated
 	public function transferPlayer(Player $player, $address, $port = 19132){
 		$this->logger->error("This function (transferPlayer) has been deprecated. A new method may be available soon");
 	}
