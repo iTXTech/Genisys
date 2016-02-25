@@ -29,7 +29,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 
-class EnchantTable extends Spawnable implements InventoryHolder{
+class EnchantTable extends Spawnable implements InventoryHolder, Nameable{
 	/** @var EnchantInventory */
 	protected $inventory;
 
@@ -39,7 +39,20 @@ class EnchantTable extends Spawnable implements InventoryHolder{
 	}
 
 	public function getName() : string{
-		return "Enchanting Table";
+		return $this->hasName() ? $this->namedtag->CustomName->getValue() : "Enchanting Table";
+	}
+
+	public function hasName(){
+		return isset($this->namedtag->CustomName);
+	}
+
+	public function setName($str){
+		if($str === ""){
+			unset($this->namedtag->CustomName);
+			return;
+		}
+
+		$this->namedtag->CustomName = new StringTag("CustomName", $str);
 	}
 
 	/**
@@ -50,11 +63,17 @@ class EnchantTable extends Spawnable implements InventoryHolder{
 	}
 
 	public function getSpawnCompound(){
-		return new CompoundTag("", [
+		$nbt = new CompoundTag("", [
 			new StringTag("id", Tile::ENCHANT_TABLE),
 			new IntTag("x", (int) $this->x),
 			new IntTag("y", (int) $this->y),
 			new IntTag("z", (int) $this->z)
 		]);
+
+		if($this->hasName()){
+			$nbt->CustomName = $this->namedtag->CustomName;
+		}
+
+		return $nbt;
 	}
 }
