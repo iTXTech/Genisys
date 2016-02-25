@@ -940,7 +940,7 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::SHEARS, 0));
 			self::addCreativeItem(Item::get(Item::CLOCK, 0));
 			self::addCreativeItem(Item::get(Item::COMPASS, 0));
-			self::addCreativeItem(Item::get(Item::MINECART, 0));;
+			self::addCreativeItem(Item::get(Item::MINECART, 0));
 			for($i = 0; $i <= 5; $i++){
 				self::addCreativeItem(Item::get(Item::BOAT, $i));
 			}
