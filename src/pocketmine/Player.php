@@ -1837,7 +1837,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->subtractFood(1);
 				}
 
-				if((($currentTick % 20) == 0) and $this->getHealth() < $this->getMaxHealth() && $this->getFood() >= 18 && $this->foodEnabled){
+				if((($currentTick % 40) == 0) and $this->getHealth() < $this->getMaxHealth() && $this->getFood() >= 18 && $this->foodEnabled){
 					$ev = new EntityRegainHealthEvent($this, 1, EntityRegainHealthEvent::CAUSE_EATING);
 					$this->heal(1, $ev);
 				}
