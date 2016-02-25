@@ -397,9 +397,9 @@ class CraftingManager{
 				"   "
 			))->setIngredient("I", Item::get(Item::IRON_INGOT, 0, 3)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::CLOCK, 0, 1),
-				" G",
-				"GR",
-				" G"
+				" G ",
+				"GRG",
+				" G "
 			))->setIngredient("G", Item::get(Item::GOLD_INGOT, 0, 4))->setIngredient("R", Item::get(Item::REDSTONE_DUST, 0, 1)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::COMPASS, 0, 1),
 				" I ",
