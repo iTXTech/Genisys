@@ -38,7 +38,7 @@ class Minecart extends Vehicle{
 
 		$this->timings->startTiming();
 
-		$hasUpdate = false;;
+		$hasUpdate = false;
 		//parent::onUpdate($currentTick);
 
 		if($this->isAlive()){
