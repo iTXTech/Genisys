@@ -584,12 +584,14 @@ class CraftingManager{
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::COBBLESTONE_WALL, 0, 6),
 				"PPP",
-				"PPP"
+				"PPP",
+				"   "
 			))->setIngredient("P", Item::get(Item::COBBLESTONE, 0, 6)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::COBBLESTONE_WALL, 1, 6),
 				"PPP",
-				"PPP"
+				"PPP",
+				"   "
 			))->setIngredient("P", Item::get(Item::MOSS_STONE, 0, 6)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::NETHER_BRICKS, 0, 1),
