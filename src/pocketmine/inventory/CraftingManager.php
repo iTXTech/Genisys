@@ -250,7 +250,8 @@ class CraftingManager{
 			))->setIngredient("C", Item::get(Item::COBBLESTONE, 0, 8)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::GLASS_PANE, 0, 16),
 				"GGG",
-				"GGG"
+				"GGG",
+				"   "
 			))->setIngredient("G", Item::get(Item::GLASS, 0, 6)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::LADDER, 0, 2),
 				"S S",
