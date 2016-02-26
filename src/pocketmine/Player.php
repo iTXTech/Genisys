@@ -1559,8 +1559,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$revert = false;
 
-		if(($distanceSquared / ($tickDiff ** 2)) > 200){
-			if($this->server->checkMovement) $revert = true;
+		if(($distanceSquared / ($tickDiff ** 2)) > 400){
+			$revert = true;
 		}else{
 			if($this->chunk === null or !$this->chunk->isGenerated()){
 				$chunk = $this->level->getChunk($newPos->x >> 4, $newPos->z >> 4, false);
@@ -1618,7 +1618,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$delta = pow($this->lastX - $to->x, 2) + pow($this->lastY - $to->y, 2) + pow($this->lastZ - $to->z, 2);
 		$deltaAngle = abs($this->lastYaw - $to->yaw) + abs($this->lastPitch - $to->pitch);
 
-		if(!$revert and ($delta > (1 / 16) or $deltaAngle > 10)){
+		if((!$revert and ($delta > (1 / 16) or $deltaAngle > 10)) or !$this->server->checkMovement){
 
 			$isFirst = ($this->lastX === null or $this->lastY === null or $this->lastZ === null);
 
