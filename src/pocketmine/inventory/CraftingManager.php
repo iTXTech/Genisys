@@ -111,7 +111,9 @@ class CraftingManager{
 			$this->registerFood();
 			$this->registerBrewingStand();
 			$this->registerRecipe((new ShapedRecipe(Item::get(Item::CLAY_BLOCK, 0, 1),
-				"X"
+				"XX ",
+				"XX ",
+				"   "
 			))->setIngredient("X", Item::get(Item::CLAY, 0, 4)));
 			$this->registerRecipe((new ShapedRecipe(Item::get(Item::WORKBENCH, 0, 1),
 				"XX",
@@ -250,7 +252,8 @@ class CraftingManager{
 			))->setIngredient("C", Item::get(Item::COBBLESTONE, 0, 8)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::GLASS_PANE, 0, 16),
 				"GGG",
-				"GGG"
+				"GGG",
+				"   "
 			))->setIngredient("G", Item::get(Item::GLASS, 0, 6)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::LADDER, 0, 2),
 				"S S",
@@ -264,7 +267,8 @@ class CraftingManager{
 			))->setIngredient("D", Item::get(Item::DIAMOND, 0, 3))->setIngredient("I", Item::get(Item::IRON_INGOT, 0, 6)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::TRAPDOOR, 0, 2),
 				"PPP",
-				"PPP"
+				"PPP",
+				"   "
 			))->setIngredient("P", Item::get(Item::WOODEN_PLANK, null, 6)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::WOODEN_DOOR, 0, 3),
 				"PP ",
@@ -542,7 +546,8 @@ class CraftingManager{
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::QUARTZ_BLOCK, 0, 1),
 				"XX ",
-				"XX "
+				"XX ",
+				"   "
 			))->setIngredient("X", Item::get(Item::QUARTZ, 0, 4)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BRICK_STAIRS, 0, 4),
@@ -584,12 +589,14 @@ class CraftingManager{
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::COBBLESTONE_WALL, 0, 6),
 				"PPP",
-				"PPP"
+				"PPP",
+				"   "
 			))->setIngredient("P", Item::get(Item::COBBLESTONE, 0, 6)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::COBBLESTONE_WALL, 1, 6),
 				"PPP",
-				"PPP"
+				"PPP",
+				"   "
 			))->setIngredient("P", Item::get(Item::MOSS_STONE, 0, 6)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::NETHER_BRICKS, 0, 1),
