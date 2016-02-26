@@ -4,7 +4,6 @@
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
-use pocketmine\item\Tool;
 use pocketmine\Player;
 
 class SlimeBlock extends Solid{
@@ -16,11 +15,7 @@ class SlimeBlock extends Solid{
 	}
 
 	public function getHardness() {
-		return 0.5;
-	}
-
-	public function getToolType(){
-		return Tool::TYPE_AXE;
+		return 0;
 	}
 
 	public function getName() : string{
