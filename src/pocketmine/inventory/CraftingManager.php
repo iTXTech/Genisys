@@ -603,8 +603,9 @@ class CraftingManager{
 			))->setIngredient("X", Item::get(Item::NETHER_BRICKS, 0, 6)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::QUARTZ_BLOCK, 2, 2),
-				"   ",
-				"PP "
+				"P  ",
+				"P  ",
+				"   "
 			))->setIngredient("P", Item::get(Item::QUARTZ_BLOCK, 0, 2)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SLAB, 6, 6),
