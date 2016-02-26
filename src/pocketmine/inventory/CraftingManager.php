@@ -111,7 +111,9 @@ class CraftingManager{
 			$this->registerFood();
 			$this->registerBrewingStand();
 			$this->registerRecipe((new ShapedRecipe(Item::get(Item::CLAY_BLOCK, 0, 1),
-				"X"
+				"XX ",
+				"XX ",
+				"   "
 			))->setIngredient("X", Item::get(Item::CLAY, 0, 4)));
 			$this->registerRecipe((new ShapedRecipe(Item::get(Item::WORKBENCH, 0, 1),
 				"XX",
