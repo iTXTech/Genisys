@@ -2317,8 +2317,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		switch($packet::NETWORK_ID){
 			case ProtocolInfo::REQUEST_CHUNK_RADIUS_PACKET:
-				$pk = new ChunkRadiusUpdatePacket();
-				$pk->radius = $this->server->chunkRadius;
+				$pk = new ChunkRadiusUpdatePacket();S
+				$pk->radius = $packet->radius;
 				$this->dataPacket($pk);
 				break;
 			case ProtocolInfo::PLAYER_INPUT_PACKET:

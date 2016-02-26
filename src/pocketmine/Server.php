@@ -371,7 +371,7 @@ class Server{
 	public $checkMovement = false;
 	public $keepExperience = false;
 	public $limitedCreative = true;
-	public $chunkRadius = 30;
+	//public $chunkRadius = 30;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -1651,7 +1651,7 @@ class Server{
 		$this->minecartMovingType = $this->getAdvancedProperty("server.minecart-moving-type", 0);
 		$this->checkMovement = $this->getAdvancedProperty("server.check-movement", true);
 		$this->limitedCreative = $this->getAdvancedProperty("server.limited-creative", true);
-		$this->chunkRadius = $this->getAdvancedProperty("server.chunk-radius", 30);
+		//$this->chunkRadius = $this->getAdvancedProperty("server.chunk-radius", 30);
 	}
 
 	/**

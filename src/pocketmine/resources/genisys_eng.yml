@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 12
+ version: 11
 
 level:
  #Set if turn on the weather system
@@ -69,8 +69,6 @@ server:
  check-movement: true
  #Set if enable limited creative (cannot drop item, cannot interact Chests and so on)
  limited-creative: true
- #Set chunk radius for players, default as 30
- chunk-radius: 30
 
 redstone:
  ##########################################
