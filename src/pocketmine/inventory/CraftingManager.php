@@ -446,8 +446,8 @@ class CraftingManager{
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::IRON_BARS, 0, 16),
 				"III",
 				"III",
-				"III"
-			))->setIngredient("I", Item::get(Item::IRON_INGOT, 0, 9)));
+				"   "
+			))->setIngredient("I", Item::get(Item::IRON_INGOT, 0, 6)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::GLASS_BOTTLE, 0, 3),
 				"G G",
 				" G ",
