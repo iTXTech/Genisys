@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Author: PeratX
  * Time: 2015/12/6 14:20
@@ -25,7 +26,7 @@ use pocketmine\math\Vector3;
 
 class BrewingStand extends Transparent{
 
-	protected $id = self::BREWING_STAND_BLOCK;
+	protected $id = self::BREWING_STAND;
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
@@ -72,8 +73,7 @@ class BrewingStand extends Transparent{
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
 			//TODO lock
-			if($player->isCreative()){
-				return true;
+			if($player->isCreative(){and $player->getServer()->limitedCreative				return true;
 			}
 
 			$t = $this->getLevel()->getTile($this);
