@@ -75,6 +75,10 @@ class Item extends Entity{
 			return;
 		}
 		$this->item = NBT::getItemHelper($this->namedtag->Item);
+		if($this->item->getId() <= 0 or $this->item->getId() > 255){
+			$this->close();
+			return;
+		}
 
 
 		$this->server->getPluginManager()->callEvent(new ItemSpawnEvent($this));
