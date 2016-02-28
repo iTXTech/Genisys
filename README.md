@@ -65,7 +65,6 @@
 * Better Crafting
 * Better Inventory
 * More Items
-* Supported 0.13.1 skin format
 * Hunger (Based on Katana)
 * AI (Based on MOW)
 * More commands (bancid bancidbyname banipbyname ms extractplugin makeplugin
@@ -76,16 +75,15 @@
 * Dispenser and Dropper
 * Colorful Sheep
 * Different types of Boat, Villager and Rabbit
+* Enchantment
+* Brewing
 * NOTICE: Please edit **genisys.yml** to enable all the features, including Redstone, MobAI, Nether and so on.
 
 ###To-Do List
-* Boat and Minecart (Improve)
-* Nether Generator (Improve)
 * Potions (Improve)
 * Redstone (Improve)
 * Anvil (Improve)
 * Fishing
-* Enchantment
 * New AI for all creatures
 * LevelDB support for Windows
 
@@ -151,7 +149,6 @@ Port: **19132**
 * 更好的合成
 * 更好的物品栏
 * 更多的物品
-* 支持 0.13.1 的皮肤格式
 * 饥饿系统（基于 Katana 的代码）
 * 生物 AI（基于 MOW 的代码）
 * 更多的指令（bancid（按设备编号或玩家 ID），banip（按 IP 或玩家 ID），ms，devTools 相关指令（打包与解包插件），pardoncid，weather，loadplugin，lvdat）
@@ -161,16 +158,15 @@ Port: **19132**
 * 发射器和投掷器
 * 五彩缤纷的羊
 * 不同种类的船，村民和兔子
+* 原版附魔
+* 酿造
 * 注意: 请编辑 __**genisys.yml**__ 来启用红石、生物AI和地狱等功能。
 
 ###计划表
-* 完善 船 与 矿车
-* 完善 下界地图生成器
 * 完善 药水
 * 完善 红石系统
 * 完善 铁毡
 * 加入 钓鱼
-* 加入 附魔
 * 用于所有生物的新 AI
 * Windows 的 LevelDB 支持
 
