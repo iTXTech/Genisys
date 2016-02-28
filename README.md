@@ -22,7 +22,6 @@
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 * [**Click Here to get php7**](https://github.com/iTXTech/PHP-Genisys/)
-* [**Click Here to read dev docs**](http://docs.mcper.cn/en-US/)
 * [**Click Here to get Genisys Installer for Windows**](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
 * Be free to create a _Pull Request_ or open an _Issue_. English and Chinese are both recommended. (Please do your best to use English because it is easy to communicate with worldwide.)
 
@@ -45,7 +44,7 @@
 [**Travis-CI**](https://travis-ci.org/iTXTech/Genisys)
 
 ###Official Development Documentation
-[**Click Here to go to Genisys Official Development Documentation Page**](http://mcper.cn/Genisys-Docs/)
+[**Click Here to go to Genisys Official Development Documentation Page**](http://docs.mcper.cn/en-US/)
 
 ###Features
 * Performance optimization (Let 100+ players join in a server)
@@ -107,7 +106,6 @@ Port: **19132**
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
 * 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
 * [**点击获取 php7**](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
-* [**点击进入开发者文档**](http://docs.mcper.cn/en-US/)
 * [**点击获取Genisys Installer for Windows**](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
 * 欢迎创建 Pull Request。请使用中文或者英文进行交流（但为了交流方便，请尽量使用英文进行交流）。
 
