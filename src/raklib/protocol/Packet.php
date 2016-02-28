@@ -77,7 +77,7 @@ abstract class Packet{
 		$version = $this->getByte();
 		if($version === 4){
 			$addr = ((~$this->getByte()) & 0xff) .".". ((~$this->getByte()) & 0xff) .".". ((~$this->getByte()) & 0xff) .".". ((~$this->getByte()) & 0xff);
-			$port = $this->getShort();
+			$port = $this->getShort(false);
 		}else{
 			//TODO: IPv6
 		}
