@@ -17,7 +17,7 @@
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 * [Download PHP7 for Genisys](https://github.com/iTXTech/PHP-Genisys/)
 * [Download Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
-* Be free to create a _Pull Request_ or open an _Issue_. English and Chinese are both welcome. Use English to communicate with more people.
+* Be free to create a _Pull Request_ or open an _Issue_. English and Chinese are both welcomed. Use English to communicate with more people.
 
 ### Acknowledgements
 * Some features are merged from **@boybook**'s **FCCore**
@@ -56,7 +56,7 @@
 * Hunger (Based on Katana)
 * AI (Based on MOW)
 * More commands (bancid bancidbyname banipbyname ms extractplugin makeplugin
-  pardoncid weather extractphar loadplugin lvdat biome)
+  pardoncid weather extractphar loadplugin lvdat biome xp setblock fill summon)
 * With FolderPluginLoader
 * Monster Spawner
 * Item Frame
@@ -126,7 +126,7 @@ Port: 19132
 * 更多的物品
 * 饥饿系统（基于 Katana 的代码）
 * 生物 AI（基于 MOW 的代码）
-* 更多的指令（bancid（按设备编号或玩家 ID），banip（按 IP 或玩家 ID），ms，devTools 相关指令（打包与解包插件），pardoncid，weather，loadplugin，lvdat）
+* 更多的指令（bancid（按设备编号或玩家 ID），banip（按 IP 或玩家 ID），ms，devTools 相关指令（打包与解包插件），pardoncid，weather，loadplugin，lvdat，xp，setblock，fill，summon）
 * 文件夹插件加载器
 * 刷怪箱
 * 物品展示柜
