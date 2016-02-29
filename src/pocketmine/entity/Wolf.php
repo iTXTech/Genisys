@@ -8,6 +8,8 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
@@ -38,7 +40,23 @@ class Wolf extends Animal{
 		$pk->pitch = $this->pitch;
 		$pk->metadata = $this->dataProperties;
 		$player->dataPacket($pk);
-
+		
+		
 		parent::spawnTo($player);
+	}
+	
+	/**
+	 * Sets the Wolf profession
+	 *
+	 * @param $profession
+	 */
+	public function setProfession($profession){
+		$this->namedtag->Profession = new IntTag("Profession", $profession);
+	}
+	public function getProfession(){
+		return $this->namedtag["Profession"];
+	}
+	public function isBaby(){
+		return $this->getDataFlag(self::DATA_AGEABLE_FLAGS, self::DATA_FLAG_BABY);
 	}
 }
