@@ -1,0 +1,23 @@
+image: php:7-zts
+
+stages:
+ - test
+
+before_script:
+ - mkdir plugins
+ - apt-get update -qq && apt-get install -y -qq libyaml-dev
+ - docker-php-ext-install sockets
+ - pecl install channel://pecl.php.net/pthreads-3.1.6 channel://pecl.php.net/weakref-0.3.2 channel://pecl.php.net/yaml-2.0.0RC7
+ - docker-php-ext-enable pthreads weakref yaml
+ - echo "phar.readonly = off" > /usr/local/etc/php/conf.d/phar.ini
+
+package:
+  stage: test
+  script:
+   - php tests/Travis.php
+  only:
+   - master
+  artifacts:
+    paths:
+     - plugins/PocketMine-iTX/Genisys*.phar
+

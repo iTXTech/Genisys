@@ -80,6 +80,7 @@ class ItemFrame extends Spawnable{
 	}
 
 	public function getSpawnCompound(){
+		if(!isset($this->namedtag->Item)) $this->setItem(Item::get(Item::AIR), false);
 		/** @var CompoundTag $nbtItem */
 		$nbtItem = clone $this->namedtag->Item;
 		$nbtItem->setName("Item");

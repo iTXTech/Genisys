@@ -32,6 +32,7 @@ class CommandReader extends Thread{
 	public function __construct(){
 		$this->buffer = new \Threaded;
 		$this->start();
+		//$this->start(PTHREADS_INHERIT_NONE);//May cause segfault
 	}
 
 	public function shutdown(){
@@ -40,7 +41,13 @@ class CommandReader extends Thread{
 
 	private function readLine(){
 		if(!$this->readline){
-			return trim(fgets(fopen("php://stdin", "r")));
+			global $stdin;
+
+			if(!is_resource($stdin)){
+				return "";
+			}
+
+			return trim(fgets($stdin));
 		}else{
 			$line = trim(readline("> "));
 			if($line != ""){
@@ -73,6 +80,9 @@ class CommandReader extends Thread{
 		if(extension_loaded("readline") and !isset($opts["disable-readline"])){
 			$this->readline = true;
 		}else{
+			global $stdin;
+			$stdin = fopen("php://stdin", "r");
+			stream_set_blocking($stdin, 0);
 			$this->readline = false;
 		}
 

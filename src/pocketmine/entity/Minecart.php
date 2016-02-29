@@ -1,4 +1,8 @@
 <?php
+/**
+ * Author: PeratX
+ * OpenGenisys Project
+ */
 
 namespace pocketmine\entity;
 
@@ -27,6 +31,10 @@ class Minecart extends Vehicle{
 		$this->setMaxHealth(1);
 		$this->setHealth($this->getMaxHealth());
 		parent::initEntity();
+	}
+
+	public function getName(){
+		return "Minecart";
 	}
 
 	public function onUpdate($currentTick){
@@ -162,7 +170,7 @@ class Minecart extends Vehicle{
 		parent::spawnTo($player);
 	}
 
-	public function attack($damage, EntityDamageEvent $source){
+	/*public function attack($damage, EntityDamageEvent $source){
 		parent::attack($damage, $source);
 
 		if(!$source->isCancelled()){
@@ -178,5 +186,5 @@ class Minecart extends Vehicle{
 	public function getSaveId(){
 		$class = new \ReflectionClass(static::class);
 		return $class->getShortName();
-	}
+	}*/
 }
