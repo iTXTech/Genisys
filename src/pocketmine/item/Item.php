@@ -1163,7 +1163,7 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 				$item = Item::fromString($id);
 				$item->setCount($count);
 				$item->setDamage($meta);
-				return false;
+				return $item;
 			}
 			$class = self::$list[$id];
 			if($class === null){
