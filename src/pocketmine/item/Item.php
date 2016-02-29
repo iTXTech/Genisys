@@ -1159,7 +1159,12 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 
 	public static function get($id, $meta = 0, int $count = 1, $tags = "") : Item{
 		try{
-			if(!is_numeric($id)) return Item::get(Item::AIR);
+			if(is_string($id)){
+				$item = Item::fromString($id);
+				$item->setCount($count);
+				$item->setDamage($meta);
+				return false;
+			}
 			$class = self::$list[$id];
 			if($class === null){
 				return (new Item($id, $meta, $count))->setCompoundTag($tags);
