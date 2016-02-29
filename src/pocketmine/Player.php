@@ -3219,10 +3219,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					break;
 				}
 				if($this->isCreative() and $this->server->limitedCreative) break;
-				if($this->isSpectator()){
-					$this->inventory->sendContents($this);
-					break;
-				}
 				$dropItem = $packet;
 				$item = $this->inventory->contains($dropItem->item) ? $dropItem->item : $this->inventory->getItemInHand();
 				$ev = new PlayerDropItemEvent($this, $item);
