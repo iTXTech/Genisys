@@ -185,6 +185,11 @@ class CraftingManager{
 				"P P",
 				"PPP"
 			))->setIngredient("P", Item::get(Item::WOODEN_PLANK, null, 8)));
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::ENCHANTMENT_TABLE, 0, 1),
+				" B ",
+				"DOD",
+				"OOO"
+			))->setIngredient("D", Item::get(Item::DIAMOND, 0, 2))->setIngredient("O", Item::get(Item::OBSIDIAN, 0, 4))->setIngredient("B", Item::get(Item::BOOK, 0, 1)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::FENCE, 0, 3),
 				"PSP",
 				"PSP",
