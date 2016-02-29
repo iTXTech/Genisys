@@ -745,8 +745,6 @@ class Item{
 			self::addCreativeItem(Item::get(Item::JUNGLE_WOODEN_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::ACACIA_WOODEN_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::DARK_OAK_WOODEN_STAIRS, 0));
-
-self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::BRICK_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::SANDSTONE_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::STONE_BRICK_STAIRS, 0));
@@ -781,7 +779,7 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::PACKED_ICE, 0));
 			self::addCreativeItem(Item::get(Item::SNOW_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::END_STONE, 0));
-			//Decoration
+			//Decoration items and block in creative mode 
 			self::addCreativeItem(Item::get(Item::COBBLESTONE_WALL, 0));
 			self::addCreativeItem(Item::get(Item::COBBLESTONE_WALL, 1));
 			self::addCreativeItem(Item::get(Item::WATER_LILY, 0));
@@ -832,6 +830,7 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::TRAPPED_CHEST, 0));
 			self::addCreativeItem(Item::get(Item::FURNACE, 0));
 			self::addCreativeItem(Item::get(Item::BREWING_STAND_BLOCK, 0));
+			// self::addCreativeItem(Item::get(Item::CAULDRON, 0));
 			self::addCreativeItem(Item::get(Item::NOTEBLOCK, 0));
 			self::addCreativeItem(Item::get(Item::END_PORTAL, 0));
 			self::addCreativeItem(Item::get(Item::ANVIL, 0));
@@ -889,7 +888,8 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::SIGN, 0));
 			self::addCreativeItem(Item::get(Item::FLOWER_POT, 0));
 			self::addCreativeItem(Item::get(Item::MONSTER_SPAWNER, 0));
-			self::addCreativeItem(Item::get(Item::ENCHANTING_TABLE, 0));
+			self::addCreativeItem(Item::get(Item::ENCHANTING_TABLE, 0))
+			self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));;
 			self::addCreativeItem(Item::get(Item::WOOL, 0));
 			self::addCreativeItem(Item::get(Item::WOOL, 8));
 			self::addCreativeItem(Item::get(Item::WOOL, 7));
@@ -924,9 +924,6 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::CARPET, 6));
 			//Tools
 			self::addCreativeItem(Item::get(Item::RAIL, 0));
-			self::addCreativeItem(Item::get(Item::ACTIVATOR_RAIL, 0));
-			self::addCreativeItem(Item::get(Item::DETECTOR_RAIL, 0));
-			self::addCreativeItem(Item::get(Item::ACTIVATOR_RAIL, 0));
 			self::addCreativeItem(Item::get(Item::TORCH, 0));
 			self::addCreativeItem(Item::get(Item::BUCKET, 0));
 			self::addCreativeItem(Item::get(Item::BUCKET, 1));
@@ -941,6 +938,10 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::CLOCK, 0));
 			self::addCreativeItem(Item::get(Item::COMPASS, 0));
 			self::addCreativeItem(Item::get(Item::MINECART, 0));
+			// self::addCreativeItem(Item::get(Item::MINECART_CHEST, 0));
+			// self::addCreativeItem(Item::get(Item::MINECART_HOPPER, 0));
+			// self::addCreativeItem(Item::get(Item::MINECART_TNT, 0));
+			
 			for($i = 0; $i <= 5; $i++){
 				self::addCreativeItem(Item::get(Item::BOAT, $i));
 			}
@@ -1006,8 +1007,11 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::STONE_BUTTON, 0));
 			self::addCreativeItem(Item::get(Item::DAYLIGHT_SENSOR, 0));
 			self::addCreativeItem(Item::get(Item::TRIPWIRE_HOOK, 0));
+			// self::addCreativeItem(Item::get(Item::REPEATER, 0));
+			// self::addCreativeItem(Item::get(Item::COMPARATOR, 0));
 			self::addCreativeItem(Item::get(Item::DROPPER, 3));
 			self::addCreativeItem(Item::get(Item::DISPENSER, 3));
+			// self::addCreativeItem(Item::get(Item::HOPPER, 0));
 			self::addCreativeItem(Item::get(Item::SNOWBALL));
 			//Seeds
 			self::addCreativeItem(Item::get(Item::COAL, 0));
