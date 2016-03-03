@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Author: PeratX
+ * OpenGenisys Project
+ */
+
 namespace pocketmine\entity;
 
 

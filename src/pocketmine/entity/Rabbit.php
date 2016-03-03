@@ -1,11 +1,6 @@
 <?php
 /**
  * Author: PeratX
- * QQ: 1215714524
- * Time: 2016/2/16 21:27
-
-
- *
  * OpenGenisys Project
  */
 

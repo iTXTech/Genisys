@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Author: PeratX
+ * OpenGenisys Project
+ */
+
 namespace pocketmine\entity;
 
 use pocketmine\level\format\FullChunk;
@@ -29,7 +34,9 @@ class ThrownPotion extends Projectile{
 
 		parent::__construct($chunk, $nbt, $shootingEntity);
 
-		$this->setDataProperty(self::DATA_POTION_ID, self::DATA_TYPE_SHORT, Potion::getEffectId($this->getPotionId()));
+		$effect = Effect::getEffect(Potion::getEffectId($this->getPotionId()));
+		$this->setDataProperty(self::DATA_POTION_ID, self::DATA_TYPE_SHORT,
+			(($effect->getId()) << 16) | (($effect->getAmplifier()) << 8) | ($effect->getDuration()));
 	}
 	
 	public function getPotionId() : int{

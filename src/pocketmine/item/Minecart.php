@@ -24,7 +24,7 @@ class Minecart extends Item{
 		$minecart = new MinecartEntity($player->getLevel()->getChunk($block->getX() >> 4, $block->getZ() >> 4), new CompoundTag("", [
 			"Pos" => new EnumTag("Pos", [
 				new DoubleTag("", $block->getX()),
-				new DoubleTag("", $block->getY()),
+				new DoubleTag("", $block->getY() + 0.8),
 				new DoubleTag("", $block->getZ())
 			]),
 			"Motion" => new EnumTag("Motion", [

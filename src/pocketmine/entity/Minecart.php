@@ -18,6 +18,11 @@ use pocketmine\math\Math;
 class Minecart extends Vehicle{
 	const NETWORK_ID = 84;
 
+	const TYPE_NORMAL = 1;
+	const TYPE_CHEST = 2;
+	const TYPE_HOPPER = 3;
+	const TYPE_TNT = 4;
+
 	public $height = 0.9;
 	public $width = 1.1;
 
@@ -33,8 +38,12 @@ class Minecart extends Vehicle{
 		parent::initEntity();
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Minecart";
+	}
+
+	public function getType() : int{
+		return self::TYPE_NORMAL;
 	}
 
 	public function onUpdate($currentTick){

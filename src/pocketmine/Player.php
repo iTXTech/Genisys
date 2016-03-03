@@ -3054,18 +3054,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 				$cancelled = false;
 
-				if($packet->action === InteractPacket::ACTION_RIGHT_CLICK){
-					// TODO handle
-					break;
-				}
-
 				if($target instanceof Player and $this->server->getConfigBoolean("pvp", true) === false
 
 				){
 					$cancelled = true;
 				}
 
-				if($target instanceof Boat or $target instanceof Minecart){
+				if($target instanceof Boat or ($target instanceof Minecart and $target->getType() == Minecart::TYPE_NORMAL)){
 					if($packet->action === 1){
 						$this->linkEntity($target);
 					}elseif($packet->action === 2){
@@ -3077,6 +3072,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->setLinked(0, $target);
 					}
 					return;
+				}
+
+				if($packet->action === InteractPacket::ACTION_RIGHT_CLICK){
+					// TODO handle
+					break;
 				}
 
 				if($target instanceof Entity and $this->getGamemode() !== Player::VIEW and $this->isAlive() and $target->isAlive()){

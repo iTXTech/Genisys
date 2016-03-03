@@ -11,8 +11,12 @@ use pocketmine\Player;
 class MinecartChest extends Minecart{
 	const NETWORK_ID = 98;
 
-	public function getName(){
+	public function getName() : string{
 		return "Minecart Chest";
+	}
+
+	public function getType() : int{
+		return self::TYPE_CHEST;
 	}
 
 	public function spawnTo(Player $player){
