@@ -34,9 +34,7 @@ class ThrownPotion extends Projectile{
 
 		parent::__construct($chunk, $nbt, $shootingEntity);
 
-		$effect = Effect::getEffect(Potion::getEffectId($this->getPotionId()));
-		$this->setDataProperty(self::DATA_POTION_ID, self::DATA_TYPE_SHORT,
-			(($effect->getId()) << 16) | (($effect->getAmplifier()) << 8) | ($effect->getDuration()));
+		$this->setDataProperty(self::DATA_POTION_ID, self::DATA_TYPE_SHORT, $this->getPotionId());
 	}
 	
 	public function getPotionId() : int{

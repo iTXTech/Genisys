@@ -340,7 +340,8 @@ class Server{
 	public $netherEnabled = false;
 	public $netherName = "nether";
 	public $netherLevel = null;
-	public $weatherChangeTime = 12000;
+	public $weatherRandomDurationMin = 6000;
+	public $weatherRandomDurationMax = 12000;
 	public $lookup = [];
 	public $hungerHealth = 10;
 	public $lightningTime = 100;
@@ -351,7 +352,6 @@ class Server{
 	public $aiHolder = null;
 	public $inventoryNum = 36;
 	public $hungerTimer = 80;
-	public $weatherLastTime = 1200;
 	public $version;
 	public $allowSnowGolem;
 	public $allowIronGolem;
@@ -1605,7 +1605,8 @@ class Server{
 		$this->keepExperience = $this->getAdvancedProperty("player.keep-experience", false);
 		$this->netherEnabled = $this->getAdvancedProperty("nether.allow-nether", false);
 		$this->netherName = $this->getAdvancedProperty("nether.level-name", "nether");
-		$this->weatherChangeTime = $this->getAdvancedProperty("level.weather-change-time", 12000);
+		$this->weatherRandomDurationMin = $this->getAdvancedProperty("level.weather-random-duration-min", 6000);
+		$this->weatherRandomDurationMax = $this->getAdvancedProperty("level.weather-random-duration-max", 12000);
 		$this->hungerHealth = $this->getAdvancedProperty("player.hunger-health", 10);
 		$this->lightningTime = $this->getAdvancedProperty("level.lightning-time", 100);
 		$this->expWriteAhead = $this->getAdvancedProperty("server.experience-cache", 200);

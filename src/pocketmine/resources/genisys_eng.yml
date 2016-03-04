@@ -7,10 +7,9 @@ config:
 level:
  #Set if turn on the weather system
  weather: true
- #Weather switch interval
- weather-change-time: 6000
- #Weather Duration，default as 1 min
- weather-last-time: 1200
+ #Weather random duration
+ weather-random-duration-min: 6000
+ weather-random-duration-max: 12000
  #Random lightning interval，default as 10s
  lightning-time: 200
  
