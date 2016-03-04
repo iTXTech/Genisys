@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 11
+ version: 12
 
 level:
  #Set if turn on the weather system
@@ -46,7 +46,7 @@ server:
  #Choose if spawning snow golem is allowed
  allow-snow-golem: false
  #Choose if anvil and enchanttable are allowed
- allow-anvilandenchanttable: false
+ allow-anvilandenchanttable: true
  #Choose if disable server.log
  disable-log: false
  #Choose if enable auto anti fly
@@ -69,6 +69,10 @@ server:
  check-movement: true
  #Set if enable limited creative (cannot drop item, cannot interact Chests and so on)
  limited-creative: true
+ #Set if add DestroyBlockParticle
+ destroy-block-particle: true
+ #Set if enable splash potion
+ allow-splash-potion: true
 
 redstone:
  ##########################################

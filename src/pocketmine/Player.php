@@ -2748,7 +2748,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}
 					}
 
-					if($item->getId() == Item::SPLASH_POTION){
+					if($item->getId() == Item::SPLASH_POTION and $this->server->allowSplashPotion){
 						$nbt = new CompoundTag("", [
 							"Pos" => new EnumTag("Pos", [
 								new DoubleTag("", $this->x),
@@ -3017,7 +3017,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 				$oldItem = clone $item;
 
-				if($this->canInteract($vector->add(0.5, 0.5, 0.5), $this->isCreative() ? 13 : 6) and $this->level->useBreakOn($vector, $item, $this, true)){
+				if($this->canInteract($vector->add(0.5, 0.5, 0.5), $this->isCreative() ? 13 : 6) and $this->level->useBreakOn($vector, $item, $this, $this->server->destroyBlockParticle)){
 					if($this->isSurvival()){
 						if(!$item->equals($oldItem) or $item->getCount() !== $oldItem->getCount()){
 							$this->inventory->setItemInHand($item);

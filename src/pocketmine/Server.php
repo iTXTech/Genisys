@@ -360,7 +360,7 @@ class Server{
 	public $dserverPlayers = 0;
 	public $dserverAllPlayers = 0;
 	public $redstoneEnabled = false;
-	public $allowFrequencyPulse = false;
+	public $allowFrequencyPulse = true;
 	public $anviletEnabled = false;
 	public $pulseFrequency = 20;
 	public $playerMsgType = self::PLAYER_MSG_TYPE_MESSAGE;
@@ -375,6 +375,8 @@ class Server{
 	public $keepExperience = false;
 	public $limitedCreative = true;
 	//public $chunkRadius = 30;
+	public $destroyBlockParticle = true;
+	public $allowSplashPotion = true;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -1645,7 +1647,7 @@ class Server{
 		$this->redstoneEnabled = $this->getAdvancedProperty("redstone.enable", false);
 		$this->allowFrequencyPulse = $this->getAdvancedProperty("redstone.allow-frequency-pulse", false);
 		$this->pulseFrequency = $this->getAdvancedProperty("redstone.pulse-frequency", 20);
-		$this->anviletEnabled = $this->getAdvancedProperty("server.allow-anvilandenchanttable", false);
+		$this->anviletEnabled = $this->getAdvancedProperty("server.allow-anvilandenchanttable", true);
 		$this->getLogger()->setWrite(!$this->getAdvancedProperty("server.disable-log", false));
 		$this->antiFly = $this->getAdvancedProperty("server.anti-fly", true);
 		$this->asyncChunkRequest = $this->getAdvancedProperty("server.async-chunk-request", true);
@@ -1655,6 +1657,8 @@ class Server{
 		$this->checkMovement = $this->getAdvancedProperty("server.check-movement", true);
 		$this->limitedCreative = $this->getAdvancedProperty("server.limited-creative", true);
 		//$this->chunkRadius = $this->getAdvancedProperty("server.chunk-radius", 30);
+		$this->destroyBlockParticle = $this->getAdvancedProperty("server.destroy-block-particle", true);
+		$this->allowSplashPotion = $this->getAdvancedProperty("server.allow-splash-potion", true);
 	}
 
 	/**
