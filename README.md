@@ -7,8 +7,8 @@
 [![Jenkins Build Status](http://jenkins.mcper.cn/buildStatus/icon?job=Genisys-master)](http://jenkins.mcper.cn/job/Genisys-master/)
 [![Travis-CI Build Status](https://travis-ci.org/iTXTech/Genisys.svg?branch=master)](https://travis-ci.org/iTXTech/Genisys)
 
-### GitLab
-[Download](https://gitlab.com/itxtech/Genisys) Genisys source code and prebuilt packages from GitLab.
+### Jenkins
+[Download](http://jenkins.mcper.cn/job/Genisys-master/) Genisys source code and prebuilt packages from Jenkins CI.
 
 ## English Version
 
