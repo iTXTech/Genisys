@@ -8,7 +8,7 @@
 [![Travis-CI Build Status](https://travis-ci.org/iTXTech/Genisys.svg?branch=master)](https://travis-ci.org/iTXTech/Genisys)
 
 ### Jenkins
-[Download](http://jenkins.mcper.cn/job/Genisys-master/) Genisys source code and prebuilt packages from Jenkins CI.
+[Download](http://jenkins.mcper.cn/job/Genisys-master/) Genisys phar files from Jenkins CI.
 
 ## English Version
 
