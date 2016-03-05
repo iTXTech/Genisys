@@ -74,7 +74,7 @@ class GamemodeCommand extends VanillaCommand{
 		}
 
 		if($target->setGamemode($gameMode) == false){
-			$sender->sendMessage("Game mode change for " . $target->getName() . " failed!");
+			$sender->sendMessage(TextFormat::RED . "Game mode change for " . $target->getName() . " failed!");
 		}else{
 			if($target === $sender){
 				Command::broadcastCommandMessage($sender, new TranslationContainer("commands.gamemode.success.self", [Server::getGamemodeString($gameMode)]));
