@@ -426,6 +426,13 @@ class Level implements ChunkManager, Metadatable{
 		$this->registerGenerator();
 	}
 
+	public function getWaterHeight() : int{
+		if($this->generatorInstance instanceof Generator){
+			return $this->generatorInstance->getWaterHeight();
+		}
+		return 0;
+	}
+
 	public function registerGenerator(){
 		$size = $this->server->getScheduler()->getAsyncTaskPoolSize();
 		for($i = 0; $i < $size; ++$i){

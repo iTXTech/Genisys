@@ -39,8 +39,6 @@ use pocketmine\block\Stone;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\biome\Biome;
 use pocketmine\level\generator\biome\BiomeSelector;
-use pocketmine\level\generator\GenerationChunkManager;
-use pocketmine\level\generator\GenerationManager;
 use pocketmine\level\generator\Generator;
 use pocketmine\level\generator\noise\Perlin;
 use pocketmine\level\generator\noise\Simplex;
@@ -103,6 +101,10 @@ class Normal extends Generator{
 
 	public function getName() : string{
 		return self::NAME;
+	}
+
+	public function getWaterHeight() : int{
+		return $this->waterHeight;
 	}
 
 	public function getSettings(){

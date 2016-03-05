@@ -89,8 +89,12 @@ class Nether extends Generator{
 		}
 	}
 
-	public function getName(){
-		return "normal";
+	public function getName() : string{
+		return "Nether";
+	}
+
+	public function getWaterHeight() : int{
+		return $this->waterHeight;
 	}
 
 	public function getSettings(){
