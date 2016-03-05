@@ -60,43 +60,7 @@ class Potion extends Item{
 	}
 
 	public static function getColor(int $meta){
-		switch($meta){
-			case self::INVISIBILITY:
-			case self::INVISIBILITY_T:
-				return (Effect::getEffect(Effect::INVISIBILITY)->getColor());
-			case self::LEAPING:
-			case self::LEAPING_T:
-			case self::LEAPING_TWO:
-				return (Effect::getEffect(Effect::JUMP)->getColor());
-			case self::FIRE_RESISTANCE:
-			case self::FIRE_RESISTANCE_T:
-				return (Effect::getEffect(Effect::FIRE_RESISTANCE)->getColor());
-			case self::SPEED:
-			case self::SPEED_T:
-			case self::SPEED_TWO:
-				return (Effect::getEffect(Effect::SPEED)->getColor());
-			case self::SLOWNESS:
-			case self::SLOWNESS_T:
-				return (Effect::getEffect(Effect::SLOWNESS)->getColor());
-			case self::WATER_BREATHING:
-			case self::WATER_BREATHING_T:
-				return (Effect::getEffect(Effect::WATER_BREATHING)->getColor());
-			case self::HARMING:
-			case self::HARMING_TWO:
-				return (Effect::getEffect(Effect::HARMING)->getColor());
-			case self::POISON:
-			case self::POISON_T:
-			case self::POISON_TWO:
-				return (Effect::getEffect(Effect::POISON)->getColor());
-			case self::HEALING:
-			case self::HEALING_TWO:
-				return (Effect::getEffect(Effect::HEALING)->getColor());
-			case self::NIGHT_VISION:
-			case self::NIGHT_VISION_T:
-				return (Effect::getEffect(Effect::NIGHT_VISION)->getColor());
-			default:
-				return (Effect::getEffect(Effect::WATER_BREATHING)->getColor());
-		}
+		return Effect::getEffect(self::getEffectId($meta))->getColor();
 	}
 
 	public static function getEffectId(int $meta) : int{
@@ -134,6 +98,10 @@ class Potion extends Item{
 			case self::NIGHT_VISION:
 			case self::NIGHT_VISION_T:
 				return Effect::NIGHT_VISION;
+			case self::REGENERATION:
+			case self::REGENERATION_T:
+			case self::REGENERATION_TWO:
+				return Effect::REGENERATION;
 			default:
 				return Effect::WATER_BREATHING;
 		}
