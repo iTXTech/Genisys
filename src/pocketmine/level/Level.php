@@ -2369,10 +2369,18 @@ class Level implements ChunkManager, Metadatable{
 		}
 	}
 
-	public function addwLighting($x, $y, $z, Player $p){
+	/**
+	 * Directly send a lightning to a player
+	 *
+	 * @param int    $x
+	 * @param int    $y
+	 * @param int    $z
+	 * @param Player $p
+	 */
+	public function sendLighting(int $x, int $y, int $z, Player $p){
 		$pk = new AddEntityPacket();
-		$pk->type = 93;
-		$pk->eid = 93;
+		$pk->type = Lightning::NETWORK_ID;
+		$pk->eid = mt_rand(10000000, 100000000);
 		$pk->x = $x;
 		$pk->y = $y;
 		$pk->z = $z;
@@ -2403,6 +2411,13 @@ class Level implements ChunkManager, Metadatable{
 		$lightning = new Lightning($chunk, $nbt);
 		$lightning->spawnToAll();
 		$this->server->getScheduler()->scheduleDelayedTask(new CallbackTask([$lightning, "close"]), $autoRemoveTime * 20);
+
+		$entities = $this->getChunkEntities($chunk->getX(), $chunk->getZ());
+		foreach($entities as $entity){
+			if($entity->distance($pos) <= 1){
+				//TODO: Process
+			}
+		}
 	}
 
 	public function addExperienceOrb(Vector3 $pos, $exp = 2){

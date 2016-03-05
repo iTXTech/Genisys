@@ -66,7 +66,7 @@ class Weather{
 					$x = $p->getX() + rand(-100, 100);
 					$y = $p->getY() + rand(20, 50);
 					$z = $p->getZ() + rand(-100, 100);
-					$this->level->addwLighting($x, $y, $z, $p);
+					$this->level->sendLighting($x, $y, $z, $p);
 				}
 			}
 		}
