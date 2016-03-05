@@ -33,7 +33,7 @@ You can get prebuilt phar from [Jenkins](http://jenkins.mcper.cn/job/Genisys-mas
 * Our leaders are **@ishitatsuyuki** and **@jasonczc**
 
 ### License
-Most codes are made by PocketMine team and licensed under LGPL. Some AI is proprietary, copy is prohibited.
+Most codes are made by PocketMine team and licensed under GPLv3. Some AI is proprietary, copy is prohibited.
 
 ### Official Development Documentation
 [Genisys Official Development Documentation Page](http://docs.mcper.cn/en-US/)
