@@ -23,6 +23,7 @@ namespace pocketmine\block;
 
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
+use pocketmine\level\sound\TNTPrimeSound;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
@@ -76,7 +77,7 @@ class TNT extends Solid{
 			]));
 
 			$tnt->spawnToAll();
-
+			$this->level->addSound(new TNTPrimeSound($this));
 			return true;
 		}
 
