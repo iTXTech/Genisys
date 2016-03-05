@@ -9,18 +9,42 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
 class Creeper extends Monster{
 	const NETWORK_ID = 33;
 
+	const DATA_SWELL_DIRECTION = 16;
+	const DATA_SWELL = 17;
+	const DATA_SWELL_OLD = 18;
+	const DATA_POWERED = 19;
+
 	public $dropExp = [5, 5];
 	
 	public function getName() : string{
 		return "Creeper";
 	}
-	
+
+	public function initEntity(){
+		parent::initEntity();
+
+		if(!isset($this->namedtag->powered)){
+			$this->setPowered(false);
+		}
+		$this->setDataProperty(self::DATA_POWERED, self::DATA_TYPE_BYTE, $this->isPowered() ? 1 : 0);
+	}
+
+	public function setPowered(bool $powered){
+		$this->namedtag->powered = new ByteTag("powered", $powered ? 1 : 0);
+		$this->setDataProperty(self::DATA_POWERED, self::DATA_TYPE_BYTE, $powered ? 1 : 0);
+	}
+
+	public function isPowered() : bool{
+		return $this->namedtag["powered"] == 0 ? false : true;
+	}
+
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
