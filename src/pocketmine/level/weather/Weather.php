@@ -38,22 +38,24 @@ class Weather{
 			//0晴天1下雨2雷雨3阴天雷
 			if($this->weatherNow == self::SUNNY){
 				$weather = $this->wea[mt_rand(0, count($this->wea) - 1)];
-				$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $weather));
+				$duration = mt_rand(min($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax), max($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax));;
+				$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $weather, $duration));
 				if(!$ev->isCancelled()){
 					$this->weatherNow = $ev->getWeather();
 					$this->strength1 = mt_rand(90000, 110000);
 					$this->strength2 = mt_rand(30000, 40000);
-					$this->duration = mt_rand(min($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax), max($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax));
+					$this->duration = $ev->getDuration();
 					$this->changeWeather($this->weatherNow, $this->strength1, $this->strength2);
 				}
 			}else{
 				$weather = self::SUNNY;
-				$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $weather));
+				$duration = mt_rand(min($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax), max($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax));
+				$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $weather, $duration));
 				if(!$ev->isCancelled()){
 					$this->weatherNow = $ev->getWeather();
 					$this->strength1 = 0;
 					$this->strength2 = 0;
-					$this->duration = mt_rand(min($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax), max($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax));
+					$this->duration = $ev->getDuration();
 					$this->changeWeather($this->weatherNow, $this->strength1, $this->strength2);
 				}
 			}
@@ -70,12 +72,15 @@ class Weather{
 		}
 	}
 
-	public function setWeather(int $wea, int $duration = 1200){
-		$this->weatherNow = $wea;
-		$this->strength1 = mt_rand(90000, 110000);
-		$this->strength2 = mt_rand(30000, 40000);
-		$this->duration = $duration;
-		$this->changeWeather($wea, $this->strength1, $this->strength2);
+	public function setWeather(int $wea, int $duration = 12000){
+		$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $wea, $duration));
+		if(!$ev->isCancelled()){
+			$this->weatherNow = $ev->getWeather();;
+			$this->strength1 = mt_rand(90000, 110000);
+			$this->strength2 = mt_rand(30000, 40000);
+			$this->duration = $ev->getDuration();
+			$this->changeWeather($wea, $this->strength1, $this->strength2);
+		}
 	}
 
 	public function getWeather() : int{
