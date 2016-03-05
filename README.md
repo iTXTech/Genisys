@@ -7,17 +7,17 @@
 [![Jenkins Build Status](http://jenkins.mcper.cn/buildStatus/icon?job=Genisys-master)](http://jenkins.mcper.cn/job/Genisys-master/)
 [![Travis-CI Build Status](https://travis-ci.org/iTXTech/Genisys.svg?branch=master)](https://travis-ci.org/iTXTech/Genisys)
 
-### Jenkins
-[Download](http://jenkins.mcper.cn/job/Genisys-master/) Genisys phar files from Jenkins CI.
+### Downloads
+You can get prebuilt phar from [Jenkins](http://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/Genisys/builds).
 
 ## English Version
 
-* One Core to rule them ALL
-* This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
+* One Core to rule anything
+* This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO and iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 * [Download PHP7 for Genisys](https://github.com/iTXTech/PHP-Genisys/)
 * [Download Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
-* Be free to create a _Pull Request_ or open an _Issue_. English and Chinese are both welcomed. Use English to communicate with more people.
+* Be free to create a Pull Request or open an Issue. English and Chinese are both welcomed. Use English to communicate with more people.
 
 ### Acknowledgements
 * Some features are merged from **@boybook**'s **FCCore**
@@ -31,6 +31,9 @@
 * Base weather system was written by **@Zzm317** and rewritten by **@PeratX**
 * **@FENGberd**'s encouragement
 * Our leaders are **@ishitatsuyuki** and **@jasonczc**
+
+### License
+Most codes are made by PocketMine team and licensed under LGPL. Some AI is proprietary, copy is prohibited.
 
 ### Official Development Documentation
 [Genisys Official Development Documentation Page](http://docs.mcper.cn/en-US/)
@@ -87,7 +90,7 @@ Port: 19132
 * 一个核心统治一切。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
 * 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
-* [点击获取 PHP7](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
+* [点击获取PHP7](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
 * [点击获取Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
 * 欢迎创建 Pull Request。请使用中文或者英文进行交流（但为了交流方便，请尽量使用英文进行交流）。
 
