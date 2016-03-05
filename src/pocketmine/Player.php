@@ -3780,6 +3780,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->fishingHook = null;
 			}
 
+			$this->removeEffect(Effect::HEALTH_BOOST);
+
 			$this->connected = false;
 			if(strlen($this->getName()) > 0){
 				$this->server->getPluginManager()->callEvent($ev = new PlayerQuitEvent($this, $message, true));
