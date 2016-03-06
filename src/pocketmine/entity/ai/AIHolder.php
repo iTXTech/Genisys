@@ -11,6 +11,7 @@ use pocketmine\entity\Ocelot;
 use pocketmine\entity\PigZombie;
 use pocketmine\entity\SnowGolem;
 use pocketmine\entity\Wolf;
+use pocketmine\event\entity\EntityGenerateEvent;
 use pocketmine\level\Position;
 use pocketmine\level\Level;
 use pocketmine\item\Item;
@@ -177,14 +178,18 @@ class AIHolder{
 	 *                            出生一只僵尸在某坐标
 	 */
 	public function spawnZombie(Position $pos, $maxHealth = 20, $health = 20){
+		$this->getZombie($pos, $maxHealth, $health)->spawnToAll();
+		//$this->getLogger()->info("生成了一只僵尸");
+	}
+
+	public function getZombie(Position $pos, $maxHealth = 20, $health = 20){
 		$chunk = $pos->level->getChunk($pos->x >> 4, $pos->z >> 4, false);
 		$nbt = $this->getNBT();
 		$zo = new Zombie($chunk, $nbt);
 		$zo->setPosition($pos);
 		$zo->setMaxHealth($maxHealth);
 		$zo->setHealth($health);
-		$zo->spawnToAll();
-		//$this->getLogger()->info("生成了一只僵尸");
+		return $zo;
 	}
 
 	/**
@@ -226,16 +231,22 @@ class AIHolder{
 	 * @param int      $maxHealth 最高血量
 	 * @param int      $health    血量
 	 *                            出生一只牛在某坐标
+	 *
+	 * @return Cow
 	 */
-	public function spawnCow(Position $pos, $maxHealth = 20, $health = 20){
+	public function getCow(Position $pos, $maxHealth = 20, $health = 20){
 		$chunk = $pos->level->getChunk($pos->x >> 4, $pos->z >> 4, false);
 		$nbt = $this->getNBT();
 		$zo = new Cow($chunk, $nbt);
 		$zo->setPosition($pos);
 		$zo->setMaxHealth($maxHealth);
 		$zo->setHealth($health);
-		$zo->spawnToAll();
+		return $zo;
 		//$this->getLogger()->info("生成了一只牛");
+	}
+
+	public function spawnCow(Position $pos, $maxHealth = 20, $health = 20){
+		$this->getCow($pos, $maxHealth, $health)->spawnToAll();
 	}
 
 	/**
@@ -879,22 +890,20 @@ class AIHolder{
 
 						if(count($zoC) > $max){
 							for($i = 0; $i < (count($zoC) - $max); $i++) $zoC[$i]->kill();
-						}else
-							if($random == 0 && $level->getTime() >= 13500){
-
-
+						}elseif($random == 0 && $level->getTime() >= 13500){
 								$pos = new Position($v3->x, $v3->y, $v3->z, $level);
 
-								$this->spawnZombie($pos);
+								$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($ent = $this->getZombie($pos), EntityGenerateEvent::CAUSE_AI_HOLDER));
+								if(!$ev->isCancelled()) $ent->spawnToAll();
 								//$this->server->getLogger()->info("生成1僵尸");
-							}
+						}
 
 						if(count($cowc) > $max){
 							for($i = 0; $i < (count($cowc) - $max); $i++) $cowc[$i]->kill();
-						}else if($random == 1){
-
+						}elseif($random == 1){
 							$pos = new Position($v3->x, $v3->y, $v3->z, $level);
-							$this->spawnCow($pos);
+							$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($ent = $this->getCow($pos), EntityGenerateEvent::CAUSE_AI_HOLDER));
+							if(!$ev->isCancelled()) $ent->spawnToAll();
 							//$this->server->getLogger()->info("生成1牛");
 						}
 						break;

@@ -12,6 +12,7 @@
 namespace pocketmine\tile;
 
 use pocketmine\entity\Entity;
+use pocketmine\event\entity\EntityGenerateEvent;
 use pocketmine\item\Item;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
@@ -97,8 +98,8 @@ class MobSpawner extends Spawnable{
 							new FloatTag("", 0)
 						]),
 					]);
-					$entity = Entity::createEntity($this->getEntityId(), $this->chunk, $nbt);
-					$entity->spawnToAll();
+					$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new EntityGenerateEvent($entity = Entity::createEntity($this->getEntityId(), $this->chunk, $nbt), EntityGenerateEvent::CAUSE_MOB_SPAWNER));
+					if(!$ev->isCancelled()) $entity->spawnToAll();
 				}
 			}
 		}
