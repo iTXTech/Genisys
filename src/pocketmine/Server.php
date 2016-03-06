@@ -2499,7 +2499,6 @@ private function lookupAddress($address) {
 			@mkdir($this->getPluginPath() . DIRECTORY_SEPARATOR . "PocketMine-iTX");
 
 		$this->tickProcessor();
-		$this->forceShutdown();
 
 		gc_collect_cycles();
 	}
