@@ -11,6 +11,7 @@ class PlayerHungerChangeEvent extends PlayerEvent implements Cancellable{
 
 	public function __construct(Player $player, $data){
 		$this->data = $data;
+		$this->player = $player;
 	}
 	
 	public function getData(){
