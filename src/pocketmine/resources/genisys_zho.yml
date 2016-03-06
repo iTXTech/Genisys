@@ -2,15 +2,14 @@
 
 #設定檔案版本
 config:
- version: 11
+ version: 12
 
 level:
  #設定是否變換天氣
  weather: true
- #天氣切換時間，預設5分鐘
- weather-change-time: 6000
- #天氣持續時間，預設1分鐘
- weather-last-time: 1200
+ #随机天气持续时长最小值，最大值
+ weather-random-duration-min: 6000
+ weather-random-duration-max: 12000
  #隨機閃電間隔，預設10秒
  lightning-time: 200
  
@@ -46,7 +45,7 @@ server:
  #是否允許生成雪傀儡
  allow-snow-golem: false
  #是否允許鐵砧和附魔臺
- allow-anvilandenchanttable: false
+ allow-anvilandenchanttable: true
  #是否停用server.log
  disable-log: false
  #是否啟用反飛行作弊
@@ -66,8 +65,12 @@ server:
  minecart-moving-type: 0
  #是否进行移动检测(不再拉回了)
  check-movement: true
- #TODO：是否限制创造某些功能(禁止丢物品, 禁止操作箱子等等)
+ #是否限制创造某些功能(禁止丢物品, 禁止操作箱子等等)
  limited-creative: true
+ #是否開啟方塊破壞粒子效果
+ destroy-block-particle: true
+ #是否啟用噴濺型藥水
+ allow-splash-potion: true
 
 redstone:
  ##############################
