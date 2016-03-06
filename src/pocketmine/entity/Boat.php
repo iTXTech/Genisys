@@ -1,45 +1,15 @@
 <?php
 
-/**
- * OpenGenisys Project
- *
- * @author PeratX
- */
-
 namespace pocketmine\entity;
 
-use pocketmine\nbt\tag\IntTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
-use pocketmine\math\Vector3;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\item\Item as ItemItem;
-use pocketmine\level\format\FullChunk;
-use pocketmine\nbt\tag\CompoundTag;
 
-class Boat extends Vehicle{
+class Boat extends Entity{
 	const NETWORK_ID = 90;
-
-	const DATA_WOOD_ID = 20;
-
-	public $height = 0.7;
-	public $width = 1.6;
-
-	public $gravity = 0.5;
-	public $drag = 0.1;
-
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
-		if(!isset($nbt->WoodID)){
-			$nbt->WoodID = new IntTag("WoodID", 0);
-		}
-		parent::__construct($chunk, $nbt);
-		$this->setDataProperty(self::DATA_WOOD_ID, self::DATA_TYPE_BYTE, $this->getWoodID());
-	}
-
-	public function getWoodID() : int{
-		return (int) $this->namedtag["WoodID"];
-	}
 
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
@@ -72,51 +42,18 @@ class Boat extends Vehicle{
 		}
 	}
 
-	public function onUpdate($currentTick){
-		if($this->closed){
-			return false;
+	public function kill(){
+		parent::kill();
+
+		foreach($this->getDrops() as $item){
+			$this->getLevel()->dropItem($this, $item);
 		}
-		$tickDiff = $currentTick - $this->lastUpdate;
-		if($tickDiff <= 0 and !$this->justCreated){
-			return true;
-		}
-
-		$this->lastUpdate = $currentTick;
-
-		$this->timings->startTiming();
-
-		$hasUpdate = $this->entityBaseTick($tickDiff);
-
-		if(!$this->level->getBlock(new Vector3($this->x,$this->y,$this->z))->getBoundingBox()==null or $this->isInsideOfWater()){
-			$this->motionY = 0.1;
-		}else{
-			$this->motionY = -0.08;
-		}
-
-		$this->move($this->motionX, $this->motionY, $this->motionZ);
-		$this->updateMovement();
-
-		if($this->linkedEntity == null or $this->linkedType = 0){
-			if($this->age > 1500){
-				$this->close();
-				$hasUpdate = true;
-				//$this->scheduleUpdate();
-
-				$this->age = 0;
-			}
-			$this->age++;
-		}else $this->age = 0;
-
-		$this->timings->stopTiming();
-
-
-		return $hasUpdate or !$this->onGround or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001;
 	}
 
-
 	public function getDrops(){
-		$drops[] = ItemItem::get(ItemItem::BOAT, 0, 1);
-		return $drops;
+		return [
+			ItemItem::get(ItemItem::BOAT, 0, 1)
+		];
 	}
 
 	public function getSaveId(){
