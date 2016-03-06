@@ -17,7 +17,7 @@ You can get prebuilt phar from [Jenkins](http://jenkins.mcper.cn/job/Genisys-mas
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 * [Download PHP7 for Genisys](https://github.com/iTXTech/PHP-Genisys/)
 * [Download Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
-* Be free to create a Pull Request or open an Issue. English and Chinese are both welcomed. Use English to communicate with more people.
+* Be free to create a Pull Request or open an Issue. English and Chinese are both welcome. Use English to communicate with more people.
 
 ### Acknowledgements
 * Some features are merged from **@boybook**'s **FCCore**
@@ -71,9 +71,9 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
 * NOTICE: Please edit **genisys.yml** to enable all the features, including Redstone, MobAI, Nether and so on.
 
 ### To-Do List
-* Potions (Improve)
-* Redstone (Improve)
-* Anvil (Improve)
+* Improve Potions
+* Improve Redstone
+* Improve Anvil
 * Fishing
 * New AI for all creatures
 * LevelDB support for Windows
