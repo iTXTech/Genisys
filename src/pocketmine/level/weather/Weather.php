@@ -27,9 +27,8 @@ class Weather{
 
 	public function __construct(Level $level, $duration = 1200){
 		$this->level = $level;
-		$this->weatherNow = 0;
+		$this->weatherNow = self::SUNNY;
 		$this->duration = $duration;
-		WeatherManager::registerLevel($level);
 	}
 
 	public function calcWeather(){

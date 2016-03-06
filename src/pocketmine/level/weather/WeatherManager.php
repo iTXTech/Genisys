@@ -1,9 +1,14 @@
 <?php
+/**
+ * Author: PeratX
+ * OpenGenisys Project
+ */
 namespace pocketmine\level\weather;
 
 use pocketmine\level\Level;
 
 class WeatherManager{
+	/** @var Level[] */
 	public static $registeredLevel = [];
 	
 	public static function registerLevel(Level $level){

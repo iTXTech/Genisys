@@ -399,7 +399,12 @@ class Level implements ChunkManager, Metadatable{
 		$this->temporalVector = new Vector3(0, 0, 0);
 		$this->tickRate = 1;
 
-		if(($this->server->weatherEnabled and $this->folderName != $this->server->netherName) or !$this->server->netherEnabled) $this->weather = new Weather($this, 0);
+		$this->weather = new Weather($this, 0);
+		if(($this->server->weatherEnabled and $this->folderName != $this->server->netherName) or !$this->server->netherEnabled) WeatherManager::registerLevel($this);
+	}
+
+	public function getDimension() : int{
+		return $this->folderName != $this->server->netherName ? 0 : 1;
 	}
 
 	public function getWeather(){
@@ -2461,6 +2466,10 @@ class Level implements ChunkManager, Metadatable{
 	 */
 	public function getHighestBlockAt($x, $z){
 		return $this->getChunk($x >> 4, $z >> 4, true)->getHighestBlockAt($x & 0x0f, $z & 0x0f);
+	}
+
+	public function canBlockSeeSky(Vector3 $pos){
+		return $this->getHighestBlockAt($pos->getFloorX(), $pos->getFloorZ()) < $pos->getY();
 	}
 
 	/**
