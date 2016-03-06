@@ -1,6 +1,6 @@
 <?php
 
-**
+/**
   * OpenGenisys Project
   *
   * @author PeratX
