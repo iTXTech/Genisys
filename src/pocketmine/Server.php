@@ -1742,11 +1742,10 @@ class Server{
 
 
 			$this->aboutstring = "\n
-		   §5PocketMine-iTX §3Genisys §fis a fork of PocketMine-MP.
-		   Powered by §5iTX Technologies LLC.
+		   §5PocketMine-iTX §3Genisys §fis a fork of PocketMine-MP, made by §5iTX Technologies LLC$f.
 		   §fVersion: §6" . $this->getPocketMineVersion() . "
-		   §fClient Version: §d" . \pocketmine\MINECRAFT_VERSION . "
-		   §fYou could get the lastest code on https://github.com/iTXTech/Genisys
+		   §fTarget client Version: §d" . \pocketmine\MINECRAFT_VERSION . "
+		   §fLatest source codes are available on https://github.com/iTXTech/Genisys
 		   §fDonate link: http://pl.zxda.net/plugins/203.html
 		   §f如果你在免费使用本核心，希望你可以进入上面的链接捐赠给我们，这会成为我们前进的动力。
 		\n";
