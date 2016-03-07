@@ -11,11 +11,12 @@ while(!feof($pipes[1])){
 		fclose($pipes[0]);
 		fclose($pipes[1]);
 		fclose($pipes[2]);
-		proc_close($server);
+		$ret = proc_close($server);
 		break;
 	}
 }
-echo "\n\nReturn value: ". proc_close($server) ."\n";
+if(!isset($ret)) $ret = proc_close($server);
+echo "\n\nReturn value: ". $ret ."\n";
 if(count(glob("plugins/PocketMine-iTX/Genisys*.phar")) === 0){
 	echo "No server phar created!\n";
 	exit(1);
