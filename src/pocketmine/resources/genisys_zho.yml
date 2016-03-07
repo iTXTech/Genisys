@@ -7,14 +7,14 @@ config:
 level:
  #設定是否變換天氣
  weather: true
- #随机天气持续时长最小值，最大值
+ #隨機天氣持續時長最小值，最大值
  weather-random-duration-min: 6000
  weather-random-duration-max: 12000
  #隨機閃電間隔，預設10秒
  lightning-time: 200
  
 player:
- #是否打開饑餓
+ #是否打開飢餓
  hunger: true
  #飢餓值扣血下限
  hunger-health: 10
@@ -58,14 +58,14 @@ server:
  logout-msg: "§3@player 離開了遊戲"
  #是否從recipes.json讀取合成公式
  recipes-from-json: false
- #是否从creativeitems.json读取创造物品
+ #是否從creativeitems.json讀取創造物品
  creative-items-from-json: false
- #设置矿车行为方式
- #-1=禁用矿车移动, 0=自由移动, 1=沿铁轨行驶
+ #設置礦車行為方式
+ #-1=禁用礦車移動, 0=自由移動, 1=沿鐵軌行駛
  minecart-moving-type: 0
- #是否进行移动检测(不再拉回了)
+ #是否進行移動檢測(不再拉回了)
  check-movement: true
- #是否限制创造某些功能(禁止丢物品, 禁止操作箱子等等)
+ #是否限制創造某些功能(禁止丟物品, 禁止操作箱子等等)
  limited-creative: true
  #是否開啟方塊破壞粒子效果
  destroy-block-particle: true
@@ -79,7 +79,7 @@ redstone:
  #如果不改為true將無法使用紅石#
  ##############################
  enable: false
- #是否允许频率脉冲
+ #是否允許頻率脈衝
  frequency-pulse: false
  #設定脈衝頻率, 預設: 1s
  pulse-frequency: 1
@@ -113,9 +113,9 @@ dserver:
 ai:
  #AI總開關
  enable: false
- #僵屍的AI，0為關閉，1為1.0版AI，2為新AI（不完善）
+ #殭屍的AI，0為關閉，1為1.0版AI，2為新AI（不完善）
  zombie: 1
- #僵屍豬人的AI
+ #殭屍豬人的AI
  pigzombie: true
  #牛和哞菇的AI
  cow: true
