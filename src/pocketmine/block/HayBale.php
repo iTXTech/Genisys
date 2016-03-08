@@ -40,6 +40,14 @@ class HayBale extends Solid{
 		return 0.5;
 	}
 
+	public function getBurnChance() : int{
+		return 60;
+	}
+
+	public function getBurnAbility() : int{
+		return 20;
+	}
+
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$faces = [
 			0 => 0,

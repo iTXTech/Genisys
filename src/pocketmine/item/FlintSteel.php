@@ -39,7 +39,7 @@ class FlintSteel extends Tool{
 
 	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
 		if($target->getId() === 49 and $player->getServer()->netherEnabled){//黑曜石 4*5最小 23*23最大
-			$level->setBlock($block, new Fire(), true);
+			//$level->setBlock($block, new Fire(), true);
 			$tx = $target->getX();
 			$ty = $target->getY();
 			$tz = $target->getZ();
@@ -119,11 +119,18 @@ class FlintSteel extends Tool{
 					}
 				}
 			}
-			return true;
+			//return true;
 		}
 
 		if($block->getId() === self::AIR and ($target instanceof Solid)){
 			$level->setBlock($block, new Fire(), true);
+
+			/** @var Fire $block */
+			$block = $level->getBlock($block);
+			if($block->isBlockTopFacingSurfaceSolid($block->getSide(Vector3::SIDE_DOWN)) or $block->canNeighborBurn()){
+				$level->scheduleUpdate($block, $block->getTickRate() + mt_rand(0, 10));
+			//	return true;
+			}
 
 			if(($player->gamemode & 0x01) === 0 and $this->useOn($block)){
 				if($this->getDamage() >= $this->getMaxDurability()){

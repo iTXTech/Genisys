@@ -90,6 +90,7 @@ use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\LongTag;
 use pocketmine\network\Network;
+use pocketmine\network\protocol\ChangeDimensionPacket;
 use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\LevelEventPacket;
@@ -404,7 +405,7 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	public function getDimension() : int{
-		return $this->folderName != $this->server->netherName ? 0 : 1;
+		return $this->folderName != $this->server->netherName ? ChangeDimensionPacket::DIMENSION_NORMAL : ChangeDimensionPacket::DIMENSION_NETHER;
 	}
 
 	public function getWeather(){

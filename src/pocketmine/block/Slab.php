@@ -61,6 +61,14 @@ class Slab extends Transparent{
 		return (($this->meta & 0x08) > 0 ? "Upper " : "") . $names[$this->meta & 0x07] . " Slab";
 	}
 
+	public function getBurnChance() : int{
+		return 5;
+	}
+
+	public function getBurnAbility() : int{
+		return 20;
+	}
+
 	protected function recalculateBoundingBox() {
 
 		if(($this->meta & 0x08) > 0){

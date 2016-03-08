@@ -179,7 +179,7 @@ abstract class Liquid extends Transparent{
 		$vector->z += $flow->z;
 	}
 
-	public function tickRate(){
+	public function tickRate() : int{
 		if($this instanceof Water){
 			return 5;
 		}elseif($this instanceof Lava){

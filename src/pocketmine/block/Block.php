@@ -27,6 +27,7 @@ namespace pocketmine\block;
 use pocketmine\entity\Entity;
 
 
+use pocketmine\event\block\BlockBurnEvent;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\level\Level;
@@ -670,6 +671,10 @@ self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 		return true;
 	}
 
+	public function tickRate() : int{
+		return 10;
+	}
+
 	/**
 	 * Do the actions needed so the block is broken with the Item
 	 *
@@ -716,6 +721,78 @@ self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 	 */
 	public function getResistance(){
 		return $this->getHardness() * 5;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getBurnChance() : int{
+		return 0;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getBurnAbility() : int{
+		return 0;
+	}
+
+	public function isBlockTopFacingSurfaceSolid(Block $block){
+		if($block->isSolid()){
+			return true;
+		}else{
+			if($block instanceof Stair and ($block->getDamage() &4) == 4){
+				return true;
+			}elseif($block instanceof Slab and ($block->getDamage() & 8) == 8){
+				return true;
+			}elseif($block instanceof SnowLayer and ($block->getDamage() & 7) == 7){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function canNeighborBurn(){
+		for($face = 0; $face < 5; $face++){
+			if($this->getSide($face)->getBurnChance() > 0){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function tryToCatchBlockOnFire(Block $block, int $bound, int $damage){
+		$burnAbility = $block->getBurnAbility();
+
+		if(mt_rand(0, $bound) < $burnAbility){
+			if(mt_rand(0, $damage + 10) < 5){
+				$meta = min(15, $damage + mt_rand(0, 5) / 4);
+
+				$this->getLevel()->setBlock($this, $fire = new Fire($meta), true);
+				$this->getLevel()->scheduleUpdate($this, $fire->getTickRate());
+			}else{
+				$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new BlockBurnEvent($block));
+				if(!$ev->isCancelled()){
+					$this->getLevel()->setBlock($this, new Air(), true);
+				}
+			}
+
+			if($block instanceof TNT){
+				$block->prime();
+			}
+		}
+	}
+
+	public function getChanceOfNeighborsEncouragingFire(Block $block){
+		if($block->getId() !== self::AIR){
+			return 0;
+		}else{
+			$chance = 0;
+			for($i = 0; $i < 5; $i++){
+				$chance = max($chance, $block->getSide($i)->getBurnChance());
+			}
+			return $chance;
+		}
 	}
 
 	/**

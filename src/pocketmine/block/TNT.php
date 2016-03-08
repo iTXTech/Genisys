@@ -52,32 +52,44 @@ class TNT extends Solid{
 		return true;
 	}
 
+	public function getBurnChance() : int{
+		return 15;
+	}
+
+	public function getBurnAbility() : int{
+		return 100;
+	}
+
+	public function prime(){
+		$this->meta = 1;
+		$mot = (new Random())->nextSignedFloat() * M_PI * 2;
+		$tnt = Entity::createEntity("PrimedTNT", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), new CompoundTag("", [
+			"Pos" => new EnumTag("Pos", [
+				new DoubleTag("", $this->x + 0.5),
+				new DoubleTag("", $this->y),
+				new DoubleTag("", $this->z + 0.5)
+			]),
+			"Motion" => new EnumTag("Motion", [
+				new DoubleTag("", -sin($mot) * 0.02),
+				new DoubleTag("", 0.2),
+				new DoubleTag("", -cos($mot) * 0.02)
+			]),
+			"Rotation" => new EnumTag("Rotation", [
+				new FloatTag("", 0),
+				new FloatTag("", 0)
+			]),
+			"Fuse" => new ByteTag("Fuse", 80)
+		]));
+
+		$tnt->spawnToAll();
+		$this->level->addSound(new TNTPrimeSound($this));
+	}
+
 	public function onActivate(Item $item, Player $player = null){
 		if($item->getId() === Item::FLINT_STEEL){
-			$item->useOn($this);
+			$this->prime();
 			$this->getLevel()->setBlock($this, new Air(), true);
-
-			$mot = (new Random())->nextSignedFloat() * M_PI * 2;
-			$tnt = Entity::createEntity("PrimedTNT", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), new CompoundTag("", [
-				"Pos" => new EnumTag("Pos", [
-					new DoubleTag("", $this->x + 0.5),
-					new DoubleTag("", $this->y),
-					new DoubleTag("", $this->z + 0.5)
-				]),
-				"Motion" => new EnumTag("Motion", [
-					new DoubleTag("", -sin($mot) * 0.02),
-					new DoubleTag("", 0.2),
-					new DoubleTag("", -cos($mot) * 0.02)
-				]),
-				"Rotation" => new EnumTag("Rotation", [
-					new FloatTag("", 0),
-					new FloatTag("", 0)
-				]),
-				"Fuse" => new ByteTag("Fuse", 80)
-			]));
-
-			$tnt->spawnToAll();
-			$this->level->addSound(new TNTPrimeSound($this));
+			$item->useOn($this);
 			return true;
 		}
 

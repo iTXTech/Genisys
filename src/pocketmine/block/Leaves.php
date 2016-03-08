@@ -50,6 +50,14 @@ class Leaves extends Transparent{
 		return Tool::TYPE_SHEARS;
 	}
 
+	public function getBurnChance() : int{
+		return 30;
+	}
+
+	public function getBurnAbility() : int{
+		return 60;
+	}
+
 	public function getName() : string{
 		static $names = [
 			self::OAK => "Oak Leaves",

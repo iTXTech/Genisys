@@ -48,6 +48,13 @@ class Fence extends Transparent{
 		return Tool::TYPE_AXE;
 	}
 
+	public function getBurnChance() : int{
+		return 5;
+	}
+
+	public function getBurnAbility() : int{
+		return 20;
+	}
 
 	public function getName() : string{
 		static $names = [
