@@ -66,6 +66,7 @@ class NBT{
 	const TAG_ByteArray = 7;
 	const TAG_String = 8;
 	const TAG_Enum = 9;
+	const TAG_List = 9;
 	const TAG_Compound = 10;
 	const TAG_IntArray = 11;
 
