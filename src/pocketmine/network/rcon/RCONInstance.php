@@ -37,6 +37,8 @@ class RCONInstance extends Thread{
 	/** @var MainLogger */
 	private $logger;
 
+	public $serverStatus;
+
 	public function isWaiting(){
 		return $this->waiting === true;
 	}
@@ -69,7 +71,7 @@ class RCONInstance extends Thread{
 
 	private function readPacket($client, &$size, &$requestID, &$packetType, &$payload){
 		socket_set_nonblock($client);
-		$d = socket_read($client, 4);
+		$d = @socket_read($client, 4);
 		if($this->stop === true){
 			return false;
 		}elseif($d === false){
@@ -153,7 +155,11 @@ class RCONInstance extends Thread{
 									$this->{"status" . $n} = -1;
 									continue;
 								}
-								$this->writePacket($client, $requestID, 0, str_replace("\n", "\r\n", trim($this->logger->getMessages())));
+								$res = (array) [
+									"serverStatus" => unserialize($this->serverStatus),
+									"logger" => str_replace("\n", "\r\n", trim($this->logger->getMessages()))
+								];
+								$this->writePacket($client, $requestID, 0, serialize($res));
 								$this->response = "";
 								break;
 							case 3: //Login
