@@ -93,7 +93,8 @@ class RCON{
 			"upload" => round($this->server->getNetwork()->getUpload() / 1024, 2),
 			"download" => round($this->server->getNetwork()->getDownload() / 1024, 2),
 			"tps" => $this->server->getTicksPerSecondAverage(),
-			"load" => $this->server->getTickUsageAverage()
+			"load" => $this->server->getTickUsageAverage(),
+			"usage" => $usage
 		]);
 		for($n = 0; $n < $this->threads; ++$n){
 			if(!$this->workers[$n]->isTerminated()){
