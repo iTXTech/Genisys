@@ -1123,6 +1123,15 @@ abstract class Entity extends Location implements Metadatable{
 		return false;
 	}
 
+	public function isInsideOfFire(){
+		foreach($this->getBlocksAround() as $block){
+			if($block instanceof Fire){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function fastMove($dx, $dy, $dz){
 		if($dx == 0 and $dz == 0 and $dy == 0){
 			return true;

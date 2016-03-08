@@ -1804,7 +1804,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			if(!$this->isSpectator()) $this->entityBaseTick($tickDiff);
 
 			if($this->isOnFire() or $this->lastUpdate % 10 == 0){
-				if($this->getLevel()->getWeather()->isRainy()){
+				if($this->isCreative() and !$this->isInsideOfFire()){
+					$this->extinguish();
+				}elseif($this->getLevel()->getWeather()->isRainy()){
 					if($this->getLevel()->canBlockSeeSky($this)){
 						$this->extinguish();
 					}
