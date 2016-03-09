@@ -81,7 +81,7 @@ class Fire extends Flowable{
 			if(!$this->isBlockTopFacingSurfaceSolid($this->getSide(Vector3::SIDE_DOWN)) and !$this->canNeighborBurn()){
 				$this->getLevel()->setBlock($this, new Air(), true);
 				return Level::BLOCK_UPDATE_NORMAL;
-			}elseif($type == Level::BLOCK_UPDATE_SCHEDULED){
+			}elseif($type == Level::BLOCK_UPDATE_SCHEDULED and $this->getLevel()->getServer()->fireSpread){
 				$forever = $this->getSide(Vector3::SIDE_DOWN)->getId() == Block::NETHERRACK;
 
 				//TODO: END
