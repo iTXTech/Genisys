@@ -39,11 +39,11 @@ class Grass extends Solid{
 
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool{
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Grass";
 	}
 
@@ -55,7 +55,7 @@ class Grass extends Solid{
 		return Tool::TYPE_SHOVEL;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array{
 		return [
 			[Item::DIRT, 0, 1],
 		];
