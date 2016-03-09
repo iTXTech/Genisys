@@ -115,8 +115,9 @@ class Boat extends Vehicle{
 
 
 	public function getDrops(){
-		$drops[] = ItemItem::get(ItemItem::BOAT, 0, 1);
-		return $drops;
+		return [
+			ItemItem::get(ItemItem::BOAT, 0, 1)
+		];
 	}
 
 	public function getSaveId(){
