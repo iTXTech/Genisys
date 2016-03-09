@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 12
+ version: 13
 
 level:
  #Set if turn on the weather system
@@ -12,6 +12,8 @@ level:
  weather-random-duration-max: 12000
  #Random lightning interval，default as 10s
  lightning-time: 200
+ #Set if enable fire spread
+ fire-spread: false
  
 player:
  #the switch of hunger system
@@ -30,6 +32,8 @@ player:
  auto-clear-inventory : true
  #Choose if keep experience when a player died
  keep-experience: false
+ #If players get crash when join, set this below 10. disable=-1
+ chunk-radius: -1
 
 nether:
  #Choose if the nether's allowed,the level of nether will generate automatically

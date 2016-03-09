@@ -2342,11 +2342,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		switch($packet::NETWORK_ID){
 			case ProtocolInfo::REQUEST_CHUNK_RADIUS_PACKET:
-				if($this->spawned){
+				/*if($this->spawned){
 					$this->viewDistance = $packet->radius ** 2;
-				}
+				}*/
 				$pk = new ChunkRadiusUpdatePacket();
-				$pk->radius = $packet->radius;
+				$pk->radius = ($this->server->chunkRadius != -1) ? $this->server->chunkRadius : $packet->radius;
 				$this->dataPacket($pk);
 				break;
 			case ProtocolInfo::PLAYER_INPUT_PACKET:
