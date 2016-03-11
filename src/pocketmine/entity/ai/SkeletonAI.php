@@ -16,7 +16,7 @@ use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
@@ -478,17 +478,17 @@ class SkeletonAI{
 									$pitch = $this->getmypitch($my, $d);
 						
 									$nbt2 = new CompoundTag("", [
-										"Pos" => new EnumTag("Pos", [
+										"Pos" => new ListTag("Pos", [
 											new DoubleTag("", $zo->getX()),
 											new DoubleTag("", $zo->getY()),
 											new DoubleTag("", $zo->getZ())
 										]),
-										"Motion" => new EnumTag("Motion", [
+										"Motion" => new ListTag("Motion", [
 											new DoubleTag("", -\sin($zom['yaw']) * \cos($pitch / 180 * M_PI)),
 											new DoubleTag("", -\sin($pitch / 180 * M_PI)),
 											new DoubleTag("", \cos($zom['yaw'] / 180 * M_PI) * \cos($pitch / 180 * M_PI))
 										]),
-										"Rotation" => new EnumTag("Rotation", [
+										"Rotation" => new ListTag("Rotation", [
 											new FloatTag("", $zom['yaw']),
 											new FloatTag("", $pitch)
 										]),

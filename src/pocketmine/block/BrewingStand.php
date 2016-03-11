@@ -17,7 +17,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\Player;
 use pocketmine\tile\Tile;
 use pocketmine\tile\BrewingStand as TileBrewingStand;
@@ -35,7 +35,7 @@ class BrewingStand extends Transparent{
 		if($block->getSide(Vector3::SIDE_DOWN)->isTransparent() === false){
 			$this->getLevel()->setBlock($block, $this, true, true);
 			$nbt = new CompoundTag("", [
-				new EnumTag("Items", []),
+				new ListTag("Items", []),
 				new StringTag("id", Tile::BREWING_STAND),
 				new IntTag("x", $this->x),
 				new IntTag("y", $this->y),
@@ -83,7 +83,7 @@ class BrewingStand extends Transparent{
 				$brewingStand = $t;
 			}else{
 				$nbt = new CompoundTag("", [
-					new EnumTag("Items", []),
+					new ListTag("Items", []),
 					new StringTag("id", Tile::BREWING_STAND),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),

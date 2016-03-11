@@ -31,7 +31,7 @@ use pocketmine\entity\Snowball;
 
 
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\IntTag;
 
 use pocketmine\nbt\tag\StringTag;
@@ -45,8 +45,8 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new DispenserInventory($this);
 
-		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof EnumTag)){
-			$this->namedtag->Items = new EnumTag("Items", []);
+		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)){
+			$this->namedtag->Items = new ListTag("Items", []);
 			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		}
 
@@ -71,7 +71,7 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 	}
 
 	public function saveNBT(){
-		$this->namedtag->Items = new EnumTag("Items", []);
+		$this->namedtag->Items = new ListTag("Items", []);
 		$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		for($index = 0; $index < $this->getSize(); ++$index){
 			$this->setItem($index, $this->inventory->getItem($index));
@@ -215,17 +215,17 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 			switch($needItem->getId()){
 				case Item::ARROW:
 					$nbt = new CompoundTag("", [
-						"Pos" => new EnumTag("Pos", [
+						"Pos" => new ListTag("Pos", [
 							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
 							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
 							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
 						]),
-						"Motion" => new EnumTag("Motion", [
+						"Motion" => new ListTag("Motion", [
 							new DoubleTag("", $motion[0]),
 							new DoubleTag("", $motion[1]),
 							new DoubleTag("", $motion[2])
 						]),
-						"Rotation" => new EnumTag("Rotation", [
+						"Rotation" => new ListTag("Rotation", [
 							new FloatTag("", lcg_value() * 360),
 							new FloatTag("", 0)
 						]),
@@ -240,17 +240,17 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 					break;
 				case Item::SNOWBALL:
 					$nbt = new CompoundTag("", [
-						"Pos" => new EnumTag("Pos", [
+						"Pos" => new ListTag("Pos", [
 							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
 							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
 							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
 						]),
-						"Motion" => new EnumTag("Motion", [
+						"Motion" => new ListTag("Motion", [
 							new DoubleTag("", $motion[0]),
 							new DoubleTag("", $motion[1]),
 							new DoubleTag("", $motion[2])
 						]),
-						"Rotation" => new EnumTag("Rotation", [
+						"Rotation" => new ListTag("Rotation", [
 							new FloatTag("", lcg_value() * 360),
 							new FloatTag("", 0)
 						]),
@@ -264,17 +264,17 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 					break;
 				case Item::EGG:
 					$nbt = new CompoundTag("", [
-						"Pos" => new EnumTag("Pos", [
+						"Pos" => new ListTag("Pos", [
 							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
 							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
 							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
 						]),
-						"Motion" => new EnumTag("Motion", [
+						"Motion" => new ListTag("Motion", [
 							new DoubleTag("", $motion[0]),
 							new DoubleTag("", $motion[1]),
 							new DoubleTag("", $motion[2])
 						]),
-						"Rotation" => new EnumTag("Rotation", [
+						"Rotation" => new ListTag("Rotation", [
 							new FloatTag("", lcg_value() * 360),
 							new FloatTag("", 0)
 						]),
@@ -288,17 +288,17 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 					break;
 				case Item::SPLASH_POTION:
 					$nbt = new CompoundTag("", [
-						"Pos" => new EnumTag("Pos", [
+						"Pos" => new ListTag("Pos", [
 							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
 							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
 							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
 						]),
-						"Motion" => new EnumTag("Motion", [
+						"Motion" => new ListTag("Motion", [
 							new DoubleTag("", $motion[0]),
 							new DoubleTag("", $motion[1]),
 							new DoubleTag("", $motion[2])
 						]),
-						"Rotation" => new EnumTag("Rotation", [
+						"Rotation" => new ListTag("Rotation", [
 							new FloatTag("", lcg_value() * 360),
 							new FloatTag("", 0)
 						]),
@@ -313,17 +313,17 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 					break;
 				case Item::ENCHANTING_BOTTLE:
 					$nbt = new CompoundTag("", [
-						"Pos" => new EnumTag("Pos", [
+						"Pos" => new ListTag("Pos", [
 							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
 							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
 							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
 						]),
-						"Motion" => new EnumTag("Motion", [
+						"Motion" => new ListTag("Motion", [
 							new DoubleTag("", $motion[0]),
 							new DoubleTag("", $motion[1]),
 							new DoubleTag("", $motion[2])
 						]),
-						"Rotation" => new EnumTag("Rotation", [
+						"Rotation" => new ListTag("Rotation", [
 							new FloatTag("", lcg_value() * 360),
 							new FloatTag("", 0)
 						]),
@@ -340,17 +340,17 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 					$itemTag->setName("Item");
 
 					$nbt = new CompoundTag("", [
-						"Pos" => new EnumTag("Pos", [
+						"Pos" => new ListTag("Pos", [
 							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
 							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
 							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
 						]),
-						"Motion" => new EnumTag("Motion", [
+						"Motion" => new ListTag("Motion", [
 							new DoubleTag("", $motion[0]),
 							new DoubleTag("", $motion[1]),
 							new DoubleTag("", $motion[2])
 						]),
-						"Rotation" => new EnumTag("Rotation", [
+						"Rotation" => new ListTag("Rotation", [
 							new FloatTag("", lcg_value() * 360),
 							new FloatTag("", 0)
 						]),

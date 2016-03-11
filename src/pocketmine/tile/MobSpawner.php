@@ -17,7 +17,7 @@ use pocketmine\item\Item;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
@@ -83,17 +83,17 @@ class MobSpawner extends Spawnable{
 				$up = $this->getLevel()->getBlock($this->getSide(Vector3::SIDE_UP));
 				if($up->getId() == Item::AIR){
 					$nbt = new CompoundTag("", [
-						"Pos" => new EnumTag("Pos", [
+						"Pos" => new ListTag("Pos", [
 							new DoubleTag("", $this->x),
 							new DoubleTag("", $this->y + 1),
 							new DoubleTag("", $this->z)
 						]),
-						"Motion" => new EnumTag("Motion", [
+						"Motion" => new ListTag("Motion", [
 							new DoubleTag("", 0),
 							new DoubleTag("", 0),
 							new DoubleTag("", 0)
 						]),
-						"Rotation" => new EnumTag("Rotation", [
+						"Rotation" => new ListTag("Rotation", [
 							new FloatTag("", 0),
 							new FloatTag("", 0)
 						]),

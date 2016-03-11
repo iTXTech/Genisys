@@ -16,7 +16,7 @@ use pocketmine\entity\Entity;
 use pocketmine\utils\TextFormat;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
 
 class SummonCommand extends VanillaCommand{
@@ -112,17 +112,17 @@ class SummonCommand extends VanillaCommand{
 		$level = ($sender instanceof Player) ? $sender->getLevel() : $sender->getServer()->getDefaultLevel();
 		$chunk = $level->getChunk(round($x) >> 4, round($z) >> 4);
 		$nbt = new CompoundTag("", [
-			"Pos" => new EnumTag("Pos", [
+			"Pos" => new ListTag("Pos", [
 				new DoubleTag("", $x),
 				new DoubleTag("", $y),
 				new DoubleTag("", $z)
 			]),
-			"Motion" => new EnumTag("Motion", [
+			"Motion" => new ListTag("Motion", [
 				new DoubleTag("", 0),
 				new DoubleTag("", 0),
 				new DoubleTag("", 0)
 			]),
-			"Rotation" => new EnumTag("Rotation", [
+			"Rotation" => new ListTag("Rotation", [
 				new FloatTag("", lcg_value() * 360),
 				new FloatTag("", 0)
 			]),

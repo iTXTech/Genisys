@@ -27,7 +27,7 @@ use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\ByteArrayTag;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\IntArrayTag;
 use pocketmine\nbt\tag\LongTag;
@@ -49,24 +49,24 @@ class Chunk extends BaseFullChunk{
 		
 		$this->nbt = $nbt;
 
-		if(isset($this->nbt->Entities) and $this->nbt->Entities instanceof EnumTag){
+		if(isset($this->nbt->Entities) and $this->nbt->Entities instanceof ListTag){
 			$this->nbt->Entities->setTagType(NBT::TAG_Compound);
 		}else{
-			$this->nbt->Entities = new EnumTag("Entities", []);
+			$this->nbt->Entities = new ListTag("Entities", []);
 			$this->nbt->Entities->setTagType(NBT::TAG_Compound);
 		}
 
-		if(isset($this->nbt->TileEntities) and $this->nbt->TileEntities instanceof EnumTag){
+		if(isset($this->nbt->TileEntities) and $this->nbt->TileEntities instanceof ListTag){
 			$this->nbt->TileEntities->setTagType(NBT::TAG_Compound);
 		}else{
-			$this->nbt->TileEntities = new EnumTag("TileEntities", []);
+			$this->nbt->TileEntities = new ListTag("TileEntities", []);
 			$this->nbt->TileEntities->setTagType(NBT::TAG_Compound);
 		}
 
-		if(isset($this->nbt->TileTicks) and $this->nbt->TileTicks instanceof EnumTag){
+		if(isset($this->nbt->TileTicks) and $this->nbt->TileTicks instanceof ListTag){
 			$this->nbt->TileTicks->setTagType(NBT::TAG_Compound);
 		}else{
-			$this->nbt->TileTicks = new EnumTag("TileTicks", []);
+			$this->nbt->TileTicks = new ListTag("TileTicks", []);
 			$this->nbt->TileTicks->setTagType(NBT::TAG_Compound);
 		}
 
@@ -398,7 +398,7 @@ class Chunk extends BaseFullChunk{
 			}
 		}
 
-		$nbt->Entities = new EnumTag("Entities", $entities);
+		$nbt->Entities = new ListTag("Entities", $entities);
 		$nbt->Entities->setTagType(NBT::TAG_Compound);
 
 
@@ -408,7 +408,7 @@ class Chunk extends BaseFullChunk{
 			$tiles[] = $tile->namedtag;
 		}
 
-		$nbt->TileEntities = new EnumTag("TileEntities", $tiles);
+		$nbt->TileEntities = new ListTag("TileEntities", $tiles);
 		$nbt->TileEntities->setTagType(NBT::TAG_Compound);
 
 		$extraData = new BinaryStream();

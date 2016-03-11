@@ -13,7 +13,7 @@ use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\entity\Painting as PaintingEntity;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
@@ -98,17 +98,17 @@ class Painting extends Item{
 
 			$nbt = new CompoundTag("", [
 				"Motive" => new StringTag("Motive", $data["Motive"]),
-				"Pos" => new EnumTag("Pos", [
+				"Pos" => new ListTag("Pos", [
 					new DoubleTag("", $data["x"]),
 					new DoubleTag("", $data["y"]),
 					new DoubleTag("", $data["z"])
 				]),
-				"Motion" => new EnumTag("Motion", [
+				"Motion" => new ListTag("Motion", [
 					new DoubleTag("", 0),
 					new DoubleTag("", 0),
 					new DoubleTag("", 0)
 				]),
-				"Rotation" => new EnumTag("Rotation", [
+				"Rotation" => new ListTag("Rotation", [
 					new FloatTag("", $data["yaw"]),
 					new FloatTag("", 0)
 				]),

@@ -19,7 +19,7 @@ use pocketmine\entity\Entity;
 use pocketmine\inventory\Fuel;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\level\Level;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
@@ -1309,7 +1309,7 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 		$tag = $this->getNamedTag();
 		if(isset($tag->ench)){
 			$tag = $tag->ench;
-			if($tag instanceof EnumTag){
+			if($tag instanceof ListTag){
 				return true;
 			}
 		}
@@ -1348,7 +1348,7 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 		}
 
 		if(!isset($tag->ench)){
-			$tag->ench = new EnumTag("ench", []);
+			$tag->ench = new ListTag("ench", []);
 			$tag->ench->setTagType(NBT::TAG_Compound);
 		}
 
