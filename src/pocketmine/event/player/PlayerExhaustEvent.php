@@ -14,50 +14,53 @@
  * (at your option) any later version.
  *
  * @author PocketMine Team
- * @link   http://www.pocketmine.net/
+ * @link http://www.pocketmine.net/
  *
  *
- */
+*/
 
 namespace pocketmine\event\player;
 
-use pocketmine\entity\FishingHook;
+use pocketmine\entity\Human;
 use pocketmine\event\Cancellable;
-use pocketmine\item\Item;
 use pocketmine\Player;
 
-/**
- * Called when a player uses the fishing rod
- */
-class PlayerFishEvent extends PlayerEvent implements Cancellable{
-
+class PlayerExhaustEvent extends PlayerEvent implements Cancellable{
 	public static $handlerList = null;
 
-	/** @var Item */
-	private $item;
+	const CAUSE_ATTACK = 1;
+	const CAUSE_DAMAGE = 2;
+	const CAUSE_MINING = 3;
+	const CAUSE_HEALTH_REGEN = 4;
+	const CAUSE_POTION = 5;
+	const CAUSE_WALKING = 6;
+	const CAUSE_SNEAKING = 7;
+	const CAUSE_SWIMMING = 8;
+	const CAUSE_JUMPING = 10;
+	const CAUSE_CUSTOM = 11;
 
-	/** @var FishingHook */
-	private $hook;
+	const CAUSE_FLAG_SPRINT = 0x10000;
 
-	/**
-	 * @param Player $player
-	 * @param Item   $item
-	 * @param        $fishingHook
-	 */
-	public function __construct(Player $player, Item $item, $fishingHook = null){
-		$this->player = $player;
-		$this->item = $item;
-		$this->hook = $fishingHook;
+	/** @var float */
+	private $amount;
+
+	public function __construct(Human $human, float $amount, int $cause){
+		$this->player = $human;
+		$this->amount = $amount;
 	}
 
 	/**
-	 * @return Item
+	 * @return Human|Player
 	 */
-	public function getItem(){
-		return clone $this->item;
+	public function getPlayer(){
+		return $this->player;
 	}
 
-	public function getHook(){
-		return $this->hook;
+	public function getAmount() : float{
+		return $this->amount;
+	}
+
+	public function setAmount(float $amount){
+		$this->amount = $amount;
 	}
 }

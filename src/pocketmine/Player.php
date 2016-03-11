@@ -71,6 +71,7 @@ use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\event\player\PlayerToggleSneakEvent;
 use pocketmine\event\player\PlayerToggleSprintEvent;
+use pocketmine\event\player\PlayerUseFishingRodEvent;
 use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\event\server\DataPacketSendEvent;
 use pocketmine\event\TextContainer;
@@ -279,6 +280,40 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	public $selectedPos = [];
 	public $selectedLev = [];
+
+	public function linkHookToPlayer(FishingHook $entity){
+		if($entity->isAlive()){
+			$this->setFishingHook($entity);
+			$pk = new EntityEventPacket();
+			$pk->eid = $this->getFishingHook()->getId();
+			$pk->event = EntityEventPacket::FISH_HOOK_POSITION;
+			$this->server->broadcastPacket($this->level->getPlayers(), $pk);
+			return true;
+		}
+		return false;
+	}
+
+	public function unlinkHookFromPlayer(){
+		$this->fishingHook->close();
+		$this->setFishingHook();
+		$pk = new EntityEventPacket();
+		$pk->eid = 0;
+		$pk->event = EntityEventPacket::FISH_HOOK_TEASE;
+		$this->server->broadcastPacket($this->level->getPlayers(), $pk);
+		return true;
+	}
+
+	public function isFishing(){
+		return ($this->fishingHook instanceof FishingHook);
+	}
+
+	public function getFishingHook(){
+		return $this->fishingHook;
+	}
+
+	public function setFishingHook(FishingHook $entity = null){
+		$this->fishingHook = $entity;
+	}
 
 	public function getLeaveMessage(){
 		return new TranslationContainer(TextFormat::YELLOW . "%multiplayer.player.left", [
@@ -1661,9 +1696,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 
 					if($this->fishingHook instanceof FishingHook){
-						if($this->distance($this->fishingHook) > 20 or $this->inventory->getItemInHand()->getId() !== Item::FISHING_ROD){
-							$this->fishingHook->close();
-							$this->fishingHook = null;
+						if($this->distance($this->fishingHook) > 33 or $this->inventory->getItemInHand()->getId() !== Item::FISHING_ROD){
+							$this->setFishingHook();
 						}
 					}
 					//	}
@@ -2615,15 +2649,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 
 					if($item->getId() === Item::FISHING_ROD){
-						if($this->fishingHook instanceof FishingHook){
-							$this->server->getPluginManager()->callEvent($fish = new PlayerFishEvent($this, $item, $this->fishingHook, true));
+						if($this->isFishing()){
+							$this->server->getPluginManager()->callEvent($ev = new PlayerUseFishingRodEvent($this, PlayerUseFishingRodEvent::ACTION_STOP_FISHING));
 						}else{
-							$this->server->getPluginManager()->callEvent($fish = new PlayerFishEvent($this, $item, $this->fishingHook, false));
+							$this->server->getPluginManager()->callEvent($ev = new PlayerUseFishingRodEvent($this, PlayerUseFishingRodEvent::ACTION_START_FISHING));
 						}
-						if(!$fish->isCancelled()){
-							if($this->fishingHook instanceof FishingHook){
-								$this->fishingHook->close();
-								$this->fishingHook = null;
+						if(!$ev->isCancelled()){
+							if($this->isFishing()){
+								$this->setFishingHook();
 							}else{
 								$nbt = new CompoundTag("", [
 									"Pos" => new ListTag("Pos", [
@@ -2645,7 +2678,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 								$f = 0.6;
 								$this->fishingHook = new FishingHook($this->chunk, $nbt, $this);
 								$this->fishingHook->setMotion($this->fishingHook->getMotion()->multiply($f));
-								$this->fishingHook->owner = $this;
 								$this->fishingHook->spawnToAll();
 							}
 						}

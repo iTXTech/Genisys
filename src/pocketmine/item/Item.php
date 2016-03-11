@@ -498,6 +498,11 @@ class Item{
 	const BEETROOT_SEED = 458;
 	const BEETROOT_SOUP = 459;
 
+	const RAW_SALMON = 460;
+	const CLOWN_FISH = 461;
+	const PUFFER_FISH = 462;
+	const COOKED_SALMON = 463;
+
 	const ENCHANTING_GOLDEN_APPLE = 466;
 
 
