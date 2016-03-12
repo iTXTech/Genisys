@@ -1217,7 +1217,10 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 		}
 	}
 
-	public function __construct(int $id, $meta = 0, int $count = 1, string $name = "Unknown"){
+	public function __construct($id, $meta = 0, int $count = 1, string $name = "Unknown"){
+		if(is_string($id)){
+			$id = Item::fromString($id);
+		}
 		$this->id = $id & 0xffff;
 		$this->meta = $meta !== null ? $meta & 0xffff : null;
 		$this->count = $count;
