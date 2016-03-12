@@ -74,7 +74,7 @@ class MakePluginCommand extends VanillaCommand{
 				continue;
 			}
 			$phar->addFile($file, $path);
-			$sender->sendMessage("[PocketMine-iTX] Adding $path");
+			$sender->sendMessage("[Genisys] Adding $path");
 		}
 
 		foreach($phar as $file => $finfo){
