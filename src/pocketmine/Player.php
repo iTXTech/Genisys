@@ -1784,9 +1784,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return $this->moving;
 	}
 
-	public function entityBaseTick($tickDiff = 1){
-		$hasUpdate = parent::entityBaseTick($tickDiff);
-
+	public function sendAttributes(){
 		$entries = $this->attributeMap->needSend();
 		if(count($entries) > 0){
 			$pk = new UpdateAttributesPacket();
@@ -1797,8 +1795,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$entry->markSynchronized();
 			}
 		}
-
-		return $hasUpdate;
 	}
 
 	public function onUpdate($currentTick){
@@ -1815,6 +1811,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->messageCounter = 2;
 
 		$this->lastUpdate = $currentTick;
+
+		$this->sendAttributes();
 
 		if(!$this->isAlive() and $this->spawned){
 			++$this->deadTicks;
