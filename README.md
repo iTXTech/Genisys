@@ -17,7 +17,7 @@ You can get prebuilt phar from [Jenkins](http://jenkins.mcper.cn/job/Genisys-mas
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
 * [Download PHP7 for Genisys](https://github.com/iTXTech/PHP-Genisys/)
 * [Download Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
-* Be free to create a Pull Request or open an Issue. English and Chinese are both welcome. Use English to communicate with more people.
+* Feel free to create a Pull Request or open an Issue. English and Chinese are both welcome. Use English to communicate with more people.
 
 ### Acknowledgements
 * Some features are merged from **@boybook**'s **FCCore**
@@ -44,10 +44,10 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
 * Weather
 * Experience
 * More Effects
-* Redstone (Button, Lever, PressurePlate, RedstoneWire, RedstoneTorch and so on)
+* Redstone (Button, Lever, Pressure Plate, Redstone Wire, Redstone Torch and more)
 * Nether (Red sky!)
 * Rail & Powered Rail
-* Minecart (can't follow rails)
+* Minecart (doesn't follow rails)
 * Boat
 * More Doors
 * Potions
@@ -58,14 +58,29 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
 * More Items
 * Hunger (Based on Katana)
 * AI (Based on MOW)
-* More commands (bancid bancidbyname banipbyname ms extractplugin makeplugin
-  pardoncid weather extractphar loadplugin lvdat biome xp setblock fill summon)
-* With FolderPluginLoader
+* More commands
+  - bancid
+  - bancidbyname
+  - banipbyname
+  - ms
+  - extractplugin
+  - makeplugin
+  - pardoncid
+  - weather
+  - extractphar
+  - loadplugin
+  - lvdat
+  - biome
+  - xp
+  - setblock
+  - fill
+  - summon
+* FolderPluginLoader
 * Monster Spawner
 * Item Frame
 * Dispenser and Dropper
 * Colorful Sheep
-* Different types of Boat, Villager and Rabbit
+* Multiple types of Boat, Villager and Rabbit
 * Enchantment
 * Brewing
 * NOTICE: Please edit **genisys.yml** to enable all the features, including Redstone, MobAI, Nether and so on.
@@ -82,6 +97,7 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
 (Follows are the test servers built by us. In fact other servers used Genisys may be more professional than ours.)
 
 **Beer MC (A mini-game server)**
+
 Address: beermc.com
 Port: 19132
 
@@ -95,6 +111,7 @@ Port: 19132
 * 欢迎创建 Pull Request。请使用中文或者英文进行交流（但为了交流方便，请尽量使用英文进行交流）。
 
 ### 鸣谢
+* 一些功能来自 **@boybook** 的 **FCCore**
 * 头颅、花盆的相关代码由 **@ImagicalCorp** ImagicalMine 编写；
 * 生物 AI 的相关代码基于 **@Zzm317**  令人惊奇的 MyOwnWorld 编写；
 * 画、酿造台的相关代码从 **Nukkit** 项目重写；
@@ -129,7 +146,19 @@ Port: 19132
 * 更多的物品
 * 饥饿系统（基于 Katana 的代码）
 * 生物 AI（基于 MOW 的代码）
-* 更多的指令（bancid（按设备编号或玩家 ID），banip（按 IP 或玩家 ID），ms，devTools 相关指令（打包与解包插件），pardoncid，weather，loadplugin，lvdat，xp，setblock，fill，summon）
+* 更多的指令
+  - bancid（按设备编号或玩家 ID）
+  - banip（按 IP 或玩家 ID）
+  - ms
+  - DevTools 相关指令（打包与解包插件）
+  - pardoncid
+  - weather
+  - loadplugin
+  - lvdat
+  - xp
+  - setblock
+  - fill
+  - summon
 * 文件夹插件加载器
 * 刷怪箱
 * 物品展示柜
@@ -153,5 +182,6 @@ Port: 19132
 （以下是我们个人搭建的服务器，供测试参观。事实上，其他许多使用 Genisys 搭建的服务器以及其维护水平可能比我们更专业、高效。）
 
 **BeerMc 小游戏**
+
 地址: beermc.com
 端口: 19132
