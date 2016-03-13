@@ -95,6 +95,7 @@ Port: 19132
 * 欢迎创建 Pull Request。请使用中文或者英文进行交流（但为了交流方便，请尽量使用英文进行交流）。
 
 ### 鸣谢
+* 一些特性从 **@boybook** 的 **FCCore** 中提取并融入；
 * 头颅、花盆的相关代码由 **@ImagicalCorp** ImagicalMine 编写；
 * 生物 AI 的相关代码基于 **@Zzm317**  令人惊奇的 MyOwnWorld 编写；
 * 画、酿造台的相关代码从 **Nukkit** 项目重写；
