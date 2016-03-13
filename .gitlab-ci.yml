@@ -3,15 +3,12 @@ image: itxtech/docker-env-genisys
 stages:
  - test
 
-before_script:
- - mkdir plugins
-
 package:
   stage: test
   script:
+   - mkdir plugins
+   - sed -i "s/const VERSION \?= \?\"\(.*\)\"/const VERSION = \"\1-$(git rev-parse --short HEAD)\"/" src/pocketmine/PocketMine.php
    - php tests/Travis.php
-  only:
-   - master
   artifacts:
     paths:
      - plugins/PocketMine-iTX/Genisys*.phar
