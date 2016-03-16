@@ -87,13 +87,11 @@ class CommandReader extends Thread{
 		}
 
 		$lastLine = microtime(true);
-		while(!$this->shutdown){
+		while(!$this->shutdown){;
 			if(($line = $this->readLine()) !== ""){
 				$this->buffer[] = preg_replace("#\\x1b\\x5b([^\\x1b]*\\x7e|[\\x40-\\x50])#", "", $line);
 			}elseif(!$this->shutdown and (microtime(true) - $lastLine) <= 0.1){ //Non blocking! Sleep to save CPU
-				$this->synchronized(function(){
-					$this->wait(10000);
-				});
+				usleep(40000);
 			}
 
 			$lastLine = microtime(true);

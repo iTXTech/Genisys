@@ -170,7 +170,7 @@ class Attribute{
 		return $this->currentValue;
 	}
 
-	public function setValue($value, $fit = false){
+	public function setValue($value, $fit = true){
 		if($value > $this->getMaxValue() or $value < $this->getMinValue()){
 			if(!$fit){
 				Server::getInstance()->getLogger()->error("[Attribute / {$this->getName()}] Value $value exceeds the range!");

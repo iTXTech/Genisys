@@ -28,6 +28,7 @@ use pocketmine\item\enchantment\EnchantmentEntry;
 use pocketmine\item\enchantment\EnchantmentLevelTable;
 use pocketmine\item\enchantment\EnchantmentList;
 use pocketmine\item\Item;
+use pocketmine\level\Level;
 use pocketmine\network\protocol\CraftingDataPacket;
 use pocketmine\Player;
 use pocketmine\Server;
@@ -173,8 +174,9 @@ class EnchantInventory extends ContainerInventory{
 	public function onClose(Player $who){
 		parent::onClose($who);
 
+		$level = $this->getHolder()->getLevel();
 		for($i = 0; $i < 2; ++$i){
-			$this->getHolder()->getLevel()->dropItem($this->getHolder()->add(0.5, 0.5, 0.5), $this->getItem($i));
+			if($level instanceof Level) $level->dropItem($this->getHolder()->add(0.5, 0.5, 0.5), $this->getItem($i));
 			$this->clear($i);
 		}
 
