@@ -1,14 +1,20 @@
 # Genisys(创世纪) - PocketMine-iTX Core
 
 ### Gitter Chat
-[![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://img.shields.io/gitter/room/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ### Build status
-[![Jenkins Build Status](http://jenkins.mcper.cn/buildStatus/icon?job=Genisys-master)](http://jenkins.mcper.cn/job/Genisys-master/)
-[![Travis-CI Build Status](https://travis-ci.org/iTXTech/Genisys.svg?branch=master)](https://travis-ci.org/iTXTech/Genisys)
+Jenkins: [![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.mcper.cn/Genisys-master.svg)](http://jenkins.mcper.cn/job/Genisys-master/)
+
+Travis-CI: [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
 
 ### Downloads
 You can get prebuilt phar from [Jenkins](http://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/Genisys/builds).
+
+### Fast Docker installation
+[![Docker Pulls](https://img.shields.io/docker/pulls/itxtech/docker-env-genisys.svg)](https://hub.docker.com/r/itxtech/docker-env-genisys/)
+
+See [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys) for details.
 
 ## English Version
 
