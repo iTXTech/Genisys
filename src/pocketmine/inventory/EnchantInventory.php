@@ -238,29 +238,31 @@ class EnchantInventory extends ContainerInventory{
 	 * @return Enchantment[]
 	 */
 	public function removeConflictEnchantment(Enchantment $enchantment, array $enchantments){
-		foreach($enchantments as $e){
-			$id = $e->getId();
-			if($id == $enchantment->getId()){
-				unset($enchantments[$id]);
-				continue;
-			}
+		if(count($enchantments) > 0){
+			foreach($enchantments as $e){
+				$id = $e->getId();
+				if($id == $enchantment->getId()){
+					unset($enchantments[$id]);
+					continue;
+				}
 
-			if($id >= 0 and $id <= 4 and $enchantment->getId() >= 0 and $enchantment->getId() <= 4){
-				//Protection
-				unset($enchantments[$id]);
-				continue;
-			}
+				if($id >= 0 and $id <= 4 and $enchantment->getId() >= 0 and $enchantment->getId() <= 4){
+					//Protection
+					unset($enchantments[$id]);
+					continue;
+				}
 
-			if($id >= 9 and $id <= 14 and $enchantment->getId() >= 9 and $enchantment->getId() <= 14){
-				//Weapon
-				unset($enchantments[$id]);
-				continue;
-			}
+				if($id >= 9 and $id <= 14 and $enchantment->getId() >= 9 and $enchantment->getId() <= 14){
+					//Weapon
+					unset($enchantments[$id]);
+					continue;
+				}
 
-			if (($id == Enchantment::TYPE_MINING_SILK_TOUCH and $enchantment->getId() == Enchantment::TYPE_MINING_FORTUNE) or ($id == Enchantment::TYPE_MINING_FORTUNE and $enchantment->getId() == Enchantment::TYPE_MINING_SILK_TOUCH)) {
-				//Protection
-				unset($enchantments[$id]);
-				continue;
+				if(($id == Enchantment::TYPE_MINING_SILK_TOUCH and $enchantment->getId() == Enchantment::TYPE_MINING_FORTUNE) or ($id == Enchantment::TYPE_MINING_FORTUNE and $enchantment->getId() == Enchantment::TYPE_MINING_SILK_TOUCH)){
+					//Protection
+					unset($enchantments[$id]);
+					continue;
+				}
 			}
 		}
 		$result = [];
