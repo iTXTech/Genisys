@@ -121,6 +121,7 @@ class EnchantInventory extends ContainerInventory{
 						}
 						$key--;
 
+						if(!isset($possible[$key])) return;
 						$enchantment = $possible[$key];
 						$result[] = $enchantment;
 						unset($possible[$key]);
@@ -263,8 +264,10 @@ class EnchantInventory extends ContainerInventory{
 			}
 		}
 		$result = [];
-		foreach($enchantments as $enchantment){
-			$result[] = $enchantment;
+		if(count($enchantments) > 0){
+			foreach($enchantments as $enchantment){
+				$result[] = $enchantment;
+			}
 		}
 		return $result;
 	}

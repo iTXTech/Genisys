@@ -22,6 +22,7 @@
 namespace pocketmine\command;
 
 use pocketmine\Thread;
+use pocketmine\ThreadManager;
 
 class CommandReader extends Thread{
 	private $readline;
@@ -74,6 +75,11 @@ class CommandReader extends Thread{
 
 	public function quit(){
 		$this->shutdown();
+		$this->isKilled = true;
+
+		$this->notify();
+
+		ThreadManager::getInstance()->remove($this);
 	}
 
 	public function run(){
@@ -92,7 +98,9 @@ class CommandReader extends Thread{
 			if(($line = $this->readLine()) !== ""){
 				$this->buffer[] = preg_replace("#\\x1b\\x5b([^\\x1b]*\\x7e|[\\x40-\\x50])#", "", $line);
 			}elseif(!$this->shutdown and (microtime(true) - $lastLine) <= 0.1){ //Non blocking! Sleep to save CPU
-				usleep(40000);
+				$this->synchronized(function(){
+					$this->wait(10000);
+				});
 			}
 
 			$lastLine = microtime(true);
