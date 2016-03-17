@@ -149,7 +149,6 @@ use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
 use pocketmine\utils\TextFormat;
 use raklib\Binary;
-use pocketmine\event\player\PlayerFishEvent;
 
 /**
  * Main class that handles networking, recovery, and packet sending to the server part
@@ -263,8 +262,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/** @var PermissibleBase */
 	private $perm = null;
 
-	protected $attribute;
-
 	public $weatherData = [0, 0, 0];
 
 	/** @var Vector3 */
@@ -294,13 +291,15 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	public function unlinkHookFromPlayer(){
-		$this->fishingHook->close();
-		$this->setFishingHook();
-		$pk = new EntityEventPacket();
-		$pk->eid = 0;
-		$pk->event = EntityEventPacket::FISH_HOOK_TEASE;
-		$this->server->broadcastPacket($this->level->getPlayers(), $pk);
-		return true;
+		if($this->fishingHook instanceof FishingHook){
+			$pk = new EntityEventPacket();
+			$pk->eid = $this->fishingHook->getId();
+			$pk->event = EntityEventPacket::FISH_HOOK_TEASE;
+			$this->server->broadcastPacket($this->level->getPlayers(), $pk);
+			$this->setFishingHook();
+			return true;
+		}
+		return false;
 	}
 
 	public function isFishing(){
