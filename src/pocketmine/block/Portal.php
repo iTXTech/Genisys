@@ -109,7 +109,7 @@ class Portal extends Flowable{
 	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
-				[Item::Portal, 0, 1],
+				[Item::PORTAL, 0, 1],
 			];
 		}else{
 			return [];
