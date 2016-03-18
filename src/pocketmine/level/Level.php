@@ -278,7 +278,8 @@ class Level implements ChunkManager, Metadatable{
 	/** @var Generator */
 	private $generatorInstance;
 
-	public $weather = null;
+	/** @var Weather */
+	private $weather;
 
 	public $blockTempData = [];
 
@@ -420,6 +421,9 @@ class Level implements ChunkManager, Metadatable{
 		return $this->dimension;
 	}
 
+	/**
+	 * @return Weather
+	 */
 	public function getWeather(){
 		return $this->weather;
 	}
