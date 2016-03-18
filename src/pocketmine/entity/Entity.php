@@ -1608,6 +1608,12 @@ abstract class Entity extends Location implements Metadatable{
 				$block->checkActivation();
 			}
 		}
+
+		$this->activatedPressurePlates = [];
+
+		if($this->attributeMap != null) {
+			$this->attributeMap = null;
+		}
 	}
 
 	/**

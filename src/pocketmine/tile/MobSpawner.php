@@ -100,6 +100,7 @@ class MobSpawner extends Spawnable{
 					]);
 					$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new EntityGenerateEvent($entity = Entity::createEntity($this->getEntityId(), $this->chunk, $nbt), EntityGenerateEvent::CAUSE_MOB_SPAWNER));
 					if(!$ev->isCancelled()) $entity->spawnToAll();
+					else $entity->close();
 				}
 			}
 		}

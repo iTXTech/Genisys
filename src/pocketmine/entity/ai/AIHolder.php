@@ -172,9 +172,9 @@ class AIHolder{
 	}
 
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只僵尸在某坐标
 	 */
 	public function spawnZombie(Position $pos, $maxHealth = 20, $health = 20){
@@ -193,9 +193,9 @@ class AIHolder{
 	}
 
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只苦力怕在某坐标
 	 */
 	public function spawnCreeper(Position $pos, $maxHealth = 20, $health = 20){
@@ -210,9 +210,9 @@ class AIHolder{
 	}
 
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只骷髅弓箭手在某坐标
 	 */
 	public function spawnSkeleton(Position $pos, $maxHealth = 20, $health = 20){
@@ -227,9 +227,9 @@ class AIHolder{
 	}
 
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只牛在某坐标
 	 *
 	 * @return Cow
@@ -250,9 +250,9 @@ class AIHolder{
 	}
 
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只豬在某坐标
 	 */
 	public function spawnPig(Position $pos, $maxHealth = 20, $health = 20){
@@ -267,9 +267,9 @@ class AIHolder{
 	}
 
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只羊在某坐标
 	 */
 	public function spawnSheep(Position $pos, $maxHealth = 20, $health = 20){
@@ -284,9 +284,9 @@ class AIHolder{
 	}
 
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只雞在某坐标
 	 */
 	public function spawnChicken(Position $pos, $maxHealth = 20, $health = 20){
@@ -494,7 +494,8 @@ class AIHolder{
 		foreach($this->getServer()->getLevels() as $level){
 			foreach($level->getEntities() as $entity){
 				if($entity instanceof Zombie or $entity instanceof Creeper or $entity instanceof Skeleton or $entity instanceof Cow or $entity instanceof Pig or $entity instanceof Sheep or $entity
-					instanceof Chicken or $entity instanceof Mooshroom or $entity instanceof Ocelot or $entity instanceof Wolf or $entity instanceof PigZombie){
+					instanceof Chicken or $entity instanceof Mooshroom or $entity instanceof Ocelot or $entity instanceof Wolf or $entity instanceof PigZombie
+				){
 					if(count($entity->getViewers()) != 0){
 						if($entity instanceof Zombie or $entity instanceof PigZombie){
 							$array = &$this->zombie;
@@ -891,11 +892,12 @@ class AIHolder{
 						if(count($zoC) > $max){
 							for($i = 0; $i < (count($zoC) - $max); $i++) $zoC[$i]->kill();
 						}elseif($random == 0 && $level->getTime() >= 13500){
-								$pos = new Position($v3->x, $v3->y, $v3->z, $level);
+							$pos = new Position($v3->x, $v3->y, $v3->z, $level);
 
-								$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($ent = $this->getZombie($pos), EntityGenerateEvent::CAUSE_AI_HOLDER));
-								if(!$ev->isCancelled()) $ent->spawnToAll();
-								//$this->server->getLogger()->info("生成1僵尸");
+							$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($ent = $this->getZombie($pos), EntityGenerateEvent::CAUSE_AI_HOLDER));
+							if(!$ev->isCancelled()) $ent->spawnToAll();
+							else $ent->close();
+							//$this->server->getLogger()->info("生成1僵尸");
 						}
 
 						if(count($cowc) > $max){
@@ -904,6 +906,7 @@ class AIHolder{
 							$pos = new Position($v3->x, $v3->y, $v3->z, $level);
 							$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($ent = $this->getCow($pos), EntityGenerateEvent::CAUSE_AI_HOLDER));
 							if(!$ev->isCancelled()) $ent->spawnToAll();
+							else $ent->close();
 							//$this->server->getLogger()->info("生成1牛");
 						}
 						break;

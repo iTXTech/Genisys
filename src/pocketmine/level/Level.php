@@ -89,7 +89,6 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\LongTag;
-use pocketmine\network\Network;
 use pocketmine\network\protocol\ChangeDimensionPacket;
 use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\protocol\FullChunkDataPacket;
@@ -111,7 +110,6 @@ use pocketmine\utils\Random;
 use pocketmine\utils\ReversePriorityQueue;
 use pocketmine\level\particle\Particle;
 use pocketmine\level\sound\Sound;
-use pocketmine\entity\Effect;
 use pocketmine\level\particle\DestroyBlockParticle;
 
 use pocketmine\level\generator\biome\Biome;
@@ -143,6 +141,9 @@ class Level implements ChunkManager, Metadatable{
 	const TIME_SUNRISE = 23000;
 
 	const TIME_FULL = 24000;
+
+	const DIMENSION_NORMAL = 0;
+	const DIMENSION_NETHER = 1;
 
 	/** @var Tile[] */
 	private $tiles = [];
@@ -281,6 +282,8 @@ class Level implements ChunkManager, Metadatable{
 
 	public $blockTempData = [];
 
+	private $dimension = self::DIMENSION_NORMAL;
+
 	/**
 	 * @param Vector3 $pos
 	 * @param         $data
@@ -402,10 +405,16 @@ class Level implements ChunkManager, Metadatable{
 
 		$this->weather = new Weather($this, 0);
 		if(($this->server->weatherEnabled and $this->folderName != $this->server->netherName) or !$this->server->netherEnabled) WeatherManager::registerLevel($this);
+		if($this->server->netherEnabled and $this->server->netherName == $this->folderName) $this->setDimension(self::DIMENSION_NETHER);
+		else $this->setDimension(self::DIMENSION_NORMAL);
+	}
+
+	public function setDimension(int $dimension){
+		$this->dimension = $dimension;
 	}
 
 	public function getDimension() : int{
-		return $this->folderName != $this->server->netherName ? ChangeDimensionPacket::DIMENSION_NORMAL : ChangeDimensionPacket::DIMENSION_NETHER;
+		return $this->dimension;
 	}
 
 	public function getWeather(){

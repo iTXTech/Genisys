@@ -788,7 +788,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 			if(WeatherManager::isRegistered($targetLevel)) $targetLevel->getWeather()->sendWeather($this);
 
-			if($this->server->netherEnabled){
+			/*if($this->server->netherEnabled){
 				if($targetLevel == $this->server->netherLevel){
 					$pk = new ChangeDimensionPacket();
 					$pk->dimension = ChangeDimensionPacket::DIMENSION_NETHER;
@@ -800,8 +800,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->dataPacket($pk);
 					$this->shouldSendStatus = true;
 				}
+			}*/
+			if($targetLevel->getDimension() != $oldLevel->getDimension()){
+				$pk = new ChangeDimensionPacket();
+				$pk->dimension = $targetLevel->getDimension();
+				$this->dataPacket($pk);
+				$this->shouldSendStatus = true;
 			}
-
 		}
 	}
 
@@ -2287,12 +2292,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$pk = new StartGamePacket();
 		$pk->seed = -1;
-		$pk->dimension = ChangeDimensionPacket::DIMENSION_NORMAL;
-		if($this->server->netherEnabled){
-			if($this->getLevel() == $this->server->netherLevel){
-				$pk->dimension = ChangeDimensionPacket::DIMENSION_NETHER;
-			}
-		}
+		$pk->dimension = $this->level->getDimension();
 		$pk->x = $this->x;
 		$pk->y = $this->y;
 		$pk->z = $this->z;
