@@ -18,57 +18,73 @@ class Weather{
 	const RAINY_THUNDER = 2;
 	const THUNDER = 3;
 
-	public $level;
-	public $weatherNow = 0;
-	public $strength1;
-	public $strength2;
-	public $duration;
-	public $wea = [0, 1, 0, 1, 0, 1, 0, 2, 0, 3];
+	private $level;
+	private $weatherNow = 0;
+	private $strength1;
+	private $strength2;
+	private $duration;
+	private $wea = [0, 1, 0, 1, 0, 1, 0, 2, 0, 3];
+	private $canCalculate = true;
+
+	private $lastUpdate = 0;
 
 	public function __construct(Level $level, $duration = 1200){
 		$this->level = $level;
 		$this->weatherNow = self::SUNNY;
 		$this->duration = $duration;
+		$this->lastUpdate = $level->getServer()->getTick();
 	}
 
-	public function calcWeather(){
-		$this->duration--;
-		if($this->duration <= 0){
-			//0晴天1下雨2雷雨3阴天雷
-			if($this->weatherNow == self::SUNNY){
-				$weather = $this->wea[mt_rand(0, count($this->wea) - 1)];
-				$duration = mt_rand(min($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax), max($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax));;
-				$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $weather, $duration));
-				if(!$ev->isCancelled()){
-					$this->weatherNow = $ev->getWeather();
-					$this->strength1 = mt_rand(90000, 110000);
-					$this->strength2 = mt_rand(30000, 40000);
-					$this->duration = $ev->getDuration();
-					$this->changeWeather($this->weatherNow, $this->strength1, $this->strength2);
+	public function canCalculate() : bool {
+		return $this->canCalculate;
+	}
+
+	public function setCanCalculate(bool $canCalc){
+		$this->canCalculate = $canCalc;
+	}
+
+	public function calcWeather($currentTick){
+		if($this->canCalculate()){
+			$tickDiff = $currentTick - $this->lastUpdate;
+			$this->duration -= $tickDiff;
+			if($this->duration <= 0){
+				//0晴天1下雨2雷雨3阴天雷
+				if($this->weatherNow == self::SUNNY){
+					$weather = $this->wea[mt_rand(0, count($this->wea) - 1)];
+					$duration = mt_rand(min($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax), max($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax));;
+					$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $weather, $duration));
+					if(!$ev->isCancelled()){
+						$this->weatherNow = $ev->getWeather();
+						$this->strength1 = mt_rand(90000, 110000);
+						$this->strength2 = mt_rand(30000, 40000);
+						$this->duration = $ev->getDuration();
+						$this->changeWeather($this->weatherNow, $this->strength1, $this->strength2);
+					}
+				}else{
+					$weather = self::SUNNY;
+					$duration = mt_rand(min($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax), max($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax));
+					$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $weather, $duration));
+					if(!$ev->isCancelled()){
+						$this->weatherNow = $ev->getWeather();
+						$this->strength1 = 0;
+						$this->strength2 = 0;
+						$this->duration = $ev->getDuration();
+						$this->changeWeather($this->weatherNow, $this->strength1, $this->strength2);
+					}
 				}
-			}else{
-				$weather = self::SUNNY;
-				$duration = mt_rand(min($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax), max($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax));
-				$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $weather, $duration));
-				if(!$ev->isCancelled()){
-					$this->weatherNow = $ev->getWeather();
-					$this->strength1 = 0;
-					$this->strength2 = 0;
-					$this->duration = $ev->getDuration();
-					$this->changeWeather($this->weatherNow, $this->strength1, $this->strength2);
+			}
+			if(($this->weatherNow > 0) and is_int($this->duration / $this->level->getServer()->lightningTime)){
+				foreach($this->level->getPlayers() as $p){
+					if(mt_rand(0, 1) == 1){
+						$x = $p->getX() + rand(-100, 100);
+						$y = $p->getY() + rand(20, 50);
+						$z = $p->getZ() + rand(-100, 100);
+						$this->level->sendLighting($x, $y, $z, $p);
+					}
 				}
 			}
 		}
-		if(($this->weatherNow > 0) and is_int($this->duration / $this->level->getServer()->lightningTime)){
-			foreach($this->level->getPlayers() as $p){
-				if(mt_rand(0 ,1) == 1){
-					$x = $p->getX() + rand(-100, 100);
-					$y = $p->getY() + rand(20, 50);
-					$z = $p->getZ() + rand(-100, 100);
-					$this->level->sendLighting($x, $y, $z, $p);
-				}
-			}
-		}
+		$this->lastUpdate = $currentTick;
 	}
 
 	public function setWeather(int $wea, int $duration = 12000){

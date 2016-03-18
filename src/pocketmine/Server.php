@@ -2953,8 +2953,6 @@ private function lookupAddress($address) {
 			$this->doAutoSave();
 		}
 
-		if($this->weatherEnabled) WeatherManager::updateWeather();
-
 		/*if($this->sendUsageTicker > 0 and --$this->sendUsageTicker === 0){
 			$this->sendUsageTicker = 6000;
 			$this->sendUsage(SendUsageTask::TYPE_STATUS);

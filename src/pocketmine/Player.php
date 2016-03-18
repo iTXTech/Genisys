@@ -96,7 +96,6 @@ use pocketmine\level\Level;
 use pocketmine\level\Location;
 use pocketmine\level\Position;
 use pocketmine\level\sound\LaunchSound;
-use pocketmine\level\weather\WeatherManager;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector2;
 use pocketmine\math\Vector3;
@@ -786,7 +785,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$pk->started = $this->level->stopTime == false;
 			$this->dataPacket($pk);
 
-			if(WeatherManager::isRegistered($targetLevel)) $targetLevel->getWeather()->sendWeather($this);
+			$targetLevel->getWeather()->sendWeather($this);
 
 			/*if($this->server->netherEnabled){
 				if($targetLevel == $this->server->netherLevel){
@@ -980,7 +979,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->server->onPlayerLogin($this);
 		$this->spawnToAll();
 
-		if(WeatherManager::isRegistered($this->level)) $this->level->getWeather()->sendWeather($this);
+		$this->level->getWeather()->sendWeather($this);
 		if($this->server->expEnabled){
 			//$this->checkExpLevel();
 			$this->updateExperience();

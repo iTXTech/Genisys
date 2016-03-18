@@ -404,7 +404,10 @@ class Level implements ChunkManager, Metadatable{
 		$this->tickRate = 1;
 
 		$this->weather = new Weather($this, 0);
-		if(($this->server->weatherEnabled and $this->folderName != $this->server->netherName) or !$this->server->netherEnabled) WeatherManager::registerLevel($this);
+		if(($this->server->weatherEnabled and $this->folderName != $this->server->netherName) or !$this->server->netherEnabled){
+			WeatherManager::registerLevel($this);
+			$this->weather->setCanCalculate(true);
+		}else $this->weather->setCanCalculate(false);
 		if($this->server->netherEnabled and $this->server->netherName == $this->folderName) $this->setDimension(self::DIMENSION_NETHER);
 		else $this->setDimension(self::DIMENSION_NORMAL);
 	}
@@ -745,6 +748,8 @@ class Level implements ChunkManager, Metadatable{
 			$this->sendTime();
 			$this->sendTimeTicker = 0;
 		}
+
+		$this->weather->calcWeather($currentTick);
 
 		$this->unloadChunks();
 
