@@ -453,10 +453,10 @@ namespace pocketmine {
 	@define("INT32_MASK", is_int(0xffffffff) ? 0xffffffff : -1);
 	@ini_set("opcache.mmap_base", bin2hex(Utils::getRandomBytes(8, false))); //Fix OPCache address errors
 
-	$lang = "eng";
+	$lang = "unknown";
 	if(!file_exists(\pocketmine\DATA . "server.properties") and !isset($opts["no-wizard"])){
 		$inst = new Installer();
-		$lang = $inst->getLang();
+		$lang = $inst->getDefaultLang();
 	}
 
 	/*if(\Phar::running(true) === ""){

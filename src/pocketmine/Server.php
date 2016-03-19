@@ -1719,8 +1719,9 @@ class Server{
 	 * @param string          $filePath
 	 * @param string          $dataPath
 	 * @param string          $pluginPath
+	 * @param string          $defaultLang
 	 */
-	public function __construct(\ClassLoader $autoloader, \ThreadedLogger $logger, $filePath, $dataPath, $pluginPath, $defaultLang = "eng"){
+	public function __construct(\ClassLoader $autoloader, \ThreadedLogger $logger, $filePath, $dataPath, $pluginPath, $defaultLang = "unknown"){
 		self::$instance = $this;
 		self::$sleeper = new \Threaded;
 		$this->autoloader = $autoloader;
@@ -1771,10 +1772,12 @@ class Server{
 				}
 				@file_put_contents($this->dataPath . "pocketmine.yml", $content);
 			}
-			$this->config = new Config($this->dataPath . "pocketmine.yml", Config::YAML, []);
-			if($this->getProperty("settings.language", "eng") != $defaultLang){
-				$this->config->set("settings.language", $defaultLang);
-				$this->config->save();
+			$this->config = new Config($configPath = $this->dataPath . "pocketmine.yml", Config::YAML, []);
+			$nowLang = $this->getProperty("settings.language", "eng");
+			if($defaultLang != "unknown" and $nowLang != $defaultLang){
+				@file_put_contents($configPath, str_replace('language: "' . $nowLang . '"', 'language: "' . $defaultLang . '"', file_get_contents($configPath)));
+				$this->config->reload();
+				unset($this->propertyCache["settings.language"]);
 			}
 
 			$this->logger->info("Loading genisys.yml...");

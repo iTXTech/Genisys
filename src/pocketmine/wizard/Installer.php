@@ -35,7 +35,7 @@ class Installer{
 	const DEFAULT_PLAYERS = 20;
 	const DEFAULT_GAMEMODE = 0;
 
-	private $lang;
+	private $defaultLang;
 
 	public function __construct(){
 		echo "[*] Genisys set-up wizard\n";
@@ -50,6 +50,7 @@ class Installer{
 				echo "[!] Couldn't find the language\n";
 				$lang = false;
 			}
+			$this->defaultLang = $lang;
 		}while($lang == false);
 		$this->lang = new InstallerLang($lang);
 
@@ -75,8 +76,8 @@ class Installer{
 		$this->endWizard();
 	}
 
-	public function getLang(){
-		return $this->lang;
+	public function getDefaultLang(){
+		return $this->defaultLang;
 	}
 
 	private function showLicense(){
