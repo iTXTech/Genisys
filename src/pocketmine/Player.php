@@ -1006,9 +1006,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		
 		$copy_inventory = $this->inventory->getContents();
 		if ($this->gamemode === Player::CREATIVE){
-              $this->setGamemode(0);
-              $this->setGamemode(1);
-          }
+			$this->setGamemode(0);
+			$this->setGamemode(1);
+		}
 		$this->inventory->setContents($copy_inventory); 
 		$this->inventory->sendContents($this);
 		$this->inventory->sendArmorContents($this);
