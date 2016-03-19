@@ -226,7 +226,7 @@ class PluginManager{
 									continue;
 								}
 								//If the plugin uses new API
-								if($version[0] <= $apiVersion[0]){
+								if($version[0] < $apiVersion[0]){
 									$compatible = true;
 									break;
 								}
@@ -239,8 +239,40 @@ class PluginManager{
 								break;
 							}
 
+							$compatiblegeniapi = false;
+							foreach($description->getCompatibleGeniApis() as $version){
+								//Format: majorVersion.minorVersion.patch
+								$version = array_map("intval", explode(".", $version));
+								$apiVersion = array_map("intval", explode(".", $this->server->getGeniApiVersion()));
+								//Completely different API version
+								if($version[0] > $apiVersion[0]){
+									continue;
+								}
+								//If the plugin uses new API
+								if($version[0] < $apiVersion[0]){
+									$compatiblegeniapi = true;
+									break;
+								}
+								//If the plugin requires new API features, being backwards compatible
+								if($version[1] > $apiVersion[1]){
+									continue;
+								}
+
+								if($version[1] == $apiVersion[1] and $version[2] > $apiVersion[2]){
+									continue;
+								}
+
+								$compatiblegeniapi = true;
+								break;
+							}
+
 							if($compatible === false){
 								$this->server->getLogger()->error($this->server->getLanguage()->translateString("pocketmine.plugin.loadError", [$name, "%pocketmine.plugin.incompatibleAPI"]));
+								continue;
+							}
+
+							if($compatiblegeniapi === false){
+								$this->server->getLogger()->error("ould not load plugin '{$description->getName()}': Incompatible GeniAPI version");
 								continue;
 							}
 

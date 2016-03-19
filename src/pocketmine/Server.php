@@ -424,8 +424,18 @@ class Server{
 	}
 
 
+	/**
+	 * @return string
+	 */
 	public function getiTXApiVersion(){
-		return \pocketmine\iTX_API_VERSION;
+		return \pocketmine\GENISYS_API_VERSION;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getGeniApiVersion(){
+		return \pocketmine\GENISYS_API_VERSION;
 	}
 
 	/**
