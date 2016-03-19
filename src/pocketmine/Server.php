@@ -159,7 +159,6 @@ use pocketmine\entity\IronGolem;
 use pocketmine\entity\SnowGolem;
 use pocketmine\entity\Lightning;
 use pocketmine\entity\ExperienceOrb;
-use pocketmine\level\weather\WeatherManager;
 use pocketmine\network\protocol\StrangePacket;
 use pocketmine\event\player\PlayerTransferEvent;
 use pocketmine\entity\ai\AIHolder;
@@ -1711,7 +1710,7 @@ class Server{
 	 * @param string          $dataPath
 	 * @param string          $pluginPath
 	 */
-	public function __construct(\ClassLoader $autoloader, \ThreadedLogger $logger, $filePath, $dataPath, $pluginPath){
+	public function __construct(\ClassLoader $autoloader, \ThreadedLogger $logger, $filePath, $dataPath, $pluginPath, $defaultLang = "eng"){
 		self::$instance = $this;
 		self::$sleeper = new \Threaded;
 		$this->autoloader = $autoloader;
@@ -1763,6 +1762,10 @@ class Server{
 				@file_put_contents($this->dataPath . "pocketmine.yml", $content);
 			}
 			$this->config = new Config($this->dataPath . "pocketmine.yml", Config::YAML, []);
+			if($this->getProperty("settings.language", "eng") != $defaultLang){
+				$this->config->set("settings.language", $defaultLang);
+				$this->config->save();
+			}
 
 			$this->logger->info("Loading genisys.yml...");
 

@@ -925,7 +925,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->spawned = true;
 
 		$this->sendSettings();
-		$this->setMovementSpeed(0.1);
 		$this->sendPotionEffects($this);
 		$this->sendData($this);
 
@@ -2991,7 +2990,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						//$this->getAttributeMap()->resetAll();
 						$this->setHealth($this->getMaxHealth());
 						$this->setFood(20);
-						$this->setMovementSpeed(0.1);
 						if($this->server->expEnabled) $this->updateExperience();
 
 						$this->starvationTick = 0;
