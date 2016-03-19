@@ -9,6 +9,7 @@ namespace pocketmine\level\weather;
 
 use pocketmine\event\level\WeatherChangeEvent;
 use pocketmine\level\Level;
+use pocketmine\math\Vector3;
 use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\Player;
 
@@ -74,14 +75,22 @@ class Weather{
 				}
 			}
 			if(($this->weatherNow > 0) and is_int($this->duration / $this->level->getServer()->lightningTime)){
-				foreach($this->level->getPlayers() as $p){
+				$players = $this->level->getPlayers();
+				if(count($players) > 0){
+					$p = $players[array_rand($players)];
+					$x = $p->x + mt_rand(-64, 64);
+					$z = $p->z + mt_rand(-64, 64);
+					$y = $this->level->getHighestBlockAt($x, $z);
+					$this->level->spawnLightning(new Vector3($x, $y, $z));
+				}
+				/*foreach($this->level->getPlayers() as $p){
 					if(mt_rand(0, 1) == 1){
 						$x = $p->getX() + rand(-100, 100);
 						$y = $p->getY() + rand(20, 50);
 						$z = $p->getZ() + rand(-100, 100);
 						$this->level->sendLighting($x, $y, $z, $p);
 					}
-				}
+				}*/
 			}
 		}
 		$this->lastUpdate = $currentTick;

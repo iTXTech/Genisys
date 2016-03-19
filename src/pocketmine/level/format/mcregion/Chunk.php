@@ -97,7 +97,7 @@ class Chunk extends BaseFullChunk{
 			$count = $stream->getInt();
 			for($i = 0; $i < $count; ++$i){
 				$key = $stream->getInt();
-				$extraData[$key] = $stream->getShort(false);
+				$extraData[$key] = $stream->getShort();
 			}
 		}
 
@@ -428,7 +428,7 @@ class Chunk extends BaseFullChunk{
 	}
 
 	/**
-	 * @return Compound
+	 * @return CompoundTag
 	 */
 	public function getNBT(){
 		return $this->nbt;

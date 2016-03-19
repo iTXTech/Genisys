@@ -1,4 +1,8 @@
 <?php
+/**
+ * Author: PeratX
+ * OpenGenisys Project
+ */
 
 namespace pocketmine\entity;
 
@@ -6,7 +10,7 @@ use pocketmine\event\player\PlayerPickupExpOrbEvent;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class ExperienceOrb extends Entity{
+class XPOrb extends Entity{
 	const NETWORK_ID = 69;
 
 	public $width = 0.25;
@@ -115,7 +119,7 @@ class ExperienceOrb extends Entity{
 	public function spawnTo(Player $player){
 		$this->setDataProperty(self::DATA_NO_AI, self::DATA_TYPE_BYTE, 1);
 		$pk = new AddEntityPacket();
-		$pk->type = ExperienceOrb::NETWORK_ID;
+		$pk->type = XPOrb::NETWORK_ID;
 		$pk->eid = $this->getId();
 		$pk->x = $this->x;
 		$pk->y = $this->y;

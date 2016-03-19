@@ -274,7 +274,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/** @var FishingHook */
 	public $fishingHook = null;
 
+	/** @var Position[] */
 	public $selectedPos = [];
+	/** @var Level[] */
 	public $selectedLev = [];
 
 	public function linkHookToPlayer(FishingHook $entity){
@@ -4090,7 +4092,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		if($this->server->expEnabled and (!$ev->getKeepExperience() and !$this->server->keepInventory)){
 			$exp = $this->getExperience();
 			if($exp > 100) $exp = 100;
-			$this->getLevel()->addExperienceOrb($this->add(0, 0.2, 0), $exp);
+			$this->getLevel()->spawnXPOrb($this->add(0, 0.2, 0), $exp);
 			$this->setExperienceAndLevel(0, 0);
 		}
 

@@ -1513,7 +1513,7 @@ abstract class Entity extends Location implements Metadatable{
 
 		if($this->getLevel()->getServer()->expEnabled) {
 			$exp = mt_rand($this->getDropExpMin(), $this->getDropExpMax());
-			if($exp > 0) $this->getLevel()->addExperienceOrb($this, $exp);
+			if($exp > 0) $this->getLevel()->spawnXPOrb($this, $exp);
 		}
 	}
 

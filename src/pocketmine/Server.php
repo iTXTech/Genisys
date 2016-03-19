@@ -158,7 +158,7 @@ use pocketmine\entity\Ocelot;
 use pocketmine\entity\IronGolem;
 use pocketmine\entity\SnowGolem;
 use pocketmine\entity\Lightning;
-use pocketmine\entity\ExperienceOrb;
+use pocketmine\entity\XPOrb;
 use pocketmine\network\protocol\StrangePacket;
 use pocketmine\event\player\PlayerTransferEvent;
 use pocketmine\entity\ai\AIHolder;
@@ -3038,7 +3038,7 @@ private function lookupAddress($address) {
 		Entity::registerEntity(SnowGolem::class);
 		Entity::registerEntity(IronGolem::class);
 		Entity::registerEntity(Lightning::class);
-		Entity::registerEntity(ExperienceOrb::class);
+		Entity::registerEntity(XPOrb::class);
 		Entity::registerEntity(ThrownExpBottle::class);
 		Entity::registerEntity(Boat::class);
 		Entity::registerEntity(Minecart::class);

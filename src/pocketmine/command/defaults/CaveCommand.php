@@ -10,17 +10,13 @@ use pocketmine\block\Air;
 use pocketmine\block\Block;
 use pocketmine\block\Lava;
 use pocketmine\block\Water;
-use pocketmine\command\Command;
-use pocketmine\command\CommandExecutor;
 use pocketmine\command\CommandSender;
-use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerInteractEvent;
+use pocketmine\event\TranslationContainer;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
-use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat;
 
 class CaveCommand extends VanillaCommand{
@@ -46,7 +42,8 @@ class CaveCommand extends VanillaCommand{
 
 		//0:旋转角度 1:洞穴长度 2:分叉数 3:洞穴强度
 		if(count($args) != 8){
-			$sender->sendMessage(TextFormat::RED . "错误的参数");
+			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+
 			return false;
 		}
 		$level = $sender->getServer()->getLevelByName($args[7]);

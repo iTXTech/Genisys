@@ -3,8 +3,6 @@
  * Author: PeratX
  * QQ: 1215714524
  * Time: 2016/1/10 21:30
-
-
  *
  * OpenGenisys Project
  *
@@ -18,7 +16,7 @@ use pocketmine\utils\TextFormat;
 use pocketmine\Player;
 
 class BiomeCommand extends VanillaCommand{
-	
+
 	public function __construct($name){
 		parent::__construct(
 			$name,
@@ -46,7 +44,7 @@ class BiomeCommand extends VanillaCommand{
 						$sender->sendMessage(TextFormat::RED . "%pocketmine.command.biome.wrongBio");
 						return false;
 					}
-					$biome=(int) $biome;
+					$biome = (int) $biome;
 					if($sender->selectedLev[0] !== $sender->selectedLev[1]){
 						$sender->sendMessage(TextFormat::RED . "%pocketmine.command.biome.wrongLev");
 						return false;
@@ -61,7 +59,7 @@ class BiomeCommand extends VanillaCommand{
 							$level->setBiomeId($x, $z, $biome);
 						}
 					}
-					$sender->sendMessage(TextFormat::GREEN . "$pocketmine.command.biome.set" . "$biome");
+					$sender->sendMessage(TextFormat::GREEN . "%pocketmine.command.biome.set" . "$biome");
 				}else{
 					$sender->sendMessage("%pocketmine.command.biome.noPos");
 				}
@@ -72,7 +70,7 @@ class BiomeCommand extends VanillaCommand{
 				if(count($a) != 3){
 					$sender->sendMessage(TextFormat::RED . "%pocketmine.command.biome.wrongCol");
 					return false;
-				} 
+				}
 				if(isset($sender->selectedPos[0]) and isset($sender->selectedPos[1])){
 					if($sender->selectedLev[0] !== $sender->selectedLev[1]){
 						$sender->sendMessage(TextFormat::RED . "%pocketmine.command.biome.wrongLev");
@@ -99,7 +97,7 @@ class BiomeCommand extends VanillaCommand{
 				$sender->selectedLev[0] = $sender->getlevel();
 				$sender->selectedPos[0][0] = $x;
 				$sender->selectedPos[0][1] = $z;
-				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.posset", [$sender->selectedLev[0]->getname(), $x, $z, "1"]));
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.posset", [$sender->selectedLev[0]->getName(), $x, $z, "1"]));
 			}elseif($args[0] == "pos2"){
 				$x = (int) $sender->getX();
 				$z = (int) $sender->getZ();

@@ -89,7 +89,6 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\LongTag;
-use pocketmine\network\protocol\ChangeDimensionPacket;
 use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\LevelEventPacket;
@@ -115,8 +114,7 @@ use pocketmine\level\particle\DestroyBlockParticle;
 use pocketmine\level\generator\biome\Biome;
 
 use pocketmine\entity\Lightning;
-use pocketmine\scheduler\CallbackTask;
-use pocketmine\entity\ExperienceOrb;
+use pocketmine\entity\XPOrb;
 use pocketmine\level\weather\Weather;
 use pocketmine\level\weather\WeatherManager;
 
@@ -1631,26 +1629,26 @@ class Level implements ChunkManager, Metadatable{
 				switch($target->getId()){
 					case Block::COAL_ORE:
 						$exp = mt_rand(0, 2);
-						if($exp > 0) $this->addExperienceOrb($vector->add(0, 1, 0), $exp);
+						if($exp > 0) $this->spawnXPOrb($vector->add(0, 1, 0), $exp);
 						break;
 					case Block::DIAMOND_ORE:
 					case Block::EMERALD_ORE:
 						$exp = mt_rand(3, 7);
-						$this->addExperienceOrb($vector->add(0, 1, 0), $exp);
+						$this->spawnXPOrb($vector->add(0, 1, 0), $exp);
 						break;
 					case Block::NETHER_QUARTZ_ORE:
 					case Block::LAPIS_ORE:
 						$exp = mt_rand(2, 5);
-						$this->addExperienceOrb($vector->add(0, 1, 0), $exp);
+						$this->spawnXPOrb($vector->add(0, 1, 0), $exp);
 						break;
 					case Block::REDSTONE_ORE:
 					case Block::GLOWING_REDSTONE_ORE:
 						$exp = mt_rand(1, 5);
-					$this->addExperienceOrb($vector->add(0, 1, 0), $exp);
+					$this->spawnXPOrb($vector->add(0, 1, 0), $exp);
 						break;
 					case Block::MONSTER_SPAWNER:
 						$exp = mt_rand(15, 43);
-						$this->addExperienceOrb($vector->add(0, 1, 0), $exp);
+						$this->spawnXPOrb($vector->add(0, 1, 0), $exp);
 						break;
 				}
 			}
@@ -1989,7 +1987,7 @@ class Level implements ChunkManager, Metadatable{
 		$nearby = [];
 
 		foreach($this->getNearbyEntities($bb) as $entity){
-			if($entity instanceof ExperienceOrb){
+			if($entity instanceof XPOrb){
 				$nearby[] = $entity;
 			}
 		}
@@ -2398,6 +2396,8 @@ class Level implements ChunkManager, Metadatable{
 	/**
 	 * Directly send a lightning to a player
 	 *
+	 * @deprecated
+	 *
 	 * @param int    $x
 	 * @param int    $y
 	 * @param int    $z
@@ -2414,7 +2414,13 @@ class Level implements ChunkManager, Metadatable{
 		$p->dataPacket($pk);
 	}
 
-	public function addLightning(Vector3 $pos){
+	/**
+	 * Add a lightning
+	 *
+	 * @param Vector3 $pos
+	 * @return Lightning
+	 */
+	public function spawnLightning(Vector3 $pos){
 		$nbt = new CompoundTag("", [
 			"Pos" => new ListTag("Pos", [
 				new DoubleTag("", $pos->getX()),
@@ -2436,17 +2442,18 @@ class Level implements ChunkManager, Metadatable{
 
 		$lightning = new Lightning($chunk, $nbt);
 		$lightning->spawnToAll();
-		$lightning->close();
 
-		$entities = $this->getChunkEntities($chunk->getX(), $chunk->getZ());
-		foreach($entities as $entity){
-			if($entity->distance($pos) <= 1){
-				//TODO: Process
-			}
-		}
+		return $lightning;
 	}
 
-	public function addExperienceOrb(Vector3 $pos, $exp = 2){
+	/**
+	 * Add an experience orb
+	 *
+	 * @param Vector3 $pos
+	 * @param int     $exp
+	 * @return bool|XPOrb
+	 */
+	public function spawnXPOrb(Vector3 $pos, int $exp = 1){
 		if($exp > 0){
 			$nbt = new CompoundTag("", [
 				"Pos" => new ListTag("Pos", [
@@ -2468,8 +2475,7 @@ class Level implements ChunkManager, Metadatable{
 
 			$chunk = $this->getChunk($pos->x >> 4, $pos->z >> 4, false);
 
-			$expOrb = new ExperienceOrb($chunk, $nbt);
-			//$expBall->setExperience($exp);
+			$expOrb = new XPOrb($chunk, $nbt);
 			$expOrb->spawnToAll();
 
 			return $expOrb;
@@ -2635,7 +2641,7 @@ class Level implements ChunkManager, Metadatable{
 		if($entity instanceof Player){
 			unset($this->players[$entity->getId()]);
 			$this->checkSleep();
-		}elseif($entity instanceof ExperienceOrb){
+		}elseif($entity instanceof XPOrb){
 			$entity->close();
 		}else{
 			$entity->kill();

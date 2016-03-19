@@ -9,6 +9,7 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\event\entity\CreeperPowerEvent;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
@@ -36,9 +37,18 @@ class Creeper extends Monster{
 		$this->setDataProperty(self::DATA_POWERED, self::DATA_TYPE_BYTE, $this->isPowered() ? 1 : 0);
 	}
 
-	public function setPowered(bool $powered){
-		$this->namedtag->powered = new ByteTag("powered", $powered ? 1 : 0);
-		$this->setDataProperty(self::DATA_POWERED, self::DATA_TYPE_BYTE, $powered ? 1 : 0);
+	public function setPowered(bool $powered, Lightning $lightning = null){
+		if($lightning != null){
+			$powered = true;
+			$cause = CreeperPowerEvent::CAUSE_LIGHTNING;
+		}else $cause = $powered ? CreeperPowerEvent::CAUSE_SET_ON : CreeperPowerEvent::CAUSE_SET_OFF;
+
+		$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new CreeperPowerEvent($this, $lightning, $cause));
+
+		if(!$ev->isCancelled()){
+			$this->namedtag->powered = new ByteTag("powered", $powered ? 1 : 0);
+			$this->setDataProperty(self::DATA_POWERED, self::DATA_TYPE_BYTE, $powered ? 1 : 0);
+		}
 	}
 
 	public function isPowered() : bool{
