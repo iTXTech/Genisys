@@ -272,7 +272,7 @@ class PluginManager{
 							}
 
 							if($compatiblegeniapi === false){
-								$this->server->getLogger()->error("ould not load plugin '{$description->getName()}': Incompatible GeniAPI version");
+								$this->server->getLogger()->error("Could not load plugin '{$description->getName()}': Incompatible GeniAPI version");
 								continue;
 							}
 
