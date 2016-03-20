@@ -6,6 +6,7 @@
 namespace pocketmine\event\entity;
 
 use pocketmine\entity\Creeper;
+use pocketmine\event\Cancellable;
 use pocketmine\entity\Lightning;
 
 class CreeperPowerEvent extends EntityEvent implements Cancellable{
