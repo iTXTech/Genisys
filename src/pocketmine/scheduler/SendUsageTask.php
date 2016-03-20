@@ -50,7 +50,7 @@ class SendUsageTask extends AsyncTask{
 				$version = new VersionString();
 
 				$data["server"] = [
-					"port" => $server->getPort(),
+					"port" => $server->getPortInternal(),
 					"software" => $server->getName(),
 					"fullVersion" => $version->get(true),
 					"version" => $version->get(),
