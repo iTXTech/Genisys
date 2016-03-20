@@ -278,6 +278,9 @@ class MainLogger extends \AttachableThreadedLogger{
 			//$this->logResource = file_put_contents($this->logFile, "a+b", FILE_APPEND);
 
 			while($this->shutdown === false){
+				if(filesize($this->logFile) > 1024 * 1024 * 10){ //10MB
+					file_put_contents($this->logFile, "");
+				}
 				if(!$this->write) break;
 				$this->synchronized(function(){
 					while($this->logStream->count() > 0){
@@ -295,6 +298,9 @@ class MainLogger extends \AttachableThreadedLogger{
 					$this->logResource = file_put_contents($this->logFile, $chunk, FILE_APPEND);
 				}
 			}
+		}
+		if(filesize($this->logFile) > 1024 * 1024 * 10){ //10MB
+			file_put_contents($this->logFile, "");
 		}
 	}
 
