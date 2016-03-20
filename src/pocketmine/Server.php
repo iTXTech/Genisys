@@ -1829,7 +1829,7 @@ class Server{
 				"level-seed" => "",
 				"level-type" => "DEFAULT",
 				"enable-query" => true,
-				"enable-rcon" => false,
+				"enable-rcon" => true,
 				"rcon.password" => substr(base64_encode(@Utils::getRandomBytes(20, false)), 3, 10),
 				"auto-save" => true,
 			]);
