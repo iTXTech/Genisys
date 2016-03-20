@@ -8,7 +8,7 @@ namespace pocketmine\event\entity;
 use pocketmine\entity\Creeper;
 use pocketmine\entity\Lightning;
 
-class CreeperPowerEvent extends EntityEvent{
+class CreeperPowerEvent extends EntityEvent implements Cancellable{
 	public static $handlerList = null;
 
 	const CAUSE_SET_ON = 0;
