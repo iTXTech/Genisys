@@ -469,8 +469,15 @@ class Server{
 	/**
 	 * @return int
 	 */
-	public function getPort(){
+	public function getPortInternal(){
 		return $this->getConfigInt("server-port", 19132);
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPort(){
+		return 19132;
 	}
 
 	/**
@@ -1822,7 +1829,7 @@ class Server{
 				"level-seed" => "",
 				"level-type" => "DEFAULT",
 				"enable-query" => true,
-				"enable-rcon" => false,
+				"enable-rcon" => true,
 				"rcon.password" => substr(base64_encode(@Utils::getRandomBytes(20, false)), 3, 10),
 				"auto-save" => true,
 			]);
@@ -1862,7 +1869,7 @@ class Server{
 			$this->scheduler = new ServerScheduler();
 
 			if($this->getConfigBoolean("enable-rcon", false) === true){
-				$this->rcon = new RCON($this, $this->getConfigString("rcon.password", ""), $this->getConfigInt("rcon.port", $this->getPort()), ($ip = $this->getIp()) != "" ? $ip : "0.0.0.0", $this->getConfigInt("rcon.threads", 1), $this->getConfigInt("rcon.clients-per-thread", 50));
+				$this->rcon = new RCON($this, $this->getConfigString("rcon.password", ""), $this->getConfigInt("rcon.port", $this->getPortInternal()), ($ip = $this->getIp()) != "" ? $ip : "0.0.0.0", $this->getConfigInt("rcon.threads", 1), $this->getConfigInt("rcon.clients-per-thread", 50));
 			}
 
 			$this->entityMetadata = new EntityMetadataStore();
@@ -1900,9 +1907,9 @@ class Server{
 				@cli_set_process_title($this->getName() . " " . $this->getPocketMineVersion());
 			}
 
-			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.networkStart", [$this->getIp() === "" ? "*" : $this->getIp(), $this->getPort()]));
+			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.networkStart", [$this->getIp() === "" ? "*" : $this->getIp(), $this->getPortInternal()]));
 			define("BOOTUP_RANDOM", @Utils::getRandomBytes(16));
-			$this->serverID = Utils::getMachineUniqueId($this->getIp() . $this->getPort());
+			$this->serverID = Utils::getMachineUniqueId($this->getIp() . $this->getPortInternal());
 
 			$this->getLogger()->debug("Server unique id: " . $this->getServerUniqueId());
 			$this->getLogger()->debug("Machine unique id: " . Utils::getMachineUniqueId());
@@ -2072,7 +2079,7 @@ class Server{
 
 	$packet = new StrangePacket();
 	$packet->address = $ip;
-	$packet->port = $ev->getPort();
+	$packet->port = $ev->getPortInternal();
 	$player->dataPacket($packet);
 	$player->setTransfered($address . ":" . $port);
 
@@ -2426,14 +2433,14 @@ private function lookupAddress($address) {
 
 			if($this->getProperty("network.upnp-forwarding", false) === true){
 				$this->logger->info("[UPnP] Removing port forward...");
-				UPnP::RemovePortForward($this->getPort());
+				UPnP::RemovePortForward($this->getPortInternal());
 			}
 
 			$this->getLogger()->debug("Disabling all plugins");
 			$this->pluginManager->disablePlugins();
 
 			foreach($this->players as $player){
-				$player->close($player->getLeaveMessage(), $this->getProperty("settings.shutdown-message", "Server closed"));
+				$player->close($player->getLeaveMessage(), TextFormat::GREEN . "服务器由轻云运行。\n服务器正在关闭，请联系您的腐竹修复或升级配置(内存啊喂QAQ)。");
 			}
 
 			$this->getLogger()->debug("Unloading all levels");
@@ -2496,7 +2503,7 @@ private function lookupAddress($address) {
 
 		if($this->getProperty("network.upnp-forwarding", false) == true){
 			$this->logger->info("[UPnP] Trying to port forward...");
-			UPnP::PortForward($this->getPort());
+			UPnP::PortForward($this->getPortInternal());
 		}
 
 		$this->tickCounter = 0;
@@ -2588,38 +2595,6 @@ private function lookupAddress($address) {
 		}
 
 		$this->logger->emergency($this->getLanguage()->translateString("pocketmine.crash.submit", [$dump->getPath()]));
-
-
-		if($this->getProperty("auto-report.enabled", true) !== false){
-			$report = true;
-			$plugin = $dump->getData()["plugin"];
-			if(is_string($plugin)){
-				$p = $this->pluginManager->getPlugin($plugin);
-				if($p instanceof Plugin and !($p->getPluginLoader() instanceof PharPluginLoader)){
-					$report = false;
-				}
-			}elseif(\Phar::running(true) == ""){
-				$report = false;
-			}
-			if($dump->getData()["error"]["type"] === "E_PARSE" or $dump->getData()["error"]["type"] === "E_COMPILE_ERROR"){
-				$report = false;
-			}
-
-			if($report){
-				$reply = Utils::postURL("http://" . $this->getProperty("auto-report.host", "crash.pocketmine.net") . "/submit/api", [
-					"report" => "yes",
-					"name" => $this->getName() . " " . $this->getPocketMineVersion(),
-					"email" => "crash@pocketmine.net",
-					"reportPaste" => base64_encode($dump->getEncodedData())
-				]);
-
-				if(($data = json_decode($reply)) !== false and isset($data->crashId)){
-					$reportId = $data->crashId;
-					$reportUrl = $data->crashUrl;
-					$this->logger->emergency($this->getLanguage()->translateString("pocketmine.crash.archive", [$reportUrl, $reportId]));
-				}
-			}
-		}
 
 		//$this->checkMemory();
 		//$dump .= "Memory Usage Tracking: \r\n" . chunk_split(base64_encode(gzdeflate(implode(";", $this->memoryStats), 9))) . "\r\n";

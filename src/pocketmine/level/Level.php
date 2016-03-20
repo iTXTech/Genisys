@@ -143,6 +143,9 @@ class Level implements ChunkManager, Metadatable{
 	const DIMENSION_NORMAL = 0;
 	const DIMENSION_NETHER = 1;
 
+	const PARTICLE_LIMIT = 20;
+	const SOUND_LIMIT = 20;
+
 	/** @var Tile[] */
 	private $tiles = [];
 
@@ -282,6 +285,10 @@ class Level implements ChunkManager, Metadatable{
 	public $blockTempData = [];
 
 	private $dimension = self::DIMENSION_NORMAL;
+
+	private $lastTick = 0;
+	private $particleCount = 0;
+	private $soundCount = 0;
 
 	/**
 	 * @param Vector3 $pos
@@ -517,6 +524,15 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	public function addSound(Sound $sound, array $players = null){
+		if($this->lastTick != $this->getServer()->getTick()){
+			$this->soundCount = 0;
+			$this->lastTick = $this->getServer()->getTick();
+		} else {
+			if($this->soundCount > self::SOUND_LIMIT){
+				return;
+			}
+			$this->soundCount++;
+		}
 		$pk = $sound->encode();
 
 		if($players === null){
@@ -541,6 +557,15 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	public function addParticle(Particle $particle, array $players = null){
+		if($this->lastTick != $this->getServer()->getTick()){
+			$this->particleCount = 0;
+			$this->lastTick = $this->getServer()->getTick();
+		} else {
+			if($this->particleCount > self::SOUND_LIMIT){
+				return;
+			}
+			$this->particleCount++;
+		}
 		$pk = $particle->encode();
 
 		if($players === null){
