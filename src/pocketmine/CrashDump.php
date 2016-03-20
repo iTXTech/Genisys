@@ -26,7 +26,7 @@ class CrashDump{
 		$this->path = $this->server->getCrashPath() . "CrashDump_" . date("D_M_j-H.i.s-T_Y", $this->time) . ".log";
 		$this->fp = @fopen($this->path, "wb");
 		if(!is_resource($this->fp)){
-			throw new RuntimeException("Could not create Crash Dump");
+			throw new \RuntimeException("Could not create Crash Dump");
 		}
 		$this->data["time"] = $this->time;
 		$this->addLine($this->server->getName() . " Crash Dump " . date("D M j H:i:s T Y", $this->time));
