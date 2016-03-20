@@ -343,7 +343,8 @@ class Server{
 	public $weatherRandomDurationMax = 12000;
 	public $lookup = [];
 	public $hungerHealth = 10;
-	public $lightningTime = 100;
+	public $lightningTime = 200;
+	public $lightningFire = false;
 	public $expCache = [];
 	public $expWriteAhead = 200;
 	public $aiConfig = [];
@@ -1618,7 +1619,8 @@ class Server{
 		$this->weatherRandomDurationMin = $this->getAdvancedProperty("level.weather-random-duration-min", 6000);
 		$this->weatherRandomDurationMax = $this->getAdvancedProperty("level.weather-random-duration-max", 12000);
 		$this->hungerHealth = $this->getAdvancedProperty("player.hunger-health", 10);
-		$this->lightningTime = $this->getAdvancedProperty("level.lightning-time", 100);
+		$this->lightningTime = $this->getAdvancedProperty("level.lightning-time", 200);
+		$this->lightningFire = $this->getAdvancedProperty("level.lightning-fire", false);
 		$this->expWriteAhead = $this->getAdvancedProperty("server.experience-cache", 200);
 		$this->aiEnabled = $this->getAdvancedProperty("ai.enable", false);
 		$this->aiConfig = array(

@@ -74,7 +74,7 @@ class Weather{
 					}
 				}
 			}
-			if(($this->weatherNow > 0) and is_int($this->duration / $this->level->getServer()->lightningTime)){
+			if(($this->weatherNow > 0) and ($this->level->getServer()->lightningTime > 0) and is_int($this->duration / $this->level->getServer()->lightningTime)){
 				$players = $this->level->getPlayers();
 				if(count($players) > 0){
 					$p = $players[array_rand($players)];

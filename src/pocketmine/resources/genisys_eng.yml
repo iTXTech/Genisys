@@ -10,8 +10,10 @@ level:
  #Weather random duration
  weather-random-duration-min: 6000
  weather-random-duration-max: 12000
- #Random lightning interval，default as 10s
+ #Random lightning interval，default as 10s, 0 = disable
  lightning-time: 200
+ #Set if enable lightning with fire
+ lightning-fire: false
  #Set if enable fire spread
  fire-spread: false
  

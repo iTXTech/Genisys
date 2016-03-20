@@ -71,8 +71,7 @@ class Lightning extends Animal{
 	public function spawnToAll(){
 		$re = parent::spawnToAll();
 
-		if($this->getLevel()->getServer()->getDifficulty() > 1){
-
+		if($this->getLevel()->getServer()->lightningFire){
 			$fire = ItemItem::get(ItemItem::FIRE)->getBlock();
 			$oldBlock = $this->getLevel()->getBlock($this);
 			if($oldBlock instanceof Liquid){
