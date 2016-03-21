@@ -32,7 +32,7 @@ class Sand extends Fallable{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 0.5;
 	}
 
@@ -40,7 +40,7 @@ class Sand extends Fallable{
 		return Tool::TYPE_SHOVEL;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		if($this->meta === 0x01){
 			return "Red Sand";
 		}

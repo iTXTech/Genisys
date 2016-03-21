@@ -28,7 +28,7 @@ use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\Player;
@@ -46,17 +46,17 @@ abstract class Fallable extends Solid{
 			$down = $this->getSide(Vector3::SIDE_DOWN);
 			if($down->getId() === self::AIR or ($down instanceof Liquid)){
 				$fall = Entity::createEntity("FallingSand", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), new CompoundTag("", [
-					"Pos" => new EnumTag("Pos", [
+					"Pos" => new ListTag("Pos", [
 						new DoubleTag("", $this->x + 0.5),
 						new DoubleTag("", $this->y),
 						new DoubleTag("", $this->z + 0.5)
 					]),
-					"Motion" => new EnumTag("Motion", [
+					"Motion" => new ListTag("Motion", [
 						new DoubleTag("", 0),
 						new DoubleTag("", 0),
 						new DoubleTag("", 0)
 					]),
-					"Rotation" => new EnumTag("Rotation", [
+					"Rotation" => new ListTag("Rotation", [
 						new FloatTag("", 0),
 						new FloatTag("", 0)
 					]),

@@ -32,7 +32,7 @@ class Emerald extends Solid{
 
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 5;
 	}
 
@@ -40,11 +40,11 @@ class Emerald extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Emerald Block";
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 4){
 			return [
 				[Item::EMERALD_BLOCK, 0, 1],

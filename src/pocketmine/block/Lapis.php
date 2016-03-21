@@ -32,7 +32,7 @@ class Lapis extends Solid{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Lapis Lazuli Block";
 	}
 
@@ -40,11 +40,11 @@ class Lapis extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 3;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 3){
 			return [
 				[Item::LAPIS_BLOCK, 0, 1],

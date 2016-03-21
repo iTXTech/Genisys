@@ -1,0 +1,15 @@
+image: itxtech/docker-env-genisys
+
+stages:
+ - test
+
+package:
+  stage: test
+  script:
+   - mkdir plugins
+   - sed -i "s/const VERSION \?= \?\"\(.*\)\"/const VERSION = \"\1-${CI_BUILD_REF:0:7}\"/" src/pocketmine/PocketMine.php
+   - php tests/Travis.php
+  artifacts:
+    paths:
+     - plugins/PocketMine-iTX/Genisys*.phar
+

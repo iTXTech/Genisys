@@ -39,6 +39,8 @@ class Squid extends WaterAnimal implements Ageable{
 	public $length = 0.95;
 	public $height = 0.95;
 
+	public $dropExp = [1, 3];
+
 	/** @var Vector3 */
 	public $swimDirection = null;
 	public $swimSpeed = 0.1;
@@ -46,17 +48,12 @@ class Squid extends WaterAnimal implements Ageable{
 	private $switchDirectionTicker = 0;
 
 	public function initEntity(){
-		$this->setMaxHealth(5);
 		parent::initEntity();
+		$this->setMaxHealth(5);
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Squid";
-	}
-	
-	public function kill(){
-		parent::kill();
-		if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0, 1, 0), mt_rand(1, 3));
 	}
 
 	public function attack($damage, EntityDamageEvent $source){

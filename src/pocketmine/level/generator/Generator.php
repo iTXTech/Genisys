@@ -240,6 +240,10 @@ abstract class Generator{
 		return $noiseArray;
 	}
 
+	public function getWaterHeight() : int{
+		return 0;
+	}
+
 	public abstract function __construct(array $settings = []);
 
 	public abstract function init(ChunkManager $level, Random $random);

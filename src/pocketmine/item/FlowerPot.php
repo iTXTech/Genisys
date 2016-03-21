@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2015/12/6 14:29
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+ ]
+
  */
 namespace pocketmine\item;
 
@@ -15,7 +15,7 @@ class FlowerPot extends Item {
 		parent::__construct(self::FLOWER_POT, 0, $count, "Flower Pot");
 	}
 
-	public function getMaxStackSize(){
+	public function getMaxStackSize() : int{
 		return 64;
 	}
 } 

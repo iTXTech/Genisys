@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2015/12/31 21:11
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+ ]
+
  *
  * OpenGenisys Project
  *
@@ -25,7 +25,7 @@ class Skull extends Item{
 		parent::__construct(self::SKULL, $meta, $count, "Skull");
 	}
 
-	public function getMaxStackSize(){
+	public function getMaxStackSize() : int {
 		return 64;
 	}
 

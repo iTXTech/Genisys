@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2015/12/22 21:12
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+ ]
+
  *
  * OpenGenisys Project
  */
@@ -43,14 +43,14 @@ class RedstoneTorch extends RedstoneSource{
 	}
 
 	public function canScheduleUpdate(){
-		return $this->getLevel()->getServer()->allowFakeLowFrequencyPulse;
+		return $this->getLevel()->getServer()->allowFrequencyPulse;
 	}
 
 	public function getFrequency(){
 		return $this->getLevel()->getServer()->pulseFrequency;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Redstone Torch";
 	}
 
@@ -109,42 +109,13 @@ class RedstoneTorch extends RedstoneSource{
 			$this->activated = true;
 			/** @var Door $block */
 
-			$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP];
+			$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP, Vector3::SIDE_DOWN];
 
 			foreach($sides as $side){
 				if(!in_array($side, $ignore)){
 					$block = $this->getSide($side);
 					if(!in_array($hash = Level::blockHash($block->x, $block->y, $block->z), $notCheck)){
-						if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
-							if(!$block->isOpened()) $block->onActivate(new Item(0));
-						}
-						if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
-						/** @var InactiveRedstoneLamp $block */
-						if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn();
-						if($block->getId() == Block::REDSTONE_WIRE){
-							/** @var RedstoneWire $wire */
-							$wire = $block;
-							$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
-						}
-					}
-				}
-			}
-
-			if(!in_array(Vector3::SIDE_DOWN, $ignore)){
-				$block = $this->getSide(Vector3::SIDE_DOWN);
-				if(!in_array($hash = Level::blockHash($block->x, $block->y, $block->z), $notCheck)){
-					if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn();
-
-					$block = $this->getSide(Vector3::SIDE_DOWN, 2);
-					if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
-						if(!$block->isOpened()) $block->onActivate(new Item(0));
-					}
-					if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
-					if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn();
-					if($block->getId() == Block::REDSTONE_WIRE){
-						/** @var RedstoneWire $wire */
-						$wire = $block;
-						$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
+						$this->activateBlock($block);
 					}
 				}
 			}
@@ -291,9 +262,9 @@ class RedstoneTorch extends RedstoneSource{
 		return false;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
-			[Item::REDSTONE_TORCH, 0, 1],
+			[Item::LIT_REDSTONE_TORCH, 0, 1],
 		];
 	}
 

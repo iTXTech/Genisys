@@ -3,6 +3,7 @@
 namespace pocketmine\entity\ai;
 
 use pocketmine\entity\ai\AIHolder;
+use pocketmine\entity\PigZombie;
 use pocketmine\Player;
 use pocketmine\math\Vector3;
 use pocketmine\math\Vector2;
@@ -48,10 +49,10 @@ class ZombieAI{
 				$this,
 				"ZombieFire"
 			] ), 40);
-			$this->plugin->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
+			/*$this->plugin->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
 				$this,
 				"array_clear"
-			] ), 20 * 5);
+			] ), 20 * 5);*/
 		}
 	}
 
@@ -77,7 +78,7 @@ class ZombieAI{
 		//$this->getLogger()->info("僵尸数量：".count($this->plugin->zombie));
 		foreach ($this->plugin->getServer()->getLevels() as $level) {
 			foreach ($level->getEntities() as $zo){
-				if($zo instanceof Zombie){
+				if($zo::NETWORK_ID == Zombie::NETWORK_ID or $zo::NETWORK_ID == PigZombie::NETWORK_ID){
 					if ($this->plugin->willMove($zo)) {
 						if (!isset($this->plugin->zombie[$zo->getId()])){
 							$this->plugin->zombie[$zo->getId()] = array(
@@ -210,7 +211,7 @@ class ZombieAI{
 	public function ZombieHateFinder() {
 		foreach ($this->plugin->getServer()->getLevels () as $level) {
 			foreach ($level->getEntities() as $zo) {
-				if ($zo instanceof Zombie) {
+				if ($zo::NETWORK_ID == Zombie::NETWORK_ID) {
 					if (isset($this->plugin->zombie[$zo->getId()])) {
 						$zom = &$this->plugin->zombie[$zo->getId()];
 						$h_r = $this->hatred_r;  //仇恨半径
@@ -246,7 +247,7 @@ class ZombieAI{
 	public function ZombieHateWalk() {
 		foreach ($this->plugin->getServer()->getLevels () as $level) {
 			foreach ($level->getEntities() as $zo) {
-				if ($zo instanceof Zombie) {
+				if ($zo::NETWORK_ID == Zombie::NETWORK_ID or $zo::NETWORK_ID == PigZombie::NETWORK_ID) {
 					if (isset($this->plugin->zombie[$zo->getId()])) {
 						$zom = &$this->plugin->zombie[$zo->getId()];
 						//$zom['yup'] = $zom['yup'] - 1;
@@ -398,7 +399,7 @@ $xxx =0;$zzz=0;
 	public function ZombieRandomWalk() {
 		foreach ($this->plugin->getServer()->getLevels() as $level) {
 			foreach ($level->getEntities() as $zo) {
-				if ($zo instanceof Zombie) {
+				if ($zo::NETWORK_ID == Zombie::NETWORK_ID or $zo::NETWORK_ID == PigZombie::NETWORK_ID) {
 					if (isset($this->plugin->zombie[$zo->getId()])) {
 						$zom = &$this->plugin->zombie[$zo->getId()];
 						if ($zom['canAttack'] != 0) {
@@ -526,7 +527,7 @@ $xxx =0;$zzz=0;
 	public function ZombieFire() {
 		foreach ($this->plugin->getServer()->getLevels() as $level) {
 			foreach ($level->getEntities() as $zo){
-				if ($zo instanceof Zombie) {
+				if ($zo::NETWORK_ID == Zombie::NETWORK_ID) {
 					//var_dump($p->getLevel()->getTime());
 					if(0 < $level->getTime() and $level->getTime() < 13500){
 						$v3 = new Vector3($zo->getX(), $zo->getY(), $zo->getZ());

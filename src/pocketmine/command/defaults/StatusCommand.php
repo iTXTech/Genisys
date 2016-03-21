@@ -46,7 +46,7 @@ class StatusCommand extends VanillaCommand{
 
 		$server = $sender->getServer();
 		$sender->sendMessage(TextFormat::GREEN . "---- " . TextFormat::WHITE . "%pocketmine.command.status.title" . TextFormat::GREEN . " ----");
-		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.status.player" . TextFormat::GREEN . \count($sender->getServer()->getOnlinePlayers()) . "/" . $sender->getServer()->getMaxPlayers());
+		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.status.player" . TextFormat::GREEN ." ". \count($sender->getServer()->getOnlinePlayers()) . "/" . $sender->getServer()->getMaxPlayers());
 
 		$time = microtime(true) - \pocketmine\START_TIME;
 

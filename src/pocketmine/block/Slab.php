@@ -43,11 +43,11 @@ class Slab extends Transparent{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 2;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		static $names = [
 			0 => "Stone",
 			1 => "Sandstone",
@@ -61,7 +61,15 @@ class Slab extends Transparent{
 		return (($this->meta & 0x08) > 0 ? "Upper " : "") . $names[$this->meta & 0x07] . " Slab";
 	}
 
-	protected function recalculateBoundingBox(){
+	public function getBurnChance() : int{
+		return 5;
+	}
+
+	public function getBurnAbility() : int{
+		return 20;
+	}
+
+	protected function recalculateBoundingBox() {
 
 		if(($this->meta & 0x08) > 0){
 			return new AxisAlignedBB(
@@ -133,7 +141,7 @@ class Slab extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[$this->id, $this->meta & 0x07, 1],

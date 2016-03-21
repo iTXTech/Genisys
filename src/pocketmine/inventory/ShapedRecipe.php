@@ -102,11 +102,11 @@ class ShapedRecipe implements Recipe{
 	 * @param Item   $item
 	 *
 	 * @return $this
-	 * @throws \Throwable
+	 * @throws \Exception
 	 */
 	public function setIngredient($key, Item $item){
 		if(!array_key_exists($key, $this->shape)){
-			throw new \Throwable("Symbol does not appear in the shape: " . $key);
+			throw new \Exception("Symbol does not appear in the shape: " . $key);
 		}
 
 		$this->fixRecipe($key, $item);

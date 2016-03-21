@@ -36,19 +36,19 @@ class Cake extends Transparent{
 		$this->meta = $meta;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 0.5;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Cake Block";
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() {
 
 		$f = (1 + $this->getDamage() * 2) / 16;
 
@@ -85,7 +85,7 @@ class Cake extends Transparent{
 		return false;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [];
 	}
 

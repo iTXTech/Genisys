@@ -44,7 +44,7 @@ abstract class Tool extends Item{
 		parent::__construct($id, $meta, $count, $name);
 	}
 
-	public function getMaxStackSize(){
+	public function getMaxStackSize() : int {
 		return 1;
 	}
 

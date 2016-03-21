@@ -32,7 +32,7 @@ use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\NBT;
 
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\IntTag;
@@ -47,8 +47,8 @@ class Furnace extends Spawnable implements InventoryHolder, Container, Nameable{
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new FurnaceInventory($this);
 
-		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof EnumTag)){
-			$this->namedtag->Items = new EnumTag("Items", []);
+		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)){
+			$this->namedtag->Items = new ListTag("Items", []);
 			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		}
 
@@ -71,7 +71,7 @@ class Furnace extends Spawnable implements InventoryHolder, Container, Nameable{
 		}
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Furnace";
 	}
 
@@ -98,7 +98,7 @@ class Furnace extends Spawnable implements InventoryHolder, Container, Nameable{
 	}
 
 	public function saveNBT(){
-		$this->namedtag->Items = new EnumTag("Items", []);
+		$this->namedtag->Items = new ListTag("Items", []);
 		$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		for($index = 0; $index < $this->getSize(); ++$index){
 			$this->setItem($index, $this->inventory->getItem($index));
@@ -289,19 +289,19 @@ class Furnace extends Spawnable implements InventoryHolder, Container, Nameable{
 	}
 	
 	public function getSpawnCompound(){
-        $nbt = new CompoundTag("", [
-            new StringTag("id", Tile::FURNACE),
-            new IntTag("x", (int) $this->x),
-            new IntTag("y", (int) $this->y),
-            new IntTag("z", (int) $this->z),
-            new ShortTag("BurnTime", $this->namedtag["BurnTime"]),
-            new ShortTag("CookTime", $this->namedtag["CookTime"]),
-            new ShortTag("BurnDuration", $this->namedtag["BurnTicks"])
-        ]);
-        
-        if($this->hasName()){
-            $nbt->CustomName = $this->namedtag->CustomName;
-        }
-        return $nbt;
-    }
+		$nbt = new CompoundTag("", [
+			new StringTag("id", Tile::FURNACE),
+			new IntTag("x", (int) $this->x),
+			new IntTag("y", (int) $this->y),
+			new IntTag("z", (int) $this->z),
+			new ShortTag("BurnTime", $this->namedtag["BurnTime"]),
+			new ShortTag("CookTime", $this->namedtag["CookTime"]),
+			//new ShortTag("BurnDuration", $this->namedtag["BurnTicks"])
+		]);
+		
+		if($this->hasName()){
+			$nbt->CustomName = $this->namedtag->CustomName;
+		}
+		return $nbt;
+	}
 }

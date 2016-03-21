@@ -21,6 +21,52 @@
 
 namespace pocketmine\item\enchantment;
 
+use pocketmine\item\ChainBoots;
+use pocketmine\item\ChainChestplate;
+use pocketmine\item\ChainHelmet;
+use pocketmine\item\ChainLeggings;
+use pocketmine\item\DiamondAxe;
+use pocketmine\item\DiamondBoots;
+use pocketmine\item\DiamondChestplate;
+use pocketmine\item\DiamondHelmet;
+use pocketmine\item\DiamondHoe;
+use pocketmine\item\DiamondLeggings;
+use pocketmine\item\DiamondPickaxe;
+use pocketmine\item\DiamondShovel;
+use pocketmine\item\DiamondSword;
+use pocketmine\item\GoldAxe;
+use pocketmine\item\GoldBoots;
+use pocketmine\item\GoldChestplate;
+use pocketmine\item\GoldHelmet;
+use pocketmine\item\GoldHoe;
+use pocketmine\item\GoldLeggings;
+use pocketmine\item\GoldPickaxe;
+use pocketmine\item\GoldShovel;
+use pocketmine\item\GoldSword;
+use pocketmine\item\IronAxe;
+use pocketmine\item\IronBoots;
+use pocketmine\item\IronChestplate;
+use pocketmine\item\IronHelmet;
+use pocketmine\item\IronHoe;
+use pocketmine\item\IronLeggings;
+use pocketmine\item\IronPickaxe;
+use pocketmine\item\IronShovel;
+use pocketmine\item\IronSword;
+use pocketmine\item\Item;
+use pocketmine\item\LeatherBoots;
+use pocketmine\item\LeatherCap;
+use pocketmine\item\LeatherPants;
+use pocketmine\item\LeatherTunic;
+use pocketmine\item\StoneAxe;
+use pocketmine\item\StoneHoe;
+use pocketmine\item\StonePickaxe;
+use pocketmine\item\StoneShovel;
+use pocketmine\item\StoneSword;
+use pocketmine\item\WoodenAxe;
+use pocketmine\item\WoodenHoe;
+use pocketmine\item\WoodenPickaxe;
+use pocketmine\item\WoodenShovel;
+use pocketmine\item\WoodenSword;
 
 class Enchantment{
 
@@ -81,6 +127,12 @@ class Enchantment{
 	const SLOT_FISHING_ROD = 0b100000000000;
 	const SLOT_CARROT_STICK = 0b1000000000000;
 
+	public static $words = ["the", "elder", "scrolls", "klaatu", "berata", "niktu", "xyzzy", "bless", "curse", "light", "darkness", "fire", "air",
+		"earth", "water", "hot", "dry", "cold", "wet", "ignite", "snuff", "embiggen", "twist", "shorten", "stretch", "fiddle", "destroy", "imbue", "galvanize",
+		"enchant", "free", "limited", "range", "of", "towards", "inside", "sphere", "cube", "self", "other", "ball", "mental", "physical", "grow", "shrink",
+		"demon", "elemental", "spirit", "animal", "creature", "beast", "humanoid", "undead", "fresh", "stale"];
+
+
 	/** @var Enchantment[] */
 	protected static $enchantments;
 
@@ -90,14 +142,14 @@ class Enchantment{
 		self::$enchantments[self::TYPE_ARMOR_PROTECTION] = new Enchantment(self::TYPE_ARMOR_PROTECTION, "%enchantment.protect.all", self::RARITY_COMMON, self::ACTIVATION_EQUIP, self::SLOT_ARMOR);
 		self::$enchantments[self::TYPE_ARMOR_FIRE_PROTECTION] = new Enchantment(self::TYPE_ARMOR_FIRE_PROTECTION, "%enchantment.protect.fire", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_ARMOR);
 		self::$enchantments[self::TYPE_ARMOR_FALL_PROTECTION] = new Enchantment(self::TYPE_ARMOR_FALL_PROTECTION, "%enchantment.protect.fall", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_FEET);
-		
+
 		self::$enchantments[self::TYPE_ARMOR_EXPLOSION_PROTECTION] = new Enchantment(self::TYPE_ARMOR_EXPLOSION_PROTECTION, "%enchantment.protect.explosion", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_ARMOR);
 		self::$enchantments[self::TYPE_ARMOR_PROJECTILE_PROTECTION] = new Enchantment(self::TYPE_ARMOR_PROJECTILE_PROTECTION, "%enchantment.protect.projectile", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_ARMOR);
 		self::$enchantments[self::TYPE_ARMOR_THORNS] = new Enchantment(self::TYPE_ARMOR_THORNS, "%enchantment.protect.thorns", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_SWORD);
 		self::$enchantments[self::TYPE_WATER_BREATHING] = new Enchantment(self::TYPE_WATER_BREATHING, "%enchantment.protect.waterbrething", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_FEET);
 		self::$enchantments[self::TYPE_WATER_SPEED] = new Enchantment(self::TYPE_WATER_SPEED, "%enchantment.waterspeed", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_FEET);
 		self::$enchantments[self::TYPE_WATER_AFFINITY] = new Enchantment(self::TYPE_WATER_AFFINITY, "%enchantment.protect.wateraffinity", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_FEET);
-		
+
 		self::$enchantments[self::TYPE_WEAPON_SHARPNESS] = new Enchantment(self::TYPE_WEAPON_SHARPNESS, "%enchantment.weapon.sharpness", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_SWORD);
 		self::$enchantments[self::TYPE_WEAPON_SMITE] = new Enchantment(self::TYPE_WEAPON_SMITE, "%enchantment.weapon.smite", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_SWORD);
 		self::$enchantments[self::TYPE_WEAPON_ARTHROPODS] = new Enchantment(self::TYPE_WEAPON_ARTHROPODS, "%enchantment.weapon.arthropods", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_SWORD);
@@ -114,7 +166,7 @@ class Enchantment{
 		self::$enchantments[self::TYPE_BOW_INFINITY] = new Enchantment(self::TYPE_BOW_INFINITY, "%enchantment.bow.infinity", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_BOW);
 		self::$enchantments[self::TYPE_FISHING_FORTUNE] = new Enchantment(self::TYPE_FISHING_FORTUNE, "%enchantment.fishing.fortune", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_FISHING_ROD);
 		self::$enchantments[self::TYPE_FISHING_LURE] = new Enchantment(self::TYPE_FISHING_LURE, "%enchantment.fishing.lure", self::RARITY_UNCOMMON, self::ACTIVATION_EQUIP, self::SLOT_FISHING_ROD);
-	
+
 	}
 
 	/**
@@ -135,6 +187,80 @@ class Enchantment{
 		return null;
 	}
 
+	public static function getEnchantAbility(Item $item){
+		switch($item->getId()){
+			case Item::BOOK:
+			case Item::BOW:
+			case Item::FISHING_ROD:
+				return 4;
+		}
+
+		if($item->isArmor()){
+			if($item instanceof ChainBoots or $item instanceof ChainChestplate or $item instanceof ChainHelmet or $item instanceof ChainLeggings) return 12;
+			if($item instanceof IronBoots or $item instanceof IronChestplate or $item instanceof IronHelmet or $item instanceof IronLeggings) return 9;
+			if($item instanceof DiamondBoots or $item instanceof DiamondChestplate or $item instanceof DiamondHelmet or $item instanceof DiamondLeggings) return 10;
+			if($item instanceof LeatherBoots or $item instanceof LeatherTunic or $item instanceof LeatherCap or $item instanceof LeatherPants) return 15;
+			if($item instanceof GoldBoots or $item instanceof GoldChestplate or $item instanceof GoldHelmet or $item instanceof GoldLeggings) return 25;
+		}
+
+		if($item->isTool()){
+			if($item instanceof WoodenAxe or $item instanceof WoodenHoe or $item instanceof WoodenPickaxe or $item instanceof WoodenShovel or $item instanceof WoodenSword) return 15;
+			if($item instanceof StoneAxe or $item instanceof StoneHoe or $item instanceof StonePickaxe or $item instanceof StoneShovel or $item instanceof StoneSword) return 5;
+			if($item instanceof DiamondAxe or $item instanceof DiamondHoe or $item instanceof DiamondPickaxe or $item instanceof DiamondShovel or $item instanceof DiamondSword) return 10;
+			if($item instanceof IronAxe or $item instanceof IronHoe or $item instanceof IronPickaxe or $item instanceof IronShovel or $item instanceof IronSword) return 14;
+			if($item instanceof GoldAxe or $item instanceof GoldHoe or $item instanceof GoldPickaxe or $item instanceof GoldShovel or $item instanceof GoldSword) return 22;
+		}
+
+		return 0;
+	}
+
+	public static function getEnchantWeight(int $enchantmentId){
+		switch($enchantmentId){
+			case self::TYPE_ARMOR_PROTECTION:
+				return 10;
+			case self::TYPE_ARMOR_FIRE_PROTECTION:
+				return 5;
+			case self::TYPE_ARMOR_FALL_PROTECTION:
+				return 2;
+			case self::TYPE_ARMOR_EXPLOSION_PROTECTION:
+				return 5;
+			case self::TYPE_WATER_BREATHING:
+				return 2;
+			case self::TYPE_WATER_AFFINITY:
+				return 2;
+			case self::TYPE_WEAPON_SHARPNESS:
+				return 10;
+			case self::TYPE_WEAPON_SMITE:
+				return 5;
+			case self::TYPE_WEAPON_ARTHROPODS:
+				return 5;
+			case self::TYPE_WEAPON_KNOCKBACK:
+				return 5;
+			case self::TYPE_WEAPON_FIRE_ASPECT:
+				return 2;
+			case self::TYPE_WEAPON_LOOTING:
+				return 2;
+			case self::TYPE_MINING_EFFICIENCY:
+				return 10;
+			case self::TYPE_MINING_SILK_TOUCH:
+				return 1;
+			case self::TYPE_MINING_DURABILITY:
+				return 5;
+			case self::TYPE_MINING_FORTUNE:
+				return 2;
+			case self::TYPE_BOW_POWER:
+				return 10;
+			case self::TYPE_BOW_KNOCKBACK:
+				return 2;
+			case self::TYPE_BOW_FLAME:
+				return 2;
+			case self::TYPE_BOW_INFINITY:
+				return 1;
+		}
+		return 0;
+	}
+
+
 	private $id;
 	private $level = 1;
 	private $name;
@@ -154,7 +280,7 @@ class Enchantment{
 		return $this->id;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return $this->name;
 	}
 
@@ -184,4 +310,12 @@ class Enchantment{
 		return $this;
 	}
 
+	public static function generateName(){
+		$count = mt_rand(3, 6);
+		$set = [];
+		while(count($set) < $count){
+			$set[] = self::$words[mt_rand(0, count(self::$words) - 1)];
+		}
+		return implode(" ", $set);
+	}
 }

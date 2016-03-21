@@ -1,58 +1,51 @@
 <?php
-/**
- * Author: PeratX
- * QQ: 1215714524
- * Time: 2016/1/7 16:41
- * Copyright(C) 2011-2016 iTX Technologies LLC.
- * All rights reserved.
- *
- * OpenGenisys Project
- */
+
 namespace pocketmine\entity;
 
-use pocketmine\item\Item as ItemItem;
-use pocketmine\network\protocol\AddEntityPacket;
+use pocketmine\event\player\PlayerFishEvent;
 use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
+use pocketmine\item\Item as ItemItem;
+use pocketmine\network\protocol\EntityEventPacket;
+use pocketmine\network\protocol\AddEntityPacket;
+use pocketmine\Server;
 
 class FishingHook extends Projectile{
 	const NETWORK_ID = 77;
 
-	public $width = 0.2;
-	public $length = 0.2;
-	public $height = 0.2;
-	protected $gravity = 0.04;
-	protected $drag = 0.04;
+	public $width = 0.25;
+	public $length = 0.25;
+	public $height = 0.25;
 
-	//public $canCollide = false;
-	public $owner = null;
+	protected $gravity = 0.1;
+	protected $drag = 0.05;
 
-	public $results = [
-		[ItemItem::RAW_FISH, 0, 1],
-	];
+	public $data = 0;
+	public $attractTimer = 100;
+	public $coughtTimer = 0;
+	public $damageRod = false;
 
-	public function getName(){
-		return "Fishing Hook";
+	public function initEntity(){
+		parent::initEntity();
+
+		if(isset($this->namedtag->Data)){
+			$this->data = $this->namedtag["Data"];
+		}
+
+		// $this->setDataProperty(FallingSand::DATA_BLOCK_INFO, self::DATA_TYPE_INT, $this->getData());
 	}
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
 		parent::__construct($chunk, $nbt, $shootingEntity);
 	}
 
-	public function initEntity(){
-		parent::initEntity();
-
-		$this->setMaxHealth(1);
-		$this->setHealth(1);
+	public function setData($id){
+		$this->data = $id;
 	}
 
-	public function close(){
-		parent::close();
-
-		if($this->owner instanceof Player){
-			$this->owner->fishingHook = null;
-		}
+	public function getData(){
+		return $this->data;
 	}
 
 	public function onUpdate($currentTick){
@@ -62,55 +55,86 @@ class FishingHook extends Projectile{
 
 		$this->timings->startTiming();
 
-		//$hasUpdate = parent::onUpdate($currentTick);
-		$hasUpdate = false;
+		$hasUpdate = parent::onUpdate($currentTick);
 
-		$this->age++;
-
-		if($this->age > 1200 or $this->owner == null){
-			$this->close();
+		if($this->isCollidedVertically && $this->isInsideOfWater()){
+			$this->motionX = 0;
+			$this->motionY += 0.01;
+			$this->motionZ = 0;
+			$this->motionChanged = true;
 			$hasUpdate = true;
-			if($this->owner instanceof  Player){
-				if($this->isInsideOfWater()){
-					//TODO: send results
-				}
-			}
-		}
-
-		if($this->isOnGround() or $this->isCollided){
+		}elseif($this->isCollided && $this->keepMovement === true){
 			$this->motionX = 0;
 			$this->motionY = 0;
 			$this->motionZ = 0;
-		}
-
-		if($this->isInsideOfWater()) $this->motionY += 0.02;
-
-		if(!$this->isOnGround() and !$this->isCollided) $this->motionY -= $this->gravity;
-
-		$this->move($this->motionX, $this->motionY, $this->motionZ);
-
-		if(!$this->onGround or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001){
-			$f = sqrt(($this->motionX ** 2) + ($this->motionZ ** 2));
-			$this->yaw = (atan2($this->motionX, $this->motionZ) * 180 / M_PI);
-			$this->pitch = (atan2($this->motionY, $f) * 180 / M_PI);
+			$this->motionChanged = true;
+			$this->keepMovement = false;
 			$hasUpdate = true;
 		}
-
-		$this->updateMovement();
-
-		$friction = 1 - $this->drag;
-
-		$this->motionX *= $friction;
-		$this->motionY *= 1 - $this->drag;
-		$this->motionZ *= $friction;
+		if($this->attractTimer === 0 && mt_rand(0, 100) <= 30){ // chance, that a fish bites
+			$this->coughtTimer = mt_rand(5, 10) * 20; // random delay to catch fish
+			$this->attractTimer = mt_rand(30, 100) * 20; // reset timer
+			$this->attractFish();
+			if($this->shootingEntity instanceof Player) $this->shootingEntity->sendTip("A fish bites!");
+		}elseif($this->attractTimer > 0){
+			$this->attractTimer--;
+		}
+		if($this->coughtTimer > 0){
+			$this->coughtTimer--;
+			$this->fishBites();
+		}
 
 		$this->timings->stopTiming();
 
 		return $hasUpdate;
 	}
 
+	public function fishBites(){
+		if($this->shootingEntity instanceof Player){
+			$pk = new EntityEventPacket();
+			$pk->eid = $this->shootingEntity->getId();//$this or $this->shootingEntity
+			$pk->event = EntityEventPacket::FISH_HOOK_HOOK;
+			Server::broadcastPacket($this->shootingEntity->hasSpawned, $pk);
+		}
+	}
+
+	public function attractFish(){
+		if($this->shootingEntity instanceof Player){
+			$pk = new EntityEventPacket();
+			$pk->eid = $this->shootingEntity->getId();//$this or $this->shootingEntity
+			$pk->event = EntityEventPacket::FISH_HOOK_BUBBLE;
+			Server::broadcastPacket($this->shootingEntity->hasSpawned, $pk);
+		}
+	}
+
+	public function reelLine(){
+		$this->damageRod = false;
+
+		if($this->shootingEntity instanceof Player && $this->coughtTimer > 0){
+			$fishes = [ItemItem::RAW_FISH, ItemItem::RAW_SALMON, ItemItem::CLOWN_FISH, ItemItem::PUFFER_FISH];
+			$fish = array_rand($fishes, 1);
+			$item = ItemItem::get($fishes[$fish]);
+			$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new PlayerFishEvent($this->shootingEntity, $item, $this));
+			if(!$ev->isCancelled()){
+				$this->shootingEntity->getInventory()->addItem($item);
+				$this->shootingEntity->addExperience(mt_rand(1, 6));
+				$this->damageRod = true;
+			}
+		}
+
+		if($this->shootingEntity instanceof Player){
+			$this->shootingEntity->unlinkHookFromPlayer();
+		}
+
+		if(!$this->closed){
+			$this->kill();
+			$this->close();
+		}
+
+		return $this->damageRod;
+	}
+
 	public function spawnTo(Player $player){
-		$this->setDataProperty(self::DATA_NO_AI, self::DATA_TYPE_BYTE, 1);
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
 		$pk->type = FishingHook::NETWORK_ID;

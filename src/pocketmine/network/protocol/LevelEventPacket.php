@@ -32,6 +32,7 @@ class LevelEventPacket extends DataPacket{
 	const EVENT_SOUND_SHOOT = 1002;
 	const EVENT_SOUND_DOOR = 1003;
 	const EVENT_SOUND_FIZZ = 1004;
+	const EVENT_SOUND_TNT = 1005;
 
 	const EVENT_SOUND_GHAST = 1007;
 	const EVENT_SOUND_GHAST_SHOOT = 1008;

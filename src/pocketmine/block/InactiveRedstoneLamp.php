@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2015/12/13 19:34
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+ ]
+
  */
 
 namespace pocketmine\block;
@@ -15,7 +15,7 @@ class InactiveRedstoneLamp extends ActiveRedstoneLamp{
 		return 0;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Inactive Redstone Lamp";
 	}
 

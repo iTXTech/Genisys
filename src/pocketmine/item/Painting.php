@@ -9,10 +9,11 @@ namespace pocketmine\item;
 
 use pocketmine\block\Block;
 use pocketmine\level\Level;
+use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\entity\Painting as PaintingEntity;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
@@ -22,7 +23,7 @@ class Painting extends Item{
 		parent::__construct(self::PAINTING, 0, $count, "Painting");
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool{
 		return true;
 	}
 
@@ -33,7 +34,6 @@ class Painting extends Item{
 				3 => 3,
 				4 => 0,
 				5 => 2,
-
 			];
 			$motives = [
 				// Motive Width Height
@@ -64,7 +64,30 @@ class Painting extends Item{
 				["Pigscene", 4, 4],
 				["Flaming Skull", 4, 4],
 			];
-			$motive = $motives[mt_rand(0, count($motives) - 1)];
+
+			$right = [4, 5, 3, 2];
+
+			$validMotives = [];
+			foreach($motives as $motive){
+				$valid = true;
+				for($x = 0; $x < $motive[1] && $valid; $x++){
+					for($z = 0; $z < $motive[2] && $valid; $z++){
+						if($target->getSide($right[$face - 2], $x)->isTransparent() ||
+							$target->getSide(Vector3::SIDE_UP, $z)->isTransparent() ||
+							$block->getSide($right[$face - 2], $x)->isSolid() ||
+							$block->getSide(Vector3::SIDE_UP, $z)->isSolid()
+						){
+							$valid = false;
+						}
+					}
+				}
+
+				if($valid){
+					$validMotives[] = $motive;
+				}
+			}
+
+			$motive = $motives[mt_rand(0, count($validMotives) - 1)];
 			$data = [
 				"x" => $target->x,
 				"y" => $target->y,
@@ -72,28 +95,28 @@ class Painting extends Item{
 				"yaw" => $faces[$face] * 90,
 				"Motive" => $motive[0],
 			];
-			
+
 			$nbt = new CompoundTag("", [
 				"Motive" => new StringTag("Motive", $data["Motive"]),
-				"Pos" => new EnumTag("Pos", [
+				"Pos" => new ListTag("Pos", [
 					new DoubleTag("", $data["x"]),
 					new DoubleTag("", $data["y"]),
 					new DoubleTag("", $data["z"])
 				]),
-				"Motion" => new EnumTag("Motion", [
+				"Motion" => new ListTag("Motion", [
 					new DoubleTag("", 0),
 					new DoubleTag("", 0),
 					new DoubleTag("", 0)
 				]),
-				"Rotation" => new EnumTag("Rotation", [
+				"Rotation" => new ListTag("Rotation", [
 					new FloatTag("", $data["yaw"]),
 					new FloatTag("", 0)
 				]),
 			]);
-			
+
 			$painting = new PaintingEntity($player->getLevel()->getChunk($block->getX() >> 4, $block->getZ() >> 4), $nbt);
 			$painting->spawnToAll();
-			
+
 			if($player->isSurvival()){
 				$item = $player->getInventory()->getItemInHand();
 				$count = $item->getCount();

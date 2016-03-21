@@ -375,7 +375,7 @@ class SessionManager{
 		$this->streamACK($session->getAddress() . ":" . $session->getPort(), $identifierACK);
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return $this->name;
 	}
 

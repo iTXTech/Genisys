@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2015/12/13 19:18
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+ ]
+
  */
 
 namespace pocketmine\block;
@@ -13,7 +13,7 @@ use pocketmine\item\Tool;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
@@ -42,11 +42,11 @@ class TrappedChest extends RedstoneSource{
 		return false;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 2.5;
 	}
 
@@ -54,7 +54,7 @@ class TrappedChest extends RedstoneSource{
 		return $this->getHardness() * 5;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Trapped Chest";
 	}
 
@@ -62,7 +62,7 @@ class TrappedChest extends RedstoneSource{
 		return Tool::TYPE_AXE;
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() {
 		return new AxisAlignedBB(
 				$this->x + 0.0625,
 				$this->y,
@@ -102,7 +102,7 @@ class TrappedChest extends RedstoneSource{
 
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [
-				new EnumTag("Items", []),
+				new ListTag("Items", []),
 				new StringTag("id", Tile::CHEST),
 				new IntTag("x", $this->x),
 				new IntTag("y", $this->y),
@@ -153,7 +153,7 @@ class TrappedChest extends RedstoneSource{
 				$chest = $t;
 			}else{
 				$nbt = new CompoundTag("", [
-						new EnumTag("Items", []),
+						new ListTag("Items", []),
 						new StringTag("id", Tile::CHEST),
 						new IntTag("x", $this->x),
 						new IntTag("y", $this->y),
@@ -169,7 +169,7 @@ class TrappedChest extends RedstoneSource{
 				}
 			}
 
-			if($player->isCreative()){
+			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
 			$player->addWindow($chest->getInventory());
@@ -178,7 +178,7 @@ class TrappedChest extends RedstoneSource{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 				[$this->id, 0, 1],
 		];

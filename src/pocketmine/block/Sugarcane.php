@@ -36,12 +36,12 @@ class Sugarcane extends Flowable{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Sugarcane";
 	}
 
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::SUGARCANE, 0, 1],
 		];

@@ -30,7 +30,7 @@ use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
 
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\IntTag;
 
 use pocketmine\nbt\tag\StringTag;
@@ -46,8 +46,8 @@ class Chest extends Spawnable implements InventoryHolder, Container, Nameable{
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new ChestInventory($this);
 
-		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof EnumTag)){
-			$this->namedtag->Items = new EnumTag("Items", []);
+		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)){
+			$this->namedtag->Items = new ListTag("Items", []);
 			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		}
 
@@ -70,7 +70,7 @@ class Chest extends Spawnable implements InventoryHolder, Container, Nameable{
 	}
 
 	public function saveNBT(){
-		$this->namedtag->Items = new EnumTag("Items", []);
+		$this->namedtag->Items = new ListTag("Items", []);
 		$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		for($index = 0; $index < $this->getSize(); ++$index){
 			$this->setItem($index, $this->inventory->getItem($index));
@@ -182,7 +182,7 @@ class Chest extends Spawnable implements InventoryHolder, Container, Nameable{
 		}
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Chest";
 	}
 

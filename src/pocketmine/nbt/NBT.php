@@ -30,7 +30,7 @@ use pocketmine\nbt\tag\ByteArrayTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\EndTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\IntArrayTag;
@@ -65,7 +65,7 @@ class NBT{
 	const TAG_Double = 6;
 	const TAG_ByteArray = 7;
 	const TAG_String = 8;
-	const TAG_Enum = 9;
+	const TAG_List = 9;
 	const TAG_Compound = 10;
 	const TAG_IntArray = 11;
 
@@ -117,7 +117,7 @@ class NBT{
 		return $item;
 	}
 
-	public static function matchList(EnumTag $tag1, EnumTag $tag2){
+	public static function matchList(ListTag $tag1, ListTag $tag2){
 		if($tag1->getName() !== $tag2->getName() or $tag1->getCount() !== $tag2->getCount()){
 			return false;
 		}
@@ -135,7 +135,7 @@ class NBT{
 				if(!self::matchTree($v, $tag2->{$k})){
 					return false;
 				}
-			}elseif($v instanceof EnumTag){
+			}elseif($v instanceof ListTag){
 				if(!self::matchList($v, $tag2->{$k})){
 					return false;
 				}
@@ -167,7 +167,7 @@ class NBT{
 				if(!self::matchTree($v, $tag2->{$k})){
 					return false;
 				}
-			}elseif($v instanceof EnumTag){
+			}elseif($v instanceof ListTag){
 				if(!self::matchList($v, $tag2->{$k})){
 					return false;
 				}
@@ -241,8 +241,8 @@ class NBT{
 				case NBT::TAG_String:
 					$data[$key] = new ByteTag($key, $value);
 					break;
-				case NBT::TAG_Enum:
-					$data[$key] = new EnumTag($key, $value);
+				case NBT::TAG_List:
+					$data[$key] = new ListTag($key, $value);
 					break;
 				case NBT::TAG_Compound:
 					$data[$key] = new CompoundTag($key, $value);
@@ -299,8 +299,8 @@ class NBT{
 				case NBT::TAG_String:
 					$data[$key] = new StringTag($key, $value);
 					break;
-				case NBT::TAG_Enum:
-					$data[$key] = new EnumTag($key, $value);
+				case NBT::TAG_List:
+					$data[$key] = new ListTag($key, $value);
 					break;
 				case NBT::TAG_Compound:
 					$data[$key] = new CompoundTag($key, $value);
@@ -351,7 +351,7 @@ class NBT{
 				}
 				++$offset;
 				$value = self::parseList($data, $offset);
-				$type = self::TAG_Enum;
+				$type = self::TAG_List;
 				break;
 			}else{
 				$value .= $c;
@@ -536,8 +536,8 @@ class NBT{
 				$tag = new StringTag($this->getString());
 				$tag->read($this);
 				break;
-			case NBT::TAG_Enum:
-				$tag = new EnumTag($this->getString());
+			case NBT::TAG_List:
+				$tag = new ListTag($this->getString());
 				$tag->read($this);
 				break;
 			case NBT::TAG_Compound:
@@ -628,9 +628,9 @@ class NBT{
 	}
 
 	private static function toArray(array &$data, Tag $tag){
-		/** @var Compound[]|Enum[]|IntArray[] $tag */
+		/** @var CompoundTag[]|ListTag[]|IntArrayTag[] $tag */
 		foreach($tag as $key => $value){
-			if($value instanceof CompoundTag or $value instanceof EnumTag or $value instanceof IntArrayTag){
+			if($value instanceof CompoundTag or $value instanceof ListTag or $value instanceof IntArrayTag){
 				$data[$key] = [];
 				self::toArray($data[$key], $value);
 			}else{
@@ -666,7 +666,7 @@ class NBT{
 						$isIntArray = false;
 					}
 				}
-				$tag{$key} = $isNumeric ? ($isIntArray ? new IntArrayTag($key, []) : new EnumTag($key, [])) : new CompoundTag($key, []);
+				$tag{$key} = $isNumeric ? ($isIntArray ? new IntArrayTag($key, []) : new ListTag($key, [])) : new CompoundTag($key, []);
 				self::fromArray($tag->{$key}, $value, $guesser);
 			}else{
 				$v = call_user_func($guesser, $key, $value);

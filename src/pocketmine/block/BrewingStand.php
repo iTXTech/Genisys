@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2015/12/6 14:20
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+ ]
+
  *
  * OpenGenisys Project
  *
@@ -17,7 +17,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\Player;
 use pocketmine\tile\Tile;
 use pocketmine\tile\BrewingStand as TileBrewingStand;
@@ -35,7 +35,7 @@ class BrewingStand extends Transparent{
 		if($block->getSide(Vector3::SIDE_DOWN)->isTransparent() === false){
 			$this->getLevel()->setBlock($block, $this, true, true);
 			$nbt = new CompoundTag("", [
-				new EnumTag("Items", []),
+				new ListTag("Items", []),
 				new StringTag("id", Tile::BREWING_STAND),
 				new IntTag("x", $this->x),
 				new IntTag("y", $this->y),
@@ -59,22 +59,22 @@ class BrewingStand extends Transparent{
 		return false;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 3;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Brewing Stand";
 	}
 
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
 			//TODO lock
-			if($player->isCreative()){
+			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
 			$t = $this->getLevel()->getTile($this);
@@ -83,7 +83,7 @@ class BrewingStand extends Transparent{
 				$brewingStand = $t;
 			}else{
 				$nbt = new CompoundTag("", [
-					new EnumTag("Items", []),
+					new ListTag("Items", []),
 					new StringTag("id", Tile::BREWING_STAND),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),
@@ -98,7 +98,7 @@ class BrewingStand extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		$drops = [];
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			$drops[] = [Item::BREWING_STAND, 0, 1];

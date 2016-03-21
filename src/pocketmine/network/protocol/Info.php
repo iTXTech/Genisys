@@ -30,7 +30,7 @@ interface Info{
 	/**
 	 * Actual Minecraft: PE protocol version
 	 */
-	const CURRENT_PROTOCOL = 38;
+	const CURRENT_PROTOCOL = 45;
 
 	const LOGIN_PACKET = 0x8f;
 	const PLAY_STATUS_PACKET = 0x90;
@@ -85,8 +85,14 @@ interface Info{
 	const CHANGE_DIMENSION_PACKET = 0xc1;
 	const SET_PLAYER_GAMETYPE_PACKET = 0xc2;
 	const PLAYER_LIST_PACKET = 0xc3;
-	const TELEMETRY_EVENT_PACKET = 0xc4;
-	const SPAWN_EXPERIENCE_ORB_PACKET = 0xc5;
+	//const TELEMETRY_EVENT_PACKET = 0xc4;
+	//const SPAWN_EXPERIENCE_ORB_PACKET = 0xc5;
+	//const CLIENTBOUND_MAP_ITEM_DATA_PACKET = 0xc6;
+	//const MAP_INFO_REQUEST_PACKET = 0xc7;
+	const REQUEST_CHUNK_RADIUS_PACKET = 0xc8;
+	const CHUNK_RADIUS_UPDATE_PACKET = 0xc9;
+	//const ITEM_FRAME_DROP_ITEM_PACKET = 0xca;
+	// const REPLACE_SELECTED_ITEM_PACKET = 0xcb;
 }
 
 

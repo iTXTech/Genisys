@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2015/12/20 21:07
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+ ]
+
  *
  * OpenGenisys Project
  */
@@ -21,11 +21,11 @@ class Lever extends RedstoneSource{
 		$this->meta = $meta;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Lever";
 	}
 
@@ -94,17 +94,7 @@ class Lever extends RedstoneSource{
 
 		$block = $this->getSide($faces[$side])->getSide(Vector3::SIDE_UP);
 		if(!$this->isRightPlace($this, $block)){
-			if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
-				if(!$block->isOpened()) $block->onActivate(new Item(0));
-			}
-			if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
-			/** @var ActiveRedstoneLamp $block */
-			if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn();
-			if($block->getId() == Block::REDSTONE_WIRE){
-				/** @var RedstoneWire $wire */
-				$wire = $block;
-				$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
-			}
+			$this->activateBlock($block);
 		}
 
 		$this->checkTorchOn($this->getSide($faces[$side]),[$this->getOppositeSide($faces[$side])]);
@@ -165,7 +155,7 @@ class Lever extends RedstoneSource{
 		return (($this->meta & 0x08) === 0x08);
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[$this->id, 0 ,1],
 		];

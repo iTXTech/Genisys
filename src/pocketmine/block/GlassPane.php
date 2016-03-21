@@ -32,15 +32,15 @@ class GlassPane extends Thin{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Glass Pane";
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 0.3;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [];
 	}
 }

@@ -25,7 +25,7 @@ use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
@@ -40,15 +40,15 @@ class BurningFurnace extends Solid{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Burning Furnace";
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 3.5;
 	}
 
@@ -70,7 +70,7 @@ class BurningFurnace extends Solid{
 		$this->meta = $faces[$player instanceof Player ? $player->getDirection() : 0];
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [
-			new EnumTag("Items", []),
+			new ListTag("Items", []),
 			new StringTag("id", Tile::FURNACE),
 			new IntTag("x", $this->x),
 			new IntTag("y", $this->y),
@@ -107,7 +107,7 @@ class BurningFurnace extends Solid{
 				$furnace = $t;
 			}else{
 				$nbt = new CompoundTag("", [
-					new EnumTag("Items", []),
+					new ListTag("Items", []),
 					new StringTag("id", Tile::FURNACE),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),
@@ -123,7 +123,7 @@ class BurningFurnace extends Solid{
 				}
 			}
 
-			if($player->isCreative()){
+			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
 
@@ -133,7 +133,7 @@ class BurningFurnace extends Solid{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		$drops = [];
 		if($item->isPickaxe() >= 1){
 			$drops[] = [Item::FURNACE, 0, 1];

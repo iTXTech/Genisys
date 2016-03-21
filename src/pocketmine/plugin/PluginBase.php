@@ -202,7 +202,8 @@ abstract class PluginBase implements Plugin{
 		}
 
 		$out = $this->dataFolder . $filename;
-		if(!file_exists($this->dataFolder)){
+		if(!file_exists(dirname($out))){
+			mkdir(dirname($out), 0755, true);
 			mkdir($this->dataFolder, 0755, true);
 		}
 

@@ -1,15 +1,19 @@
 <?php
+
+/**
+ * OpenGenisys Project
+ *
+ * @author PeratX
+ */
+
 namespace pocketmine\entity;
 
-use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
-use pocketmine\entity\Animal;
-use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\item\Item as ItemItem;
 
 class SnowGolem extends Animal{
 	const NETWORK_ID = 21;
+
 	public $width = 0.3;
 	public $length = 0.9;
 	public $height = 1.8;
@@ -37,6 +41,7 @@ class SnowGolem extends Animal{
 		$pk->pitch = $this->pitch;
 		$pk->metadata = $this->dataProperties;
 		$player->dataPacket($pk);
+
 		parent::spawnTo($player);
 	}
 }

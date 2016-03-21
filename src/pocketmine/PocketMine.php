@@ -72,12 +72,12 @@ namespace pocketmine {
 	use pocketmine\utils\Utils;
 	use pocketmine\wizard\Installer;
 
-	const VERSION = "1.0dev";
-	const API_VERSION = "1.13.1";
-	const CODENAME = "Amazing PHP7 !";
-	const MINECRAFT_VERSION = "v0.13.1 alpha";
-	const MINECRAFT_VERSION_NETWORK = "0.13.1";
-	const iTX_API_VERSION = '1.5.8';
+	const VERSION = "1.1dev";
+	const API_VERSION = "2.0.0";
+	const CODENAME = "Ikaros";
+	const MINECRAFT_VERSION = "v0.14.0 alpha";
+	const MINECRAFT_VERSION_NETWORK = "0.14.0";
+	const GENISYS_API_VERSION = '1.7.1';
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
@@ -171,11 +171,13 @@ namespace pocketmine {
 		 * This is here so that people don't come to us complaining and fill up the issue tracker when they put
 		 * an incorrect timezone abbreviation in php.ini apparently.
 		 */
-		$default_timezone = date_default_timezone_get();
-		if(strpos($default_timezone, "/") === false){
-			$default_timezone = timezone_name_from_abbr($default_timezone);
+		$timezone = ini_get("date.timezone");
+		if(strpos($timezone, "/") === false){
+			$default_timezone = timezone_name_from_abbr($timezone);
 			ini_set("date.timezone", $default_timezone);
 			date_default_timezone_set($default_timezone);
+		} else {
+			date_default_timezone_set($timezone);
 		}
 	}
 
@@ -395,8 +397,8 @@ namespace pocketmine {
 	if(substr_count($pthreads_version, ".") < 2){
 		$pthreads_version = "0.$pthreads_version";
 	}
-	if(version_compare($pthreads_version, "3.0.7") < 0){
-		$logger->critical("pthreads >= 3.0.7 is required, while you have $pthreads_version.");
+	if(version_compare($pthreads_version, "3.1.5") < 0){
+		$logger->critical("pthreads >= 3.1.5 is required, while you have $pthreads_version.");
 		++$errors;
 	}
 
@@ -451,8 +453,10 @@ namespace pocketmine {
 	@define("INT32_MASK", is_int(0xffffffff) ? 0xffffffff : -1);
 	@ini_set("opcache.mmap_base", bin2hex(Utils::getRandomBytes(8, false))); //Fix OPCache address errors
 
+	$lang = "unknown";
 	if(!file_exists(\pocketmine\DATA . "server.properties") and !isset($opts["no-wizard"])){
-		new Installer();
+		$inst = new Installer();
+		$lang = $inst->getDefaultLang();
 	}
 
 	/*if(\Phar::running(true) === ""){
@@ -460,7 +464,7 @@ namespace pocketmine {
 	}*/
 
 	ThreadManager::init();
-	$server = new Server($autoloader, $logger, \pocketmine\PATH, \pocketmine\DATA, \pocketmine\PLUGIN_PATH);
+	$server = new Server($autoloader, $logger, \pocketmine\PATH, \pocketmine\DATA, \pocketmine\PLUGIN_PATH, $lang);
 
 	$logger->info("Stopping other threads");
 
@@ -475,7 +479,9 @@ namespace pocketmine {
 	$logger->shutdown();
 	$logger->join();
 
-	echo Terminal::$FORMAT_RESET . "\n";
+	echo "Server has stopped" . Terminal::$FORMAT_RESET . "\n";
+
+	@kill(getmypid());
 
 	exit(0);
 

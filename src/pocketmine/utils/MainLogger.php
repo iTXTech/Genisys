@@ -24,7 +24,6 @@ namespace pocketmine\utils;
 use LogLevel;
 use pocketmine\Thread;
 use pocketmine\Worker;
-use pocketmine\Server;
 
 class MainLogger extends \AttachableThreadedLogger{
 	protected $logFile;
@@ -37,6 +36,22 @@ class MainLogger extends \AttachableThreadedLogger{
 
 	/** Extra Settings */
 	protected $write = true;
+
+	public $shouldSendMsg = "";
+	public $shouldRecordMsg = false;
+	private $lastGet = 0;
+
+	public function setSendMsg($b){
+		$this->shouldRecordMsg = $b;
+		$this->lastGet = time();
+	}
+
+	public function getMessages(){
+		$msg = $this->shouldSendMsg;
+		$this->shouldSendMsg = "";
+		$this->lastGet = time();
+		return $msg;
+	}
 
 	/**
 	 * @param string $logFile
@@ -193,7 +208,15 @@ class MainLogger extends \AttachableThreadedLogger{
 			$threadName = (new \ReflectionClass($thread))->getShortName() . " thread";
 		}
 
-		$message = TextFormat::toANSI(TextFormat::AQUA . "[" . date("H:i:s", $now) . "] ". TextFormat::RESET . $color ."[" . $threadName . "/" . $prefix . "]:" . " " . $message . TextFormat::RESET);
+		if($this->shouldRecordMsg){
+			if((time() - $this->lastGet) >= 10) $this->shouldRecordMsg = false; // 10 secs timeout
+			else{
+				if(strlen($this->shouldSendMsg) >= 10000) $this->shouldSendMsg = "";
+				$this->shouldSendMsg .= $color . "|" . $prefix . "|" . trim($message, "\r\n") . "\n";
+			}
+		}
+
+		$message = TextFormat::toANSI(TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . TextFormat::RESET . $color . "[" . $threadName . "/" . $prefix . "]:" . " " . $message . TextFormat::RESET);
 		//$message = TextFormat::toANSI(TextFormat::AQUA . "[" . date("H:i:s") . "] ". TextFormat::RESET . $color ."<".$prefix . ">" . " " . $message . TextFormat::RESET);
 		$cleanMessage = TextFormat::clean($message);
 
@@ -256,7 +279,7 @@ class MainLogger extends \AttachableThreadedLogger{
 
 			while($this->shutdown === false){
 				if(!$this->write) break;
-				$this->synchronized(function (){
+				$this->synchronized(function(){
 					while($this->logStream->count() > 0){
 						$chunk = $this->logStream->shift();
 						$this->logResource = file_put_contents($this->logFile, $chunk, FILE_APPEND);

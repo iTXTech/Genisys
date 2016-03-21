@@ -5,6 +5,13 @@
 
 namespace pocketmine\entity\ai;
 
+use pocketmine\entity\IronGolem;
+use pocketmine\entity\Mooshroom;
+use pocketmine\entity\Ocelot;
+use pocketmine\entity\PigZombie;
+use pocketmine\entity\SnowGolem;
+use pocketmine\entity\Wolf;
+use pocketmine\event\entity\EntityGenerateEvent;
 use pocketmine\level\Position;
 use pocketmine\level\Level;
 use pocketmine\item\Item;
@@ -17,7 +24,7 @@ use pocketmine\scheduler\CallbackTask;
 use pocketmine\event\entity\EntityDeathEvent;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -93,7 +100,7 @@ class AIHolder{
 		$this->SkeletonAI = new SkeletonAI($this);
 
 		$this->IronGolemAI = new IronGolemAI($this);
-		$this->PigZombieAI = new PigZombieAI($this);
+		//$this->PigZombieAI = new PigZombieAI($this);
 	}
 
 	/*
@@ -165,26 +172,30 @@ class AIHolder{
 	}
 
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只僵尸在某坐标
 	 */
 	public function spawnZombie(Position $pos, $maxHealth = 20, $health = 20){
+		$this->getZombie($pos, $maxHealth, $health)->spawnToAll();
+		//$this->getLogger()->info("生成了一只僵尸");
+	}
+
+	public function getZombie(Position $pos, $maxHealth = 20, $health = 20){
 		$chunk = $pos->level->getChunk($pos->x >> 4, $pos->z >> 4, false);
 		$nbt = $this->getNBT();
 		$zo = new Zombie($chunk, $nbt);
 		$zo->setPosition($pos);
 		$zo->setMaxHealth($maxHealth);
 		$zo->setHealth($health);
-		$zo->spawnToAll();
-		//$this->getLogger()->info("生成了一只僵尸");
+		return $zo;
 	}
 
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只苦力怕在某坐标
 	 */
 	public function spawnCreeper(Position $pos, $maxHealth = 20, $health = 20){
@@ -199,9 +210,9 @@ class AIHolder{
 	}
 
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只骷髅弓箭手在某坐标
 	 */
 	public function spawnSkeleton(Position $pos, $maxHealth = 20, $health = 20){
@@ -216,26 +227,32 @@ class AIHolder{
 	}
 
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只牛在某坐标
+	 *
+	 * @return Cow
 	 */
-	public function spawnCow(Position $pos, $maxHealth = 20, $health = 20){
+	public function getCow(Position $pos, $maxHealth = 20, $health = 20){
 		$chunk = $pos->level->getChunk($pos->x >> 4, $pos->z >> 4, false);
 		$nbt = $this->getNBT();
 		$zo = new Cow($chunk, $nbt);
 		$zo->setPosition($pos);
 		$zo->setMaxHealth($maxHealth);
 		$zo->setHealth($health);
-		$zo->spawnToAll();
+		return $zo;
 		//$this->getLogger()->info("生成了一只牛");
 	}
 
+	public function spawnCow(Position $pos, $maxHealth = 20, $health = 20){
+		$this->getCow($pos, $maxHealth, $health)->spawnToAll();
+	}
+
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只豬在某坐标
 	 */
 	public function spawnPig(Position $pos, $maxHealth = 20, $health = 20){
@@ -250,9 +267,9 @@ class AIHolder{
 	}
 
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只羊在某坐标
 	 */
 	public function spawnSheep(Position $pos, $maxHealth = 20, $health = 20){
@@ -267,9 +284,9 @@ class AIHolder{
 	}
 
 	/**
-	 * @param Position $pos       出生位置坐标(世界)
+	 * @param Position $pos 出生位置坐标(世界)
 	 * @param int      $maxHealth 最高血量
-	 * @param int      $health    血量
+	 * @param int      $health 血量
 	 *                            出生一只雞在某坐标
 	 */
 	public function spawnChicken(Position $pos, $maxHealth = 20, $health = 20){
@@ -422,17 +439,17 @@ class AIHolder{
 	 */
 	public function getNBT() : CompoundTag{
 		$nbt = new CompoundTag("", [
-			"Pos" => new EnumTag("Pos", [
+			"Pos" => new ListTag("Pos", [
 				new DoubleTag("", 0),
 				new DoubleTag("", 0),
 				new DoubleTag("", 0)
 			]),
-			"Motion" => new EnumTag("Motion", [
+			"Motion" => new ListTag("Motion", [
 				new DoubleTag("", 0),
 				new DoubleTag("", 0),
 				new DoubleTag("", 0)
 			]),
-			"Rotation" => new EnumTag("Rotation", [
+			"Rotation" => new ListTag("Rotation", [
 				new FloatTag("", 0),
 				new FloatTag("", 0)
 			]),
@@ -476,15 +493,17 @@ class AIHolder{
 	public function RotationTimer(){
 		foreach($this->getServer()->getLevels() as $level){
 			foreach($level->getEntities() as $entity){
-				if($entity instanceof Zombie or $entity instanceof Creeper or $entity instanceof Skeleton or $entity instanceof Cow or $entity instanceof Pig or $entity instanceof Sheep or $entity instanceof Chicken){
+				if($entity instanceof Zombie or $entity instanceof Creeper or $entity instanceof Skeleton or $entity instanceof Cow or $entity instanceof Pig or $entity instanceof Sheep or $entity
+					instanceof Chicken or $entity instanceof Mooshroom or $entity instanceof Ocelot or $entity instanceof Wolf or $entity instanceof PigZombie
+				){
 					if(count($entity->getViewers()) != 0){
-						if($entity instanceof Zombie){
+						if($entity instanceof Zombie or $entity instanceof PigZombie){
 							$array = &$this->zombie;
 						}elseif($entity instanceof Creeper){
 							$array = &$this->Creeper;
 						}elseif($entity instanceof Skeleton){
 							$array = &$this->Skeleton;
-						}elseif($entity instanceof Cow){
+						}elseif($entity instanceof Cow or $entity instanceof Mooshroom or $entity instanceof Pig or $entity instanceof Sheep or $entity instanceof Ocelot or $entity instanceof Wolf){
 							$array = &$this->Cow;
 						}elseif($entity instanceof Pig){
 							$array = &$this->Pig;
@@ -492,6 +511,10 @@ class AIHolder{
 							$array = &$this->Sheep;
 						}elseif($entity instanceof Chicken){
 							$array = &$this->Chicken;
+						}elseif($entity instanceof IronGolem){
+							$array = &$this->irongolem;
+						}elseif($entity instanceof SnowGolem){
+							$array = &$this->snowgolem;
 						}
 						if(isset($array[$entity->getId()])){
 							$yaw0 = $entity->yaw;  //实际yaw
@@ -868,22 +891,22 @@ class AIHolder{
 
 						if(count($zoC) > $max){
 							for($i = 0; $i < (count($zoC) - $max); $i++) $zoC[$i]->kill();
-						}else
-							if($random == 0 && $level->getTime() >= 13500){
+						}elseif($random == 0 && $level->getTime() >= 13500){
+							$pos = new Position($v3->x, $v3->y, $v3->z, $level);
 
-
-								$pos = new Position($v3->x, $v3->y, $v3->z, $level);
-
-								$this->spawnZombie($pos);
-								//$this->server->getLogger()->info("生成1僵尸");
-							}
+							$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($ent = $this->getZombie($pos), EntityGenerateEvent::CAUSE_AI_HOLDER));
+							if(!$ev->isCancelled()) $ent->spawnToAll();
+							else $ent->close();
+							//$this->server->getLogger()->info("生成1僵尸");
+						}
 
 						if(count($cowc) > $max){
 							for($i = 0; $i < (count($cowc) - $max); $i++) $cowc[$i]->kill();
-						}else if($random == 1){
-
+						}elseif($random == 1){
 							$pos = new Position($v3->x, $v3->y, $v3->z, $level);
-							$this->spawnCow($pos);
+							$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($ent = $this->getCow($pos), EntityGenerateEvent::CAUSE_AI_HOLDER));
+							if(!$ev->isCancelled()) $ent->spawnToAll();
+							else $ent->close();
 							//$this->server->getLogger()->info("生成1牛");
 						}
 						break;

@@ -6,7 +6,7 @@ use pocketmine\level\Level;
 use pocketmine\block\Block;
 use pocketmine\Player;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\entity\Minecart as MinecartEntity;
@@ -16,26 +16,23 @@ class Minecart extends Item{
 		parent::__construct(self::MINECART, $meta, $count, "Minecart");
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 
 	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
-		$blockTemp = $level->getBlock($block->add(0, -1, 0));
-		//if($blockTemp->getId() != self::RAIL and $blockTemp->getId() != self::POWERED_RAIL) return;
-
 		$minecart = new MinecartEntity($player->getLevel()->getChunk($block->getX() >> 4, $block->getZ() >> 4), new CompoundTag("", [
-			"Pos" => new EnumTag("Pos", [
+			"Pos" => new ListTag("Pos", [
 				new DoubleTag("", $block->getX()),
-				new DoubleTag("", $block->getY() + 1),
+				new DoubleTag("", $block->getY() + 0.8),
 				new DoubleTag("", $block->getZ())
 			]),
-			"Motion" => new EnumTag("Motion", [
+			"Motion" => new ListTag("Motion", [
 				new DoubleTag("", 0),
 				new DoubleTag("", 0),
 				new DoubleTag("", 0)
 			]),
-			"Rotation" => new EnumTag("Rotation", [
+			"Rotation" => new ListTag("Rotation", [
 				new FloatTag("", 0),
 				new FloatTag("", 0)
 			]),
@@ -47,7 +44,7 @@ class Minecart extends Item{
 			$count = $item->getCount();
 			if(--$count <= 0){
 				$player->getInventory()->setItemInHand(Item::get(Item::AIR));
-				return;
+				return true;
 			}
 
 			$item->setCount($count);

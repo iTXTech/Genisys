@@ -27,6 +27,7 @@ namespace pocketmine\block;
 use pocketmine\entity\Entity;
 
 
+use pocketmine\event\block\BlockBurnEvent;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\level\Level;
@@ -75,10 +76,14 @@ class Block extends Position implements Metadatable{
 
 	const SANDSTONE = 24;
 
+	const DISPENSER = 23;
+
 	const NOTEBLOCK = 25;
 
 	const BED_BLOCK = 26;
 
+	const POWERED_RAIL = 27;
+	const DETECTOR_RAIL = 28;
 	const COBWEB = 30;
 	const TALL_GRASS = 31;
 	const BUSH = 32;
@@ -169,8 +174,13 @@ class Block extends Position implements Metadatable{
 	const WOODEN_TRAPDOOR = 96;
 	const WOOD_TRAPDOOR = 96;
 
+	const MONSTER_EGG_BLOCK = 97;
+
 	const STONE_BRICKS = 98;
 	const STONE_BRICK = 98;
+
+	const BROWN_MUSHROOM_BLOCK = 99;
+	const RED_MUSHROOM_BLOCK = 100;
 
 	const IRON_BAR = 101;
 	const IRON_BARS = 101;
@@ -203,9 +213,15 @@ class Block extends Position implements Metadatable{
 	const INACTIVE_REDSTONE_LAMP = 123;
 	const ACTIVE_REDSTONE_LAMP = 124;
 
+	const DROPPER = 125;
+
+	const ACTIVATOR_RAIL = 126;
+	const COCOA_BLOCK = 127;
 	const SANDSTONE_STAIRS = 128;
 	const EMERALD_ORE = 129;
 
+	const TRIPWIRE_HOOK = 131;
+	const TRIPWIRE = 132;
 	const EMERALD_BLOCK = 133;
 	const SPRUCE_WOOD_STAIRS = 134;
 	const SPRUCE_WOODEN_STAIRS = 134;
@@ -258,7 +274,7 @@ class Block extends Position implements Metadatable{
 	const ACACIA_WOODEN_STAIRS = 163;
 	const DARK_OAK_WOOD_STAIRS = 164;
 	const DARK_OAK_WOODEN_STAIRS = 164;
-
+        const SLIME_BLOCK = 165;
 	const IRON_TRAPDOOR = 167;
 	const HAY_BALE = 170;
 	const CARPET = 171;
@@ -282,16 +298,18 @@ class Block extends Position implements Metadatable{
 
 	const GRASS_PATH = 198;
 
+	const ITEM_FRAME_BLOCK = 199;
+
 	const PODZOL = 243;
 	const BEETROOT_BLOCK = 244;
 	const STONECUTTER = 245;
 	const GLOWING_OBSIDIAN = 246;
 	const NETHER_REACTOR = 247;
-	
+	const CAMERA = 439;
+
 	const NETHER_BRICK_FENCE = 113;
-	
+
 	const RAIL = 66;
-	const POWERED_RAIL = 27;
 
 	/** @var \SplFixedArray */
 	public static $list = null;
@@ -440,6 +458,9 @@ class Block extends Position implements Metadatable{
 			self::$list[self::TRAPDOOR] = Trapdoor::class;
 
 			self::$list[self::STONE_BRICKS] = StoneBricks::class;
+			
+			self::$list[self::BROWN_MUSHROOM_BLOCK] = BrownMushroomBlock::class;
+			self::$list[self::RED_MUSHROOM_BLOCK] = RedMushroomBlock::class;
 
 			self::$list[self::IRON_BARS] = IronBars::class;
 			self::$list[self::GLASS_PANE] = GlassPane::class;
@@ -491,6 +512,7 @@ class Block extends Position implements Metadatable{
 			self::$list[self::ACACIA_WOOD_STAIRS] = AcaciaWoodStairs::class;
 			self::$list[self::DARK_OAK_WOOD_STAIRS] = DarkOakWoodStairs::class;
 
+self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 			self::$list[self::HAY_BALE] = HayBale::class;
 			self::$list[self::CARPET] = Carpet::class;
 			self::$list[self::HARDENED_CLAY] = HardenedClay::class;
@@ -512,7 +534,7 @@ class Block extends Position implements Metadatable{
 			self::$list[self::STONECUTTER] = Stonecutter::class;
 			self::$list[self::GLOWING_OBSIDIAN] = GlowingObsidian::class;
 			self::$list[self::NETHER_REACTOR] = NetherReactor::class;
-			
+
 			self::$list[self::NETHER_BRICK_FENCE] = NetherBrickFence::class;
 			self::$list[self::POWERED_RAIL] = PoweredRail::class;
 			self::$list[self::RAIL] = Rail::class;
@@ -534,6 +556,14 @@ class Block extends Position implements Metadatable{
 			self::$list[self::NOTEBLOCK] = Noteblock::class;
 			self::$list[self::SKULL_BLOCK] = SkullBlock::class;
 			self::$list[self::NETHER_QUARTZ_ORE] = NetherQuartzOre::class;
+			self::$list[self::ACTIVATOR_RAIL] = ActivatorRail::class;
+			self::$list[self::COCOA_BLOCK] = CocoaBlock::class;
+			self::$list[self::DETECTOR_RAIL] = DetectorRail::class;
+			self::$list[self::TRIPWIRE] = Tripwire::class;
+			self::$list[self::TRIPWIRE_HOOK] = TripwireHook::class;
+			self::$list[self::ITEM_FRAME_BLOCK] = ItemFrame::class;
+			self::$list[self::DISPENSER] = Dispenser::class;
+			self::$list[self::DROPPER] = Dropper::class;
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){
@@ -556,6 +586,8 @@ class Block extends Position implements Metadatable{
 							}else{
 								self::$lightFilter[$id] = 1;
 							}
+						}elseif($block->getId() == Block::GLOWSTONE){
+							self::$lightFilter[$id] = 1;
 						}else{
 							self::$lightFilter[$id] = 15;
 						}
@@ -639,6 +671,10 @@ class Block extends Position implements Metadatable{
 		return true;
 	}
 
+	public function tickRate() : int{
+		return 10;
+	}
+
 	/**
 	 * Do the actions needed so the block is broken with the Item
 	 *
@@ -690,6 +726,78 @@ class Block extends Position implements Metadatable{
 	/**
 	 * @return int
 	 */
+	public function getBurnChance() : int{
+		return 0;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getBurnAbility() : int{
+		return 0;
+	}
+
+	public function isBlockTopFacingSurfaceSolid(Block $block){
+		if($block->isSolid()){
+			return true;
+		}else{
+			if($block instanceof Stair and ($block->getDamage() &4) == 4){
+				return true;
+			}elseif($block instanceof Slab and ($block->getDamage() & 8) == 8){
+				return true;
+			}elseif($block instanceof SnowLayer and ($block->getDamage() & 7) == 7){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function canNeighborBurn(){
+		for($face = 0; $face < 5; $face++){
+			if($this->getSide($face)->getBurnChance() > 0){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function tryToCatchBlockOnFire(Block $block, int $bound, int $damage){
+		$burnAbility = $block->getBurnAbility();
+
+		if(mt_rand(0, $bound) < $burnAbility){
+			if(mt_rand(0, $damage + 10) < 5){
+				$meta = min(15, $damage + mt_rand(0, 5) / 4);
+
+				$this->getLevel()->setBlock($this, $fire = new Fire($meta), true);
+				$this->getLevel()->scheduleUpdate($this, $fire->getTickRate());
+			}else{
+				$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new BlockBurnEvent($block));
+				if(!$ev->isCancelled()){
+					$this->getLevel()->setBlock($this, new Air(), true);
+				}
+			}
+
+			if($block instanceof TNT){
+				$block->prime();
+			}
+		}
+	}
+
+	public function getChanceOfNeighborsEncouragingFire(Block $block){
+		if($block->getId() !== self::AIR){
+			return 0;
+		}else{
+			$chance = 0;
+			for($i = 0; $i < 5; $i++){
+				$chance = max($chance, $block->getSide($i)->getBurnChance());
+			}
+			return $chance;
+		}
+	}
+
+	/**
+	 * @return int
+	 */
 	public function getToolType(){
 		return Tool::TYPE_NONE;
 	}
@@ -716,7 +824,7 @@ class Block extends Position implements Metadatable{
 	public function canBePlaced(){
 		return true;
 	}
-	
+
 	public function isPlaceable(){
 		return $this->canBePlaced();
 	}
@@ -755,7 +863,15 @@ class Block extends Position implements Metadatable{
 	 *
 	 * @return bool
 	 */
-	public function canBeActivated(){
+	public function canBeActivated() : bool{
+		return false;
+	}
+
+	public function activate(){
+		return false;
+	}
+
+	public function deactivate(){
 		return false;
 	}
 
@@ -770,7 +886,7 @@ class Block extends Position implements Metadatable{
 	/**
 	 * @return string
 	 */
-	public function getName(){
+	public function getName() : string{
 		return "Unknown";
 	}
 
@@ -819,7 +935,7 @@ class Block extends Position implements Metadatable{
 	 *
 	 * @return array
 	 */
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array{
 		if(!isset(self::$list[$this->getId()])){ //Unknown blocks
 			return [];
 		}else{

@@ -22,11 +22,11 @@
 namespace pocketmine\nbt\tag;
 
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\EnumTag as TagEnum;
+use pocketmine\nbt\tag\ListTag as TagEnum;
 
 #include <rules/NBT.h>
 
-class EnumTag extends NamedTag implements \ArrayAccess, \Countable{
+class ListTag extends NamedTag implements \ArrayAccess, \Countable{
 
 	private $tagType;
 
@@ -103,7 +103,7 @@ class EnumTag extends NamedTag implements \ArrayAccess, \Countable{
 	}
 
 	public function getType(){
-		return NBT::TAG_Enum;
+		return NBT::TAG_List;
 	}
 
 	public function setTagType($type){
@@ -160,7 +160,7 @@ class EnumTag extends NamedTag implements \ArrayAccess, \Countable{
 					$tag->read($nbt);
 					$this->{$i} = $tag;
 					break;
-				case NBT::TAG_Enum:
+				case NBT::TAG_List:
 					$tag = new TagEnum("");
 					$tag->read($nbt);
 					$this->{$i} = $tag;

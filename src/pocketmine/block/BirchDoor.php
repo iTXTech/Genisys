@@ -32,15 +32,15 @@ class BirchDoor extends Door{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Birch Door Block";
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 3;
 	}
 
@@ -48,7 +48,7 @@ class BirchDoor extends Door{
 		return Tool::TYPE_AXE;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::BIRCH_DOOR, 0, 1],
 		];

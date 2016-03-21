@@ -37,6 +37,8 @@ use pocketmine\level\generator\hell\HellBiome;
 use pocketmine\level\generator\populator\Populator;
 use pocketmine\utils\Random;
 
+use pocketmine\level\generator\populator\Flower;
+
 abstract class Biome{
 
 	const OCEAN = 0;
@@ -82,6 +84,20 @@ abstract class Biome{
 		self::$biomes[(int) $id] = $biome;
 		$biome->setId((int) $id);
 		$biome->grassColor = self::generateBiomeColor($biome->getTemperature(), $biome->getRainfall());
+
+		$flowerPopFound = false;
+
+		foreach($biome->getPopulators() as $populator){
+			if($populator instanceof Flower){
+				$flowerPopFound = true;
+				break;
+			}
+		}
+
+		if($flowerPopFound === false){
+			$flower = new Flower();
+			$biome->addPopulator($flower);
+		}
 	}
 
 	public static function init(){

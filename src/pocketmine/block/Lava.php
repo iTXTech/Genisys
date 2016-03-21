@@ -42,7 +42,7 @@ class Lava extends Liquid{
 		return 15;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Lava";
 	}
 

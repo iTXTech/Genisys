@@ -32,11 +32,11 @@ class Glowstone extends Transparent{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Glowstone";
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 0.3;
 	}
 
@@ -48,7 +48,7 @@ class Glowstone extends Transparent{
 		return 15;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::GLOWSTONE_DUST, 0, mt_rand(2, 4)],
 		];

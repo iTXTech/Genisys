@@ -50,7 +50,7 @@ class OfflinePlayer implements IPlayer{
 		return $this->getPlayer() !== null;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return $this->name;
 	}
 

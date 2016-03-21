@@ -1,13 +1,32 @@
-#English Version
+# Genisys(创世纪) - PocketMine-iTX Core
 
-##Genisys
+### Gitter Chat
+[![Gitter](https://img.shields.io/gitter/room/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-* One Core to rule them ALL
-* This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
+### Build status
+Jenkins: [![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.mcper.cn/Genisys-master.svg)](http://jenkins.mcper.cn/job/Genisys-master/)
+
+Travis-CI: [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
+
+### Downloads
+You can get prebuilt phar from [Jenkins](http://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/Genisys/builds).
+
+### Fast Docker installation
+[![Docker Pulls](https://img.shields.io/docker/pulls/itxtech/docker-env-genisys.svg)](https://hub.docker.com/r/itxtech/docker-env-genisys/)
+
+See [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys) for details.
+
+## English Version
+
+* One Core to rule anything
+* This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO and iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
+* [Download PHP7 for Genisys](https://github.com/iTXTech/PHP-Genisys/)
+* [Download Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
+* Feel free to create a Pull Request or open an Issue. English and Chinese are both welcome. Use English to communicate with more people.
 
-##Acknowledgements
+### Acknowledgements
+* Some features are merged from **@boybook**'s **FCCore**
 * Skull, FlowerPot are based on **@ImagicalCorp** ImagicalMine's work
 * AIs are based on **@Zzm317**'s amazing MyOwnWorld.
 * Painting and Brewing Stand are translated from **Nukkit** Project
@@ -16,93 +35,89 @@
 * Nether door was written by **JJLeo**
 * Base food system is based on **Katana**
 * Base weather system was written by **@Zzm317** and rewritten by **@PeratX**
-* @FENGberd's encouragement
+* **@FENGberd**'s encouragement
 * Our leaders are **@ishitatsuyuki** and **@jasonczc**
 
-##Declaration
-* We have never copy **ANY** codes from PxxxxxMxxxPxxxPxxx and we even don't know about that project either.
+### License
+Most codes are made by PocketMine team and licensed under GPLv3. Some AI is proprietary, copy is prohibited.
 
-##Jenkins CI
-<a href="http://mcper.cn:8080/job/Genisys/">**Click Here to go to Jenkins CI Page**</a>
+### Official Development Documentation
+[Genisys Official Development Documentation Page](http://docs.mcper.cn/en-US/)
 
-##Features
+### Features
 * Performance optimization (Let 100+ players join in a server)
 * Bug fix in PocketMine-MP
 * Weather
 * Experience
 * More Effects
-* Redstone (Button, Lever, PressurePlate, RedstoneWire, RedstoneTorch and so on)
+* Redstone (Button, Lever, Pressure Plate, Redstone Wire, Redstone Torch and more)
 * Nether (Red sky!)
 * Rail & Powered Rail
-* Minecart (can't follow rails)
+* Minecart (doesn't follow rails)
 * Boat
 * More Doors
 * Potions
 * Splash Potions
 * Anvil
 * Better Crafting
-* Better Invenory
+* Better Inventory
 * More Items
-* Supported 0.13.1 skin format
 * Hunger (Based on Katana)
 * AI (Based on MOW)
-* More commands (bancid bancidbyname banipbyname ms extractplugin makeplugin pardoncid weather extractphar loadplugin lvdat)
-* With FolderPluginLoader
-
-##To-Do List
-* Boat and Minecart (Improve)
-* Nether Generator (Improve)
-* Potions (Improve)
-* Redstone (Improve)
-* Anvil (Improve)
-* Fishing
+* More commands
+  - bancid
+  - bancidbyname
+  - banipbyname
+  - ms
+  - extractplugin
+  - makeplugin
+  - pardoncid
+  - weather
+  - extractphar
+  - loadplugin
+  - lvdat
+  - biome
+  - xp
+  - setblock
+  - fill
+  - summon
+* FolderPluginLoader
+* Monster Spawner
+* Item Frame
+* Dispenser and Dropper
+* Colorful Sheep
+* Multiple types of Boat, Villager and Rabbit
 * Enchantment
+* Brewing
+* NOTICE: Please edit **genisys.yml** to enable all the features, including Redstone, MobAI, Nether and so on.
+
+### To-Do List
+* Improve Potions
+* Improve Redstone
+* Improve Anvil
+* Fishing
 * New AI for all creatures
 * LevelDB support for Windows
-* php7 support
 
-##Servers
-(In fact there are more than 80 servers in China using our core and most of them are better than us. Here are some servers set by us.)
+### Servers
+(Follows are the test servers built by us. In fact other servers used Genisys may be more professional than ours.)
 
-**Young Dream**<br>
-Address: **mcper.cn**<br>
-Port: **19132**
+**Beer MC (A mini-game server)**
 
-**Young Dream - Survival**<br>
-Address: **mcper.cn**<br>
-Port: **12345**
+Address: beermc.com
+Port: 19132
 
-**Young Dream - Happy Town**<br>
-Address: **mcper.cn**<br>
-Port: **666**
+## 中文
 
-**Sai Gao Server**<br>
-Address: **sgmcpe.com**<br>
-Port: **100**
-
-**That the sky**<br>
-Address: **g.mcpe.cc**<br>
-Port: **2333**
-
-**Test Server**<br>
-Address: **mcper.cn**<br>
-Port: **233**
-
-**Zhy WAC Survival Server**<br>
-Address: **umcpe.com**<br>
-Port: **888**
-
-
-#中文版本
-
-##创世纪
-
-[![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * 一个核心统治一切。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
-* 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原代码均由 PocketMine 小组编写。
+* 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
+* [点击获取PHP7](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
+* [点击获取Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
+* 欢迎创建 Pull Request。请使用中文或者英文进行交流（但为了交流方便，请尽量使用英文进行交流）。
 
-##鸣谢
+### 鸣谢
+* 一些功能来自 **@boybook** 的 **FCCore**
 * 头颅、花盆的相关代码由 **@ImagicalCorp** ImagicalMine 编写；
 * 生物 AI 的相关代码基于 **@Zzm317**  令人惊奇的 MyOwnWorld 编写；
 * 画、酿造台的相关代码从 **Nukkit** 项目重写；
@@ -114,13 +129,10 @@ Port: **888**
 * 感谢 **@FENGberd** 的支持与鼓励；
 * 我们的项目负责人为 **@ishitatsuyuki** 及 **@jasonczc**。
 
-##声明
-* 我们没有从PxxxxxMxxxPxxxPxxx抄袭任何代码，并且此前也不曾听闻该项目
+### 开发者文档
+[点击这里进入开发者文档](http://docs.mcper.cn/zh-CN/)
 
-##自动构建的.phar内核
-<a href="http://mcper.cn:8080/job/Genisys/">**点击这里进入下载**</a>
-
-##特性
+### 特性
 * 性能提升（允许 100+ 的玩家加入服务器）
 * 修复 PocketMine-MP 的 Bug
 * 天气系统
@@ -138,53 +150,44 @@ Port: **888**
 * 更好的合成
 * 更好的物品栏
 * 更多的物品
-* 支持 0.13.1 的皮肤格式
 * 饥饿系统（基于 Katana 的代码）
 * 生物 AI（基于 MOW 的代码）
-* 更多的指令（bancid（按设备编号或玩家 ID），banip（按 IP 或玩家 ID），ms，devTools 相关指令（打包与解包插件），pardoncid，weather，loadplugin，lvdat）
+* 更多的指令
+  - bancid（按设备编号或玩家 ID）
+  - banip（按 IP 或玩家 ID）
+  - ms
+  - DevTools 相关指令（打包与解包插件）
+  - pardoncid
+  - weather
+  - loadplugin
+  - lvdat
+  - xp
+  - setblock
+  - fill
+  - summon
 * 文件夹插件加载器
+* 刷怪箱
+* 物品展示柜
+* 发射器和投掷器
+* 五彩缤纷的羊
+* 不同种类的船，村民和兔子
+* 原版附魔
+* 酿造
+* 注意: 请编辑 **genisys.yml** 来启用红石、生物AI和地狱等功能。
 
-##计划表
-* 完善 船 与 矿车
-* 完善 下界地图生成器
+### 计划表
 * 完善 药水
 * 完善 红石系统
 * 完善 铁毡
 * 加入 钓鱼
-* 加入 附魔
 * 用于所有生物的新 AI
 * Windows 的 LevelDB 支持
-* php7 的支持
-
-##服务器
-（事实上，有超过 80 个中国的 Minecraft PE 服务器在使用我们的服务器内核，且大部分的服务器都比我们架设的好。这些是我们架设的服务器）
-
-**Young Dream**<br>
-地址: **mcper.cn**<br>
-端口: **19132**
-
-**Young Dream - Survival**<br>
-地址: **mcper.cn**<br>
-端口: **12345**
-
-**Young Dream - Happy Town**<br>
-地址: **mcper.cn**<br>
-端口: **666**
-
-**Sai Gao Server**<br>
-地址: **sgmcpe.com**<br>
-端口: **100**
-
-**That the sky**<br>
-地址: **g.mcpe.cc**<br>
-端口: **2333**
-
-**Test Server**<br>
-地址: **mcper.cn**<br>
-端口: **233**
-
-**Zhy WAC Survival Server**<br>
-地址: **umcpe.com**<br>
-端口: **888**
 
 
+### 服务器
+（以下是我们个人搭建的服务器，供测试参观。事实上，其他许多使用 Genisys 搭建的服务器以及其维护水平可能比我们更专业、高效。）
+
+**BeerMc 小游戏**
+
+地址: beermc.com
+端口: 19132

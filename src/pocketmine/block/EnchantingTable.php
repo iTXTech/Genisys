@@ -29,6 +29,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
+use pocketmine\tile\EnchantTable;
 use pocketmine\tile\Tile;
 
 class EnchantingTable extends Transparent{
@@ -63,7 +64,7 @@ class EnchantingTable extends Transparent{
 		return true;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool{
 		return true;
 	}
 
@@ -75,7 +76,7 @@ class EnchantingTable extends Transparent{
 		return 6000;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Enchanting Table";
 	}
 
@@ -87,17 +88,41 @@ class EnchantingTable extends Transparent{
 		if(!$this->getLevel()->getServer()->anviletEnabled) return true;
 		if($player instanceof Player){
 			//TODO lock
-			if($player->isCreative()){
+			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
+			$tile = $this->getLevel()->getTile($this);
+			$enchantTable = null;
+			if($tile instanceof EnchantTable)
+				$enchantTable = $tile;
+		}else{
+			$this->getLevel()->setBlock($this, $this, true, true);
+			$nbt = new CompoundTag("", [
+				new StringTag("id", Tile::ENCHANT_TABLE),
+				new IntTag("x", $this->x),
+				new IntTag("y", $this->y),
+				new IntTag("z", $this->z)
+			]);
 
-			$player->addWindow(new EnchantInventory($this));
+			if($item->hasCustomName()){
+				$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
+			}
+
+			if($item->hasCustomBlockData()){
+				foreach($item->getCustomBlockData() as $key => $v){
+					$nbt->{$key} = $v;
+				}
+			}
+
+			$enchantTable = Tile::createTile(Tile::ENCHANT_TABLE, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 		}
+
+		$player->addWindow($enchantTable->getInventory());
 
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array{
 		if($item->isPickaxe() >= 1){
 			return [
 				[$this->id, 0, 1],

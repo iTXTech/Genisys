@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2015/12/31 21:16
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+ ]
+
  *
  * OpenGenisys Project
  *
@@ -35,8 +35,12 @@ class SkullBlock extends Transparent{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 1;
+	}
+	
+	public function isHelmet(){
+		return true;
 	}
 
 	public function isSolid(){
@@ -84,7 +88,7 @@ class SkullBlock extends Transparent{
 		return 5;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		static $names = [
 			0 => "Skeleton Skull",
 			1 => "Wither Skeleton Skull",
@@ -104,7 +108,7 @@ class SkullBlock extends Transparent{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		/** @var Skull $tile */
 		if(($tile = $this->getLevel()->getTile($this)) instanceof Skull){
 			return [[Item::SKULL, $tile->getSkullType(), 1]];

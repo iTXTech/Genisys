@@ -121,10 +121,15 @@ class ParticleCommand extends VanillaCommand{
 		return true;
 	}
 
+
 	/**
-	 * @param $name
-	 *
-	 * @return Particle
+	 * @param         $name
+	 * @param Vector3 $pos
+	 * @param         $xd
+	 * @param         $yd
+	 * @param         $zd
+	 * @param         $data
+	 * @return null|DustParticle|ItemBreakParticle|TerrainParticle
 	 */
 	private function getParticle($name, Vector3 $pos, $xd, $yd, $zd, $data){
 		switch($name){

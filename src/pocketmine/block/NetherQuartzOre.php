@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2016/1/1 10:42
- * Copyright(C) 2011-2016 iTX Technologies LLC.
- * All rights reserved.
+
+
  *
  * OpenGenisys Project
  */
@@ -19,7 +19,7 @@ class NetherQuartzOre extends Solid{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Nether Quartz Ore";
 	}
 
@@ -27,7 +27,7 @@ class NetherQuartzOre extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			return [
 				[Item::NETHER_QUARTZ, 0, 1],

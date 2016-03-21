@@ -1,11 +1,8 @@
 <?php
 
-/*
- * PocketMine-iTX Genisys
- * @author PocketMine-iTX Team & iTX Technologies LLC.
- * @link http://mcper.cn 
- *       http://mcpe.asia 
- *       http://pl.zxda.net
+/**
+ * OpenGenisys Project
+ * @author happy163
 */
 
 namespace pocketmine\block;
@@ -24,7 +21,7 @@ class Rail extends Flowable{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Rail";
 	}
 
@@ -171,7 +168,7 @@ class Rail extends Flowable{
 			$v3 = new Vector3($rail->x + $blocks[0][0], $rail->y + $y, $rail->z + $blocks[0][1]);
 			$id = $rail->getLevel()->getBlockIdAt($v3->x, $v3->y, $v3->z);
 			$meta = $rail->getLevel()->getBlockDataAt($v3->x, $v3->y, $v3->z);
-			if(($id == self::RAIL or $id == self::POWERED_RAIL) and in_array([$rail->x - $v3->x, $rail->z - $v3->z], $array[$meta])){
+			if(in_array($id, [self::RAIL, self::ACTIVATOR_RAIL, self::DETECTOR_RAIL, self::POWERED_RAIL]) and in_array([$rail->x - $v3->x, $rail->z - $v3->z], $array[$meta])){
 				$connected[] = $v3;
 				break;
 			}
@@ -180,7 +177,7 @@ class Rail extends Flowable{
 			$v3 = new Vector3($rail->x + $blocks[1][0], $rail->y + $y, $rail->z + $blocks[1][1]);
 			$id = $rail->getLevel()->getBlockIdAt($v3->x, $v3->y, $v3->z);
 			$meta = $rail->getLevel()->getBlockDataAt($v3->x, $v3->y, $v3->z);
-			if(($id == self::RAIL or $id == self::POWERED_RAIL) and in_array([$rail->x - $v3->x, $rail->z - $v3->z], $array[$meta])){
+			if(in_array($id, [self::RAIL, self::ACTIVATOR_RAIL, self::DETECTOR_RAIL, self::POWERED_RAIL]) and in_array([$rail->x - $v3->x, $rail->z - $v3->z], $array[$meta])){
 				$connected[] = $v3;
 				break;
 			}
@@ -188,7 +185,7 @@ class Rail extends Flowable{
 		return $connected;
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 0.6;
 	}
 

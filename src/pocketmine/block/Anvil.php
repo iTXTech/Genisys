@@ -38,11 +38,11 @@ class Anvil extends Fallable{
 		$this->meta = $meta;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 5;
 	}
 
@@ -50,7 +50,7 @@ class Anvil extends Fallable{
 		return 6000;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Anvil";
 	}
 
@@ -61,7 +61,7 @@ class Anvil extends Fallable{
 	public function onActivate(Item $item, Player $player = null){
 		if(!$this->getLevel()->getServer()->anviletEnabled) return true;
 		if($player instanceof Player){
-			if($player->isCreative()){
+			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
 
@@ -71,7 +71,7 @@ class Anvil extends Fallable{
 		return true;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[$this->id, 0, 1], //TODO break level

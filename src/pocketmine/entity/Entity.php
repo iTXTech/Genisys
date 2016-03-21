@@ -40,6 +40,7 @@ use pocketmine\level\format\Chunk;
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\Level;
 use pocketmine\level\Location;
+use pocketmine\level\particle\DestroyBlockParticle;
 use pocketmine\level\Position;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Math;
@@ -50,7 +51,7 @@ use pocketmine\metadata\MetadataValue;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ShortTag;
@@ -193,6 +194,9 @@ abstract class Entity extends Location implements Metadatable{
 	protected $fireProof;
 	private $invulnerable;
 
+	/** @var AttributeMap */
+	protected $attributeMap;
+
 	protected $gravity;
 	protected $drag;
 
@@ -215,11 +219,11 @@ abstract class Entity extends Location implements Metadatable{
 	/** @var PressurePlate */
 	protected $activatedPressurePlates = [];
 
+	public $dropExp = [0, 0];
+
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
-		if($chunk === null or $chunk->getProvider() === null){
-			throw new ChunkException("Invalid garbage Chunk given to Entity");
-		}
+		assert($chunk !== null and $chunk->getProvider() !== null);
 
 		$this->timings = Timings::getEntityTimings($this);
 
@@ -251,6 +255,8 @@ abstract class Entity extends Location implements Metadatable{
 		);
 		$this->setMotion($this->temporalVector->setComponents($this->namedtag["Motion"][0], $this->namedtag["Motion"][1], $this->namedtag["Motion"][2]));
 
+		assert(!is_nan($this->x) and !is_infinite($this->x) and !is_nan($this->y) and !is_infinite($this->y) and !is_nan($this->z) and !is_infinite($this->z));
+
 		if(!isset($this->namedtag->FallDistance)){
 			$this->namedtag->FallDistance = new FloatTag("FallDistance", 0);
 		}
@@ -276,6 +282,8 @@ abstract class Entity extends Location implements Metadatable{
 		}
 		$this->invulnerable = $this->namedtag["Invulnerable"] > 0 ? true : false;
 
+		$this->attributeMap = new AttributeMap();
+
 		$this->chunk->addEntity($this);
 		$this->level->addEntity($this);
 		$this->initEntity();
@@ -284,6 +292,20 @@ abstract class Entity extends Location implements Metadatable{
 
 		$this->scheduleUpdate();
 
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDropExpMin() : int{
+		return $this->dropExp[0];
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDropExpMax() : int{
+		return $this->dropExp[1];
 	}
 
 	/**
@@ -327,7 +349,11 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	public function setSprinting($value = true){
-		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_SPRINTING, (bool)$value);
+		if($value !== $this->isSprinting()){
+			$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_SPRINTING, (bool) $value);
+			$attr = $this->attributeMap->getAttribute(Attribute::MOVEMENT_SPEED);
+			$attr->setValue($value ? ($attr->getValue() * 1.3) : ($attr->getValue() / 1.3));
+		}
 	}
 
 	/**
@@ -421,7 +447,7 @@ abstract class Entity extends Location implements Metadatable{
 	 * @param CompoundTag   $nbt
 	 * @param            $args
 	 *
-	 * @return Entity
+	 * @return Entity|Projectile
 	 */
 	public static function createEntity($type, FullChunk $chunk, CompoundTag $nbt, ...$args){
 		if(isset(self::$knownEntities[$type])){
@@ -470,19 +496,19 @@ abstract class Entity extends Location implements Metadatable{
 			}
 		}
 
-		$this->namedtag->Pos = new EnumTag("Pos", [
+		$this->namedtag->Pos = new ListTag("Pos", [
 			new DoubleTag(0, $this->x),
 			new DoubleTag(1, $this->y),
 			new DoubleTag(2, $this->z)
 		]);
 
-		$this->namedtag->Motion = new EnumTag("Motion", [
+		$this->namedtag->Motion = new ListTag("Motion", [
 			new DoubleTag(0, $this->motionX),
 			new DoubleTag(1, $this->motionY),
 			new DoubleTag(2, $this->motionZ)
 		]);
 
-		$this->namedtag->Rotation = new EnumTag("Rotation", [
+		$this->namedtag->Rotation = new ListTag("Rotation", [
 			new FloatTag(0, $this->yaw),
 			new FloatTag(1, $this->pitch)
 		]);
@@ -505,13 +531,26 @@ abstract class Entity extends Location implements Metadatable{
 				]);
 			}
 
-			$this->namedtag->ActiveEffects = new EnumTag("ActiveEffects", $effects);
+			$this->namedtag->ActiveEffects = new ListTag("ActiveEffects", $effects);
 		}else{
 			unset($this->namedtag->ActiveEffects);
 		}
 	}
 
 	protected function initEntity(){
+		assert($this->namedtag instanceof CompoundTag);
+
+		if(isset($this->namedtag->CustomName)){
+			$this->setNameTag($this->namedtag["CustomName"]);
+			if(isset($this->namedtag->CustomNameVisible)){
+				$this->setNameTagVisible($this->namedtag["CustomNameVisible"] > 0);
+			}
+		}
+
+		$this->scheduleUpdate();
+
+		$this->addAttributes();
+
 		if(isset($this->namedtag->ActiveEffects)){
 			foreach($this->namedtag->ActiveEffects->getValue() as $e){
 				$effect = Effect::getEffect($e["Id"]);
@@ -525,15 +564,9 @@ abstract class Entity extends Location implements Metadatable{
 			}
 		}
 
+	}
 
-		if(isset($this->namedtag->CustomName)){
-			$this->setNameTag($this->namedtag["CustomName"]);
-			if(isset($this->namedtag->CustomNameVisible)){
-				$this->setNameTagVisible($this->namedtag["CustomNameVisible"] > 0);
-			}
-		}
-
-		$this->scheduleUpdate();
+	protected function addAttributes(){
 	}
 
 	/**
@@ -686,6 +719,10 @@ abstract class Entity extends Location implements Metadatable{
 		return $this->lastDamageCause;
 	}
 
+	public function getAttributeMap(){
+		return $this->attributeMap;
+	}
+
 	/**
 	 * @return int
 	 */
@@ -786,7 +823,7 @@ abstract class Entity extends Location implements Metadatable{
 			}
 
 			if($direction === 5){
-				$this->motionY = $force;
+				$this->motionZ = $force;
 
 				return true;
 			}
@@ -843,7 +880,7 @@ abstract class Entity extends Location implements Metadatable{
 					$this->fireTicks = 0;
 				}
 			}else{
-				if(!$this->hasEffect(Effect::FIRE_RESISTANCE) and ($this->fireTicks % 20) === 0 or $tickDiff > 20){
+				if(!$this->hasEffect(Effect::FIRE_RESISTANCE) and (($this->fireTicks % 20) === 0 or $tickDiff > 20)){
 					$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_FIRE_TICK, 1);
 					$this->attack($ev->getFinalDamage(), $ev);
 				}
@@ -1021,6 +1058,10 @@ abstract class Entity extends Location implements Metadatable{
 			$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_FALL, $damage);
 			$this->attack($ev->getFinalDamage(), $ev);
 		}
+
+		if($this->getLevel()->getServer()->destroyBlockParticle and $fallDistance > 3){
+			$this->getLevel()->addParticle(new DestroyBlockParticle($this, $this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))));
+		}
 	}
 
 	public function handleLavaMovement(){ //TODO
@@ -1103,6 +1144,15 @@ abstract class Entity extends Location implements Metadatable{
 
 		if($bb !== null and $block->isSolid() and !$block->isTransparent() and $bb->intersectsWith($this->getBoundingBox())){
 			return true;
+		}
+		return false;
+	}
+
+	public function isInsideOfFire(){
+		foreach($this->getBlocksAround() as $block){
+			if($block instanceof Fire){
+				return true;
+			}
 		}
 		return false;
 	}
@@ -1465,6 +1515,11 @@ abstract class Entity extends Location implements Metadatable{
 	public function kill(){
 		$this->health = 0;
 		$this->scheduleUpdate();
+
+		if($this->getLevel()->getServer()->expEnabled) {
+			$exp = mt_rand($this->getDropExpMin(), $this->getDropExpMax());
+			if($exp > 0) $this->getLevel()->spawnXPOrb($this, $exp);
+		}
 	}
 
 	/**
@@ -1558,6 +1613,12 @@ abstract class Entity extends Location implements Metadatable{
 				$block->checkActivation();
 			}
 		}
+
+		$this->activatedPressurePlates = [];
+
+		if($this->attributeMap != null) {
+			$this->attributeMap = null;
+		}
 	}
 
 	/**
@@ -1589,7 +1650,7 @@ abstract class Entity extends Location implements Metadatable{
 		}
 	}
 
-	public function setLinked($type = 0, Entity $entity = null){
+	public function setLinked($type = 0, Entity $entity){
 		if($type != 0 and $entity === null){
 			return false;
 		}
@@ -1617,6 +1678,7 @@ abstract class Entity extends Location implements Metadatable{
 				if($this->linkedEntity->getLinkedType()){
 					$this->linkedEntity->setLinked(0, $this);
 				}
+				$this->linkedEntity = null;
 				return true;
 			case 1:
 				if(!$entity->isAlive()){
@@ -1624,6 +1686,8 @@ abstract class Entity extends Location implements Metadatable{
 				}
 				$this->linkedEntity = $entity;
 				$this->linkedType = 1;
+				$entity->linkedEntity = $this;
+				$entity->linkedType = 1;
 				$pk = new SetEntityLinkPacket();
 				$pk->from = $entity->getId();
 				$pk->to = $this->getId();
@@ -1679,9 +1743,10 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	/**
-	 * @param int  $propertyId ;
-	 * @param int  $id
+	 * @param      $propertyId
+	 * @param      $id
 	 * @param bool $value
+	 * @param int  $type
 	 */
 	public function setDataFlag($propertyId, $id, $value = true, $type = self::DATA_TYPE_BYTE){
 		if($this->getDataFlag($propertyId, $id) !== $value){

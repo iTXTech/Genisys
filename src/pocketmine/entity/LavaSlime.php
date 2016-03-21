@@ -21,21 +21,18 @@
 
 namespace pocketmine\entity;
 
-
-use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
 class LavaSlime extends Living{
 	const NETWORK_ID = 42;
+
+	const DATA_SLIME_SIZE = 16;
+
+	public $dropExp = [1, 4];
 	
-	public function getName(){
+	public function getName() : string{
 		return "LavaSlime";
-	}
-	
-	public function kill(){
-		parent::kill();
-		if($this->getLevel()->getServer()->expEnabled) $this->getLevel()->addExperienceOrb($this->add(0, 1, 0), mt_rand(1, 4));
 	}
 	
 	public function spawnTo(Player $player){

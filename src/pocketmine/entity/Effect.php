@@ -56,9 +56,11 @@ class Effect{
 	const ABSORPTION = 22;
 	const SATURATION = 23;
 
+	const MAX_DURATION = 2147483648;
+
 	/** @var Effect[] */
 	protected static $effects;
-	
+
 	public static function init(){
 		self::$effects = new \SplFixedArray(256);
 
@@ -76,16 +78,16 @@ class Effect{
 		self::$effects[Effect::FIRE_RESISTANCE] = new Effect(Effect::FIRE_RESISTANCE, "%potion.fireResistance", 228, 154, 58);
 		self::$effects[Effect::WATER_BREATHING] = new Effect(Effect::WATER_BREATHING, "%potion.waterBreathing", 46, 82, 153);
 		self::$effects[Effect::INVISIBILITY] = new Effect(Effect::INVISIBILITY, "%potion.invisibility", 127, 131, 146);
-		
+
 		self::$effects[Effect::BLINDNESS] = new Effect(Effect::BLINDNESS, "%potion.blindness", 191, 192, 192);
 		self::$effects[Effect::NIGHT_VISION] = new Effect(Effect::NIGHT_VISION, "%potion.nightVision", 0, 0, 139);
 		self::$effects[Effect::HUNGER] = new Effect(Effect::HUNGER, "%potion.hunger", 46, 139, 87);
-		
+
 		self::$effects[Effect::WEAKNESS] = new Effect(Effect::WEAKNESS, "%potion.weakness", 72, 77, 72 , true);
 		self::$effects[Effect::POISON] = new Effect(Effect::POISON, "%potion.poison", 78, 147, 49, true);
 		self::$effects[Effect::WITHER] = new Effect(Effect::WITHER, "%potion.wither", 53, 42, 39, true);
 		self::$effects[Effect::HEALTH_BOOST] = new Effect(Effect::HEALTH_BOOST, "%potion.healthBoost", 248, 125, 35);
-		
+
 		self::$effects[Effect::ABSORPTION] = new Effect(Effect::ABSORPTION, "%potion.absorption", 36, 107, 251);
 		self::$effects[Effect::SATURATION] = new Effect(Effect::SATURATION, "%potion.saturation", 255, 0, 255);
 	}
@@ -115,7 +117,7 @@ class Effect{
 
 	protected $duration;
 
-	protected $amplifier;
+	protected $amplifier = 0;
 
 	protected $color;
 
@@ -132,7 +134,7 @@ class Effect{
 		$this->setColor($r, $g, $b);
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return $this->name;
 	}
 
@@ -141,7 +143,7 @@ class Effect{
 	}
 
 	public function setDuration($ticks){
-		$this->duration = $ticks;
+		$this->duration = (($ticks > self::MAX_DURATION) ? self::MAX_DURATION : $ticks);
 		return $this;
 	}
 
@@ -189,6 +191,7 @@ class Effect{
 	}
 
 	public function canTick(){
+		if($this->amplifier < 0) $this->amplifier = 0;
 		switch($this->id){
 			case Effect::POISON:
 				if(($interval = (25 >> $this->amplifier)) > 0){
@@ -214,9 +217,6 @@ class Effect{
 					return ($this->duration % $interval) === 0;
 				}
 				return true;
-			case Effect::SPEED:
-			case Effect::SLOWNESS:
-				return ($this->duration % 20) === 0;
 		}
 		return false;
 	}
@@ -275,12 +275,6 @@ class Effect{
 					}
 				}
 				break;
-			case Effect::SPEED:
-				if($entity instanceof Player) $entity->setMovementSpeed(0.1 + ($this->amplifier + 1) * 0.01);
-				break;
-			case Effect::SLOWNESS:
-				if($entity instanceof Player) $entity->setMovementSpeed(0.1 - ($this->amplifier + 1) * 0.01);
-				break;
 		}
 	}
 
@@ -292,7 +286,7 @@ class Effect{
 		$this->color = (($r & 0xff) << 16) + (($g & 0xff) << 8) + ($b & 0xff);
 	}
 
-	public function add(Entity $entity, $modify = false){
+	public function add(Entity $entity, $modify = false, Effect $oldEffect = null){
 		if($entity instanceof Player){
 			$pk = new MobEffectPacket();
 			$pk->eid = 0;
@@ -307,19 +301,29 @@ class Effect{
 			}
 
 			$entity->dataPacket($pk);
-			
-			if($this->id === Effect::SPEED){
-				if($entity instanceof Player) $entity->setMovementSpeed(0.1 + ($this->amplifier + 1) * 0.01);
-			}
-			
-			if($this->id === Effect::SLOWNESS){
-				if($entity instanceof Player) $entity->setMovementSpeed(0.1 - ($this->amplifier + 1) * 0.01);
-			}
 		}
 
 		if($this->id === Effect::INVISIBILITY){
 			$entity->setDataFlag(Entity::DATA_FLAGS, Entity::DATA_FLAG_INVISIBLE, true);
 			$entity->setDataProperty(Entity::DATA_SHOW_NAMETAG, Entity::DATA_TYPE_BYTE, 0);
+		}elseif($this->id === Effect::SPEED){
+			$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+			if($modify and $oldEffect !== null){
+				$speed = $attr->getValue() / (1 + 0.2 * $oldEffect->getAmplifier());
+			}else{
+				$speed = $attr->getValue();
+			}
+			$speed *= (1 + 0.2 * $this->amplifier);
+			$attr->setValue($speed);
+		}elseif($this->id === Effect::SLOWNESS){
+			$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+			if($modify and $oldEffect !== null){
+				$speed = $attr->getValue() / (1 - 0.15 * $oldEffect->getAmplifier());
+			}else{
+				$speed = $attr->getValue();
+			}
+			$speed *= (1 - 0.15 * $this->amplifier);
+			$attr->setValue($speed);
 		}
 	}
 
@@ -331,15 +335,17 @@ class Effect{
 			$pk->effectId = $this->getId();
 
 			$entity->dataPacket($pk);
-			
-			if($this->id === Effect::SPEED or $this->id === Effect::SLOWNESS){
-				if($entity instanceof Player) $entity->setMovementSpeed(0.1);
-			}
 		}
 
 		if($this->id === Effect::INVISIBILITY){
 			$entity->setDataFlag(Entity::DATA_FLAGS, Entity::DATA_FLAG_INVISIBLE, false);
 			$entity->setDataProperty(Entity::DATA_SHOW_NAMETAG, Entity::DATA_TYPE_BYTE, 1);
+		}elseif($this->id === Effect::SPEED){
+			$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+			$attr->setValue($attr->getValue() / (1 + 0.2 * $this->amplifier));
+		}elseif($this->id === Effect::SLOWNESS){
+			$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+			$attr->setValue($attr->getValue() / (1 - 0.15 * $this->amplifier));
 		}
 	}
 }

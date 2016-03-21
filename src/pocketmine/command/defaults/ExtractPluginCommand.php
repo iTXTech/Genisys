@@ -30,7 +30,7 @@ class ExtractPluginCommand extends VanillaCommand{
 
 		$pluginName = trim(implode(" ", $args));
 		if($pluginName === "" or !(($plugin = Server::getInstance()->getPluginManager()->getPlugin($pluginName)) instanceof Plugin)){
-			$sender->sendMessage(TextFormat::RED . "Invalid plugin name, check the name case.");
+			$sender->sendMessage(TextFormat::RED . "Invalid plugin name, check the file is in the plugin directory.");
 			return true;
 		}
 		$description = $plugin->getDescription();
@@ -40,7 +40,7 @@ class ExtractPluginCommand extends VanillaCommand{
 			return true;
 		}
 
-		$folderPath = Server::getInstance()->getPluginPath().DIRECTORY_SEPARATOR . "PocketMine-iTX" . DIRECTORY_SEPARATOR . $description->getName()."_v".$description->getVersion()."/";
+		$folderPath = Server::getInstance()->getPluginPath().DIRECTORY_SEPARATOR . "Genisys" . DIRECTORY_SEPARATOR . $description->getName()."_v".$description->getVersion()."/";
 		if(file_exists($folderPath)){
 			$sender->sendMessage("Plugin already exists, overwriting...");
 		}else{

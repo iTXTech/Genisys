@@ -50,12 +50,21 @@ class BanCommand extends VanillaCommand{
 		}
 
 		$name = array_shift($args);
-		$reason = implode(" ", $args);
+		if(isset($args[0]) and isset($args[1])){
+			$reason = $args[0];
+			if($args[1] != null and is_numeric($args[1])){
+				$until = $args[1] * 86400 + time();
+			}else{
+				$until = null;
+			}
 
-		$sender->getServer()->getNameBans()->addBan($name, $reason, null, $sender->getName());
+			$sender->getServer()->getNameBans()->addBan($name, $reason, $until, $sender->getName());
+		}
+		$sender->getServer()->getNameBans()->addBan($name, $reason = implode(" ", $args), null, $sender->getName());
+
 
 		if(($player = $sender->getServer()->getPlayerExact($name)) instanceof Player){
-			$player->kick($reason !== "" ? "Banned by admin. Reason: " . $reason : "Banned by admin.");
+			$player->kick($reason !== "" ? "Banned by admin. Reason: " . $reason : "Banned by admin." . "Banned Until:" . date('r'), $until = "Forever");
 		}
 
 		Command::broadcastCommandMessage($sender, new TranslationContainer("%commands.ban.success", [$player !== null ? $player->getName() : $name]));

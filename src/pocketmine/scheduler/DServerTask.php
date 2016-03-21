@@ -9,8 +9,9 @@ use pocketmine\Server;
 
 class DServerTask extends AsyncTask{
 
-	private $data;
-	private $autotimes;
+	public $data;
+	public $autotimes;
+	public $re;
 
 	public function __construct($data, $autotimes = 5){
 		$this->data = $data;
@@ -24,7 +25,7 @@ class DServerTask extends AsyncTask{
 			$re[0] = $re[0] + $data[0];
 			$re[1] = $re[1] + $data[1];
 		}
-		$this->setResult($re, false);
+		$this->re = (array) $re;
 	}
 
 
@@ -58,7 +59,7 @@ class DServerTask extends AsyncTask{
 	}
 
 	public function onCompletion(Server $server){
-		$re = $this->getResult();
+		$re = $this->re;
 		if($re[0] > 0) $server->dserverPlayers = $re[0];
 		if($re[1] > 0) $server->dserverAllPlayers = $re[1];
 		//$server->getNetwork()->updateName();

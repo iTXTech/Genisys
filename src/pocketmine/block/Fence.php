@@ -40,7 +40,7 @@ class Fence extends Transparent{
 		$this->meta = $meta;
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 2;
 	}
 
@@ -48,8 +48,15 @@ class Fence extends Transparent{
 		return Tool::TYPE_AXE;
 	}
 
+	public function getBurnChance() : int{
+		return 5;
+	}
 
-	public function getName(){
+	public function getBurnAbility() : int{
+		return 20;
+	}
+
+	public function getName() : string{
 		static $names = [
 			0 => "Oak Fence",
 			1 => "Spruce Fence",
@@ -63,7 +70,7 @@ class Fence extends Transparent{
 		return $names[$this->meta & 0x07];
 	}
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() {
 
 		$north = $this->canConnect($this->getSide(Vector3::SIDE_NORTH));
 		$south = $this->canConnect($this->getSide(Vector3::SIDE_SOUTH));

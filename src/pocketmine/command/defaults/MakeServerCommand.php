@@ -34,8 +34,10 @@ class MakeServerCommand extends VanillaCommand{
 			"name" => $server->getName(),
 			"version" => $server->getPocketMineVersion(),
 			"api" => $server->getApiVersion(),
+			"itxapi" => $server->getiTXApiVersion(),
 			"minecraft" => $server->getVersion(),
 			"protocol" => Info::CURRENT_PROTOCOL,
+			"creator" => "Genisys MakeServerCommand",
 			"creationDate" => time()
 		]);
 		$phar->setStub('<?php define("pocketmine\\\\PATH", "phar://". __FILE__ ."/"); require_once("phar://". __FILE__ ."/src/pocketmine/PocketMine.php");  __HALT_COMPILER();');
@@ -50,7 +52,7 @@ class MakeServerCommand extends VanillaCommand{
 				continue;
 			}
 			$phar->addFile($file, $path);
-			$sender->sendMessage("[PocketMine-iTX] Adding $path");
+			$sender->sendMessage("[Genisys] Adding $path");
 		}
 		foreach($phar as $file => $finfo){
 			/** @var \PharFileInfo $finfo */

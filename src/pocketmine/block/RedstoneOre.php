@@ -33,11 +33,11 @@ class RedstoneOre extends Solid{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Redstone Ore";
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 3;
 	}
 
@@ -57,7 +57,7 @@ class RedstoneOre extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 2){
 			return [
 				[Item::REDSTONE_DUST, 0, mt_rand(4, 5)],

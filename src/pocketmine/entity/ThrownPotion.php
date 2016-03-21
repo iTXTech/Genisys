@@ -1,21 +1,24 @@
 <?php
 
-namespace pocketmine\entity;
+/**
+ * Author: PeratX
+ * OpenGenisys Project
+ */
 
+namespace pocketmine\entity;
 
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\particle\SpellParticle;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\network\Network;
+use pocketmine\nbt\tag\ShortTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 use pocketmine\item\Potion;
-use pocketmine\entity\Effect;
-use pocketmine\level\particle\Particle;
-use pocketmine\level\particle\GenericParticle;
 
 class ThrownPotion extends Projectile{
 	const NETWORK_ID = 86;
+
+	const DATA_POTION_ID = 16;
 
 	public $width = 0.25;
 	public $length = 0.25;
@@ -23,56 +26,46 @@ class ThrownPotion extends Projectile{
 
 	protected $gravity = 0.1;
 	protected $drag = 0.05;
-	
-	public $data = 0;
-	
-	public function initEntity(){
-		parent::initEntity();
-		
-		if(isset($this->namedtag->Data)){
-			$this->data = $this->namedtag["Data"];
-		}
-
-		$color = Potion::getColor($this->getData());
-		$this->setDataProperty(Entity::DATA_POTION_COLOR, Entity::DATA_TYPE_INT, (($color[0] & 0xff) << 16) | (($color[1] & 0xff) << 8) | ($color[2] & 0xff));
-	}
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
+		if(!isset($nbt->PotionId)){
+			$nbt->PotionId = new ShortTag("PotionId", Potion::AWKWARD);
+		}
+
 		parent::__construct($chunk, $nbt, $shootingEntity);
+
+		unset($this->dataProperties[self::DATA_SHOOTER_ID]);
+		$this->setDataProperty(self::DATA_POTION_ID, self::DATA_TYPE_SHORT, $this->getPotionId());
 	}
 	
-	public function setData($id){
-		$this->data = $id;
-	}
-	
-	public function getData(){
-		return $this->data;
+	public function getPotionId() : int{
+		return (int) $this->namedtag["PotionId"];
 	}
 	
 	public function kill(){
-		$color = Potion::getColor($this->getData());
+		$color = Potion::getColor($this->getPotionId());
 		$this->getLevel()->addParticle(new SpellParticle($this, $color[0], $color[1], $color[2]));
 		$players = $this->getViewers();
 		foreach($players as $p) {
 			if($p->distance($this) <= 6){
-				switch($this->getData()) {
+				switch($this->getPotionId()) {
 					case Potion::NIGHT_VISION:
 						$p->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::NIGHT_VISION_T:
-						$p->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::INVISIBILITY:
 						$p->addEffect(Effect::getEffect(Effect::INVISIBILITY)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::INVISIBILITY_T:
-						$p->addEffect(Effect::getEffect(Effect::INVISIBILITY)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::INVISIBILITY)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::LEAPING:
 						$p->addEffect(Effect::getEffect(Effect::JUMP)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::LEAPING_T:
-						$p->addEffect(Effect::getEffect(Effect::JUMP)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::JUMP)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::LEAPING_TWO:
 						$p->addEffect(Effect::getEffect(Effect::JUMP)->setAmplifier(1)->setDuration(1.5 * 60 * 20));
@@ -81,13 +74,13 @@ class ThrownPotion extends Projectile{
 						$p->addEffect(Effect::getEffect(Effect::FIRE_RESISTANCE)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::FIRE_RESISTANCE_T:
-						$p->addEffect(Effect::getEffect(Effect::FIRE_RESISTANCE)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::FIRE_RESISTANCE)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::SPEED:
 						$p->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::SPEED_T:
-						$p->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::SPEED_TWO:
 						$p->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(1)->setDuration(1.5 * 60 * 20));
@@ -102,7 +95,7 @@ class ThrownPotion extends Projectile{
 						$p->addEffect(Effect::getEffect(Effect::WATER_BREATHING)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::WATER_BREATHING_T:
-						$p->addEffect(Effect::getEffect(Effect::WATER_BREATHING)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::WATER_BREATHING)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::POISON:
 						$p->addEffect(Effect::getEffect(Effect::POISON)->setAmplifier(0)->setDuration(45 * 20));
@@ -126,7 +119,7 @@ class ThrownPotion extends Projectile{
 						$p->addEffect(Effect::getEffect(Effect::STRENGTH)->setAmplifier(0)->setDuration(3 * 60 * 20));
 						break;
 					case Potion::STRENGTH_T:
-						$p->addEffect(Effect::getEffect(Effect::STRENGTH)->setAmplifier(0)->setDuration(8 * 60 * 20));
+						$p->addEffect(Effect::getEffect(Effect::STRENGTH)->setAmplifier(0)->setDuration(6 * 60 * 20));
 						break;
 					case Potion::STRENGTH_TWO:
 						$p->addEffect(Effect::getEffect(Effect::STRENGTH)->setAmplifier(1)->setDuration(1.5 * 60 * 20));

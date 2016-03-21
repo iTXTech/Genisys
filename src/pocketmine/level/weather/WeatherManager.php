@@ -1,9 +1,17 @@
 <?php
+/**
+ * Author: PeratX
+ * OpenGenisys Project
+ */
 namespace pocketmine\level\weather;
 
 use pocketmine\level\Level;
 
+/**
+ * @deprecated
+ */
 class WeatherManager{
+	/** @var Level[] */
 	public static $registeredLevel = [];
 	
 	public static function registerLevel(Level $level){
@@ -21,7 +29,7 @@ class WeatherManager{
 	
 	public static function updateWeather(){
 		foreach(self::$registeredLevel as $level) {
-			$level->getWeather()->calcWeather();
+			$level->getWeather()->calcWeather($level->getServer()->getTick());
 		}
 	}
 	

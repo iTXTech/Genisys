@@ -35,15 +35,15 @@ class FenceGate extends Transparent implements ElectricalAppliance{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Oak Fence Gate";
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 2;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 
@@ -52,7 +52,7 @@ class FenceGate extends Transparent implements ElectricalAppliance{
 	}
 
 
-	protected function recalculateBoundingBox(){
+	protected function recalculateBoundingBox() {
 
 		if(($this->getDamage() & 0x04) > 0){
 			return null;
@@ -97,7 +97,7 @@ class FenceGate extends Transparent implements ElectricalAppliance{
 		return (($this->getDamage() & 0x04) > 0);
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[$this->id, 0, 1],
 		];

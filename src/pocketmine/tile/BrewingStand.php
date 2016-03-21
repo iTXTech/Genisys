@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2016/1/2 23:34
- * Copyright(C) 2011-2016 iTX Technologies LLC.
- * All rights reserved.
+
+
  *
  * OpenGenisys Project
  *
@@ -17,7 +17,7 @@ use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\IntTag;
@@ -35,8 +35,8 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new BrewingInventory($this);
 
-		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof EnumTag)){
-			$this->namedtag->Items = new EnumTag("Items", []);
+		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)){
+			$this->namedtag->Items = new ListTag("Items", []);
 			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		}
 
@@ -53,7 +53,7 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		}
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return $this->hasName() ? $this->namedtag->CustomName->getValue() : "Brewing Stand";
 	}
 
@@ -80,7 +80,7 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 	}
 
 	public function saveNBT(){
-		$this->namedtag->Items = new EnumTag("Items", []);
+		$this->namedtag->Items = new ListTag("Items", []);
 		$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		for($index = 0; $index < $this->getSize(); ++$index){
 			$this->setItem($index, $this->inventory->getItem($index));

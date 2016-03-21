@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2015/12/20 18:47
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+ ]
+
  */
 namespace pocketmine\block;
 
@@ -103,54 +103,35 @@ class WoodenButton extends RedstoneSource{
 	public function activate(array $ignore = []){
 		parent::activate($ignore = []);
 		$faces = [
+				0 => 1,
 				1 => 0,
 				2 => 3,
 				3 => 2,
 				4 => 5,
 				5 => 4,
 		];
+		
 		$side = $this->meta;
 		if($this->isActivated()) $side ^= 0x08;
 
 		$block = $this->getSide($faces[$side])->getSide(Vector3::SIDE_UP);
 		if(!$this->isRightPlace($this, $block)){
-			if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
-				if(!$block->isOpened()) $block->onActivate(new Item(0));
-			}
-			if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
-			/** @var ActiveRedstoneLamp $block */
-			if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn();
-			if($block->getId() == Block::REDSTONE_WIRE){
-				/** @var RedstoneWire $wire */
-				$wire = $block;
-				$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
-			}
+			$this->activateBlock($block);
 		}
 
 		if($side != 1){
-			/** @var Door $block */
 			$block = $this->getSide($faces[$side], 2);
-			if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
-				if(!$block->isOpened()) $block->onActivate(new Item(0));
-			}
-			if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
-			/** @var ActiveRedstoneLamp $block */
-			if($block->getId() == Block::INACTIVE_REDSTONE_LAMP or $block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOn();
-			if($block->getId() == Block::REDSTONE_WIRE) {
-				/** @var RedstoneWire $wire */
-				$wire = $block;
-				$wire->calcSignal(15, RedstoneWire::ON);
-			}
+			$this->activateBlock($block);
 		}
 
 		$this->checkTorchOn($this->getSide($faces[$side]),[$this->getOppositeSide($faces[$side])]);
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Wooden Button";
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 0.5;
 	}
 
@@ -172,7 +153,7 @@ class WoodenButton extends RedstoneSource{
 		return false;
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 

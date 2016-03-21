@@ -32,11 +32,11 @@ class Gravel extends Fallable{
 
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Gravel";
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 0.6;
 	}
 
@@ -44,7 +44,7 @@ class Gravel extends Fallable{
 		return Tool::TYPE_SHOVEL;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if(mt_rand(1, 10) === 1){
 			return [
 				[Item::FLINT, 0, 1],

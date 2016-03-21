@@ -32,7 +32,7 @@ class CoalOre extends Solid{
 
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 3;
 	}
 
@@ -40,11 +40,11 @@ class CoalOre extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Coal Ore";
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[Item::COAL, 0, 1],

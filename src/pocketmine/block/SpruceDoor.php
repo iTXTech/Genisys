@@ -32,15 +32,15 @@ class SpruceDoor extends Door{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Spruce Door Block";
 	}
 
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 3;
 	}
 
@@ -48,7 +48,7 @@ class SpruceDoor extends Door{
 		return Tool::TYPE_AXE;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::SPRUCE_DOOR, 0, 1],
 		];

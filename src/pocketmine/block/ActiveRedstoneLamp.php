@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2015/12/13 19:35
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+ ]
+
  */
 
 namespace pocketmine\block;
@@ -19,11 +19,11 @@ class ActiveRedstoneLamp extends Solid implements ElectricalAppliance{
 		$this->meta = $meta;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Active Redstone Lamp";
 	}
 
-	public function getHardness(){
+	public function getHardness() {
 		return 0.3;
 	}
 
@@ -35,7 +35,7 @@ class ActiveRedstoneLamp extends Solid implements ElectricalAppliance{
 		return 15;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		return [
 			[Item::INACTIVE_REDSTONE_LAMP, 0 ,1],
 		];

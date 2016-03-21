@@ -2,8 +2,8 @@
 /**
  * Author: PeratX
  * Time: 2015/12/29 23:52
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+ ]
+
  *
  * OpenGenisys Project
  */
@@ -50,10 +50,10 @@ class FlowerPot extends Spawnable{
 		if($this->chunk){
 			$this->chunk->setChanged();
 			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
-			$block = $this->level->getBlock($this);
+			/*$block = $this->level->getBlock($this);
 			if($block->getId() === Block::FLOWER_POT_BLOCK){
 				$this->level->setBlock($this, Block::get(Block::FLOWER_POT_BLOCK, $data), true, true);
-			}
+			}*/
 		}
 		return true;
 	}

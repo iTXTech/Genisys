@@ -22,6 +22,7 @@
 namespace pocketmine\command;
 
 use pocketmine\Thread;
+use pocketmine\ThreadManager;
 
 class CommandReader extends Thread{
 	private $readline;
@@ -32,6 +33,7 @@ class CommandReader extends Thread{
 	public function __construct(){
 		$this->buffer = new \Threaded;
 		$this->start();
+		//$this->start(PTHREADS_INHERIT_NONE);//May cause segfault
 	}
 
 	public function shutdown(){
@@ -40,13 +42,14 @@ class CommandReader extends Thread{
 
 	private function readLine(){
 		if(!$this->readline){
-			global $stdin;
+			/*global $stdin;
 
 			if(!is_resource($stdin)){
 				return "";
 			}
 
-			return trim(fgets($stdin));
+			return trim(fgets($stdin));*/
+			return trim(fgets(fopen("php://stdin", "r")));
 		}else{
 			$line = trim(readline("> "));
 			if($line != ""){
@@ -72,6 +75,11 @@ class CommandReader extends Thread{
 
 	public function quit(){
 		$this->shutdown();
+		$this->isKilled = true;
+
+		$this->notify();
+
+		ThreadManager::getInstance()->remove($this);
 	}
 
 	public function run(){
@@ -79,9 +87,9 @@ class CommandReader extends Thread{
 		if(extension_loaded("readline") and !isset($opts["disable-readline"])){
 			$this->readline = true;
 		}else{
-			global $stdin;
+		/*	global $stdin;
 			$stdin = fopen("php://stdin", "r");
-			stream_set_blocking($stdin, 0);
+			stream_set_blocking($stdin, 0);*/
 			$this->readline = false;
 		}
 

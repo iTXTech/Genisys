@@ -16,11 +16,11 @@ class Portal extends Flowable{
 		
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Portal";
 	}
 	
-	public function getHardness(){
+	public function getHardness() {
 		return 20;
 	}
 
@@ -28,7 +28,7 @@ class Portal extends Flowable{
 		return Tool::TYPE_PICKAXE;
 	}
 	
-	public function canBeActivated(){
+	public function canBeActivated() : bool {
 		return true;
 	}
 
@@ -106,7 +106,7 @@ class Portal extends Flowable{
 		return true;
 	}
 	
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
 				[Item::Portal, 0, 1],

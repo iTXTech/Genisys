@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * OpenGenisys Project
+ *
+ * @author PeratX
+ */
+
 namespace pocketmine\entity;
 
 use pocketmine\Player;
@@ -16,7 +23,7 @@ class ZombieVillager extends Zombie{
 		parent::initEntity();
 	}
 
-	public function getName(){
+	public function getName() : string{
 		return "Zombie Villager";
 	}
 
