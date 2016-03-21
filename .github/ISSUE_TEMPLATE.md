@@ -1,6 +1,9 @@
+<!--- WARNING
+ANY ISSUE ON OUTDATED GENISYS WILL BE CLOSED. CONTINUING SPAMMNG WILL CAUSE A BAN. CHECK YOUR VERSION BEFORE CONTINUING.
+-->
+
 #### Issue description
-<!--- use our forum https://forums.mcper.cn for questions -->
-Write a short description about the issue
+<!--- Write a short description about the issue -->
 
 #### Steps to reproduce the issue
 <!--- help us find the problem by adding steps to reproduce the issue -->
