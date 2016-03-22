@@ -2,7 +2,7 @@
 
 #配置文件版本
 config:
- version: 12
+ version: 13
  
 level:
  #设置是否变换天气
@@ -10,8 +10,12 @@ level:
  #随机天气持续时长最小值，最大值
  weather-random-duration-min: 6000
  weather-random-duration-max: 12000
- #随机闪电间隔，默认10秒
+ #随机闪电间隔，默认10秒，0 = 禁用
  lightning-time: 200
+ #是否启用闪电击中着火
+ lightning-fire: false
+ #是否启用火焰蔓延
+ fire-spread: false
  
 player:
  #是否打开饥饿
@@ -30,6 +34,8 @@ player:
  auto-clear-inventory: true
  #是否开启死亡经验不掉落
  keep-experience: false
+ #如果玩家进入游戏时崩溃, 请设置低于10的值. 禁用 = -1
+ chunk-radius: -1
  
 nether:
  #是否允许地狱，打开此选项会自动生成地狱地图

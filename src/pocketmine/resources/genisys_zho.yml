@@ -2,7 +2,7 @@
 
 #設定檔案版本
 config:
- version: 12
+ version: 13
 
 level:
  #設定是否變換天氣
@@ -10,8 +10,12 @@ level:
  #隨機天氣持續時長最小值，最大值
  weather-random-duration-min: 6000
  weather-random-duration-max: 12000
- #隨機閃電間隔，預設10秒
+ #隨機閃電間隔，預設10秒，0=不啟用
  lightning-time: 200
+ #設定是否閃電擊中起火
+ lightning-fire: false
+ #設定是否火焰蔓延
+ fire-spread: false
  
 player:
  #是否打開飢餓
@@ -30,6 +34,8 @@ player:
  auto-clear-inventory: true
  #TODO: 是否開啟死亡經驗不掉落
  keep-experience: false
+ #如果玩家進入遊戲時崩潰, 請設置該值低於10. 禁用 = -1
+ chunk-radius: -1
 
 nether:
  #是否允許地獄，打開此選項會自動生成地獄地圖
