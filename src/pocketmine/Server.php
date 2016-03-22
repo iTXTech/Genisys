@@ -2681,12 +2681,12 @@ private function lookupAddress($address) {
 		}
 	}
 
-	public function updatePlayerListData(UUID $uuid, $entityId, $name, $skinName, $skinData, array $players = null){
-		$pk = new PlayerListPacket();
-		$pk->type = PlayerListPacket::TYPE_ADD;
-		$pk->entries[] = [$uuid, $entityId, $name, $skinName, $skinData];
-		Server::broadcastPacket($players === null ? $this->playerList : $players, $pk);
-	}
+	public function updatePlayerListData(UUID $uuid, $entityId, $name, $skinName, $skinData, array $players = null, $skinTransparency = false){
+        	$pk = new PlayerListPacket();
+        	$pk->type = PlayerListPacket::TYPE_ADD;
+        	$pk->entries[] = [$uuid, $entityId, $name, $skinName, $skinData, $skinTransparency];
+        	Server::broadcastPacket($players === null ? $this->playerList : $players, $pk);
+    	}
 
 	public function removePlayerListData(UUID $uuid, array $players = null){
 		$pk = new PlayerListPacket();
