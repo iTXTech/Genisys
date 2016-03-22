@@ -10,7 +10,7 @@ level:
  #隨機天氣持續時長最小值，最大值
  weather-random-duration-min: 6000
  weather-random-duration-max: 12000
- #隨機閃電間隔，預設10秒
+ #隨機閃電間隔，預設10秒，0=不啟用
  lightning-time: 200
  #設定是否閃電擊中起火
  lightning-fire: false
