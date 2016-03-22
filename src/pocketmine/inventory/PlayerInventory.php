@@ -233,9 +233,9 @@ class PlayerInventory extends BaseInventory{
 		$old = $this->getItem($index);
 		$this->slots[$index] = clone $item;
 		$this->onSlotChange($index, $old);
-		/*if($this->getHolder() instanceof Player){
+		if($this->getHolder() instanceof Player){
 			if($this->getHolder()->isSurvival()) $this->sendContents($this->getHolder());
-		}*/
+		}
 
 		return true;
 	}
@@ -386,6 +386,7 @@ class PlayerInventory extends BaseInventory{
 
 		$pk = new ContainerSetContentPacket();
 		$pk->slots = [];
+		$holder = $this->getHolder();
 		for($i = 0; $i < $this->getSize(); ++$i){ //Do not send armor by error here
 			$pk->slots[$i] = $this->getItem($i);
 		}
@@ -419,7 +420,7 @@ class PlayerInventory extends BaseInventory{
 		}
 	}
 
-	/*public function addItem(...$slots){
+	public function addItem(...$slots){
 		$result = parent::addItem(...$slots);
 		if($this->getHolder() instanceof Player){
 			if($this->getHolder()->isSurvival()) $this->sendContents($this->getHolder());
@@ -433,7 +434,7 @@ class PlayerInventory extends BaseInventory{
 			if($this->getHolder()->isSurvival()) $this->sendContents($this->getHolder());
 		}
 		return $result;
-	}*/
+	}
 
 	/**
 	 * @param int             $index

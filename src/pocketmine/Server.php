@@ -1639,6 +1639,7 @@ class Server{
 		);
 		$this->inventoryNum = $this->getAdvancedProperty("player.inventory-num", 36);
 		$this->hungerTimer = $this->getAdvancedProperty("player.hunger-timer", 80);
+		$this->weatherLastTime = $this->getAdvancedProperty("level.weather-last-time", 1200);
 		$this->allowSnowGolem = $this->getAdvancedProperty("server.allow-snow-golem", false);
 		$this->allowIronGolem = $this->getAdvancedProperty("server.allow-iron-golem", false);
 		$this->autoClearInv = $this->getAdvancedProperty("player.auto-clear-inventory", true);
