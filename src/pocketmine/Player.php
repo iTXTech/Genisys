@@ -1575,7 +1575,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$pk->target = $entity->getId();
 						$this->dataPacket($pk);
 
-						if(!$this->isCreative()) $this->inventory->addItem(clone $item);
+						$this->inventory->addItem(clone $item);
 						$entity->kill();
 					}
 				}
