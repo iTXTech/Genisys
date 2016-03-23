@@ -9,14 +9,14 @@ ANY ISSUE ON OUTDATED GENISYS WILL BE CLOSED. CONTINUING SPAMMNG WILL CAUSE A BA
 <!--- help us find the problem by adding steps to reproduce the issue -->
 
 #### OS and versions
-<!--- use the 'version' command in PocketMine-MP -->
-<!--- Try Docker for library/extension issues -->
+<!--- Try Docker for library/extension issues
+use the 'version' command in Genisys
+Valid version must contain build number or git hash -->
 * Genisys:
 * PHP:
 * OS:
 
 #### Crashdump, backtrace or other files
-<!--- please paste them here -->
 ```
-Replace this placeholder with your crashdump...
+Paste here
 ```
