@@ -193,6 +193,7 @@ abstract class BaseInventory implements Inventory{
 		foreach($this->getContents() as $index => $i){
 			if($item->equals($i, $checkDamage, $checkTags)){
 				$this->clear($index);
+				break;
 			}
 		}
 	}
