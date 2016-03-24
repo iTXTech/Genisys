@@ -14,7 +14,7 @@ class UnlitRedstoneTorch extends RedstoneTorch{
 		return 0;
 	}
 
-	public function isActivated(){
+	public function isActivated(Block $from = null){
 		return false;
 	}
 }

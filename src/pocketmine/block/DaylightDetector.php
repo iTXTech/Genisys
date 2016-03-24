@@ -62,7 +62,7 @@ class DaylightDetector extends RedstoneSource{
 		return true;
 	}
 
-	public function isActivated(){
+	public function isActivated(Block $from = null){
 		return $this->getTile()->isActivated();
 	}
 

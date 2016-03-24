@@ -894,9 +894,10 @@ class AIHolder{
 						}elseif($random == 0 && $level->getTime() >= 13500){
 							$pos = new Position($v3->x, $v3->y, $v3->z, $level);
 
-							$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($ent = $this->getZombie($pos), EntityGenerateEvent::CAUSE_AI_HOLDER));
-							if(!$ev->isCancelled()) $ent->spawnToAll();
-							else $ent->close();
+							$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($pos, Zombie::NETWORK_ID, EntityGenerateEvent::CAUSE_AI_HOLDER));
+							if(!$ev->isCancelled()){
+								$this->spawnZombie($ev->getPosition());
+							}
 							//$this->server->getLogger()->info("生成1僵尸");
 						}
 
@@ -904,9 +905,11 @@ class AIHolder{
 							for($i = 0; $i < (count($cowc) - $max); $i++) $cowc[$i]->kill();
 						}elseif($random == 1){
 							$pos = new Position($v3->x, $v3->y, $v3->z, $level);
-							$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($ent = $this->getCow($pos), EntityGenerateEvent::CAUSE_AI_HOLDER));
-							if(!$ev->isCancelled()) $ent->spawnToAll();
-							else $ent->close();
+
+							$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($pos, Cow::NETWORK_ID, EntityGenerateEvent::CAUSE_AI_HOLDER));
+							if(!$ev->isCancelled()){
+								$this->spawnCow($ev->getPosition());
+							}
 							//$this->server->getLogger()->info("生成1牛");
 						}
 						break;

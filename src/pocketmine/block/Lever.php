@@ -151,7 +151,7 @@ class Lever extends RedstoneSource{
 		$this->getLevel()->setBlock($this, new Air(), true, false);
 	}
 
-	public function isActivated(){
+	public function isActivated(Block $from = null){
 		return (($this->meta & 0x08) === 0x08);
 	}
 

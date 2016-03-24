@@ -169,6 +169,9 @@ class Block extends Position implements Metadatable{
 	const LIT_PUMPKIN = 91;
 	const JACK_O_LANTERN = 91;
 	const CAKE_BLOCK = 92;
+	
+	const UNPOWERED_REPEATER = 93;
+	const POWERED_REPEATER = 94;
 
 	const TRAPDOOR = 96;
 	const WOODEN_TRAPDOOR = 96;
@@ -512,7 +515,7 @@ class Block extends Position implements Metadatable{
 			self::$list[self::ACACIA_WOOD_STAIRS] = AcaciaWoodStairs::class;
 			self::$list[self::DARK_OAK_WOOD_STAIRS] = DarkOakWoodStairs::class;
 
-self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
+			self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 			self::$list[self::HAY_BALE] = HayBale::class;
 			self::$list[self::CARPET] = Carpet::class;
 			self::$list[self::HARDENED_CLAY] = HardenedClay::class;
@@ -564,6 +567,8 @@ self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 			self::$list[self::ITEM_FRAME_BLOCK] = ItemFrame::class;
 			self::$list[self::DISPENSER] = Dispenser::class;
 			self::$list[self::DROPPER] = Dropper::class;
+			//self::$list[self::POWERED_REPEATER] = PoweredRepeater::class;
+			//self::$list[self::UNPOWERED_REPEATER] = UnpoweredRepeater::class;
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){

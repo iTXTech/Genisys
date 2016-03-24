@@ -82,25 +82,28 @@ class MobSpawner extends Spawnable{
 				$this->lastUpdate = $currentTick;
 				$up = $this->getLevel()->getBlock($this->getSide(Vector3::SIDE_UP));
 				if($up->getId() == Item::AIR){
-					$nbt = new CompoundTag("", [
-						"Pos" => new ListTag("Pos", [
-							new DoubleTag("", $this->x),
-							new DoubleTag("", $this->y + 1),
-							new DoubleTag("", $this->z)
-						]),
-						"Motion" => new ListTag("Motion", [
-							new DoubleTag("", 0),
-							new DoubleTag("", 0),
-							new DoubleTag("", 0)
-						]),
-						"Rotation" => new ListTag("Rotation", [
-							new FloatTag("", 0),
-							new FloatTag("", 0)
-						]),
-					]);
-					$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new EntityGenerateEvent($entity = Entity::createEntity($this->getEntityId(), $this->chunk, $nbt), EntityGenerateEvent::CAUSE_MOB_SPAWNER));
-					if(!$ev->isCancelled()) $entity->spawnToAll();
-					else $entity->close();
+					$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new EntityGenerateEvent($this->add(0, 1, 0), $this->getEntityId(), EntityGenerateEvent::CAUSE_MOB_SPAWNER));
+					if(!$ev->isCancelled()){
+						$pos = $ev->getPosition();
+						$nbt = new CompoundTag("", [
+							"Pos" => new ListTag("Pos", [
+								new DoubleTag("", $pos->x),
+								new DoubleTag("", $pos->y),
+								new DoubleTag("", $pos->z)
+							]),
+							"Motion" => new ListTag("Motion", [
+								new DoubleTag("", 0),
+								new DoubleTag("", 0),
+								new DoubleTag("", 0)
+							]),
+							"Rotation" => new ListTag("Rotation", [
+								new FloatTag("", 0),
+								new FloatTag("", 0)
+							]),
+						]);
+						$entity = Entity::createEntity($this->getEntityId(), $this->chunk, $nbt);
+						$entity->spawnToAll();
+					}
 				}
 			}
 		}

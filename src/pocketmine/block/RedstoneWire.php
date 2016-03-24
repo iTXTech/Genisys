@@ -34,7 +34,7 @@ class RedstoneWire extends RedstoneSource{
 		return $this->meta;
 	}
 
-	public function isActivated(){
+	public function isActivated(Block $from = null){
 		return ($this->meta > 0);
 	}
 
@@ -274,7 +274,7 @@ class RedstoneWire extends RedstoneSource{
 			/** @var RedstoneWire $block */
 			$block = $wire->getSide($side);
 			if($block instanceof RedstoneSource){
-				if($block->isActivated()){
+				if($block->isActivated($wire)){
 					if($block->getId() != $this->id){
 						$powers[] = $block;
 					}else{
@@ -293,7 +293,7 @@ class RedstoneWire extends RedstoneSource{
 			if(!$bool){
 				$block = $this->getLevel()->getBlock($baseBlock->getSide($side));
 				if($block instanceof RedstoneSource){
-					if($block->isActivated()){
+					if($block->isActivated($wire)){
 						if($block->getId() == $this->id){
 							$result = $this->getPowerSources($block, $powers, $hasUpdated);
 							$powers = $result[0];
@@ -311,7 +311,7 @@ class RedstoneWire extends RedstoneSource{
 			if(!$bool){
 				$block = $this->getLevel()->getBlock($baseBlock->getSide($side));
 				if($block instanceof RedstoneSource){
-					if($block->isActivated()){
+					if($block->isActivated($wire)){
 						if($block->getId() == $this->id){
 							$result = $this->getPowerSources($block, $powers, $hasUpdated);
 							$powers = $result[0];

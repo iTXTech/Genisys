@@ -28,7 +28,7 @@ class RedstoneSource extends Flowable{
 		return $this->maxStrength;
 	}
 
-	public function isActivated(){
+	public function isActivated(Block $from = null){
 		return $this->activated;
 	}
 
@@ -131,7 +131,7 @@ class RedstoneSource extends Flowable{
 			if(!in_array($side, $ignore)){
 				$pos = $block->getSide($side);
 				if($pos instanceof RedstoneSource){
-					if($pos->isActivated()){
+					if($pos->isActivated($this)){
 						if(($ignoreWire and $pos->getId() != self::REDSTONE_WIRE) or (!$ignoreWire and $pos->getId() != self::REDSTONE_WIRE)) return true;
 						if(!$ignoreWire and $pos->getId() == self::REDSTONE_WIRE){
 							/** @var RedstoneWire $pos */
@@ -147,7 +147,7 @@ class RedstoneSource extends Flowable{
 		if($block->getId() == Block::ACTIVE_REDSTONE_LAMP and !in_array(Vector3::SIDE_UP, $ignore)){
 			$pos = $block->getSide(Vector3::SIDE_UP);
 			if($pos instanceof RedstoneSource and $pos->getId() != self::REDSTONE_TORCH){
-				if($pos->isActivated()) return true;
+				if($pos->isActivated($this)) return true;
 			}
 		}
 

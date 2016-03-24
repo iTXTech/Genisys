@@ -176,6 +176,9 @@ class Item{
 	const JACK_O_LANTERN = 91;
 	const CAKE_BLOCK = 92;
 
+	const UNPOWERED_REPEATER = 93;
+	const POWERED_REPEATER = 94;
+
 	const TRAPDOOR = 96;
 	const MONSTER_EGG_BLOCK = 97;
 	const STONE_BRICKS = 98;
@@ -420,6 +423,7 @@ class Item{
 	const CAKE = 354;
 	const BED = 355;
 
+	const REPEATER = 356;
 
 	const COOKIE = 357;
 
@@ -668,6 +672,7 @@ class Item{
 			self::$list[self::GLISTERING_MELON] = GlisteringMelon::class;
 			self::$list[self::ITEM_FRAME] = ItemFrame::class;
 			self::$list[self::ENCHANTED_BOOK] = EnchantedBook::class;
+			self::$list[self::REPEATER] = Repeater::class;
 
 			for($i = 0; $i < 256; ++$i){
 				if(Block::$list[$i] !== null){
@@ -1011,6 +1016,7 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::STONE_BUTTON, 0));
 			self::addCreativeItem(Item::get(Item::DAYLIGHT_SENSOR, 0));
 			self::addCreativeItem(Item::get(Item::TRIPWIRE_HOOK, 0));
+			self::addCreativeItem(Item::get(Item::REPEATER));
 			self::addCreativeItem(Item::get(Item::DROPPER, 3));
 			self::addCreativeItem(Item::get(Item::DISPENSER, 3));
 			self::addCreativeItem(Item::get(Item::SNOWBALL));

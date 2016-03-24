@@ -41,7 +41,7 @@ class PressurePlate extends RedstoneSource{
 		}
 	}
 
-	public function isActivated(){
+	public function isActivated(Block $from = null){
 		return ($this->meta == 0) ? false : true;
 	}
 
