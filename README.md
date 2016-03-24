@@ -8,8 +8,10 @@ Jenkins: [![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.mcper.cn/Geni
 
 Travis-CI: [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
 
+GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/builds)
+
 ### Downloads
-You can get prebuilt phar from [Jenkins](http://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/Genisys/builds).
+You can get prebuilt phar from [Jenkins](http://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/genisys/builds).
 
 ### Fast Docker installation
 [![Docker Pulls](https://img.shields.io/docker/pulls/itxtech/docker-env-genisys.svg)](https://hub.docker.com/r/itxtech/docker-env-genisys/)

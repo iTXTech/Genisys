@@ -112,7 +112,7 @@ class FlowerPot extends Flowable{
 	public function getDrops(Item $item) : array {
 		$items = array([Item::FLOWER_POT, 0, 1]);
 		/** @var FlowerPotTile $tile */
-		if(($tile = $this->getLevel()->getTile($this)) instanceof FlowerPotTile){
+		if($this->getLevel()!=null && (($tile = $this->getLevel()->getTile($this)) instanceof FlowerPotTile)){
 			if($tile->getFlowerPotItem() !== Item::AIR){
 				$items[] = array($tile->getFlowerPotItem(), $tile->getFlowerPotData(), 1);
 			}
