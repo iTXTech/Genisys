@@ -66,7 +66,7 @@ class BiomeCommand extends VanillaCommand{
 			}elseif($args[0] == "color"){
 				$color = isset($args[1]) ? $args[1] : "146,188,89";//1=草原("146,188,89"),2=沙漠(251,183,19)"130,180,147"
 				$a = explode(",", $color);
-				var_dump($a);
+				//var_dump($a);
 				if(count($a) != 3){
 					$sender->sendMessage(TextFormat::RED . "%pocketmine.command.biome.wrongCol");
 					return false;
