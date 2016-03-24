@@ -242,6 +242,7 @@ class EnchantmentLevelTable{
 	            if($range->isInRange($modifiedLevel)){
 		            $result[] = $enchantment->setLevel($i);
 	            }
+			}
             }
         }
 
