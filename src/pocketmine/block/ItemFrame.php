@@ -78,6 +78,9 @@ class ItemFrame extends Transparent{
 	}
 
 	public function getDrops(Item $item) : array{
+		if($this->getLevel()==null){
+			return [];
+		}
 		$tile = $this->getLevel()->getTile($this);
 		if(!$tile instanceof ItemFrameTile){
 			return [
