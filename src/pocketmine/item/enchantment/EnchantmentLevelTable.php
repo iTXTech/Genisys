@@ -234,15 +234,16 @@ class EnchantmentLevelTable{
 
 		foreach($enchantmentIds as $enchantmentId) {
 			$enchantment = Enchantment::getEnchantment($enchantmentId);
-            $ranges = self::$map[$enchantmentId];
-            $i = 0;
+        		$ranges = self::$map[$enchantmentId];
+            		$i = 0;
 			/** @var Range $range */
 			foreach($ranges as $range) {
-	            $i++;
-	            if($range->isInRange($modifiedLevel)){
-		            $result[] = $enchantment->setLevel($i);
-	            }
+	        		$i++;
+	            		if($range->isInRange($modifiedLevel)){
+		            		$result[] = $enchantment->setLevel($i);
+	            		}
 			}
+		}
             }
         }
 
