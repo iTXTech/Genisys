@@ -27,10 +27,4 @@ class UnpoweredRepeater extends PoweredRepeater{
 	public function isActivated(Block $from = null){
 		return false;
 	}
-
-	public function activate(array $ignore = []){
-	}
-
-	public function deactivate(array $ignore = []){
-	}
 }

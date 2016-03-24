@@ -426,7 +426,7 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 			}
 
 			//Normal inventory
-			$slotCount = Player::SURVIVAL_SLOTS + 9;
+			$slotCount = $this->getLevel()->getServer()->inventoryNum + 9;
 			//$slotCount = (($this instanceof Player and ($this->gamemode & 0x01) === 1) ? Player::CREATIVE_SLOTS : Player::SURVIVAL_SLOTS) + 9;
 			for($slot = 9; $slot < $slotCount; ++$slot){
 				$item = $this->inventory->getItem($slot - 9);

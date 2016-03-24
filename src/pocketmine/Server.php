@@ -1623,7 +1623,7 @@ class Server{
 		$this->lightningFire = $this->getAdvancedProperty("level.lightning-fire", false);
 		$this->expWriteAhead = $this->getAdvancedProperty("server.experience-cache", 200);
 		$this->aiEnabled = $this->getAdvancedProperty("ai.enable", false);
-		$this->aiConfig = array(
+		$this->aiConfig = [
 			"cow" => $this->getAdvancedProperty("ai.cow", true),
 			"chicken" => $this->getAdvancedProperty("ai.chicken", true),
 			"zombie" => $this->getAdvancedProperty("ai.zombie", 1),
@@ -1636,8 +1636,8 @@ class Server{
 			"pigzombie" => $this->getAdvancedProperty("ai.pigzombie", true),
 			"creeperexplode" => $this->getAdvancedProperty("ai.creeper-explode-destroy-block", false),
 			"mobgenerate" => $this->getAdvancedProperty("ai.mobgenerate", false),
-		);
-		$this->inventoryNum = $this->getAdvancedProperty("player.inventory-num", 36);
+		];
+		$this->inventoryNum = min(89, $this->getAdvancedProperty("player.inventory-num", 36));
 		$this->hungerTimer = $this->getAdvancedProperty("player.hunger-timer", 80);
 		$this->allowSnowGolem = $this->getAdvancedProperty("server.allow-snow-golem", false);
 		$this->allowIronGolem = $this->getAdvancedProperty("server.allow-iron-golem", false);

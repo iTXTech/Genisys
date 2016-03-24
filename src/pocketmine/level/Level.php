@@ -279,11 +279,13 @@ class Level implements ChunkManager, Metadatable{
 	/** @var Weather */
 	private $weather;
 
-	public $blockTempData = [];
+	private $blockTempData = [];
 
 	private $dimension = self::DIMENSION_NORMAL;
 
 	/**
+	 * This method is internal use only. Do not use this in plugins
+	 *
 	 * @param Vector3 $pos
 	 * @param         $data
 	 */
@@ -292,6 +294,8 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	/**
+	 * This method is internal use only. Do not use this in plugins
+	 *
 	 * @param Vector3 $pos
 	 * @return int
 	 */
