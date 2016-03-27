@@ -19,19 +19,30 @@
  *
  */
 
-namespace pocketmine\inventory;
+namespace pocketmine\level\sound;
 
-use pocketmine\tile\Dispenser;
+use pocketmine\math\Vector3;
+use pocketmine\network\protocol\LevelEventPacket;
 
-class DispenserInventory extends ContainerInventory{
-	public function __construct(Dispenser $tile){
-		parent::__construct($tile, InventoryType::get(InventoryType::DISPENSER));
+class SpellSound extends Sound{
+
+	private $id;
+	private $color;
+
+	public function __construct(Vector3 $pos, $r = 0, $g = 0, $b = 0, $a = 0){
+		parent::__construct($pos->x, $pos->y, $pos->z);
+		$this->id = (int) LevelEventPacket::EVENT_SOUND_SPELL;
+		$this->color = ($a << 24 | $r << 16 | $g << 8 | $b) & 0xffffffff;
 	}
 
-	/**
-	 * @return Dispenser
-	 */
-	public function getHolder(){
-		return $this->holder;
+	public function encode(){
+		$pk = new LevelEventPacket;
+		$pk->evid = $this->id;
+		$pk->x = $this->x;
+		$pk->y = $this->y;
+		$pk->z = $this->z;
+		$pk->data = $this->color;
+
+		return $pk;
 	}
 }

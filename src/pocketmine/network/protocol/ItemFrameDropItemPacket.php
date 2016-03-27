@@ -10,7 +10,7 @@
  * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
@@ -19,13 +19,24 @@
  *
  */
 
-namespace pocketmine\item;
+namespace pocketmine\network\protocol;
 
-use pocketmine\block\Block;
+class ItemFrameDropItemPacket extends DataPacket{
 
-class Repeater extends Item{
-	public function __construct($meta = 0, $count = 1){
-		$this->block = Block::get(Block::UNPOWERED_REPEATER);
-		parent::__construct(self::REPEATER, $meta, $count, "Repeater");
+	const NETWORK_ID = Info::ITEM_FRAME_DROP_ITEM_PACKET;
+
+	public $x;
+	public $y;
+	public $z;
+	public $dropItem;
+
+	public function decode(){
+		$this->z = $this->getInt();
+		$this->y = $this->getInt();
+		$this->x = $this->getInt();
+		$this->dropItem = $this->getSlot();
+	}
+
+	public function encode(){
 	}
 }

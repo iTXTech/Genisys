@@ -10,21 +10,21 @@ use pocketmine\network\protocol\SetEntityMotionPacket;
 
 class PigAI{
 
-	private $plugin;
+	private $AIHolder;
 
 	public $width = 0.3;
 	private $dif = 0;
 
 
-	public function __construct(AIHolder $plugin){
-		$this->plugin = $plugin;
-		if($this->plugin->getServer()->aiConfig["pig"]){
-			$this->plugin->getServer()->getScheduler()->scheduleRepeatingTask(new CallbackTask ([
+	public function __construct(AIHolder $AIHolder){
+		$this->AIHolder = $AIHolder;
+		if($this->AIHolder->getServer()->aiConfig["pig"]){
+			$this->AIHolder->getServer()->getScheduler()->scheduleRepeatingTask(new CallbackTask ([
 				$this,
 				"PigRandomWalkCalc"
 			]), 5);
 
-			$this->plugin->getServer()->getScheduler()->scheduleRepeatingTask(new CallbackTask ([
+			$this->AIHolder->getServer()->getScheduler()->scheduleRepeatingTask(new CallbackTask ([
 				$this,
 				"PigRandomWalk"
 			]), 1);
@@ -32,14 +32,14 @@ class PigAI{
 	}
 
 	public function PigRandomWalkCalc(){
-		$this->dif = $this->plugin->getServer()->getDifficulty();
+		$this->dif = $this->AIHolder->getServer()->getDifficulty();
 		//$this->getLogger()->info("猪数量：".count($this->plugin->Pig));
-		foreach($this->plugin->getServer()->getLevels() as $level){
+		foreach($this->AIHolder->getServer()->getLevels() as $level){
 			foreach($level->getEntities() as $zo){
 				if($zo::NETWORK_ID == Pig::NETWORK_ID){
-					if($this->plugin->willMove($zo)){
-						if(!isset($this->plugin->Pig[$zo->getId()])){
-							$this->plugin->Pig[$zo->getId()] = array(
+					if($this->AIHolder->willMove($zo)){
+						if(!isset($this->AIHolder->Pig[$zo->getId()])){
+							$this->AIHolder->Pig[$zo->getId()] = array(
 								'ID' => $zo->getId(),
 								'IsChasing' => false,
 								'motionx' => 0,
@@ -66,12 +66,12 @@ class PigAI{
 								'canAttack' => 0,
 								'knockBack' => false,
 							);
-							$zom = &$this->plugin->Pig[$zo->getId()];
+							$zom = &$this->AIHolder->Pig[$zo->getId()];
 							$zom['x'] = $zo->getX();
 							$zom['y'] = $zo->getY();
 							$zom['z'] = $zo->getZ();
 						}
-						$zom = &$this->plugin->Pig[$zo->getId()];
+						$zom = &$this->AIHolder->Pig[$zo->getId()];
 
 						//if ($zom['IsChasing'] === false) {  //自由行走模式
 
@@ -105,11 +105,11 @@ class PigAI{
 						//boybook的y轴判断法
 						//$width = $this->width;
 						$pos = new Vector3 ($zom['x'] + $zom['motionx'], floor($zo->getY()) + 1, $zom['z'] + $zom['motionz']);  //目标坐标
-						$zy = $this->plugin->ifjump($zo->getLevel(), $pos);
+						$zy = $this->AIHolder->ifjump($zo->getLevel(), $pos);
 
 						if($zy === false){  //前方不可前进
 							$pos2 = new Vector3 ($zom['x'], $zom['y'], $zom['z']);  //目标坐标
-							if($this->plugin->ifjump($zo->getLevel(), $pos2) === false){ //原坐标依然是悬空
+							if($this->AIHolder->ifjump($zo->getLevel(), $pos2) === false){ //原坐标依然是悬空
 								//	$pos2 = new Vector3 ($zom['x'], $zom['y'],$zom['z']);  //下降
 								//	$zom['up'] = 1;
 								$zom['yup'] = 0;
@@ -133,7 +133,7 @@ class PigAI{
 						if($zom['motionx'] == 0 and $zom['motionz'] == 0){  //牛停止
 						}else{
 							//转向计算
-							$yaw = $this->plugin->getyaw($zom['motionx'], $zom['motionz']);
+							$yaw = $this->AIHolder->getyaw($zom['motionx'], $zom['motionz']);
 							//$zo->setRotation($yaw,0);
 							$zom['yaw'] = $yaw;
 							$zom['pitch'] = 0;
@@ -161,11 +161,11 @@ class PigAI{
 	}
 
 	public function PigRandomWalk(){
-		foreach($this->plugin->getServer()->getLevels() as $level){
+		foreach($this->AIHolder->getServer()->getLevels() as $level){
 			foreach($level->getEntities() as $zo){
 				if($zo::NETWORK_ID == Pig::NETWORK_ID){
-					if(isset($this->plugin->Pig[$zo->getId()])){
-						$zom = &$this->plugin->Pig[$zo->getId()];
+					if(isset($this->AIHolder->Pig[$zo->getId()])){
+						$zom = &$this->AIHolder->Pig[$zo->getId()];
 						if($zom['canAttack'] != 0){
 							$zom['canAttack'] -= 1;
 						}
@@ -212,11 +212,11 @@ class PigAI{
 	}
 
 	public function array_clear(){
-		if(count($this->plugin->Pig) != 0){
-			foreach($this->plugin->Pig as $eid => $info){
-				foreach($this->plugin->getServer()->getLevels() as $level){
+		if(count($this->AIHolder->Pig) != 0){
+			foreach($this->AIHolder->Pig as $eid => $info){
+				foreach($this->AIHolder->getServer()->getLevels() as $level){
 					if(!($level->getEntity($eid) instanceof Entity)){
-						unset($this->plugin->Pig[$eid]);
+						unset($this->AIHolder->Pig[$eid]);
 						//echo "清除 $eid \n";
 					}
 				}

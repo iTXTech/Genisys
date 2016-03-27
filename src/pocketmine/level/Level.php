@@ -289,8 +289,12 @@ class Level implements ChunkManager, Metadatable{
 	 * @param Vector3 $pos
 	 * @param         $data
 	 */
-	public function setBlockTempData(Vector3 $pos, $data){
-		$this->blockTempData[self::blockHash($pos->x, $pos->y, $pos->z)] = (int) $data;
+	public function setBlockTempData(Vector3 $pos, $data = null){
+		if($data == null and isset($this->blockTempData[self::blockHash($pos->x, $pos->y, $pos->z)])){
+			unset($this->blockTempData[self::blockHash($pos->x, $pos->y, $pos->z)]);
+		}else{
+			$this->blockTempData[self::blockHash($pos->x, $pos->y, $pos->z)] = $data;
+		}
 	}
 
 	/**

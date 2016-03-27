@@ -15,7 +15,7 @@ use pocketmine\level\Position;
 
 class CreeperAI{
 
-	private $plugin;
+	private $AIHolder;
 	
 	public $width = 0.4;  //苦力怕宽度
 	private $dif = 0;
@@ -23,30 +23,30 @@ class CreeperAI{
 	public $hatred_r = 5;  //仇恨半径
 	public $zo_hate_v = 1.4; //苦力怕仇恨模式下的行走速度
 
-	public function __construct(AIHolder $plugin){
-		$this->plugin = $plugin;
-		if($this->plugin->getServer()->aiConfig["creeper"]){
-			$this->plugin->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
+	public function __construct(AIHolder $AIHolder){
+		$this->AIHolder = $AIHolder;
+		if($this->AIHolder->getServer()->aiConfig["creeper"]){
+			$this->AIHolder->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
 				$this,
 				"CreeperRandomWalkCalc"
 			] ), 10);
 
-			$this->plugin->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
+			$this->AIHolder->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
 				$this,
 				"CreeperRandomWalk"
 			] ), 1);
 
-			$this->plugin->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
+			$this->AIHolder->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
 				$this,
 				"CreeperHateWalk"
 			] ), 10);
 			
-			$this->plugin->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
+			$this->AIHolder->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
 				$this,
 			"CreeperHateFinder"
 			] ), 10);
 			
-			$this->plugin->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
+			$this->AIHolder->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
 				$this,
 				"array_clear"
 			] ), 20 * 5);
@@ -54,11 +54,11 @@ class CreeperAI{
 	}
 
 	public function array_clear() {
-		if (count($this->plugin->Creeper) != 0) {
-			foreach ($this->plugin->Creeper as $eid=>$info) {
-				foreach ($this->plugin->getServer()->getLevels() as $level) {
+		if (count($this->AIHolder->Creeper) != 0) {
+			foreach ($this->AIHolder->Creeper as $eid=> $info) {
+				foreach ($this->AIHolder->getServer()->getLevels() as $level) {
 					if (!($level->getEntity($eid) instanceof Entity)) {
-						unset($this->plugin->Creeper[$eid]);
+						unset($this->AIHolder->Creeper[$eid]);
 						//echo "清除 $eid \n";
 					}
 				}
@@ -71,14 +71,14 @@ class CreeperAI{
 	 * 循环间隔：20 ticks
 	 */
 	public function CreeperRandomWalkCalc() {
-		$this->dif = $this->plugin->getServer()->getDifficulty();
+		$this->dif = $this->AIHolder->getServer()->getDifficulty();
 		//$this->getLogger()->info("苦力怕数量：".count($this->plugin->Creeper));
-		foreach ($this->plugin->getServer()->getLevels() as $level) {
+		foreach ($this->AIHolder->getServer()->getLevels() as $level) {
 			foreach ($level->getEntities() as $zo){
 				if($zo instanceof Creeper){	
-					if ($this->plugin->willMove($zo)) {
-						if (!isset($this->plugin->Creeper[$zo->getId()])){
-							$this->plugin->Creeper[$zo->getId()] = array(
+					if ($this->AIHolder->willMove($zo)) {
+						if (!isset($this->AIHolder->Creeper[$zo->getId()])){
+							$this->AIHolder->Creeper[$zo->getId()] = array(
 								'ID' => $zo->getId(),
 								'IsChasing' => false,
 								'motionx' => 0,
@@ -106,12 +106,12 @@ class CreeperAI{
 								'knockBack' => false,
 								'boom' => false,
 							);
-							$zom = &$this->plugin->Creeper[$zo->getId()];
+							$zom = &$this->AIHolder->Creeper[$zo->getId()];
 							$zom['x'] = $zo->getX();
 							$zom['y'] = $zo->getY();
 							$zom['z'] = $zo->getZ();
 						}
-						$zom = &$this->plugin->Creeper[$zo->getId()];
+						$zom = &$this->AIHolder->Creeper[$zo->getId()];
 					
 					if ($zom['boom'] == false) {
 						if ($zom['IsChasing'] === false) {  //自由行走模式
@@ -146,10 +146,10 @@ class CreeperAI{
 							//boybook的y轴判断法
 							//$width = $this->width;
 							$pos = new Vector3 ($zom['x'] + $zom['motionx'], floor($zo->getY()) + 1,$zom['z'] + $zom['motionz']);  //目标坐标
-							$zy = $this->plugin->ifjump($zo->getLevel(),$pos);
+							$zy = $this->AIHolder->ifjump($zo->getLevel(),$pos);
 							if ($zy === false) {  //前方不可前进
 								$pos2 = new Vector3 ($zom['x'], $zom['y'] ,$zom['z']);  //目标坐标
-								if ($this->plugin->ifjump($zo->getLevel(),$pos2) === false) { //原坐标依然是悬空
+								if ($this->AIHolder->ifjump($zo->getLevel(),$pos2) === false) { //原坐标依然是悬空
 									$pos2 = new Vector3 ($zom['x'], $zom['y']-1,$zom['z']);  //下降
 									$zom['up'] = 1;
 									$zom['yup'] = 0;
@@ -175,7 +175,7 @@ class CreeperAI{
 							}
 							else {
 								//转向计算
-								$yaw = $this->plugin->getyaw($zom['motionx'], $zom['motionz']);
+								$yaw = $this->AIHolder->getyaw($zom['motionx'], $zom['motionz']);
 								//$zo->setRotation($yaw,0);
 								$zom['yaw'] = $yaw;
 								$zom['pitch'] = 0;
@@ -206,11 +206,11 @@ class CreeperAI{
 	 * 循环间隔：10 ticks
 	 */
 	public function CreeperHateFinder() {
-		foreach ($this->plugin->getServer()->getLevels () as $level) {
+		foreach ($this->AIHolder->getServer()->getLevels () as $level) {
 			foreach ($level->getEntities() as $zo) {
 				if ($zo instanceof Creeper) {
-					if (isset($this->plugin->Creeper[$zo->getId()])) {
-						$zom = &$this->plugin->Creeper[$zo->getId()];
+					if (isset($this->AIHolder->Creeper[$zo->getId()])) {
+						$zom = &$this->AIHolder->Creeper[$zo->getId()];
 						$h_r = $this->hatred_r;  //仇恨半径
 						$pos = new Vector3($zo->getX(), $zo->getY(), $zo->getZ());
 						$hatred = false;
@@ -242,11 +242,11 @@ class CreeperAI{
 	 * 循环间隔：10 ticks
 	 */
 	public function CreeperHateWalk() {
-		foreach ($this->plugin->getServer()->getLevels () as $level) {
+		foreach ($this->AIHolder->getServer()->getLevels () as $level) {
 			foreach ($level->getEntities() as $zo) {
 				if ($zo instanceof Creeper) {
-					if (isset($this->plugin->Creeper[$zo->getId()])) {
-						$zom = &$this->plugin->Creeper[$zo->getId()];
+					if (isset($this->AIHolder->Creeper[$zo->getId()])) {
+						$zom = &$this->AIHolder->Creeper[$zo->getId()];
 						//$zom['yup'] = $zom['yup'] - 1;
 						if (!$zom['knockBack']) {
 							$zom['oldv3'] = $zo->getLocation();
@@ -271,7 +271,7 @@ class CreeperAI{
 										$zom['x'] = $newpos->x;
 										$zom['y'] = $newpos->y;
 										$zom['z'] = $newpos->z;
-										$this->plugin->getServer()->getScheduler()->scheduleDelayedTask(new CallbackTask([$this->plugin,"knockBackover"],[$zo,$newpos]),5);
+										$this->AIHolder->getServer()->getScheduler()->scheduleDelayedTask(new CallbackTask([$this->AIHolder,"knockBackover"],[$zo,$newpos]),5);
 									}
 								}
 
@@ -279,14 +279,14 @@ class CreeperAI{
 
 							if ($zom['IsChasing'] !== false) {
 								//echo ("是属于仇恨模式\n");
-								$p = $this->plugin->getServer()->getPlayer($zom['IsChasing']);
+								$p = $this->AIHolder->getServer()->getPlayer($zom['IsChasing']);
 								if (($p instanceof Player) === false) {
 									$zom['IsChasing'] = false;  //取消仇恨模式
 								} else {
 									//真正的行走方向计算
 									$xx = $p->getX() - $zo->getX();
 									$zz = $p->getZ() - $zo->getZ();
-									$yaw = $this->plugin->getyaw($xx,$zz);
+									$yaw = $this->AIHolder->getyaw($xx,$zz);
 									/*
 									 * x = $xxx, z = $zzz
 									 * x0 = $xx, z0 = $zz
@@ -330,25 +330,25 @@ class CreeperAI{
 									//$v = $this->zo_hate_v/2;
 									//$pos_front = new Vector3 ($zo->getX() + ($xxx/$v*($v+$this->width)), $zo->getY() + 1, $zo->getZ() + ($zzz/$v*($v+$this->width)));  //前方坐标
 									//$pos_back = new Vector3 ($zo->getX() + (-$xxx/$v*(-$v-$this->width)), $zo->getY() + 1, $zo->getZ() + (-$zzz/$v*(-$v-$this->width)));  //后方坐标
-									$zy = $this->plugin->ifjump($zo->getLevel(), $pos, true);
+									$zy = $this->AIHolder->ifjump($zo->getLevel(), $pos, true);
 
-									if ($zy === false or ($zy !== false and $this->plugin->ifjump($zo->getLevel(), $pos0, true, true) == 'fall')) {  //前方不可前进
+									if ($zy === false or ($zy !== false and $this->AIHolder->ifjump($zo->getLevel(), $pos0, true, true) == 'fall')) {  //前方不可前进
 										//真正的自由落体 by boybook
-										if ($this->plugin->ifjump($zo->getLevel(), $pos0, false) === false) { //原坐标依然是悬空
+										if ($this->AIHolder->ifjump($zo->getLevel(), $pos0, false) === false) { //原坐标依然是悬空
 											if ($zom['drop'] === false) {
 												$zom['drop'] = 0;  //苦力怕下落的速度
 											}
 											$pos2 = new Vector3 ($zo->getX(), $zo->getY() - ($zom['drop'] / 2 + 1.25), $zo->getZ());  //下降
 										} else {
 											$zom['drop'] = false;
-											if ($this->plugin->whatBlock($level, $pos0) == "climb") {  //梯子
+											if ($this->AIHolder->whatBlock($level, $pos0) == "climb") {  //梯子
 												$zy = $pos0->y + 0.7;
 												$pos2 = new Vector3 ($zo->getX(), $zy - 1, $zo->getZ());  //目标坐标
 											}
 											elseif ($xxx != 0 and $zzz != 0) {  //走向最近距离
-												if ($this->plugin->ifjump($zo->getLevel(), new Vector3($zo->getX() + $xxx, $zo->getY() + 1, $zo->getZ()), true) !== false) {
+												if ($this->AIHolder->ifjump($zo->getLevel(), new Vector3($zo->getX() + $xxx, $zo->getY() + 1, $zo->getZ()), true) !== false) {
 													$pos2 = new Vector3($zo->getX() + $xxx, floor($zo->getY()), $zo->getZ());  //目标坐标
-												} elseif ($this->plugin->ifjump($zo->getLevel(), new Vector3($zo->getX(), $zo->getY() + 1, $zo->getZ() + $zzz), true) !== false) {
+												} elseif ($this->AIHolder->ifjump($zo->getLevel(), new Vector3($zo->getX(), $zo->getY() + 1, $zo->getZ() + $zzz), true) !== false) {
 													$pos2 = new Vector3($zo->getX(), floor($zo->getY()), $zo->getZ() + $zzz);  //目标坐标
 												} else {
 													$pos2 = new Vector3 ($zo->getX() - $xxx / 5, floor($zo->getY()), $zo->getZ() - $zzz / 5);  //目标坐标
@@ -367,7 +367,7 @@ class CreeperAI{
 									$pos3->y = $pos3->y + 2.62;
 									$ppos = $p->getLocation();
 									$ppos->y = $ppos->y + $p->getEyeHeight();
-									$pitch = $this->plugin->getpitch($pos3,$ppos);
+									$pitch = $this->AIHolder->getpitch($pos3,$ppos);
 
 									$zom['yaw'] = $yaw;
 									$zom['pitch'] = $pitch;
@@ -392,11 +392,11 @@ class CreeperAI{
 	 * 循环间隔：1 tick
 	 */
 	public function CreeperRandomWalk() {
-		foreach ($this->plugin->getServer()->getLevels() as $level) {
+		foreach ($this->AIHolder->getServer()->getLevels() as $level) {
 			foreach ($level->getEntities() as $zo) {
 				if ($zo instanceof Creeper) {
-					if (isset($this->plugin->Creeper[$zo->getId()])) {
-						$zom = &$this->plugin->Creeper[$zo->getId()];
+					if (isset($this->AIHolder->Creeper[$zo->getId()])) {
+						$zom = &$this->AIHolder->Creeper[$zo->getId()];
 						if ($zom['canAttack'] != 0) {
 							$zom['canAttack'] -= 1;
 						}
@@ -417,12 +417,12 @@ class CreeperAI{
 							$dropy = $zo->getY() - ($olddrop * 0.05 + 0.0125);
 							$posd0 = new Vector3 (floor($zo->getX()), floor($dropy), floor($zo->getZ()));
 							$posd = new Vector3 ($zo->getX(), $dropy, $zo->getZ());
-							if ($this->plugin->whatBlock($zo->getLevel(), $posd0) == "air") {
+							if ($this->AIHolder->whatBlock($zo->getLevel(), $posd0) == "air") {
 								$zo->setPosition($posd->add(0,1,0));  //下降
 							} else {
 								for ($i = 1; $i <= $drop; $i++) {
 									$posd0->y++;
-									if ($this->plugin->whatBlock($zo->getLevel(), $posd0) != "block") {
+									if ($this->AIHolder->whatBlock($zo->getLevel(), $posd0) != "block") {
 										$posd->y = $posd0->y;
 										//$zo->setPosition($posd);  //下降完成
 										$h = $zom['drop'] * $zom['drop'] / 20;
@@ -445,7 +445,7 @@ class CreeperAI{
 							if (!$zom['knockBack']) {
 								//echo $zy;
 								$zom['up'] = 0;
-								if ($this->plugin->whatBlock($level, $pos) == "water") {
+								if ($this->AIHolder->whatBlock($level, $pos) == "water") {
 									$zom['swim'] += 1;
 									if ($zom['swim'] >= 20) $zom['swim'] = 0;
 								} else {
@@ -478,7 +478,7 @@ class CreeperAI{
 									$pl->dataPacket($pk3);
 								}
 
-								$p = $this->plugin->getServer()->getPlayer($zom['IsChasing']);
+								$p = $this->AIHolder->getServer()->getPlayer($zom['IsChasing']);
 								if ($p instanceof Player) {
 									if ($p->distance($pos) <= 1.3) {
 										//苦力怕的火焰点燃人类
@@ -520,10 +520,10 @@ class CreeperAI{
 					}else{
 						$zom['boom'] =  $zom['boom'] - 1 ;	
 						if($zom['boom'] <= 0){
-							unset($this->plugin->Creeper[$zo->getId()]);
+							unset($this->AIHolder->Creeper[$zo->getId()]);
 							$level->getEntity($zo->getId())->close();
 							$e = new Explosion(new Position($zo->getX(), $zo->getY(), $zo->getZ(), $level),4);
-							if($this->plugin->getServer()->aiConfig["creeperexplode"]) $e->explode();
+							if($this->AIHolder->getServer()->aiConfig["creeperexplode"]) $e->explode();
 							else $e->explodeB();
 			
 						}

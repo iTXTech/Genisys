@@ -110,6 +110,7 @@ use pocketmine\scheduler\FileWriteTask;
 use pocketmine\scheduler\SendUsageTask;
 use pocketmine\scheduler\ServerScheduler;
 use pocketmine\tile\BrewingStand;
+use pocketmine\tile\Cauldron;
 use pocketmine\tile\Chest;
 use pocketmine\tile\Dispenser;
 use pocketmine\tile\DLDetector;
@@ -124,6 +125,7 @@ use pocketmine\tile\Skull;
 use pocketmine\tile\Tile;
 use pocketmine\updater\AutoUpdater;
 use pocketmine\utils\Binary;
+use pocketmine\utils\Color;
 use pocketmine\utils\Config;
 use pocketmine\utils\LevelException;
 use pocketmine\utils\MainLogger;
@@ -1936,6 +1938,7 @@ class Server{
 			Enchantment::init();
 			Attribute::init();
 			EnchantmentLevelTable::init();
+			Color::init();
 			//TextWrapper::init();
 			$this->craftingManager = new CraftingManager($this->recipesFromJson);
 
@@ -3082,5 +3085,6 @@ private function lookupAddress($address) {
 		Tile::registerTile(Dispenser::class);
 		Tile::registerTile(Dropper::class);
 		Tile::registerTile(DLDetector::class);
+		Tile::registerTile(Cauldron::class);
 	}
 }

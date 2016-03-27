@@ -1,13 +1,24 @@
 <?php
-/**
- * Author: PeratX
- * QQ: 1215714524
- * Time: 2016/2/3 15:40
 
-
+/*
  *
- * OpenGenisys Project
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://mcper.cn
+ *
  */
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -99,9 +110,9 @@ class Dropper extends Solid implements ElectricalAppliance{
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
 			$t = $this->getLevel()->getTile($this);
-			$dispenser = null;
+			$dropper = null;
 			if($t instanceof TileDropper){
-				$dispenser = $t;
+				$dropper = $t;
 			}else{
 				$nbt = new CompoundTag("", [
 					new ListTag("Items", []),
@@ -111,13 +122,13 @@ class Dropper extends Solid implements ElectricalAppliance{
 					new IntTag("z", $this->z)
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
-				$dispenser = Tile::createTile(Tile::DROPPER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+				$dropper = Tile::createTile(Tile::DROPPER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 			}
 
 			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
-			$player->addWindow($dispenser->getInventory());
+			$player->addWindow($dropper->getInventory());
 		}
 
 		return true;

@@ -14,25 +14,25 @@ use pocketmine\event\entity\EntityDamageEvent;
 
 class ChickenAI{
 
-	private $plugin;
+	private $AIHolder;
 	
 	public $width = 0.6;  
 	private $dif = 0;
 
 
-	public function __construct(AIHolder $plugin){
-		$this->plugin = $plugin;
-		if($this->plugin->getServer()->aiConfig["chicken"]){
-			$this->plugin->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
+	public function __construct(AIHolder $AIHolder){
+		$this->AIHolder = $AIHolder;
+		if($this->AIHolder->getServer()->aiConfig["chicken"]){
+			$this->AIHolder->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
 				$this,
 				"ChickenRandomWalkCalc"
 			] ), 10);
 
-			$this->plugin->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
+			$this->AIHolder->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
 				$this,
 				"ChickenRandomWalk"
 			] ), 1);
-			$this->plugin->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
+			$this->AIHolder->getServer()->getScheduler ()->scheduleRepeatingTask ( new CallbackTask ( [
 				$this,
 				"array_clear"
 			] ), 20 * 5);
@@ -40,14 +40,14 @@ class ChickenAI{
 	}
 
 	public function ChickenRandomWalkCalc() {
-		$this->dif = $this->plugin->getServer()->getDifficulty();
+		$this->dif = $this->AIHolder->getServer()->getDifficulty();
 		//$this->getLogger()->info("雞数量：".count($this->plugin->Chicken));
-		foreach ($this->plugin->getServer()->getLevels() as $level) {
+		foreach ($this->AIHolder->getServer()->getLevels() as $level) {
 			foreach ($level->getEntities() as $zo){
 				if($zo instanceof Chicken){
-					if ($this->plugin->willMove($zo)) {
-						if (!isset($this->plugin->Chicken[$zo->getId()])){
-							$this->plugin->Chicken[$zo->getId()] = array(
+					if ($this->AIHolder->willMove($zo)) {
+						if (!isset($this->AIHolder->Chicken[$zo->getId()])){
+							$this->AIHolder->Chicken[$zo->getId()] = array(
 								'ID' => $zo->getId(),
 								'IsChasing' => false,
 								'motionx' => 0,
@@ -74,12 +74,12 @@ class ChickenAI{
 								'canAttack' => 0,
 								'knockBack' => false,
 							);
-							$zom = &$this->plugin->Chicken[$zo->getId()];
+							$zom = &$this->AIHolder->Chicken[$zo->getId()];
 							$zom['x'] = $zo->getX();
 							$zom['y'] = $zo->getY();
 							$zom['z'] = $zo->getZ();
 						}
-						$zom = &$this->plugin->Chicken[$zo->getId()];
+						$zom = &$this->AIHolder->Chicken[$zo->getId()];
 
 						if ($zom['IsChasing'] === false) {  //自由行走模式
 							if ($zom['gotimer'] == 0 or $zom['gotimer'] == 10) {
@@ -113,10 +113,10 @@ class ChickenAI{
 							//boybook的y轴判断法
 							//$width = $this->width;
 							$pos = new Vector3 ($zom['x'] + $zom['motionx'], floor($zo->getY()) + 1,$zom['z'] + $zom['motionz']);  //目标坐标
-							$zy = $this->plugin->ifjump($zo->getLevel(),$pos);
+							$zy = $this->AIHolder->ifjump($zo->getLevel(),$pos);
 							if ($zy === false) {  //前方不可前进
 								$pos2 = new Vector3 ($zom['x'], $zom['y'] ,$zom['z']);  //目标坐标
-								if ($this->plugin->ifjump($zo->getLevel(),$pos2) === false) { //原坐标依然是悬空
+								if ($this->AIHolder->ifjump($zo->getLevel(),$pos2) === false) { //原坐标依然是悬空
 									$pos2 = new Vector3 ($zom['x'], $zom['y']-1,$zom['z']);  //下降
 									$zom['up'] = 1;
 									$zom['yup'] = 0;
@@ -142,7 +142,7 @@ class ChickenAI{
 							}
 							else {
 								//转向计算
-								$yaw = $this->plugin->getyaw($zom['motionx'], $zom['motionz']);
+								$yaw = $this->AIHolder->getyaw($zom['motionx'], $zom['motionz']);
 								//$zo->setRotation($yaw,0);
 								$zom['yaw'] = $yaw;
 								$zom['pitch'] = 0;
@@ -168,11 +168,11 @@ class ChickenAI{
 	}
 
 	public function ChickenRandomWalk() {
-		foreach ($this->plugin->getServer()->getLevels() as $level) {
+		foreach ($this->AIHolder->getServer()->getLevels() as $level) {
 			foreach ($level->getEntities() as $zo) {
 				if ($zo instanceof Chicken) {
-					if (isset($this->plugin->Chicken[$zo->getId()])) {
-						$zom = &$this->plugin->Chicken[$zo->getId()];
+					if (isset($this->AIHolder->Chicken[$zo->getId()])) {
+						$zom = &$this->AIHolder->Chicken[$zo->getId()];
 						if ($zom['canAttack'] != 0) {
 							$zom['canAttack'] -= 1;
 						}
@@ -188,12 +188,12 @@ class ChickenAI{
 							$dropy = $zo->getY() - ($olddrop * 0.05 + 0.0125);
 							$posd0 = new Vector3 (floor($zo->getX()), floor($dropy), floor($zo->getZ()));
 							$posd = new Vector3 ($zo->getX(), $dropy, $zo->getZ());
-							if ($this->plugin->whatBlock($zo->getLevel(), $posd0) == "air") {
+							if ($this->AIHolder->whatBlock($zo->getLevel(), $posd0) == "air") {
 								$zo->setPosition($posd);  //下降
 							} else {
 								for ($i = 1; $i <= $drop; $i++) {
 									$posd0->y++;
-									if ($this->plugin->whatBlock($zo->getLevel(), $posd0) != "block") {
+									if ($this->AIHolder->whatBlock($zo->getLevel(), $posd0) != "block") {
 										$posd->y = $posd0->y;
 										//$zo->setPosition($posd);  //下降完成
 										$h = $zom['drop'] * $zom['drop'] / 20;
@@ -226,11 +226,11 @@ class ChickenAI{
 	}
 
 	public function array_clear() {
-		if (count($this->plugin->Chicken) != 0) {
-			foreach ($this->plugin->Chicken as $eid=>$info) {
-				foreach ($this->plugin->getServer()->getLevels() as $level) {
+		if (count($this->AIHolder->Chicken) != 0) {
+			foreach ($this->AIHolder->Chicken as $eid=> $info) {
+				foreach ($this->AIHolder->getServer()->getLevels() as $level) {
 					if (!($level->getEntity($eid) instanceof Entity)) {
-						unset($this->plugin->Chicken[$eid]);
+						unset($this->AIHolder->Chicken[$eid]);
 						//echo "清除 $eid \n";
 					}
 				}

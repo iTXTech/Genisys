@@ -450,7 +450,10 @@ class Item{
 	const FERMENTED_SPIDER_EYE = 376;
 	const BLAZE_POWDER = 377;
 	const MAGMA_CREAM = 378;
+
 	const BREWING_STAND = 379;
+	const CAULDRON = 380;
+
 	const GLISTERING_MELON = 382;
 	const SPAWN_EGG = 383;
 	const BOTTLE_O_ENCHANTING = 384;
@@ -668,11 +671,11 @@ class Item{
 			self::$list[self::FERMENTED_SPIDER_EYE] = FermentedSpiderEye::class;
 			self::$list[self::BLAZE_POWDER] = BlazePowder::class;
 			self::$list[self::MAGMA_CREAM] = MagmaCream::class;
-			self::$list[self::BREWING_STAND] = BrewingStand::class;
 			self::$list[self::GLISTERING_MELON] = GlisteringMelon::class;
 			self::$list[self::ITEM_FRAME] = ItemFrame::class;
 			self::$list[self::ENCHANTED_BOOK] = EnchantedBook::class;
 			self::$list[self::REPEATER] = Repeater::class;
+			self::$list[self::CAULDRON] = Cauldron::class;
 
 			for($i = 0; $i < 256; ++$i){
 				if(Block::$list[$i] !== null){
@@ -841,7 +844,8 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::CHEST, 0));
 			self::addCreativeItem(Item::get(Item::TRAPPED_CHEST, 0));
 			self::addCreativeItem(Item::get(Item::FURNACE, 0));
-			self::addCreativeItem(Item::get(Item::BREWING_STAND_BLOCK, 0));
+			self::addCreativeItem(Item::get(Item::BREWING_STAND, 0));
+			self::addCreativeItem(Item::get(Item::CAULDRON, 0));
 			self::addCreativeItem(Item::get(Item::NOTEBLOCK, 0));
 			self::addCreativeItem(Item::get(Item::END_PORTAL, 0));
 			self::addCreativeItem(Item::get(Item::ANVIL, 0));
@@ -1653,12 +1657,12 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 		return false;
 	}
 
-	public final function equals(Item $item, bool $checkDamage = true, bool $checkCompound = true) : bool{
-		return $this->id === $item->getId() and ($checkDamage === false or $this->getDamage() === $item->getDamage()) and ($checkCompound === false or $this->getCompoundTag() === $item->getCompoundTag());
+	public final function equals(Item $item, bool $checkDamage = true, bool $checkCompound = true, bool $checkCount = false) : bool{
+		return $this->id === $item->getId() and ($checkCount === false or $this->getCount() === $item->getCount()) and($checkDamage === false or $this->getDamage() === $item->getDamage()) and ($checkCompound === false or $this->getCompoundTag() === $item->getCompoundTag());
 	}
 
-	public final function deepEquals(Item $item, $checkDamage = true, $checkCompound = false){
-		if($this->equals($item, $checkDamage, $checkCompound)){
+	public final function deepEquals(Item $item, bool $checkDamage = true, bool $checkCompound = true, bool $checkCount = false) : bool{
+		if($this->equals($item, $checkDamage, $checkCompound, $checkCount)){
 			return true;
 		}elseif($item->hasCompoundTag() and $this->hasCompoundTag()){
 			return NBT::matchTree($this->getNamedTag(), $item->getNamedTag());

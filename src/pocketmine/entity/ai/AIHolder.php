@@ -83,10 +83,10 @@ class AIHolder{
 		}
 
 
-		$this->getServer()->getScheduler()->scheduleRepeatingTask(new CallbackTask([
+		/*$this->getServer()->getScheduler()->scheduleRepeatingTask(new CallbackTask([
 			$this,
 			"TimeFix"
-		]), 20);
+		]), 20);*/
 
 		$this->getServer()->getScheduler()->scheduleRepeatingTask(new CallbackTask ([$this, "RotationTimer"]), 2);
 

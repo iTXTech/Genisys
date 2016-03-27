@@ -209,7 +209,9 @@ class Block extends Position implements Metadatable{
 	const ENCHANT_TABLE = 116;
 	const ENCHANTMENT_TABLE = 116;
 
-	const BREWING_STAND = 117;
+	const BREWING_STAND_BLOCK = 117;
+	const CAULDRON_BLOCK = 118;
+
 	const END_PORTAL_FRAME = 120;
 	const END_STONE = 121;
 
@@ -277,7 +279,7 @@ class Block extends Position implements Metadatable{
 	const ACACIA_WOODEN_STAIRS = 163;
 	const DARK_OAK_WOOD_STAIRS = 164;
 	const DARK_OAK_WOODEN_STAIRS = 164;
-        const SLIME_BLOCK = 165;
+	const SLIME_BLOCK = 165;
 	const IRON_TRAPDOOR = 167;
 	const HAY_BALE = 170;
 	const CARPET = 171;
@@ -484,7 +486,7 @@ class Block extends Position implements Metadatable{
 
 			self::$list[self::ENCHANTING_TABLE] = EnchantingTable::class;
 
-			self::$list[self::BREWING_STAND] = BrewingStand::class;
+			self::$list[self::BREWING_STAND_BLOCK] = BrewingStand::class;
 			self::$list[self::END_PORTAL_FRAME] = EndPortalFrame::class;
 			self::$list[self::END_STONE] = EndStone::class;
 			self::$list[self::SANDSTONE_STAIRS] = SandstoneStairs::class;
@@ -567,8 +569,9 @@ class Block extends Position implements Metadatable{
 			self::$list[self::ITEM_FRAME_BLOCK] = ItemFrame::class;
 			self::$list[self::DISPENSER] = Dispenser::class;
 			self::$list[self::DROPPER] = Dropper::class;
-			//self::$list[self::POWERED_REPEATER] = PoweredRepeater::class;
-			//self::$list[self::UNPOWERED_REPEATER] = UnpoweredRepeater::class;
+			self::$list[self::POWERED_REPEATER] = PoweredRepeater::class;
+			self::$list[self::UNPOWERED_REPEATER] = UnpoweredRepeater::class;
+			self::$list[self::CAULDRON_BLOCK] = Cauldron::class;
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){

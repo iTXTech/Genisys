@@ -1,9 +1,22 @@
 <?php
-/**
- * Author: PeratX
- * Time: 2015/12/13 19:09
- ]
 
+/*
+ *
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://mcper.cn
+ *
  */
 
 namespace pocketmine\block;
@@ -202,47 +215,19 @@ class RedstoneWire extends RedstoneSource{
 			$sides = [Vector3::SIDE_WEST, Vector3::SIDE_EAST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH];
 			foreach($sides as $s){
 				if(!in_array($s, $side[1])) {
-					$block = $this->getSide(Vector3::SIDE_DOWN)->getSide($s);
-					if(!$this->checkPower($block)){
-						/** @var Door $block */
-						if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
-							if($block->isOpened()) $block->onActivate(new Item(0));
-						}
-						/** @var ActiveRedstoneLamp $block*/
-						if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOff();
-					}
-					if($block->getId() == Block::REDSTONE_WIRE){
-						/** @var RedstoneWire $wire */
-						$wire = $block;
-						$wire->calcSignal(0, RedstoneWire::OFF);
-					}
+					$this->deactivateBlock($this->getSide(Vector3::SIDE_DOWN)->getSide($s));
 				}
 			}
 
 			if($side[0] == false) return;
 			$block = $this->getSide($side[0]);
-			/** @var Door $block */
-			if(!$this->checkPower($block)){
-				if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
-					if($block->isOpened()) $block->onActivate(new Item(0));
-				}
-				/** @var ActiveRedstoneLamp $block */
-				if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOff();
-			}
+			$this->deactivateBlockWithoutWire($block);
 
 			if(!$block->isTransparent()){
 				$sides = [Vector3::SIDE_WEST, Vector3::SIDE_EAST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP, Vector3::SIDE_DOWN];
 				foreach($sides as $s){
 					if($s != $this->getOppositeSide($side[0])){
-						$e = $block->getSide($s);
-						if(!$this->checkPower($e)){
-							/** @var Door $e */
-							if(($e instanceof Door) or ($e instanceof Trapdoor) or ($e instanceof FenceGate)){
-								if($e->isOpened()) $e->onActivate(new Item(0));
-							}
-							/** @var ActiveRedstoneLamp $e */
-							if($e->getId() == Block::ACTIVE_REDSTONE_LAMP) $e->turnOff();
-						}
+						$this->deactivateBlockWithoutWire($block->getSide($s));
 					}
 				}
 			}

@@ -189,9 +189,10 @@ abstract class BaseInventory implements Inventory{
 	public function remove(Item $item){
 		$checkDamage = $item->getDamage() === null ? false : true;
 		$checkTags = $item->getCompoundTag() === null ? false : true;
+		$checkCount = $item->getCount() === null ? false : true;
 
 		foreach($this->getContents() as $index => $i){
-			if($item->equals($i, $checkDamage, $checkTags)){
+			if($item->equals($i, $checkDamage, $checkTags, $checkCount)){
 				$this->clear($index);
 				break;
 			}
