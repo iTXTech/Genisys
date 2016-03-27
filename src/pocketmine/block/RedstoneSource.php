@@ -24,6 +24,7 @@ namespace pocketmine\block;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
+use pocketmine\Player;
 
 /*
  * This class is the power of all redstone blocks!
@@ -49,24 +50,43 @@ class RedstoneSource extends Flowable{
 		return $this->getLevel()->getServer()->redstoneEnabled;
 	}
 
-	public function activateBlock(Block $block){
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+		$this->getLevel()->setBlock($this, $this, true);
+		if($this->isActivated()){
+			$this->activate();
+		}
+	}
+
+	public function onBreak(Item $item){
+		$this->getLevel()->setBlock($this, new Air(), true);
+		if($this->isActivated()){
+			$this->deactivate();
+		}
+	}
+
+	public function activateBlockWithoutWire(Block $block){
+
 		if(($block instanceof Door) or ($block instanceof Trapdoor) or ($block instanceof FenceGate)){
 			if(!$block->isOpened()) $block->onActivate(new Item(0));
 		}
 		if($block->getId() == Block::TNT) $block->onActivate(new Item(Item::FLINT_AND_STEEL));
 		/** @var InactiveRedstoneLamp $block */
 		if($block->getId() == Block::INACTIVE_REDSTONE_LAMP) $block->turnOn();
-		if($block->getId() == Block::REDSTONE_WIRE){
-			/** @var RedstoneWire $wire */
-			$wire = $block;
-			$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
-		}
 		/** @var Dropper|Dispenser $block */
 		if($block->getId() == Block::DROPPER or $block->getId() == Block::DISPENSER) $block->activate();
 
 		/** @var PoweredRepeater $block*/
 		if($block->getId() == Block::UNPOWERED_REPEATER){
-			if($this->equals($block->getSide($block->getOppositeSide($block->getDirection())))) $block->activate();
+			if($this->equals($block->getSide($block->getDirection()))) $block->activate();
+		}
+	}
+
+	public function activateBlock(Block $block){
+		$this->activateBlockWithoutWire($block);
+		if($block->getId() == Block::REDSTONE_WIRE){
+			/** @var RedstoneWire $wire */
+			$wire = $block;
+			$wire->calcSignal($this->maxStrength, RedstoneWire::ON);
 		}
 	}
 
@@ -90,7 +110,7 @@ class RedstoneSource extends Flowable{
 		}
 		/** @var PoweredRepeater $block*/
 		if($block->getId() == Block::POWERED_REPEATER){
-			if($this->equals($block->getSide($block->getOppositeSide($block->getDirection())))) $block->deactivate();
+			if($this->equals($block->getSide($block->getDirection()))) $block->deactivate();
 		}
 	}
 
@@ -138,6 +158,12 @@ class RedstoneSource extends Flowable{
 	}
 
 	public function checkPower(Block $block, array $ignore = [], $ignoreWire = false){
+		if($block instanceof PoweredRepeater){
+			if($block->getSide($block->getDirection())->isActivated($block)){
+				return true;
+			}
+			return false;
+		}
 		$sides = [
 			Vector3::SIDE_EAST,
 			Vector3::SIDE_WEST,

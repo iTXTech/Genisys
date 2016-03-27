@@ -64,7 +64,7 @@ class RedstoneWire extends RedstoneSource{
 			/** @var RedstoneSource $block */
 			$block = $this->getSide($side);
 			if($block instanceof RedstoneSource){
-				if($block->getStrength() > $strength) $strength = $block->getStrength();
+				if(($block->getStrength() > $strength) and $block->isActivated($this)) $strength = $block->getStrength();
 				$hasChecked[$side] = true;
 			}
 		}
@@ -108,10 +108,14 @@ class RedstoneWire extends RedstoneSource{
 		];
 		//check blocks around
 		foreach($hasChecked as $side => $bool){
-			/** @var RedstoneSource $block */
 			$block = $this->getSide($side);
-			if($block instanceof RedstoneSource){
+			if($block instanceof RedstoneSource and !$block instanceof PoweredRepeater){
 				$hasChecked[$side] = true;
+			}
+			if($block instanceof PoweredRepeater){
+				if($this->equals($block->getSide($block->getOppositeDirection()))){
+					$hasChecked[$side] = true;
+				}
 			}
 		}
 
@@ -179,19 +183,11 @@ class RedstoneWire extends RedstoneSource{
 			$block = $this->getSide($side[0]);
 			$this->activateBlock($block);
 
-
 			if(!$block->isTransparent()){
 				$sides = [Vector3::SIDE_WEST, Vector3::SIDE_EAST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP, Vector3::SIDE_DOWN];
 				foreach($sides as $s){
 					if($s != $this->getOppositeSide($side[0])){
-						$e = $block->getSide($s);
-						/** @var Door $block */
-						if(($e instanceof Door) or ($e instanceof Trapdoor) or ($e instanceof FenceGate)){
-							if(!$e->isOpened()) $e->onActivate(new Item(0));
-						}
-						if($e->getId() == Block::TNT) $e->onActivate(new Item(Item::FLINT_AND_STEEL));
-						/** @var ActiveRedstoneLamp $e */
-						if($e->getId() == Block::INACTIVE_REDSTONE_LAMP) $e->turnOn();
+						$this->activateBlockWithoutWire($block->getSide($s));
 					}
 				}
 			}

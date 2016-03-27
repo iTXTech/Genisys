@@ -883,6 +883,10 @@ class Block extends Position implements Metadatable{
 		return false;
 	}
 
+	public function isActivated(Block $from = null){
+		return false;
+	}
+
 	public function hasEntityCollision(){
 		return false;
 	}

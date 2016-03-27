@@ -21,6 +21,8 @@
 
 namespace pocketmine\block;
 
+use pocketmine\item\Item;
+
 class UnpoweredRepeater extends PoweredRepeater{
 	protected $id = self::UNPOWERED_REPEATER;
 
@@ -34,5 +36,9 @@ class UnpoweredRepeater extends PoweredRepeater{
 
 	public function isActivated(Block $from = null){
 		return false;
+	}
+
+	public function onBreak(Item $item){
+		$this->getLevel()->setBlock($this, new Air(), true);
 	}
 }
