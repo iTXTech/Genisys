@@ -30,6 +30,7 @@ use pocketmine\item\Potion;
 use pocketmine\level\sound\ExplodeSound;
 use pocketmine\level\sound\GraySplashSound;
 use pocketmine\level\sound\SpeelSound;
+use pocketmine\level\sound\SpellSound;
 use pocketmine\level\sound\SplashSound;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
@@ -63,17 +64,6 @@ class Cauldron extends Solid{
 
 	public function canBeActivated() : bool{
 		return true;
-	}
-
-	public function getBoundingBox(){//todo fix(?)
-		return new AxisAlignedBB(
-			$this->x,
-			$this->y,
-			$this->z,
-			$this->x + 1,
-			$this->y + 1,
-			$this->z + 1
-		);
 	}
 
 	public function getToolType(){
@@ -251,6 +241,7 @@ class Cauldron extends Solid{
 						$this->getLevel()->setBlock($this, $this, true);
 						$tile->setPotionId($item->getDamage());
 						$tile->setSplashPotion($item->getId() === Item::SPLASH_POTION);
+						$tile->clearCustomColor();
 
 						if($player->isSurvival()){
 							$player->getInventory()->setItemInHand(Item::get(Item::GLASS_BOTTLE));

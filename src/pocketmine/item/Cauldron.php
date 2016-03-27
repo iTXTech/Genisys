@@ -28,4 +28,8 @@ class Cauldron extends Item{
 		$this->block = Block::get(Block::CAULDRON_BLOCK);
 		parent::__construct(self::CAULDRON, $meta, $count, "Cauldron");
 	}
+
+	public function getMaxStackSize() : int{
+		return 1;
+	}
 }

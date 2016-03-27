@@ -53,23 +53,23 @@ class Color {
 
 	public static function init(){
 		if(self::$dyeColors === null){
-			self::$dyeColors = new \SplFixedArray(256);//todo rewrite to dec and check color
-			self::$dyeColors[self::COLOR_DYE_BLACK] = Color::getRGB(0x1e, 0x1b, 0x1b);
-			self::$dyeColors[self::COLOR_DYE_RED] = Color::getRGB(0xb3, 0x31, 0x2c);
-			self::$dyeColors[self::COLOR_DYE_BLUE] = Color::getRGB(0x25, 0x31, 0x92);
-			self::$dyeColors[self::COLOR_DYE_BROWN] = Color::getRGB(0x51, 0x30, 0x1a);
-			self::$dyeColors[self::COLOR_DYE_BLUE] = Color::getRGB(0x25, 0x31, 0x92);
-			self::$dyeColors[self::COLOR_DYE_PURPLE] = Color::getRGB(0x7b, 0x2f, 0xbe);
-			self::$dyeColors[self::COLOR_DYE_CYAN] = Color::getRGB(0x28, 0x76, 0x97);
-			self::$dyeColors[self::COLOR_DYE_LIGHT_GRAY] = Color::getRGB(0x99, 0x99, 0x99);
-			self::$dyeColors[self::COLOR_DYE_GRAY] = Color::getRGB(0x43, 0x43, 0x43);
-			self::$dyeColors[self::COLOR_DYE_PINK] = Color::getRGB(0xd8, 0x81, 0x98);
-			self::$dyeColors[self::COLOR_DYE_LIME] = Color::getRGB(0x41, 0xcd, 0x34);
-			self::$dyeColors[self::COLOR_DYE_YELLOW] = Color::getRGB(0xde, 0xcf, 0x2a);
-			self::$dyeColors[self::COLOR_DYE_LIGHT_BLUE] = Color::getRGB(0x66, 0x89, 0xd3);
-			self::$dyeColors[self::COLOR_DYE_MAGENTA] = Color::getRGB(0xc3, 0x54, 0xcd);
-			self::$dyeColors[self::COLOR_DYE_ORANGE] = Color::getRGB(0xeb, 0x88, 0x44);
-			self::$dyeColors[self::COLOR_DYE_WHITE] = Color::getRGB(0xf0, 0xf0, 0xf0);
+			self::$dyeColors = new \SplFixedArray(256);
+			self::$dyeColors[self::COLOR_DYE_BLACK] = Color::getRGB(30, 27, 27);
+			self::$dyeColors[self::COLOR_DYE_RED] = Color::getRGB(179, 49, 44);
+			self::$dyeColors[self::COLOR_DYE_GREEN] = Color::getRGB(61, 81, 26);
+			self::$dyeColors[self::COLOR_DYE_BROWN] = Color::getRGB(81, 48, 26);
+			self::$dyeColors[self::COLOR_DYE_BLUE] = Color::getRGB(37, 49, 146);
+			self::$dyeColors[self::COLOR_DYE_PURPLE] = Color::getRGB(123, 47, 190);
+			self::$dyeColors[self::COLOR_DYE_CYAN] = Color::getRGB(40, 118, 151);
+			self::$dyeColors[self::COLOR_DYE_LIGHT_GRAY] = Color::getRGB(153, 153, 153);
+			self::$dyeColors[self::COLOR_DYE_GRAY] = Color::getRGB(67, 67, 67);
+			self::$dyeColors[self::COLOR_DYE_PINK] = Color::getRGB(216, 129, 152);
+			self::$dyeColors[self::COLOR_DYE_LIME] = Color::getRGB(65, 205, 52);
+			self::$dyeColors[self::COLOR_DYE_YELLOW] = Color::getRGB(222, 207, 42);
+			self::$dyeColors[self::COLOR_DYE_LIGHT_BLUE] = Color::getRGB(102, 137, 211);
+			self::$dyeColors[self::COLOR_DYE_MAGENTA] = Color::getRGB(195, 84, 205);
+			self::$dyeColors[self::COLOR_DYE_ORANGE] = Color::getRGB(235, 136, 68);
+			self::$dyeColors[self::COLOR_DYE_WHITE] = Color::getRGB(240, 240, 240);
 		}
 	}
 
