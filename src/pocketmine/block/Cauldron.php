@@ -29,7 +29,6 @@ use pocketmine\item\Tool;
 use pocketmine\item\Potion;
 use pocketmine\level\sound\ExplodeSound;
 use pocketmine\level\sound\GraySplashSound;
-use pocketmine\level\sound\SpeelSound;
 use pocketmine\level\sound\SpellSound;
 use pocketmine\level\sound\SplashSound;
 use pocketmine\math\AxisAlignedBB;
