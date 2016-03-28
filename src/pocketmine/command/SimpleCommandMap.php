@@ -228,7 +228,7 @@ class SimpleCommandMap implements CommandMap{
 			switch($args[$offset]){
 				case "@a":
 					$p = $this->server->getOnlinePlayers();
-					if(count($p) > 0){
+					if(count($p) <= 0){
 						$sender->sendMessage(TextFormat::RED . "No players online"); //TODO: add language
 					}else{
 						foreach($p as $player){
