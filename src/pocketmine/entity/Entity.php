@@ -1514,6 +1514,7 @@ abstract class Entity extends Location implements Metadatable{
 
 	public function kill(){
 		$this->health = 0;
+		$this->removeAllEffects();
 		$this->scheduleUpdate();
 
 		if($this->getLevel()->getServer()->expEnabled) {
@@ -1595,6 +1596,7 @@ abstract class Entity extends Location implements Metadatable{
 		if(!$this->closed){
 			$this->server->getPluginManager()->callEvent(new EntityDespawnEvent($this));
 			$this->closed = true;
+			$this->removeEffect(Effect::HEALTH_BOOST);
 			$this->despawnFromAll();
 			if($this->linkedType != 0){
 				$this->linkedEntity->setLinked(0, $this);

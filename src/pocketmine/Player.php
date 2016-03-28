@@ -3002,7 +3002,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->deadTicks = 0;
 						$this->noDamageTicks = 60;
 
-						//$this->getAttributeMap()->resetAll();
+						$this->removeAllEffects();
 						$this->setHealth($this->getMaxHealth());
 						$this->setFood(20);
 						if($this->server->expEnabled) $this->updateExperience();
@@ -3011,7 +3011,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->foodTick = 0;
 						$this->foodUsageTime = 0;
 
-						$this->removeAllEffects();
 						$this->sendData($this);
 
 						$this->sendSettings();
