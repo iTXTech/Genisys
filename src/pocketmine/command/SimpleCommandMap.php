@@ -70,6 +70,7 @@ use pocketmine\command\defaults\WhitelistCommand;
 use pocketmine\command\defaults\XpCommand;
 use pocketmine\command\defaults\FillCommand;
 use pocketmine\event\TranslationContainer;
+use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
@@ -221,6 +222,50 @@ class SimpleCommandMap implements CommandMap{
 		return true;
 	}
 
+	private function dispatchAdvanced(CommandSender $sender, Command $command, $label, array $args, $offset = 0){
+		if(isset($args[$offset])){
+			$argsTemp = $args;
+			switch($args[$offset]){
+				case "@a":
+					$p = $this->server->getOnlinePlayers();
+					if(count($p) > 0){
+						$sender->sendMessage(TextFormat::RED . "No players online"); //TODO: add language
+					}else{
+						foreach($p as $player){
+							$argsTemp[$offset] = $player->getName();
+							$this->dispatchAdvanced($sender, $command, $label, $argsTemp, $offset + 1);
+						}
+					}
+					break;
+				case "@p":
+					$players = $this->server->getOnlinePlayers();
+					if(count($players) > 0){
+						$argsTemp[$offset] = $players[array_rand($players)]->getName();
+						$this->dispatchAdvanced($sender, $command, $label, $argsTemp, $offset + 1);
+					}
+					break;
+				case "@r":
+					if($sender instanceof Player){
+						$distance = 5;
+						$nearestPlayer = $sender;
+						foreach($sender->getLevel()->getPlayers() as $p){
+							if($p != $sender and (($dis = $p->distance($sender)) < $distance)){
+								$distance = $dis;
+								$nearestPlayer = $p;
+							}
+						}
+						if($distance != 5){
+							$argsTemp[$offset] = $nearestPlayer->getName();
+							$this->dispatchAdvanced($sender, $command, $label, $argsTemp, $offset + 1);
+						}else $sender->sendMessage(TextFormat::RED . "No player is near you!");
+					}else $sender->sendMessage(TextFormat::RED . "You must be a player!"); //TODO: add language
+					break;
+				default:
+					$this->dispatchAdvanced($sender, $command, $label, $argsTemp, $offset + 1);
+			}
+		}else $command->execute($sender, $label, $args);
+	}
+
 	public function dispatch(CommandSender $sender, $commandLine){
 		$args = explode(" ", $commandLine);
 
@@ -237,7 +282,11 @@ class SimpleCommandMap implements CommandMap{
 
 		$target->timings->startTiming();
 		try{
-			$target->execute($sender, $sentCommandLabel, $args);
+			if($this->server->advancedCommandSelector){
+				$this->dispatchAdvanced($sender, $target, $sentCommandLabel, $args);
+			}else{
+				$target->execute($sender, $sentCommandLabel, $args);
+			}
 		}catch(\Throwable $e){
 			$sender->sendMessage(new TranslationContainer(TextFormat::RED . "%commands.generic.exception"));
 			$this->server->getLogger()->critical($this->server->getLanguage()->translateString("pocketmine.command.exception", [$commandLine, (string) $target, $e->getMessage()]));

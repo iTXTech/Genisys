@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 13
+ version: 14
 
 level:
  #Set if turn on the weather system
@@ -78,6 +78,8 @@ server:
  destroy-block-particle: true
  #Set if enable splash potion
  allow-splash-potion: true
+ #Set if enable advanced Command Selector
+ advanced-command-selector: false
 
 redstone:
  ##########################################

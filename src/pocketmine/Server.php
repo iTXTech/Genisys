@@ -380,6 +380,7 @@ class Server{
 	public $destroyBlockParticle = true;
 	public $allowSplashPotion = true;
 	public $fireSpread = false;
+	public $advancedCommandSelector = false;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -1674,6 +1675,7 @@ class Server{
 		$this->destroyBlockParticle = $this->getAdvancedProperty("server.destroy-block-particle", true);
 		$this->allowSplashPotion = $this->getAdvancedProperty("server.allow-splash-potion", true);
 		$this->fireSpread = $this->getAdvancedProperty("level.fire-spread", false);
+		$this->advancedCommandSelector = $this->getAdvancedProperty("server.advanced-command-selector", false);
 	}
 
 	/**
