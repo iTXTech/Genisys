@@ -75,7 +75,7 @@ class RedstoneSource extends Flowable{
 		/** @var Dropper|Dispenser $block */
 		if($block->getId() == Block::DROPPER or $block->getId() == Block::DISPENSER) $block->activate();
 
-		/** @var PoweredRepeater $block*/
+		/** @var PoweredRepeater $block */
 		if($block->getId() == Block::UNPOWERED_REPEATER){
 			if($this->equals($block->getSide($block->getDirection()))) $block->activate();
 		}
@@ -108,7 +108,7 @@ class RedstoneSource extends Flowable{
 			/** @var ActiveRedstoneLamp $block */
 			if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOff();
 		}
-		/** @var PoweredRepeater $block*/
+		/** @var PoweredRepeater $block */
 		if($block->getId() == Block::POWERED_REPEATER){
 			if($this->equals($block->getSide($block->getDirection()))) $block->deactivate();
 		}
@@ -206,13 +206,13 @@ class RedstoneSource extends Flowable{
 				$block = $pos->getSide($side);
 				if($block->getId() == self::REDSTONE_TORCH){
 					$faces = [
-							1 => 4,
-							2 => 5,
-							3 => 2,
-							4 => 3,
-							5 => 0,
-							6 => 0,
-							0 => 0,
+						1 => 4,
+						2 => 5,
+						3 => 2,
+						4 => 3,
+						5 => 0,
+						6 => 0,
+						0 => 0,
 					];
 					if($block->getSide($faces[$block->meta])->equals($pos)){
 						$ignoreBlock = $this->getSide($this->getOppositeSide($faces[$block->meta]));
@@ -231,13 +231,13 @@ class RedstoneSource extends Flowable{
 				$block = $pos->getSide($side);
 				if($block->getId() == self::UNLIT_REDSTONE_TORCH){
 					$faces = [
-							1 => 4,
-							2 => 5,
-							3 => 2,
-							4 => 3,
-							5 => 0,
-							6 => 0,
-							0 => 0,
+						1 => 4,
+						2 => 5,
+						3 => 2,
+						4 => 3,
+						5 => 0,
+						6 => 0,
+						0 => 0,
 					];
 					if($block->getSide($faces[$block->meta])->equals($pos)){
 						$ignoreBlock = $this->getSide($this->getOppositeSide($faces[$block->meta]));

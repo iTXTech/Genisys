@@ -101,8 +101,9 @@ class Cauldron extends Solid{
 	}
 
 	public function badUpdate(){
-		$this->meta++;
-		$this->getLevel()->setBlock($this, $this, true, false);
+		//$this->getLevel()->setBlockDataAt($this->x, $this->y, $this->z, $this->meta + 1);
+		$this->getLevel()->setBlock($this, Block::get($this->id, $this->meta + 1), true, false);
+		$this->getLevel()->setBlock($this, $this, true, false);//TODO: improve
 	}
 
 	public function isEmpty(){
@@ -123,7 +124,7 @@ class Cauldron extends Solid{
 			case Item::BUCKET:
 				if($item->getDamage() === 0){
 					if(!$this->isFull() and !$tile->isCustomColor() and !$tile->hasPotion()){
-						return false;
+						break;
 					}
 					$bucket = clone $item;
 					$bucket->setDamage(8);//water bucket
@@ -137,8 +138,8 @@ class Cauldron extends Solid{
 						$tile->clearCustomColor();
 						$this->getLevel()->addSound(new SplashSound($this->add(0.5, 1, 0.5)));
 					}
-				}elseif($item->getDamage() === 8){
-					if($this->isFull()) break;
+				}elseif($item->getDamage() === 8){//water bucket
+					if($this->isFull() and !$tile->isCustomColor() and !$tile->hasPotion()) break;
 					$bucket = clone $item;
 					$bucket->setDamage(0);//empty bucket
 					Server::getInstance()->getPluginManager()->callEvent($ev = new PlayerBucketEmptyEvent($player, $this, 0, $item, $bucket));
@@ -164,6 +165,7 @@ class Cauldron extends Solid{
 				}
 				break;
 			case Item::DYE:
+				if($tile->hasPotion()) break;
 				$color = Color::getDyeColor($item->getDamage());
 				if($tile->isCustomColor()){
 					$color = Color::averageColor($color, $tile->getCustomColor());
@@ -177,7 +179,7 @@ class Cauldron extends Solid{
 			case Item::LEATHER_TUNIC:
 			case Item::LEATHER_PANTS:
 			case Item::LEATHER_BOOTS:
-				if($this->isEmpty()) return true;
+				if($this->isEmpty()) break;
 				if($tile->isCustomColor()){
 					--$this->meta;
 					$this->getLevel()->setBlock($this, $this, true);
@@ -220,38 +222,33 @@ class Cauldron extends Solid{
 						$player->getInventory()->setItemInHand(Item::get(Item::GLASS_BOTTLE));
 					}
 					$this->getLevel()->addSound(new ExplodeSound($this->add(0.5, 0, 0.5)));
-				}elseif(!$this->isFull()){
-					if($item->getDamage() === Potion::WATER_BOTTLE){
-						$this->meta += 2;
-						if($this->meta > 0x06) $this->meta = 0x06;
-						$this->getLevel()->setBlock($this, $this, true);
-
-						if($player->isSurvival()){
-							$player->getInventory()->setItemInHand(Item::get(Item::GLASS_BOTTLE));
-						}
-
-						$tile->setPotionId(0xffff);
-						$tile->setSplashPotion(false);
-						$tile->clearCustomColor();
-						$this->getLevel()->addSound(new SplashSound($this->add(0.5, 1, 0.5)));
-					}else{
-						$this->meta += 2;
-						if($this->meta > 0x06) $this->meta = 0x06;
-						$this->getLevel()->setBlock($this, $this, true);
-						$tile->setPotionId($item->getDamage());
-						$tile->setSplashPotion($item->getId() === Item::SPLASH_POTION);
-						$tile->clearCustomColor();
-
-						if($player->isSurvival()){
-							$player->getInventory()->setItemInHand(Item::get(Item::GLASS_BOTTLE));
-						}
-						$color = Potion::getColor($item->getDamage());
-						$this->getLevel()->addSound(new SpellSound($this->add(0.5, 1, 0.5), $color[0], $color[1], $color[2]));
+				}elseif($item->getDamage() === Potion::WATER_BOTTLE){//water bottle
+					$this->meta += 2;
+					if($this->meta > 0x06) $this->meta = 0x06;
+					$this->getLevel()->setBlock($this, $this, true);
+					if($player->isSurvival()){
+						$player->getInventory()->setItemInHand(Item::get(Item::GLASS_BOTTLE));
 					}
+					$tile->setPotionId(0xffff);
+					$tile->setSplashPotion(false);
+					$tile->clearCustomColor();
+					$this->getLevel()->addSound(new SplashSound($this->add(0.5, 1, 0.5)));
+				}elseif(!$this->isFull()){
+					$this->meta += 2;
+					if($this->meta > 0x06) $this->meta = 0x06;
+					$this->getLevel()->setBlock($this, $this, true);
+					$tile->setPotionId($item->getDamage());
+					$tile->setSplashPotion($item->getId() === Item::SPLASH_POTION);
+					$tile->clearCustomColor();
+					if($player->isSurvival()){
+						$player->getInventory()->setItemInHand(Item::get(Item::GLASS_BOTTLE));
+					}
+					$color = Potion::getColor($item->getDamage());
+					$this->getLevel()->addSound(new SpellSound($this->add(0.5, 1, 0.5), $color[0], $color[1], $color[2]));
 				}
 				break;
 			case Item::GLASS_BOTTLE:
-				if($this->meta < 2) return false;
+				if($this->meta < 2) break;
 				if($tile->hasPotion()){
 					$this->meta -= 2;
 					if($this->meta < 0x00) $this->meta = 0x00;
