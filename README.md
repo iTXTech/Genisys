@@ -1,21 +1,18 @@
 # Genisys(创世纪) - PocketMine-iTX Core
 
-### Gitter Chat
-[![Gitter](https://img.shields.io/gitter/room/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+Chat on Gitter: [![Gitter](https://img.shields.io/gitter/room/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
+You can also join #genisys on freenode IRC.
 
 ### Build status
-Jenkins: [![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.mcper.cn/Genisys-master.svg)](http://jenkins.mcper.cn/job/Genisys-master/)
-
-Travis-CI: [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
-
+Jenkins: [![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.mcper.cn/Genisys-master.svg)](http://jenkins.mcper.cn/job/Genisys-master/)  
+Travis-CI: [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)  
 GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/builds)
 
 ### Downloads
 You can get prebuilt phar from [Jenkins](http://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/genisys/builds).
 
 ### Fast Docker installation
-[![Docker Pulls](https://img.shields.io/docker/pulls/itxtech/docker-env-genisys.svg)](https://hub.docker.com/r/itxtech/docker-env-genisys/)
-
+[![Docker Pulls](https://img.shields.io/docker/pulls/itxtech/docker-env-genisys.svg)](https://hub.docker.com/r/itxtech/docker-env-genisys/)  
 See [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys) for details.
 
 ## English Version
@@ -104,9 +101,8 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
 ### Servers
 (Follows are the test servers built by us. In fact other servers used Genisys may be more professional than ours.)
 
-**Beer MC (A mini-game server)**
-
-Address: beermc.com
+#### Beer MC (A mini-game server)
+Address: beermc.com  
 Port: 19132
 
 ## 中文
@@ -189,7 +185,6 @@ Port: 19132
 ### 服务器
 （以下是我们个人搭建的服务器，供测试参观。事实上，其他许多使用 Genisys 搭建的服务器以及其维护水平可能比我们更专业、高效。）
 
-**BeerMc 小游戏**
-
-地址: beermc.com
+#### BeerMc 小游戏
+地址: beermc.com  
 端口: 19132
