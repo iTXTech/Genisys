@@ -38,7 +38,7 @@ class TallSugarcane extends Populator{
 
 	private function canTallSugarcaneStay($x, $y, $z){
 		$b = $this->level->getBlockIdAt($x, $y, $z);
-		return ($b === Block::SUGARCANE_BLOCK) and $this->level->getBlockIdAt($x, $y - 1, $z) === Block::SUGARCANE_BLOCK;
+		return ($b === Block::AIR) and $this->level->getBlockIdAt($x, $y - 1, $z) === Block::SUGARCANE_BLOCK;
 	}
 
 	private function getHighestWorkableBlock($x, $z){
