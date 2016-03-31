@@ -158,7 +158,8 @@ class PlayerInventory extends BaseInventory{
 		if($index >= $this->getSize()){
 			$this->sendArmorSlot($index, $this->getViewers());
 			$this->sendArmorSlot($index, $this->getHolder()->getViewers());
-		}elseif($holder instanceof Player){
+		};
+		if($holder instanceof Player){
 			$this->sendContents($holder);
 		}
 	}
