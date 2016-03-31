@@ -59,6 +59,14 @@ class PlayerInventory extends BaseInventory{
 
 	public function setHotbarSlotIndex($index, $slot){
 		if($index >= 0 and $index < $this->getHotbarSize() and $slot >= -1 and $slot < $this->getSize()){
+			for($i = 0; $i < $this->getHotbarSize(); ++$i){
+				$index2 = $this->getHotbarSlotIndex($i);
+				if($index2==$slot){
+					$this->hotbar[$i] = $this->getHotbarSlotIndex($index);
+					break;
+				}
+			};
+			
 			$this->hotbar[$index] = $slot;
 		}
 	}
@@ -416,21 +424,146 @@ class PlayerInventory extends BaseInventory{
 			$player->dataPacket(clone $pk);
 		}
 	}
+	
+	public function canAddItem(Item $item){
+		$item = clone $item;
+		$checkDamage = $item->getDamage() === null ? false : true;
+		$checkTags = $item->getCompoundTag() === null ? false : true;
+		for($i = 0; $i < $this->getSize()-9; ++$i){
+			$slot = $this->getItem($i);
+			if($item->equals($slot, $checkDamage, $checkTags)){
+				if(($diff = $slot->getMaxStackSize() - $slot->getCount()) > 0){
+					$item->setCount($item->getCount() - $diff);
+				}
+			}elseif($slot->getId() === Item::AIR){
+				$item->setCount($item->getCount() - $this->getMaxStackSize());
+			}
+
+			if($item->getCount() <= 0){
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	public function addItem(...$slots){
-		$result = parent::addItem(...$slots);
+		/** @var Item[] $itemSlots */
+		/** @var Item[] $slots */
+		$itemSlots = [];
+		foreach($slots as $slot){
+			if(!($slot instanceof Item)){
+				throw new \InvalidArgumentException("Expected Item[], got ".gettype($slot));
+			}
+			if($slot->getId() !== 0 and $slot->getCount() > 0){
+				$itemSlots[] = clone $slot;
+			}
+		}
+
+		$emptySlots = [];
+
+		for($i = 0; $i < $this->getSize()-9; ++$i){
+			$item = $this->getItem($i);
+			if($item->getId() === Item::AIR or $item->getCount() <= 0){
+				$emptySlots[] = $i;
+			}
+
+			foreach($itemSlots as $index => $slot){
+				if($slot->equals($item) and $item->getCount() < $item->getMaxStackSize()){
+					$amount = min($item->getMaxStackSize() - $item->getCount(), $slot->getCount(), $this->getMaxStackSize());
+					if($amount > 0){
+						$slot->setCount($slot->getCount() - $amount);
+						$item->setCount($item->getCount() + $amount);
+						$this->setItem($i, $item);
+						if($slot->getCount() <= 0){
+							unset($itemSlots[$index]);
+						}
+					}
+				}
+			}
+
+			if(count($itemSlots) === 0){
+				break;
+			}
+		}
+
+		if(count($itemSlots) > 0 and count($emptySlots) > 0){
+			foreach($emptySlots as $index2 => $slotIndex){
+				//This loop only gets the first item, then goes to the next empty slot
+				foreach($itemSlots as $index => $slot){
+					$amount = min($slot->getMaxStackSize(), $slot->getCount(), $this->getMaxStackSize());
+					$slot->setCount($slot->getCount() - $amount);
+					$item = clone $slot;
+					$item->setCount($amount);
+					$this->setItem($slotIndex, $item);
+					if($slot->getCount() <= 0){
+						unset($itemSlots[$index]);
+					}
+					break;
+				}
+			}
+		}
 		if($this->getHolder() instanceof Player and $this->getHolder()->spawned){
 			$this->sendContents($this->getHolder());
 		}
-		return $result;
+
+		return $itemSlots;
+	}
+	
+	public function remove(Item $item){
+		$checkDamage = $item->getDamage() === null ? false : true;
+		$checkTags = $item->getCompoundTag() === null ? false : true;
+
+		for($i = 0; $i < $this->getHotbarSize(); ++$i){
+			$index = $this->getHotbarSlotIndex($i);
+			if($index==$this->getHeldItemIndex()){
+				$this->clear($index);
+			}
+			break;
+		}
 	}
 
 	public function removeItem(...$slots){
-		$result = parent::removeItem(...$slots);
+		/** @var Item[] $itemSlots */
+		/** @var Item[] $slots */
+		$itemSlots = [];
+		foreach($slots as $slot){
+			if(!($slot instanceof Item)){
+				throw new \InvalidArgumentException("Expected Item[], got ".gettype($slot));
+			}
+			if($slot->getId() !== 0 and $slot->getCount() > 0){
+				$itemSlots[] = clone $slot;
+			}
+		}
+
+		for($i = 0; $i < $this->getSize()-9; ++$i){
+			$item = $this->getItem($i);
+			if($item->getId() === Item::AIR or $item->getCount() <= 0){
+				continue;
+			}
+
+			foreach($itemSlots as $index => $slot){
+				if($slot->equals($item, $slot->getDamage() === null ? false : true, $slot->getCompoundTag() === null ? false : true)){
+					$amount = min($item->getCount(), $slot->getCount());
+					$slot->setCount($slot->getCount() - $amount);
+					$item->setCount($item->getCount() - $amount);
+					$this->setItem($i, $item);
+					if($slot->getCount() <= 0){
+						unset($itemSlots[$index]);
+					}
+				}
+			}
+
+			if(count($itemSlots) === 0){
+				break;
+			}
+		}
+
 		if($this->getHolder() instanceof Player and $this->getHolder()->spawned){
 			$this->sendContents($this->getHolder());
 		}
-		return $result;
+
+		return $itemSlots;
 	}
 
 	/**
