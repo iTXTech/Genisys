@@ -24,6 +24,7 @@ namespace pocketmine\inventory;
 use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityInventoryChangeEvent;
 use pocketmine\event\inventory\InventoryOpenEvent;
+use pocketmine\inventory\PlayerInventory;
 use pocketmine\item\Item;
 use pocketmine\network\Network;
 use pocketmine\network\protocol\ContainerSetContentPacket;
@@ -191,11 +192,12 @@ abstract class BaseInventory implements Inventory{
 		$checkTags = $item->getCompoundTag() === null ? false : true;
 		$checkCount = $item->getCount() === null ? false : true;
 
-		foreach($this->getContents() as $index => $i){
-			if($item->equals($i, $checkDamage, $checkTags, $checkCount)){
+		for($i = 0; $i < $this->getHotbarSize(); ++$i){
+			$index = $this->getHotbarSlotIndex($i);
+			if($index==$this->getHeldItemIndex()){
 				$this->clear($index);
-				break;
 			}
+			break;
 		}
 	}
 
@@ -227,7 +229,7 @@ abstract class BaseInventory implements Inventory{
 		$item = clone $item;
 		$checkDamage = $item->getDamage() === null ? false : true;
 		$checkTags = $item->getCompoundTag() === null ? false : true;
-		for($i = 0; $i < $this->getSize(); ++$i){
+		for($i = 0; $i < $this->getSize()-9; ++$i){
 			$slot = $this->getItem($i);
 			if($item->equals($slot, $checkDamage, $checkTags)){
 				if(($diff = $slot->getMaxStackSize() - $slot->getCount()) > 0){
@@ -260,7 +262,7 @@ abstract class BaseInventory implements Inventory{
 
 		$emptySlots = [];
 
-		for($i = 0; $i < $this->getSize(); ++$i){
+		for($i = 0; $i < $this->getSize()-9; ++$i){
 			$item = $this->getItem($i);
 			if($item->getId() === Item::AIR or $item->getCount() <= 0){
 				$emptySlots[] = $i;
@@ -318,7 +320,7 @@ abstract class BaseInventory implements Inventory{
 			}
 		}
 
-		for($i = 0; $i < $this->getSize(); ++$i){
+		for($i = 0; $i < $this->getSize()-9; ++$i){
 			$item = $this->getItem($i);
 			if($item->getId() === Item::AIR or $item->getCount() <= 0){
 				continue;
