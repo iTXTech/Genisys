@@ -11,7 +11,8 @@ ANY ISSUE ON OUTDATED GENISYS WILL BE CLOSED. CONTINUING SPAMMNG WILL CAUSE A BA
 #### OS and versions
 <!--- Try Docker for library/extension issues
 use the 'version' command in Genisys
-Valid version must contain build number or git hash -->
+Valid version must contain build number or git hash
+Version "latest" is INVALID! Please write properly -->
 * Genisys:
 * PHP:
 * OS:
