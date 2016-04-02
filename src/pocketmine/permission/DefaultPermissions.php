@@ -102,7 +102,11 @@ abstract class DefaultPermissions{
 		self::registerPermission(new Permission(self::ROOT . ".command.tell", "Allows the user to privately message another player", Permission::DEFAULT_TRUE), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.say", "Allows the user to talk as the console", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.give", "Allows the user to give items to players", Permission::DEFAULT_OP), $commands);
-		self::registerPermission(new Permission(self::ROOT . ".command.effect", "Allows the user to give/take potion effects", Permission::DEFAULT_OP), $commands);
+		
+		$effect = self::registerPermission(new Permission(self::ROOT . ".command.effect", "Allows the user to give/take potion effects", Permission::DEFAULT_OP), $commands);
+		self::registerPermission(new Permission(self::ROOT . ".command.effect.other", "Allows the user to give/take potion effects for other", Permission::DEFAULT_OP), $commands);
+		$effect->recalculatePermissibles();
+		
 		self::registerPermission(new Permission(self::ROOT . ".command.enchant", "Allows the user to enchant items", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.particle", "Allows the user to create particle effects", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.teleport", "Allows the user to teleport players", Permission::DEFAULT_OP), $commands);
