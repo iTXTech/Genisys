@@ -24,6 +24,7 @@ namespace pocketmine;
 use pocketmine\block\Block;
 use pocketmine\block\PressurePlate;
 use pocketmine\command\CommandSender;
+use pocketmine\entity\Animal;
 use pocketmine\entity\Arrow;
 use pocketmine\entity\Attribute;
 use pocketmine\entity\Boat;
@@ -3129,21 +3130,23 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				if($target instanceof Boat or ($target instanceof Minecart and $target->getType() == Minecart::TYPE_NORMAL)){
-					if($packet->action === 1){
+					if($packet->action === InteractPacket::ACTION_RIGHT_CLICK){
 						$this->linkEntity($target);
-					}elseif($packet->action === 2){
+					}elseif($packet->action === InteractPacket::ACTION_LEFT_CLICK){
 						if($this->linkedEntity == $target){
 							$target->setLinked(0, $this);
 						}
 						$target->close();
-					}elseif($packet->action === 3){
+					}elseif($packet->action === InteractPacket::ACTION_LEAVE_VEHICLE){
 						$this->setLinked(0, $target);
 					}
 					return;
 				}
 
 				if($packet->action === InteractPacket::ACTION_RIGHT_CLICK){
-					// TODO handle
+					if($target instanceof Animal and $this->getInventory()->getItemInHand()){
+						//TODO: Feed
+					}
 					break;
 				}
 

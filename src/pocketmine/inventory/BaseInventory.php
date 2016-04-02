@@ -87,6 +87,10 @@ abstract class BaseInventory implements Inventory{
 		return $this->size;
 	}
 
+	public function getHotbarSize(){
+		return 0;
+	}
+
 	public function setSize($size){
 		$this->size = (int) $size;
 	}
@@ -227,7 +231,7 @@ abstract class BaseInventory implements Inventory{
 		$item = clone $item;
 		$checkDamage = $item->getDamage() === null ? false : true;
 		$checkTags = $item->getCompoundTag() === null ? false : true;
-		for($i = 0; $i < $this->getSize(); ++$i){
+		for($i = 0; $i < ($this->getSize() - $this->getHotbarSize()); ++$i){
 			$slot = $this->getItem($i);
 			if($item->equals($slot, $checkDamage, $checkTags)){
 				if(($diff = $slot->getMaxStackSize() - $slot->getCount()) > 0){
@@ -260,7 +264,7 @@ abstract class BaseInventory implements Inventory{
 
 		$emptySlots = [];
 
-		for($i = 0; $i < $this->getSize(); ++$i){
+		for($i = 0; $i < ($this->getSize() - $this->getHotbarSize()); ++$i){
 			$item = $this->getItem($i);
 			if($item->getId() === Item::AIR or $item->getCount() <= 0){
 				$emptySlots[] = $i;
@@ -318,7 +322,7 @@ abstract class BaseInventory implements Inventory{
 			}
 		}
 
-		for($i = 0; $i < $this->getSize(); ++$i){
+		for($i = 0; $i < ($this->getSize() - $this->getHotbarSize()); ++$i){
 			$item = $this->getItem($i);
 			if($item->getId() === Item::AIR or $item->getCount() <= 0){
 				continue;
