@@ -318,7 +318,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 		$this->fishingHook = $entity;
 	}
-
+	
+	public function getItemInHand(){
+		return $this->inventory->getItemInHand();
+	}
+	
 	public function getLeaveMessage(){
 		return new TranslationContainer(TextFormat::YELLOW . "%multiplayer.player.left", [
 			$this->getDisplayName()
