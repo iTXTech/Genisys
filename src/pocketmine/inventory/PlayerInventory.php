@@ -61,7 +61,7 @@ class PlayerInventory extends BaseInventory{
 		if($index >= 0 and $index < $this->getHotbarSize() and $slot >= -1 and $slot < $this->getSize()){
 			for($i = 0; $i < $this->getHotbarSize(); ++$i){
 				$index2 = $this->getHotbarSlotIndex($i);
-				if($index2==$slot){
+				if($index2==$slot and $slot!=-1){
 					$this->hotbar[$i] = $this->getHotbarSlotIndex($index);
 					break;
 				}
