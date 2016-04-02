@@ -70,7 +70,7 @@ class BiomeCommand extends VanillaCommand{
 							$level->setBiomeId($x, $z, $biome);
 						}
 					}
-					$sender->sendMessage(TextFormat::GREEN . "%pocketmine.command.biome.set" . "$biome");
+					$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.set", [$biome]));
 				}else{
 					$sender->sendMessage("%pocketmine.command.biome.noPos");
 				}
@@ -98,7 +98,7 @@ class BiomeCommand extends VanillaCommand{
 						}
 					}
 					//$sender->selectedPos = array();
-					$sender->sendMessage(TextFormat::GREEN . "%pocketmine.command.biome.color" . "$a[0], $a[1], $a[2]");
+					$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.color", [$a[0], $a[1], $a[2]]));
 				}else{
 					$sender->sendMessage("%pocketmine.command.biome.noPos");
 				}
@@ -122,12 +122,13 @@ class BiomeCommand extends VanillaCommand{
 				$biome = $sender->getLevel()->getBiomeId($x, $z);
 				$color = $sender->getLevel()->getBiomeColor($x, $z);
 				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.get", [$biome, $color[0], $color[1], $color[2]]));
+			}else{
+				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+				return true;
 			}
 		}else{
 			$sender->sendMessage("%commands.generic.runingame");
 			return false;
 		}
-		$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
-		return true;
 	}
 }
