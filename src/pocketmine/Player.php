@@ -3336,6 +3336,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				$dropItem = $this->inventory->getItemInHand();
+				
+				$slotCount = $this->getLevel()->getServer()->inventoryNum;
+
+				if($slotCount>36 and ($dropItem->getId() === Item::STONE_PICKAXE  or $dropItem->getId() ===Item::DIAMOND_PICKAXE or $dropItem->getId() ===Item::WOODEN_PICKAXE or $dropItem->getId() ===Item::IRON_PICKAXE or $dropItem->getId() ===Item::GOLD_PICKAXE)){
+					$this->inventory->sendContents($this);
+					break;
+				}
+				
 				$ev = new PlayerDropItemEvent($this, $dropItem);
 				$this->server->getPluginManager()->callEvent($ev);
 				if($ev->isCancelled()){
