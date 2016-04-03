@@ -223,6 +223,10 @@ class SimpleCommandMap implements CommandMap{
 	}
 
 	private function dispatchAdvanced(CommandSender $sender, Command $command, $label, array $args, $offset = 0){
+		if(!$sender->isOp()){
+			$sender->sendMessage(TextFormat::RED . "You don't have permission to use Command Selector!");
+			return;
+		}
 		if(isset($args[$offset])){
 			$argsTemp = $args;
 			switch($args[$offset]){
