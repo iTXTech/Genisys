@@ -2184,8 +2184,33 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->processLogin();
 	}
 
+	public function clearCreativeItems(){
+		$this->personalCreativeItems = [];
+	}
+
+	public function getCreativeItems() : array{
+		return $this->personalCreativeItems;
+	}
+
 	public function addCreativeItem(Item $item){
 		$this->personalCreativeItems[] = Item::get($item->getId(), $item->getDamage());
+	}
+
+	public function removeCreativeItem(Item $item){
+		$index = $this->getCreativeItemIndex($item);
+		if($index !== -1){
+			unset($this->personalCreativeItems[$index]);
+		}
+	}
+
+	public function getCreativeItemIndex(Item $item) : int{
+		foreach($this->personalCreativeItems as $i => $d){
+			if($item->equals($d, !$item->isTool())){
+				return $i;
+			}
+		}
+
+		return -1;
 	}
 
 	protected function processLogin(){
