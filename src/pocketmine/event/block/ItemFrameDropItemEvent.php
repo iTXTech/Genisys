@@ -22,11 +22,11 @@
 namespace pocketmine\event\block;
 
 use pocketmine\block\Block;
-use pocketmine\event\Listener;
+use pocketmine\event\Cancellable;
 use pocketmine\item\Item;
 use pocketmine\tile\ItemFrame;
 
-class ItemFrameDropItemEvent extends BlockEvent implements Listener{
+class ItemFrameDropItemEvent extends BlockEvent implements Cancellable{
 	public static $handlerList = null;
 	/** @var  Item */
 	private $item;

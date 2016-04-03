@@ -169,7 +169,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/** @var SourceInterface */
 	protected $interface;
 
-	/** @var bool  */
+	/** @var bool */
 	public $playedBefore = false;
 	public $spawned = false;
 	public $loggedIn = false;
@@ -323,11 +323,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 		$this->fishingHook = $entity;
 	}
-	
+
 	public function getItemInHand(){
 		return $this->inventory->getItemInHand();
 	}
-	
+
 	public function getLeaveMessage(){
 		return new TranslationContainer(TextFormat::YELLOW . "%multiplayer.player.left", [
 			$this->getDisplayName()
@@ -3325,7 +3325,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					break;
 				}
 
-			if(!$this->inventory->contains($packet->item)) {
+				if(!$this->inventory->contains($packet->item) or ($this->isCreative() and $this->server->limitedCreative)){
 					$this->inventory->sendContents($this);
 					break;
 				}
@@ -3335,7 +3335,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					break;
 				}
 				$dropItem = $this->inventory->getItem($slot);
-				$ev = new PlayerDropItemEvent($this, $item);
+				$ev = new PlayerDropItemEvent($this, $dropItem);
 				$this->server->getPluginManager()->callEvent($ev);
 				if($ev->isCancelled()){
 					$this->inventory->sendSlot($slot, $this);
@@ -3343,7 +3343,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				$this->inventory->remove($dropItem);
-				$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
+				//$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
 				$motion = $this->getDirectionVector()->multiply(0.4);
 
 				$this->level->dropItem($this->add(0, 1.3, 0), $dropItem, $motion, 40);
