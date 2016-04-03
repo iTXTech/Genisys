@@ -27,6 +27,7 @@ use pocketmine\item\Item;
 use pocketmine\tile\ItemFrame;
 
 class ItemFrameDropItemEvent extends BlockEvent implements Listener{
+	public static $handlerList = null;
 	/** @var  Item */
 	private $item;
 	/** @var  ItemFrame */
