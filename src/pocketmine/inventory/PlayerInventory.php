@@ -157,7 +157,7 @@ class PlayerInventory extends BaseInventory{
 
 	public function onSlotChange($index, $before){
 		$holder = $this->getHolder();
-		if($holder instanceof Player and !$holder->spawned){
+		if(!$holder instanceof Player or !$holder->spawned){
 			return;
 		}
 
@@ -167,7 +167,7 @@ class PlayerInventory extends BaseInventory{
 			$this->sendArmorSlot($index, $this->getViewers());
 			$this->sendArmorSlot($index, $this->getHolder()->getViewers());
 		}else{
-			if($this->getHolder()->isSurvival())$this->sendContents($holder);
+			if($holder->isSurvival())$this->sendContents($holder);
 		}
 	}
 
