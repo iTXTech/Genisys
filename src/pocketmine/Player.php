@@ -2187,7 +2187,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public function addCreativeItem(Item $item){
 		$this->personalCreativeItems[] = Item::get($item->getId(), $item->getDamage());
 	}
-
+	
+	public function removeCreativeItem(Item $item){
+		unset($this->personalCreativeItems[$item]);
+	}
+	
 	protected function processLogin(){
 		if(!$this->server->isWhitelisted(strtolower($this->getName()))){
 			$this->close($this->getLeaveMessage(), "Server is white-listed");
