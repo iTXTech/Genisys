@@ -3332,6 +3332,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 				$slot = $this->inventory->first($packet->item);
 				if($slot == -1){
+					$this->inventory->sendContents($this);
 					break;
 				}
 				$dropItem = $this->inventory->getItem($slot);
