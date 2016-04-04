@@ -2432,9 +2432,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						if($item->getId() !== Item::AIR){
 							if((mt_rand(0, 10) / 10) < $tile->getItemDropChance()){
 								$this->level->dropItem($tile, $item);
+								$tile->setItem(Item::get(Item::AIR));
+								$tile->setItemRotation(0);
 							}
-							$tile->setItem(Item::get(Item::AIR));
-							$tile->setItemRotation(0);
 						}
 					}
 				}
