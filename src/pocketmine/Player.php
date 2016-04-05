@@ -2436,7 +2436,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$tile->setItem(Item::get(Item::AIR));
 							$tile->setItemRotation(0);
 						}
-					}
+					}else $tile->spawnTo($this);
 				}
 				break;
 			case ProtocolInfo::REQUEST_CHUNK_RADIUS_PACKET:
