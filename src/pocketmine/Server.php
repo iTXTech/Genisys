@@ -2396,8 +2396,10 @@ private function lookupAddress($address) {
 
 	/**
 	 * Shutdowns the server correctly
+	 * @param bool   $restart
+	 * @param string $msg
 	 */
-	public function shutdown(){
+	public function shutdown(bool $restart = false, string $msg = ""){
 		/*if($this->expEnabled){
 			foreach($this->getLevels() as $level){
 				foreach($level->getEntities() as $e){
@@ -2411,6 +2413,9 @@ private function lookupAddress($address) {
 			$killer->kill();
 		}*/
 		$this->isRunning = false;
+		if($msg != ""){
+			$this->propertyCache["settings.shutdown-message"] = $msg;
+		}
 	}
 
 	public function forceShutdown(){

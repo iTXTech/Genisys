@@ -42,18 +42,23 @@ class StopCommand extends VanillaCommand{
 			return true;
 		}
 
-		$restart = \Null;
+		$msg = "";
 		if(isset($args[0])){
+			$msg = $args[0];
+		}
+
+		$restart = false;
+		if(isset($args[1])){
 			if($args[0] == 'force'){
-				$restart = \true;
+				$restart = true;
 			}else{
-				$restart = \false;
+				$restart = false;
 			}
 		}
 
 		Command::broadcastCommandMessage($sender, new TranslationContainer("commands.stop.start"));
 
-		$sender->getServer()->shutdown($restart);
+		$sender->getServer()->shutdown($restart, $msg);
 
 		return true;
 	}
