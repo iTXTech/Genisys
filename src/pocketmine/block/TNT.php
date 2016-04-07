@@ -94,6 +94,7 @@ class TNT extends Solid implements ElectricalAppliance{
 				$block = $this->getSide($side);
 				if($block instanceof RedstoneSource and $block->isActivated($this)){
 					$this->prime();
+					$this->getLevel()->setBlock($this, new Air(), true);
 					break;
 				}
 			}
