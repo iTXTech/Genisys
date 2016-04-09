@@ -93,7 +93,6 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
 ### To-Do List
 * Improve Potions
 * Improve Redstone
-* Improve Anvil
 * Fishing
 * New AI for all creatures
 * LevelDB support for Windows
@@ -176,7 +175,6 @@ Port: 19132
 ### 计划表
 * 完善 药水
 * 完善 红石系统
-* 完善 铁毡
 * 加入 钓鱼
 * 用于所有生物的新 AI
 * Windows 的 LevelDB 支持
