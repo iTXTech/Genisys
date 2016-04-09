@@ -2517,10 +2517,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				if((strlen($packet->skin) != 64 * 64 * 4) and (strlen($packet->skin) != 64 * 32 * 4)){
-					$this->close("", TextFormat::RED . "Please use 0.13.1 join the server!");
-					//$this->close("", "disconnectionScreen.invalidSkin");
+					$this->close("", "disconnectionScreen.invalidSkin");
+
 					break;
-					//$this->setSkin("", "Standard_Steve");
 				}
 
 				$this->setSkin($packet->skin, $packet->skinName);
