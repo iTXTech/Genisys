@@ -60,17 +60,19 @@ class Bucket extends Item{
 				}
 			}
 		}elseif($targetBlock instanceof Liquid){
-			$result = clone $this;
-			$result->setDamage(0);
-			$player->getServer()->getPluginManager()->callEvent($ev = new PlayerBucketFillEvent($player, $block, $face, $this, $result));
-			if(!$ev->isCancelled()){
-				$player->getLevel()->setBlock($block, $targetBlock, true, true);
-				if($player->isSurvival()){
-					$player->getInventory()->setItemInHand($ev->getItem());
+			if($player->getLevel()->getDimension() != Level::DIMENSION_NETHER){
+				$result = clone $this;
+				$result->setDamage(0);
+				$player->getServer()->getPluginManager()->callEvent($ev = new PlayerBucketFillEvent($player, $block, $face, $this, $result));
+				if(!$ev->isCancelled()){
+					$player->getLevel()->setBlock($block, $targetBlock, true, true);
+					if($player->isSurvival()){
+						$player->getInventory()->setItemInHand($ev->getItem());
+					}
+					return true;
+				}else{
+					$player->getInventory()->sendContents($player);
 				}
-				return true;
-			}else{
-				$player->getInventory()->sendContents($player);
 			}
 		}
 

@@ -56,7 +56,7 @@ class CraftingManager{
 			// load recipes from src/pocketmine/recipes.json
 			$recipes = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/recipes.json", Config::JSON, []);
 
-			MainLogger::getLogger()->Info("Loading recipes...");
+			MainLogger::getLogger()->info("Loading recipes...");
 			foreach($recipes->getAll() as $recipe){
 				switch($recipe["Type"]){
 					case 0:
@@ -101,7 +101,7 @@ class CraftingManager{
 				}
 			}
 		}else{
-			$this->registerStonecutter();
+			//$this->registerStonecutter();
 			$this->registerFurnace();
 			$this->registerDyes();
 			$this->registerIngots();
@@ -736,6 +736,7 @@ class CraftingManager{
 		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::STONE_BRICK, 2, 1), Item::get(Item::STONE_BRICK, 0, 1)));
 		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::GLASS, 0, 1), Item::get(Item::SAND, null, 1)));
 		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::COAL, 1, 1), Item::get(Item::TRUNK, null, 1)));
+		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::COAL, 1, 1), Item::get(Item::TRUNK2, null, 1)));
 		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::GOLD_INGOT, 0, 1), Item::get(Item::GOLD_ORE, 0, 1)));
 		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::IRON_INGOT, 0, 1), Item::get(Item::IRON_ORE, 0, 1)));
 		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::EMERALD, 0, 1), Item::get(Item::EMERALD_ORE, 0, 1)));
@@ -814,8 +815,8 @@ class CraftingManager{
 			[Item::COBBLESTONE_WALL, StoneWall::MOSSY_WALL, Item::MOSSY_STONE, 0, "wall/fence", 6],
 			[Item::NETHER_BRICK_FENCE, 0, Item::NETHER_BRICK_BLOCK, 0, "wall/fence", 6],
 			[Item::NETHER_BRICKS, 0, Item::NETHER_BRICK, 0, "blockrecipe1", 1],
-			[Item::SANDSTONE, SandStone::NORMAL, Item::SAND, 0, "blockrecipe1", 1],
-			[Item::SANDSTONE, Sandstone::CHISELED, Item::SANDSTONE, SandStone::NORMAL, "blockrecipe1", 4],
+			[Item::SANDSTONE, Sandstone::NORMAL, Item::SAND, 0, "blockrecipe1", 1],
+			[Item::SANDSTONE, Sandstone::CHISELED, Item::SANDSTONE, Sandstone::NORMAL, "blockrecipe1", 4],
 			[Item::STONE_BRICK, StoneBricks::NORMAL, Item::STONE, Stone::NORMAL, "blockrecipe1", 4],
 			[Item::STONE_BRICK, StoneBricks::NORMAL, Item::STONE, Stone::POLISHED_GRANITE, "blockrecipe1", 4],
 			[Item::STONE_BRICK, StoneBricks::NORMAL, Item::STONE, Stone::POLISHED_DIORITE, "blockrecipe1", 4],
@@ -825,7 +826,7 @@ class CraftingManager{
 			[Item::STONE, Stone::POLISHED_ANDESITE, Item::STONE, Stone::ANDESITE, "blockrecipe1", 4],
 			[Item::QUARTZ_BLOCK, Quartz::QUARTZ_NORMAL, Item::QUARTZ, Stone::ANDESITE, "blockrecipe1", 4],
 			[Item::QUARTZ_BLOCK, Quartz::QUARTZ_CHISELED, Item::SLAB, Slab::QUARTZ, "blockrecipe2X1", 1],
-			[Item::SANDSTONE, SandStone::CHISELED, Item::SLAB, Slab::SANDSTONE, "blockrecipe2X1", 1],
+			[Item::SANDSTONE, Sandstone::CHISELED, Item::SLAB, Slab::SANDSTONE, "blockrecipe2X1", 1],
 			[Item::STONE_BRICK, StoneBricks::CHISELED, Item::SLAB, Slab::STONE_BRICK, "blockrecipe2X1", 1],
 		];
 		foreach($recipes as $recipe){
