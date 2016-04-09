@@ -114,7 +114,7 @@ class Portal extends Transparent{
 				}
 			}
 		}
-		$this->getLevel()->setBlock($this, new Air(), true);
+		parent::onBreak($item);
 	}
 	
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
