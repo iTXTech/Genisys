@@ -679,6 +679,30 @@ class CraftingManager{
 				" Y ",
 				" X "
 			))->setIngredient("X", Item::get(Item::COBBLESTONE, 0, 1))->setIngredient("Y", Item::get(Item::STONE, Stone::DIORITE, 1)));
+
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::FLOWER_POT, 0, 1),
+				"B B",
+				" B ",
+				"   "
+			))->setIngredient("B", Item::get(Item::BRICK, null, 1)));
+
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::NOTEBLOCK, 0, 1),
+				"PPP",
+				"PRP",
+				"PPP"
+			))->setIngredient("P", Item::get(Item::PLANK, null, 1))->setIngredient("R", Item::get(Item::REDSTONE, null, 1)));
+
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::ITEM_FRAME, 0, 1),
+				"SSS",
+				"SLS",
+				"SSS"
+			))->setIngredient("S", Item::get(Item::STICK, null, 1))->setIngredient("L", Item::get(Item::LEATHER, null, 1)));
+
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::CAULDRON, 0, 1),
+				"I I",
+				"I I",
+				"III"
+			))->setIngredient("I", Item::get(Item::IRON_INGOT, null, 1)));
 		}
 	}
 

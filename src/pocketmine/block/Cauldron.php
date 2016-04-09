@@ -31,18 +31,16 @@ use pocketmine\level\sound\ExplodeSound;
 use pocketmine\level\sound\GraySplashSound;
 use pocketmine\level\sound\SpellSound;
 use pocketmine\level\sound\SplashSound;
-use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
 use pocketmine\Server;
-
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\IntTag;
-use pocketmine\tile\Tile;
 use pocketmine\tile\Cauldron as TileCauldron;
+use pocketmine\tile\Tile;
 use pocketmine\utils\Color;
 
 class Cauldron extends Solid{
@@ -80,14 +78,13 @@ class Cauldron extends Solid{
 			new ListTag("Items", [])
 		]);
 		$chunk = $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4);
-		$tile = Tile::createTile("Cauldron", $chunk, $nbt);
-
+		$tile = Tile::createTile("Cauldron", $chunk, $nbt);//
 		$this->getLevel()->setBlock($block, $this, true, true);
 		return true;
 	}
 
 	public function onBreak(Item $item){
-		$this->getLevel()->setBlock($this, new Air(), true, true);
+		$this->getLevel()->setBlock($this, new Air(), true);
 		return true;
 	}
 
@@ -100,10 +97,9 @@ class Cauldron extends Solid{
 		return [];
 	}
 
-	public function badUpdate(){
-		//$this->getLevel()->setBlockDataAt($this->x, $this->y, $this->z, $this->meta + 1);
-		$this->getLevel()->setBlock($this, Block::get($this->id, $this->meta + 1), true, false);
-		$this->getLevel()->setBlock($this, $this, true, false);//TODO: improve
+	public function update(){//umm... right update method...?
+		$this->getLevel()->setBlock($this, Block::get($this->id, $this->meta + 1), true);
+		$this->getLevel()->setBlock($this, $this, true);//Undo the damage value
 	}
 
 	public function isEmpty(){
@@ -116,14 +112,13 @@ class Cauldron extends Solid{
 
 	public function onActivate(Item $item, Player $player = null){//long...
 		$tile = $this->getLevel()->getTile($this);
-		if(!($tile instanceof TileCauldron) or !($player instanceof Player)){
+		if(!($tile instanceof TileCauldron)){
 			return false;
 		}
-
 		switch($item->getId()){
 			case Item::BUCKET:
-				if($item->getDamage() === 0){
-					if(!$this->isFull() and !$tile->isCustomColor() and !$tile->hasPotion()){
+				if($item->getDamage() === 0){//empty bucket
+					if(!$this->isFull() or $tile->isCustomColor() or $tile->hasPotion()){
 						break;
 					}
 					$bucket = clone $item;
@@ -139,7 +134,9 @@ class Cauldron extends Solid{
 						$this->getLevel()->addSound(new SplashSound($this->add(0.5, 1, 0.5)));
 					}
 				}elseif($item->getDamage() === 8){//water bucket
-					if($this->isFull() and !$tile->isCustomColor() and !$tile->hasPotion()) break;
+					if($this->isFull() and !$tile->isCustomColor() and !$tile->hasPotion()){
+						break;
+					}
 					$bucket = clone $item;
 					$bucket->setDamage(0);//empty bucket
 					Server::getInstance()->getPluginManager()->callEvent($ev = new PlayerBucketEmptyEvent($player, $this, 0, $item, $bucket));
@@ -147,7 +144,6 @@ class Cauldron extends Solid{
 						if($player->isSurvival()){
 							$player->getInventory()->setItemInHand($ev->getItem());
 						}
-
 						if($tile->hasPotion()){//if has potion
 							$this->meta = 0;//empty
 							$this->getLevel()->setBlock($this, $this, true);
@@ -160,7 +156,7 @@ class Cauldron extends Solid{
 							$tile->clearCustomColor();
 							$this->getLevel()->addSound(new SplashSound($this->add(0.5, 1, 0.5)));
 						}
-						$this->badUpdate();//bad
+						$this->update();
 					}
 				}
 				break;
@@ -170,10 +166,16 @@ class Cauldron extends Solid{
 				if($tile->isCustomColor()){
 					$color = Color::averageColor($color, $tile->getCustomColor());
 				}
+				if($player->isSurvival()){
+					$item->setCount($item->getCount() - 1);
+					/*if($item->getCount() <= 0){
+						$player->getInventory()->setItemInHand(Item::get(Item::AIR));
+					}*/
+				}
 				$tile->setCustomColor($color);
 				$this->getLevel()->addSound(new SplashSound($this->add(0.5, 1, 0.5)));
 
-				$this->badUpdate();//bad
+				$this->update();
 				break;
 			case Item::LEATHER_CAP:
 			case Item::LEATHER_TUNIC:
@@ -183,26 +185,21 @@ class Cauldron extends Solid{
 				if($tile->isCustomColor()){
 					--$this->meta;
 					$this->getLevel()->setBlock($this, $this, true);
-
 					$newItem = clone $item;
-					/** @var $newItem Armor */
+					/** @var Armor $newItem */
 					$newItem->setCustomColor($tile->getCustomColor());
 					$player->getInventory()->setItemInHand($newItem);
-
 					$this->getLevel()->addSound(new SplashSound($this->add(0.5, 1, 0.5)));
-
 					if($this->isEmpty()){
 						$tile->clearCustomColor();
 					}
 				}else{
 					--$this->meta;
 					$this->getLevel()->setBlock($this, $this, true);
-
 					$newItem = clone $item;
-					/** @var $newItem Armor */
+					/** @var Armor $newItem */
 					$newItem->clearCustomColor();
 					$player->getInventory()->setItemInHand($newItem);
-
 					$this->getLevel()->addSound(new SplashSound($this->add(0.5, 1, 0.5)));
 				}
 				break;
@@ -212,12 +209,11 @@ class Cauldron extends Solid{
 						($item->getId() === Item::POTION and $tile->getSplashPotion()) or
 						($item->getId() === Item::SPLASH_POTION and !$tile->getSplashPotion()) or
 						($item->getDamage() === Potion::WATER_BOTTLE and $tile->hasPotion()))
-				){//oh long...
+				){//long...
 					$this->meta = 0x00;
 					$this->getLevel()->setBlock($this, $this, true);
 					$tile->setPotionId(0xffff);//reset
 					$tile->setSplashPotion(false);
-
 					if($player->isSurvival()){
 						$player->getInventory()->setItemInHand(Item::get(Item::GLASS_BOTTLE));
 					}
@@ -253,16 +249,12 @@ class Cauldron extends Solid{
 					$this->meta -= 2;
 					if($this->meta < 0x00) $this->meta = 0x00;
 					$this->getLevel()->setBlock($this, $this, true);
-
-					//if($player->isSurvival()){
 					$result = Item::get(Item::POTION, $tile->getPotionId());
 					if($item->getCount() === 1){
 						$player->getInventory()->setItemInHand($result);
 					}else{
 						$player->getInventory()->addItem($result);
 					}
-					//}
-
 					if($this->isEmpty()){
 						$tile->setPotionId(0xffff);//reset
 						$tile->setSplashPotion(false);
@@ -273,7 +265,6 @@ class Cauldron extends Solid{
 					$this->meta -= 2;
 					if($this->meta < 0x00) $this->meta = 0x00;
 					$this->getLevel()->setBlock($this, $this, true);
-
 					if($player->isSurvival()){
 						$result = Item::get(Item::POTION, Potion::WATER_BOTTLE);
 						if($item->getCount() > 1 and $player->getInventory()->canAddItem($result)){
@@ -282,7 +273,6 @@ class Cauldron extends Solid{
 							$player->getInventory()->setItemInHand($result);
 						}
 					}
-
 					$this->getLevel()->addSound(new GraySplashSound($this->add(0.5, 1, 0.5)));
 				}
 				break;
