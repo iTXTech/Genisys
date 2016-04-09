@@ -25,7 +25,7 @@ class CaveCommand extends VanillaCommand{
 		parent::__construct(
 			$name,
 			"Generate a cave",
-			"/cave <旋转角度> <洞穴长度> <分叉数> <洞穴强度> <X> <Y> <Z> <LevelName> | /cave getmypos"
+			"%commands.cave.usage"
 		);
 		$this->setPermission("pocketmine.command.cave");
 	}
@@ -57,11 +57,11 @@ class CaveCommand extends VanillaCommand{
 		$caves[2] = isset($args[2]) ? $args[2] : mt_rand(1, 6);
 		$caves[4] = isset($args[3]) ? $args[3] : mt_rand(1, 10);
 		$caves[3] = [false, true, true];
-		$sender->sendMessage("旋转角度:{$caves[0]} 洞穴长度:{$caves[1]} 分叉数:{$caves[2]} 洞穴强度:{$caves[4]}");
-		$sender->sendMessage("[Caves] " . TextFormat::YELLOW . "开始生成矿洞，可能需要较多时间");
+		$sender->sendMessage(new TranslationContainer("commands.cave.info", [$caves[0], $caves[1], $caves[2], $caves[3]]));
+		$sender->sendMessage("[Caves] " . TextFormat::YELLOW . "%commands.cave.start");
 		$sender->sendMessage($pos->x . " " . $pos->y . " " . $pos->z);
 		$this->caves($pos, $caves);
-		$sender->sendMessage("[Caves] " . TextFormat::GREEN . "矿洞生成完毕啦");
+		$sender->sendMessage("[Caves] " . TextFormat::GREEN . "%commands.cave.success");
 		return true;
 	}
 
