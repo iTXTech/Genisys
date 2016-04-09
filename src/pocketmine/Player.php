@@ -1984,6 +1984,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				3 => 1
 			],
 			Item::POTION => 0,
+			Item::ROTTEN_FLESH => 4
 		];
 
 		$slot = $this->inventory->getItemInHand();
@@ -2015,6 +2016,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->inventory->setItemInHand($slot);
 				if($slot->getId() === Item::MUSHROOM_STEW or $slot->getId() === Item::BEETROOT_SOUP){
 					$this->inventory->addItem(Item::get(Item::BOWL, 0, 1));
+				}elseif($slot->getId() === Item::ROTTEN_FLESH){
+					if(mt_rand(0, 100) < 80){
+						$this->addEffect(Effect::getEffect(Effect::HUNGER)->setAmplifier(0)->setDuration(30 * 20));
+					}
 				}elseif($slot->getId() === Item::RAW_FISH and $slot->getDamage() === 3){ //Pufferfish
 					$this->addEffect(Effect::getEffect(Effect::HUNGER)->setAmplifier(2)->setDuration(15 * 20));
 					$this->addEffect(Effect::getEffect(Effect::NAUSEA)->setAmplifier(1)->setDuration(15 * 20));
