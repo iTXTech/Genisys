@@ -676,6 +676,7 @@ class Item{
 			self::$list[self::ENCHANTED_BOOK] = EnchantedBook::class;
 			self::$list[self::REPEATER] = Repeater::class;
 			self::$list[self::CAULDRON] = Cauldron::class;
+			self::$list[self::ROTTEN_FLESH] = RottenFlesh::class;
 
 			for($i = 0; $i < 256; ++$i){
 				if(Block::$list[$i] !== null){
