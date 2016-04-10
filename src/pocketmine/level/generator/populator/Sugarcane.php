@@ -1,5 +1,23 @@
 <?php
 
+/*
+ *
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://mcper.cn
+ *
+ */
 
 namespace pocketmine\level\generator\populator;
 
@@ -41,7 +59,7 @@ class Sugarcane extends Populator{
 		for($i = $x - 4; $i < ($x + 4); $i++){
 			for($j = $z - 4; $j < ($z + 4); $j++){
 				$b = $this->level->getBlockIdAt($i, $y, $j);
-				echo "$i $y $j $b \n";
+				//echo "$i $y $j $b $count \n";
 				if($b === Block::WATER or $b === Block::STILL_WATER){
 					$count++;
 				}

@@ -36,7 +36,7 @@ class PlainBiome extends GrassyBiome{
 		parent::__construct();
 
 		$sugarcane = new Sugarcane();
-		$sugarcane->setBaseAmount(12);
+		$sugarcane->setBaseAmount(8);
 		$tallSugarcane = new TallSugarcane();
 		$tallSugarcane->setBaseAmount(45);
 		$tallGrass = new TallGrass();
