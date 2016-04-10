@@ -1,5 +1,5 @@
 approve_by_comment: true
-approve_regex: '^Approved'
+approve_regex: '^Approved|+1'
 reject_regex: '^Rejected|-1'
 reset_on_push: true
 reviewers:
@@ -12,4 +12,4 @@ reviewers:
   - PEMapModder
   - PeratX
   name: default
-  required: 1
+  required: 2
