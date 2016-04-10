@@ -3,13 +3,13 @@ approve_regex: '^Approved|+1'
 reject_regex: '^Rejected|-1'
 reset_on_push: true
 reviewers:
-  members:
-  - CrayonDing
-  - gaoyichuan
-  - ishitatsuyuki
-  - jasonczc
-  - Muqsit
-  - PEMapModder
-  - PeratX
   name: default
+  members:
+    - CrayonDing
+    - gaoyichuan
+    - ishitatsuyuki
+    - jasonczc
+    - Muqsit
+    - PEMapModder
+    - PeratX
   required: 2
