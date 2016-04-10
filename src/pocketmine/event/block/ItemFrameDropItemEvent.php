@@ -19,10 +19,31 @@
  *
  */
 
-namespace pocketmine\item;
+namespace pocketmine\event\block;
 
-class NetherQuartz extends Item{
-	public function __construct($meta = 0, $count = 1){
-		parent::__construct(self::NETHER_QUARTZ, 0, $count, "Nether Quartz");
+use pocketmine\block\Block;
+use pocketmine\event\Cancellable;
+use pocketmine\item\Item;
+use pocketmine\tile\ItemFrame;
+
+class ItemFrameDropItemEvent extends BlockEvent implements Cancellable{
+	public static $handlerList = null;
+	/** @var  Item */
+	private $item;
+	/** @var  ItemFrame */
+	private $itemFrame;
+
+	public function __construct(Block $block, ItemFrame $itemFrame, Item $item){
+		$this->block = $block;
+		$this->itemFrame = $itemFrame;
+		$this->item = $item;
 	}
-} 
+
+	public function getItemFrame(){
+		return $this->itemFrame;
+	}
+
+	public function getItem(){
+		return $this->item;
+	}
+}

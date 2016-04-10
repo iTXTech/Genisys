@@ -2,7 +2,7 @@
 
 #配置文件版本
 config:
- version: 13
+ version: 14
  
 level:
  #设置是否变换天气
@@ -77,6 +77,8 @@ server:
  destroy-block-particle: true
  #是否允许喷溅型药水
  allow-splash-potion: true
+ #是否启用高级指令选择器
+ advanced-command-selector: false
 
 redstone:
  ##############################

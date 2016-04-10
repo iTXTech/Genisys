@@ -4,12 +4,12 @@ Chat on Gitter: [![Gitter](https://img.shields.io/gitter/room/iTXTech/Genisys.sv
 You can also join #genisys on freenode IRC.
 
 ### Build status
-Jenkins: [![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.mcper.cn/Genisys-master.svg)](http://jenkins.mcper.cn/job/Genisys-master/)  
+Jenkins: [![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.mcper.cn/Genisys-master.svg)](https://jenkins.mcper.cn/job/Genisys-master/)  
 Travis-CI: [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)  
 GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/builds)
 
 ### Downloads
-You can get prebuilt phar from [Jenkins](http://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/genisys/builds).
+You can get prebuilt phar from [Jenkins](https://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/genisys/builds).
 
 ### Fast Docker installation
 [![Docker Pulls](https://img.shields.io/docker/pulls/itxtech/docker-env-genisys.svg)](https://hub.docker.com/r/itxtech/docker-env-genisys/)  
@@ -93,7 +93,6 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
 ### To-Do List
 * Improve Potions
 * Improve Redstone
-* Improve Anvil
 * Fishing
 * New AI for all creatures
 * LevelDB support for Windows
@@ -176,7 +175,6 @@ Port: 19132
 ### 计划表
 * 完善 药水
 * 完善 红石系统
-* 完善 铁毡
 * 加入 钓鱼
 * 用于所有生物的新 AI
 * Windows 的 LevelDB 支持

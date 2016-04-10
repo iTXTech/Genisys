@@ -23,7 +23,9 @@ namespace pocketmine\block;
 
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
+use pocketmine\level\Level;
 use pocketmine\level\sound\TNTPrimeSound;
+use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
@@ -32,7 +34,7 @@ use pocketmine\nbt\tag\FloatTag;
 use pocketmine\Player;
 use pocketmine\utils\Random;
 
-class TNT extends Solid{
+class TNT extends Solid implements ElectricalAppliance{
 
 	protected $id = self::TNT;
 
@@ -44,11 +46,11 @@ class TNT extends Solid{
 		return "TNT";
 	}
 
-	public function getHardness() {
+	public function getHardness(){
 		return 0;
 	}
 
-	public function canBeActivated() : bool {
+	public function canBeActivated() : bool{
 		return true;
 	}
 
@@ -83,6 +85,28 @@ class TNT extends Solid{
 
 		$tnt->spawnToAll();
 		$this->level->addSound(new TNTPrimeSound($this));
+	}
+
+	public function onUpdate($type){
+		if($type == Level::BLOCK_UPDATE_SCHEDULED){
+			$sides = [0, 1, 2, 3, 4, 5];
+			foreach($sides as $side){
+				$block = $this->getSide($side);
+				if($block instanceof RedstoneSource and $block->isActivated($this)){
+					$this->prime();
+					$this->getLevel()->setBlock($this, new Air(), true);
+					break;
+				}
+			}
+			return Level::BLOCK_UPDATE_SCHEDULED;
+		}
+		return false;
+	}
+
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+		$this->getLevel()->setBlock($this, $this, true, false);
+
+		$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage() * 2);
 	}
 
 	public function onActivate(Item $item, Player $player = null){

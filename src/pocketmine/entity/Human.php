@@ -285,7 +285,7 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 
 		parent::initEntity();
 
-		if(!isset($this->namedtag->foodLevel) or !($this->namedtag->foodLevel instanceof IntTag)){
+		/*if(!isset($this->namedtag->foodLevel) or !($this->namedtag->foodLevel instanceof IntTag)){
 			$this->namedtag->foodLevel = new IntTag("foodLevel", $this->getFood());
 		}else{
 			$this->setFood($this->namedtag["foodLevel"]);
@@ -307,7 +307,7 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 			$this->namedtag->foodTickTimer = new IntTag("foodTickTimer", $this->foodTickTimer);
 		}else{
 			$this->foodTickTimer = $this->namedtag["foodTickTimer"];
-		}
+		}*/
 
 		if(!isset($this->namedtag->XpLevel) or !($this->namedtag->XpLevel instanceof IntTag)){
 			$this->namedtag->XpLevel = new IntTag("XpLevel", $this->getXpLevel());

@@ -47,12 +47,19 @@ class Bucket extends Item{
 		if($targetBlock instanceof Air){
 			if($target instanceof Liquid and $target->getDamage() === 0){
 				$result = clone $this;
-				$result->setDamage($target->getId());
+				$id = $target->getId();
+				if($id == self::STILL_WATER){
+					$id = self::WATER;
+				}
+				if($id == self::STILL_LAVA){
+					$id = self::LAVA;
+				}
+				$result->setDamage($id);
 				$player->getServer()->getPluginManager()->callEvent($ev = new PlayerBucketFillEvent($player, $block, $face, $this, $result));
 				if(!$ev->isCancelled()){
 					$player->getLevel()->setBlock($target, new Air(), true, true);
 					if($player->isSurvival()){
-						$player->getInventory()->setItemInHand($ev->getItem(), $player);
+						$player->getInventory()->setItemInHand($ev->getItem());
 					}
 					return true;
 				}else{
@@ -60,17 +67,19 @@ class Bucket extends Item{
 				}
 			}
 		}elseif($targetBlock instanceof Liquid){
-			$result = clone $this;
-			$result->setDamage(0);
-			$player->getServer()->getPluginManager()->callEvent($ev = new PlayerBucketFillEvent($player, $block, $face, $this, $result));
-			if(!$ev->isCancelled()){
-				$player->getLevel()->setBlock($block, $targetBlock, true, true);
-				if($player->isSurvival()){
-					$player->getInventory()->setItemInHand($ev->getItem(), $player);
+			if($player->getLevel()->getDimension() != Level::DIMENSION_NETHER){
+				$result = clone $this;
+				$result->setDamage(0);
+				$player->getServer()->getPluginManager()->callEvent($ev = new PlayerBucketFillEvent($player, $block, $face, $this, $result));
+				if(!$ev->isCancelled()){
+					$player->getLevel()->setBlock($block, $targetBlock, true, true);
+					if($player->isSurvival()){
+						$player->getInventory()->setItemInHand($ev->getItem());
+					}
+					return true;
+				}else{
+					$player->getInventory()->sendContents($player);
 				}
-				return true;
-			}else{
-				$player->getInventory()->sendContents($player);
 			}
 		}
 

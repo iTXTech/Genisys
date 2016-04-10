@@ -1640,7 +1640,7 @@ class Server{
 			"creeperexplode" => $this->getAdvancedProperty("ai.creeper-explode-destroy-block", false),
 			"mobgenerate" => $this->getAdvancedProperty("ai.mobgenerate", false),
 		];
-		$this->inventoryNum = min(89, $this->getAdvancedProperty("player.inventory-num", 36));
+		$this->inventoryNum = min(91, $this->getAdvancedProperty("player.inventory-num", 36));
 		$this->hungerTimer = $this->getAdvancedProperty("player.hunger-timer", 80);
 		$this->allowSnowGolem = $this->getAdvancedProperty("server.allow-snow-golem", false);
 		$this->allowIronGolem = $this->getAdvancedProperty("server.allow-iron-golem", false);
@@ -2396,8 +2396,10 @@ private function lookupAddress($address) {
 
 	/**
 	 * Shutdowns the server correctly
+	 * @param bool   $restart
+	 * @param string $msg
 	 */
-	public function shutdown(){
+	public function shutdown(bool $restart = false, string $msg = ""){
 		/*if($this->expEnabled){
 			foreach($this->getLevels() as $level){
 				foreach($level->getEntities() as $e){
@@ -2411,6 +2413,9 @@ private function lookupAddress($address) {
 			$killer->kill();
 		}*/
 		$this->isRunning = false;
+		if($msg != ""){
+			$this->propertyCache["settings.shutdown-message"] = $msg;
+		}
 	}
 
 	public function forceShutdown(){

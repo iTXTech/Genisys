@@ -36,7 +36,7 @@ class EffectCommand extends VanillaCommand{
 			"%pocketmine.command.effect.description",
 			"%commands.effect.usage"
 		);
-		$this->setPermission("pocketmine.command.effect");
+		$this->setPermission("pocketmine.command.effect;pocketmine.command.effect.other");
 	}
 
 	public function execute(CommandSender $sender, $currentAlias, array $args){
@@ -46,7 +46,6 @@ class EffectCommand extends VanillaCommand{
 
 		if(count($args) < 2){
 			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
-
 			return true;
 		}
 
@@ -54,6 +53,11 @@ class EffectCommand extends VanillaCommand{
 
 		if($player === null){
 			$sender->sendMessage(new TranslationContainer(TextFormat::RED . "%commands.generic.player.notFound"));
+			return true;
+		}
+		
+		if($player->getName()!=$sender->getName() && !$sender->hasPermission("pocketmine.command.effect.other")){
+			$sender->sendMessage("You don't have permission to give effect to other player .");
 			return true;
 		}
 

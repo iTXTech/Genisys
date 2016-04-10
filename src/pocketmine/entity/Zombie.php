@@ -231,7 +231,7 @@ class Zombie extends Monster{
 		$drops = [];
 		if($this->lastDamageCause instanceof EntityDamageByEntityEvent and $this->lastDamageCause->getEntity() instanceof Player){
 			if(mt_rand(0, 199) < 5){
-				switch(mt_rand(0, 2)){
+				switch(mt_rand(0, 3)){
 					case 0:
 						$drops[] = ItemItem::get(ItemItem::IRON_INGOT, 0, 1);
 						break;
@@ -242,6 +242,10 @@ class Zombie extends Monster{
 						$drops[] = ItemItem::get(ItemItem::POTATO, 0, 1);
 						break;
 				}
+			}
+			$count = mt_rand(0, 2);
+			if($count > 0){
+				$drops[] = ItemItem::get(ItemItem::ROTTEN_FLESH, 0, $count);
 			}
 		}
 

@@ -59,6 +59,14 @@ class PlayerInventory extends BaseInventory{
 
 	public function setHotbarSlotIndex($index, $slot){
 		if($index >= 0 and $index < $this->getHotbarSize() and $slot >= -1 and $slot < $this->getSize()){
+			for($i = 0; $i < $this->getHotbarSize(); ++$i){
+				$index2 = $this->getHotbarSlotIndex($i);
+				if($index2 == $slot and $slot != -1){
+					$this->hotbar[$i] = $this->getHotbarSlotIndex($index);
+					break;
+				}
+			};
+
 			$this->hotbar[$index] = $slot;
 		}
 	}
@@ -149,7 +157,7 @@ class PlayerInventory extends BaseInventory{
 
 	public function onSlotChange($index, $before){
 		$holder = $this->getHolder();
-		if($holder instanceof Player and !$holder->spawned){
+		if(!$holder instanceof Player or !$holder->spawned){
 			return;
 		}
 
@@ -158,8 +166,8 @@ class PlayerInventory extends BaseInventory{
 		if($index >= $this->getSize()){
 			$this->sendArmorSlot($index, $this->getViewers());
 			$this->sendArmorSlot($index, $this->getHolder()->getViewers());
-		}elseif($holder instanceof Player){
-			$this->sendContents($holder);
+		}else{
+			if($holder->isSurvival()) $this->sendContents($holder);
 		}
 	}
 
@@ -415,22 +423,6 @@ class PlayerInventory extends BaseInventory{
 			$pk->windowid = $id;
 			$player->dataPacket(clone $pk);
 		}
-	}
-
-	public function addItem(...$slots){
-		$result = parent::addItem(...$slots);
-		if($this->getHolder() instanceof Player and $this->getHolder()->spawned){
-			$this->sendContents($this->getHolder());
-		}
-		return $result;
-	}
-
-	public function removeItem(...$slots){
-		$result = parent::removeItem(...$slots);
-		if($this->getHolder() instanceof Player and $this->getHolder()->spawned){
-			$this->sendContents($this->getHolder());
-		}
-		return $result;
 	}
 
 	/**

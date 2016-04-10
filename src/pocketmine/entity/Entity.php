@@ -1462,6 +1462,16 @@ abstract class Entity extends Location implements Metadatable{
 		}
 	}
 
+	public function setLocation(Location $pos){
+		if($this->closed){
+			return false;
+		}
+
+		$this->setPositionAndRotation($pos, $pos->yaw, $pos->pitch);
+
+		return true;
+	}
+
 	public function setPosition(Vector3 $pos){
 		if($this->closed){
 			return false;

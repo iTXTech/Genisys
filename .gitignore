@@ -6,7 +6,7 @@ timings/*
 *.log
 *.phar
 server.properties
-pocketmine.yml
+/pocketmine.yml
 *.txt
 genisys.yml
 crashdumps/*

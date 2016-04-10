@@ -46,6 +46,15 @@ abstract class Armor extends Item{
 		$this->setCompoundTag($tag);
 	}
 
+	public function getCustomColor(){
+		if(!$this->hasCompoundTag()) return null;
+		$tag = $this->getNamedTag();
+		if(isset($tag->customColor)){
+			return $tag["customColor"];
+		}
+		return null;
+	}
+
 	public function clearCustomColor(){
 		if(!$this->hasCompoundTag()) return;
 		$tag = $this->getNamedTag();

@@ -676,6 +676,7 @@ class Item{
 			self::$list[self::ENCHANTED_BOOK] = EnchantedBook::class;
 			self::$list[self::REPEATER] = Repeater::class;
 			self::$list[self::CAULDRON] = Cauldron::class;
+			self::$list[self::ROTTEN_FLESH] = RottenFlesh::class;
 
 			for($i = 0; $i < 256; ++$i){
 				if(Block::$list[$i] !== null){
@@ -759,7 +760,7 @@ class Item{
 			self::addCreativeItem(Item::get(Item::ACACIA_WOODEN_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::DARK_OAK_WOODEN_STAIRS, 0));
 
-self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
+			self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::BRICK_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::SANDSTONE_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::STONE_BRICK_STAIRS, 0));
@@ -1059,7 +1060,7 @@ self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 				self::addCreativeItem(Item::get(460 + $i, 0));
 			}//All kinds of fish
 			self::addCreativeItem(Item::get(Item::COOKED_FISH, 0));
-			self::addCreativeItem(Item::get(463, 0));//Cooked Fish
+			self::addCreativeItem(Item::get(Item::COOKED_SALMON, 0));//Cooked Fish
 			self::addCreativeItem(Item::get(Item::ROTTEN_FLESH, 0));
 			self::addCreativeItem(Item::get(Item::MUSHROOM_STEW, 0));
 			self::addCreativeItem(Item::get(Item::BREAD, 0));
