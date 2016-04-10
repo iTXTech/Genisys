@@ -1,0 +1,15 @@
+approve_by_comment: true
+approve_regex: ^Approved
+reject_regex: ^Rejected|-1
+reset_on_push: true
+reviewers:
+  members:
+  - CrayonDing
+  - gaoyichuan
+  - ishitatsuyuki
+  - jasonczc
+  - Muqsit
+  - PEMapModder
+  - PeratX
+  name: default
+  required: 1
