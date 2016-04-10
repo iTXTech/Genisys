@@ -1,7 +1,6 @@
 approve_by_comment: true
 approve_regex: '^Approved'
 reject_regex: '^Rejected|-1'
-author_approval: ignored
 reset_on_push: true
 reviewers:
   members:
