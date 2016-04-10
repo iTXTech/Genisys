@@ -36,11 +36,28 @@ class Sugarcane extends Populator{
 		}
 	}
 
-	private function canSugarCaneStay($x, $y, $z)
-    {
-             $b = $this->level->getBlockIdAt($x, $y, $z);
-        return ($b === Block::SUGARCANE_BLOCK) and $this->level->getBlockIdAt($x -1, $y, $z) or $this->level->getBlockIdAt($x, $y, $z -1) or  $this->level->getBlockIdAt($x, $y, $z +1) or  $this->level->getBlockIdAt($x +1, $y, $z) === Block::STILL_WATER;
-    }
+	private function findWater($x, $y, $z){
+		$count = 0;
+		for($i = $x - 4; $i < ($x + 4); $i++){
+			for($j = $z - 4; $j < ($z + 4); $j++){
+				$b = $this->level->getBlockIdAt($i, $y, $j);
+				echo "$i $y $j $b \n";
+				if($b === Block::WATER or $b === Block::STILL_WATER){
+					$count++;
+				}
+				if($count > 10){
+					return true;
+				}
+			}
+		}
+		return ($count > 10);
+	}
+
+	private function canSugarcaneStay($x, $y, $z){
+		$b = $this->level->getBlockIdAt($x, $y, $z);
+		$below = $this->level->getBlockIdAt($x, $y - 1, $z);
+		return ($b === Block::AIR) and ($below === Block::SAND or $below === Block::GRASS) and $this->findWater($x, $y - 1, $z);
+	}
 
 	private function getHighestWorkableBlock($x, $z){
 		for($y = 127; $y >= 0; --$y){
