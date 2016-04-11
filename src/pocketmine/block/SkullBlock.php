@@ -85,6 +85,12 @@ class SkullBlock extends Transparent{
 				new ByteTag("SkullType", $item->getDamage()),
 				$rot
 			]);
+			
+			if($item->hasCustomBlockData()){
+			    foreach($item->getCustomBlockData() as $key => $v){
+				    $nbt->{$key} = $v;
+			    }
+		    	}
 
 			$chunk = $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4);
 			$pot = Tile::createTile("Skull", $chunk, $nbt);
