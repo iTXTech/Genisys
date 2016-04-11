@@ -1053,6 +1053,7 @@ abstract class Entity extends Location implements Metadatable{
 
 	public function fall($fallDistance){
 		if($this->getLevel()->getServer()->destroyBlockParticle and $fallDistance > 3){
+			if($this instanceof Player && $this->getGamemode() === 3) return;
 			$this->getLevel()->addParticle(new DestroyBlockParticle($this, $this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))));
 		}
 		if($this->isInsideOfWater()){
