@@ -24,6 +24,7 @@ namespace pocketmine\command\defaults;
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
 use pocketmine\level\Level;
+use pocketmine\level\weather\Weather;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
@@ -50,7 +51,7 @@ class WeatherCommand extends VanillaCommand{
 		}
 
 		if($sender instanceof Player){
-			$wea = (int) $args[0];
+			$wea = Weather::getWeatherFromString($args[0]);
 			if(!isset($args[1])) $duration = mt_rand(min($sender->getServer()->weatherRandomDurationMin, $sender->getServer()->weatherRandomDurationMax), max($sender->getServer()->weatherRandomDurationMin, $sender->getServer()->weatherRandomDurationMax));
 			else $duration = (int) $args[1];
 			if($wea >= 0 and $wea <= 3){
@@ -82,7 +83,7 @@ class WeatherCommand extends VanillaCommand{
 			return false;
 		}
 
-		$wea = (int) $args[1];
+		$wea = Weather::getWeatherFromString($args[1]);
 		if(!isset($args[1])) $duration = mt_rand(min($sender->getServer()->weatherRandomDurationMin, $sender->getServer()->weatherRandomDurationMax), max($sender->getServer()->weatherRandomDurationMin, $sender->getServer()->weatherRandomDurationMax));
 		else $duration = (int) $args[1];
 		if($wea >= 0 and $wea <= 3){

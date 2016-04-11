@@ -138,7 +138,13 @@ class Weather{
 		return $this->weatherNow;
 	}
 
-	public function getWeatherFromString(string $weather){
+	public static function getWeatherFromString($weather){
+		if(is_int($weather)){
+			if($weather <= 3){
+				return $weather;
+			}
+			return self::SUNNY;
+		}
 		switch(strtolower($weather)){
 			case "clear":
 			case "sunny":
