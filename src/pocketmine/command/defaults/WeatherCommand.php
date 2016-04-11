@@ -33,7 +33,7 @@ class WeatherCommand extends VanillaCommand{
 		parent::__construct(
 			$name,
 			"%pocketmine.command.weather.description",
-			"%commands.weather.usage"
+			"%pocketmine.command.weather.usage"
 		);
 		$this->setPermission("pocketmine.command.weather");
 	}
