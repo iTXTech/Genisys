@@ -90,10 +90,10 @@ class SkullBlock extends Transparent{
 			    foreach($item->getCustomBlockData() as $key => $v){
 				    $nbt->{$key} = $v;
 			    }
-		    	}
+			}
 
 			$chunk = $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4);
-			$pot = Tile::createTile("Skull", $chunk, $nbt);
+			$pot = Tile::createTile(Tile::SKULL, $chunk, $nbt);
 			$this->getLevel()->setBlock($block, Block::get(Block::SKULL_BLOCK, $face), true, true);
 			return true;
 		}
