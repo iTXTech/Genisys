@@ -21,12 +21,12 @@
 
 namespace pocketmine\block;
 
-class StillWater extends Flowable{
+class StillWater extends Water{
 
 	protected $id = self::STILL_WATER;
 
-	public function __construct($meta = 0){
-		$this->meta = $meta;
+	public function onUpdate($type){
+		return false;
 	}
 
 	public function getName() : string{
