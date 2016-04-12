@@ -430,13 +430,14 @@ class CraftingManager{
 				"III"
 			))->setIngredient("I", Item::get(Item::IRON_INGOT, 0, 5)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BOOK, 0, 1),
-				"P P",
-				" P "
+				"   ",
+				"PP ",
+				"P  "
 			))->setIngredient("P", Item::get(Item::PAPER, 0, 3)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BOOKSHELF, 0, 1),
-				"PBP",
-				"PBP",
-				"PBP"
+				"PPP",
+				"BBB",
+				"PPP"
 			))->setIngredient("P", Item::get(Item::WOODEN_PLANK, null, 6))->setIngredient("B", Item::get(Item::BOOK, 0, 3)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::PAINTING, 0, 1),
 				"SSS",
@@ -444,8 +445,9 @@ class CraftingManager{
 				"SSS"
 			))->setIngredient("S", Item::get(Item::STICK, 0, 8))->setIngredient("W", Item::get(Item::WOOL, null, 1)));
 			$this->registerRecipe((new ShapedRecipe(Item::get(Item::PAPER, 0, 3),
-				"SS",
-				"S"
+				"   ",
+				"SSS",
+				"   "
 			))->setIngredient("S", Item::get(Item::SUGARCANE, 0, 3)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SIGN, 0, 3),
 				"PPP",
