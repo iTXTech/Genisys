@@ -21,9 +21,13 @@
 
 namespace pocketmine\block;
 
-class StillLava extends Lava{
+class StillLava extends Flowable{
 
 	protected $id = self::STILL_LAVA;
+
+	public function __construct($meta = 0){
+		$this->meta = $meta;
+	}
 
 	public function getName() : string{
 		return "Still Lava";

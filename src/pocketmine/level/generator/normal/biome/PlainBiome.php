@@ -35,10 +35,6 @@ class PlainBiome extends GrassyBiome{
 	public function __construct(){
 		parent::__construct();
 
-		$sugarcane = new Sugarcane();
-		$sugarcane->setBaseAmount(8);
-		$tallSugarcane = new TallSugarcane();
-		$tallSugarcane->setBaseAmount(45);
 		$tallGrass = new TallGrass();
 		$tallGrass->setBaseAmount(12);
 		$waterPit = new WaterPit();
@@ -57,8 +53,6 @@ class PlainBiome extends GrassyBiome{
 		$flower->addType([Block::RED_FLOWER, FlowerBlock::TYPE_PINK_TULIP]);
 		$flower->addType([Block::RED_FLOWER, FlowerBlock::TYPE_OXEYE_DAISY]);
 
-		$this->addPopulator($sugarcane);
-		$this->addPopulator($tallSugarcane);
 		$this->addPopulator($tallGrass);
 		$this->addPopulator($flower);
 		$this->addPopulator($waterPit);

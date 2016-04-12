@@ -31,9 +31,9 @@ class RiverBiome extends GrassyBiome{
 		parent::__construct();
 
 		$sugarcane = new Sugarcane();
-		$sugarcane->setBaseAmount(8);
+		$sugarcane->setBaseAmount(6);
 		$tallSugarcane = new TallSugarcane();
-		$tallSugarcane->setBaseAmount(45);
+		$tallSugarcane->setBaseAmount(60);
 		$tallGrass = new TallGrass();
 		$tallGrass->setBaseAmount(5);
 
