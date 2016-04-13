@@ -1847,9 +1847,33 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					if($this->server->netherLevel instanceof Level){
 						if($this->getLevel() != $this->server->netherLevel){
 							$this->fromPos = $this->getPosition();
+							$this->fromPos->x = ((int)$this->fromPos->x) + 0.5;
+							$this->fromPos->z = ((int)$this->fromPos->z) + 0.5;
 							$this->teleport($this->shouldResPos = $this->server->netherLevel->getSafeSpawn());
 						}elseif($this->fromPos != null){
-							$this->teleport($this->shouldResPos = $this->fromPos->add(mt_rand(-5, 5), 0, mt_rand(-5, 5)));
+							if(!($this->getLevel()->isChunkLoaded($this->fromPos->x, $this->fromPos->z))){
+								$this->getLevel()->loadChunk($this->fromPos->x, $this->fromPos->z);
+							}
+							$temposadd = [1,0,-1,0,0,1,0,-1];
+							$tempos = null;
+							for($j = 2; $j < 5; $j++){
+								for($i = 0; $i < 4; $i++){
+									if($this->fromPos->level->getBlock($this->fromPos->add($temposadd[$i] * $j, 0, $temposadd[$i + 4] * $j))->getid() === BLOCK::AIR){
+										if($this->fromPos->level->getBlock($this->fromPos->add($temposadd[$i] * $j, 1, $temposadd[$i + 4]* $j))->getid() === BLOCK::AIR){
+											$tempos = $this->fromPos->add($temposadd[$i] * $j, 0, $temposadd[$i + 4] * $j);
+											//$this->getLevel()->getServer()->getLogger()->debug($tempos);
+											break;
+										}
+									}
+								}
+								if($tempos != null){break;}
+							}
+							if($tempos == null){
+								$tempos = $this->fromPos->add(5,0,5);
+							}
+							$this->teleport($this->shouldResPos = $tempos);
+							$temposadd = null;
+							$tempos = null;
 							$this->fromPos = null;
 						}else{
 							$this->teleport($this->shouldResPos = $this->server->getDefaultLevel()->getSafeSpawn());
