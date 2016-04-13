@@ -13,18 +13,18 @@ class MakeServerCommand extends VanillaCommand{
 		parent::__construct(
 			$name,
 			"Creates a PocketMine Phar",
-			"/makeserver"
+			"/makeserver (nogz)"
 		);
 		$this->setPermission("pocketmine.command.makeserver");
 	}
-	
+
 	public function execute(CommandSender $sender, $commandLabel, array $args){
 		if(!$this->testPermission($sender)){
 			return false;
 		}
 
 		$server = $sender->getServer();
-		$pharPath = Server::getInstance()->getPluginPath().DIRECTORY_SEPARATOR . "PocketMine-iTX" . DIRECTORY_SEPARATOR . $server->getName()."_".$server->getPocketMineVersion().".phar";
+		$pharPath = Server::getInstance()->getPluginPath() . DIRECTORY_SEPARATOR . "Genisys" . DIRECTORY_SEPARATOR . $server->getName() . "_" . $server->getPocketMineVersion() . ".phar";
 		if(file_exists($pharPath)){
 			$sender->sendMessage("Phar file already exists, overwriting...");
 			@unlink($pharPath);
@@ -34,7 +34,7 @@ class MakeServerCommand extends VanillaCommand{
 			"name" => $server->getName(),
 			"version" => $server->getPocketMineVersion(),
 			"api" => $server->getApiVersion(),
-			"itxapi" => $server->getiTXApiVersion(),
+			"geniapi" => $server->getGeniApiVersion(),
 			"minecraft" => $server->getVersion(),
 			"protocol" => Info::CURRENT_PROTOCOL,
 			"creator" => "Genisys MakeServerCommand",
@@ -60,10 +60,12 @@ class MakeServerCommand extends VanillaCommand{
 				$finfo->compress(\Phar::GZ);
 			}
 		}
-		$phar->compressFiles(\Phar::GZ);
+		if(!isset($args[0]) or (isset($args[0]) and $args[0] != "nogz")){
+			$phar->compressFiles(\Phar::GZ);
+		}
 		$phar->stopBuffering();
 
-		$sender->sendMessage($server->getName() . " " . $server->getPocketMineVersion() . " Phar file has been created on ".$pharPath);
+		$sender->sendMessage($server->getName() . " " . $server->getPocketMineVersion() . " Phar file has been created on " . $pharPath);
 
 		return true;
 	}

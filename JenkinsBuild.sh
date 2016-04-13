@@ -20,6 +20,6 @@ while(!feof($pipes[1])){
 fclose($pipes[0]);
 fclose($pipes[1]);
 fclose($pipes[2]);
-rename("/opt/data-2T/jenkins/jobs/Genisys-master/workspace/plugins/PocketMine-iTX/Genisys_1.1dev-$version.phar","/opt/data-2T/jenkins/jobs/Genisys-master/workspace/artifact/Genisys_1.1dev-$version.phar");
+rename("/opt/data-2T/jenkins/jobs/Genisys-master/workspace/plugins/Genisys/Genisys_1.1dev-$version.phar","/opt/data-2T/jenkins/jobs/Genisys-master/workspace/artifact/Genisys_1.1dev-$version.phar");
 if(file_exists("/opt/data-2T/jenkins/jobs/Genisys-master/workspace/artifact/Genisys_1.1dev-$version.phar")) exit (0);
 exit (1);
