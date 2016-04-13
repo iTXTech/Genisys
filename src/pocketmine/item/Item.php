@@ -1360,6 +1360,26 @@ class Item{
 
 		return null;
 	}
+	
+	/**
+	 * @param $id
+	 * @return Enchantmentlevel|0(for null)
+	 */
+	public function getEnchantmentLevel(int $id){
+		if(!$this->hasEnchantments()){
+			return 0;
+		}
+
+		foreach($this->getNamedTag()->ench as $entry){
+			if($entry["id"] === $id){
+				$e = Enchantment::getEnchantment($entry["id"]);
+				$e->setLevel($entry["lvl"]);
+				return $e->getlevel();
+			}
+		}
+
+		return null;
+	}
 
 	/**
 	 * @param Enchantment $ench
