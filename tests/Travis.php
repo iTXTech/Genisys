@@ -17,7 +17,7 @@ while(!feof($pipes[1])){
 }
 if(!isset($ret)) $ret = proc_close($server);
 echo "\n\nReturn value: ". $ret ."\n";
-if(count(glob("plugins/PocketMine-iTX/Genisys*.phar")) === 0){
+if(count(glob("plugins/Genisys/Genisys*.phar")) === 0){
 	echo "No server phar created!\n";
 	exit(1);
 }else{
