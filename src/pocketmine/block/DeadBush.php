@@ -51,9 +51,16 @@ class DeadBush extends Flowable{
 
 
 	public function getDrops(Item $item) : array {
-		return [
-			[Item::STICK, 0, mt_rand(0, 2)],
-		];
+		if($item->isShears()){
+			return [
+				[Item::DEAD_BUSH, 0, 1],
+			];
+		}else{
+			return [
+				[Item::STICK, 0, mt_rand(0, 2)],
+			];
+		}
+		
 	}
 
 }
