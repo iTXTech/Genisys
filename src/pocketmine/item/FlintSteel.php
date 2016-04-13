@@ -78,6 +78,7 @@ class FlintSteel extends Tool{
 								$level->setBlock(new Vector3($px, $py, $tz), new Block(90, 0));
 							}
 						}
+						return true;
 					}
 				}
 			}
@@ -116,6 +117,7 @@ class FlintSteel extends Tool{
 								$level->setBlock(new Vector3($tx, $py, $pz), new Block(90, 0));
 							}
 						}
+						return true;
 					}
 				}
 			}
