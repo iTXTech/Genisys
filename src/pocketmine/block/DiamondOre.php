@@ -23,6 +23,7 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\item\enchantment\enchantment;
 
 class DiamondOre extends Solid{
 
@@ -46,9 +47,16 @@ class DiamondOre extends Solid{
 
 	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 4){
-			return [
-				[Item::DIAMOND, 0, 1],
-			];
+			if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+				return [
+					[Item::DIAMOND_ORE, 0, 1],
+				];
+			}else{
+				return [
+					[Item::DIAMOND, 0, 1],
+				];
+			}
+			
 		}else{
 			return [];
 		}
