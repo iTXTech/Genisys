@@ -5,6 +5,7 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\item\enchantment\enchantment;
 use pocketmine\Player;
 
 class RedMushroomBlock extends Solid{
@@ -32,5 +33,17 @@ class RedMushroomBlock extends Solid{
 
 	public function getName() : string{
 		return "Red Mushroom Block";
+	}
+	
+	public function getDrops(Item $item) : array {
+		if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+			return [
+				[Item::RED_MUSHROOM_BLOCK, SELF::RED, 1],
+			];
+		}else{
+			return [
+				[Item::RED_MUSHROOM, 0, mt_rand(0, 2)],
+			];
+		}
 	}
 }
