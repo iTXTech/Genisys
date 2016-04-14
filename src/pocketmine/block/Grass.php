@@ -24,6 +24,7 @@ namespace pocketmine\block;
 use pocketmine\event\block\BlockSpreadEvent;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\item\enchantment\enchantment;
 use pocketmine\level\generator\object\TallGrass as TallGrassObject;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
@@ -56,9 +57,15 @@ class Grass extends Solid{
 	}
 
 	public function getDrops(Item $item) : array{
-		return [
-			[Item::DIRT, 0, 1],
-		];
+		if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+			return [
+				[Item::GRASS, 0, 1],
+			];
+		}else{
+			return [
+				[Item::DIRT, 0, 1],
+			];
+		}
 	}
 
 	public function onUpdate($type){

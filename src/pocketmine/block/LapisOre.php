@@ -23,6 +23,7 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\item\enchantment\enchantment;
 
 class LapisOre extends Solid{
 
@@ -46,9 +47,15 @@ class LapisOre extends Solid{
 
 	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 3){
-			return [
-				[Item::DYE, 4, mt_rand(4, 8)],
-			];
+			if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+				return [
+					[Item::LAPIS_ORE, 0, 1],
+				];
+			}else{
+				return [
+					[Item::DYE, 4, mt_rand(4, 8)],
+				];
+			}
 		}else{
 			return [];
 		}

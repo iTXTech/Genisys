@@ -23,6 +23,7 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\item\enchantment\enchantment;
 
 class Melon extends Transparent{
 
@@ -45,8 +46,15 @@ class Melon extends Transparent{
 	}
 
 	public function getDrops(Item $item) : array {
-		return [
-			[Item::MELON_SLICE, 0, mt_rand(3, 7)],
-		];
+		if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+			return [
+				[Item::MELON_BLOCK, 0, 1],
+			];
+		}else{
+			return [
+				[Item::MELON_SLICE, 0, mt_rand(3, 7)],
+			];
+		}
+		
 	}
 }

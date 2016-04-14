@@ -23,6 +23,7 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\item\enchantment\enchantment;
 
 class EmeraldOre extends Solid{
 
@@ -46,9 +47,15 @@ class EmeraldOre extends Solid{
 
 	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 4){
-			return [
-				[Item::EMERALD, 0, 1],
-			];
+			if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+				return [
+					[Item::EMERALD_ORE, 0, 1],
+				];
+			}else{
+				return [
+					[Item::EMERALD, 0, 1],
+				];
+			}
 		}else{
 			return [];
 		}
