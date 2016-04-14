@@ -24,6 +24,7 @@ namespace pocketmine\block;
 use pocketmine\event\block\LeavesDecayEvent;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\item\Dye;
 use pocketmine\item\enchantment\enchantment;
 use pocketmine\level\Level;
 use pocketmine\Player;
@@ -177,8 +178,10 @@ class Leaves extends Transparent{
 			if(($this->meta & 0x03) === self::OAK and mt_rand(1, 200) === 1){ //Apples
 				$drops[] = [Item::APPLE, 0, 1];
 			}
+			if(($this->meta & 0x03) === self::JUNGLE and mt_rand(1, 200) === 1){ //Cocoa
+				$drops[] = [Item::DYE, DYE::BROWN, 1];
+			}
 		}
-
 		return $drops;
 	}
 }
