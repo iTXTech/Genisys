@@ -4,9 +4,7 @@
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
-use pocketmine\item\Tool;
 use pocketmine\item\enchantment\enchantment;
-use pocketmine\Player;
 
 class RedMushroomBlock extends Solid{
 
@@ -15,20 +13,12 @@ class RedMushroomBlock extends Solid{
 
 	protected $id = self::RED_MUSHROOM_BLOCK;
 
-	public function __construct($meta = 15){
+	public function __construct($meta = 14){
 		$this->meta = $meta;
 	}
 
 	public function canBeActivated() : bool {
 		return true;
-	}
-
-	public function getHardness() {
-		return 0.5;
-	}
-
-	public function getToolType(){
-		return Tool::TYPE_AXE;
 	}
 
 	public function getName() : string{
