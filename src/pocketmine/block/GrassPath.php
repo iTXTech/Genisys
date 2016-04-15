@@ -24,6 +24,7 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\item\enchantment\enchantment;
 
 
 use pocketmine\level\Level;
@@ -73,8 +74,14 @@ class GrassPath extends Transparent{
 	}
 
 	public function getDrops(Item $item) : array {
-		return [
-			[Item::DIRT, 0, 1],
-		];
+		if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+			return [
+				[Item::GRASS_PATH, 0, 1],
+			];
+		}else{
+			return [
+				[Item::DIRT, 0, 1],
+			];
+		}
 	}
 }
