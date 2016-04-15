@@ -23,6 +23,7 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\item\enchantment\enchantment;
 
 class Glowstone extends Transparent{
 
@@ -49,8 +50,20 @@ class Glowstone extends Transparent{
 	}
 
 	public function getDrops(Item $item) : array {
-		return [
-			[Item::GLOWSTONE_DUST, 0, mt_rand(2, 4)],
-		];
+		if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+			return [
+				[Item::GLOWSTONE_BLOCK, 0, 1],
+			];
+		}else{
+			$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+			$fortunel = $fortunel > 3 ? 3 : $fortunel;
+			$times = [1,1,2,3,4];
+			$time = $times[mt_rand(0, $fortunel + 1)];
+			$num = mt_rand(2, 4) * $time;
+			$num = $num > 4 ? 4 : $num;
+			return [
+				[Item::GLOWSTONE_DUST, 0, $num],
+			];
+		}
 	}
 }
