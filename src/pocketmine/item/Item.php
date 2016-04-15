@@ -1378,7 +1378,7 @@ class Item{
 			}
 		}
 
-		return null;
+		return 0;
 	}
 
 	/**
