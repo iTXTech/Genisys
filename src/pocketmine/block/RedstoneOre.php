@@ -63,8 +63,10 @@ class RedstoneOre extends Solid{
 					[Item::REDSTONE_ORE, 0, 1],
 				];
 			}else{
+				$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+				$fortunel = $fortunel > 3 ? 3 : $fortunel;
 				return [
-					[Item::REDSTONE_DUST, 0, mt_rand(4, 5)],
+					[Item::REDSTONE_DUST, 0, mt_rand(4, 5 + $fortunel)],
 				];
 			}
 		}else{
