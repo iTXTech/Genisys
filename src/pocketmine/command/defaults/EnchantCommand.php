@@ -62,10 +62,6 @@ class EnchantCommand extends VanillaCommand{
 		$enchantLevel = isset($args[2]) ? (int) $args[2] : 1;
 
 		$enchantment = Enchantment::getEnchantment($enchantId);
-		if($enchantment->getId() === Enchantment::TYPE_INVALID){
-			$sender->sendMessage(new TranslationContainer("commands.enchant.notFound", [$enchantId]));
-			return true;
-		}
 
 		$enchantment->setLevel($enchantLevel);
 
