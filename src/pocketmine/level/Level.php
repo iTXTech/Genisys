@@ -35,7 +35,6 @@ use pocketmine\block\Grass;
 use pocketmine\block\Ice;
 use pocketmine\block\Leaves;
 use pocketmine\block\Leaves2;
-use pocketmine\block\NetherWart;
 use pocketmine\block\MelonStem;
 use pocketmine\block\Mycelium;
 use pocketmine\block\Potato;
@@ -254,7 +253,6 @@ class Level implements ChunkManager, Metadatable{
 		Block::RED_MUSHROOM => RedMushroom::class,
 		Block::BROWN_MUSHROOM => BrownMushroom::class,
 		Block::PUMPKIN_STEM => PumpkinStem::class,
-		Block::NETHER_WART_BLOCK => NetherWart::class,
 		Block::MELON_STEM => MelonStem::class,
 		//Block::VINE => true,
 		Block::MYCELIUM => Mycelium::class,
