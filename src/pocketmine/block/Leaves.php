@@ -172,14 +172,15 @@ class Leaves extends Transparent{
 		if($item->isShears() or $item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
 			$drops[] = [Item::LEAVES, $this->meta & 0x03, 1];
 		}else{
-			if(mt_rand(1, 20) === 1){ //Saplings
+			$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+			$fortunel = $fortunel > 3 ? 3 : $fortunel;
+			$rates = [20,16,12,10];
+			if(mt_rand(1, $rates[$fortunel]) === 1){ //Saplings
 				$drops[] = [Item::SAPLING, $this->meta & 0x03, 1];
 			}
-			if(($this->meta & 0x03) === self::OAK and mt_rand(1, 200) === 1){ //Apples
+			$rates = [200,180,160,120];
+			if(($this->meta & 0x03) === self::OAK and mt_rand(1, $rates[$fortunel]) === 1){ //Apples
 				$drops[] = [Item::APPLE, 0, 1];
-			}
-			if(($this->meta & 0x03) === self::JUNGLE and mt_rand(1, 200) === 1){ //Cocoa
-				$drops[] = [Item::DYE, DYE::BROWN, 1];
 			}
 		}
 		return $drops;

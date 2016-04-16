@@ -47,8 +47,12 @@ class NetherQuartzOre extends Solid{
 					[Item::NETHER_QUARTZ_ORE, 0, 1],
 				];
 			}else{
+				$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+				$fortunel = $fortunel > 3 ? 3 : $fortunel;
+				$times = [1,1,2,3,4];
+				$time = $times[mt_rand(0, $fortunel + 1)];
 				return [
-					[Item::NETHER_QUARTZ, 0, 1],
+					[Item::NETHER_QUARTZ, 0, $time],
 				];
 			}
 		}else{
