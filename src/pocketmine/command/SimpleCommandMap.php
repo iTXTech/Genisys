@@ -262,11 +262,6 @@ class SimpleCommandMap implements CommandMap{
 					break;
 				default:
 					$this->dispatchAdvanced($sender, $command, $label, $argsTemp, $offset + 1);
-						if(!$sender->isOp()){
-							$sender->sendMessage(TextFormat::RED . "You don't have permission to use Command Selector!");
-							$command->execute($sender, $label, $args);
-								return;
-						}
 			}
 		}else $command->execute($sender, $label, $args);
 	}
