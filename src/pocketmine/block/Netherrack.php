@@ -37,6 +37,10 @@ class Netherrack extends Solid{
 	}
 
 	public function getHardness() {
+		return 0.4;
+	}
+
+	public function getResistance(){
 		return 2;
 	}
 

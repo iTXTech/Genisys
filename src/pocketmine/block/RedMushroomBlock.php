@@ -24,6 +24,14 @@ class RedMushroomBlock extends Solid{
 	public function getName() : string{
 		return "Red Mushroom Block";
 	}
+
+	public function getHardness() {
+		return 0.2;
+	}
+
+	public function getResistance(){
+		return 1;
+	}
 	
 	public function getDrops(Item $item) : array {
 		if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){

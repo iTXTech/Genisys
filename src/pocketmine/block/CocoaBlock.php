@@ -32,4 +32,12 @@ class CocoaBlock extends Solid {
     public function getName() : string {
         return "Cocoa Block";
     }
+
+    public function getHardness() {
+        return 0.2;
+    }
+
+    public function getResistance(){
+        return 15;
+    }
 }

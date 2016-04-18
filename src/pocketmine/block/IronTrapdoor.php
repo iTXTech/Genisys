@@ -31,4 +31,13 @@ class IronTrapdoor extends Trapdoor {
 	public function getName() {
 		return "Iron Trapdoor";
 	}
+
+	public function getHardness() {
+		return 5;
+	}
+
+	public function getResistance(){
+		return 25;
+	}
+
 }

@@ -111,4 +111,12 @@ class PressurePlate extends RedstoneSource{
 		$this->canActivate = false;
 		$this->getLevel()->setBlock($this, new Air(), true);
 	}
+
+	public function getHardness() {
+		return 0.5;
+	}
+
+	public function getResistance(){
+		return 2.5;
+	}
 }

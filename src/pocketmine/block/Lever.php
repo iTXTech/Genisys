@@ -156,6 +156,14 @@ class Lever extends RedstoneSource{
 		return (($this->meta & 0x08) === 0x08);
 	}
 
+	public function getHardness() {
+		return 0.5;
+	}
+
+	public function getResistance(){
+		return 2.5;
+	}
+
 	public function getDrops(Item $item) : array {
 		return [
 			[$this->id, 0 ,1],
