@@ -62,6 +62,7 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\Timings;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
+use pocketmine\item\enchantment\enchantment;
 use pocketmine\level\format\Chunk;
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\format\generic\BaseLevelProvider;
@@ -1636,31 +1637,32 @@ class Level implements ChunkManager, Metadatable{
 			$drops = $ev->getDrops();
 
 			if($player->isSurvival() and $this->getServer()->expEnabled){
+				$exp = 0;
+				if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) === 0){
+					switch($target->getId()){
+						case Block::COAL_ORE:
+							$exp = mt_rand(0, 2);
+							break;
+						case Block::DIAMOND_ORE:
+						case Block::EMERALD_ORE:
+							$exp = mt_rand(3, 7);
+							break;
+						case Block::NETHER_QUARTZ_ORE:
+						case Block::LAPIS_ORE:
+							$exp = mt_rand(2, 5);
+							break;
+						case Block::REDSTONE_ORE:
+						case Block::GLOWING_REDSTONE_ORE:
+							$exp = mt_rand(1, 5);
+							break;
+					}
+				}
 				switch($target->getId()){
-					case Block::COAL_ORE:
-						$exp = mt_rand(0, 2);
-						if($exp > 0) $this->spawnXPOrb($vector->add(0, 1, 0), $exp);
-						break;
-					case Block::DIAMOND_ORE:
-					case Block::EMERALD_ORE:
-						$exp = mt_rand(3, 7);
-						$this->spawnXPOrb($vector->add(0, 1, 0), $exp);
-						break;
-					case Block::NETHER_QUARTZ_ORE:
-					case Block::LAPIS_ORE:
-						$exp = mt_rand(2, 5);
-						$this->spawnXPOrb($vector->add(0, 1, 0), $exp);
-						break;
-					case Block::REDSTONE_ORE:
-					case Block::GLOWING_REDSTONE_ORE:
-						$exp = mt_rand(1, 5);
-					$this->spawnXPOrb($vector->add(0, 1, 0), $exp);
-						break;
 					case Block::MONSTER_SPAWNER:
 						$exp = mt_rand(15, 43);
-						$this->spawnXPOrb($vector->add(0, 1, 0), $exp);
 						break;
 				}
+				if($exp > 0){$this->spawnXPOrb($vector->add(0, 1, 0), $exp);}
 			}
 
 		}elseif($item !== null and !$target->isBreakable($item)){
@@ -1778,7 +1780,26 @@ class Level implements ChunkManager, Metadatable{
 			$this->server->getPluginManager()->callEvent($ev);
 			if(!$ev->isCancelled()){
 				$target->onUpdate(self::BLOCK_UPDATE_TOUCH);
-				if(!$player->isSneaking() and $target->canBeActivated() === true and $target->onActivate($item, $player) === true){
+				if(!$player->isSneaking()){
+					if($target->canBeActivated() === true and $target->onActivate($item, $player) === true){
+						if($item->getCount() <= 0){
+							$item = Item::get(Item::AIR, 0, 0);
+						}elseif($item->isTool() and $item->getDamage() >= $item->getMaxDurability()){
+							$item = Item::get(Item::AIR, 0, 0);
+						}
+						return true;
+					}
+					if($item->canBeActivated() and $item->onActivate($this, $player, $block, $target, $face, $fx, $fy, $fz)){
+						if($item->getCount() <= 0){
+							$item = Item::get(Item::AIR, 0, 0);
+							return true;
+						}elseif($item->isTool() and $item->getDamage() >= $item->getMaxDurability()){
+							$item = Item::get(Item::AIR, 0, 0);
+							return true;
+						}
+					}
+				}
+				/*if(!$player->isSneaking() and $target->canBeActivated() === true and $target->onActivate($item, $player) === true){
 					return true;
 				}
 
@@ -1788,7 +1809,7 @@ class Level implements ChunkManager, Metadatable{
 
 						return true;
 					}
-				}
+				}*/
 			}else{
 				return false;
 			}
