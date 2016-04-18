@@ -3,7 +3,7 @@
 Chat on Gitter: [![Gitter](https://img.shields.io/gitter/room/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
 You can also join #genisys on freenode IRC.
 
-Special thanks to [JetBrains](https://www.jetbrains.com) for providing free open source lisence.
+Special thanks to [JetBrains](https://www.jetbrains.com) for providing free open source license.
 
 ### Build status
 Jenkins: [![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.mcper.cn/Genisys-master.svg)](https://jenkins.mcper.cn/job/Genisys-master/)  
