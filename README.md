@@ -3,6 +3,8 @@
 Chat on Gitter: [![Gitter](https://img.shields.io/gitter/room/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
 You can also join #genisys on freenode IRC.
 
+Special thanks to [JetBrains](https://www.jetbrains.com) for providing free open source lisence.
+
 ### Build status
 Jenkins: [![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.mcper.cn/Genisys-master.svg)](https://jenkins.mcper.cn/job/Genisys-master/)  
 Travis-CI: [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)  
@@ -88,6 +90,7 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
 * Multiple types of Boat, Villager and Rabbit
 * Enchantment
 * Brewing
+* Enchantment effects
 * NOTICE: Please edit **genisys.yml** to enable all the features, including Redstone, MobAI, Nether and so on.
 
 ### To-Do List
@@ -170,6 +173,7 @@ Port: 19132
 * 不同种类的船，村民和兔子
 * 原版附魔
 * 酿造
+* 附魔效果
 * 注意: 请编辑 **genisys.yml** 来启用红石、生物AI和地狱等功能。
 
 ### 计划表
