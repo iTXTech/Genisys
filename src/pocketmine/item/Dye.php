@@ -41,7 +41,8 @@ class Dye extends Item{
 	const ORANGE = 14;
 	const WHITE = 15;
 
-	public function __construct($meta = 0, $count = 1){
+	public function __construct($meta = 0, $count = 1)
+	{
 		if ($meta === 3) {
 			$this->block = Block::get(Item::COCOA_BLOCK);
 			parent::__construct(self::DYE, 3, $count, "Cocoa Beans");

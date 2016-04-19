@@ -31,7 +31,8 @@ class CocoaBlock extends Solid {
 
     protected $id = self::COCOA_BLOCK;
 
-    public function __construct($meta = 0){
+    public function __construct($meta = 0)
+    {
         $this->meta = $meta;
     }
 
@@ -44,7 +45,8 @@ class CocoaBlock extends Solid {
         return 0.2;
     }
 
-    public function getResistance(){
+    public function getResistance()
+    {
         return 15;
     }
 
