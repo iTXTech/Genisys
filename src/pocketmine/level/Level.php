@@ -45,6 +45,7 @@ use pocketmine\block\Sapling;
 use pocketmine\block\SnowLayer;
 use pocketmine\block\Sugarcane;
 use pocketmine\block\Wheat;
+use pocketmine\block\CocoaBlock;
 use pocketmine\entity\Arrow;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Item as DroppedItem;
@@ -247,6 +248,7 @@ class Level implements ChunkManager, Metadatable{
 		Block::SAPLING => Sapling::class,
 		Block::LEAVES => Leaves::class,
 		Block::WHEAT_BLOCK => Wheat::class,
+		Block::COCOA_BLOCK => CocoaBlock::class,
 		Block::FARMLAND => Farmland::class,
 		Block::SNOW_LAYER => SnowLayer::class,
 		Block::ICE => Ice::class,

@@ -221,6 +221,7 @@ class Item{
 
 	const ACTIVATOR_RAIL = 126;
 	const COCOA_BLOCK = 127;
+	const COCOA_PODS = 127;
 	const SANDSTONE_STAIRS = 128;
 	const EMERALD_ORE = 129;
 

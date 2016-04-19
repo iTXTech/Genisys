@@ -21,6 +21,8 @@
 
 namespace pocketmine\item;
 
+use pocketmine\block\Block;
+
 class Dye extends Item{
 	const BLACK = 0;
 	const RED = 1;
@@ -40,7 +42,12 @@ class Dye extends Item{
 	const WHITE = 15;
 
 	public function __construct($meta = 0, $count = 1){
-		parent::__construct(self::DYE, $meta, $count, "Dye");
+		if ($meta === 3) {
+			$this->block = Block::get(Item::COCOA_BLOCK);
+			parent::__construct(self::DYE, 3, $count, "Cocoa Beans");
+		} else {
+			parent::__construct(self::DYE, $meta, $count, "Dye");
+		}
 	}
 
 }
