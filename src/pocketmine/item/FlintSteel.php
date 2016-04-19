@@ -78,6 +78,10 @@ class FlintSteel extends Tool{
 								$level->setBlock(new Vector3($px, $py, $tz), new Block(90, 0));
 							}
 						}
+						if (($player->gamemode & 0x01) === 0) {
+							$this->useOn($block, 2);
+							$player->getInventory()->setItemInHand($this);
+						}
 						return true;
 					}
 				}
@@ -117,6 +121,10 @@ class FlintSteel extends Tool{
 								$level->setBlock(new Vector3($tx, $py, $pz), new Block(90, 0));
 							}
 						}
+						if (($player->gamemode & 0x01) === 0) {
+							$this->useOn($block, 2);
+							$player->getInventory()->setItemInHand($this);
+						}
 						return true;
 					}
 				}
@@ -134,13 +142,9 @@ class FlintSteel extends Tool{
 			//	return true;
 			}
 
-			if(($player->gamemode & 0x01) === 0 and $this->useOn($block)){
-				if($this->getDamage() >= $this->getMaxDurability()){
-					$player->getInventory()->setItemInHand(new Item(Item::AIR, 0, 0));
-				}else{
-					$this->meta++;
-					$player->getInventory()->setItemInHand($this);
-				}
+			if (($player->gamemode & 0x01) === 0) {
+				$this->useOn($block, 2);//耐久跟报废分别写在 tool 跟 level 了
+				$player->getInventory()->setItemInHand($this);
 			}
 
 			return true;
