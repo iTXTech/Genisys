@@ -42,6 +42,10 @@ class Podzol extends Solid{
 	}
 
 	public function getHardness() {
+		return 0.5;
+	}
+
+	public function getResistance(){
 		return 2.5;
 	}
 

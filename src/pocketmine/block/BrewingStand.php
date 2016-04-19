@@ -74,7 +74,11 @@ class BrewingStand extends Transparent{
 	}
 
 	public function getHardness() {
-		return 3;
+		return 0.5;
+	}
+
+	public function getResistance(){
+		return 2.5;
 	}
 
 	public function getName() : string{

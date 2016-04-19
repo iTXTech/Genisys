@@ -32,4 +32,13 @@ class TripwireHook extends Solid {
     public function getName() :string {
         return "Tripwire Hook";
     }
+
+    public function getHardness() {
+        return 0;
+    }
+
+    public function getResistance(){
+        return 0;
+    }
+    
 }

@@ -46,7 +46,11 @@ class Portal extends Transparent{
 	}
 	
 	public function getHardness() {
-		return 20;
+		return -1;
+	}
+
+	public function getResistance(){
+		return 0;
 	}
 
 	public function getToolType(){

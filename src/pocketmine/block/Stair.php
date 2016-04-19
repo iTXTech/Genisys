@@ -151,6 +151,14 @@ abstract class Stair extends Transparent{
 		return true;
 	}
 
+	public function getHardness() {
+		return 2;
+	}
+
+	public function getResistance(){
+		return 15;
+	}
+
 	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			return [

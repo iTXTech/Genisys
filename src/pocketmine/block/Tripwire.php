@@ -32,4 +32,13 @@ class Tripwire extends Solid {
     public function getName() : string {
         return "Tripwire";
     }
+
+    public function getHardness() {
+        return 0;
+    }
+
+    public function getResistance(){
+        return 0;
+    }
+
 }

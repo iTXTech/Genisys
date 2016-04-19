@@ -40,6 +40,14 @@ class NetherQuartzOre extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
+	public function getHardness() {
+		return 3;
+	}
+
+	public function getResistance(){
+		return 15;
+	}
+
 	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
