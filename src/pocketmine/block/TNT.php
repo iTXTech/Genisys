@@ -113,7 +113,7 @@ class TNT extends Solid implements ElectricalAppliance{
 		if($item->getId() === Item::FLINT_STEEL){
 			$this->prime();
 			$this->getLevel()->setBlock($this, new Air(), true);
-			$item->useOn($this);
+			$item->useOn($this, 2);
 			return true;
 		}
 

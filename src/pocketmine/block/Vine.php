@@ -165,6 +165,6 @@ class Vine extends Transparent{
 	}
 
 	public function getToolType(){
-		return Tool::TYPE_AXE;
+		return Tool::TYPE_SHEARS;
 	}
 }

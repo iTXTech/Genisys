@@ -22,6 +22,7 @@
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
+use pocketmine\item\Tool;
 use pocketmine\level\Level;
 use pocketmine\Player;
 
@@ -77,6 +78,11 @@ class TallGrass extends Flowable{
 		}
 
 		return false;
+	}
+
+	public function getToolType()
+	{
+		return Tool::TYPE_SHEARS;
 	}
 
 	public function getDrops(Item $item) : array {

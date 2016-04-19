@@ -47,7 +47,7 @@ class Cobweb extends Flowable{
 	}
 
 	public function getToolType(){
-		return Tool::TYPE_SWORD;
+		return Tool::TYPE_SHEARS;
 	}
 
 	public function onEntityCollide(Entity $entity){
