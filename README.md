@@ -109,6 +109,9 @@ Port: 19132
 
 ## 中文
 
+### 特别鸣谢
+* 特别鸣谢 [JetBrains](https://www.jetbrains.com) 提供的针对开源项目的软件license.
+
 * 一个核心统治一切。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
 * 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
