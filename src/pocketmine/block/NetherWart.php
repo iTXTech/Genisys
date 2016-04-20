@@ -56,7 +56,7 @@ class NetherWart extends Flowable{
 				return Level::BLOCK_UPDATE_NORMAL;
 			}
 		}elseif($type === Level::BLOCK_UPDATE_RANDOM){
-			if(mt_rand(0, 1) == 1){//only have 0-3 So maybe slowly
+			if(mt_rand(0, 12) == 1){//only have 0-3 So maybe slowly
 				if($this->meta < 0x03){//0x03
 					$block = clone $this;
 					++$block->meta;
