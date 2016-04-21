@@ -34,7 +34,7 @@ use pocketmine\level\generator\noise\Simplex;
 
 use pocketmine\level\generator\object\OreType;
 use pocketmine\level\generator\populator\GroundFire;
-use pocketmine\level\generator\populator\NetherGrowStone;
+use pocketmine\level\generator\populator\NetherGlowStone;
 use pocketmine\level\generator\populator\NetherOre;
 use pocketmine\level\generator\populator\Populator;
 
@@ -115,7 +115,7 @@ class Nether extends Generator{
 			new OreType(new Gravel(), 5, 64, 0, 128),
 		]);
 		$this->populators[] = $ores;
-		$this->populators[] = new NetherGrowStone();
+		$this->populators[] = new NetherGlowStone();
 		$groundFire = new GroundFire();
 		$groundFire->setBaseAmount(1);
 		$groundFire->setRandomAmount(1);
@@ -154,7 +154,7 @@ class Nether extends Generator{
 						$chunk->setBlockId($x, $y, $z, Block::NETHERRACK);
 					}elseif($y <= $this->waterHeight){
 						$chunk->setBlockId($x, $y, $z, Block::STILL_LAVA);
-						$chunk->setBlockLight($x, $y, $z, 15);
+						$chunk->setBlockLight($x, $y + 1, $z, 15);
 					}
 				}
 			}

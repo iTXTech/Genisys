@@ -69,6 +69,36 @@ interface ChunkManager{
 	public function setBlockDataAt(int $x, int $y, int $z, int $data);
 
 	/**
+	 * Gets the raw block light level
+	 *
+	 * @param int $x
+	 * @param int $y
+	 * @param int $z
+	 *
+	 * @return int 0-15
+	 */
+	public function getBlockLightAt($x, $y, $z);
+
+	/**
+	 * Updates the light around the block
+	 *
+	 * @param $x
+	 * @param $y
+	 * @param $z
+	 */
+	public function updateBlockLight($x, $y, $z);
+
+	/**
+	 * Sets the raw block light level.
+	 *
+	 * @param int $x
+	 * @param int $y
+	 * @param int $z
+	 * @param int $level 0-15
+	 */
+	public function setBlockLightAt($x, $y, $z, $level);
+
+	/**
 	 * @param int $chunkX
 	 * @param int $chunkZ
 	 *

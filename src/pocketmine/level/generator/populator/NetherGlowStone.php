@@ -21,14 +21,13 @@
 
 namespace pocketmine\level\generator\populator;
 
-use pocketmine\block\Block;
 use pocketmine\block\Glowstone;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\object\NetherOreTop as ObjectOre;
 use pocketmine\level\generator\object\OreType;
 use pocketmine\utils\Random;
 
-class NetherGrowStone extends Populator{
+class NetherGlowStone extends Populator{
 
 	/** @var ChunkManager */
 	private $level;
@@ -42,9 +41,7 @@ class NetherGrowStone extends Populator{
 			$z = $random->nextRange($chunkZ << 4, ($chunkZ << 4) + 15);
 			$y = $this->getHighestWorkableBlock($x, $z);
 			$ore->placeObject($level, $x, $y, $z);
-
 		}
-
 	}
 
 	private function getHighestWorkableBlock($x, $z){
