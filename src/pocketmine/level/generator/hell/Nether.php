@@ -23,6 +23,7 @@ namespace pocketmine\level\generator\hell;
 
 use pocketmine\block\Block;
 use pocketmine\block\Gravel;
+use pocketmine\block\Lava;
 use pocketmine\block\NetherQuartzOre;
 use pocketmine\block\SoulSand;
 use pocketmine\level\ChunkManager;
@@ -35,6 +36,7 @@ use pocketmine\level\generator\noise\Simplex;
 use pocketmine\level\generator\object\OreType;
 use pocketmine\level\generator\populator\GroundFire;
 use pocketmine\level\generator\populator\NetherGlowStone;
+use pocketmine\level\generator\populator\NetherLava;
 use pocketmine\level\generator\populator\NetherOre;
 use pocketmine\level\generator\populator\Populator;
 
@@ -113,6 +115,7 @@ class Nether extends Generator{
 			new OreType(new NetherQuartzOre(), 20, 16, 0, 128),
 			new OreType(new SoulSand(), 5, 64, 0, 128),
 			new OreType(new Gravel(), 5, 64, 0, 128),
+			new OreType(new Lava(), 1, 16, 0, $this->waterHeight),
 		]);
 		$this->populators[] = $ores;
 		$this->populators[] = new NetherGlowStone();
@@ -120,6 +123,10 @@ class Nether extends Generator{
 		$groundFire->setBaseAmount(1);
 		$groundFire->setRandomAmount(1);
 		$this->populators[] = $groundFire;
+		$lava = new NetherLava();
+		$lava->setBaseAmount(0);
+		$lava->setRandomAmount(0);
+		$this->populators[] = $lava;
 	}
 
 	public function generateChunk($chunkX, $chunkZ){
