@@ -29,34 +29,41 @@ class CommandReader extends Thread{
 	/** @var \Threaded */
 	protected $buffer;
 	private $shutdown = false;
+	private $stdin;
+	private $logger;
 
-	public function __construct(){
+	public function __construct($logger){
+		$this->stdin = fopen("php://stdin", "r");
+		$opts = getopt("", ["disable-readline"]);
+		if(extension_loaded("readline") && !isset($opts["disable-readline"]) && (!function_exists("posix_isatty") || posix_isatty($this->stdin))){
+			$this->readline = true;
+		}else{
+			$this->readline = false;
+		}
+		$this->logger = $logger;
 		$this->buffer = new \Threaded;
 		$this->start();
-		//$this->start(PTHREADS_INHERIT_NONE);//May cause segfault
 	}
 
 	public function shutdown(){
 		$this->shutdown = true;
 	}
 
+	private function readline_callback($line){
+		if($line !== ""){
+			$this->buffer[] = $line;
+			readline_add_history($line);
+		}
+	}
+
 	private function readLine(){
 		if(!$this->readline){
-			/*global $stdin;
-
-			if(!is_resource($stdin)){
-				return "";
+			$line = trim(fgets($this->stdin));
+			if($line !== ""){
+				$this->buffer[] = $line;
 			}
-
-			return trim(fgets($stdin));*/
-			return trim(fgets(fopen("php://stdin", "r")));
 		}else{
-			$line = trim(readline("> "));
-			if($line != ""){
-				readline_add_history($line);
-			}
-
-			return $line;
+			readline_callback_read_char();
 		}
 	}
 
@@ -75,35 +82,34 @@ class CommandReader extends Thread{
 
 	public function quit(){
 		$this->shutdown();
-		$this->isKilled = true;
-
-		$this->notify();
-
-		ThreadManager::getInstance()->remove($this);
+		parent::quit();
 	}
 
 	public function run(){
-		$opts = getopt("", ["disable-readline"]);
-		if(extension_loaded("readline") and !isset($opts["disable-readline"])){
-			$this->readline = true;
-		}else{
-		/*	global $stdin;
-			$stdin = fopen("php://stdin", "r");
-			stream_set_blocking($stdin, 0);*/
-			$this->readline = false;
+		if($this->readline){
+			readline_callback_handler_install("Genisys> ", [$this, "readline_callback"]);
+			$this->logger->setConsoleCallback("readline_redisplay");
 		}
 
-		$lastLine = microtime(true);
 		while(!$this->shutdown){
-			if(($line = $this->readLine()) !== ""){
-				$this->buffer[] = preg_replace("#\\x1b\\x5b([^\\x1b]*\\x7e|[\\x40-\\x50])#", "", $line);
-			}elseif(!$this->shutdown and (microtime(true) - $lastLine) <= 0.1){ //Non blocking! Sleep to save CPU
-				$this->synchronized(function(){
-					$this->wait(10000);
-				});
+			$r = [$this->stdin];
+			$w = null;
+			$e = null;
+			if(stream_select($r, $w, $e, 0, 200000) > 0){
+				if(feof($this->stdin)){
+					$this->buffer[] = "stop";
+					$this->shutdown();
+					break;
+				}
+				if(($line = $this->readLine()) !== ""){
+					$this->buffer[] = $line;
+				}
 			}
-
-			$lastLine = microtime(true);
+		}
+		
+		if($this->readline){
+			$this->logger->setConsoleCallback(null);
+			readline_callback_handler_remove();
 		}
 	}
 
