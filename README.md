@@ -1,7 +1,9 @@
-# Genisys(创世纪) - PocketMine-iTX Core
+![Genisys Logo](http://i2.piimg.com/cbb430ffc7a97315.jpg)
+
+# Genisys (创世纪) - PocketMine-iTX Core
 
 Chat on Gitter: [![Gitter](https://img.shields.io/gitter/room/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
-You can also join #genisys on freenode IRC.
+You can also join `#genisys` on freenode IRC.
 
 Special thanks to [JetBrains](https://www.jetbrains.com) for providing free open source license.
 
@@ -15,14 +17,19 @@ You can get prebuilt phar from [Jenkins](https://jenkins.mcper.cn/job/Genisys-ma
 
 ### Fast Docker installation
 [![Docker Pulls](https://img.shields.io/docker/pulls/itxtech/docker-env-genisys.svg)](https://hub.docker.com/r/itxtech/docker-env-genisys/)  
-See [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys) for details.
+See [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys) for more details.
+
+## Contents
+
+* [English Version](#english-version)
+* [中文版本](#中文版本)
 
 ## English Version
 
 * One Core to rule anything
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO and iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
-* [Download PHP7 for Genisys](https://github.com/iTXTech/PHP-Genisys/)
+* [Download php7 for Genisys](https://github.com/iTXTech/PHP-Genisys/)
 * [Download Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
 * Feel free to create a Pull Request or open an Issue. English and Chinese are both welcome. Use English to communicate with more people.
 
@@ -107,13 +114,13 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
 Address: beermc.com  
 Port: 19132
 
-## 中文
+## 中文版本
 
 * 一个核心统治一切。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
 * 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
-* [点击获取PHP7](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
-* [点击获取Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
+* [点击获取 php7](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
+* [点击获取 Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
 * 欢迎创建 Pull Request。请使用中文或者英文进行交流（但为了交流方便，请尽量使用英文进行交流）。
 
 ### 鸣谢
