@@ -1752,7 +1752,7 @@ class Server{
 			$this->dataPath = realpath($dataPath) . DIRECTORY_SEPARATOR;
 			$this->pluginPath = realpath($pluginPath) . DIRECTORY_SEPARATOR;
 
-			$this->console = new CommandReader();
+			$this->console = new CommandReader($logger);
 
 			$version = new VersionString($this->getPocketMineVersion());
 			$this->version = $version;
