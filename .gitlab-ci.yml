@@ -8,7 +8,7 @@ phar:
   script:
    - mkdir plugins
    - sed -i "s/const VERSION \?= \?\"\(.*\)\"/const VERSION = \"\1-${CI_BUILD_REF:0:7}\"/" src/pocketmine/PocketMine.php
-   - php tests/Travis.php
+   - ./tests/ci.sh
    - mv plugins/Genisys/Genisys*.phar .
   artifacts:
     paths:
