@@ -91,9 +91,7 @@ class CommandReader extends Thread{
 		if($this->readline){
 			readline_callback_handler_install("Genisys> ", [$this, "readline_callback"]);
 			$this->logger->setConsoleCallback("readline_redisplay");
-		}else{
-            stream_set_blocking($this->stdin, false);
-        }
+		}
 
 		while(!$this->shutdown){
 			$r = [$this->stdin];
@@ -114,9 +112,7 @@ class CommandReader extends Thread{
 		if($this->readline){
 			$this->logger->setConsoleCallback(null);
 			readline_callback_handler_remove();
-		}else{
-            stream_set_blocking($this->stdin, true);
-        }
+		}
 	}
 
 	public function getThreadName(){
