@@ -84,7 +84,7 @@ class CommandReader extends Thread{
 
 	public function quit(){
 		$this->shutdown();
-		//parent::quit();
+		parent::quit();
 	}
 
 	public function run(){
@@ -99,14 +99,15 @@ class CommandReader extends Thread{
 			$e = null;
 			if(stream_select($r, $w, $e, 0, 200000) > 0){
 				if(feof($this->stdin)){
-					$this->stdin = fopen("php://stdin", "r"); //unexpectedly closed
+					$this->buffer[] = "stop";
+					$this->shutdown();
+					break;
 				}
 				if(($line = $this->readLine()) !== ""){
 					$this->buffer[] = $line;
 				}
 			}
 		}
-		fclose($this->stdin);
 		
 		if($this->readline){
 			$this->logger->setConsoleCallback(null);
