@@ -804,25 +804,15 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->dataPacket($pk);
 
 			$targetLevel->getWeather()->sendWeather($this);
-
-			/*if($this->server->netherEnabled){
-				if($targetLevel == $this->server->netherLevel){
-					$pk = new ChangeDimensionPacket();
-					$pk->dimension = ChangeDimensionPacket::DIMENSION_NETHER;
-					$this->dataPacket($pk);
-					$this->shouldSendStatus = true;
-				}elseif($oldLevel == $this->server->netherLevel){
-					$pk = new ChangeDimensionPacket();
-					$pk->dimension = ChangeDimensionPacket::DIMENSION_NORMAL;
-					$this->dataPacket($pk);
-					$this->shouldSendStatus = true;
-				}
-			}*/
 			if($targetLevel->getDimension() != $oldLevel->getDimension()){
 				$pk = new ChangeDimensionPacket();
 				$pk->dimension = $targetLevel->getDimension();
 				$this->dataPacket($pk);
 				$this->shouldSendStatus = true;
+			}
+
+			if($this->spawned){
+				$this->spawnToAll();
 			}
 		}
 	}

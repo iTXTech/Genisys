@@ -23,6 +23,7 @@ namespace pocketmine\command;
 
 use pocketmine\Thread;
 use pocketmine\ThreadManager;
+use pocketmine\utils\MainLogger;
 
 class CommandReader extends Thread{
 	private $readline;
@@ -30,6 +31,7 @@ class CommandReader extends Thread{
 	protected $buffer;
 	private $shutdown = false;
 	private $stdin;
+	/** @var MainLogger */
 	private $logger;
 
 	public function __construct($logger){

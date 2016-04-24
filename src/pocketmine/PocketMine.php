@@ -481,6 +481,8 @@ namespace pocketmine {
 
 	echo "Server has stopped" . Terminal::$FORMAT_RESET . "\n";
 
+	@kill(getmygid());
+
 	exit(0);
 
 }
