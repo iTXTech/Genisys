@@ -57,14 +57,16 @@ class MobSpawner extends Spawnable{
 			$nbt->Delay = new IntTag("Delay", mt_rand($nbt->MinSpawnDelay->getValue(), $nbt->MaxSpawnDelay->getValue()));
 		}
 
-		if($this->getEntityId() > 0) $this->scheduleUpdate();
+		if($this->getEntityId() > 0){
+			$this->scheduleUpdate();
+		}
 	}
 
 	public function getEntityId(){
 		return $this->namedtag["EntityId"];
 	}
 
-	public function setEntityId($id){
+	public function setEntityId(int $id){
 		$this->namedtag->EntityId->setValue($id);
 		$this->spawnToAll();
 		if($this->chunk instanceof FullChunk){
@@ -78,7 +80,7 @@ class MobSpawner extends Spawnable{
 		return $this->namedtag["SpawnCount"];
 	}
 
-	public function setSpawnCount($value){
+	public function setSpawnCount(int $value){
 		$this->namedtag->SpawnCount->setValue($value);
 	}
 
@@ -86,7 +88,7 @@ class MobSpawner extends Spawnable{
 		return $this->namedtag["SpawnRange"];
 	}
 
-	public function setSpawnRange($value){
+	public function setSpawnRange(int $value){
 		$this->namedtag->SpawnRange->setValue($value);
 	}
 
@@ -94,26 +96,26 @@ class MobSpawner extends Spawnable{
 		return $this->namedtag["MinSpawnDelay"];
 	}
 
-	public function setMinSpawnDelay($value){
+	public function setMinSpawnDelay(int $value){
 		$this->namedtag->MinSpawnDelay->setValue($value);
 	}
-	
+
 	public function getMaxSpawnDelay(){
 		return $this->namedtag["MaxSpawnDelay"];
 	}
 
-	public function setMaxSpawnDelay($value){
+	public function setMaxSpawnDelay(int $value){
 		$this->namedtag->MaxSpawnDelay->setValue($value);
 	}
-	
+
 	public function getDelay(){
 		return $this->namedtag["Delay"];
 	}
 
-	public function setDelay($value){
+	public function setDelay(int $value){
 		$this->namedtag->Delay->setValue($value);
 	}
-	
+
 	public function getName() : string{
 		return "Monster Spawner";
 	}
@@ -126,9 +128,13 @@ class MobSpawner extends Spawnable{
 			if($e instanceof Player){
 				if($e->distance($this->getBlock()) <= 15) $hasPlayer = true;
 			}
-			if($e::NETWORK_ID == $this->getEntityId()) $count++;
+			if($e::NETWORK_ID == $this->getEntityId()){
+				$count++;
+			}
 		}
-		if($hasPlayer and $count < 15) return true; // Spawn limit = 15
+		if($hasPlayer and $count < 15){ // Spawn limit = 15
+			return true;
+		}
 		return false;
 	}
 
@@ -139,12 +145,13 @@ class MobSpawner extends Spawnable{
 
 		$this->timings->startTiming();
 
-		if(!($this->chunk instanceof FullChunk)) return false;
+		if(!($this->chunk instanceof FullChunk)){
+			return false;
+		}
 		if($this->canUpdate()){
 			if($this->getDelay() == 0){
 				$success = 0;
-				for($i = 0; $i < $this->getSpawnCount(); $i++)
-				{
+				for($i = 0; $i < $this->getSpawnCount(); $i++){
 					$pos = $this->add(mt_rand() / mt_getrandmax() * $this->getSpawnRange(), mt_rand(-1, 1), mt_rand() / mt_getrandmax() * $this->getSpawnRange());
 					$target = $this->getLevel()->getBlock($pos);
 					$ground = $target->getSide(Vector3::SIDE_DOWN);
@@ -174,8 +181,7 @@ class MobSpawner extends Spawnable{
 					}
 				}
 				if($success > 0) $this->setDelay(mt_rand($this->getMinSpawnDelay(), $this->getMaxSpawnDelay()));
-			}
-			else{
+			}else{
 				$this->setDelay($this->getDelay() - 1);
 			}
 		}
