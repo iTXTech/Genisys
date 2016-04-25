@@ -85,10 +85,11 @@ class CommandReader extends Thread{
 
 	public function quit(){
 		$this->shutdown();
-		if(Utils::getOS() != "win"){
+		if(Utils::getOS() == "win"){
 			// Windows sucks. Don't use that.
-			parent::quit();
+			\Thread::kill();
 		}
+		parent::quit();
 	}
 
 	public function run(){
@@ -103,9 +104,6 @@ class CommandReader extends Thread{
 			$e = null;
 			if(stream_select($r, $w, $e, 0, 200000) > 0){
 				if(feof($this->stdin)){
-					/*$this->buffer[] = "stop";
-					$this->shutdown();*/
-					$this->stdin = fopen("php://stdin", "r");//Unexpected stdin close
 					break;
 				}
 				$this->readLine();
