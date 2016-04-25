@@ -24,6 +24,7 @@ namespace pocketmine\command;
 use pocketmine\Thread;
 use pocketmine\ThreadManager;
 use pocketmine\utils\MainLogger;
+use pocketmine\utils\Utils;
 
 class CommandReader extends Thread{
 	private $readline;
@@ -84,11 +85,10 @@ class CommandReader extends Thread{
 
 	public function quit(){
 		$this->shutdown();
-		if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
+		if(Utils::getOS() != "win"){
 			// Windows sucks. Don't use that.
-			parent::kill();
+			parent::quit();
 		}
-		parent::quit();
 	}
 
 	public function run(){
@@ -103,14 +103,15 @@ class CommandReader extends Thread{
 			$e = null;
 			if(stream_select($r, $w, $e, 0, 200000) > 0){
 				if(feof($this->stdin)){
-					$this->buffer[] = "stop";
-					$this->shutdown();
+					/*$this->buffer[] = "stop";
+					$this->shutdown();*/
+					$this->stdin = fopen("php://stdin", "r");//Unexpected stdin close
 					break;
 				}
 				$this->readLine();
 			}
 		}
-		
+
 		if($this->readline){
 			$this->logger->setConsoleCallback(null);
 			readline_callback_handler_remove();
