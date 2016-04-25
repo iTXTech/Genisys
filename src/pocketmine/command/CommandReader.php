@@ -85,11 +85,9 @@ class CommandReader extends Thread{
 
 	public function quit(){
 		$this->shutdown();
-		if(Utils::getOS() == "win"){
-			// Windows sucks. Don't use that.
-			\Thread::kill();
+		if(Utils::getOS() != "win"){
+			parent::quit();
 		}
-		parent::quit();
 	}
 
 	public function run(){
