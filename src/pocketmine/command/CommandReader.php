@@ -84,6 +84,10 @@ class CommandReader extends Thread{
 
 	public function quit(){
 		$this->shutdown();
+		if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
+			// Windows sucks. Don't use that.
+			parent::kill();
+		}
 		parent::quit();
 	}
 
@@ -103,9 +107,7 @@ class CommandReader extends Thread{
 					$this->shutdown();
 					break;
 				}
-				if(($line = $this->readLine()) !== ""){
-					$this->buffer[] = $line;
-				}
+				$this->readLine();
 			}
 		}
 		
