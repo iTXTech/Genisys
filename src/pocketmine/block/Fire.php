@@ -82,7 +82,7 @@ class Fire extends Flowable{
 
 	public function onUpdate($type){
 		if($type == Level::BLOCK_UPDATE_NORMAL or $type = Level::BLOCK_UPDATE_RANDOM){
-			if(!$this->isBlockTopFacingSurfaceSolid($this->getSide(Vector3::SIDE_DOWN)) and !$this->canNeighborBurn()){
+			if(!$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() and !$this->canNeighborBurn()){
 				$this->getLevel()->setBlock($this, new Air(), true);
 				return Level::BLOCK_UPDATE_NORMAL;
 			}elseif($type == Level::BLOCK_UPDATE_SCHEDULED and $this->getLevel()->getServer()->fireSpread){
@@ -90,7 +90,7 @@ class Fire extends Flowable{
 
 				//TODO: END
 
-				if(!$this->isBlockTopFacingSurfaceSolid($this->getSide(Vector3::SIDE_DOWN)) and !$this->canNeighborBurn()){
+				if(!$this->getSide(Vector3::SIDE_DOWN)->isBlockTopFacingSurfaceSolid() and !$this->canNeighborBurn()){
 					$this->getLevel()->setBlock($this, new Air(), true);
 				}
 
@@ -114,7 +114,7 @@ class Fire extends Flowable{
 					$this->getLevel()->scheduleUpdate($this, $this->getTickRate() + mt_rand(0, 10));
 
 					if(!$forever and !$this->canNeighborBurn()){
-						if(!$this->isBlockTopFacingSurfaceSolid($this->getSide(Vector3::SIDE_DOWN)) or $meta > 3){
+						if(!$$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() or $meta > 3){
 							$this->getLevel()->setBlock($this, new Air(), true);
 						}
 					}else if(!$forever && !($this->getSide(Vector3::SIDE_DOWN)->getBurnAbility() > 0) && $meta == 15 && mt_rand(0, 4) == 0){
@@ -191,4 +191,37 @@ class Fire extends Flowable{
 		return false;
 	}*/
 
+	private function tryToCatchBlockOnFire(Block $block, int $bound, int $damage){
+		$burnAbility = $block->getBurnAbility();
+
+		if(mt_rand(0, $bound) < $burnAbility){
+			if(mt_rand(0, $damage + 10) < 5){
+				$meta = max(15, $damage + mt_rand(0, 4) / 4);
+
+				$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new BlockBurnEvent($block));
+				if(!$ev->isCancelled()){
+					$this->getLevel()->setBlock($block, $fire = new Fire($meta), true);
+					$this->getLevel()->scheduleUpdate($block, $fire->getTickRate());
+				}
+			}else{
+					$this->getLevel()->setBlock($this, new Air(), true);
+			}
+
+			if($block instanceof TNT){
+				$block->prime();
+			}
+		}
+	}
+
+	private function getChanceOfNeighborsEncouragingFire(Block $block){
+		if($block->getId() !== self::AIR){
+			return 0;
+		}else{
+			$chance = 0;
+			for($i = 0; $i < 5; $i++){
+				$chance = max($chance, $block->getSide($i)->getBurnChance());
+			}
+			return $chance;
+		}
+	}
 }

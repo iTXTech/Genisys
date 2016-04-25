@@ -137,7 +137,7 @@ class FlintSteel extends Tool{
 
 			/** @var Fire $block */
 			$block = $level->getBlock($block);
-			if($block->isBlockTopFacingSurfaceSolid($block->getSide(Vector3::SIDE_DOWN)) or $block->canNeighborBurn()){
+			if($block->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() or $block->canNeighborBurn()){
 				$level->scheduleUpdate($block, $block->getTickRate() + mt_rand(0, 10));
 			//	return true;
 			}

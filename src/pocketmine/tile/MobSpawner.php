@@ -155,7 +155,7 @@ class MobSpawner extends Spawnable{
 					$pos = $this->add(mt_rand() / mt_getrandmax() * $this->getSpawnRange(), mt_rand(-1, 1), mt_rand() / mt_getrandmax() * $this->getSpawnRange());
 					$target = $this->getLevel()->getBlock($pos);
 					$ground = $target->getSide(Vector3::SIDE_DOWN);
-					if($target->getId() == Item::AIR && $ground->isSolid()){
+					if($target->getId() == Item::AIR && $ground->isTopFacingSurfaceSolid()){
 						$success++;
 						$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new EntityGenerateEvent($pos, $this->getEntityId(), EntityGenerateEvent::CAUSE_MOB_SPAWNER));
 						if(!$ev->isCancelled()){

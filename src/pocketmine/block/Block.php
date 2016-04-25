@@ -749,15 +749,15 @@ class Block extends Position implements Metadatable{
 		return 0;
 	}
 
-	public function isBlockTopFacingSurfaceSolid(Block $block){
-		if($block->isSolid()){
+	public function isTopFacingSurfaceSolid(){
+		if($this->isSolid()){
 			return true;
 		}else{
-			if($block instanceof Stair and ($block->getDamage() &4) == 4){
+			if($this instanceof Stair and ($this->getDamage() &4) == 4){
 				return true;
-			}elseif($block instanceof Slab and ($block->getDamage() & 8) == 8){
+			}elseif($this instanceof Slab and ($this->getDamage() & 8) == 8){
 				return true;
-			}elseif($block instanceof SnowLayer and ($block->getDamage() & 7) == 7){
+			}elseif($this instanceof SnowLayer and ($this->getDamage() & 7) == 7){
 				return true;
 			}
 		}
@@ -771,40 +771,6 @@ class Block extends Position implements Metadatable{
 			}
 		}
 		return false;
-	}
-
-	public function tryToCatchBlockOnFire(Block $block, int $bound, int $damage){
-		$burnAbility = $block->getBurnAbility();
-
-		if(mt_rand(0, $bound) < $burnAbility){
-			if(mt_rand(0, $damage + 10) < 5){
-				$meta = min(15, $damage + mt_rand(0, 5) / 4);
-
-				$this->getLevel()->setBlock($this, $fire = new Fire($meta), true);
-				$this->getLevel()->scheduleUpdate($this, $fire->getTickRate());
-			}else{
-				$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new BlockBurnEvent($block));
-				if(!$ev->isCancelled()){
-					$this->getLevel()->setBlock($this, new Air(), true);
-				}
-			}
-
-			if($block instanceof TNT){
-				$block->prime();
-			}
-		}
-	}
-
-	public function getChanceOfNeighborsEncouragingFire(Block $block){
-		if($block->getId() !== self::AIR){
-			return 0;
-		}else{
-			$chance = 0;
-			for($i = 0; $i < 5; $i++){
-				$chance = max($chance, $block->getSide($i)->getBurnChance());
-			}
-			return $chance;
-		}
 	}
 
 	/**
