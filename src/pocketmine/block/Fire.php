@@ -81,7 +81,7 @@ class Fire extends Flowable{
 	}
 
 	public function onUpdate($type){
-		if($type == Level::BLOCK_UPDATE_NORMAL or $type = Level::BLOCK_UPDATE_RANDOM){
+		if($type == Level::BLOCK_UPDATE_NORMAL or $type == Level::BLOCK_UPDATE_RANDOM or $type == Level::BLOCK_UPDATE_SCHEDULED){
 			if(!$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() and !$this->canNeighborBurn()){
 				$this->getLevel()->setBlock($this, new Air(), true);
 				return Level::BLOCK_UPDATE_NORMAL;
@@ -90,7 +90,7 @@ class Fire extends Flowable{
 
 				//TODO: END
 
-				if(!$this->getSide(Vector3::SIDE_DOWN)->isBlockTopFacingSurfaceSolid() and !$this->canNeighborBurn()){
+				if(!$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() and !$this->canNeighborBurn()){
 					$this->getLevel()->setBlock($this, new Air(), true);
 				}
 
