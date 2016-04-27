@@ -24,6 +24,7 @@ namespace pocketmine\block;
 use pocketmine\entity\Arrow;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
+use pocketmine\event\block\BlockBurnEvent;
 use pocketmine\event\entity\EntityCombustByBlockEvent;
 use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -36,8 +37,14 @@ class Fire extends Flowable{
 
 	protected $id = self::FIRE;
 
+	/** @var Vector3 */
+	private $temporalVector = null;
+
 	public function __construct($meta = 0){
 		$this->meta = $meta;
+		if($this->temporalVector === null){
+			$this->temporalVector = new Vector3(0, 0, 0);
+		}
 	}
 
 	public function hasEntityCollision(){
@@ -131,7 +138,6 @@ class Fire extends Flowable{
 						$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_SOUTH), 300 + $o, $meta);
 						$this->tryToCatchBlockOnFire($this->getSide(Vector3::SIDE_NORTH), 300 + $o, $meta);
 
-						$tempVector = new Vector3(0, 0, 0);
 						for($x = ($this->x - 1); $x <= ($this->x + 1); ++$x){
 							for($z = ($this->z - 1); $z <= ($this->z + 1); ++$z){
 								for($y = ($this->y -1); $y <= ($this->y + 4); ++$y){
@@ -141,18 +147,18 @@ class Fire extends Flowable{
 										$k += ($y - ($this->y + 1)) * 100;
 									}
 
-									$chance = $this->getChanceOfNeighborsEncouragingFire($this->getLevel()->getBlock($tempVector->setComponents($x, $y, $z)));
+									$chance = $this->getChanceOfNeighborsEncouragingFire($this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $z)));
 
 									if($chance > 0){
 										$t = ($chance + 40 + $this->getLevel()->getServer()->getDifficulty() * 7);
 
-										//TODO: decrease the t if the rainfall values are high
+										//TODO: decrease t if the rainfall values are high
 
 										if($t > 0 and mt_rand(0, $k) <= $t){
 											$damage = min(15, $meta + mt_rand(0, 5) / 4);
 
-											$this->getLevel()->setBlock($tempVector->setComponents($x, $y, $z), new Fire($damage), true);
-											$this->getLevel()->scheduleUpdate($tempVector, $this->getTickRate());
+											$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $z), new Fire($damage), true);
+											$this->getLevel()->scheduleUpdate($this->temporalVector, $this->getTickRate());
 										}
 									}
 								}

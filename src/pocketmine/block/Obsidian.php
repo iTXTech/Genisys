@@ -67,44 +67,42 @@ class Obsidian extends Solid{
 			for($i = 0;$i <= 6;$i++){
 				if($i == 6){
 					return;
-				}elseif($this->getLevel()->getBlock($this->getSide($i))->getId() == 90){
-					$side = $i;
-					break;
 				}
 			}
 			$block = $this->getLevel()->getBlock($this->getSide($i));
-			if($this->getLevel()->getBlock($block->add(-1, 0, 0))->getId() == 90 or $this->getLevel()->getBlock($block->add(1, 0, 0))->getId() == 90){//x方向
-				for($x = $block->getX();$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $block->getY(), $block->getZ()))->getId() == 90;$x++){
-					for($y = $block->getY();$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $block->getZ()))->getId() == 90;$y++){
-						$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $block->getZ()), new Block(0, 0));
+			if($this->getLevel()->getBlock($this->temporalVector->setComponents($block->x - 1, $block->y, $block->z))->getId() == Block::PORTAL or
+				$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x + 1, $block->y, $block->z))->getId() == Block::PORTAL){//x方向
+				for($x = $block->x;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $block->y, $block->z))->getId() == Block::PORTAL;$x++){
+					for($y = $block->y;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $block->z))->getId() == Block::PORTAL;$y++){
+						$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $block->z), new Air());
 					}
-					for($y = $block->getY() - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $block->getZ()))->getId() == 90;$y--){
-						$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $block->getZ()), new Block(0, 0));
+					for($y = $block->y - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $block->z))->getId() == Block::PORTAL;$y--){
+						$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $block->z), new Air());
 					}
 				}
-				for($x = $block->getX() - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $block->getY(), $block->getZ()))->getId() == 90;$x--){
-					for($y = $block->getY();$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $block->getZ()))->getId() == 90;$y++){
-						$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $block->getZ()), new Block(0, 0));
+				for($x = $block->x - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $block->y, $block->z))->getId() == Block::PORTAL;$x--){
+					for($y = $block->y;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $block->z))->getId() == Block::PORTAL;$y++){
+						$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $block->z), new Air());
 					}
-					for($y = $block->getY() - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $block->getZ()))->getId() == 90;$y--){
-						$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $block->getZ()), new Block(0, 0));
+					for($y = $block->y - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $block->z))->getId() == Block::PORTAL;$y--){
+						$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $block->z), new Air());
 					}
 				}
 			}else{//z方向
-				for($z = $block->getZ();$this->getLevel()->getBlock($this->temporalVector->setComponents($block->getX(), $block->getY(), $z))->getId() == 90;$z++){
-					for($y = $block->getY();$this->getLevel()->getBlock($this->temporalVector->setComponents($block->getX(), $y, $z))->getId() == 90;$y++){
-						$this->getLevel()->setBlock($this->temporalVector->setComponents($block->getX(), $y, $z), new Block(0, 0));
+				for($z = $block->z;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x, $block->y, $z))->getId() == Block::PORTAL;$z++){
+					for($y = $block->y;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x, $y, $z))->getId() == Block::PORTAL;$y++){
+						$this->getLevel()->setBlock($this->temporalVector->setComponents($block->x, $y, $z), new Air());
 					}
-					for($y = $block->getY() - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->getX(), $y, $z))->getId() == 90;$y--){
-						$this->getLevel()->setBlock($this->temporalVector->setComponents($block->getX(), $y, $z), new Block(0, 0));
+					for($y = $block->y - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x, $y, $z))->getId() == Block::PORTAL;$y--){
+						$this->getLevel()->setBlock($this->temporalVector->setComponents($block->x, $y, $z), new Air());
 					}
 				}
-				for($z = $block->getZ() - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->getX(), $block->getY(), $z))->getId() == 90;$z--){
-					for($y = $block->getY();$this->getLevel()->getBlock($this->temporalVector->setComponents($block->getX(), $y, $z))->getId() == 90;$y++){
-						$this->getLevel()->setBlock($this->temporalVector->setComponents($block->getX(), $y, $z), new Block(0, 0));
+				for($z = $block->z - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x, $block->y, $z))->getId() == Block::PORTAL;$z--){
+					for($y = $block->y;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x, $y, $z))->getId() == Block::PORTAL;$y++){
+						$this->getLevel()->setBlock($this->temporalVector->setComponents($block->x, $y, $z), new Air());
 					}
-					for($y = $block->getY() - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->getX(), $y, $z))->getId() == 90;$y--){
-						$this->getLevel()->setBlock($this->temporalVector->setComponents($block->getX(), $y, $z), new Block(0, 0));
+					for($y = $block->y - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x, $y, $z))->getId() == Block::PORTAL;$y--){
+						$this->getLevel()->setBlock($this->temporalVector->setComponents($block->x, $y, $z), new Air());
 					}
 				}
 			}
