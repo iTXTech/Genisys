@@ -2465,7 +2465,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->server->getPluginManager()->callEvent($ev = new BlockBreakEvent($this, $block, $this->getInventory()->getItemInHand(), true));
 					if(!$ev->isCancelled()){
 						$item = $tile->getItem();
-						$this->server->getPluginManager()->callEvent($ev = new ItemFrameDropItemEvent($block, $tile, $item));
+						$this->server->getPluginManager()->callEvent($ev = new ItemFrameDropItemEvent($this, $block, $tile, $item));
 						if(!$ev->isCancelled()){
 							if($item->getId() !== Item::AIR){
 								if((mt_rand(0, 10) / 10) < $tile->getItemDropChance()){
