@@ -33,8 +33,8 @@ class ChunkInfoCommand extends VanillaCommand{
 	public function __construct($name){
 		parent::__construct(
 			$name,
-			"Gets the information of a chunk",
-			"/chunkinfo (x) (y) (z) (levelName)"
+			"Gets the information of a chunk or regenerate a chunk",
+			"/chunkinfo (x) (y) (z) (levelName) (regenerate)"
 		);
 		$this->setPermission("pocketmine.command.chunkinfo");
 	}
@@ -50,7 +50,7 @@ class ChunkInfoCommand extends VanillaCommand{
 			return false;
 		}
 
-		if($sender instanceof Player){
+		if($sender instanceof Player and count($args) < 4){
 			$pos = $sender->getPosition();
 		}else{
 			$level = $sender->getServer()->getLevelByName($args[3]);
@@ -62,10 +62,19 @@ class ChunkInfoCommand extends VanillaCommand{
 			$pos = new Position((int) $args[0], (int) $args[1], (int) $args[2], $level);
 		}
 
-		$chunk = $pos->getLevel()->getChunk($pos->x >> 4, $pos->z >> 4);
-		McRegion::getRegionIndex($chunk->getX(), $chunk->getZ(), $x, $z);
+		if(!isset($args[4]) or $args[0] != "regenerate"){
+			$chunk = $pos->getLevel()->getChunk($pos->x >> 4, $pos->z >> 4);
+			McRegion::getRegionIndex($chunk->getX(), $chunk->getZ(), $x, $z);
 
-		$sender->sendMessage("Region X: $x Region Z: $z");
+			$sender->sendMessage("Region X: $x Region Z: $z");
+		}elseif($args[4] == "regenerate"){
+			foreach($sender->getServer()->getOnlinePlayers() as $p){
+				if($p->getLevel() == $pos->getLevel()){
+					$p->kick(TextFormat::AQUA . "A chunk of this chunk is regenerating, please re-login.", false);
+				}
+			}
+			$pos->getLevel()->regenerateChunk($pos->x >> 4, $pos->z >> 4);
+		}
 
 		return true;
 	}
