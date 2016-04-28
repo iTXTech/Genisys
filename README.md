@@ -29,9 +29,9 @@ See [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys) fo
 * One Core to rule anything
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO and iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
-* [Download php7 for Genisys](https://github.com/iTXTech/PHP-Genisys/)
+* [Download PHP7 for Genisys](https://github.com/iTXTech/PHP-Genisys/)
 * [Download Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
-* Feel free to create a Pull Request or open an Issue. English and Chinese are both welcome. Use English to communicate with more people.
+* Feel free to create a Pull Request or open an Issue. English or Chinese are both accepted. Use English to communicate with more people.
 
 ### Acknowledgements
 * Some features are merged from **@boybook**'s **FCCore**
@@ -41,20 +41,20 @@ See [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys) fo
 * Furnace was fixed by **@MagicDroidX**
 * Rail and Powered Rails were written by **@happy163**
 * Nether door was written by **JJLeo**
-* Base food system is based on **Katana**
+* Base hunger/food system is based on **Katana**
 * Base weather system was written by **@Zzm317** and rewritten by **@PeratX**
 * **@FENGberd**'s encouragement
-* Our leaders are **@ishitatsuyuki** and **@jasonczc**
+* Our project leaders are **@ishitatsuyuki** and **@jasonczc**
 
 ### License
-Most codes are made by PocketMine team and licensed under GPLv3. Some AI is proprietary, copy is prohibited.
+Most codes are written by PocketMine team and licensed under GPLv3. Some of the AI is proprietary, copying is prohibited.
 
 ### Official Development Documentation
 [Genisys Official Development Documentation Page](http://docs.mcper.cn/en-US/)
 
 ### Features
-* Performance optimization (Let 100+ players join in a server)
-* Bug fix in PocketMine-MP
+* Performance optimization (Lets 100+ players join in a server)
+* Lots of bug fixes in PocketMine-MP
 * Weather
 * Experience
 * More Effects
@@ -72,7 +72,7 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
 * More Items
 * Hunger (Based on Katana)
 * AI (Based on MOW)
-* More commands
+* More commands than the original PocketMine-MP
   - bancid
   - bancidbyname
   - banipbyname
@@ -110,7 +110,7 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
 ### Servers
 (Follows are the test servers built by us. In fact other servers used Genisys may be more professional than ours.)
 
-#### Beer MC (A mini-game server)
+#### Beer MC (A minigame server)
 Address: beermc.com  
 Port: 19132
 
