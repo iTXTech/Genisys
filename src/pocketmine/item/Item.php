@@ -943,7 +943,7 @@ class Item{
 			self::addCreativeItem(Item::get(Item::CARPET, 6));
 			//Tools
 			self::addCreativeItem(Item::get(Item::RAIL, 0));
-			self::addCreativeItem(Item::get(Item::ACTIVATOR_RAIL, 0));
+			self::addCreativeItem(Item::get(Item::POWERED_RAIL, 0));
 			self::addCreativeItem(Item::get(Item::DETECTOR_RAIL, 0));
 			self::addCreativeItem(Item::get(Item::ACTIVATOR_RAIL, 0));
 			self::addCreativeItem(Item::get(Item::TORCH, 0));
