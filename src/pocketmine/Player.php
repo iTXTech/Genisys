@@ -82,6 +82,7 @@ use pocketmine\event\server\DataPacketSendEvent;
 use pocketmine\event\TextContainer;
 use pocketmine\event\Timings;
 use pocketmine\event\TranslationContainer;
+use pocketmine\inventory\AnvilInventory;
 use pocketmine\inventory\BaseTransaction;
 use pocketmine\inventory\BigShapedRecipe;
 use pocketmine\inventory\BigShapelessRecipe;
@@ -338,82 +339,97 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		]);
 	}
 
-	protected $explevel = 0;
-	protected $experience = 0;
+	protected $expLevel = 0;
+	protected $exp = 0;
 
-	public function setExperienceAndLevel($exp, $level){
+	public function setExperienceAndLevel(int $exp, int $level){
 		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, $level));
-		if($ev->isCancelled()) return false;
-		$this->explevel = $level;
-		$this->experience = $exp;
-		$this->calcExpLevel();
-		$this->updateExperience();
-		return true;
+		if(!$ev->isCancelled()){
+			$this->expLevel = $level;
+			$this->exp = $exp;
+			$this->calcExpLevel();
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
-	public function setExperience($exp){
+	public function setExp(int $exp){
 		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, 0));
-		if($ev->isCancelled()) return false;
-		$this->experience = $ev->getExp();
-		$this->calcExpLevel();
-		$this->updateExperience();
-		return true;
+		if($ev->isCancelled()){
+			$this->exp = $ev->getExp();
+			$this->calcExpLevel();
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
-	public function setExpLevel($level){
+	public function setExpLevel(int $level){
 		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, 0, $level));
-		if($ev->isCancelled()) return false;
-		$this->explevel = $level;
-		$this->updateExperience();
-		return true;
+		if(!$ev->isCancelled()){
+			$this->expLevel = $level;
+			$this->exp = $this->server->getExpectedExperience($level);
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
 	public function getExpectedExperience(){
-		return $this->server->getExpectedExperience($this->explevel + 1);
+		return $this->server->getExpectedExperience($this->expLevel + 1);
 	}
 
 	public function getLevelUpExpectedExperience(){
 		/*if($this->explevel < 16) return 2 * $this->explevel + 7;
 		elseif($this->explevel < 31) return 5 * $this->explevel - 38;
 		else return 9 * $this->explevel - 158;*/
-		return $this->getExpectedExperience() - $this->server->getExpectedExperience($this->explevel);
+		return $this->getExpectedExperience() - $this->server->getExpectedExperience($this->expLevel);
 	}
 
 	public function calcExpLevel(){
-		while($this->experience >= $this->getExpectedExperience()){
-			$this->explevel++;
+		while($this->exp >= $this->getExpectedExperience()){
+			$this->expLevel++;
 		}
-		while($this->experience < $this->server->getExpectedExperience($this->explevel - 1)){
-			$this->explevel--;
+		while($this->exp < $this->server->getExpectedExperience($this->expLevel - 1)){
+			$this->expLevel--;
 		}
 	}
 
-	public function addExperience($exp){
+	public function addExperience(int $exp){
 		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, 0, PlayerExperienceChangeEvent::ADD_EXPERIENCE));
-		if($ev->isCancelled()) return false;
-		$this->experience = $this->experience + $ev->getExp();
-		$this->calcExpLevel();
-		$this->updateExperience();
-		return true;
+		if(!$ev->isCancelled()){
+			$this->exp = $this->exp + $ev->getExp();
+			$this->calcExpLevel();
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
-	public function addExpLevel($level){
-		$this->explevel = $this->explevel + $level;
-		$this->updateExperience();
+	public function addExpLevel(int $level){
+		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, 0, $level, PlayerExperienceChangeEvent::ADD_EXPERIENCE));
+		if(!$ev->isCancelled()){
+			$this->expLevel = $this->expLevel + $ev->getExpLevel();
+			$this->calcExpLevel();
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
-	public function getExperience(){
-		return $this->experience;
+	public function getExp(){
+		return $this->exp;
 	}
 
 	public function getExpLevel(){
-		return $this->explevel;
+		return $this->expLevel;
 	}
 
 	public function updateExperience(){
 		if($this->getAttributeMap() instanceof AttributeMap){
-			$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE)->setValue(($this->experience - $this->server->getExpectedExperience($this->explevel)) / ($this->getLevelUpExpectedExperience()));
-			$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE_LEVEL)->setValue($this->explevel);
+			$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE)->setValue(($this->exp - $this->server->getExpectedExperience($this->expLevel)) / ($this->getLevelUpExpectedExperience()));
+			$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE_LEVEL)->setValue($this->expLevel);
 		}
 	}
 
@@ -695,8 +711,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$this->creationTime = microtime(true);
 
-		$this->experience = 0;
-		$this->explevel = 0;
+		$this->exp = 0;
+		$this->expLevel = 0;
 		$this->food = 20;
 		Entity::setHealth(20);
 	}
@@ -1839,36 +1855,38 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		if($this->spawned){
 			if($this->server->netherEnabled){
-				if(($this->server->getTick() - $this->portalTime) >= ($this->server->getTicksPerSecondAverage() * 1) and $this->portalTime > 0){
+				if(($this->server->getTick() - $this->portalTime) >= $this->server->getTicksPerSecondAverage() and $this->portalTime > 0){
 					if($this->server->netherLevel instanceof Level){
 						if($this->getLevel() != $this->server->netherLevel){
 							$this->fromPos = $this->getPosition();
-							$this->fromPos->x = ((int)$this->fromPos->x) + 0.5;
-							$this->fromPos->z = ((int)$this->fromPos->z) + 0.5;
+							$this->fromPos->x = ((int) $this->fromPos->x) + 0.5;
+							$this->fromPos->z = ((int) $this->fromPos->z) + 0.5;
 							$this->teleport($this->shouldResPos = $this->server->netherLevel->getSafeSpawn());
-						}elseif($this->fromPos != null){
+						}elseif($this->fromPos instanceof Position){
 							if(!($this->getLevel()->isChunkLoaded($this->fromPos->x, $this->fromPos->z))){
 								$this->getLevel()->loadChunk($this->fromPos->x, $this->fromPos->z);
 							}
-							$temposadd = [1,0,-1,0,0,1,0,-1];
+							$add = [1, 0, -1, 0, 0, 1, 0, -1];
 							$tempos = null;
 							for($j = 2; $j < 5; $j++){
 								for($i = 0; $i < 4; $i++){
-									if($this->fromPos->level->getBlock($this->fromPos->add($temposadd[$i] * $j, 0, $temposadd[$i + 4] * $j))->getid() === BLOCK::AIR){
-										if($this->fromPos->level->getBlock($this->fromPos->add($temposadd[$i] * $j, 1, $temposadd[$i + 4]* $j))->getid() === BLOCK::AIR){
-											$tempos = $this->fromPos->add($temposadd[$i] * $j, 0, $temposadd[$i + 4] * $j);
+									if($this->fromPos->getLevel()->getBlock($this->temporalVector->fromObjectAdd($this->fromPos, $add[$i] * $j, 0, $add[$i + 4] * $j))->getId() === Block::AIR){
+										if($this->fromPos->getLevel()->getBlock($this->temporalVector->fromObjectAdd($this->fromPos, $add[$i] * $j, 1, $add[$i + 4] * $j))->getId() === Block::AIR){
+											$tempos = $this->fromPos->add($add[$i] * $j, 0, $add[$i + 4] * $j);
 											//$this->getLevel()->getServer()->getLogger()->debug($tempos);
 											break;
 										}
 									}
 								}
-								if($tempos != null){break;}
+								if($tempos != null){
+									break;
+								}
 							}
 							if($tempos == null){
-								$tempos = $this->fromPos->add(5,0,5);
+								$tempos = $this->fromPos->add(mt_rand(-2, 2), 0, mt_rand(-2, 2));
 							}
 							$this->teleport($this->shouldResPos = $tempos);
-							$temposadd = null;
+							$add = null;
 							$tempos = null;
 							$this->fromPos = null;
 						}else{
@@ -1904,7 +1922,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$expectedVelocity = (-$this->gravity) / $this->drag - ((-$this->gravity) / $this->drag) * exp(-$this->drag * ($this->inAirTicks - $this->startAirTicks));
 							$diff = ($this->speed->y - $expectedVelocity) ** 2;
 							if(!$this->hasEffect(Effect::JUMP) and $diff > 0.6 and $expectedVelocity < $this->speed->y and !$this->server->getAllowFlight()){
-								$this->setMotion(new Vector3(0, $expectedVelocity, 0));
+								$this->setMotion($this->temporalVector->setComponents(0, $expectedVelocity, 0));
 								/*if($this->inAirTicks < 1000){
 
 								}elseif($this->kick("Flying is not enabled on this server")){
@@ -2297,8 +2315,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->food = $nbt["Hunger"];
 		$this->setMaxHealth($nbt["MaxHealth"]);
 		Entity::setHealth(($nbt["Health"] <= 0) ? 20 : $nbt["Health"]);
-		$this->experience = ($nbt["Experience"] > 0) ? $nbt["Experience"] : 0;
-		$this->explevel = ($nbt["ExpLevel"] >= 0) ? $nbt["ExpLevel"] : 0;
+		$this->exp = ($nbt["Experience"] > 0) ? $nbt["Experience"] : 0;
+		$this->expLevel = ($nbt["ExpLevel"] >= 0) ? $nbt["ExpLevel"] : 0;
 		$this->calcExpLevel();
 		$this->gamemode = $nbt["playerGameType"] & 0x03;
 		if($this->server->getForceGamemode()){
@@ -3431,6 +3449,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->craftingType = 0;
 				$this->currentTransaction = null;
 				if(isset($this->windowIndex[$packet->windowid])){
+					if($this->windowIndex[$packet->windowid] instanceof EnchantInventory){
+						$this->updateExperience();
+					}
 					$this->server->getPluginManager()->callEvent(new InventoryCloseEvent($this->windowIndex[$packet->windowid], $this));
 					$this->removeWindow($this->windowIndex[$packet->windowid]);
 				}else{
@@ -3658,8 +3679,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->craftingType = 0;
 					$inv = $this->windowIndex[$packet->windowid];
 
+					/** @var $packet \pocketmine\network\protocol\ContainerSetSlotPacket */
 					if($inv instanceof EnchantInventory and $packet->item->hasEnchantments()){
 						$inv->onEnchant($this, $inv->getItem($packet->slot), $packet->item);
+					}
+
+					if($inv instanceof AnvilInventory and $packet->item->hasCustomName()){
+						//TODO
 					}
 
 					$transaction = new BaseTransaction($inv, $packet->slot, $inv->getItem($packet->slot), $packet->item);
@@ -4041,8 +4067,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->namedtag["Hunger"] = new ShortTag("Hunger", $this->food);
 			$this->namedtag["Health"] = new ShortTag("Health", $this->getHealth());
 			$this->namedtag["MaxHealth"] = new ShortTag("MaxHealth", $this->getMaxHealth());
-			$this->namedtag["Experience"] = new LongTag("Experience", $this->experience);
-			$this->namedtag["ExpLevel"] = new LongTag("ExpLevel", $this->explevel);
+			$this->namedtag["Experience"] = new LongTag("Experience", $this->exp);
+			$this->namedtag["ExpLevel"] = new LongTag("ExpLevel", $this->expLevel);
 
 			if($this->username != "" and $this->namedtag instanceof CompoundTag){
 				$this->server->saveOfflinePlayerData($this->username, $this->namedtag, $async);
@@ -4191,7 +4217,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		if($this->server->expEnabled and (!$ev->getKeepExperience() and !$this->server->keepInventory)){
-			$exp = $this->getExperience();
+			$exp = $this->getExp();
 			if($exp > 100) $exp = 100;
 			$this->getLevel()->spawnXPOrb($this->add(0, 0.2, 0), $exp);
 			$this->setExperienceAndLevel(0, 0);

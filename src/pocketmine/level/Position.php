@@ -135,4 +135,12 @@ class Position extends Vector3{
 		return $this;
 	}
 
+	public function fromObjectAdd(Vector3 $pos, $x, $y, $z){
+		if($pos instanceof Position){
+			$this->level = $pos->level;
+		}
+		parent::fromObjectAdd($pos, $x, $y, $z);
+		return $this;
+	}
+
 }

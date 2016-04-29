@@ -65,16 +65,16 @@ class EnchantInventory extends ContainerInventory{
 				$this->bookshelfAmount = 15;
 			}
 
-			$base = mt_rand(1 ,8) + ($this->bookshelfAmount / 2) + mt_rand(0 , $this->bookshelfAmount);
+			$base = mt_rand(1, 8) + ($this->bookshelfAmount / 2) + mt_rand(0, $this->bookshelfAmount);
 			$this->levels = [
 				0 => max($base / 3, 1),
-				1 => (($base * 2) / 3 +1),
+				1 => (($base * 2) / 3 + 1),
 				2 => max($base, $this->bookshelfAmount * 2)
 			];
 		}
 	}
 
-	private function randomFloat($min = 0, $max = 1) {
+	private function randomFloat($min = 0, $max = 1){
 		return $min + mt_rand() / mt_getrandmax() * ($max - $min);
 	}
 
@@ -94,7 +94,7 @@ class EnchantInventory extends ContainerInventory{
 						$result = [];
 
 						$level = $this->levels[$i];
-						$k = $level +  mt_rand(0 ,round(round($enchantAbility / 4) * 2)) + 1;
+						$k = $level + mt_rand(0, round(round($enchantAbility / 4) * 2)) + 1;
 						$bonus = ($this->randomFloat() + $this->randomFloat() - 1) * 0.15 + 1;
 						$modifiedLevel = ($k * (1 + $bonus) + 0.5);
 
@@ -129,15 +129,15 @@ class EnchantInventory extends ContainerInventory{
 						//Extra enchantment
 						while(count($possible) > 0){
 							$modifiedLevel = round($modifiedLevel / 2);
-							$v = mt_rand(0 ,51);
-							if($v <= ($modifiedLevel +1)){
+							$v = mt_rand(0, 51);
+							if($v <= ($modifiedLevel + 1)){
 
 								$possible = $this->removeConflictEnchantment($enchantment, $possible);
 
 								$weights = [];
 								$total = 0;
 
-								for($j = 0; $j< count($possible); $j++){
+								for($j = 0; $j < count($possible); $j++){
 									$id = $possible[$j]->getId();
 									$weight = Enchantment::getEnchantWeight($id);
 									$weights[$j] = $weight;
@@ -188,16 +188,38 @@ class EnchantInventory extends ContainerInventory{
 		}
 	}
 
+	/**
+	 * @param Enchantment[] $ent1
+	 * @param Enchantment[] $ent2
+	 *
+	 * @return bool
+	 */
+	public function checkEnts(array $ent1, array $ent2){
+		foreach($ent1 as $enchantment){
+			$hasResult = false;
+			foreach($ent2 as $enchantment1){
+				if($enchantment->equals($enchantment1)){
+					$hasResult = true;
+					continue;
+				}
+			}
+			if(!$hasResult){
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public function onEnchant(Player $who, Item $before, Item $after){
 		$result = ($before->getId() == Item::BOOK) ? new EnchantedBook() : $before;
 		if(!$before->hasEnchantments() and $after->hasEnchantments() and $after->getId() == $result->getId() and
-			$this->levels != null and $this->entries != null){
+			$this->levels != null and $this->entries != null
+		){
 			$enchantments = $after->getEnchantments();
 			for($i = 0; $i < 3; $i++){
-				if($enchantments == $this->entries[$i]->getEnchantments()){
+				if($this->checkEnts($enchantments, $this->entries[$i]->getEnchantments())){
 					$lapis = $this->getItem(1);
 					$level = $who->getExpLevel();
-					$exp = $who->getExperience();
 					$cost = $this->entries[$i]->getCost();
 					if($lapis->getId() == Item::DYE and $lapis->getDamage() == Dye::BLUE and $lapis->getCount() > $i and $level >= $cost){
 						foreach($enchantments as $enchantment){
@@ -206,7 +228,7 @@ class EnchantInventory extends ContainerInventory{
 						$this->setItem(0, $result);
 						$lapis->setCount($lapis->getCount() - $i - 1);
 						$this->setItem(1, $lapis);
-						$who->setExperienceAndLevel($exp, $level - $cost);
+						$who->setExpLevel($level - $cost);
 						break;
 					}
 				}
@@ -233,8 +255,8 @@ class EnchantInventory extends ContainerInventory{
 	}
 
 	/**
-	 * @param Enchantment      $enchantment
-	 * @param Enchantment[]    $enchantments
+	 * @param Enchantment   $enchantment
+	 * @param Enchantment[] $enchantments
 	 * @return Enchantment[]
 	 */
 	public function removeConflictEnchantment(Enchantment $enchantment, array $enchantments){
