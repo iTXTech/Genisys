@@ -25,6 +25,7 @@
 namespace pocketmine\entity;
 
 use pocketmine\block\Block;
+use pocketmine\block\Fire;
 use pocketmine\block\Portal;
 use pocketmine\block\PressurePlate;
 use pocketmine\block\Water;
@@ -1127,11 +1128,10 @@ abstract class Entity extends Location implements Metadatable{
 		$blocks = $this->getBlocksAround();
 
 		foreach($blocks as $block){
-			if($block instanceof Portal) return true;
+			if($block instanceof Portal){
+				return true;
+			}
 		}
-		/*
-		$block = $this->getLevel()->getBlock($this->round());
-		if($block instanceof Portal) return true;*/
 
 		return false;
 	}
@@ -1193,7 +1193,7 @@ abstract class Entity extends Location implements Metadatable{
 			$bb->minY -= 0.75;
 			$this->onGround = false;
 			if(!$this->level->getBlock(new Vector3($this->x, $this->y - 1, $this->z))->isTransparent())
-				$this->onGround = \true;
+				$this->onGround = true;
 			/*
                         if(count($this->level->getCollisionBlocks($bb)) > 0){
                             $this->onGround = true;

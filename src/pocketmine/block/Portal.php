@@ -57,6 +57,10 @@ class Portal extends Transparent{
 		return Tool::TYPE_PICKAXE;
 	}
 
+	public function canPassThrough(){
+		return true;
+	}
+
 	public function canBeActivated() : bool {
 		return true;
 	}
