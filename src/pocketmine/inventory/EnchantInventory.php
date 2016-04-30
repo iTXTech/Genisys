@@ -220,14 +220,15 @@ class EnchantInventory extends ContainerInventory{
 				if($this->checkEnts($enchantments, $this->entries[$i]->getEnchantments())){
 					$lapis = $this->getItem(1);
 					$level = $who->getExpLevel();
-					if($lapis->getId() == Item::DYE and $lapis->getDamage() == Dye::BLUE and $lapis->getCount() > $i and $level >= $i){
+					$cost = $this->entries[$i]->getCost();
+					if($lapis->getId() == Item::DYE and $lapis->getDamage() == Dye::BLUE and $lapis->getCount() > $i and $level >= $cost){
 						foreach($enchantments as $enchantment){
 							$result->addEnchantment($enchantment);
 						}
 						$this->setItem(0, $result);
 						$lapis->setCount($lapis->getCount() - $i - 1);
 						$this->setItem(1, $lapis);
-						$who->setExpLevel($level - $i);
+						$who->setExpLevel($level - $i - 1);
 						break;
 					}
 				}
