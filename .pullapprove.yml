@@ -1,6 +1,6 @@
 approve_by_comment: true
-approve_regex: '(A|a)pproved|\+1'
-reject_regex: '(R|r)ejected|-1'
+approve_regex: '(?<!(N|n|o|'')t )(W|w)ork|(A|a)pproved|\+1'
+reject_regex: '(N|n|o|'')t (W|w)|(R|r)ejected|-1'
 reject_value: -1
 reset_on_push: true
 reviewers:
