@@ -523,12 +523,14 @@ class CraftingManager{
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SLAB, 0, 6),
 				"   ",
-				"PPP"
+				"PPP",
+				"   "
 			))->setIngredient("P", Item::get(Item::STONE, '', 3)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SLAB, 5, 6),
 				"   ",
-				"PPP"
+				"PPP",
+				"   "
 			))->setIngredient("P", Item::get(Item::STONE_BRICK, '', 3)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::STONE_BRICK, 3, 1),
@@ -538,7 +540,8 @@ class CraftingManager{
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SLAB, 1, 6),
 				"   ",
-				"PPP"
+				"PPP",
+				"   "
 			))->setIngredient("P", Item::get(Item::SANDSTONE, 0, 3)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SANDSTONE, 1, 1),
@@ -576,7 +579,8 @@ class CraftingManager{
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SLAB, 4, 6),
 				"   ",
-				"PPP"
+				"PPP",
+				"   "
 			))->setIngredient("P", Item::get(Item::BRICKS_BLOCK, 0, 3)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::QUARTZ_BLOCK, 1, 1),
@@ -586,7 +590,8 @@ class CraftingManager{
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SLAB, 3, 6),
 				"   ",
-				"PPP"
+				"PPP",
+				"   "
 			))->setIngredient("P", Item::get(Item::COBBLESTONE, 0, 3)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::COBBLESTONE, 0, 1),
@@ -624,7 +629,8 @@ class CraftingManager{
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SLAB, 6, 6),
 				"   ",
-				"PPP"
+				"PPP",
+				"   "
 			))->setIngredient("P", Item::get(Item::QUARTZ_BLOCK, 0, 3)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SANDSTONE_STAIRS, 0, 4),
