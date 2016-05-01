@@ -97,6 +97,8 @@ synapse:
  #TODO: If you want to use Synapse API or connect to a synapse server, enable this
  enabled: false
  port: 10305
+ server-ip: 127.0.0.1
+ server-port: 10306
 
 dserver:
  #The count of all multi-server unified

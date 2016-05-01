@@ -22,7 +22,6 @@
 namespace pocketmine\command;
 
 use pocketmine\Thread;
-use pocketmine\ThreadManager;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\Utils;
 
@@ -102,7 +101,10 @@ class CommandReader extends Thread{
 			$e = null;
 			if(stream_select($r, $w, $e, 0, 200000) > 0){
 				if(feof($this->stdin)){
-					break;
+					$this->stdin = fopen("php://stdin", "r");
+					if(!is_resource($this->stdin)){
+						break;
+					}
 				}
 				$this->readLine();
 			}
