@@ -93,6 +93,11 @@ redstone:
  #Set the frequency of pulse, Default: 1s
  pulse-frequency: 1
 
+synapse:
+ #TODO: If you want to use Synapse API or connect to a synapse server, enable this
+ enabled: false
+ port: 10305
+
 dserver:
  #The count of all multi-server unified
  enable: false

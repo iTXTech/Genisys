@@ -171,6 +171,7 @@ use pocketmine\entity\ThrownPotion;
 use pocketmine\entity\Painting;
 use pocketmine\scheduler\DServerTask;
 use pocketmine\scheduler\CallbackTask;
+use synapse\Synapse;
 
 /**
  * The class that manages everything
@@ -381,9 +382,13 @@ class Server{
 	public $allowSplashPotion = true;
 	public $fireSpread = false;
 	public $advancedCommandSelector = false;
+	public $synapseConfig = [];
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
+
+	/** @var Synapse */
+	private $synapse = null;
 
 	/**
 	 * @return string
@@ -1676,6 +1681,18 @@ class Server{
 		$this->allowSplashPotion = $this->getAdvancedProperty("server.allow-splash-potion", true);
 		$this->fireSpread = $this->getAdvancedProperty("level.fire-spread", false);
 		$this->advancedCommandSelector = $this->getAdvancedProperty("server.advanced-command-selector", false);
+		$this->synapseConfig = [
+			"enabled" => $this->getAdvancedProperty("synapse.enabled", false),
+			"port" => $this->getAdvancedProperty("synapse.port", 10305),
+		];
+	}
+
+	public function isSynapseEnabled() : bool {
+		return (bool) $this->synapseConfig["enabled"];
+	}
+
+	public function getSynapsePort() : int {
+		return (int) $this->synapseConfig["port"];
 	}
 
 	/**
@@ -2046,6 +2063,10 @@ class Server{
 				$this,
 				"updateDServerInfo"
 			]), $this->dserverConfig["timer"]);
+
+			if($this->isSynapseEnabled()){
+				$this->synapse = new Synapse($this, $this->getSynapsePort());
+			}
 
 			if($cfgVer != $advVer){
 				$this->logger->notice("Your genisys.yml needs update");
