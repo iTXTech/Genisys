@@ -106,7 +106,7 @@ class TNT extends Solid implements ElectricalAppliance{
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$this->getLevel()->setBlock($this, $this, true, false);
 
-		$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage() * 2);
+		$this->getLevel()->scheduleUpdate($this, 40);
 	}
 
 	public function onActivate(Item $item, Player $player = null){
