@@ -237,14 +237,14 @@ class SimpleCommandMap implements CommandMap{
 						}
 					}
 					break;
-				case "@p":
+				case "@r":
 					$players = $this->server->getOnlinePlayers();
 					if(count($players) > 0){
 						$argsTemp[$offset] = $players[array_rand($players)]->getName();
 						$this->dispatchAdvanced($sender, $command, $label, $argsTemp, $offset + 1);
 					}
 					break;
-				case "@r":
+				case "@a":
 					if($sender instanceof Player){
 						$distance = 5;
 						$nearestPlayer = $sender;
