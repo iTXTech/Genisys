@@ -842,6 +842,7 @@ class Item{
 			self::addCreativeItem(Item::get(Item::IRON_BARS, 0));
 			self::addCreativeItem(Item::get(Item::BED, 0));
 			self::addCreativeItem(Item::get(Item::BOOKSHELF, 0));
+			self::addCreativeItem(Item::get(Item::SIGN, 0));
 			self::addCreativeItem(Item::get(Item::PAINTING, 0));
 			self::addCreativeItem(Item::get(Item::ITEM_FRAME, 0));
 			self::addCreativeItem(Item::get(Item::WORKBENCH, 0));
@@ -905,7 +906,6 @@ class Item{
 			self::addCreativeItem(Item::get(Item::SKULL, 2));
 			self::addCreativeItem(Item::get(Item::SKULL, 3));
 			self::addCreativeItem(Item::get(Item::SKULL, 4));
-			self::addCreativeItem(Item::get(Item::SIGN, 0));
 			self::addCreativeItem(Item::get(Item::FLOWER_POT, 0));
 			self::addCreativeItem(Item::get(Item::MONSTER_SPAWNER, 0));
 			self::addCreativeItem(Item::get(Item::ENCHANTING_TABLE, 0));
