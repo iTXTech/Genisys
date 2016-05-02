@@ -244,7 +244,7 @@ class SimpleCommandMap implements CommandMap{
 						$this->dispatchAdvanced($sender, $command, $label, $argsTemp, $offset + 1);
 					}
 					break;
-				case "@a":
+				case "@p":
 					if($sender instanceof Player){
 						$distance = 5;
 						$nearestPlayer = $sender;
