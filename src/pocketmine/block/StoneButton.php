@@ -22,6 +22,7 @@
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
+use pocketmine\player\Player;
 
 class StoneButton extends WoodenButton{
 	protected $id = self::STONE_BUTTON;
