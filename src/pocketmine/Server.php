@@ -1683,18 +1683,13 @@ class Server{
 		$this->advancedCommandSelector = $this->getAdvancedProperty("server.advanced-command-selector", false);
 		$this->synapseConfig = [
 			"enabled" => $this->getAdvancedProperty("synapse.enabled", false),
-			"port" => $this->getAdvancedProperty("synapse.port", 10305),
 			"server-ip" => $this->getAdvancedProperty("synapse.server-ip", "127.0.0.1"),
-			"server-port" => $this->getAdvancedProperty("synapse.server-port", 10306),
+			"server-port" => $this->getAdvancedProperty("synapse.server-port", 10305),
 		];
 	}
 
 	public function isSynapseEnabled() : bool {
 		return (bool) $this->synapseConfig["enabled"];
-	}
-
-	public function getSynapsePort() : int {
-		return (int) $this->synapseConfig["port"];
 	}
 
 	public function getSynapseServerIp(){

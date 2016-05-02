@@ -43,6 +43,6 @@ class Synapse{
 	}
 
 	public function start(){
-		$this->logger->info("Synapse client is listening on {$this->server->getIp()}:{$this->port}");
+		//connect to synapse server
 	}
 }
