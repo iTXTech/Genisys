@@ -84,6 +84,7 @@ class CommandReader extends Thread{
 
 	public function quit(){
 		$this->shutdown();
+		// Windows sucks
 		if(Utils::getOS() != "win"){
 			parent::quit();
 		}
@@ -100,7 +101,8 @@ class CommandReader extends Thread{
 			$w = null;
 			$e = null;
 			if(stream_select($r, $w, $e, 0, 200000) > 0){
-				if(feof($this->stdin)){
+				// PHP on Windows sucks
+				if(feof($this->stdin) and Utils::getOS() == "win"){
 					$this->stdin = fopen("php://stdin", "r");
 					if(!is_resource($this->stdin)){
 						break;
