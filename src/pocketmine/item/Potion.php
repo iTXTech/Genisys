@@ -83,6 +83,10 @@ class Potion extends Item{
 		return Effect::getEffect(self::getEffectId($meta))->getColor();
 	}
 
+	public function getMaxStackSize() : int{
+		return 1;
+	}
+
 	public static function getEffectId(int $meta) : int{
 		switch($meta){
 			case self::INVISIBILITY:
