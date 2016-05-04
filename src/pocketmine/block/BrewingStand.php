@@ -81,6 +81,10 @@ class BrewingStand extends Transparent{
 		return 2.5;
 	}
 
+	public function getLightLevel(){
+		return 1;
+	}
+
 	public function getName() : string{
 		return "Brewing Stand";
 	}
@@ -92,7 +96,7 @@ class BrewingStand extends Transparent{
 				return true;
 			}
 			$t = $this->getLevel()->getTile($this);
-			$brewingStand = false;
+			//$brewingStand = false;
 			if($t instanceof TileBrewingStand){
 				$brewingStand = $t;
 			}else{
@@ -108,7 +112,6 @@ class BrewingStand extends Transparent{
 			}
 			$player->addWindow($brewingStand->getInventory());
 		}
-
 		return true;
 	}
 
@@ -117,7 +120,6 @@ class BrewingStand extends Transparent{
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			$drops[] = [Item::BREWING_STAND, 0, 1];
 		}
-
 		return $drops;
 	}
 }
