@@ -23,6 +23,7 @@ namespace pocketmine\block;
 
 use pocketmine\event\player\PlayerBucketEmptyEvent;
 use pocketmine\event\player\PlayerBucketFillEvent;
+use pocketmine\event\player\PlayerGlassBottleEvent;
 use pocketmine\item\Armor;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
@@ -245,6 +246,10 @@ class Cauldron extends Solid{
 				}
 				break;
 			case Item::GLASS_BOTTLE:
+				$player->getServer()->getPluginManager()->callEvent($ev = new PlayerGlassBottleEvent($player, $this, $item));
+				if($ev->isCancelled()){
+					return false;
+				}
 				if($this->meta < 2) {
 					break;
 				}
