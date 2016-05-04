@@ -77,7 +77,7 @@ class CocoaBlock extends Solid {
             }
         } elseif ($type === Level::BLOCK_UPDATE_RANDOM) {
             if (mt_rand(0, 45) === 1) {
-                if ($this->meta < 7) {
+                if ($this->meta <= 7) {
                     $block = clone $this;
                     $block->meta += 4;
                     Server::getInstance()->getPluginManager()->callEvent($ev = new BlockGrowEvent($this, $block));
