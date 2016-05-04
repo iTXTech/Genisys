@@ -1,11 +1,9 @@
-![Genisys Logo](http://i2.piimg.com/cbb430ffc7a97315.jpg)
-
-# Genisys (创世纪) - PocketMine-iTX Core
+# Genisys (创世纪) - Advanced Minecraft: Pocket Edition Server
 
 Chat on Gitter: [![Gitter](https://img.shields.io/gitter/room/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
 You can also join `#genisys` on freenode IRC.
 
-Special thanks to [JetBrains](https://www.jetbrains.com) for providing free open source license.
+Special thanks to [JetBrains](https://www.jetbrains.com) for providing free edition of PHPStorm.
 
 ### Build status
 Jenkins: [![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.mcper.cn/Genisys-master.svg)](https://jenkins.mcper.cn/job/Genisys-master/)  
@@ -15,9 +13,13 @@ GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.
 ### Downloads
 You can get prebuilt phar from [Jenkins](https://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/genisys/builds).
 
-### Fast Docker installation
+### Installation
+If you are on Linux, use Docker to install Genisys.
+
 [![Docker Pulls](https://img.shields.io/docker/pulls/itxtech/docker-env-genisys.svg)](https://hub.docker.com/r/itxtech/docker-env-genisys/)  
 See [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys) for more details.
+
+For other platform, see below.
 
 ## Contents
 
@@ -35,9 +37,9 @@ See [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys) fo
 
 ### Acknowledgements
 * Some features are merged from **@boybook**'s **FCCore**
-* Skull, FlowerPot are based on **@ImagicalCorp** ImagicalMine's work
+* Skull, FlowerPot are based on ImagicalMine's work
 * AIs are based on **@Zzm317**'s amazing MyOwnWorld.
-* Painting and Brewing Stand are translated from **Nukkit** Project
+* Painting and Brewing Stand are translated from Nukkit Project
 * Furnace was fixed by **@MagicDroidX**
 * Rail and Powered Rails were written by **@happy163**
 * Nether door was written by **JJLeo**
@@ -125,9 +127,9 @@ Port: 19132
 
 ### 鸣谢
 * 一些功能来自 **@boybook** 的 **FCCore**
-* 头颅、花盆的相关代码由 **@ImagicalCorp** ImagicalMine 编写；
+* 头颅、花盆的相关代码由 ImagicalMine 编写；
 * 生物 AI 的相关代码基于 **@Zzm317**  令人惊奇的 MyOwnWorld 编写；
-* 画、酿造台的相关代码从 **Nukkit** 项目重写；
+* 画、酿造台的相关代码从 Nukkit 项目重写；
 * 熔炉的相关代码及其 Bug 由 **@MagicDroidX** 编写与修复；
 * 铁轨、充能铁轨的相关代码由 **@happy163** 编写；
 * 地狱门的相关代码由 **JJLeo** 编写；
