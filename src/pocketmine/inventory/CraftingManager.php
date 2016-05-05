@@ -106,6 +106,7 @@ class CraftingManager{
 			$this->registerFurnace();
 			$this->registerDyes();
 			$this->registerIngots();
+			$this->registerPotions();
 			$this->registerTools();
 			$this->registerWeapons();
 			$this->registerArmor();
@@ -1352,16 +1353,33 @@ class CraftingManager{
 	}
 
 	protected function registerPotions(){
-		$this->registerRecipe((new BigShapedRecipe(Item::get(Item::FERMENTED_SPIDER_EYE, 0, 1),
-			" X ",
-			" Y ",
-			" Z "
+		$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BREWING_STAND, 0, 1),
+			"   ",
+			" B ",
+			"CCC"
+		))->setIngredient("B", Item::get(Item::BLAZE_ROD, 0, 1))->setIngredient("C", Item::get(Item::COBBLE, 0, 3)));
+		$this->registerRecipe((new ShapedRecipe(Item::get(Item::BLAZE_POWDER, 0, 2),
+			"B ",
+			"  "
+		))->setIngredient("B", Item::get(Item::BLAZE_ROD, 0, 1)));
+		$this->registerRecipe((new ShapedRecipe(Item::get(Item::MAGMA_CREAM, 0, 1),
+			"BS",
+			"  "
+		))->setIngredient("B", Item::get(Item::BLAZE_ROD, 0, 1))->setIngredient("S", Item::get(Item::SLIMEBALL, 0, 1)));
+		$this->registerRecipe((new ShapedRecipe(Item::get(Item::FERMENTED_SPIDER_EYE, 0, 1),
+			"XY",
+			" Z"
 		))->setIngredient("X", Item::get(Item::SPIDER_EYE, 0, 1))->setIngredient("Y", Item::get(Item::SUGAR, 0, 1))->setIngredient("Z", Item::get(Item::BROWN_MUSHROOM, 0, 1)));
 		$this->registerRecipe((new BigShapedRecipe(Item::get(Item::GLISTERING_MELON, 0, 1),
 			"YYY",
 			"YXY",
 			"YYY"
 		))->setIngredient("X", Item::get(Item::MELON, 0, 1))->setIngredient("Y", Item::get(Item::GOLD_NUGGET, 0, 8)));
+		$this->registerRecipe((new BigShapedRecipe(Item::get(Item::GOLDEN_CARROT, 0, 1),
+			"YYY",
+			"YXY",
+			"YYY"
+		))->setIngredient("X", Item::get(Item::CARROT, 0, 1))->setIngredient("Y", Item::get(Item::GOLD_NUGGET, 0, 8)));
 	}
 
 	public function sort(Item $i1, Item $i2){
