@@ -2088,7 +2088,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->addEffect(Effect::getEffect(Effect::HEALTH_BOOST)->setAmplifier(0)->setDuration(2 * 60 * 20));
 					$this->addEffect(Effect::getEffect(Effect::REGENERATION)->setAmplifier(1)->setDuration(5 * 20));
 				}elseif($slot->getId() == Item::POTION){
-					$this->inventory->addItem(new Item(Item::POTION, Potion::WATER_BOTTLE, 1));
+					$this->inventory->addItem(new Item(Item::GLASS_BOTTLE, 0, 1));
 					switch($slot->getDamage()){
 						case Potion::NIGHT_VISION:
 							$this->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setAmplifier(0)->setDuration(3 * 60 * 20));
