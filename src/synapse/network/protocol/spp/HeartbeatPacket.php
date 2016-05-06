@@ -15,18 +15,19 @@
  * (at your option) any later version.
  *
  * @author iTX Technologies
- * @link https://mcper.cn
+ * @link https://itxtech.org
  *
  */
  
-namespace synapse\network\protocol;
+namespace synapse\network\protocol\spp;
 
-class Info{
-	const CURRENT_PROTOCOL = 1;
+class HeartbeatPacket extends DataPacket{
+	const NETWORK_ID = Info::HEARTBEAT_PACKET;
 
-	const HEARTBEAT_PACKET = 0x01;
-	const CONNECT_PACKET = 0x02;
-	const DISCONNECT_PACKET = 0x03;
-	const TRANSFER_PACKET = 0x04;
-	const REDIRECT_PACKET = 0x05;
+	public function encode(){
+
+	}
+
+	public function decode(){
+	}
 }

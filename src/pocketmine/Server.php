@@ -1685,19 +1685,13 @@ class Server{
 			"enabled" => $this->getAdvancedProperty("synapse.enabled", false),
 			"server-ip" => $this->getAdvancedProperty("synapse.server-ip", "127.0.0.1"),
 			"server-port" => $this->getAdvancedProperty("synapse.server-port", 10305),
+			"isMainServer" => $this->getAdvancedProperty("synapse.is-main-server", true),
+			"password" => $this->getAdvancedProperty("synapse.server-password", "123456"),
 		];
 	}
 
 	public function isSynapseEnabled() : bool {
 		return (bool) $this->synapseConfig["enabled"];
-	}
-
-	public function getSynapseServerIp(){
-		return $this->synapseConfig["server-ip"];
-	}
-
-	public function getSynapseServerPort() : int{
-		return (int) $this->synapseConfig["server-port"];
 	}
 
 	/**
@@ -2070,7 +2064,7 @@ class Server{
 			]), $this->dserverConfig["timer"]);
 
 			if($this->isSynapseEnabled()){
-				$this->synapse = new Synapse($this, $this->getSynapsePort());
+				$this->synapse = new Synapse($this, $this->synapseConfig);
 			}
 
 			if($cfgVer != $advVer){
@@ -2086,9 +2080,16 @@ class Server{
 		}
 	}
 
+	/**
+	 * @return Synapse
+	 */
+	public function getSynapse(){
+		return $this->synapse;
+	}
+
 	//@Deprecated
 	public function transferPlayer(Player $player, $address, $port = 19132){
-		$this->logger->error("This function (transferPlayer) has been deprecated. A new method may be available soon");
+		$this->logger->error("Use synapse instead");
 	}
 	/*$ev = new PlayerTransferEvent($player, $address, $port);
 	$this->getPluginManager()->callEvent($ev);
