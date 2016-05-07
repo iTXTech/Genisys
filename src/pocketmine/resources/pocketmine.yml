@@ -117,9 +117,9 @@ chunk-sending:
 
 chunk-ticking:
  #Max amount of chunks processed each tick
- per-tick: 0
+ per-tick: 16
  #Radius of chunks around a player to tick
- tick-radius: 0
+ tick-radius: 3
  light-updates: false
  clear-tick-list: true
 
