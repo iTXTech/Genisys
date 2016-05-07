@@ -204,7 +204,7 @@ class Potion extends Item{
 				return "Potion of Leaping II";
 			case self::FIRE_RESISTANCE:
 			case self::FIRE_RESISTANCE_T:
-				return "Potion of Fire Resistence";
+				return "Potion of Fire Resistance";
 			case self::SPEED:
 			case self::SPEED_T:
 				return "Potion of Speed";
