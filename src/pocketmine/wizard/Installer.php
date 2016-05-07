@@ -35,7 +35,7 @@ class Installer{
 	const DEFAULT_PLAYERS = 20;
 	const DEFAULT_GAMEMODE = 0;
 	const DEFAULT_LEVEL_NAME = "world";
-	const DEFAULT_LEVEL_TYPE = "default";
+	const DEFAULT_LEVEL_TYPE = "DEFAULT";
 
 	private $defaultLang;
 
