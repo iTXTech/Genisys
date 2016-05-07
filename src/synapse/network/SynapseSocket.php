@@ -24,14 +24,26 @@ namespace synapse\network;
 use pocketmine\Thread;
 use pocketmine\utils\Binary;
 use pocketmine\utils\MainLogger;
-use synapse\Synapse;
 
 class SynapseSocket extends Thread{
-	private $interface;
 	private $ip;
 	private $port;
 	private $socket;
 	private $stop = false;
+	private $waiting;
+	/** @var \Threaded */
+	protected $buffer;
+
+	public function isWaiting(){
+		return $this->waiting === true;
+	}
+
+	public function getPBuffer(){
+		if($this->buffer->count() !== 0){
+			return $this->buffer->shift();
+		}
+		return null;
+	}
 
 	public function __construct(string $ip, int $port){
 		//$this->getInterface() = $interface;
@@ -45,16 +57,13 @@ class SynapseSocket extends Thread{
 		socket_set_block($this->socket);
 
 		socket_getsockname($this->socket, $addr, $port);
-		$this->getLogger()->info("Synapse Client has connected to $addr:$port");
+		$this->getLogger()->info("Synapse Client is running on $addr:$port");
+		$this->buffer = new \Threaded;
 		$this->start();
 	}
 
 	public function getLogger(){
 		return MainLogger::getLogger();
-	}
-	
-	public function getInterface(){
-		return Synapse::getInstance()->getInterface();
 	}
 
 	public function getSocket(){
@@ -65,7 +74,7 @@ class SynapseSocket extends Thread{
 		socket_close($this->socket);
 	}
 
-	public function writePacket($buffer){ var_dump($buffer);
+	public function writePacket($buffer){
 		return socket_write($this->socket, Binary::writeLInt(strlen($buffer)) . $buffer);
 	}
 
@@ -101,16 +110,12 @@ class SynapseSocket extends Thread{
 			$this->synchronized(function(){
 				$this->wait(100);
 			});
-			$client = &$this->socket;
-			if($client !== null and !$this->stop){
-				$p = $this->readPacket($buffer);
-				if($p === false){
-					$this->disconnect();
-					continue;
-				}elseif($p === null){
-					continue;
-				}
-				$this->getInterface()->handlePacket($buffer);
+			$p = $this->readPacket($buffer);
+			if($p === false){
+				$this->socket = null;
+			}elseif($p === null){
+			}else{
+				$this->buffer[] = $buffer;
 			}
 		}
 	}

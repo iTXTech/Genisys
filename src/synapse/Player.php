@@ -15,20 +15,20 @@
  * (at your option) any later version.
  *
  * @author iTX Technologies
- * @link https://mcper.cn
+ * @link https://itxtech.org
  *
  */
+ 
+namespace synapse;
 
-namespace synapse\network\protocol\spp;
+use pocketmine\network\protocol\DataPacket;
+use pocketmine\Player as PMPlayer;
 
-class Info{
-	const CURRENT_PROTOCOL = 1;
+class Player extends PMPlayer{
+	public function dataPacket(DataPacket $packet, $needACK = false){
 
-	const HEARTBEAT_PACKET = 0x01;
-	const CONNECT_PACKET = 0x02;
-	const DISCONNECT_PACKET = 0x03;
-	const REDIRECT_PACKET = 0x04;
-	const PLAYER_LOGIN_PACKET = 0x05;
-	const PLAYER_LOGOUT_PACKET = 0x06;
-	const INFORMATION_PACKET = 0x07;
+	}
+
+	public function directDataPacket(DataPacket $packet, $needACK = false){
+	}
 }

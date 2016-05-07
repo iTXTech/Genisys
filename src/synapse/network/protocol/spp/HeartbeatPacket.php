@@ -25,7 +25,7 @@ class HeartbeatPacket extends DataPacket{
 	const NETWORK_ID = Info::HEARTBEAT_PACKET;
 
 	public function encode(){
-
+		$this->reset();
 	}
 
 	public function decode(){

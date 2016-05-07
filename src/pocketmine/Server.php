@@ -2972,6 +2972,9 @@ private function lookupAddress($address) {
 
 		Timings::$connectionTimer->startTiming();
 		$this->network->processInterfaces();
+		if($this->isSynapseEnabled()){
+			$this->synapse->tick();
+		}
 
 		if($this->rcon !== null){
 			$this->rcon->check();

@@ -26,6 +26,7 @@ use synapse\network\protocol\spp\DataPacket;
 use synapse\network\protocol\spp\DisconnectPacket;
 use synapse\network\protocol\spp\HeartbeatPacket;
 use synapse\network\protocol\spp\Info;
+use synapse\network\protocol\spp\InformationPacket;
 use synapse\network\protocol\spp\PlayerLoginPacket;
 use synapse\network\protocol\spp\PlayerLogoutPacket;
 use synapse\network\protocol\spp\RedirectPacket;
@@ -59,6 +60,12 @@ class SynapseInterface{
 		$this->socket->writePacket($pk->buffer);
 	}
 
+	public function process(){
+		while(($buffer = $this->socket->getPBuffer()) != null){
+			$this->handlePacket($buffer);
+		}
+	}
+
 	/**
 	 * @param $buffer
 	 *
@@ -78,6 +85,7 @@ class SynapseInterface{
 
 	public function handlePacket($buffer){
 		if(($pk = $this->getPacket($buffer)) != null){
+			$pk->decode();
 			$this->synapse->handleDataPacket($pk);
 		}
 	}
@@ -100,5 +108,6 @@ class SynapseInterface{
 		$this->registerPacket(Info::REDIRECT_PACKET, RedirectPacket::class);
 		$this->registerPacket(Info::PLAYER_LOGIN_PACKET, PlayerLoginPacket::class);
 		$this->registerPacket(Info::PLAYER_LOGOUT_PACKET, PlayerLogoutPacket::class);
+		$this->registerPacket(Info::INFORMATION_PACKET, InformationPacket::class);
 	}
 }

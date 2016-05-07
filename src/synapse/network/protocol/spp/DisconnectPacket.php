@@ -25,6 +25,7 @@ class DisconnectPacket extends DataPacket{
 	const NETWORK_ID = Info::DISCONNECT_PACKET;
 
 	public function encode(){
+		$this->reset();
 	}
 
 	public function decode(){

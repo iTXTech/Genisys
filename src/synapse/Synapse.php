@@ -26,7 +26,10 @@ use pocketmine\utils\MainLogger;
 use pocketmine\utils\Utils;
 use synapse\network\protocol\spp\ConnectPacket;
 use synapse\network\protocol\spp\DataPacket;
+use synapse\network\protocol\spp\HeartbeatPacket;
 use synapse\network\protocol\spp\Info;
+use synapse\network\protocol\spp\InformationPacket;
+use synapse\network\protocol\spp\PlayerLoginPacket;
 use synapse\network\SynapseInterface;
 
 class Synapse{
@@ -40,6 +43,10 @@ class Synapse{
 	private $isMainServer;
 	private $password;
 	private $interface;
+	private $isVerified = false;
+	private $lastUpdate;
+	/** @var Player[] */
+	private $players = [];
 
 	public function __construct(Server $server, array $config){
 		self::$obj = $this;
@@ -50,6 +57,7 @@ class Synapse{
 		$this->password = $config["password"];
 		$this->logger = $server->getLogger();
 		$this->interface = new SynapseInterface($this, $this->serverIp, $this->port);
+		$this->lastUpdate = time();
 		$this->connect();
 	}
 
@@ -70,7 +78,16 @@ class Synapse{
 		$this->interface->putPacket($pk);
 	}
 
-	public function getServerIp() : string {
+	public function tick(){
+		$this->interface->process();
+		if((($time = time()) - $this->lastUpdate) >= 0){//Heartbeat!
+			$this->lastUpdate = $time;
+			$pk = new HeartbeatPacket();
+			$this->interface->putPacket($pk);
+		}
+	}
+
+	public function getServerIp() : string{
 		return $this->serverIp;
 	}
 
@@ -87,6 +104,19 @@ class Synapse{
 	}
 
 	public function handleDataPacket(DataPacket $pk){
+		$this->logger->debug("Received packet " . $pk::NETWORK_ID . " from {$this->serverIp}:{$this->port}");
+		switch($pk::NETWORK_ID){
+			case Info::INFORMATION_PACKET:
+				if($pk->message == InformationPacket::INFO_LOGIN_SUCCESS){
+					$this->logger->info("Login success to {$this->serverIp}:{$this->port}");
+					$this->isVerified = true;
+				}elseif($pk->message == InformationPacket::INFO_LOGIN_FAILED){
+					$this->logger->info("Login failed to {$this->serverIp}:{$this->port}");
+				}
+				break;
+			case Info::PLAYER_LOGIN_PACKET:
+				/** @var PlayerLoginPacket $pk */
 
+		}
 	}
 }

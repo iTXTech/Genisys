@@ -15,20 +15,26 @@
  * (at your option) any later version.
  *
  * @author iTX Technologies
- * @link https://mcper.cn
+ * @link https://itxtech.org
  *
  */
-
+ 
 namespace synapse\network\protocol\spp;
 
-class Info{
-	const CURRENT_PROTOCOL = 1;
+class InformationPacket extends DataPacket{
+	const NETWORK_ID = Info::INFORMATION_PACKET;
 
-	const HEARTBEAT_PACKET = 0x01;
-	const CONNECT_PACKET = 0x02;
-	const DISCONNECT_PACKET = 0x03;
-	const REDIRECT_PACKET = 0x04;
-	const PLAYER_LOGIN_PACKET = 0x05;
-	const PLAYER_LOGOUT_PACKET = 0x06;
-	const INFORMATION_PACKET = 0x07;
+	const INFO_LOGIN_SUCCESS = "login.success";
+	const INFO_LOGIN_FAILED = "login.failed";
+
+	public $message;
+
+	public function encode(){
+		$this->reset();
+		$this->putString($this->message);
+	}
+
+	public function decode(){
+		$this->message = $this->getString();
+	}
 }
