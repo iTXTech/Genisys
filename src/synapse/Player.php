@@ -22,9 +22,14 @@
 namespace synapse;
 
 use pocketmine\network\protocol\DataPacket;
+use pocketmine\network\SourceInterface;
 use pocketmine\Player as PMPlayer;
 
 class Player extends PMPlayer{
+	public function __construct(SourceInterface $interface, $clientID, $ip, $port){
+
+	}
+
 	public function dataPacket(DataPacket $packet, $needACK = false){
 
 	}

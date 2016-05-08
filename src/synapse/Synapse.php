@@ -80,7 +80,7 @@ class Synapse{
 
 	public function tick(){
 		$this->interface->process();
-		if((($time = time()) - $this->lastUpdate) >= 0){//Heartbeat!
+		if((($time = time()) - $this->lastUpdate) > 5){//Heartbeat!
 			$this->lastUpdate = $time;
 			$pk = new HeartbeatPacket();
 			$this->interface->putPacket($pk);
@@ -116,7 +116,7 @@ class Synapse{
 				break;
 			case Info::PLAYER_LOGIN_PACKET:
 				/** @var PlayerLoginPacket $pk */
-
+				//$this->players[$pk->uuid->toBinary()] = new Player($this->server->getNetwork()->getInterfaces()[0]);
 		}
 	}
 }

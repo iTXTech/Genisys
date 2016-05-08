@@ -21,7 +21,7 @@
  
 namespace synapse\network\protocol\spp;
 
-use synapse\utils\UUID;
+use pocketmine\utils\UUID;
 
 class RedirectPacket extends DataPacket{
 	const NETWORK_ID = Info::REDIRECT_PACKET;

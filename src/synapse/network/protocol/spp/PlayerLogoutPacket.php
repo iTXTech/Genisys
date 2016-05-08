@@ -21,7 +21,7 @@
  
 namespace synapse\network\protocol\spp;
 
-use synapse\utils\UUID;
+use pocketmine\utils\UUID;
 
 class PlayerLogoutPacket extends DataPacket{
 	const NETWORK_ID = Info::PLAYER_LOGOUT_PACKET;
