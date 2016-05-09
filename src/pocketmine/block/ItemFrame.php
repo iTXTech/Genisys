@@ -128,6 +128,13 @@ class ItemFrame extends Transparent{
 				new ByteTag("ItemRotation", 0),
 				new FloatTag("ItemDropChance", 1.0)
 			]);
+			
+			if($item->hasCustomBlockData()){
+			    foreach($item->getCustomBlockData() as $key => $v){
+				    $nbt->{$key} = $v;
+			    }
+		    }
+		    
 			Tile::createTile(Tile::ITEM_FRAME, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 			return true;
 		}
