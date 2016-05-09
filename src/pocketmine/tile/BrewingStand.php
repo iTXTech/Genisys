@@ -21,7 +21,6 @@
 
 namespace pocketmine\tile;
 
-use pocketmine\block\Block;
 use pocketmine\inventory\BrewingInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
@@ -202,6 +201,7 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 	}
 
 	public function updateSurface(){
+		$this->saveNBT();
 		$this->spawnToAll();
 		if($this->chunk){
 			$this->chunk->setChanged();
@@ -308,13 +308,8 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 			new IntTag("y", (int) $this->y),
 			new IntTag("z", (int) $this->z),
 			new ShortTag("CookTime", self::MAX_BREW_TIME),
+			$this->namedtag->Items,
 		]);
-
-		$nbt->Items = new ListTag("Items", []);
-		$nbt->Items->setTagType(NBT::TAG_Compound);
-		for($index = 0; $index < $this->getSize(); ++$index){
-			$nbt->Items[$index] = NBT::putItemHelper($this->inventory->getItem($index), $index);
-		}
 
 		if($this->hasName()){
 			$nbt->CustomName = $this->namedtag->CustomName;
