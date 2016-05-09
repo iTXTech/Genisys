@@ -25,8 +25,9 @@ class StillWater extends Water{
 
 	protected $id = self::STILL_WATER;
 
-	public function onUpdate($type){
-		return false;
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+		$ret = $this->getLevel()->setBlock($this, $this, true, false);
+		return $ret;
 	}
 
 	public function getName() : string{
