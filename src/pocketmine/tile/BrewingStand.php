@@ -201,6 +201,14 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		return false;
 	}
 
+	public function updateSurface(){
+		$this->spawnToAll();
+		if($this->chunk){
+			$this->chunk->setChanged();
+			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
+		}
+	}
+
 	public function onUpdate(){
 		if($this->closed === true){
 			return false;
@@ -213,25 +221,20 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		$ingredient = $this->inventory->getIngredient();
 		$canBrew = false;
 
-		$look = 0;
 		for($i = 1; $i <= 3; $i++){//查瓶子
 			if($this->inventory->getItem($i)->getId() === Item::POTION or
-				$this->inventory->getItem($i)->getId() === Item::SPLASH_POTION){
+				$this->inventory->getItem($i)->getId() === Item::SPLASH_POTION
+			){
 				$canBrew = true;
-				$look += $i;
 			}
 		}
-		//TODO 修复外观问题 估计是协议哪里少了 反正我这么写没有反应 退出重进游戏还是不变
-		/*if($this->getBlock()->getDamage() !== $look){
-			$this->getBlock()->setDamage($look);
-		}*/
 
 		if($ingredient->getId() !== Item::AIR and $ingredient->getCount() > 0){//有原料
 			if($canBrew){//查原料
 				if(!$this->checkIngredient($ingredient)){
 					$canBrew = false;
 				}
-			} 
+			}
 
 			if($canBrew){//查能不能炼
 				for($i = 1; $i <= 3; $i++){
@@ -306,6 +309,12 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 			new IntTag("z", (int) $this->z),
 			new ShortTag("CookTime", self::MAX_BREW_TIME),
 		]);
+
+		$nbt->Items = new ListTag("Items", []);
+		$nbt->Items->setTagType(NBT::TAG_Compound);
+		for($index = 0; $index < $this->getSize(); ++$index){
+			$nbt->Items[$index] = NBT::putItemHelper($this->inventory->getItem($index), $index);
+		}
 
 		if($this->hasName()){
 			$nbt->CustomName = $this->namedtag->CustomName;
