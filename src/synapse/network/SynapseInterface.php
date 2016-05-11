@@ -30,14 +30,15 @@ use synapse\network\protocol\spp\InformationPacket;
 use synapse\network\protocol\spp\PlayerLoginPacket;
 use synapse\network\protocol\spp\PlayerLogoutPacket;
 use synapse\network\protocol\spp\RedirectPacket;
+use synapse\network\synlib\SynapseClient;
 use synapse\Synapse;
 
 class SynapseInterface{
 	private $synapse;
 	private $ip;
 	private $port;
-	/** @var SynapseSocket */
-	private $socket;
+	/** @var SynapseClient */
+	private $client;
 	/** @var DataPacket[] */
 	private $packetPool = [];
 	
@@ -46,7 +47,7 @@ class SynapseInterface{
 		$this->ip = $ip;
 		$this->port = $port;
 		$this->registerPackets();
-		$this->socket = new SynapseSocket($ip, $port);
+		$this->client = new SynapseClient($server->getLogger(), $server->getGenisysServer()->getLoader(), $port, $ip);
 	}
 
 	public function getSynapse(){
@@ -57,11 +58,11 @@ class SynapseInterface{
 		if(!$pk->isEncoded){
 			$pk->encode();
 		}
-		$this->socket->writePacket($pk->buffer);
+		$this->client->pushMainToThreadPacket($pk->buffer);
 	}
 
 	public function process(){
-		while(($buffer = $this->socket->getPBuffer()) != null){
+		while(strlen($buffer = $this->client->readThreadToMainPacket()) > 0){
 			$this->handlePacket($buffer);
 		}
 	}

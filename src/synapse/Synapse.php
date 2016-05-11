@@ -61,6 +61,10 @@ class Synapse{
 		$this->connect();
 	}
 
+	public function getGenisysServer(){
+		return $this->server;
+	}
+
 	public function getInterface(){
 		return $this->interface;
 	}
