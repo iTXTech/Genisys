@@ -87,6 +87,9 @@ class Synapse{
 		if((($time = time()) - $this->lastUpdate) > 5){//Heartbeat!
 			$this->lastUpdate = $time;
 			$pk = new HeartbeatPacket();
+			$pk->tps = $this->server->getTicksPerSecondAverage();
+			$pk->load = $this->server->getTickUsageAverage();
+			$pk->upTime = microtime(true) - \pocketmine\START_TIME;
 			$this->interface->putPacket($pk);
 		}
 	}
