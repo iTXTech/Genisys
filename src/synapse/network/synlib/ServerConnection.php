@@ -104,7 +104,7 @@ class ServerConnection{
 				$data = @socket_read($this->socket->getSocket(), 2048, PHP_BINARY_READ);
 				$this->receiveBuffer .= $data;
 				if($this->sendBuffer != ""){
-					socket_write($this->socket->getSocket(), $this->sendBuffer);
+					@socket_write($this->socket->getSocket(), $this->sendBuffer);
 					$this->sendBuffer = "";
 				}
 			}

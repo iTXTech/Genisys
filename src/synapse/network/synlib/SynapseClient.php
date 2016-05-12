@@ -67,7 +67,7 @@ class SynapseClient extends Thread{
 
 	public function shutdownHandler(){
 		if($this->shutdown !== true){
-			$this->getLogger()->emergency("RakLib crashed!");
+			$this->getLogger()->emergency("SynLib crashed!");
 		}
 	}
 

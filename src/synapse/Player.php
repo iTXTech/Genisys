@@ -25,6 +25,7 @@ use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\protocol\LoginPacket;
 use pocketmine\network\SourceInterface;
 use pocketmine\Player as PMPlayer;
+use pocketmine\utils\UUID;
 use synapse\network\protocol\spp\PlayerLoginPacket;
 
 class Player extends PMPlayer{
@@ -32,10 +33,13 @@ class Player extends PMPlayer{
 
 	public function handleLoginPacket(PlayerLoginPacket $packet){
 		$this->isFirstTimeLogin = $packet->isFirstTime;
-		$pk = new LoginPacket();
-		$pk->buffer = $packet->cachedLoginPacket;
+		$pk = Synapse::getInstance()->getPacket($packet->cachedLoginPacket);
 		$pk->decode();
 		$this->handleDataPacket($pk);
+	}
+
+	public function setUniqueId(UUID $uuid){
+		$this->uuid = $uuid;
 	}
 
 	public function dataPacket(DataPacket $packet, $needACK = false){

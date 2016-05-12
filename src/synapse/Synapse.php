@@ -115,6 +115,17 @@ class Synapse{
 		return $this->logger;
 	}
 
+	public function getPacket($buffer){
+		$pid = ord($buffer{1});
+
+		if(($data = $this->server->getNetwork()->getPacket($pid)) === null){
+			return null;
+		}
+		$data->setBuffer($buffer, 2);
+
+		return $data;
+	}
+
 	public function handleDataPacket(DataPacket $pk){var_dump($pk);
 		$this->logger->debug("Received packet " . $pk::NETWORK_ID . " from {$this->serverIp}:{$this->port}");
 		switch($pk::NETWORK_ID){
@@ -129,12 +140,18 @@ class Synapse{
 			case Info::PLAYER_LOGIN_PACKET:
 				/** @var PlayerLoginPacket $pk */
 				$player = new Player($this->synLibInterface, mt_rand(0, PHP_INT_MAX), $pk->address, $pk->port);
+				$player->setUniqueId($pk->uuid);
+				$this->server->addPlayer(spl_object_hash($player), $player);
 				$this->players[$pk->uuid->toBinary()] = $player;
 				$player->handleLoginPacket($pk);
 				break;
 			case Info::REDIRECT_PACKET:
 				/** @var RedirectPacket $pk */
-
+				if(isset($this->players[$uuid = $pk->uuid->toBinary()])){
+					$pk = $this->getPacket($pk->mcpeBuffer);
+					$pk->decode();
+					$this->players[$uuid]->handleDataPacket($pk);
+				}
 		}
 	}
 }
