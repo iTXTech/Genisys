@@ -30,7 +30,9 @@ use synapse\network\protocol\spp\HeartbeatPacket;
 use synapse\network\protocol\spp\Info;
 use synapse\network\protocol\spp\InformationPacket;
 use synapse\network\protocol\spp\PlayerLoginPacket;
+use synapse\network\protocol\spp\RedirectPacket;
 use synapse\network\SynapseInterface;
+use synapse\network\SynLibInterface;
 
 class Synapse{
 	private static $obj = null;
@@ -47,6 +49,8 @@ class Synapse{
 	private $lastUpdate;
 	/** @var Player[] */
 	private $players = [];
+	/** @var SynLibInterface */
+	private $synLibInterface;
 
 	public function __construct(Server $server, array $config){
 		self::$obj = $this;
@@ -57,7 +61,8 @@ class Synapse{
 		$this->password = $config["password"];
 		$this->logger = $server->getLogger();
 		$this->interface = new SynapseInterface($this, $this->serverIp, $this->port);
-		$this->lastUpdate = time();
+		$this->synLibInterface = new SynLibInterface($this, $this->interface);
+		$this->lastUpdate = microtime(true);
 		$this->connect();
 	}
 
@@ -84,7 +89,7 @@ class Synapse{
 
 	public function tick(){
 		$this->interface->process();
-		if((($time = time()) - $this->lastUpdate) > 5){//Heartbeat!
+		if((($time = microtime(true)) - $this->lastUpdate) >= 5){//Heartbeat!
 			$this->lastUpdate = $time;
 			$pk = new HeartbeatPacket();
 			$pk->tps = $this->server->getTicksPerSecondAverage();
@@ -110,7 +115,7 @@ class Synapse{
 		return $this->logger;
 	}
 
-	public function handleDataPacket(DataPacket $pk){
+	public function handleDataPacket(DataPacket $pk){var_dump($pk);
 		$this->logger->debug("Received packet " . $pk::NETWORK_ID . " from {$this->serverIp}:{$this->port}");
 		switch($pk::NETWORK_ID){
 			case Info::INFORMATION_PACKET:
@@ -123,7 +128,13 @@ class Synapse{
 				break;
 			case Info::PLAYER_LOGIN_PACKET:
 				/** @var PlayerLoginPacket $pk */
-				//$this->players[$pk->uuid->toBinary()] = new Player($this->server->getNetwork()->getInterfaces()[0]);
+				$player = new Player($this->synLibInterface, mt_rand(0, PHP_INT_MAX), $pk->address, $pk->port);
+				$this->players[$pk->uuid->toBinary()] = $player;
+				$player->handleLoginPacket($pk);
+				break;
+			case Info::REDIRECT_PACKET:
+				/** @var RedirectPacket $pk */
+
 		}
 	}
 }

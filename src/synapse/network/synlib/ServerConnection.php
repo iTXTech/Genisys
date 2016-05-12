@@ -35,6 +35,8 @@ class ServerConnection{
 	private $port;
 	/** @var SynapseClient */
 	private $server;
+	private $lastCheck;
+	private $connected;
 
 	protected $shutdown = false;
 
@@ -44,6 +46,9 @@ class ServerConnection{
 		socket_getpeername($this->socket->getSocket(), $address, $port);
 		$this->ip = $address;
 		$this->port = $port;
+
+		$this->lastCheck = microtime(true);
+		$this->connected = true;
 
 		$this->run();
 	}
@@ -90,12 +95,29 @@ class ServerConnection{
 	}
 
 	public function update(){
-		if($this->sendBuffer != ""){
-			socket_write($this->socket->getSocket(), $this->sendBuffer);
-			$this->sendBuffer = "";
+		if($this->connected){
+			$err = socket_last_error($this->socket->getSocket());
+			if($err == 10057 or $err == 10054){
+				$this->server->getLogger()->error("Synapse connection has disconnected unexpectedly");
+				$this->connected = false;
+			}else{
+				$data = @socket_read($this->socket->getSocket(), 2048, PHP_BINARY_READ);
+				$this->receiveBuffer .= $data;
+				if($this->sendBuffer != ""){
+					socket_write($this->socket->getSocket(), $this->sendBuffer);
+					$this->sendBuffer = "";
+				}
+			}
+		}else{
+			if((($time = microtime(true)) - $this->lastCheck) >= 3){//re-connect
+				$this->server->getLogger()->notice("Trying to re-connect to Synapse Server");
+				if($this->socket->connect()){
+					$this->connected = true;
+					$this->server->setNeedAuth(true);
+				}
+				$this->lastCheck = $time;
+			}
 		}
-		$data = socket_read($this->socket->getSocket(), 2048, PHP_BINARY_READ);
-		$this->receiveBuffer .= $data;
 	}
 
 	public function getSocket(){

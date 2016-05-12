@@ -14,6 +14,7 @@ class SynapseClient extends Thread{
 	/** @var \Threaded */
 	private $externalQueue, $internalQueue;
 	private $mainPath;
+	private $needAuth = false;
 
 	public function __construct(\ThreadedLogger $logger, \ClassLoader $loader, $port, $interface = "127.0.0.1"){
 		$this->logger = $logger;
@@ -36,6 +37,14 @@ class SynapseClient extends Thread{
 		}
 
 		$this->start();
+	}
+
+	public function isNeedAuth() : bool{
+		return $this->needAuth;
+	}
+
+	public function setNeedAuth(bool $need){
+		$this->needAuth = $need;
 	}
 
 	public function run(){

@@ -22,18 +22,27 @@
 namespace synapse;
 
 use pocketmine\network\protocol\DataPacket;
+use pocketmine\network\protocol\LoginPacket;
 use pocketmine\network\SourceInterface;
 use pocketmine\Player as PMPlayer;
+use synapse\network\protocol\spp\PlayerLoginPacket;
 
 class Player extends PMPlayer{
-	public function __construct(SourceInterface $interface, $clientID, $ip, $port){
+	private $isFirstTimeLogin = false;
 
+	public function handleLoginPacket(PlayerLoginPacket $packet){
+		$this->isFirstTimeLogin = $packet->isFirstTime;
+		$pk = new LoginPacket();
+		$pk->buffer = $packet->cachedLoginPacket;
+		$pk->decode();
+		$this->handleDataPacket($pk);
 	}
 
 	public function dataPacket(DataPacket $packet, $needACK = false){
-
+		$this->interface->putPacket($this, $packet, $needACK);
 	}
 
 	public function directDataPacket(DataPacket $packet, $needACK = false){
+		$this->interface->putPacket($this, $packet, $needACK, true);
 	}
 }

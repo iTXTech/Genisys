@@ -65,6 +65,10 @@ class SynapseInterface{
 		while(strlen($buffer = $this->client->readThreadToMainPacket()) > 0){
 			$this->handlePacket($buffer);
 		}
+		if($this->client->isNeedAuth()){
+			$this->synapse->connect();
+			$this->client->setNeedAuth(false);
+		}
 	}
 
 	/**
@@ -84,7 +88,7 @@ class SynapseInterface{
 		return null;
 	}
 
-	public function handlePacket($buffer){
+	public function handlePacket($buffer){var_dump($buffer);
 		if(($pk = $this->getPacket($buffer)) != null){
 			$pk->decode();
 			$this->synapse->handleDataPacket($pk);
