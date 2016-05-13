@@ -25,7 +25,7 @@ use pocketmine\utils\Binary;
 
 class ServerConnection{
 
-	const MAGIC_BYTES = "\x35\xac";
+	const MAGIC_BYTES = "\x35\xac\x66\xbf";
 
 	private $receiveBuffer = "";
 	private $sendBuffer = "";
