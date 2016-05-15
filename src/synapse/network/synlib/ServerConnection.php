@@ -41,7 +41,7 @@ class ServerConnection{
 	public function __construct(SynapseClient $server, SynapseSocket $socket){
 		$this->server = $server;
 		$this->socket = $socket;
-		socket_getpeername($this->socket->getSocket(), $address, $port);
+		@socket_getpeername($this->socket->getSocket(), $address, $port);
 		$this->ip = $address;
 		$this->port = $port;
 
@@ -107,6 +107,9 @@ class ServerConnection{
 				$this->server->getLogger()->notice("Trying to re-connect to Synapse Server");
 				if($this->socket->connect()){
 					$this->connected = true;
+					@socket_getpeername($this->socket->getSocket(), $address, $port);
+					$this->ip = $address;
+					$this->port = $port;
 					$this->server->setNeedAuth(true);
 				}
 				$this->lastCheck = $time;
