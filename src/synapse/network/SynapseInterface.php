@@ -54,6 +54,10 @@ class SynapseInterface{
 		return $this->synapse;
 	}
 
+	public function shutdown(){
+		$this->client->shutdown();
+	}
+
 	public function putPacket(DataPacket $pk){
 		if(!$pk->isEncoded){
 			$pk->encode();

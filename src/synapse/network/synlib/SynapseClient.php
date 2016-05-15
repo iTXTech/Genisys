@@ -4,6 +4,8 @@ namespace synapse\network\synlib;
 use pocketmine\Thread;
 
 class SynapseClient extends Thread{
+	const VERSION = "0.1.0";
+
 	/** @var \ThreadedLogger */
 	private $logger;
 	/** @var string */
@@ -45,6 +47,11 @@ class SynapseClient extends Thread{
 
 	public function setNeedAuth(bool $need){
 		$this->needAuth = $need;
+	}
+
+	public function quit(){
+		$this->shutdown();
+		parent::quit();
 	}
 
 	public function run(){

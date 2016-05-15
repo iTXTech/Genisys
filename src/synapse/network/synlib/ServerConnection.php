@@ -38,8 +38,6 @@ class ServerConnection{
 	private $lastCheck;
 	private $connected;
 
-	protected $shutdown = false;
-
 	public function __construct(SynapseClient $server, SynapseSocket $socket){
 		$this->server = $server;
 		$this->socket = $socket;
@@ -53,16 +51,12 @@ class ServerConnection{
 		$this->run();
 	}
 
-	public function shutdown(){
-		$this->shutdown = true;
-	}
-
 	public function run(){
 		$this->tickProcessor();
 	}
 
 	private function tickProcessor(){
-		while(!$this->shutdown){
+		while(!$this->server->isShutdown()){
 			$start = microtime(true);
 			$this->tick();
 			$time = microtime(true);
@@ -70,6 +64,7 @@ class ServerConnection{
 				@time_sleep_until($time + 0.01 - ($time - $start));
 			}
 		}
+		$this->socket->close();
 	}
 
 	private function tick(){
@@ -101,8 +96,7 @@ class ServerConnection{
 				$this->server->getLogger()->error("Synapse connection has disconnected unexpectedly");
 				$this->connected = false;
 			}else{
-				$data = @socket_read($this->socket->getSocket(), 2048, PHP_BINARY_READ);
-				$this->receiveBuffer .= $data;
+				$this->receiveBuffer .= @socket_read($this->socket->getSocket(), 2048, PHP_BINARY_READ);
 				if($this->sendBuffer != ""){
 					@socket_write($this->socket->getSocket(), $this->sendBuffer);
 					$this->sendBuffer = "";

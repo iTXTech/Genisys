@@ -26,10 +26,12 @@ use pocketmine\utils\MainLogger;
 use pocketmine\utils\Utils;
 use synapse\network\protocol\spp\ConnectPacket;
 use synapse\network\protocol\spp\DataPacket;
+use synapse\network\protocol\spp\DisconnectPacket;
 use synapse\network\protocol\spp\HeartbeatPacket;
 use synapse\network\protocol\spp\Info;
 use synapse\network\protocol\spp\InformationPacket;
 use synapse\network\protocol\spp\PlayerLoginPacket;
+use synapse\network\protocol\spp\PlayerLogoutPacket;
 use synapse\network\protocol\spp\RedirectPacket;
 use synapse\network\SynapseInterface;
 use synapse\network\SynLibInterface;
@@ -45,7 +47,7 @@ class Synapse{
 	private $isMainServer;
 	private $password;
 	private $interface;
-	private $isVerified = false;
+	private $verified = false;
 	private $lastUpdate;
 	/** @var Player[] */
 	private $players = [];
@@ -78,7 +80,17 @@ class Synapse{
 		return self::$obj;
 	}
 
+	public function shutdown(){
+		if($this->verified){
+			$pk = new DisconnectPacket();
+			$this->interface->putPacket($pk);
+			$this->getLogger()->debug("Synapse client has disconnected from Synapse server");
+		}
+		$this->interface->shutdown();
+	}
+
 	public function connect(){
+		$this->verified = false;
 		$pk = new ConnectPacket();
 		$pk->encodedPassword = base64_encode(Utils::aes_encode($this->password, $this->password));
 		$pk->isMainServer = $this->isMainServer();
@@ -126,13 +138,13 @@ class Synapse{
 		return $data;
 	}
 
-	public function handleDataPacket(DataPacket $pk){var_dump($pk);
+	public function handleDataPacket(DataPacket $pk){
 		$this->logger->debug("Received packet " . $pk::NETWORK_ID . " from {$this->serverIp}:{$this->port}");
 		switch($pk::NETWORK_ID){
 			case Info::INFORMATION_PACKET:
 				if($pk->message == InformationPacket::INFO_LOGIN_SUCCESS){
 					$this->logger->info("Login success to {$this->serverIp}:{$this->port}");
-					$this->isVerified = true;
+					$this->verified = true;
 				}elseif($pk->message == InformationPacket::INFO_LOGIN_FAILED){
 					$this->logger->info("Login failed to {$this->serverIp}:{$this->port}");
 				}
@@ -152,6 +164,14 @@ class Synapse{
 					$pk->decode();
 					$this->players[$uuid]->handleDataPacket($pk);
 				}
+				break;
+			case Info::PLAYER_LOGOUT_PACKET:
+				/** @var PlayerLogoutPacket $pk */
+				if(isset($this->players[$uuid = $pk->uuid->toBinary()])){
+					$this->players[$uuid]->close("", $pk->reason);
+					unset($this->players[$uuid]);
+				}
+				break;
 		}
 	}
 }

@@ -2499,6 +2499,11 @@ private function lookupAddress($address) {
 				$this->network->unregisterInterface($interface);
 			}
 
+			if($this->isSynapseEnabled()){
+				$this->getLogger()->debug("Stopping Synapse client");
+				$this->synapse->shutdown();
+			}
+
 			//$this->memoryManager->doObjectCleanup();
 
 			gc_collect_cycles();

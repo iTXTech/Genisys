@@ -18,7 +18,7 @@
  * @link https://itxtech.org
  *
  */
- 
+
 namespace synapse;
 
 use pocketmine\network\protocol\DataPacket;
@@ -26,16 +26,32 @@ use pocketmine\network\protocol\LoginPacket;
 use pocketmine\network\SourceInterface;
 use pocketmine\Player as PMPlayer;
 use pocketmine\utils\UUID;
+use synapse\event\player\PlayerConnectEvent;
 use synapse\network\protocol\spp\PlayerLoginPacket;
 
 class Player extends PMPlayer{
 	private $isFirstTimeLogin = false;
+	private $lastPacketTime;
 
 	public function handleLoginPacket(PlayerLoginPacket $packet){
 		$this->isFirstTimeLogin = $packet->isFirstTime;
+		$this->server->getPluginManager()->callEvent($ev = new PlayerConnectEvent($this, $this->isFirstTimeLogin));
 		$pk = Synapse::getInstance()->getPacket($packet->cachedLoginPacket);
 		$pk->decode();
 		$this->handleDataPacket($pk);
+	}
+
+	public function handleDataPacket(DataPacket $packet){
+		$this->lastPacketTime = microtime(true);
+		return parent::handleDataPacket($packet);
+	}
+
+	public function onUpdate($currentTick){
+		if((microtime(true) - $this->lastPacketTime) >= 5 * 60){//5 minutes time out
+			$this->close("", "timeout");
+			return false;
+		}
+		return parent::onUpdate($currentTick);
 	}
 
 	public function setUniqueId(UUID $uuid){
