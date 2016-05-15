@@ -15,18 +15,32 @@
  * (at your option) any later version.
  *
  * @author iTX Technologies
- * @link https://mcper.cn
+ * @link https://itxtech.org
  *
  */
  
-namespace synapse\network\protocol;
+namespace synapse\network\protocol\spp;
 
-class Info{
-	const CURRENT_PROTOCOL = 1;
+use pocketmine\utils\UUID;
 
-	const HEARTBEAT_PACKET = 0x01;
-	const CONNECT_PACKET = 0x02;
-	const DISCONNECT_PACKET = 0x03;
-	const TRANSFER_PACKET = 0x04;
-	const REDIRECT_PACKET = 0x05;
+class RedirectPacket extends DataPacket{
+	const NETWORK_ID = Info::REDIRECT_PACKET;
+
+	/** @var UUID */
+	public $uuid;
+	public $direct;
+	public $mcpeBuffer;
+
+	public function encode(){
+		$this->reset();
+		$this->putUUID($this->uuid);
+		$this->putByte($this->direct ? 1 : 0);
+		$this->putString($this->mcpeBuffer);
+	}
+
+	public function decode(){
+		$this->uuid = $this->getUUID();
+		$this->direct = ($this->getByte() == 1) ? true : false;
+		$this->mcpeBuffer = $this->getString();
+	}
 }
