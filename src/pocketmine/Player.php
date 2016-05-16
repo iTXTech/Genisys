@@ -3104,7 +3104,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->removeAllEffects();
 						$this->setHealth($this->getMaxHealth());
 						$this->setFood(20);
-						if($this->server->expEnabled) $this->updateExperience();
+						if($this->server->expEnabled){
+							$this->updateExperience();
+						}
 
 						$this->starvationTick = 0;
 						$this->foodTick = 0;

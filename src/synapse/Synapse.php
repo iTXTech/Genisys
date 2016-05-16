@@ -38,9 +38,9 @@ use synapse\network\SynLibInterface;
 
 class Synapse{
 	private static $obj = null;
-	/** @var  Server */
+	/** @var Server */
 	private $server;
-	/** @var  MainLogger */
+	/** @var MainLogger */
 	private $logger;
 	private $serverIp;
 	private $port;
@@ -53,6 +53,8 @@ class Synapse{
 	private $players = [];
 	/** @var SynLibInterface */
 	private $synLibInterface;
+	private $clientData = [];
+	private $description;
 
 	public function __construct(Server $server, array $config){
 		self::$obj = $this;
@@ -61,11 +63,16 @@ class Synapse{
 		$this->port = $config["server-port"];
 		$this->isMainServer = $config["isMainServer"];
 		$this->password = $config["password"];
+		$this->description = $config["description"];
 		$this->logger = $server->getLogger();
 		$this->interface = new SynapseInterface($this, $this->serverIp, $this->port);
 		$this->synLibInterface = new SynLibInterface($this, $this->interface);
 		$this->lastUpdate = microtime(true);
 		$this->connect();
+	}
+
+	public function getClientData(){
+		return $this->clientData;
 	}
 
 	public function getGenisysServer(){
@@ -83,10 +90,24 @@ class Synapse{
 	public function shutdown(){
 		if($this->verified){
 			$pk = new DisconnectPacket();
-			$this->interface->putPacket($pk);
+			$pk->type = DisconnectPacket::TYPE_GENERIC;
+			$pk->message = "Server closed";
+			$this->sendDataPacket($pk);
 			$this->getLogger()->debug("Synapse client has disconnected from Synapse server");
 		}
 		$this->interface->shutdown();
+	}
+
+	public function getDescription() : string{
+		return $this->description;
+	}
+
+	public function setDescription(string $description){
+		$this->description = $description;
+	}
+
+	public function sendDataPacket(DataPacket $pk){
+		$this->interface->putPacket($pk);
 	}
 
 	public function connect(){
@@ -94,9 +115,10 @@ class Synapse{
 		$pk = new ConnectPacket();
 		$pk->encodedPassword = base64_encode(Utils::aes_encode($this->password, $this->password));
 		$pk->isMainServer = $this->isMainServer();
+		$pk->description = $this->description;
 		$pk->maxPlayers = $this->server->getMaxPlayers();
 		$pk->protocol = Info::CURRENT_PROTOCOL;
-		$this->interface->putPacket($pk);
+		$this->sendDataPacket($pk);
 	}
 
 	public function tick(){
@@ -107,7 +129,7 @@ class Synapse{
 			$pk->tps = $this->server->getTicksPerSecondAverage();
 			$pk->load = $this->server->getTickUsageAverage();
 			$pk->upTime = microtime(true) - \pocketmine\START_TIME;
-			$this->interface->putPacket($pk);
+			$this->sendDataPacket($pk);
 		}
 	}
 
@@ -127,6 +149,10 @@ class Synapse{
 		return $this->logger;
 	}
 
+	public function getHash() : string{
+		return $this->serverIp . ":" . $this->port;
+	}
+
 	public function getPacket($buffer){
 		$pid = ord($buffer{1});
 
@@ -138,16 +164,31 @@ class Synapse{
 		return $data;
 	}
 
+	public function removePlayer(Player $player){
+		if(isset($this->players[$uuid = $player->getUniqueId()->toBinary()])){
+			unset($this->players[$uuid]);
+		}
+	}
+
 	public function handleDataPacket(DataPacket $pk){
 		$this->logger->debug("Received packet " . $pk::NETWORK_ID . " from {$this->serverIp}:{$this->port}");
 		switch($pk::NETWORK_ID){
 			case Info::INFORMATION_PACKET:
-				if($pk->message == InformationPacket::INFO_LOGIN_SUCCESS){
-					$this->logger->info("Login success to {$this->serverIp}:{$this->port}");
-					$this->verified = true;
-				}elseif($pk->message == InformationPacket::INFO_LOGIN_FAILED){
-					$this->logger->info("Login failed to {$this->serverIp}:{$this->port}");
+				/** @var InformationPacket $pk */
+				switch($pk->type){
+					case InformationPacket::TYPE_LOGIN:
+						if($pk->message == InformationPacket::INFO_LOGIN_SUCCESS){
+							$this->logger->info("Login success to {$this->serverIp}:{$this->port}");
+							$this->verified = true;
+						}elseif($pk->message == InformationPacket::INFO_LOGIN_FAILED){
+							$this->logger->info("Login failed to {$this->serverIp}:{$this->port}");
+						}
+					break;
+					case InformationPacket::TYPE_CLIENT_DATA:
+						$this->clientData = json_decode($pk->message, true);
+						break;
 				}
+
 				break;
 			case Info::PLAYER_LOGIN_PACKET:
 				/** @var PlayerLoginPacket $pk */
@@ -169,7 +210,7 @@ class Synapse{
 				/** @var PlayerLogoutPacket $pk */
 				if(isset($this->players[$uuid = $pk->uuid->toBinary()])){
 					$this->players[$uuid]->close("", $pk->reason);
-					unset($this->players[$uuid]);
+					$this->removePlayer($this->players[$uuid]);
 				}
 				break;
 		}

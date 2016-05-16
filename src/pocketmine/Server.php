@@ -161,8 +161,6 @@ use pocketmine\entity\IronGolem;
 use pocketmine\entity\SnowGolem;
 use pocketmine\entity\Lightning;
 use pocketmine\entity\XPOrb;
-use pocketmine\network\protocol\StrangePacket;
-use pocketmine\event\player\PlayerTransferEvent;
 use pocketmine\entity\ai\AIHolder;
 use pocketmine\entity\ThrownExpBottle;
 use pocketmine\entity\Boat;
@@ -1687,6 +1685,7 @@ class Server{
 			"server-port" => $this->getAdvancedProperty("synapse.server-port", 10305),
 			"isMainServer" => $this->getAdvancedProperty("synapse.is-main-server", true),
 			"password" => $this->getAdvancedProperty("synapse.server-password", "123456"),
+			"description" => $this->getAdvancedProperty("synapse.description", "A Synapse client"),
 		];
 	}
 

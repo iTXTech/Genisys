@@ -21,26 +21,23 @@
  
 namespace synapse\network\protocol\spp;
 
-class InformationPacket extends DataPacket{
-	const NETWORK_ID = Info::INFORMATION_PACKET;
+use pocketmine\utils\UUID;
 
-	const TYPE_LOGIN = 0;
-	const TYPE_CLIENT_DATA = 1;
+class TransferPacket extends DataPacket{
+	const NETWORK_ID = Info::TRANSFER_PACKET;
 
-	const INFO_LOGIN_SUCCESS = "success";
-	const INFO_LOGIN_FAILED = "failed";
-
-	public $type;
-	public $message;
+	/** @var UUID */
+	public $uuid;
+	public $clientHash;
 
 	public function encode(){
 		$this->reset();
-		$this->putByte($this->type);
-		$this->putString($this->message);
+		$this->putUUID($this->uuid);
+		$this->putString($this->clientHash);
 	}
 
 	public function decode(){
-		$this->type = $this->getByte();
-		$this->message = $this->getString();
+		$this->uuid = $this->getUUID();
+		$this->clientHash = $this->getString();
 	}
 }

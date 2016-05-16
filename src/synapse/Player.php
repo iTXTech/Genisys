@@ -28,6 +28,7 @@ use pocketmine\Player as PMPlayer;
 use pocketmine\utils\UUID;
 use synapse\event\player\PlayerConnectEvent;
 use synapse\network\protocol\spp\PlayerLoginPacket;
+use synapse\network\protocol\spp\TransferPacket;
 
 class Player extends PMPlayer{
 	private $isFirstTimeLogin = false;
@@ -39,6 +40,22 @@ class Player extends PMPlayer{
 		$pk = Synapse::getInstance()->getPacket($packet->cachedLoginPacket);
 		$pk->decode();
 		$this->handleDataPacket($pk);
+	}
+
+	public function transfer(string $hash){
+		$clients = Synapse::getInstance()->getClientData();
+		if(isset($clients[$hash])){
+			$pk = new TransferPacket();
+			$pk->uuid = $this->uuid;
+			$pk->clientHash = $hash;
+			Synapse::getInstance()->sendDataPacket($pk);
+
+			$ip = $clients[$hash]["ip"];
+			$port = $clients[$hash]["port"];
+			
+			$this->close("", "Transferred to $ip:$port");
+			Synapse::getInstance()->removePlayer($this);
+		}
 	}
 
 	public function handleDataPacket(DataPacket $packet){
