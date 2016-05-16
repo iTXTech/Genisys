@@ -18,7 +18,7 @@
  * @link https://itxtech.org
  *
  */
- 
+
 namespace synapse\network\protocol\spp;
 
 class ConnectPacket extends DataPacket{
