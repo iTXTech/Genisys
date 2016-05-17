@@ -95,7 +95,6 @@ class Synapse{
 			$this->sendDataPacket($pk);
 			$this->getLogger()->debug("Synapse client has disconnected from Synapse server");
 		}
-		$this->interface->shutdown();
 	}
 
 	public function getDescription() : string{
