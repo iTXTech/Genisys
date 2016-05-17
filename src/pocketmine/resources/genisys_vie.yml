@@ -2,7 +2,7 @@
 
 #Phiên bản file cài đặt
 config:
- version: 14
+ version: 15
 
 level:
  #Chỉnh nếu muốn bật/tắt thời tiết (true/false)
@@ -94,10 +94,13 @@ redstone:
  pulse-frequency: 1
 
 synapse:
- #TODO: Nếu bạn muốn sử dụng Synapse API hoặc kết nối vào server Synapse, kích hoạt (true/false)
+ #Nếu muốn kích hoạt API của Synapse hoặc kết nối vào server Synapse, kích hoạt chế nđộ này
  enabled: false
  server-ip: 127.0.0.1
- server-port: 10306
+ server-port: 10305
+ is-main-server: true
+ server-password: 32bitlongkey
+ description: "A Synapse client"
 
 dserver:
  #The count of all multi-server unified
