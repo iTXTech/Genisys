@@ -3886,7 +3886,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public function sendPopup($message, $subtitle = ""){
 		$ev = new PlayerTextPreSendEvent($this, $message, PlayerTextPreSendEvent::POPUP);
 		$this->server->getPluginManager()->callEvent($ev);
-		if($ev->isCancelled()){
+		if(!$ev->isCancelled()){
 			$pk = new TextPacket();
 			$pk->type = TextPacket::TYPE_POPUP;
 			$pk->source = $message;
