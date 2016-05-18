@@ -3876,38 +3876,44 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$ev = new PlayerTextPreSendEvent($this, $pk->message, PlayerTextPreSendEvent::TRANSLATED_MESSAGE);
 		$this->server->getPluginManager()->callEvent($ev);
-		if($ev->isCancelled()) return false;
-
-		$this->dataPacket($pk);
-
-		return true;
+		if(!$ev->isCancelled()){
+			$this->dataPacket($pk);
+			return true;
+		}
+		return false;
 	}
 
 	public function sendPopup($message, $subtitle = ""){
 		$ev = new PlayerTextPreSendEvent($this, $message, PlayerTextPreSendEvent::POPUP);
 		$this->server->getPluginManager()->callEvent($ev);
-		if($ev->isCancelled()) return false;
-
-		$pk = new TextPacket();
-		$pk->type = TextPacket::TYPE_POPUP;
-		$pk->source = $message;
-		$pk->message = $subtitle;
-		$this->dataPacket($pk);
-
-		return true;
+		if($ev->isCancelled()){
+			$pk = new TextPacket();
+			$pk->type = TextPacket::TYPE_POPUP;
+			$pk->source = $message;
+			$pk->message = $subtitle;
+			$this->dataPacket($pk);
+			return true;
+		}
+		return false;
 	}
 
+	/**
+	 * @deprecated
+	 *
+	 * @param $message
+	 * @return bool
+	 */
 	public function sendTip($message){
 		$ev = new PlayerTextPreSendEvent($this, $message, PlayerTextPreSendEvent::TIP);
 		$this->server->getPluginManager()->callEvent($ev);
-		if($ev->isCancelled()) return false;
-
-		$pk = new TextPacket();
-		$pk->type = TextPacket::TYPE_TIP;
-		$pk->message = $message;
-		$this->dataPacket($pk);
-
-		return true;
+		if(!$ev->isCancelled()){
+			$pk = new TextPacket();
+			$pk->type = TextPacket::TYPE_TIP;
+			$pk->message = $message;
+			$this->dataPacket($pk);
+			return true;
+		}
+		return false;
 	}
 
 	/**

@@ -167,7 +167,9 @@ class PlayerInventory extends BaseInventory{
 			$this->sendArmorSlot($index, $this->getViewers());
 			$this->sendArmorSlot($index, $this->getHolder()->getViewers());
 		}else{
-			if($holder->isSurvival()) $this->sendContents($holder);
+			if(!$holder->getServer()->limitedCreative or $holder->isSurvival()){
+				$this->sendContents($holder);
+			}
 		}
 	}
 
