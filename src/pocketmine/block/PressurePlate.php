@@ -43,13 +43,13 @@ class PressurePlate extends RedstoneSource{
 
 	public function onEntityCollide(Entity $entity){
 		if($this->getLevel()->getServer()->redstoneEnabled and $this->canActivate){
-			if(!$this->isActivated() or ($this->isActivated() and ($this->getLevel()->getServer()->getTick() % 30) == 0)){
+			if(!$this->isActivated()){
 				$this->meta = 1;
 				$this->getLevel()->setBlock($this, $this, true, false);
-				$this->activate();
 				$this->getLevel()->addSound(new GenericSound($this, 1000));
-				//$this->activateTime = $this->getLevel()->getServer()->getTick();
-				$this->getLevel()->scheduleUpdate($this, 30);
+			}
+			if(!$this->isActivated() or ($this->isActivated() and ($this->getLevel()->getServer()->getTick() % 30) == 0)){
+				$this->activate();
 			}
 		}
 	}
