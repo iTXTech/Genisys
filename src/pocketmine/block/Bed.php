@@ -22,6 +22,7 @@
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
+use pocketmine\level\Explosion;
 use pocketmine\level\Level;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
@@ -59,6 +60,11 @@ class Bed extends Transparent{
 	}
 
 	public function onActivate(Item $item, Player $player = null){
+		if($this->getLevel()->getDimension() == Level::DIMENSION_NETHER){
+			$explosion = new Explosion($this, 6, $this);
+			$explosion->explode();
+			return true;
+		}
 
 		$time = $this->getLevel()->getTime() % Level::TIME_FULL;
 
