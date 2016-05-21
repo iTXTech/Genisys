@@ -13,7 +13,7 @@ use pocketmine\Player;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\item\Item as ItemItem;
 
-class Mooshroom extends Cow{
+class Mooshroom extends Animal{
 	const NETWORK_ID = 16;
 
 	public $width = 0.3;

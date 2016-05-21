@@ -79,6 +79,13 @@ class MonsterSpawner extends Solid{
 			new IntTag("z", $block->z),
 			new IntTag("EntityId", 0),
 		]);
+		
+		if($item->hasCustomBlockData()){
+			foreach($item->getCustomBlockData() as $key => $v){
+				$nbt->{$key} = $v;
+			}
+		}
+		
 		Tile::createTile(Tile::MOB_SPAWNER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 		return true;
 	}

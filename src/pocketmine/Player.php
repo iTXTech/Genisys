@@ -27,6 +27,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\entity\Animal;
 use pocketmine\entity\Arrow;
 use pocketmine\entity\Attribute;
+use pocketmine\entity\AttributeMap;
 use pocketmine\entity\Boat;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
@@ -38,11 +39,13 @@ use pocketmine\entity\Minecart;
 use pocketmine\entity\Projectile;
 use pocketmine\entity\ThrownExpBottle;
 use pocketmine\entity\ThrownPotion;
+use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\ItemFrameDropItemEvent;
 use pocketmine\event\block\SignChangeEvent;
 use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityEatItemEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\entity\EntityShootBowEvent;
 use pocketmine\event\entity\ProjectileLaunchEvent;
@@ -79,6 +82,7 @@ use pocketmine\event\server\DataPacketSendEvent;
 use pocketmine\event\TextContainer;
 use pocketmine\event\Timings;
 use pocketmine\event\TranslationContainer;
+use pocketmine\inventory\AnvilInventory;
 use pocketmine\inventory\BaseTransaction;
 use pocketmine\inventory\BigShapedRecipe;
 use pocketmine\inventory\BigShapelessRecipe;
@@ -90,6 +94,7 @@ use pocketmine\inventory\PlayerInventory;
 use pocketmine\inventory\ShapedRecipe;
 use pocketmine\inventory\ShapelessRecipe;
 use pocketmine\inventory\SimpleTransactionGroup;
+use pocketmine\item\FoodSource;
 use pocketmine\item\Item;
 use pocketmine\item\Potion;
 use pocketmine\level\ChunkLoader;
@@ -334,81 +339,98 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		]);
 	}
 
-	protected $explevel = 0;
-	protected $experience = 0;
+	protected $expLevel = 0;
+	protected $exp = 0;
 
-	public function setExperienceAndLevel($exp, $level){
+	public function setExperienceAndLevel(int $exp, int $level){
 		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, $level));
-		if($ev->isCancelled()) return false;
-		$this->explevel = $level;
-		$this->experience = $exp;
-		$this->calcExpLevel();
-		$this->updateExperience();
-		return true;
+		if(!$ev->isCancelled()){
+			$this->expLevel = $level;
+			$this->exp = $exp;
+			$this->calcExpLevel();
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
-	public function setExperience($exp){
+	public function setExp(int $exp){
 		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, 0));
-		if($ev->isCancelled()) return false;
-		$this->experience = $ev->getExp();
-		$this->calcExpLevel();
-		$this->updateExperience();
-		return true;
+		if($ev->isCancelled()){
+			$this->exp = $ev->getExp();
+			$this->calcExpLevel();
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
-	public function setExpLevel($level){
+	public function setExpLevel(int $level){
 		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, 0, $level));
-		if($ev->isCancelled()) return false;
-		$this->explevel = $level;
-		$this->updateExperience();
-		return true;
+		if(!$ev->isCancelled()){
+			$this->expLevel = $level;
+			$this->exp = $this->server->getExpectedExperience($level);
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
 	public function getExpectedExperience(){
-		return $this->server->getExpectedExperience($this->explevel + 1);
+		return $this->server->getExpectedExperience($this->expLevel + 1);
 	}
 
 	public function getLevelUpExpectedExperience(){
 		/*if($this->explevel < 16) return 2 * $this->explevel + 7;
 		elseif($this->explevel < 31) return 5 * $this->explevel - 38;
 		else return 9 * $this->explevel - 158;*/
-		return $this->getExpectedExperience() - $this->server->getExpectedExperience($this->explevel);
+		return $this->getExpectedExperience() - $this->server->getExpectedExperience($this->expLevel);
 	}
 
 	public function calcExpLevel(){
-		while($this->experience >= $this->getExpectedExperience()){
-			$this->explevel++;
+		while($this->exp >= $this->getExpectedExperience()){
+			$this->expLevel++;
 		}
-		while($this->experience < $this->server->getExpectedExperience($this->explevel - 1)){
-			$this->explevel--;
+		while($this->exp < $this->server->getExpectedExperience($this->expLevel - 1)){
+			$this->expLevel--;
 		}
 	}
 
-	public function addExperience($exp){
+	public function addExperience(int $exp){
 		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, 0, PlayerExperienceChangeEvent::ADD_EXPERIENCE));
-		if($ev->isCancelled()) return false;
-		$this->experience = $this->experience + $ev->getExp();
-		$this->calcExpLevel();
-		$this->updateExperience();
-		return true;
+		if(!$ev->isCancelled()){
+			$this->exp = $this->exp + $ev->getExp();
+			$this->calcExpLevel();
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
-	public function addExpLevel($level){
-		$this->explevel = $this->explevel + $level;
-		$this->updateExperience();
+	public function addExpLevel(int $level){
+		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, 0, $level, PlayerExperienceChangeEvent::ADD_EXPERIENCE));
+		if(!$ev->isCancelled()){
+			$this->expLevel = $this->expLevel + $ev->getExpLevel();
+			$this->calcExpLevel();
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
-	public function getExperience(){
-		return $this->experience;
+	public function getExp(){
+		return $this->exp;
 	}
 
 	public function getExpLevel(){
-		return $this->explevel;
+		return $this->expLevel;
 	}
 
 	public function updateExperience(){
-		$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE)->setValue(($this->experience - $this->server->getExpectedExperience($this->explevel)) / ($this->getLevelUpExpectedExperience()));
-		$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE_LEVEL)->setValue($this->explevel);
+		if($this->getAttributeMap() instanceof AttributeMap){
+			$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE)->setValue(($this->exp - $this->server->getExpectedExperience($this->expLevel)) / ($this->getLevelUpExpectedExperience()));
+			$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE_LEVEL)->setValue($this->expLevel);
+		}
 	}
 
 	/**
@@ -689,8 +711,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$this->creationTime = microtime(true);
 
-		$this->experience = 0;
-		$this->explevel = 0;
+		$this->exp = 0;
+		$this->expLevel = 0;
 		$this->food = 20;
 		Entity::setHealth(20);
 	}
@@ -798,25 +820,15 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->dataPacket($pk);
 
 			$targetLevel->getWeather()->sendWeather($this);
-
-			/*if($this->server->netherEnabled){
-				if($targetLevel == $this->server->netherLevel){
-					$pk = new ChangeDimensionPacket();
-					$pk->dimension = ChangeDimensionPacket::DIMENSION_NETHER;
-					$this->dataPacket($pk);
-					$this->shouldSendStatus = true;
-				}elseif($oldLevel == $this->server->netherLevel){
-					$pk = new ChangeDimensionPacket();
-					$pk->dimension = ChangeDimensionPacket::DIMENSION_NORMAL;
-					$this->dataPacket($pk);
-					$this->shouldSendStatus = true;
-				}
-			}*/
 			if($targetLevel->getDimension() != $oldLevel->getDimension()){
 				$pk = new ChangeDimensionPacket();
 				$pk->dimension = $targetLevel->getDimension();
 				$this->dataPacket($pk);
 				$this->shouldSendStatus = true;
+			}
+
+			if($this->spawned){
+				$this->spawnToAll();
 			}
 		}
 	}
@@ -1425,6 +1437,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$pk = new AdventureSettingsPacket();
 		$pk->flags = $flags;
+		$pk->userPermission = 2;
+		$pk->globalPermission = 2;
 		$this->dataPacket($pk);
 	}
 
@@ -1697,8 +1711,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					//$teleported = false;
 					if($this->server->netherEnabled){
 						if($this->isInsideOfPortal()){
-							if($this->portalTime == 0) $this->portalTime = $this->server->getTick();
-						}else $this->portalTime = 0;
+							if($this->portalTime == 0){
+								$this->portalTime = $this->server->getTick();
+							}
+						}else{
+							$this->portalTime = 0;
+						}
 					}
 
 					//if($this->server->redstoneEnabled) $this->getLevel()->updateAround($ev->getTo()->round());
@@ -1841,13 +1859,39 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		if($this->spawned){
 			if($this->server->netherEnabled){
-				if(($this->server->getTick() - $this->portalTime) >= ($this->server->getTicksPerSecondAverage() * 1) and $this->portalTime > 0){
+				if(($this->isCreative() or $this->isSurvival() and $this->server->getTick() - $this->portalTime >= 30) and $this->portalTime > 0){
 					if($this->server->netherLevel instanceof Level){
 						if($this->getLevel() != $this->server->netherLevel){
 							$this->fromPos = $this->getPosition();
+							$this->fromPos->x = ((int) $this->fromPos->x) + 0.5;
+							$this->fromPos->z = ((int) $this->fromPos->z) + 0.5;
 							$this->teleport($this->shouldResPos = $this->server->netherLevel->getSafeSpawn());
-						}elseif($this->fromPos != null){
-							$this->teleport($this->shouldResPos = $this->fromPos->add(mt_rand(-5, 5), 0, mt_rand(-5, 5)));
+						}elseif($this->fromPos instanceof Position){
+							if(!($this->getLevel()->isChunkLoaded($this->fromPos->x, $this->fromPos->z))){
+								$this->getLevel()->loadChunk($this->fromPos->x, $this->fromPos->z);
+							}
+							$add = [1, 0, -1, 0, 0, 1, 0, -1];
+							$tempos = null;
+							for($j = 2; $j < 5; $j++){
+								for($i = 0; $i < 4; $i++){
+									if($this->fromPos->getLevel()->getBlock($this->temporalVector->fromObjectAdd($this->fromPos, $add[$i] * $j, 0, $add[$i + 4] * $j))->getId() === Block::AIR){
+										if($this->fromPos->getLevel()->getBlock($this->temporalVector->fromObjectAdd($this->fromPos, $add[$i] * $j, 1, $add[$i + 4] * $j))->getId() === Block::AIR){
+											$tempos = $this->fromPos->add($add[$i] * $j, 0, $add[$i + 4] * $j);
+											//$this->getLevel()->getServer()->getLogger()->debug($tempos);
+											break;
+										}
+									}
+								}
+								if($tempos != null){
+									break;
+								}
+							}
+							if($tempos == null){
+								$tempos = $this->fromPos->add(mt_rand(-2, 2), 0, mt_rand(-2, 2));
+							}
+							$this->teleport($this->shouldResPos = $tempos);
+							$add = null;
+							$tempos = null;
 							$this->fromPos = null;
 						}else{
 							$this->teleport($this->shouldResPos = $this->server->getDefaultLevel()->getSafeSpawn());
@@ -1882,7 +1926,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$expectedVelocity = (-$this->gravity) / $this->drag - ((-$this->gravity) / $this->drag) * exp(-$this->drag * ($this->inAirTicks - $this->startAirTicks));
 							$diff = ($this->speed->y - $expectedVelocity) ** 2;
 							if(!$this->hasEffect(Effect::JUMP) and $diff > 0.6 and $expectedVelocity < $this->speed->y and !$this->server->getAllowFlight()){
-								$this->setMotion(new Vector3(0, $expectedVelocity, 0));
+								$this->setMotion($this->temporalVector->setComponents(0, $expectedVelocity, 0));
 								/*if($this->inAirTicks < 1000){
 
 								}elseif($this->kick("Flying is not enabled on this server")){
@@ -1996,6 +2040,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					return;
 				}
 
+				if($slot instanceof FoodSource){
+					$this->server->getPluginManager()->callEvent($ev = new EntityEatItemEvent($this, $slot));
+					if($ev->isCancelled()){
+						$this->inventory->sendContents($this);
+						return;
+					}
+				}
+
 				$pk = new EntityEventPacket();
 				$pk->eid = $this->getId();
 				$pk->event = EntityEventPacket::USE_ITEM;
@@ -2036,7 +2088,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->addEffect(Effect::getEffect(Effect::HEALTH_BOOST)->setAmplifier(0)->setDuration(2 * 60 * 20));
 					$this->addEffect(Effect::getEffect(Effect::REGENERATION)->setAmplifier(1)->setDuration(5 * 20));
 				}elseif($slot->getId() == Item::POTION){
-					$this->inventory->addItem(new Item(Item::POTION, Potion::WATER_BOTTLE, 1));
+					$this->inventory->addItem(Item::get(Item::GLASS_BOTTLE, 0, 1));
 					switch($slot->getDamage()){
 						case Potion::NIGHT_VISION:
 							$this->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setAmplifier(0)->setDuration(3 * 60 * 20));
@@ -2267,8 +2319,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->food = $nbt["Hunger"];
 		$this->setMaxHealth($nbt["MaxHealth"]);
 		Entity::setHealth(($nbt["Health"] <= 0) ? 20 : $nbt["Health"]);
-		$this->experience = ($nbt["Experience"] > 0) ? $nbt["Experience"] : 0;
-		$this->explevel = ($nbt["ExpLevel"] >= 0) ? $nbt["ExpLevel"] : 0;
+		$this->exp = ($nbt["Experience"] > 0) ? $nbt["Experience"] : 0;
+		$this->expLevel = ($nbt["ExpLevel"] >= 0) ? $nbt["ExpLevel"] : 0;
 		$this->calcExpLevel();
 		$this->gamemode = $nbt["playerGameType"] & 0x03;
 		if($this->server->getForceGamemode()){
@@ -2431,16 +2483,20 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			case ProtocolInfo::ITEM_FRAME_DROP_ITEM_PACKET:
 				$tile = $this->level->getTile($this->temporalVector->setComponents($packet->x, $packet->y, $packet->z));
 				if($tile instanceof ItemFrame){
-					$item = $tile->getItem();
-					$this->server->getPluginManager()->callEvent($ev = new ItemFrameDropItemEvent($this->level->getBlock($tile), $tile, $item));
+					$block = $this->level->getBlock($tile);
+					$this->server->getPluginManager()->callEvent($ev = new BlockBreakEvent($this, $block, $this->getInventory()->getItemInHand(), true));
 					if(!$ev->isCancelled()){
-						if($item->getId() !== Item::AIR){
-							if((mt_rand(0, 10) / 10) < $tile->getItemDropChance()){
-								$this->level->dropItem($tile, $item);
+						$item = $tile->getItem();
+						$this->server->getPluginManager()->callEvent($ev = new ItemFrameDropItemEvent($this, $block, $tile, $item));
+						if(!$ev->isCancelled()){
+							if($item->getId() !== Item::AIR){
+								if((mt_rand(0, 10) / 10) < $tile->getItemDropChance()){
+									$this->level->dropItem($tile, $item);
+								}
+								$tile->setItem(Item::get(Item::AIR));
+								$tile->setItemRotation(0);
 							}
-							$tile->setItem(Item::get(Item::AIR));
-							$tile->setItemRotation(0);
-						}
+						}else $tile->spawnTo($this);
 					}else $tile->spawnTo($this);
 				}
 				break;
@@ -2517,10 +2573,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				if((strlen($packet->skin) != 64 * 64 * 4) and (strlen($packet->skin) != 64 * 32 * 4)){
-					$this->close("", TextFormat::RED . "Please use 0.13.1 join the server!");
-					//$this->close("", "disconnectionScreen.invalidSkin");
+					$this->close("", "disconnectionScreen.invalidSkin");
+
 					break;
-					//$this->setSkin("", "Standard_Steve");
 				}
 
 				$this->setSkin($packet->skin, $packet->skinName);
@@ -2640,6 +2695,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 				break;
 			case ProtocolInfo::USE_ITEM_PACKET:
+				$packet->decodeAdditional($this->protocol);
 				if($this->spawned === false or !$this->isAlive() or $this->blocked){
 					break;
 				}
@@ -3049,7 +3105,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->removeAllEffects();
 						$this->setHealth($this->getMaxHealth());
 						$this->setFood(20);
-						if($this->server->expEnabled) $this->updateExperience();
+						if($this->server->expEnabled){
+							$this->updateExperience();
+						}
 
 						$this->starvationTick = 0;
 						$this->foodTick = 0;
@@ -3398,6 +3456,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->craftingType = 0;
 				$this->currentTransaction = null;
 				if(isset($this->windowIndex[$packet->windowid])){
+					if($this->windowIndex[$packet->windowid] instanceof EnchantInventory){
+						$this->updateExperience();
+					}
 					$this->server->getPluginManager()->callEvent(new InventoryCloseEvent($this->windowIndex[$packet->windowid], $this));
 					$this->removeWindow($this->windowIndex[$packet->windowid]);
 				}else{
@@ -3625,8 +3686,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->craftingType = 0;
 					$inv = $this->windowIndex[$packet->windowid];
 
+					/** @var $packet \pocketmine\network\protocol\ContainerSetSlotPacket */
 					if($inv instanceof EnchantInventory and $packet->item->hasEnchantments()){
 						$inv->onEnchant($this, $inv->getItem($packet->slot), $packet->item);
+					}
+
+					if($inv instanceof AnvilInventory and $packet->item->hasCustomName()){
+						//TODO
 					}
 
 					$transaction = new BaseTransaction($inv, $packet->slot, $inv->getItem($packet->slot), $packet->item);
@@ -3811,38 +3877,44 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$ev = new PlayerTextPreSendEvent($this, $pk->message, PlayerTextPreSendEvent::TRANSLATED_MESSAGE);
 		$this->server->getPluginManager()->callEvent($ev);
-		if($ev->isCancelled()) return false;
-
-		$this->dataPacket($pk);
-
-		return true;
+		if(!$ev->isCancelled()){
+			$this->dataPacket($pk);
+			return true;
+		}
+		return false;
 	}
 
-	public function sendPopup($message, $subtitle = ""){
+	public function sendPopup(string $message, string $subtitle = ""){
 		$ev = new PlayerTextPreSendEvent($this, $message, PlayerTextPreSendEvent::POPUP);
 		$this->server->getPluginManager()->callEvent($ev);
-		if($ev->isCancelled()) return false;
-
-		$pk = new TextPacket();
-		$pk->type = TextPacket::TYPE_POPUP;
-		$pk->source = $message;
-		$pk->message = $subtitle;
-		$this->dataPacket($pk);
-
-		return true;
+		if(!$ev->isCancelled()){
+			$pk = new TextPacket();
+			$pk->type = TextPacket::TYPE_POPUP;
+			$pk->source = $message;
+			$pk->message = $subtitle;
+			$this->dataPacket($pk);
+			return true;
+		}
+		return false;
 	}
 
-	public function sendTip($message){
+	/**
+	 * @param string $message
+	 * @param string $subtitle
+	 * @return bool
+	 */
+	public function sendTip(string $message, string $subtitle = ""){
 		$ev = new PlayerTextPreSendEvent($this, $message, PlayerTextPreSendEvent::TIP);
 		$this->server->getPluginManager()->callEvent($ev);
-		if($ev->isCancelled()) return false;
-
-		$pk = new TextPacket();
-		$pk->type = TextPacket::TYPE_TIP;
-		$pk->message = $message;
-		$this->dataPacket($pk);
-
-		return true;
+		if(!$ev->isCancelled()){
+			$pk = new TextPacket();
+			$pk->type = TextPacket::TYPE_TIP;
+			$pk->source = $message;
+			$pk->message = $subtitle;
+			$this->dataPacket($pk);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -4008,8 +4080,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->namedtag["Hunger"] = new ShortTag("Hunger", $this->food);
 			$this->namedtag["Health"] = new ShortTag("Health", $this->getHealth());
 			$this->namedtag["MaxHealth"] = new ShortTag("MaxHealth", $this->getMaxHealth());
-			$this->namedtag["Experience"] = new LongTag("Experience", $this->experience);
-			$this->namedtag["ExpLevel"] = new LongTag("ExpLevel", $this->explevel);
+			$this->namedtag["Experience"] = new LongTag("Experience", $this->exp);
+			$this->namedtag["ExpLevel"] = new LongTag("ExpLevel", $this->expLevel);
 
 			if($this->username != "" and $this->namedtag instanceof CompoundTag){
 				$this->server->saveOfflinePlayerData($this->username, $this->namedtag, $async);
@@ -4158,7 +4230,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		if($this->server->expEnabled and (!$ev->getKeepExperience() and !$this->server->keepInventory)){
-			$exp = $this->getExperience();
+			$exp = $this->getExp();
 			if($exp > 100) $exp = 100;
 			$this->getLevel()->spawnXPOrb($this->add(0, 0.2, 0), $exp);
 			$this->setExperienceAndLevel(0, 0);

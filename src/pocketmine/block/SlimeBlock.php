@@ -14,6 +14,10 @@ class SlimeBlock extends Solid{
 		$this->meta = $meta;
 	}
 
+	public function hasEntityCollision(){
+		return true;
+	}
+
 	public function getHardness() {
 		return 0;
 	}

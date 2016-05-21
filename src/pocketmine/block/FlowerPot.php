@@ -17,6 +17,7 @@ use pocketmine\tile\Tile;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\tile\FlowerPot as FlowerPotTile;
 
@@ -35,11 +36,11 @@ class FlowerPot extends Flowable{
 		return "Flower Pot Block";
 	}
 
-	public function getBoundingBox(){//todo fix...
+	public function getBoundingBox(){
 		return new AxisAlignedBB(
-			$this->x - 0.6875,
-			$this->y - 0.375,
-			$this->z - 0.6875,
+			$this->x + 0.3125,
+			$this->y,
+			$this->z + 0.3125,
 			$this->x + 0.6875,
 			$this->y + 0.375,
 			$this->z + 0.6875
@@ -54,19 +55,21 @@ class FlowerPot extends Flowable{
 				new IntTag("x", $block->x),
 				new IntTag("y", $block->y),
 				new IntTag("z", $block->z),
-				new IntTag("item", 0),
+				new ShortTag("item", 0),
 				new IntTag("data", 0),
 			]);
+			
+			if($item->hasCustomBlockData()){
+			    foreach($item->getCustomBlockData() as $key => $v){
+				    $nbt->{$key} = $v;
+			    }
+		    }
+		    
 			$pot = Tile::createTile("FlowerPot", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 			return true;
 		}
 		return false;
 	}
-
-	/*public function onBreak(Item $item){
-		$this->getLevel()->setBlock($this, new Air(), true, true, true);
-		return true;
-	}*/
 
 	public function onActivate(Item $item, Player $player = null){
 		$tile = $this->getLevel()->getTile($this);

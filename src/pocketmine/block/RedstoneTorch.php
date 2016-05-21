@@ -84,7 +84,7 @@ class RedstoneTorch extends RedstoneSource{
 			return true;
 		}elseif($result === Level::BLOCK_UPDATE_SCHEDULED){
 			$this->ignore = $ignore;
-			$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage() * $this->getFrequency());
+			$this->getLevel()->scheduleUpdate($this, 20 * $this->getFrequency());
 			return true;
 		}
 		return false;
@@ -109,7 +109,7 @@ class RedstoneTorch extends RedstoneSource{
 			return true;
 		}elseif($result === Level::BLOCK_UPDATE_SCHEDULED){
 			$this->ignore = $ignore;
-			$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage() * $this->getFrequency());
+			$this->getLevel()->scheduleUpdate($this, 20 * $this->getFrequency());
 			return true;
 		}
 		return false;

@@ -24,6 +24,8 @@ namespace pocketmine\block;
 use pocketmine\event\block\LeavesDecayEvent;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\item\Dye;
+use pocketmine\item\enchantment\enchantment;
 use pocketmine\level\Level;
 use pocketmine\Player;
 use pocketmine\Server;
@@ -167,17 +169,20 @@ class Leaves extends Transparent{
 
 	public function getDrops(Item $item) : array {
 		$drops = [];
-		if($item->isShears()){
+		if($item->isShears() or $item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
 			$drops[] = [Item::LEAVES, $this->meta & 0x03, 1];
 		}else{
-			if(mt_rand(1, 20) === 1){ //Saplings
+			$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+			$fortunel = $fortunel > 3 ? 3 : $fortunel;
+			$rates = [20,16,12,10];
+			if(mt_rand(1, $rates[$fortunel]) === 1){ //Saplings
 				$drops[] = [Item::SAPLING, $this->meta & 0x03, 1];
 			}
-			if(($this->meta & 0x03) === self::OAK and mt_rand(1, 200) === 1){ //Apples
+			$rates = [200,180,160,120];
+			if(($this->meta & 0x03) === self::OAK and mt_rand(1, $rates[$fortunel]) === 1){ //Apples
 				$drops[] = [Item::APPLE, 0, 1];
 			}
 		}
-
 		return $drops;
 	}
 }

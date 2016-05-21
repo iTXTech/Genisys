@@ -33,6 +33,8 @@ class MainLogger extends \AttachableThreadedLogger{
 	private $logResource;
 	/** @var MainLogger */
 	public static $logger = null;
+	
+	private $consoleCallback;
 
 	/** Extra Settings */
 	protected $write = true;
@@ -226,6 +228,10 @@ class MainLogger extends \AttachableThreadedLogger{
 			echo $message . PHP_EOL;
 		}
 
+		if(isset($this->consoleCallback)){
+			call_user_func($this->consoleCallback);
+		}
+
 		if($this->attachment instanceof \ThreadedLoggerAttachment){
 			$this->attachment->call($level, $message);
 		}
@@ -285,7 +291,7 @@ class MainLogger extends \AttachableThreadedLogger{
 						$this->logResource = file_put_contents($this->logFile, $chunk, FILE_APPEND);
 					}
 
-					$this->wait(25000);
+					$this->wait(200000);
 				});
 			}
 
@@ -300,5 +306,9 @@ class MainLogger extends \AttachableThreadedLogger{
 
 	public function setWrite($write){
 		$this->write = $write;
+	}
+	
+	public function setConsoleCallback($callback){
+		$this->consoleCallback = $callback;
 	}
 }

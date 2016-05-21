@@ -74,6 +74,58 @@ class Potion extends Item{
 	
 	const HARMING = 23;
 	const HARMING_TWO = 24;
+
+	static $POTION_LIST = [
+		self::WATER_BOTTLE => self::WATER_BOTTLE,
+		self::MUNDANE => self::MUNDANE,
+		self::MUNDANE_EXTENDED => self::MUNDANE_EXTENDED,
+		self::THICK => self::THICK,
+		self::AWKWARD => self::AWKWARD,
+
+		self::REGENERATION => self::REGENERATION,
+		self::REGENERATION_T => self::REGENERATION_T,
+		self::REGENERATION_TWO => self::REGENERATION_TWO,
+
+		self::SPEED => self::SPEED,
+		self::SPEED_T => self::SPEED_T,
+		self::SPEED_TWO => self::SPEED_TWO,
+
+		self::FIRE_RESISTANCE => self::FIRE_RESISTANCE,
+		self::FIRE_RESISTANCE_T => self::FIRE_RESISTANCE_T,
+
+		self::HEALING => self::HEALING,
+		self::HEALING_TWO => self::HEALING_TWO,
+
+		self::NIGHT_VISION => self::NIGHT_VISION,
+		self::NIGHT_VISION_T => self::NIGHT_VISION_T,
+
+		self::STRENGTH => self::STRENGTH,
+		self::STRENGTH_T => self::STRENGTH_T,
+		self::STRENGTH_TWO => self::STRENGTH_TWO,
+
+		self::LEAPING => self::LEAPING,
+		self::LEAPING_T => self::LEAPING_T,
+		self::LEAPING_TWO => self::LEAPING_TWO,
+
+		self::WATER_BREATHING => self::WATER_BREATHING,
+		self::WATER_BREATHING_T => self::WATER_BREATHING_T,
+
+		self::INVISIBILITY => self::INVISIBILITY,
+		self::INVISIBILITY_T => self::INVISIBILITY_T,
+		
+		self::POISON => self::POISON,
+		self::POISON_T => self::POISON_T,
+		self::POISON_TWO => self::POISON_TWO,
+
+		self::WEAKNESS => self::WEAKNESS,
+		self::WEAKNESS_T => self::WEAKNESS_T,
+
+		self::SLOWNESS => self::SLOWNESS,
+		self::SLOWNESS_T => self::SLOWNESS_T,
+
+		self::HARMING => self::HARMING,
+		self::HARMING_TWO => self::HARMING_TWO,
+	];
 	
 	public function __construct($meta = 0, $count = 1){
 		parent::__construct(self::POTION, $meta, $count, $this->getNameByMeta($meta));
@@ -81,6 +133,10 @@ class Potion extends Item{
 
 	public static function getColor(int $meta){
 		return Effect::getEffect(self::getEffectId($meta))->getColor();
+	}
+
+	public function getMaxStackSize() : int{
+		return 1;
 	}
 
 	public static function getEffectId(int $meta) : int{
@@ -148,7 +204,7 @@ class Potion extends Item{
 				return "Potion of Leaping II";
 			case self::FIRE_RESISTANCE:
 			case self::FIRE_RESISTANCE_T:
-				return "Potion of Fire Residence";
+				return "Potion of Fire Resistance";
 			case self::SPEED:
 			case self::SPEED_T:
 				return "Potion of Speed";

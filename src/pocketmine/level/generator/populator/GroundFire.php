@@ -23,6 +23,7 @@ namespace pocketmine\level\generator\populator;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
+use pocketmine\level\SimpleChunkManager;
 use pocketmine\utils\Random;
 
 class GroundFire extends Populator{
@@ -49,6 +50,7 @@ class GroundFire extends Populator{
 			//echo "Fire to $x, $y, $z\n";
 			if($y !== -1 and $this->canGroundFireStay($x, $y, $z)){
 				$this->level->setBlockIdAt($x, $y, $z, Block::FIRE);
+				$this->level->updateBlockLight($x, $y, $z);
 			}
 		}
 	}

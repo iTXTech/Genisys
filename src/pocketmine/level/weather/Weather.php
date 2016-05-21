@@ -1,10 +1,24 @@
 <?php
-// -	 -   -------    /----
-// |     |      |      |
-// |	 |      |       \----\
-// |     |      |             |
-//  \___/       |       _____/
-// This file is created by Zzm and modified by PeratX
+
+/*
+ *
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://mcper.cn
+ *
+ */
+
 namespace pocketmine\level\weather;
 
 use pocketmine\event\level\WeatherChangeEvent;
@@ -14,7 +28,9 @@ use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\Player;
 
 class Weather{
+	const CLEAR = 0;
 	const SUNNY = 0;
+	const RAIN = 1;
 	const RAINY = 1;
 	const RAINY_THUNDER = 2;
 	const THUNDER = 3;
@@ -24,19 +40,24 @@ class Weather{
 	private $strength1;
 	private $strength2;
 	private $duration;
-	private $wea = [0, 1, 0, 1, 0, 1, 0, 2, 0, 3];
 	private $canCalculate = true;
 
+	/** @var Vector3 */
+	private $temporalVector = null;
+
 	private $lastUpdate = 0;
+
+	private $randomWeatherData = [0, 1, 0, 1, 0, 1, 0, 2, 0, 3];
 
 	public function __construct(Level $level, $duration = 1200){
 		$this->level = $level;
 		$this->weatherNow = self::SUNNY;
 		$this->duration = $duration;
 		$this->lastUpdate = $level->getServer()->getTick();
+		$this->temporalVector = new Vector3(0, 0, 0);
 	}
 
-	public function canCalculate() : bool {
+	public function canCalculate() : bool{
 		return $this->canCalculate;
 	}
 
@@ -51,7 +72,7 @@ class Weather{
 			if($this->duration <= 0){
 				//0晴天1下雨2雷雨3阴天雷
 				if($this->weatherNow == self::SUNNY){
-					$weather = $this->wea[mt_rand(0, count($this->wea) - 1)];
+					$weather = $this->randomWeatherData[array_rand($this->randomWeatherData)];
 					$duration = mt_rand(min($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax), max($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax));;
 					$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $weather, $duration));
 					if(!$ev->isCancelled()){
@@ -81,7 +102,7 @@ class Weather{
 					$x = $p->x + mt_rand(-64, 64);
 					$z = $p->z + mt_rand(-64, 64);
 					$y = $this->level->getHighestBlockAt($x, $z);
-					$this->level->spawnLightning(new Vector3($x, $y, $z));
+					$this->level->spawnLightning($this->temporalVector->setComponents($x, $y, $z));
 				}
 				/*foreach($this->level->getPlayers() as $p){
 					if(mt_rand(0, 1) == 1){
@@ -107,8 +128,41 @@ class Weather{
 		}
 	}
 
+	public function getRandomWeatherData() : array{
+		return $this->randomWeatherData;
+	}
+
+	public function setRandomWeatherData(array $randomWeatherData){
+		$this->randomWeatherData = $randomWeatherData;
+	}
+
 	public function getWeather() : int{
 		return $this->weatherNow;
+	}
+
+	public static function getWeatherFromString($weather){
+		if(is_int($weather)){
+			if($weather <= 3){
+				return $weather;
+			}
+			return self::SUNNY;
+		}
+		switch(strtolower($weather)){
+			case "clear":
+			case "sunny":
+			case "fine":
+				return self::SUNNY;
+			case "rain":
+			case "rainy":
+				return self::RAINY;
+			case "thunder":
+				return self::THUNDER;
+			case "rain_thunder":
+			case "rainy_thunder":
+				return self::RAINY_THUNDER;
+			default:
+				return self::SUNNY;
+		}
 	}
 
 	/**

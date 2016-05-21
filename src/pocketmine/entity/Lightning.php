@@ -69,7 +69,7 @@ class Lightning extends Animal{
 	}
 
 	public function spawnToAll(){
-		$re = parent::spawnToAll();
+		parent::spawnToAll();
 
 		if($this->getLevel()->getServer()->lightningFire){
 			$fire = ItemItem::get(ItemItem::FIRE)->getBlock();
@@ -94,7 +94,5 @@ class Lightning extends Animal{
 				}
 			}
 		}
-
-		return $re;
 	}
 }

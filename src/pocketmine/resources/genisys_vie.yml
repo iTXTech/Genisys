@@ -1,0 +1,157 @@
+#Cài đặt Genisys cho server (Genisys VN Version)
+
+#Phiên bản file cài đặt
+config:
+ version: 15
+
+level:
+ #Chỉnh nếu muốn bật/tắt thời tiết (true/false)
+ weather: true
+ #Thời gian ngẫu nhiên điều chỉnh thời tiết
+ weather-random-duration-min: 6000
+ weather-random-duration-max: 12000
+ #Thời gian đánh sấm sét ngẫu nhiên，mặc định là 10s, 0 = disable
+ lightning-time: 200
+ #Bật/tắt nếu sấm sét đánh có lửa (true/false)
+ lightning-fire: false
+ #Bật/tắt nếu muốn lửa lan (true/false)
+ fire-spread: false
+ 
+player:
+ #Bật/tắt nếu muốn thêm chế độ đói (true/false)
+ hunger: true
+ #Số máu đói tối đa nếu có người tấn công (mặc định là 20)
+ hunger-health: 10
+ #Thời gian "tấn công" cơn đói, Mặc định là 80=4 giây
+ hunger-timer: 3000
+ #Bật/tắt nếu muốn thêm chế độ điểm kinh nghiệm (true/false)
+ experience: true
+ #Bật/tắt nếu muốn server chết không mất đồ (true/false)
+ keep-inventory: false
+ #Số lượng đồ trong kho đồ (mặc định là 36 slot)
+ inventory-num: 36
+ #Bật/tắt nếu tự động quét hết đồ trong kho đồ khi chuyển sang chế độ sáng tạo (true/false)
+ auto-clear-inventory : true
+ #Bật/tắt nếu muốn chết không mất kinh nghiệm (true/false)
+ keep-experience: false
+ #Nếu người chơi vào game bị crash, đặt nó là 10. Hủy chế độ=-1
+ chunk-radius: -1
+
+nether:
+ #Bật/tắt nếu muốn thêm địa ngục vào server, khi bật server hệ thống sẽ tự tạo thế giới địa ngục (true/false)
+ allow-nether: true
+ #Đặt tên cho thế giới địa ngục của bạn.
+ level-name: "nether"
+ 
+server:
+ #Tái tạo lại hệ thống điểm kinh nghiệm，0=hủy bỏ chế đọ
+ experience-cache: 65535
+ #Bật/tắt nếu muốn thêm Iron Golem vào server (true/false)
+ allow-iron-golem: false
+ #Bật/tắt nếu muốn thêm Snow Golem vào server (true/false)
+ allow-snow-golem: false
+ #Bật/tắt nếu muốn thêm cường hóa hoặc sử dụng đe (true/false)
+ allow-anvilandenchanttable: true
+ #Bật/tắt nếu muốn hủy server.log <file theo dõi lệnh và người chơi trong server> (true/false)
+ disable-log: false
+ #Bật/tắt nếu muốn hủy chế độ bay (true/false)
+ anti-fly: true
+ #Bật/tắt nếu muốn yêu cầu khối Async (mặc định: true) (true/false)
+ async-chunk-request: true
+ #Chọn để thông báo người chơi đã vào hoặc rời (nếu bạn không biết có thể bỏ qua)
+ #0 = Tin nhắn, 1 = Mẹo, 2 = Thanh nổi ở thanh chọn đồ
+ player-msg-type: 0
+ login-msg: "§3@player joined the game"
+ logout-msg: "§3@player left the game"
+ #Bật/tắt nếu muốn sử dụng đồ chế tạo qua file json (mặc định: false) (true/false)
+ recipes-from-json: false
+ #Bật/tắt nếu muốn sử dụng đồ cre qua file json (mặc định: false) (true/false)
+ creative-items-from-json: false
+ #Chọn nếu muốn sử dụng xe ray tự do, theo đường ray hoặc hủy bỏ (mặc định: 1)
+ #-1=disable, 0=free moving, 1=follow rails
+ minecart-moving-type: 0
+ #Bật/tắt nếu muốn kiểm tra tốc độ (không còn đẩy lùi mỗi khi đi) (true/false)
+ check-movement: true
+ #Bật/tắt nếu kích hoạt chế độ sáng tạo giới hạn (Không thể rớt đồ, mở rương và hơn thế nữa) (mặc định: false) (true/false)
+ limited-creative: true
+ #Bật/tắt nếu muốn kích hoạt DestroyBlockParticle (phá block tự nhiên) (true/false)
+ destroy-block-particle: true
+ #Bật/tắt nếu muốn thêm chai ném (true/false)
+ allow-splash-potion: true
+ #Bật/tắt nếu muốn thêm Lệnh Nâng Cao (mặc định: false) (true/false)
+ advanced-command-selector: false
+
+redstone:
+ ##########################################
+ ###Bật/tắt nếu muốn thêm chế độ đá đỏ###
+ ##########################################
+ #Nếu không bật thì sẽ không hoạt động#
+ ##########################################
+ enable: false
+ #Bật/tắt nếu muốn chia tỷ lệ hoạt động
+ frequency-pulse: false
+ #Đánh số tỷ lệ hoạt động, mặc định: 1 giây
+ pulse-frequency: 1
+
+synapse:
+ #Nếu muốn kích hoạt API của Synapse hoặc kết nối vào server Synapse, kích hoạt chế nđộ này
+ enabled: false
+ server-ip: 127.0.0.1
+ server-port: 10305
+ is-main-server: true
+ server-password: 32bitlongkey
+ description: "A Synapse client"
+
+dserver:
+ #The count of all multi-server unified
+ enable: false
+ #Query update automatically
+ query-auto-update: false
+ #Query update periodical
+ query-tick-update: true
+ #The max players' number of Motd
+ motd-max-players: 0
+ #The max players' number of query，0=Default
+ query-max-players: 0
+ #Show the number of all players on motd
+ motd-all-players: false
+ #Show the number of all players on Query
+ query-all-players: false
+ #Show the number of online players on motd
+ motd-players: false
+ #Show the number of online players on Query
+ query-players: false
+ #Update Frequency ,20=1s
+ time: 40
+ #Auto-retry times when failed
+ retry-times: 3
+ #the server list，Separate by ';'，e.g. 1.example.com:19132;2.example.com:19133
+ server-list: ""
+ 
+ai:
+ #Bật/tắt AI (true/false) (bên dưới là kích hoạt các AI nếu muốn cho vào server, đánh true/false)
+ enable: false
+ #Zombie'AI，0=hủy bỏ，1=AI 1.0ver，2=AI mới(Siêu nhân)
+ zombie: 1
+ #AI Zombie Lợn
+ pigzombie: true
+ #AI bò và bò nấm
+ cow: true
+ #AI gà
+ chicken: true
+ #AI cừu
+ sheep: true
+ #AI lợn
+ pig: true
+ #AI người xương
+ skeleton: true
+ #AI Creeper
+ creeper: true
+ #AI Iron Golem (người sắt)
+ iron-golem: true
+ #AI Snow Golem (người tuyết)
+ snow-golem: true
+ #Phá hủy các khối nếu creeper nổ (true/false)
+ creeper-explode-destroy-block: false
+ #Bật/tắt nếu muốn kích hoạt chế độ mob tự spawn (true/false)
+ mobgenerate: false

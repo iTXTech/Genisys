@@ -186,7 +186,11 @@ class Rail extends Flowable{
 	}
 
 	public function getHardness() {
-		return 0.6;
+		return 0.7;
+	}
+
+	public function getResistance(){
+		return 3.5;
 	}
 
 	public function canPassThrough(){

@@ -22,6 +22,7 @@
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
+use pocketmine\level\Explosion;
 use pocketmine\level\Level;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
@@ -59,6 +60,11 @@ class Bed extends Transparent{
 	}
 
 	public function onActivate(Item $item, Player $player = null){
+		if($this->getLevel()->getDimension() == Level::DIMENSION_NETHER){
+			$explosion = new Explosion($this, 6, $this);
+			$explosion->explode();
+			return true;
+		}
 
 		$time = $this->getLevel()->getTime() % Level::TIME_FULL;
 
@@ -125,30 +131,26 @@ class Bed extends Transparent{
 	}
 
 	public function onBreak(Item $item){
-		$blockNorth = $this->getSide(2); //Gets the blocks around them
-		$blockSouth = $this->getSide(3);
-		$blockEast = $this->getSide(5);
-		$blockWest = $this->getSide(4);
+		$sides = [
+			0 => 3,
+			1 => 4,
+			2 => 2,
+			3 => 5,
+			8 => 2,
+			9 => 5,
+			10 => 3,
+			11 => 4,
+		];
 
 		if(($this->meta & 0x08) === 0x08){ //This is the Top part of bed
-			if($blockNorth->getId() === $this->id and $blockNorth->meta !== 0x08){ //Checks if the block ID and meta are right
-				$this->getLevel()->setBlock($blockNorth, new Air(), true, true);
-			}elseif($blockSouth->getId() === $this->id and $blockSouth->meta !== 0x08){
-				$this->getLevel()->setBlock($blockSouth, new Air(), true, true);
-			}elseif($blockEast->getId() === $this->id and $blockEast->meta !== 0x08){
-				$this->getLevel()->setBlock($blockEast, new Air(), true, true);
-			}elseif($blockWest->getId() === $this->id and $blockWest->meta !== 0x08){
-				$this->getLevel()->setBlock($blockWest, new Air(), true, true);
+			$next = $this->getSide($sides[$this->meta]);
+			if($next->getId() === $this->id and ($next->meta | 0x08) === $this->meta){ //Checks if the block ID and meta are right
+				$this->getLevel()->setBlock($next, new Air(), true, true);
 			}
 		}else{ //Bottom Part of Bed
-			if($blockNorth->getId() === $this->id and ($blockNorth->meta & 0x08) === 0x08){
-				$this->getLevel()->setBlock($blockNorth, new Air(), true, true);
-			}elseif($blockSouth->getId() === $this->id and ($blockSouth->meta & 0x08) === 0x08){
-				$this->getLevel()->setBlock($blockSouth, new Air(), true, true);
-			}elseif($blockEast->getId() === $this->id and ($blockEast->meta & 0x08) === 0x08){
-				$this->getLevel()->setBlock($blockEast, new Air(), true, true);
-			}elseif($blockWest->getId() === $this->id and ($blockWest->meta & 0x08) === 0x08){
-				$this->getLevel()->setBlock($blockWest, new Air(), true, true);
+			$next = $this->getSide($sides[$this->meta]);
+			if($next->getId() === $this->id and $next->meta === ($this->meta | 0x08)){
+				$this->getLevel()->setBlock($next, new Air(), true, true);
 			}
 		}
 		$this->getLevel()->setBlock($this, new Air(), true, true);

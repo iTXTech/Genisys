@@ -16,7 +16,7 @@ before_script:
  - echo | pecl install channel://pecl.php.net/yaml-2.0.0RC7
 
 script:
- - php tests/Travis.php
+ - ./tests/ci.sh
 
 notifications:
  email: false

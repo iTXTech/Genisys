@@ -304,10 +304,17 @@ class Enchantment{
 		return $this->level;
 	}
 
-	public function setLevel($level){
-		$this->level = (int) $level;
+	public function setLevel(int $level){
+		$this->level = $level;
 
 		return $this;
+	}
+
+	public function equals(Enchantment $ent){
+		if($ent->getId() == $this->getId() and $ent->getLevel() == $this->getLevel() and $ent->getActivationType() == $this->getActivationType() and $ent->getRarity() == $this->getRarity()){
+			return true;
+		}
+		return false;
 	}
 
 	public static function generateName(){

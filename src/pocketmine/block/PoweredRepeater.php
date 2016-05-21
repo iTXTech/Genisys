@@ -96,7 +96,7 @@ class PoweredRepeater extends RedstoneSource{
 				$this->getLevel()->setBlock($this, $this, true, false);
 			}
 			$this->getLevel()->setBlockTempData($this, self::ACTION_ACTIVATE);
-			$this->getLevel()->scheduleUpdate($this, $this->getDelayLevel() * $this->getLevel()->getServer()->getTicksPerSecondAverage() / 10);
+			$this->getLevel()->scheduleUpdate($this, $this->getDelayLevel() * 2);
 		}
 	}
 
@@ -107,7 +107,7 @@ class PoweredRepeater extends RedstoneSource{
 				$this->getLevel()->setBlock($this, $this, true, false);
 			}
 			$this->getLevel()->setBlockTempData($this, self::ACTION_DEACTIVATE);
-			$this->getLevel()->scheduleUpdate($this, $this->getDelayLevel() * $this->getLevel()->getServer()->getTicksPerSecondAverage() / 10);
+			$this->getLevel()->scheduleUpdate($this, $this->getDelayLevel() * 2);
 		}
 	}
 

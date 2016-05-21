@@ -31,9 +31,14 @@ use pocketmine\math\Vector3;
 class Portal extends Transparent{
 
 	protected $id = self::PORTAL;
+
+	/** @var  Vector3 */
+	private $temporalVector = null;
 	
 	public function __construct(){
-		
+		if($this->temporalVector === null){
+			$this->temporalVector = new Vector3(0, 0, 0);
+		}
 	}
 
 	public function getName() : string{
@@ -41,11 +46,19 @@ class Portal extends Transparent{
 	}
 	
 	public function getHardness() {
-		return 20;
+		return -1;
+	}
+
+	public function getResistance(){
+		return 0;
 	}
 
 	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
+	}
+
+	public function canPassThrough(){
+		return true;
 	}
 
 	public function canBeActivated() : bool {
@@ -78,43 +91,44 @@ class Portal extends Transparent{
 		$particle = new PortalParticle($this);
 		$this->getLevel()->addParticle($particle);
 		$block = $this;
-		//$this->getLevel()->setBlock($block, new Block(90, 0));//在破坏处放置一个方块防止计算出错
-		if($this->getLevel()->getBlock($block->add(-1, 0, 0))->getId() == 90 or $this->getLevel()->getBlock($block->add(1, 0, 0))->getId() == 90){//x方向
-			for($x = $block->getX();$this->getLevel()->getBlock(new Vector3($x, $block->getY(), $block->getZ()))->getId() == 90;$x++){
-				for($y = $block->getY();$this->getLevel()->getBlock(new Vector3($x, $y, $block->getZ()))->getId() == 90;$y++){
-					$this->getLevel()->setBlock(new Vector3($x, $y, $block->getZ()), new Block(0, 0));
+		//$this->getLevel()->setBlock($block, new Block(Block::PORTAL, 0));//在破坏处放置一个方块防止计算出错
+		if($this->getLevel()->getBlock($this->temporalVector->setComponents($block->x - 1, $block->y, $block->z))->getId() == Block::PORTAL or
+			$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x + 1, $block->y, $block->z))->getId() == Block::PORTAL){//x方向
+			for($x = $block->x;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $block->y, $block->z))->getId() == Block::PORTAL;$x++){
+				for($y = $block->y;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $block->z))->getId() == Block::PORTAL;$y++){
+					$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $block->z), new Air());
 				}
-				for($y = $block->getY() - 1;$this->getLevel()->getBlock(new Vector3($x, $y, $block->getZ()))->getId() == 90;$y--){
-					$this->getLevel()->setBlock(new Vector3($x, $y, $block->getZ()), new Block(0, 0));
+				for($y = $block->y - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $block->z))->getId() == Block::PORTAL;$y--){
+					$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $block->z), new Air());
 				}
 			}
-			for($x = $block->getX() - 1;$this->getLevel()->getBlock(new Vector3($x, $block->getY(), $block->getZ()))->getId() == 90;$x--){
-				for($y = $block->getY();$this->getLevel()->getBlock(new Vector3($x, $y, $block->getZ()))->getId() == 90;$y++){
-					$this->getLevel()->setBlock(new Vector3($x, $y, $block->getZ()), new Block(0, 0));
+			for($x = $block->x - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $block->y, $block->z))->getId() == Block::PORTAL;$x--){
+				for($y = $block->y;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $block->z))->getId() == Block::PORTAL;$y++){
+					$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $block->z), new Air());
 				}
-				for($y = $block->getY() - 1;$this->getLevel()->getBlock(new Vector3($x, $y, $block->getZ()))->getId() == 90;$y--){
-					$this->getLevel()->setBlock(new Vector3($x, $y, $block->getZ()), new Block(0, 0));
+				for($y = $block->y - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $y, $block->z))->getId() == Block::PORTAL;$y--){
+					$this->getLevel()->setBlock($this->temporalVector->setComponents($x, $y, $block->z), new Air());
 				}
 			}
 		}else{//z方向
-			for($z = $block->getZ();$this->getLevel()->getBlock(new Vector3($block->getX(), $block->getY(), $z))->getId() == 90;$z++){
-				for($y = $block->getY();$this->getLevel()->getBlock(new Vector3($block->getX(), $y, $z))->getId() == 90;$y++){
-					$this->getLevel()->setBlock(new Vector3($block->getX(), $y, $z), new Block(0, 0));
+			for($z = $block->z;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x, $block->y, $z))->getId() == Block::PORTAL;$z++){
+				for($y = $block->y;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x, $y, $z))->getId() == Block::PORTAL;$y++){
+					$this->getLevel()->setBlock($this->temporalVector->setComponents($block->x, $y, $z), new Air());
 				}
-				for($y = $block->getY() - 1;$this->getLevel()->getBlock(new Vector3($block->getX(), $y, $z))->getId() == 90;$y--){
-					$this->getLevel()->setBlock(new Vector3($block->getX(), $y, $z), new Block(0, 0));
+				for($y = $block->y - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x, $y, $z))->getId() == Block::PORTAL;$y--){
+					$this->getLevel()->setBlock($this->temporalVector->setComponents($block->x, $y, $z), new Air());
 				}
 			}
-			for($z = $block->getZ() - 1;$this->getLevel()->getBlock(new Vector3($block->getX(), $block->getY(), $z))->getId() == 90;$z--){
-				for($y = $block->getY();$this->getLevel()->getBlock(new Vector3($block->getX(), $y, $z))->getId() == 90;$y++){
-					$this->getLevel()->setBlock(new Vector3($block->getX(), $y, $z), new Block(0, 0));
+			for($z = $block->z - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x, $block->y, $z))->getId() == Block::PORTAL;$z--){
+				for($y = $block->y;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x, $y, $z))->getId() == Block::PORTAL;$y++){
+					$this->getLevel()->setBlock($this->temporalVector->setComponents($block->x, $y, $z), new Air());
 				}
-				for($y = $block->getY() - 1;$this->getLevel()->getBlock(new Vector3($block->getX(), $y, $z))->getId() == 90;$y--){
-					$this->getLevel()->setBlock(new Vector3($block->getX(), $y, $z), new Block(0, 0));
+				for($y = $block->y - 1;$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x, $y, $z))->getId() == Block::PORTAL;$y--){
+					$this->getLevel()->setBlock($this->temporalVector->setComponents($block->x, $y, $z), new Air());
 				}
 			}
 		}
-		$this->getLevel()->setBlock($this, new Air(), true);
+		parent::onBreak($item);
 	}
 	
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){

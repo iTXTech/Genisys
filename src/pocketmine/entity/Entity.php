@@ -25,6 +25,7 @@
 namespace pocketmine\entity;
 
 use pocketmine\block\Block;
+use pocketmine\block\Fire;
 use pocketmine\block\Portal;
 use pocketmine\block\PressurePlate;
 use pocketmine\block\Water;
@@ -1052,15 +1053,25 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	public function fall($fallDistance){
-		if($this->isInsideOfWater()) return;
+		if($this instanceof Player and $this->isSpectator()){
+			return;
+		}
+		if($this->getLevel()->getServer()->destroyBlockParticle and $fallDistance > 3){
+			$this->getLevel()->addParticle(new DestroyBlockParticle($this, $this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))));
+		}
+		if($this->isInsideOfWater()){
+			return;
+		}
 		$damage = floor($fallDistance - 3 - ($this->hasEffect(Effect::JUMP) ? $this->getEffect(Effect::JUMP)->getAmplifier() + 1 : 0));
+		foreach($this->getBlocksAround() as $block){
+			if($block->getId() === Block::SLIME_BLOCK){
+				$damage = 0;
+				break;
+			}
+		}
 		if($damage > 0){
 			$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_FALL, $damage);
 			$this->attack($ev->getFinalDamage(), $ev);
-		}
-
-		if($this->getLevel()->getServer()->destroyBlockParticle and $fallDistance > 3){
-			$this->getLevel()->addParticle(new DestroyBlockParticle($this, $this->getLevel()->getBlock($this->floor()->subtract(0, 1, 0))));
 		}
 	}
 
@@ -1117,11 +1128,10 @@ abstract class Entity extends Location implements Metadatable{
 		$blocks = $this->getBlocksAround();
 
 		foreach($blocks as $block){
-			if($block instanceof Portal) return true;
+			if($block instanceof Portal){
+				return true;
+			}
 		}
-		/*
-		$block = $this->getLevel()->getBlock($this->round());
-		if($block instanceof Portal) return true;*/
 
 		return false;
 	}
@@ -1183,7 +1193,7 @@ abstract class Entity extends Location implements Metadatable{
 			$bb->minY -= 0.75;
 			$this->onGround = false;
 			if(!$this->level->getBlock(new Vector3($this->x, $this->y - 1, $this->z))->isTransparent())
-				$this->onGround = \true;
+				$this->onGround = true;
 			/*
                         if(count($this->level->getCollisionBlocks($bb)) > 0){
                             $this->onGround = true;

@@ -112,7 +112,7 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new ExtractPluginCommand("extractplugin"));
 		$this->register("pocketmine", new MakePluginCommand("makeplugin"));
 		$this->register("pocketmine", new MakeServerCommand("ms"));
-		$this->register("pocketmine", new MakeServerCommand("makeserver"));
+		//$this->register("pocketmine", new MakeServerCommand("makeserver"));
 		$this->register("pocketmine", new ExtractPluginCommand("ep"));
 		$this->register("pocketmine", new MakePluginCommand("mp"));
 
@@ -223,11 +223,6 @@ class SimpleCommandMap implements CommandMap{
 	}
 
 	private function dispatchAdvanced(CommandSender $sender, Command $command, $label, array $args, $offset = 0){
-		if(!$sender->isOp()){
-			$sender->sendMessage(TextFormat::RED . "You don't have permission to use Command Selector!");
-			$command->execute($sender, $label, $args);
-			return;
-		}
 		if(isset($args[$offset])){
 			$argsTemp = $args;
 			switch($args[$offset]){
@@ -242,14 +237,14 @@ class SimpleCommandMap implements CommandMap{
 						}
 					}
 					break;
-				case "@p":
+				case "@r":
 					$players = $this->server->getOnlinePlayers();
 					if(count($players) > 0){
 						$argsTemp[$offset] = $players[array_rand($players)]->getName();
 						$this->dispatchAdvanced($sender, $command, $label, $argsTemp, $offset + 1);
 					}
 					break;
-				case "@r":
+				case "@p":
 					if($sender instanceof Player){
 						$distance = 5;
 						$nearestPlayer = $sender;

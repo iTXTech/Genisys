@@ -2,33 +2,32 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____  
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
- * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author PocketMine Team
- * @link http://www.pocketmine.net/
- * 
+ * @author iTX Technologies
+ * @link https://mcper.cn
  *
-*/
+ */
 
 namespace pocketmine\level\generator\populator;
 
-use pocketmine\block\Block;
 use pocketmine\block\Glowstone;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\object\NetherOreTop as ObjectOre;
 use pocketmine\level\generator\object\OreType;
 use pocketmine\utils\Random;
 
-class NetherGrowStone extends Populator{
+class NetherGlowStone extends Populator{
 
 	/** @var ChunkManager */
 	private $level;
@@ -42,9 +41,7 @@ class NetherGrowStone extends Populator{
 			$z = $random->nextRange($chunkZ << 4, ($chunkZ << 4) + 15);
 			$y = $this->getHighestWorkableBlock($x, $z);
 			$ore->placeObject($level, $x, $y, $z);
-
 		}
-
 	}
 
 	private function getHighestWorkableBlock($x, $z){

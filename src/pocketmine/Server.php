@@ -161,8 +161,6 @@ use pocketmine\entity\IronGolem;
 use pocketmine\entity\SnowGolem;
 use pocketmine\entity\Lightning;
 use pocketmine\entity\XPOrb;
-use pocketmine\network\protocol\StrangePacket;
-use pocketmine\event\player\PlayerTransferEvent;
 use pocketmine\entity\ai\AIHolder;
 use pocketmine\entity\ThrownExpBottle;
 use pocketmine\entity\Boat;
@@ -171,6 +169,7 @@ use pocketmine\entity\ThrownPotion;
 use pocketmine\entity\Painting;
 use pocketmine\scheduler\DServerTask;
 use pocketmine\scheduler\CallbackTask;
+use synapse\Synapse;
 
 /**
  * The class that manages everything
@@ -381,9 +380,13 @@ class Server{
 	public $allowSplashPotion = true;
 	public $fireSpread = false;
 	public $advancedCommandSelector = false;
+	public $synapseConfig = [];
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
+
+	/** @var Synapse */
+	private $synapse = null;
 
 	/**
 	 * @return string
@@ -1676,6 +1679,18 @@ class Server{
 		$this->allowSplashPotion = $this->getAdvancedProperty("server.allow-splash-potion", true);
 		$this->fireSpread = $this->getAdvancedProperty("level.fire-spread", false);
 		$this->advancedCommandSelector = $this->getAdvancedProperty("server.advanced-command-selector", false);
+		$this->synapseConfig = [
+			"enabled" => $this->getAdvancedProperty("synapse.enabled", false),
+			"server-ip" => $this->getAdvancedProperty("synapse.server-ip", "127.0.0.1"),
+			"server-port" => $this->getAdvancedProperty("synapse.server-port", 10305),
+			"isMainServer" => $this->getAdvancedProperty("synapse.is-main-server", true),
+			"password" => $this->getAdvancedProperty("synapse.server-password", "123456"),
+			"description" => $this->getAdvancedProperty("synapse.description", "A Synapse client"),
+		];
+	}
+
+	public function isSynapseEnabled() : bool {
+		return (bool) $this->synapseConfig["enabled"];
 	}
 
 	/**
@@ -1752,7 +1767,7 @@ class Server{
 			$this->dataPath = realpath($dataPath) . DIRECTORY_SEPARATOR;
 			$this->pluginPath = realpath($pluginPath) . DIRECTORY_SEPARATOR;
 
-			$this->console = new CommandReader();
+			$this->console = new CommandReader($logger);
 
 			$version = new VersionString($this->getPocketMineVersion());
 			$this->version = $version;
@@ -2047,6 +2062,10 @@ class Server{
 				"updateDServerInfo"
 			]), $this->dserverConfig["timer"]);
 
+			if($this->isSynapseEnabled()){
+				$this->synapse = new Synapse($this, $this->synapseConfig);
+			}
+
 			if($cfgVer != $advVer){
 				$this->logger->notice("Your genisys.yml needs update");
 				$this->logger->notice("Current Version: $advVer   Latest Version: $cfgVer");
@@ -2060,9 +2079,16 @@ class Server{
 		}
 	}
 
+	/**
+	 * @return Synapse
+	 */
+	public function getSynapse(){
+		return $this->synapse;
+	}
+
 	//@Deprecated
 	public function transferPlayer(Player $player, $address, $port = 19132){
-		$this->logger->error("This function (transferPlayer) has been deprecated. A new method may be available soon");
+		$this->logger->error("Use synapse instead");
 	}
 	/*$ev = new PlayerTransferEvent($player, $address, $port);
 	$this->getPluginManager()->callEvent($ev);
@@ -2472,6 +2498,11 @@ private function lookupAddress($address) {
 				$this->network->unregisterInterface($interface);
 			}
 
+			if($this->isSynapseEnabled()){
+				$this->getLogger()->debug("Stopping Synapse client");
+				$this->synapse->shutdown();
+			}
+
 			//$this->memoryManager->doObjectCleanup();
 
 			gc_collect_cycles();
@@ -2523,8 +2554,9 @@ private function lookupAddress($address) {
 
 		$this->logger->info($this->getLanguage()->translateString("pocketmine.server.startFinished", [round(microtime(true) - \pocketmine\START_TIME, 3)]));
 
-		if(!file_exists($this->getPluginPath() . DIRECTORY_SEPARATOR . "PocketMine-iTX"))
-			@mkdir($this->getPluginPath() . DIRECTORY_SEPARATOR . "PocketMine-iTX");
+		if(!file_exists($this->getPluginPath() . DIRECTORY_SEPARATOR . "Genisys")){
+			@mkdir($this->getPluginPath() . DIRECTORY_SEPARATOR . "Genisys");
+		}
 
 		$this->tickProcessor();
 		$this->forceShutdown();
@@ -2944,6 +2976,9 @@ private function lookupAddress($address) {
 
 		Timings::$connectionTimer->startTiming();
 		$this->network->processInterfaces();
+		if($this->isSynapseEnabled()){
+			$this->synapse->tick();
+		}
 
 		if($this->rcon !== null){
 			$this->rcon->check();

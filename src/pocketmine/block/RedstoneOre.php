@@ -23,6 +23,7 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\item\enchantment\enchantment;
 use pocketmine\level\Level;
 
 class RedstoneOre extends Solid{
@@ -57,9 +58,17 @@ class RedstoneOre extends Solid{
 
 	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= Tool::TIER_IRON){
-			return [
-				[Item::REDSTONE_DUST, 0, mt_rand(4, 5)],
-			];
+			if($item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+				return [
+					[Item::REDSTONE_ORE, 0, 1],
+				];
+			}else{
+				$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+				$fortunel = $fortunel > 3 ? 3 : $fortunel;
+				return [
+					[Item::REDSTONE_DUST, 0, mt_rand(4, 5 + $fortunel)],
+				];
+			}
 		}else{
 			return [];
 		}

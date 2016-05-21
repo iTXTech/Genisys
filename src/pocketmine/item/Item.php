@@ -221,6 +221,7 @@ class Item{
 
 	const ACTIVATOR_RAIL = 126;
 	const COCOA_BLOCK = 127;
+	const COCOA_PODS = 127;
 	const SANDSTONE_STAIRS = 128;
 	const EMERALD_ORE = 129;
 
@@ -427,6 +428,8 @@ class Item{
 
 	const COOKIE = 357;
 
+	const FILLED_MAP = 358;
+
 	const SHEARS = 359;
 	const MELON = 360;
 	const MELON_SLICE = 360;
@@ -471,6 +474,7 @@ class Item{
 	const BAKED_POTATO = 393;
 	const BAKED_POTATOES = 393;
 	const POISONOUS_POTATO = 394;
+	const MAP = 395;
 	const GOLDEN_CARROT = 396;
 	const MOB_HEAD = 397;
 	const SKULL = 397;
@@ -939,7 +943,7 @@ class Item{
 			self::addCreativeItem(Item::get(Item::CARPET, 6));
 			//Tools
 			self::addCreativeItem(Item::get(Item::RAIL, 0));
-			self::addCreativeItem(Item::get(Item::ACTIVATOR_RAIL, 0));
+			self::addCreativeItem(Item::get(Item::POWERED_RAIL, 0));
 			self::addCreativeItem(Item::get(Item::DETECTOR_RAIL, 0));
 			self::addCreativeItem(Item::get(Item::ACTIVATOR_RAIL, 0));
 			self::addCreativeItem(Item::get(Item::TORCH, 0));
@@ -1356,6 +1360,26 @@ class Item{
 		}
 
 		return null;
+	}
+	
+	/**
+	 * @param $id
+	 * @return Enchantment level|0(for null)
+	 */
+	public function getEnchantmentLevel(int $id){
+		if(!$this->hasEnchantments()){
+			return 0;
+		}
+
+		foreach($this->getNamedTag()->ench as $entry){
+			if($entry["id"] === $id){
+				$e = Enchantment::getEnchantment($entry["id"]);
+				$e->setLevel($entry["lvl"]);
+				return $e->getLevel();
+			}
+		}
+
+		return 0;
 	}
 
 	/**

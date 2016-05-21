@@ -157,7 +157,7 @@ class WoodenButton extends RedstoneSource{
 			$this->getLevel()->setBlock($this, $this, true, false);
 			$this->getLevel()->addSound(new ButtonClickSound($this));
 			$this->activate();
-			$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage() * 2);
+			$this->getLevel()->scheduleUpdate($this, 30);
 		}
 		return true;
 	}

@@ -123,17 +123,28 @@ class Ladder extends Transparent{
 	}
 
 	public function onUpdate($type){
-		if($type === Level::BLOCK_UPDATE_NORMAL){
-			/*if($this->getSide(0)->getId() === self::AIR){ //Replace with common break method
-				Server::getInstance()->api->entity->drop($this, Item::get(LADDER, 0, 1));
-				$this->getLevel()->setBlock($this, new Air(), true, true, true);
-				return Level::BLOCK_UPDATE_NORMAL;
+		$faces = [
+			2 => 3,
+			3 => 2,
+			4 => 5,
+			5 => 4,
+		];
+		/*if($this->getSide(0)->getId() === self::AIR){ //Replace with common break method
+			Server::getInstance()->api->entity->drop($this, Item::get(LADDER, 0, 1));
+			$this->getLevel()->setBlock($this, new Air(), true, true, true);
+			return Level::BLOCK_UPDATE_NORMAL;
 			}*/
+		if($type === Level::BLOCK_UPDATE_NORMAL){
+			if(isset($faces[$this->meta])) {
+				if ($this->getSide($faces[$this->meta])->getId() === self::AIR) {
+					$this->getLevel()->useBreakOn($this);
+				}
+				return Level::BLOCK_UPDATE_NORMAL;
+			}
 		}
-
 		return false;
 	}
-
+	
 	public function getToolType(){
 		return Tool::TYPE_AXE;
 	}
