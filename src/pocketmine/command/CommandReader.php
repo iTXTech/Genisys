@@ -102,13 +102,15 @@ class CommandReader extends Thread{
 			$e = null;
 			if(stream_select($r, $w, $e, 0, 200000) > 0){
 				// PHP on Windows sucks
-				if(feof($this->stdin) and Utils::getOS() == "win"){
-					$this->stdin = fopen("php://stdin", "r");
-					if(!is_resource($this->stdin)){
+				if(feof($this->stdin)){
+					if(Utils::getOS() == "win"){
+						$this->stdin = fopen("php://stdin", "r");
+						if(!is_resource($this->stdin)){
+							break;
+						}
+					}else{
 						break;
 					}
-				}else{
-					break;
 				}
 				$this->readLine();
 			}
