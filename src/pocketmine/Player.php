@@ -3884,7 +3884,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return false;
 	}
 
-	public function sendPopup($message, $subtitle = ""){
+	public function sendPopup(string $message, string $subtitle = ""){
 		$ev = new PlayerTextPreSendEvent($this, $message, PlayerTextPreSendEvent::POPUP);
 		$this->server->getPluginManager()->callEvent($ev);
 		if(!$ev->isCancelled()){
@@ -3899,18 +3899,18 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	/**
-	 * @deprecated
-	 *
-	 * @param $message
+	 * @param string $message
+	 * @param string $subtitle
 	 * @return bool
 	 */
-	public function sendTip($message){
+	public function sendTip(string $message, string $subtitle = ""){
 		$ev = new PlayerTextPreSendEvent($this, $message, PlayerTextPreSendEvent::TIP);
 		$this->server->getPluginManager()->callEvent($ev);
 		if(!$ev->isCancelled()){
 			$pk = new TextPacket();
 			$pk->type = TextPacket::TYPE_TIP;
-			$pk->message = $message;
+			$pk->source = $message;
+			$pk->message = $subtitle;
 			$this->dataPacket($pk);
 			return true;
 		}
