@@ -107,6 +107,8 @@ class CommandReader extends Thread{
 					if(!is_resource($this->stdin)){
 						break;
 					}
+				}else{
+					break;
 				}
 				$this->readLine();
 			}
