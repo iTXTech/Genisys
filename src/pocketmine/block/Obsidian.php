@@ -65,11 +65,14 @@ class Obsidian extends Solid{
 		
 		if($this->getLevel()->getServer()->netherEnabled){
 			for($i = 0;$i <= 6;$i++){
+				if($this->getSide($i)->getId() == self::PORTAL){
+					break;
+				}
 				if($i == 6){
 					return;
 				}
 			}
-			$block = $this->getLevel()->getBlock($this->getSide($i));
+			$block = $this->getSide($i);
 			if($this->getLevel()->getBlock($this->temporalVector->setComponents($block->x - 1, $block->y, $block->z))->getId() == Block::PORTAL or
 				$this->getLevel()->getBlock($this->temporalVector->setComponents($block->x + 1, $block->y, $block->z))->getId() == Block::PORTAL){//x方向
 				for($x = $block->x;$this->getLevel()->getBlock($this->temporalVector->setComponents($x, $block->y, $block->z))->getId() == Block::PORTAL;$x++){
