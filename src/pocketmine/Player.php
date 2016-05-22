@@ -3907,17 +3907,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @return bool
 	 */
 	public function sendTip($message){
+		trigger_error("sendTip() should no longer be used", E_USER_DEPRECATED);
+		return $this->sendPopup("", $message);
 		$ev = new PlayerTextPreSendEvent($this, $message, PlayerTextPreSendEvent::TIP);
 		$this->server->getPluginManager()->callEvent($ev);
 		if(!$ev->isCancelled()){
-			$this->sendPopup("",$message);
-			/*
 			$pk = new TextPacket();
 			$pk->type = TextPacket::TYPE_TIP;
 			$pk->message = $message;
 			$this->dataPacket($pk);
 			return true;
-			*/
 		}
 		return false;
 	}
