@@ -22,6 +22,7 @@
 namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
+use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Utils;
 
@@ -45,8 +46,14 @@ class StatusCommand extends VanillaCommand{
 		$rUsage = Utils::getRealMemoryUsage();
 
 		$server = $sender->getServer();
+		$onlineCount = 0;
+		foreach($sender->getServer()->getOnlinePlayers() as $player){
+			if($player->isOnline() and (!($sender instanceof Player) or $sender->canSee($player))){
+				++$onlineCount;
+			}
+		}
 		$sender->sendMessage(TextFormat::GREEN . "---- " . TextFormat::WHITE . "%pocketmine.command.status.title" . TextFormat::GREEN . " ----");
-		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.status.player" . TextFormat::GREEN ." ". \count($sender->getServer()->getOnlinePlayers()) . "/" . $sender->getServer()->getMaxPlayers());
+		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.status.player" . TextFormat::GREEN ." ". $onlineCount . "/" . $sender->getServer()->getMaxPlayers());
 
 		$time = microtime(true) - \pocketmine\START_TIME;
 
