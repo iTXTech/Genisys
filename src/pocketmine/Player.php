@@ -3898,7 +3898,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return false;
 	}
 
-	/**
+	/*
+	 * Note for plugin developers: Do NOT use this function anymore, it's deprecated
+	 * and only for legacy reasons there is a redirect to sendPopup()
 	 * @deprecated
 	 *
 	 * @param $message
@@ -3908,11 +3910,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$ev = new PlayerTextPreSendEvent($this, $message, PlayerTextPreSendEvent::TIP);
 		$this->server->getPluginManager()->callEvent($ev);
 		if(!$ev->isCancelled()){
+			$this->sendPopup("",$message);
+			/*
 			$pk = new TextPacket();
 			$pk->type = TextPacket::TYPE_TIP;
 			$pk->message = $message;
 			$this->dataPacket($pk);
 			return true;
+			*/
 		}
 		return false;
 	}
