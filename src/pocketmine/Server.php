@@ -2106,7 +2106,7 @@ class Server{
 	$packet->address = $ip;
 	$packet->port = $ev->getPort();
 	$player->dataPacket($packet);
-	$player->setTransfered($address . ":" . $port);
+	$player->setTransferred($address . ":" . $port);
 
 	return true;
 }
