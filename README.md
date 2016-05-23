@@ -11,13 +11,13 @@ Travis-CI: [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.sv
 GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/builds)
 
 ### Downloads
-You can get prebuilt phar from [Jenkins](https://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/genisys/builds).
+You can get a pre-built phar from [Jenkins](https://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/genisys/builds).
 
 ### Installation
 If you are on Linux, use Docker to install Genisys.
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/itxtech/docker-env-genisys.svg)](https://hub.docker.com/r/itxtech/docker-env-genisys/)  
-See [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys) for more details.
+See the [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys) for more details.
 
 For other platform, see below.
 
@@ -30,16 +30,16 @@ For other platform, see below.
 
 * One Core to rule anything
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO and iTX Technologies LLC.
-* Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
+* Genisys is only a fork of PocketMine-MP and all original code was written by the [PocketMine Team](https://github.com/PocketMine).
 * [Download php7 for Genisys](https://github.com/iTXTech/PHP-Genisys/)
 * [Download Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
-* Feel free to create a Pull Request or open an Issue. English and Chinese are both welcome. Use English to communicate with more people.
+* Feel free to create a Pull Request or open an Issue. English and Chinese are both welcome. Communication in English is recommended.
 
 ### Acknowledgements
 * Some features are merged from **@boybook**'s **FCCore**
 * Skull, FlowerPot are based on ImagicalMine's work
 * AIs are based on **@Zzm317**'s amazing MyOwnWorld.
-* Painting and Brewing Stand are translated from Nukkit Project
+* Painting and Brewing Stand are translated from [Nukkit Project](https://github.com/Nukkit/Nukkit)
 * Furnace was fixed by **@MagicDroidX**
 * Rail and Powered Rails were written by **@happy163**
 * Nether door was written by **JJLeo**
@@ -49,14 +49,14 @@ For other platform, see below.
 * Our leaders are **@ishitatsuyuki** and **@jasonczc**
 
 ### License
-Most codes are made by PocketMine team and licensed under GPLv3. Some AI is proprietary, copy is prohibited.
+Most of the code in this repository was written by the PocketMine team and is licensed under GPLv3. Some AI is proprietary, copying is prohibited.
 
 ### Official Development Documentation
 [Genisys Official Development Documentation Page](http://docs.mcper.cn/en-US/)
 
 ### Features
 * Performance optimization (Let 100+ players join in a server)
-* Bug fix in PocketMine-MP
+* Bug fixes in PocketMine-MP
 * Weather
 * Experience
 * More Effects
@@ -78,19 +78,19 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
   - bancid
   - bancidbyname
   - banipbyname
-  - ms
-  - extractplugin
-  - makeplugin
-  - pardoncid
-  - weather
+  - biome
   - extractphar
+  - extractplugin
+  - fill
   - loadplugin
   - lvdat
-  - biome
-  - xp
+  - makeplugin
+  - ms
+  - pardoncid
   - setblock
-  - fill
   - summon
+  - weather
+  - xp
 * FolderPluginLoader
 * Monster Spawner
 * Item Frame
@@ -100,7 +100,7 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
 * Enchantment
 * Brewing
 * Enchantment effects
-* NOTICE: Please edit **genisys.yml** to enable all the features, including Redstone, MobAI, Nether and so on.
+* NOTE: Please edit **genisys.yml** to enable the desired features, such as Redstone, MobAI, Nether, etc.
 
 ### To-Do List
 * Improve Potions
@@ -110,7 +110,7 @@ Most codes are made by PocketMine team and licensed under GPLv3. Some AI is prop
 * LevelDB support for Windows
 
 ### Servers
-(Follows are the test servers built by us. In fact other servers used Genisys may be more professional than ours.)
+The following are the test servers built by us. Keep in mind that the following are test servers.
 
 #### Beer MC (A mini-game server)
 Address: beermc.com  
