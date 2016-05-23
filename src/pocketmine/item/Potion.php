@@ -232,6 +232,19 @@ class Potion extends Item{
 			case self::NIGHT_VISION:
 			case self::NIGHT_VISION_T:
 				return "Potion of Night Vision";
+			case self::STRENGTH:
+			case self::STRENGTH_T:
+				return "Potion of Strength";
+			case self::STRENGTH_TWO:
+				return "Potion of Strength II";
+			case self::REGENERATION:
+			case self::REGENERATION_T:
+				return "Potion of Regeneration";
+			case self::REGENERATION_TWO:
+				return "Potion of Regeneration II";
+			case self::WEAKNESS:
+			case self::WEAKNESS_T:
+				return "Potion of Weakness";
 			default:
 				return "Potion";
 		}

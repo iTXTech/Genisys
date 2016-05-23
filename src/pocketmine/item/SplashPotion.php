@@ -77,9 +77,29 @@ class SplashPotion extends Item{
 				return "Splash Potion of Healing";
 			case Potion::HEALING_TWO:
 				return "Splash Potion of Healing II";
+			case Potion::WEAKNESS:
+			case Potion::WEAKNESS_T:
+				return "Splash Potion of Weakness";
+			case Potion::REGENERATION_TWO:
+				return "Splash Potion of Regeneration II";
+			case Potion::NIGHT_VISION:
+			case Potion::NIGHT_VISION_T:
+				return "Splash Potion of Night Vision";
+			case Potion::STRENGTH:
+			case Potion::STRENGTH_T:
+				return "Splash Potion of Strength";
+			case Potion::STRENGTH_TWO:
+				return "Splash Potion of Strength II";
+			case Potion::REGENERATION:
+			case Potion::REGENERATION_T:
+				return "Splash Potion of Regeneration";
+			case Potion::REGENERATION_TWO:
+				return "Splash Potion of Regeneration II";
+
 			default:
 				return "Splash Potion";
 		}
 	}
+
 	
 }
