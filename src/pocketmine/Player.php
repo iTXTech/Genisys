@@ -274,7 +274,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/** @var Vector3 */
 	public $fromPos = null;
 	private $portalTime = 0;
-	private $hasTransfered = false;
+	private $hasTransferred = false;
 	private $shouldSendStatus = false;
 	/** @var  Position */
 	private $shouldResPos;
@@ -1112,7 +1112,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @return bool
 	 */
 	public function batchDataPacket(DataPacket $packet){
-		if($this->connected === false or $this->hasTransfered){
+		if($this->connected === false or $this->hasTransferred){
 			return false;
 		}
 
@@ -1142,7 +1142,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @return int|bool
 	 */
 	public function dataPacket(DataPacket $packet, $needACK = false){
-		if(!$this->connected or $this->hasTransfered){
+		if(!$this->connected or $this->hasTransferred){
 			return false;
 		}
 
@@ -1175,7 +1175,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @return bool|int
 	 */
 	public function directDataPacket(DataPacket $packet, $needACK = false){
-		if($this->connected === false or $this->hasTransfered){
+		if($this->connected === false or $this->hasTransferred){
 			return false;
 		}
 
@@ -3924,7 +3924,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/**
 	 * @param string $tranferedTo
 	 */
-	/*public final function setTransfered($transferedTo = "") {
+	/*public final function setTransferred($transferredTo = "") {
 		if ($this->connected and !$this->closed) {
 			foreach ($this->usedChunks as $index => $d) {
 				Level::getXZ($index, $chunkX, $chunkZ);
@@ -3942,13 +3942,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 			$this->server->getPluginManager()->unsubscribeFromPermission(Server::BROADCAST_CHANNEL_USERS, $this);
 			$this->spawned = false;
-			$this->server->getLogger()->info($this->getServer()->getLanguage()->translateString("pocketmine.player.transfered", [
+			$this->server->getLogger()->info($this->getServer()->getLanguage()->translateString("pocketmine.player.transferred", [
 				TextFormat::AQUA . $this->getName() . TextFormat::WHITE,
 				$this->ip,
 				$this->port,
-				$transferedTo
+				$transferredTo
 			]));
-			$this->hasTransfered = true;
+			$this->hasTransferred = true;
 		}
 	}*/
 
