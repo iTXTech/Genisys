@@ -33,10 +33,10 @@ class FolderPluginLoader implements PluginLoader{
 	public function loadPlugin($file){
 		if(is_dir($file) and file_exists($file . "/plugin.yml") and file_exists($file . "/src/")){
 			if(($description = $this->getPluginDescription($file)) instanceof PluginDescription){
-				MainLogger::getLogger()->info(TextFormat::LIGHT_PURPLE."读取中... " . $description->getFullName());
+				MainLogger::getLogger()->info(TextFormat::LIGHT_PURPLE."Loading source plugin " . $description->getFullName());
 				$dataFolder = dirname($file) . DIRECTORY_SEPARATOR . $description->getName();
 				if(file_exists($dataFolder) and !is_dir($dataFolder)){
-					trigger_error("项目数据目录 '" . $dataFolder . "' 给 " . $description->getName() . " 已存在但不是一个目录", E_USER_WARNING);
+					trigger_error("Projected dataFolder '" . $dataFolder . "' for " . $description->getName() . " exists and is not a directory", E_USER_WARNING);
 
 					return null;
 				}
@@ -51,7 +51,7 @@ class FolderPluginLoader implements PluginLoader{
 
 					return $plugin;
 				}else{
-					trigger_error("无法加载源码插件 " . $description->getName() . "：未找到主类", E_USER_WARNING);
+					trigger_error("Couldn't load source plugin " . $description->getName() . ": main class not found", E_USER_WARNING);
 
 					return null;
 				}
@@ -104,7 +104,7 @@ class FolderPluginLoader implements PluginLoader{
 	 */
 	public function enablePlugin(Plugin $plugin){
 		if($plugin instanceof PluginBase and !$plugin->isEnabled()){
-			MainLogger::getLogger()->info("开启中... " . $plugin->getDescription()->getFullName());
+			MainLogger::getLogger()->info("Enabling " . $plugin->getDescription()->getFullName());
 
 			$plugin->setEnabled(true);
 
@@ -117,7 +117,7 @@ class FolderPluginLoader implements PluginLoader{
 	 */
 	public function disablePlugin(Plugin $plugin){
 		if($plugin instanceof PluginBase and $plugin->isEnabled()){
-			MainLogger::getLogger()->info("关闭中... " . $plugin->getDescription()->getFullName());
+			MainLogger::getLogger()->info("Disabling " . $plugin->getDescription()->getFullName());
 
 			Server::getInstance()->getPluginManager()->callEvent(new PluginDisableEvent($plugin));
 

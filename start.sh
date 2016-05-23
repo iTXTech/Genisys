@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# This is start.sh file for Genisys #
-# Please input ./start.sh to start server #
+# This is the start.sh file for Genisys
+# Please input ./start.sh to start server
 
 # Variable define
 DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
@@ -10,12 +10,12 @@ DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 cd "$DIR"
 
 # Loop starting
-# Do not edit without knowing what are you doing!
+# Don't edit this if you don't know what this does!
 
 DO_LOOP="no"
 
 ##########################################
-# DO NOT EDIT ANYTHING BEHIND THIS LINE! #
+# DO NOT EDIT ANYTHING BEYOND THIS LINE! #
 ##########################################
 
 while getopts "p:f:l" OPTION 2> /dev/null; do
@@ -51,7 +51,7 @@ if [ "$POCKETMINE_FILE" == "" ]; then
 	if [ -f ./PocketMine-iTX.phar ]; then
 		POCKETMINE_FILE="./PocketMine-iTX.phar"
 	elif [ -f ./Genisys*.phar ]; then
-	    POCKETMINE_FILE="./Genisys*.phar"
+	    	POCKETMINE_FILE="./Genisys*.phar"
 	elif [ -f ./PocketMine-MP.phar ]; then
 		POCKETMINE_FILE="./PocketMine-MP.phar"
 	elif [ -f ./src/pocketmine/PocketMine.php ]; then

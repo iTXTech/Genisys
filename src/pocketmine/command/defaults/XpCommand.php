@@ -53,13 +53,13 @@ class XpCommand extends VanillaCommand{
 					$level = rtrim($args[0], "Ll");
 					if(is_numeric($level)){
 						$player->addExpLevel($level);
-						$sender->sendMessage("Successfully add $level Level of experience to $name");
+						$sender->sendMessage("Successfully added $level Level of experience to $name");
 					}
 				}elseif(is_numeric($args[0])){											//Set Experience
 					$player->addExperience($args[0]);
-					$sender->sendMessage("Successfully add $args[0] of experience to $name");
+					$sender->sendMessage("Successfully added $args[0] of experience to $name");
 				}else{
-					$sender->sendMessage("Argument error.");
+					$sender->sendMessage("Argument error");
 					return false;
 				}
 			}else{
