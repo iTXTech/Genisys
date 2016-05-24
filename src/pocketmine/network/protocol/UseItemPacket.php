@@ -38,6 +38,7 @@ class UseItemPacket extends DataPacket{
 	public $posX;
 	public $posY;
 	public $posZ;
+	public $slot;
 
 	public function decode(){
 		$this->x = $this->getInt();
@@ -50,14 +51,16 @@ class UseItemPacket extends DataPacket{
 		$this->posX = $this->getFloat();
 		$this->posY = $this->getFloat();
 		$this->posZ = $this->getFloat();
+		//decode more!
 	}
 
 	public function encode(){
 	}
 	
 	public function decodeAdditional($protocol){
-		if($protocol == 70){
-			$this->getInt();
+		$this->slot = -1;
+		if($protocol >= Info::CURRENT_PROTOCOL){
+			$this->slot = $this->getInt();
 		}
 		$this->item = $this->getSlot();
 	}
