@@ -2696,7 +2696,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 				break;
 			case ProtocolInfo::USE_ITEM_PACKET:
-				/** @var UseItemPacket $pk */
+				/** @var UseItemPacket $packet */
 				$packet->decodeAdditional($this->protocol);
 				if($this->spawned === false or !$this->isAlive() or $this->blocked){
 					break;
@@ -3900,7 +3900,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return false;
 	}
 
-	/*
+	/**
 	 * Note for plugin developers: Do NOT use this function anymore, it's deprecated
 	 * and only for legacy reasons there is a redirect to sendPopup()
 	 * @deprecated
@@ -3909,11 +3909,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @return bool
 	 */
 	public function sendTip($message){
-		trigger_error("sendTip() should no longer be used", E_USER_DEPRECATED);
-		return $this->sendPopup("", $message);
 		$ev = new PlayerTextPreSendEvent($this, $message, PlayerTextPreSendEvent::TIP);
 		$this->server->getPluginManager()->callEvent($ev);
 		if(!$ev->isCancelled()){
+			return $this->sendPopup($message);
 			$pk = new TextPacket();
 			$pk->type = TextPacket::TYPE_TIP;
 			$pk->message = $message;
