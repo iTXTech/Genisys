@@ -1247,6 +1247,7 @@ class Item{
 			$item = Item::fromString($id);
 			$id = $item->getId();
 			if($item->getDamage() != $meta) $meta = $item->getDamage();
+			$name = $item->getName();
 		}
 		$this->id = $id & 0xffff;
 		$this->meta = $meta !== null ? $meta & 0xffff : null;
