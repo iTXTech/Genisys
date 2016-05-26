@@ -290,6 +290,11 @@ class Item{
 	const INVERTED_DAYLIGHT_SENSOR = 178;
 	const DAYLIGHT_SENSOR_INVERTED = 178;
 
+	const RED_SANDSTONE = 179;
+	const RED_SANDSTONE_STAIRS = 180;
+	const DOUBLE_RED_SANDSTONE_SLAB = 181;
+	const RED_SANDSTONE_SLAB = 182;
+
 	const FENCE_GATE_SPRUCE = 183;
 	const FENCE_GATE_BIRCH = 184;
 	const FENCE_GATE_JUNGLE = 185;
@@ -743,6 +748,9 @@ class Item{
 			self::addCreativeItem(Item::get(Item::SANDSTONE, 0));
 			self::addCreativeItem(Item::get(Item::SANDSTONE, 1));
 			self::addCreativeItem(Item::get(Item::SANDSTONE, 2));
+			self::addCreativeItem(Item::get(Item::RED_SANDSTONE, 0));
+			self::addCreativeItem(Item::get(Item::RED_SANDSTONE, 1));
+			self::addCreativeItem(Item::get(Item::RED_SANDSTONE, 2));
 			self::addCreativeItem(Item::get(Item::SAND, 0));
 			self::addCreativeItem(Item::get(Item::SAND, 1));
 			self::addCreativeItem(Item::get(Item::GRAVEL, 0));
@@ -767,6 +775,7 @@ class Item{
 			self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::BRICK_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::SANDSTONE_STAIRS, 0));
+			self::addCreativeItem(Item::get(Item::RED_SANDSTONE_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::STONE_BRICK_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::NETHER_BRICKS_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::QUARTZ_STAIRS, 0));
@@ -783,6 +792,7 @@ class Item{
 			self::addCreativeItem(Item::get(Item::SLAB, 5));
 			self::addCreativeItem(Item::get(Item::SLAB, 6));
 			self::addCreativeItem(Item::get(Item::SLAB, 7));
+			self::addCreativeItem(Item::get(Item::RED_SANDSTONE_SLAB, 0));
 			self::addCreativeItem(Item::get(Item::QUARTZ_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::QUARTZ_BLOCK, 1));
 			self::addCreativeItem(Item::get(Item::QUARTZ_BLOCK, 2));

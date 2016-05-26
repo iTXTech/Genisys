@@ -62,11 +62,19 @@ class Slab extends Transparent{
 	}
 
 	public function getBurnChance() : int{
-		return 5;
+		$type = $this->meta & 0x07;
+		if($type == self::WOODEN){
+			return 5;
+		}
+		return 0;
 	}
 
 	public function getBurnAbility() : int{
-		return 20;
+		$type = $this->meta & 0x07;
+		if($type == self::WOODEN){
+			return 5;
+		}
+		return 0;
 	}
 
 	protected function recalculateBoundingBox() {

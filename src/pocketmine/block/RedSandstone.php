@@ -15,25 +15,22 @@
  * (at your option) any later version.
  *
  * @author iTX Technologies
- * @link https://mcper.cn
+ * @link https://itxtech.org
  *
  */
-
+ 
 namespace pocketmine\block;
 
-class IronTrapdoor extends Trapdoor {
-	protected $id = self::IRON_TRAPDOOR;
-
+class RedSandstone extends Sandstone{
+	protected $id = Block::RED_SANDSTONE;
+	
 	public function getName() : string{
-		return "Iron Trapdoor";
+		static $names = [
+			0 => "Red Sandstone",
+			1 => "Chiseled Red Sandstone",
+			2 => "Smooth Red Sandstone",
+			3 => "",
+		];
+		return $names[$this->meta & 0x03];
 	}
-
-	public function getHardness() {
-		return 5;
-	}
-
-	public function getResistance(){
-		return 25;
-	}
-
 }

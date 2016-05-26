@@ -15,25 +15,29 @@
  * (at your option) any later version.
  *
  * @author iTX Technologies
- * @link https://mcper.cn
+ * @link https://itxtech.org
  *
  */
 
 namespace pocketmine\block;
 
-class IronTrapdoor extends Trapdoor {
-	protected $id = self::IRON_TRAPDOOR;
+use pocketmine\item\Item;
+
+class DoubleRedSandstoneSlab extends DoubleSlab{
+
+	protected $id = Block::DOUBLE_RED_SANDSTONE_SLAB;
 
 	public function getName() : string{
-		return "Iron Trapdoor";
+		return "Double Red Sandstone Slab";
 	}
 
-	public function getHardness() {
-		return 5;
+	public function getDrops(Item $item) : array {
+		if($item->isPickaxe() >= 1){
+			return [
+				[Item::RED_SANDSTONE_SLAB, $this->meta, 2],
+			];
+		}else{
+			return [];
+		}
 	}
-
-	public function getResistance(){
-		return 25;
-	}
-
 }

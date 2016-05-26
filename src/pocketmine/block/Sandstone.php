@@ -57,7 +57,7 @@ class Sandstone extends Solid{
 	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
-				[Item::SANDSTONE, $this->meta & 0x03, 1],
+				[$this->id, $this->meta & 0x03, 1],
 			];
 		}else{
 			return [];
