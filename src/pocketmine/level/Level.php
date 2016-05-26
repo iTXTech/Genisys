@@ -727,9 +727,13 @@ class Level implements ChunkManager, Metadatable{
 			return;
 		}else{
 			$this->time += 1;
+			//The below code should not be necessary now that AIs for monsters which burn have been fixed
+			//Now can allow time to continue to day 2, day 3, day 4, etc.
+			/*
 			if($this->time > self::TIME_FULL){
 				$this->time = 0;
 			}
+			*/
 		}
 	}
 
