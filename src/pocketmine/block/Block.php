@@ -405,7 +405,7 @@ class Block extends Position implements Metadatable{
 			self::$list[self::LAPIS_BLOCK] = Lapis::class;
 			self::$list[self::SANDSTONE] = Sandstone::class;
 			self::$list[self::RED_SANDSTONE] = RedSandstone::class;
-			self::$list[self::RED_SANDSTONE_STAIRS] = RedSandstone::class;
+			self::$list[self::RED_SANDSTONE_STAIRS] = RedSandstoneStairs::class;
 			self::$list[self::BED_BLOCK] = Bed::class;
 			self::$list[self::COBWEB] = Cobweb::class;
 			self::$list[self::TALL_GRASS] = TallGrass::class;
