@@ -254,7 +254,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	protected $chunksPerTick;
 	protected $spawnThreshold;
 	/** @var null|Position */
-	private $spawnPosition = null;
+	protected $spawnPosition = null;
 
 	protected $inAirTicks = 0;
 	protected $startAirTicks = 5;
@@ -276,7 +276,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public $fromPos = null;
 	private $portalTime = 0;
 	private $hasTransferred = false;
-	private $shouldSendStatus = false;
+	protected $shouldSendStatus = false;
 	/** @var  Position */
 	private $shouldResPos;
 
@@ -289,7 +289,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public $selectedLev = [];
 
 	/** @var Item[] */
-	private $personalCreativeItems = [];
+	protected $personalCreativeItems = [];
 
 	public function linkHookToPlayer(FishingHook $entity){
 		if($entity->isAlive()){
