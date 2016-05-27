@@ -48,10 +48,10 @@ class MobSpawner extends Spawnable{
 			$nbt->SpawnRange = new IntTag("SpawnRange", 4);
 		}
 		if(!isset($nbt->MinSpawnDelay)){
-			$nbt->MinSpawnDelay = new IntTag("MinSpawnDelay", 200);
+			$nbt->MinSpawnDelay = new IntTag("MinSpawnDelay", 100);
 		}
 		if(!isset($nbt->MaxSpawnDelay)){
-			$nbt->MaxSpawnDelay = new IntTag("MaxSpawnDelay", 799);
+			$nbt->MaxSpawnDelay = new IntTag("MaxSpawnDelay", 400);
 		}
 		if(!isset($nbt->Delay)){
 			$nbt->Delay = new IntTag("Delay", mt_rand($nbt->MinSpawnDelay->getValue(), $nbt->MaxSpawnDelay->getValue()));
@@ -149,7 +149,7 @@ class MobSpawner extends Spawnable{
 			return false;
 		}
 		if($this->canUpdate()){
-			if($this->getDelay() == 0){
+			if($this->getDelay() <= 0){
 				$success = 0;
 				for($i = 0; $i < $this->getSpawnCount(); $i++){
 					$pos = $this->add(mt_rand() / mt_getrandmax() * $this->getSpawnRange(), mt_rand(-1, 1), mt_rand() / mt_getrandmax() * $this->getSpawnRange());
@@ -180,7 +180,9 @@ class MobSpawner extends Spawnable{
 						}
 					}
 				}
-				if($success > 0) $this->setDelay(mt_rand($this->getMinSpawnDelay(), $this->getMaxSpawnDelay()));
+				if($success > 0){
+					$this->setDelay(mt_rand($this->getMinSpawnDelay(), $this->getMaxSpawnDelay()));
+				}
 			}else{
 				$this->setDelay($this->getDelay() - 1);
 			}
