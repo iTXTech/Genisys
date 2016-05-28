@@ -48,10 +48,10 @@ class MobSpawner extends Spawnable{
 			$nbt->SpawnRange = new IntTag("SpawnRange", 4);
 		}
 		if(!isset($nbt->MinSpawnDelay)){
-			$nbt->MinSpawnDelay = new IntTag("MinSpawnDelay", 100);
+			$nbt->MinSpawnDelay = new IntTag("MinSpawnDelay", 200);
 		}
 		if(!isset($nbt->MaxSpawnDelay)){
-			$nbt->MaxSpawnDelay = new IntTag("MaxSpawnDelay", 400);
+			$nbt->MaxSpawnDelay = new IntTag("MaxSpawnDelay", 799);
 		}
 		if(!isset($nbt->Delay)){
 			$nbt->Delay = new IntTag("Delay", mt_rand($nbt->MinSpawnDelay->getValue(), $nbt->MaxSpawnDelay->getValue()));
