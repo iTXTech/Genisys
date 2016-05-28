@@ -23,7 +23,7 @@ settings:
  #Used for plugin asynchronous tasks, world generation, compression and web communication.
  #Set this approximately to your number of cores.
  #If set to auto, it'll try to detect the number of cores (or use 2)
- async-workers: auto
+ async-workers: 2
 
 memory:
  #Global soft memory limit in megabytes. Set to 0 to disable
@@ -108,9 +108,9 @@ chunk-sending:
  #Amount of chunks sent to players per tick
  per-tick: 1
  #Amount of chunks sent around each player
- max-chunks: 32
+ max-chunks: 96
  #Amount of chunks that need to be sent before spawning the player
- spawn-threshold: 28
+ spawn-threshold: 19
  #Save a serialized copy of the chunk in memory for faster sending
  #Useful in mostly-static worlds where lots of players join at the same time
  cache-chunks: true
