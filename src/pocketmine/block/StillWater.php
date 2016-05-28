@@ -21,12 +21,16 @@
 
 namespace pocketmine\block;
 
+use pocketmine\level\Level;
+
 class StillWater extends Water{
 
 	protected $id = self::STILL_WATER;
 
 	public function onUpdate($type){
-		return false;
+		if($type == Level::BLOCK_UPDATE_NORMAL){
+			parent::onUpdate($type);
+		}
 	}
 
 	public function getName() : string{
