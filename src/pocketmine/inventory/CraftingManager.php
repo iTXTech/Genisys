@@ -28,7 +28,6 @@ use pocketmine\block\StoneBricks;
 use pocketmine\block\StoneWall;
 use pocketmine\block\Wood;
 use pocketmine\block\Wood2;
-use pocketmine\item\Fish;
 use pocketmine\item\Item;
 use pocketmine\item\Potion;
 use pocketmine\utils\UUID;
@@ -541,15 +540,26 @@ class CraftingManager{
 			))->setIngredient("P", Item::get(Item::SLAB, 5, 2)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SLAB, 1, 6),
-				"   ",
 				"PPP",
-				"   "
-			))->setIngredient("P", Item::get(Item::SANDSTONE, 0, 3)));
-
-			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SANDSTONE, 1, 1),
 				"   ",
-				"PP "
+				"   "
+			))->setIngredient("P", Item::get(Item::SANDSTONE, null, 3)));
+
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::RED_SANDSTONE_SLAB, 0, 6),
+				"PPP",
+				"   ",
+				"   "
+			))->setIngredient("P", Item::get(Item::RED_SANDSTONE, null, 3)));
+
+			$this->registerRecipe((new ShapedRecipe(Item::get(Item::SANDSTONE, 1, 1),
+				"P ",
+				"P "
 			))->setIngredient("P", Item::get(Item::SLAB, 1, 2)));
+
+			$this->registerRecipe((new ShapedRecipe(Item::get(Item::RED_SANDSTONE, 1, 1),
+				"P ",
+				"P "
+			))->setIngredient("P", Item::get(Item::RED_SANDSTONE_SLAB, 0, 2)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::STONE_BRICK, 0, 4),
 				"XX ",
@@ -641,15 +651,31 @@ class CraftingManager{
 				"PPP"
 			))->setIngredient("P", Item::get(Item::SANDSTONE, 0, 6)));
 
-			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SANDSTONE, 0, 1),
-				"XX ",
-				"XX "
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::RED_SANDSTONE_STAIRS, 0, 4),
+				"P  ",
+				"PP ",
+				"PPP"
+			))->setIngredient("P", Item::get(Item::RED_SANDSTONE, 0, 6)));
+
+			$this->registerRecipe((new ShapedRecipe(Item::get(Item::SANDSTONE, 0, 1),
+				"XX",
+				"XX"
 			))->setIngredient("X", Item::get(Item::SAND, 0, 4)));
 
-			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SANDSTONE, 2, 4),
-				"XX ",
-				"XX "
+			$this->registerRecipe((new ShapedRecipe(Item::get(Item::RED_SANDSTONE, 0, 1),
+				"XX",
+				"XX"
+			))->setIngredient("X", Item::get(Item::SAND, 1, 4)));
+
+			$this->registerRecipe((new ShapedRecipe(Item::get(Item::SANDSTONE, 2, 4),
+				"XX",
+				"XX"
 			))->setIngredient("X", Item::get(Item::SANDSTONE, 0, 4)));
+
+			$this->registerRecipe((new ShapedRecipe(Item::get(Item::RED_SANDSTONE, 2, 4),
+				"XX",
+				"XX"
+			))->setIngredient("X", Item::get(Item::RED_SANDSTONE, 0, 4)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::STONE, Stone::POLISHED_GRANITE, 4),
 				"XX ",
@@ -868,9 +894,11 @@ class CraftingManager{
 	}
 
 	protected function registerFurnace(){
+		//TODO 修复unll机制   Fix a bug that "NULL" do not working properly
 		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::STONE, 0, 1), Item::get(Item::COBBLESTONE, 0, 1)));
 		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::STONE_BRICK, 2, 1), Item::get(Item::STONE_BRICK, 0, 1)));
 		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::GLASS, 0, 1), Item::get(Item::SAND, null, 1)));
+		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::GLASS, 0, 1), Item::get(Item::SAND, 1, 1)));
 		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::COAL, 1, 1), Item::get(Item::TRUNK, null, 1)));
 		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::COAL, 1, 1), Item::get(Item::TRUNK2, null, 1)));
 		$this->registerRecipe(new FurnaceRecipe(Item::get(Item::GOLD_INGOT, 0, 1), Item::get(Item::GOLD_ORE, 0, 1)));
