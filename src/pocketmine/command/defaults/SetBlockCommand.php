@@ -95,7 +95,7 @@ class SetBlockCommand extends VanillaCommand{
 			if($pos instanceof Vector3){
 				$level = ($sender instanceof Player) ? $sender->getLevel() : $sender->getServer()->getDefaultLevel();
 				if($level->setBlock($pos, $block)){
-					$sender->sendMessage("Successfully set the block at ($x, $y, $z) to block $args[3]");
+					$this->getServer()->getLogger()->info(TextFormat::GREEN . "$x $y $z -> $args[3]");
 					return true;
 				}else{
 					$sender->sendMessage(TextFormat::RED . new TranslationContainer("commands.generic.exception", []));
