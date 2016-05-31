@@ -582,7 +582,12 @@ class SkeletonAI{
 			foreach ($level->getEntities() as $zo){
 				if ($zo instanceof Skeleton) {
 					//var_dump($p->getLevel()->getTime());
-					if(0 < $level->getTime() and $level->getTime() < 13500){
+					/* Don't use time directly
+					 * Instead, get remainder of current time divided by 24,000
+					 * This tells us the time of day, which is what we really need
+					 */
+					$timeOfDay = abs($level->getTime() % 24000);
+					if(0 < $timeOfDay and $timeOfDay < 13000){
 						$v3 = new Vector3($zo->getX(), $zo->getY(), $zo->getZ());
 						$ok = true;
 						for ($y0 = $zo->getY() + 2; $y0 <= $zo->getY()+10; $y0++) {
