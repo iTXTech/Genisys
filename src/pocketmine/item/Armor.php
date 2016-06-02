@@ -27,6 +27,16 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\utils\Color;
 
 abstract class Armor extends Item{
+	const TIER_LEATHER = 1;
+	const TIER_GOLD = 2;
+	const TIER_CHAIN = 3;
+	const TIER_IRON = 4;
+	const TIER_DIAMOND = 5;
+
+	const TYPE_HELMET = 0;
+	const TYPE_CHESTPLATE = 1;
+	const TYPE_LEGGINGS = 2;
+	const TYPE_BOOTS = 3;
 
 	public function getMaxStackSize() : int {
 		return 1;
@@ -62,5 +72,21 @@ abstract class Armor extends Item{
 			unset($tag->customColor);
 		}
 		$this->setCompoundTag($tag);
+	}
+
+	public function isHelmet(){
+		return false;
+	}
+
+	public function isChestplate(){
+		return false;
+	}
+
+	public function isLeggings(){
+		return false;
+	}
+
+	public function isBoots(){
+		return false;
 	}
 }
