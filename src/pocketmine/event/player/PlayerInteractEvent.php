@@ -59,6 +59,12 @@ class PlayerInteractEvent extends PlayerEvent implements Cancellable{
 		if($block instanceof Block){
 			$this->blockTouched = $block;
 			$this->touchVector = new Vector3(0, 0, 0);
+			$up = $block->y+1;
+			if($up instanceof Fire){
+				$level = $block->getLevel();
+				$level->setBlock(new Vector3($up), Block::get(Block::AIR), true, true);
+			}
+            	}
 		}else{
 			$this->touchVector = $block;
 			$this->blockTouched = Block::get(0, 0, new Position(0, 0, 0, $player->level));
