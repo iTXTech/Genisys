@@ -61,7 +61,6 @@ class PlayerInteractEvent extends PlayerEvent implements Cancellable{
 			$this->touchVector = new Vector3(0, 0, 0);
 			$up = $block->getLevel()->getBlock(new Vector3($block->x, $block->y+1, $block->z));
         		if($up instanceof Fire){
-            			$this->getServer()->broadcastMessage("This should work :P");
             			$level = $block->getLevel();
             			$level->setBlock($up, Block::get(Block::AIR), true, true);
         		}
