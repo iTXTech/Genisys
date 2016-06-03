@@ -2796,9 +2796,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 								$this->fishingHook->spawnToAll();
 							}
 						}
-					}
-
-					if($item->getId() === Item::SNOWBALL){
+					}elseif($item->getId() === Item::SNOWBALL){
 						$nbt = new CompoundTag("", [
 							"Pos" => new ListTag("Pos", [
 								new DoubleTag("", $this->x),
@@ -2838,9 +2836,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}else{
 							$snowball->spawnToAll();
 						}
-					}
-
-					if($item->getId() === Item::EGG){
+					}elseif($item->getId() === Item::EGG){
 						$nbt = new CompoundTag("", [
 							"Pos" => new ListTag("Pos", [
 								new DoubleTag("", $this->x),
@@ -2876,9 +2872,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}else{
 							$egg->spawnToAll();
 						}
-					}
-
-					if($item->getId() == Item::ENCHANTING_BOTTLE){
+					}elseif($item->getId() == Item::ENCHANTING_BOTTLE){
 						$nbt = new CompoundTag("", [
 							"Pos" => new ListTag("Pos", [
 								new DoubleTag("", $this->x),
@@ -2914,9 +2908,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}else{
 							$thrownExpBottle->spawnToAll();
 						}
-					}
-
-					if($item->getId() == Item::SPLASH_POTION and $this->server->allowSplashPotion){
+					}elseif($item->getId() == Item::SPLASH_POTION and $this->server->allowSplashPotion){
 						$nbt = new CompoundTag("", [
 							"Pos" => new ListTag("Pos", [
 								new DoubleTag("", $this->x),
