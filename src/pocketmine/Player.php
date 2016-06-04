@@ -2698,8 +2698,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 				break;
 			case ProtocolInfo::USE_ITEM_PACKET:
-				/** @var UseItemPacket $pk */
-				$packet->decodeAdditional($this->protocol);
 				if($this->spawned === false or !$this->isAlive() or $this->blocked){
 					break;
 				}
