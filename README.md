@@ -1,22 +1,22 @@
-# Genisys (创世纪) - Advanced Minecraft: Pocket Edition Server
+# Genisys (创世纪)
+
+### Advanced Minecraft: Pocket Edition Server
 
 Chat on Gitter: [![Gitter](https://img.shields.io/gitter/room/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
-You can also join `#genisys` on freenode IRC.
+IRC: #genisys at freenode
 
-Special thanks to [JetBrains](https://www.jetbrains.com) for providing free edition of PHPStorm.
+Special thanks to [JetBrains](https://www.jetbrains.com) for providing free license of PHPStorm.
 
 ### Build status
-Jenkins: [![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.mcper.cn/Genisys-master.svg)](https://jenkins.mcper.cn/job/Genisys-master/)  
 Travis-CI: [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)  
+Jenkins: [![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.mcper.cn/Genisys-master.svg)](https://jenkins.mcper.cn/job/Genisys-master/)  
 GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/builds)
 
 ### Downloads
-You can get a pre-built phar from [Jenkins](https://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/genisys/builds).
+You can get a prebuilt phar from [Jenkins](https://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/genisys/builds).
 
 ### Installation
 If you are on Linux, use Docker to install Genisys.
-
-[![Docker Pulls](https://img.shields.io/docker/pulls/itxtech/docker-env-genisys.svg)](https://hub.docker.com/r/itxtech/docker-env-genisys/)  
 See the [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys) for more details.
 
 For other platform, see below.
