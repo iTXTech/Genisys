@@ -3890,8 +3890,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		if(!$ev->isCancelled()){
 			$pk = new TextPacket();
 			$pk->type = TextPacket::TYPE_POPUP;
-			$pk->source = $message;
-			$pk->message = $subtitle;
+			$pk->source = "n\n\n".$message;
+			$pk->message = "n\n\n".$subtitle;
 			$this->dataPacket($pk);
 			return true;
 		}
@@ -3915,7 +3915,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->server->getPluginManager()->callEvent($ev);
 		if(!$ev->isCancelled()){
 			$pk = new TextPacket();
-			$pk->type = TextPacket::TYPE_TIP;
+			$pk->type = TextPacket::TYPE_POPUP;
 			$pk->message = $message;
 			$this->dataPacket($pk);
 			return true;
