@@ -151,7 +151,9 @@ abstract class Projectile extends Entity{
 						$ev = new EntityDamageByChildEntityEvent($this->shootingEntity, $this, $movingObjectPosition->entityHit, EntityDamageEvent::CAUSE_PROJECTILE, $damage);
 					}
 
-					$movingObjectPosition->entityHit->attack($ev->getFinalDamage(), $ev);
+					if($movingObjectPosition->entityHit->attack($ev->getFinalDamage(), $ev) === true){
+						$ev->useArmors();
+					}
 
 					$this->hadCollision = true;
 
