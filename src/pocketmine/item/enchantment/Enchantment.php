@@ -260,6 +260,50 @@ class Enchantment{
 		return 0;
 	}
 
+	public static function getEnchantMaxLevel(int $enchantmentId){
+		switch($enchantmentId){
+			case self::TYPE_ARMOR_PROTECTION:
+			case self::TYPE_ARMOR_FIRE_PROTECTION:
+			case self::TYPE_ARMOR_FALL_PROTECTION:
+			case self::TYPE_ARMOR_EXPLOSION_PROTECTION:
+			case self::TYPE_ARMOR_PROJECTILE_PROTECTION:
+				return 4;
+			case self::TYPE_ARMOR_THORNS:
+				return 3;
+			case self::TYPE_WATER_BREATHING:
+			case self::TYPE_WATER_SPEED:
+				return 3;
+			case self::TYPE_WATER_AFFINITY:
+				return 1;
+			case self::TYPE_WEAPON_SHARPNESS:
+			case self::TYPE_WEAPON_SMITE:
+			case self::TYPE_WEAPON_ARTHROPODS:
+				return 5;
+			case self::TYPE_WEAPON_KNOCKBACK:
+			case self::TYPE_WEAPON_FIRE_ASPECT:
+				return 2;
+			case self::TYPE_WEAPON_LOOTING:
+				return 3;
+			case self::TYPE_MINING_EFFICIENCY:
+				return 5;
+			case self::TYPE_MINING_SILK_TOUCH:
+				return 1;
+			case self::TYPE_MINING_DURABILITY:
+			case self::TYPE_MINING_FORTUNE:
+				return 3;
+			case self::TYPE_BOW_POWER:
+				return 5;
+			case self::TYPE_BOW_KNOCKBACK:
+				return 2;
+			case self::TYPE_BOW_FLAME:
+			case self::TYPE_BOW_INFINITY:
+				return 1;
+			case self::TYPE_FISHING_FORTUNE:
+			case self::TYPE_FISHING_LURE:
+				return 3;
+		}
+		return 999;
+	}
 
 	private $id;
 	private $level = 1;
