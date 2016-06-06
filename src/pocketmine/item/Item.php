@@ -1375,7 +1375,7 @@ class Item{
 	
 	/**
 	 * @param $id
-	 * @return Enchantment level|0(for null)
+	 * @return Int level|0(for null)
 	 */
 	public function getEnchantmentLevel(int $id){
 		if(!$this->hasEnchantments()){
@@ -1386,7 +1386,8 @@ class Item{
 			if($entry["id"] === $id){
 				$e = Enchantment::getEnchantment($entry["id"]);
 				$e->setLevel($entry["lvl"]);
-				return $e->getLevel();
+				$E_level = $e->getLevel() > Enchantment::getEnchantMaxLevel($id) ? Enchantment::getEnchantMaxLevel($id) : $e->getLevel();
+				return $E_level;
 			}
 		}
 

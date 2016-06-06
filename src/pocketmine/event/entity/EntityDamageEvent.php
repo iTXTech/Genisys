@@ -89,6 +89,7 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 			throw new \InvalidArgumentException("BASE Damage modifier missing");
 		}
 
+		//For DAMAGE_RESISTANCE
 		if($cause !== self::CAUSE_VOID and $cause !== self::CAUSE_SUICIDE){
 			if($entity->hasEffect(Effect::DAMAGE_RESISTANCE)){
 				$RES_level = 1 - 0.20 * ($entity->getEffect(Effect::DAMAGE_RESISTANCE)->getAmplifier() + 1);
@@ -99,6 +100,7 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 			}
 		}
 
+		//For MODIFIER_ARMOR
 		switch($cause){
 			case self::CAUSE_CONTACT:
 			case self::CAUSE_ENTITY_ATTACK:
@@ -122,10 +124,8 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 				}
 				break;
 			case self::CAUSE_FALL:
-
 				break;
 			case self::CAUSE_FIRE_TICK:
-
 				break;
 			case self::CAUSE_SUFFOCATION:
 			case self::CAUSE_DROWNING:
@@ -139,6 +139,7 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 				break;
 		}
 
+		//For MODIFIER_PROTECTION TODO: add all kind of PROTECTION Enchantment
 	}
 
 	/**
