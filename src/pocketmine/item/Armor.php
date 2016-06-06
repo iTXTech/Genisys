@@ -33,10 +33,10 @@ abstract class Armor extends Item{
 	const TIER_IRON = 4;
 	const TIER_DIAMOND = 5;
 
-	const TYPE_HELMET = 0;
-	const TYPE_CHESTPLATE = 1;
-	const TYPE_LEGGINGS = 2;
-	const TYPE_BOOTS = 3;
+	const TYPE_HELMET = 1;
+	const TYPE_CHESTPLATE = 2;
+	const TYPE_LEGGINGS = 3;
+	const TYPE_BOOTS = 4;
 
 	public function getMaxStackSize() : int {
 		return 1;
@@ -44,6 +44,29 @@ abstract class Armor extends Item{
 
 	public function isArmor(){
 		return true;
+	}
+
+	/**
+	 *
+	 * @param Item $object
+	 *
+	 * @return bool
+	 */
+	public function useOn($object)
+	{
+		if($this->isUnbreakable()){
+			return true;
+		}
+		$this->setDamage($this->getDamage() + 1);
+		if($this->getDamage() >= $this->getMaxDurability()){
+			$this->setCount(0);
+		}
+		return true;
+	}
+
+	public function isUnbreakable(){
+		$tag = $this->getNamedTagEntry("Unbreakable");
+		return $tag !== null and $tag->getValue() > 0;
 	}
 
 	public function setCustomColor(Color $color){
@@ -72,6 +95,22 @@ abstract class Armor extends Item{
 			unset($tag->customColor);
 		}
 		$this->setCompoundTag($tag);
+	}
+
+	public function getArmorTier(){
+		return false;
+	}
+
+	public function getArmorType(){
+		return false;
+	}
+
+	public function getMaxDurability(){
+		return false;
+	}
+
+	public function getArmorValue(){
+		return false;
 	}
 
 	public function isHelmet(){

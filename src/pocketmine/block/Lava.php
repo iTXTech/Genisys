@@ -50,7 +50,9 @@ class Lava extends Liquid{
 		$entity->fallDistance *= 0.5;
 		if(!$entity->hasEffect(Effect::FIRE_RESISTANCE)){
 			$ev = new EntityDamageByBlockEvent($this, $entity, EntityDamageEvent::CAUSE_LAVA, 4);
-			$entity->attack($ev->getFinalDamage(), $ev);
+			if($entity->attack($ev->getFinalDamage(), $ev) === true){
+				$ev->useArmors();
+			}
 		}
 
 		$ev = new EntityCombustByBlockEvent($this, $entity, 15);

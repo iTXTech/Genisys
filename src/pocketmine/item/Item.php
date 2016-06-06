@@ -1665,6 +1665,10 @@ class Item{
 		return false;
 	}
 
+	public function getArmorValue(){
+		return false;
+	}
+
 	public function isBoots(){
 		return false;
 	}
