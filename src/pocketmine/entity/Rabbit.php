@@ -37,7 +37,7 @@ class Rabbit extends Animal{
 
 	const TYPE_BROWN = 0;
 	const TYPE_WHITE = 1;
-	const TYPE_BLOCK = 2;
+	const TYPE_BLACK = 2;
 	const TYPE_BLACK_WHITE = 3;
 	const TYPE_GOLD = 4;
 	const TYPE_SALT_PEPPER = 5;
