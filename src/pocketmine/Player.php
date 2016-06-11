@@ -2005,6 +2005,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$items = [ //TODO: move this to item classes
 			Item::APPLE => 4,
 			Item::MUSHROOM_STEW => 6,
+			Item::RABBIT_STEW => 10,
 			Item::BEETROOT_SOUP => 5,
 			Item::BREAD => 5,
 			Item::RAW_PORKCHOP => 2,
