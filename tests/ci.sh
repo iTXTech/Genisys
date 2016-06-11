@@ -1,6 +1,10 @@
 #!/bin/bash
-find . -name "*.php" -print0 | xargs -0 -n1 php -l || exit 1
-echo -e "version\nms\nstop\n\n" | php src/pocketmine/PocketMine.php --no-wizard
+shopt -s globstar
+for file in **.php; do
+    OUTPUT=`php -l "$file"`
+    [ $? -ne 0 ] && echo -n "$OUTPUT" && exit 1
+done
+echo -e "version\nms\nstop\n" | php src/pocketmine/PocketMine.php --no-wizard
 if ls plugins/Genisys/Genisys*.phar >/dev/null 2>&1; then
     echo "Server packaged successfully."
 else
