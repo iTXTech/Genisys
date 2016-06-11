@@ -25,7 +25,6 @@ use pocketmine\entity\Effect;
 
 class Arrow extends Item {
 
-
 	const REGENERATION_ARROW = 28;
 	const REGENERATION_ARROW_T = 29;
 	const REGENERATION_ARROW_TWO = 30;
@@ -125,7 +124,7 @@ class Arrow extends Item {
 	public static function getColor(int $meta){
 		return Effect::getEffect(self::getEffectId($meta))->getColor();
 	}
-------------------------------------------
+
 	public static function getEffectId(int $meta) : int{
 		switch($meta){
 			case self::INVISIBILITY_ARROW:
@@ -231,5 +230,3 @@ class Arrow extends Item {
 	
 }
 
-
-}
