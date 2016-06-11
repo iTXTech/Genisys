@@ -1121,11 +1121,6 @@ class CraftingManager{
 			"  "
 		))->setIngredient("X", Item::get(Item::PUMPKIN, 0, 1)));
 
-		$this->registerRecipe((new ShapedRecipe(Item::get(Item::PUMPKIN_SEEDS, 0, 4),
-			"X ",
-			"  "
-		))->setIngredient("X", Item::get(Item::PUMPKIN, 0, 1)));
-
 		$this->registerRecipe((new ShapedRecipe(Item::get(Item::RABBIT_STEW, 0, 1),
 			" A ",
 			"BCD",
