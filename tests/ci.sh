@@ -1,6 +1,6 @@
 #!/bin/bash
 shopt -s globstar
-for file in **.php; do
+for file in **/*.php; do
     OUTPUT=`php -l "$file"`
     [ $? -ne 0 ] && echo -n "$OUTPUT" && exit 1
 done
