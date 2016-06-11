@@ -1926,6 +1926,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->inAirTicks = 0;
 					}else{
 						if(!$this->allowFlight and $this->inAirTicks > 10 and !$this->isSleeping() and $this->getDataProperty(self::DATA_NO_AI) !== 1){
+							//expectedVelocity here is not calculated correctly
+							//This causes players to fall too fast when bouncing on slime when antiFly is enabled
 							$expectedVelocity = (-$this->gravity) / $this->drag - ((-$this->gravity) / $this->drag) * exp(-$this->drag * ($this->inAirTicks - $this->startAirTicks));
 							$diff = ($this->speed->y - $expectedVelocity) ** 2;
 							if(!$this->hasEffect(Effect::JUMP) and $diff > 0.6 and $expectedVelocity < $this->speed->y and !$this->server->getAllowFlight()){
@@ -1945,7 +1947,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 			if($this->server->foodEnabled){
 				if($this->starvationTick >= 20){
-					$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_CUSTOM, 1);
+					$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_STARVATION, 1);
 					if($this->getHealth() > $this->server->hungerHealth) $this->attack(1, $ev);
 					$this->starvationTick = 0;
 				}
@@ -2005,6 +2007,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$items = [ //TODO: move this to item classes
 			Item::APPLE => 4,
 			Item::MUSHROOM_STEW => 6,
+			Item::RABBIT_STEW => 10,
 			Item::BEETROOT_SOUP => 5,
 			Item::BREAD => 5,
 			Item::RAW_PORKCHOP => 2,
@@ -2658,6 +2661,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						for($i = 0; $i < $this->inventory->getHotbarSize(); ++$i){
 							if($this->inventory->getHotbarSlotIndex($i) === -1){
 								$this->inventory->setHeldItemIndex($i);
+								$this->inventory->sendHeldItem($this->getViewers());
 								$found = true;
 								break;
 							}
@@ -2693,11 +2697,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 				}
 
-				$this->inventory->sendHeldItem($this->hasSpawned);
-
 				$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 				break;
 			case ProtocolInfo::USE_ITEM_PACKET:
+				/** @var UseItemPacket $pk */
+				$packet->decodeAdditional($this->protocol);
 				if($this->spawned === false or !$this->isAlive() or $this->blocked){
 					break;
 				}
@@ -3291,37 +3295,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}elseif($this->server->getConfigBoolean("pvp") !== true or $this->server->getDifficulty() === 0){
 							$cancelled = true;
 						}
-
-						$armorValues = [
-							Item::LEATHER_CAP => 1,
-							Item::LEATHER_TUNIC => 3,
-							Item::LEATHER_PANTS => 2,
-							Item::LEATHER_BOOTS => 1,
-							Item::CHAIN_HELMET => 1,
-							Item::CHAIN_CHESTPLATE => 5,
-							Item::CHAIN_LEGGINGS => 4,
-							Item::CHAIN_BOOTS => 1,
-							Item::GOLD_HELMET => 1,
-							Item::GOLD_CHESTPLATE => 5,
-							Item::GOLD_LEGGINGS => 3,
-							Item::GOLD_BOOTS => 1,
-							Item::IRON_HELMET => 2,
-							Item::IRON_CHESTPLATE => 6,
-							Item::IRON_LEGGINGS => 5,
-							Item::IRON_BOOTS => 2,
-							Item::DIAMOND_HELMET => 3,
-							Item::DIAMOND_CHESTPLATE => 8,
-							Item::DIAMOND_LEGGINGS => 6,
-							Item::DIAMOND_BOOTS => 3,
-						];
-						$points = 0;
-						foreach($target->getInventory()->getArmorContents() as $index => $i){
-							if(isset($armorValues[$i->getId()])){
-								$points += $armorValues[$i->getId()];
-							}
-						}
-
-						$damage[EntityDamageEvent::MODIFIER_ARMOR] = -floor($damage[EntityDamageEvent::MODIFIER_BASE] * $points * 0.04);
 					}
 
 					$ev = new EntityDamageByEntityEvent($this, $target, EntityDamageEvent::CAUSE_ENTITY_ATTACK, $damage);
@@ -3329,7 +3302,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$ev->setCancelled();
 					}
 
-					$target->attack($ev->getFinalDamage(), $ev);
+					if($target->attack($ev->getFinalDamage(), $ev) === true){
+						$ev->useArmors();
+					}
 
 					if($ev->isCancelled()){
 						if($item->isTool() and $this->isSurvival()){
@@ -4348,7 +4323,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	public function attack($damage, EntityDamageEvent $source){
 		if(!$this->isAlive()){
-			return;
+			return false;
 		}
 
 		if($this->isCreative() and $source->getCause() !== EntityDamageEvent::CAUSE_SUICIDE and $source->getCause() !== EntityDamageEvent::CAUSE_VOID){
@@ -4360,13 +4335,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		parent::attack($damage, $source);
 
 		if($source->isCancelled()){
-			return;
+			return false;
 		}elseif($this->getLastDamageCause() === $source and $this->spawned){
 			$pk = new EntityEventPacket();
 			$pk->eid = 0;
 			$pk->event = EntityEventPacket::HURT_ANIMATION;
 			$this->dataPacket($pk);
 		}
+		return true;
 	}
 
 	public function sendPosition(Vector3 $pos, $yaw = null, $pitch = null, $mode = 0, array $targets = null){

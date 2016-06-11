@@ -1120,6 +1120,28 @@ class CraftingManager{
 			"X ",
 			"  "
 		))->setIngredient("X", Item::get(Item::PUMPKIN, 0, 1)));
+
+		$this->registerRecipe((new ShapedRecipe(Item::get(Item::RABBIT_STEW, 0, 1),
+			" A ",
+			"BCD",
+			" E "
+		))->setIngredient("A", Item::get(Item::COOKED_RABBIT, 0, 1))
+		  ->setIngredient("B", Item::get(Item::CARROT, 0, 1))
+		  ->setIngredient("C", Item::get(Item::BAKED_POTATO, 0, 1))
+		  ->setIngredient("D", Item::get(Item::BROWN_MUSHROOM, 0, 1))
+		  ->setIngredient("E", Item::get(Item::BOWL, 0, 1))
+		);
+
+		$this->registerRecipe((new ShapedRecipe(Item::get(Item::RABBIT_STEW, 0, 1),
+			" A ",
+			"BCD",
+			" E "
+		))->setIngredient("A", Item::get(Item::COOKED_RABBIT, 0, 1))
+			->setIngredient("B", Item::get(Item::CARROT, 0, 1))
+			->setIngredient("C", Item::get(Item::BAKED_POTATO, 0, 1))
+			->setIngredient("D", Item::get(Item::RED_MUSHROOM, 0, 1))
+			->setIngredient("E", Item::get(Item::BOWL, 0, 1))
+		);
 	}
 
 	protected function registerArmor(){

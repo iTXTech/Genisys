@@ -102,11 +102,11 @@ class SessionManager{
 		while(!$this->shutdown){
 			$start = microtime(true);
 			$max = 5000;
-			while(--$max and $this->receivePacket());
-			while($this->receiveStream());
+			while(--$max and $this->receivePacket()) ;
+			while($this->receiveStream()) ;
 			$time = microtime(true) - $start;
 			if($time < 0.05){
-				time_sleep_until(microtime(true) + 0.05 - $time);
+				@time_sleep_until(microtime(true) + 0.05 - $time);
 			}
 			$this->tick();
 		}
@@ -124,7 +124,6 @@ class SessionManager{
 			}
 		}
 		$this->ipSec = [];
-
 
 
 		if(($this->ticks & 0b1111) === 0){
@@ -168,6 +167,10 @@ class SessionManager{
 			}
 
 			$pid = ord($buffer{0});
+
+			if($pid == UNCONNECTED_PONG::$ID){
+				return false;
+			}
 
 			if(($packet = $this->getPacketFromPool($pid)) !== null){
 				$packet->buffer = $buffer;
@@ -344,7 +347,7 @@ class SessionManager{
 
 	/**
 	 * @param string $ip
-	 * @param int	$port
+	 * @param int    $port
 	 *
 	 * @return Session
 	 */
