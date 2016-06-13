@@ -217,7 +217,7 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 	 */
 	public function useArmors(){
 		if($this->entity instanceof Player){
-			if($this->entity->isSurvival()){
+			if($this->entity->isSurvival() and $this->entity->isAlive()){
 				foreach ($this->use_armors as $index=>$i){
 					if($i->isArmor()){
 						$i->useOn($i);
