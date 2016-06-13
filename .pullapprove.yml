@@ -1,17 +1,15 @@
 approve_by_comment: true
+author_approval: ignored
 approve_regex: '(?<!(N|n|o|'')t )((W|w)ork|(G|g)ood)|(A|a)pproved|\+1'
 reject_regex: '(N|n|o|'')t (W|w)|(R|r)ejected|-1'
 reject_value: -1
 reset_on_push: true
 reviewers:
   name: default
-  members:
-    - CrayonDing
-    - dog194
-    - gaoyichuan
-    - ishitatsuyuki
-    - jasonczc
-    - Muqsit
-    - PEMapModder
-    - PeratX
+  teams: reviewers
   required: 2
+always_rejected:
+    title_regex: '(WIP|wip)'
+    labels:
+        - wip
+    explanation: 'This PR is still work in progress'
