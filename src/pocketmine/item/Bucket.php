@@ -25,6 +25,7 @@ use pocketmine\block\Air;
 use pocketmine\block\Block;
 use pocketmine\block\Liquid;
 use pocketmine\event\player\PlayerBucketFillEvent;
+use pocketmine\event\player\PlayerBucketEmptyEvent;
 use pocketmine\level\Level;
 use pocketmine\Player;
 
@@ -55,7 +56,7 @@ class Bucket extends Item{
 					$id = self::LAVA;
 				}
 				$result->setDamage($id);
-				$player->getServer()->getPluginManager()->callEvent($ev = new PlayerBucketFillEvent($player, $block, $face, $this, $result));
+				$player->getServer()->getPluginManager()->callEvent($ev = new PlayerBucketEmptyEvent($player, $block, $face, $this, $result));
 				if(!$ev->isCancelled()){
 					$player->getLevel()->setBlock($target, new Air(), true, true);
 					if($player->isSurvival()){
