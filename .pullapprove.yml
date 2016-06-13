@@ -5,8 +5,10 @@ reject_regex: '(N|n|o|'')t (W|w)|(R|r)ejected|-1'
 reject_value: -1
 reset_on_push: true
 reviewers:
+ -
   name: default
-  teams: reviewers
+  teams: 
+   - reviewers
   required: 2
 always_rejected:
     title_regex: '(WIP|wip)'
