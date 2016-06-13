@@ -2,7 +2,7 @@ always_rejected:
   explanation: "This PR is still work in progress"
   labels: 
     - wip
-  title_regex: (WIP|wip)
+  title_regex: "(WIP|wip)"
 approve_by_comment: true
 approve_regex: "(?<!(N|n|o|')t )((W|w)ork|(G|g)ood)|(A|a)pproved|\\+1"
 author_approval: ignored
