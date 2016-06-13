@@ -10,8 +10,7 @@ reject_regex: "(N|n|o|')t (W|w)|(R|r)ejected|-1"
 reject_value: -1
 reset_on_push: true
 reviewers: 
-  - 
-    name: default
-    required: 2
-    teams: 
-      - trusted
+  name: default
+  required: 2
+  teams: 
+    - trusted
