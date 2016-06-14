@@ -4,9 +4,9 @@ always_rejected:
     - wip
   title_regex: "(WIP|wip)"
 approve_by_comment: true
-approve_regex: "(?<!(N|n|o|')t )((W|w)ork|(G|g)ood)|(A|a)pproved|\\+1"
+approve_regex: "(A|a)pprov|\\+1"
 author_approval: ignored
-reject_regex: "(N|n|o|')t (W|w)|(R|r)ejected|-1"
+reject_regex: "(R|r)eject|-1"
 reject_value: -1
 reset_on_push: true
 reviewers: 
