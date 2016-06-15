@@ -29,7 +29,7 @@ use pocketmine\level\particle\SmokeParticle;
 use pocketmine\level\sound\FizzSound;
 use pocketmine\math\Vector3;
 
-abstract class Liquid extends Solid{
+abstract class Liquid extends Transparent{
 
 	/** @var Vector3 */
 	private $temporalVector = null;
