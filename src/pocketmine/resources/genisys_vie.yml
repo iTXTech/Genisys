@@ -2,7 +2,7 @@
 
 #Phiên bản file cài đặt
 config:
- version: 15
+ version: 16
 
 level:
  #Chỉnh nếu muốn bật/tắt thời tiết (true/false)
