@@ -72,11 +72,11 @@ namespace pocketmine {
 	use pocketmine\utils\Utils;
 	use pocketmine\wizard\Installer;
 
-	const VERSION = "1.2dev";
+	const VERSION = "1.1dev";
 	const API_VERSION = "2.0.0";
 	const CODENAME = "Ikaros";
-	const MINECRAFT_VERSION = "v0.15.0 alpha";
-	const MINECRAFT_VERSION_NETWORK = "0.15.0";
+	const MINECRAFT_VERSION = "v0.14.x alpha";
+	const MINECRAFT_VERSION_NETWORK = "0.14.3";
 	const GENISYS_API_VERSION = '1.7.3';
 
 	/*

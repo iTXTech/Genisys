@@ -22,8 +22,8 @@
 namespace pocketmine\network\protocol;
 
 
-class ChunkRadiusUpdatedPacket extends DataPacket{
-	const NETWORK_ID = Info::CHUNK_RADIUS_UPDATED_PACKET;
+class ChunkRadiusUpdatePacket extends DataPacket{
+	const NETWORK_ID = Info::CHUNK_RADIUS_UPDATE_PACKET;
 
 	public $radius;
 
