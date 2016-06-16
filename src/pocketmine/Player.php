@@ -2565,7 +2565,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->uuid = UUID::fromString($packet->clientUUID);
 				$this->rawUUID = $this->uuid->toBinary();
 
-				$this->additionalChar = $packet->additionalChar;//need fixed
+				//$this->additionalChar = $packet->additionalChar;//need fixed | Implement this when it's ready!
 				$valid = true;
 				$len = strlen($packet->username);
 				if($len > 16 or $len < 3){
