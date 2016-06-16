@@ -2454,13 +2454,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->dataPacket($pk);
 		}
 		
-		$pk = new SetEntityDataPacket();
-		$pk->eid = 0;
-		$pk->metadata = [
-			self::DATA_LEAD_HOLDER => [self::DATA_TYPE_LONG, -1]
-		];
-		$this->dataPacket($pk);
-		
 		$this->forceMovement = $this->teleportPosition = $this->getPosition();
 	}
 
