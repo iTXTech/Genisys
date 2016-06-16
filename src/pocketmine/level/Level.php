@@ -811,7 +811,7 @@ class Level implements ChunkManager, Metadatable{
 
 		if(count($this->changedBlocks) > 0){
 			if(count($this->players) > 0){
-				foreach($this->changedBlocks as $index => $blocks){
+				foreach($this->changedBlocks as $index => $mini){
 					foreach($mini as $blocks){
 						foreach($blocks as $b){
 							foreach ($this->getUsingChunk($b->x >> 4, $b->z >> 4) as $player) {								
