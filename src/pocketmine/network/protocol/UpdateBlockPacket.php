@@ -44,7 +44,6 @@ class UpdateBlockPacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putInt(count($this->records));
 		foreach($this->records as $r){
 			$this->putInt($r[0]);
 			$this->putInt($r[1]);
