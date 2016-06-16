@@ -1,7 +1,7 @@
 #!/opt/php/bin/php
 <?php
 $version = trim($_SERVER["argv"][1]);
-$pocketmine = str_replace('const VERSION = "1.1dev', 'const VERSION = "1.1dev-' . $version, file_get_contents($file = "src/pocketmine/PocketMine.php"));
+$pocketmine = str_replace('const VERSION = "1.2dev', 'const VERSION = "1.2dev-' . $version, file_get_contents($file = "src/pocketmine/PocketMine.php"));
 file_put_contents($file, $pocketmine);
 $server = proc_open(PHP_BINARY . " src/pocketmine/PocketMine.php --no-wizard --disable-readline", [
 	0 => ["pipe", "r"],
@@ -20,6 +20,6 @@ while(!feof($pipes[1])){
 fclose($pipes[0]);
 fclose($pipes[1]);
 fclose($pipes[2]);
-rename("/opt/data-2T/jenkins/jobs/Genisys-master/workspace/plugins/Genisys/Genisys_1.1dev-$version.phar","/opt/data-2T/jenkins/jobs/Genisys-master/workspace/artifact/Genisys_1.1dev-$version.phar");
-if(file_exists("/opt/data-2T/jenkins/jobs/Genisys-master/workspace/artifact/Genisys_1.1dev-$version.phar")) exit (0);
+rename("/opt/data-2T/jenkins/jobs/Genisys-master/workspace/plugins/Genisys/Genisys_1.2dev-$version.phar","/opt/data-2T/jenkins/jobs/Genisys-master/workspace/artifact/Genisys_1.2dev-$version.phar");
+if(file_exists("/opt/data-2T/jenkins/jobs/Genisys-master/workspace/artifact/Genisys_1.2dev-$version.phar")) exit (0);
 exit (1);
