@@ -41,7 +41,7 @@ class AddEntityPacket extends DataPacket{
 	public $speedZ;
 	public $yaw;
 	public $pitch;
-	public $metadata;
+	public $metadata = [];
 	public $links = [];
 
 	public function decode(){
