@@ -144,6 +144,7 @@ use pocketmine\network\protocol\SetSpawnPositionPacket;
 use pocketmine\network\protocol\SetTimePacket;
 use pocketmine\network\protocol\StartGamePacket;
 use pocketmine\network\protocol\SetPlayerGameTypePacket;
+use pocketmine\network\protocol\SetEntityDataPacket;
 use pocketmine\network\protocol\TakeItemEntityPacket;
 use pocketmine\network\protocol\TextPacket;
 use pocketmine\network\protocol\UpdateAttributesPacket;
@@ -2452,6 +2453,15 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$pk->slots = array_merge(Item::getCreativeItems(), $this->personalCreativeItems);
 			$this->dataPacket($pk);
 		}
+		
+		$pk = new SetEntityDataPacket();
+		$pk->eid = 0;
+		$pk->metadata = [
+			self::DATA_LEAD_HOLDER => [self::DATA_TYPE_LONG, -1],
+			self::DATA_LEAD => [self::DATA_TYPE_BYTE, 0]
+		];
+		$this->dataPacket($pk);
+		
 		$this->forceMovement = $this->teleportPosition = $this->getPosition();
 	}
 
