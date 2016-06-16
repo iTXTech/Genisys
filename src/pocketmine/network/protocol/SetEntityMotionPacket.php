@@ -43,7 +43,6 @@ class SetEntityMotionPacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putInt(count($this->entities));
 		foreach($this->entities as $d){
 			$this->putLong($d[0]); //eid
 			$this->putFloat($d[1]); //motX
