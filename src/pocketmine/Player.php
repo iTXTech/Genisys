@@ -144,6 +144,7 @@ use pocketmine\network\protocol\SetSpawnPositionPacket;
 use pocketmine\network\protocol\SetTimePacket;
 use pocketmine\network\protocol\StartGamePacket;
 use pocketmine\network\protocol\SetPlayerGameTypePacket;
+use pocketmine\network\protocol\SetEntityDataPacket;
 use pocketmine\network\protocol\TakeItemEntityPacket;
 use pocketmine\network\protocol\TextPacket;
 use pocketmine\network\protocol\UpdateAttributesPacket;
@@ -2452,6 +2453,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$pk->slots = array_merge(Item::getCreativeItems(), $this->personalCreativeItems);
 			$this->dataPacket($pk);
 		}
+		
 		$this->forceMovement = $this->teleportPosition = $this->getPosition();
 	}
 
@@ -2565,7 +2567,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->uuid = UUID::fromString($packet->clientUUID);
 				$this->rawUUID = $this->uuid->toBinary();
 
-				$this->additionalChar = $packet->additionalChar;//need fixed
+				$this->additionalChar = $packet->additionalChar;
 				$valid = true;
 				$len = strlen($packet->username);
 				if($len > 16 or $len < 3){
@@ -4600,10 +4602,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return $this->isConnected();
 	}
 	
-	public function getAdditionalChar() {
+	public function getAdditionalChar(){
 		return $this->additionalChar;
 	}
-
 
 	/**
 	 * @param     $chunkX

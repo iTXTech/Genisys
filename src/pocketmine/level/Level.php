@@ -811,17 +811,16 @@ class Level implements ChunkManager, Metadatable{
 
 		if(count($this->changedBlocks) > 0){
 			if(count($this->players) > 0){
-				foreach($this->changedBlocks as $index => $blocks){
-					unset($this->chunkCache[$index]);
-					Level::getXZ($index, $chunkX, $chunkZ);
-					if(count($blocks) > 512){
-						$chunk = $this->getChunk($chunkX, $chunkZ);
-						foreach($this->getChunkPlayers($chunkX, $chunkZ) as $p){
-							$p->onChunkChanged($chunk);
-						}
-					}else{
-						$this->sendBlocks($this->getChunkPlayers($chunkX, $chunkZ), $blocks, UpdateBlockPacket::FLAG_ALL);
-					}
+				foreach($this->changedBlocks as $index => $mini){
+					foreach($mini as $blocks){
+						foreach($blocks as $b){
+							foreach ($this->getUsingChunk($b->x >> 4, $b->z >> 4) as $player) {								
+								$pk = new UpdateBlockPacket();
+								$pk->records[] = [$b->x, $b->z, $b->y, $b->getId(), $b->getDamage(), UpdateBlockPacket::FLAG_ALL];
+								$player->dataPacket($pk);
+							}
+ 						}
+ 					}
 				}
 			}else{
 				$this->chunkCache = [];
@@ -911,45 +910,22 @@ class Level implements ChunkManager, Metadatable{
 	 * @param int      $flags
 	 * @param bool     $optimizeRebuilds
 	 */
-	public function sendBlocks(array $target, array $blocks, $flags = UpdateBlockPacket::FLAG_NONE, $optimizeRebuilds = false){
-		$pk = new UpdateBlockPacket();
-
-		if($optimizeRebuilds){
-			$chunks = [];
-			foreach($blocks as $b){
-				if($b === null){
-					continue;
-				}
-
-				$first = false;
-				if(!isset($chunks[$index = Level::chunkHash($b->x >> 4, $b->z >> 4)])){
-					$chunks[$index] = true;
-					$first = true;
-				}
-
-				if($b instanceof Block){
-					$pk->records[] = [$b->x, $b->z, $b->y, $b->getId(), $b->getDamage(), $first ? $flags : UpdateBlockPacket::FLAG_NONE];
-				}else{
-					$fullBlock = $this->getFullBlock($b->x, $b->y, $b->z);
-					$pk->records[] = [$b->x, $b->z, $b->y, $fullBlock >> 4, $fullBlock & 0xf, $first ? $flags : UpdateBlockPacket::FLAG_NONE];
-				}
+	public function sendBlocks(array $target, array $blocks, $flags = UpdateBlockPacket::FLAG_ALL) {
+		foreach ($blocks as $b) {
+			if ($b === null) {
+				continue;
 			}
-		}else{
-			foreach($blocks as $b){
-				if($b === null){
-					continue;
-				}
-				if($b instanceof Block){
+			foreach ($target as $player) {
+				$pk = new UpdateBlockPacket();
+				if ($b instanceof Block) {
 					$pk->records[] = [$b->x, $b->z, $b->y, $b->getId(), $b->getDamage(), $flags];
-				}else{
+				} else {
 					$fullBlock = $this->getFullBlock($b->x, $b->y, $b->z);
 					$pk->records[] = [$b->x, $b->z, $b->y, $fullBlock >> 4, $fullBlock & 0xf, $flags];
 				}
+				$player->dataPacket($pk);
 			}
 		}
-
-
-		Server::broadcastPacket($target, $pk);
 	}
 
 	public function clearCache($full = false){
