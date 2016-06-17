@@ -10,7 +10,7 @@ level:
  #Thời gian ngẫu nhiên điều chỉnh thời tiết
  weather-random-duration-min: 6000
  weather-random-duration-max: 12000
- #Thời gian đánh sấm sét ngẫu nhiên，mặc định là 10s, 0 = disable
+ #Thời gian đánh sấm sét ngẫu nhiên，mặc định là 10s, 0 = huỷ sấm sét
  lightning-time: 200
  #Bật/tắt nếu sấm sét đánh có lửa (true/false)
  lightning-fire: false
@@ -44,7 +44,7 @@ nether:
  level-name: "nether"
  
 server:
- #Tái tạo lại hệ thống điểm kinh nghiệm，0=hủy bỏ chế đọ
+ #Tái tạo lại hệ thống điểm kinh nghiệm，0=hủy bỏ chế độ
  experience-cache: 65535
  #Bật/tắt nếu muốn thêm Iron Golem vào server (true/false)
  allow-iron-golem: false
@@ -103,7 +103,7 @@ synapse:
  description: "A Synapse client"
 
 dserver:
- #The count of all multi-server unified
+ #Tất cả các server gộp vào. Bật/tắt để hoạt động (true/false)
  enable: false
  #Query update automatically
  query-auto-update: false
@@ -131,7 +131,7 @@ dserver:
 ai:
  #Bật/tắt AI (true/false) (bên dưới là kích hoạt các AI nếu muốn cho vào server, đánh true/false)
  enable: false
- #Zombie'AI，0=hủy bỏ，1=AI 1.0ver，2=AI mới(Siêu nhân)
+ #Zombie'AI，0=hủy bỏ，1=AI 2=AI mới(Siêu nhân)
  zombie: 1
  #AI Zombie Lợn
  pigzombie: true
