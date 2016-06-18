@@ -772,8 +772,6 @@ class Item{
 			self::addCreativeItem(Item::get(Item::JUNGLE_WOODEN_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::ACACIA_WOODEN_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::DARK_OAK_WOODEN_STAIRS, 0));
-
-			self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::BRICK_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::SANDSTONE_STAIRS, 0));
 			self::addCreativeItem(Item::get(Item::RED_SANDSTONE_STAIRS, 0));
@@ -920,6 +918,7 @@ class Item{
 			self::addCreativeItem(Item::get(Item::FLOWER_POT, 0));
 			self::addCreativeItem(Item::get(Item::MONSTER_SPAWNER, 0));
 			self::addCreativeItem(Item::get(Item::ENCHANTING_TABLE, 0));
+			self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
 			self::addCreativeItem(Item::get(Item::WOOL, 0));
 			self::addCreativeItem(Item::get(Item::WOOL, 8));
 			self::addCreativeItem(Item::get(Item::WOOL, 7));
