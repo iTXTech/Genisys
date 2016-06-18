@@ -1499,8 +1499,12 @@ class Server{
 	 * @param string $name
 	 */
 	public function removeOp($name){
-		$this->operators->remove(strtolower($name));
-
+		foreach($this->operators->getAll() as $opName => $dummyValue){
+			if(strtolower($name) === strtolower($opName)){
+				$this->operators->remove($opName);
+			}
+		}
+		
 		if(($player = $this->getPlayerExact($name)) !== null){
 			$player->recalculatePermissions();
 		}
