@@ -3887,18 +3887,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	/**
-	 * Note for plugin developers: Do NOT use this function anymore, it's deprecated
-	 * and only for legacy reasons there is a redirect to sendPopup()
-	 *
-	 * @deprecated
-	 *
 	 * @param $message
 	 * @return bool
 	 */
 	public function sendTip($message){
-		if($this->protocol >= ProtocolInfo::CURRENT_PROTOCOL){
-			return $this->sendPopup($message);//fix for 0.14.2 +
-		}
 		$ev = new PlayerTextPreSendEvent($this, $message, PlayerTextPreSendEvent::TIP);
 		$this->server->getPluginManager()->callEvent($ev);
 		if(!$ev->isCancelled()){
