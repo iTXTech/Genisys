@@ -25,7 +25,7 @@ namespace pocketmine\network\protocol;
 
 
 class RemovePlayerPacket extends DataPacket{
-	const NETWORK_ID = Info::REMOVE_PLAYER_PACKET;
+	const NETWORK_ID = Info::REMOVED_PLAYER_PACKET;
 
 	public $eid;
 	public $clientId;
