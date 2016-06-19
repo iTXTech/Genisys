@@ -35,7 +35,7 @@ class LoginPacket extends DataPacket{
 	public $identityPublickey;
 	public $serverAddress;
 
-	public $skinID = null;
+	public $skinId = null;
 	public $skin = null;
 
 	public function decode(){
@@ -52,33 +52,32 @@ class LoginPacket extends DataPacket{
 		$this->setBuffer($str,0);
 		
 		$chainData = json_decode($this->get($this->getLInt()));
-		foreach($chainData->{"chain"} as $chain)
-			{
-				$webtoken = $this->decodeToken($chain);
-				if(isset($webtoken["extraData"])){
-					if(isset($webtoken["extraData"]["displayName"])){
-						$this->username = $webtoken["extraData"]["displayName"];
-					}
-					if(isset($webtoken["extraData"]["identity"])){
-						$this->clientUUID = $webtoken["extraData"]["identity"];
-					}
-					if(isset($webtoken["identityPublicKey"])){
-						$this->identityPublicKey = $webtoken["identityPublicKey"];
-					}
+		foreach($chainData->{"chain"} as $chain){
+			$webtoken = $this->decodeToken($chain);
+			if(isset($webtoken["extraData"])){
+				if(isset($webtoken["extraData"]["displayName"])){
+					$this->username = $webtoken["extraData"]["displayName"];
+				}
+				if(isset($webtoken["extraData"]["identity"])){
+					$this->clientUUID = $webtoken["extraData"]["identity"];
+				}
+				if(isset($webtoken["identityPublicKey"])){
+					$this->identityPublicKey = $webtoken["identityPublicKey"];
 				}
 			}
+		}
 		$skinToken = $this->decodeToken($this->get($this->getLInt()));
 		if(isset($skinToken["ClientRandomId"])){
-		$this->clientId = $skinToken["ClientRandomId"];
+			$this->clientId = $skinToken["ClientRandomId"];
 		}
 		if(isset($skinToken["ServerAddress"])){
-		$this->serverAddress = $skinToken["ServerAddress"];
+			$this->serverAddress = $skinToken["ServerAddress"];
 		}
 		if(isset($skinToken["SkinData"])){
-		$this->skin = base64_decode($skinToken["SkinData"]);
+			$this->skin = base64_decode($skinToken["SkinData"]);
 		}
 		if(isset($skinToken["SkinId"])){
-		$this->skinId = $skinToken["SkinId"];
+			$this->skinId = $skinToken["SkinId"];
 		}
 	}
 
@@ -87,10 +86,10 @@ class LoginPacket extends DataPacket{
 	}
 	
 	public function decodeToken($token){
- 	$tokens = explode(".", $token);
-	list($headB64, $payloadB64, $sigB64) = $tokens;
+		$tokens = explode(".", $token);
+		list($headB64, $payloadB64, $sigB64) = $tokens;
 	
-	return json_decode(base64_decode($payloadB64), true);
+		return json_decode(base64_decode($payloadB64), true);
 	}
 
 }
