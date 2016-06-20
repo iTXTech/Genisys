@@ -246,19 +246,11 @@ class SimpleCommandMap implements CommandMap{
 					break;
 				case "@p":
 					if($sender instanceof Player){
-						$distance = 5;
-						$nearestPlayer = $sender;
-						foreach($sender->getLevel()->getPlayers() as $p){
-							if($p != $sender and (($dis = $p->distance($sender)) < $distance)){
-								$distance = $dis;
-								$nearestPlayer = $p;
-							}
-						}
-						if($distance != 5){
-							$argsTemp[$offset] = $nearestPlayer->getName();
-							$this->dispatchAdvanced($sender, $command, $label, $argsTemp, $offset + 1);
-						}else $sender->sendMessage(TextFormat::RED . "No player is near you!");
-					}else $sender->sendMessage(TextFormat::RED . "You must be a player!"); //TODO: add language
+						$argsTemp[$offset] = $sender->getName();
+						$this->dispatchAdvanced($sender, $command, $label, $argsTemp, $offset + 1);
+					}else{
+						$sender->sendMessage(TextFormat::RED . "You must be a player!"); //TODO: add language
+					}
 					break;
 				default:
 					$this->dispatchAdvanced($sender, $command, $label, $argsTemp, $offset + 1);
