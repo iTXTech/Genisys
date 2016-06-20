@@ -249,7 +249,7 @@ class SimpleCommandMap implements CommandMap{
 						$distance = 5;
 						$nearestPlayer = $sender;
 						foreach($sender->getLevel()->getPlayers() as $p){
-							if($p != $sender and (($dis = $p->distance($sender)) < $distance)){
+							if((($dis = $p->distance($sender)) < $distance)){
 								$distance = $dis;
 								$nearestPlayer = $p;
 							}
