@@ -132,7 +132,7 @@ class Zombie extends Monster{
 			 * Instead, get remainder of current time divided by 24,000
 			 * This tells us the time of day, which is what we really need
 			 */
-			$timeOfDay = abs($level->getTime() % 24000);
+			$timeOfDay = abs($this->getLevel()->getTime() % 24000);
 			if(0 < $timeOfDay and $timeOfDay < 13000) $this->setOnFire(2); //僵尸起火
 			
 			$p = $this->getNearestPlayer();//找到最近的可以被仇恨的玩家
