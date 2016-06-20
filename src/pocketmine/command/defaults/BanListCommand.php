@@ -39,39 +39,39 @@ class BanListCommand extends VanillaCommand{
 
 	public function execute(CommandSender $sender, $currentAlias, array $args){
 		if(!$this->testPermission($sender)){
-			return \true;
+			return true;
 		}
-		$list = $sender->getServer()->getNameBans();
-		if(isset($args[0])){
-			$args[0] = \strtolower($args[0]);
-			if($args[0] === "ips"){
-				$list = $sender->getServer()->getIPBans();
-			}elseif($args[0] === "players"){
+		
+		$args[0] = (isset($args[0]) ? strtolower($args[0]): "");
+		$title = "";
+		
+		switch($args[0]){
+			case "ips":
+				$list = $sender->getServer()->getIPBans();	
+				$title = "commands.banlist.ips";
+				break;
+			case "cids":
+				$list = $list = $sender->getServer()->getCIDBans(); 
+				$title = "commands.banlist.cids";
+				break;
+			case "players":
 				$list = $sender->getServer()->getNameBans();
-			}elseif($args[0] === "cids") {
-				$list = $sender->getServer()->getCIDBans();
-			}else{
+				$title = "commands.banlist.players";
+				break;
+			default:
 				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
-
-				return \false;
-			}
+				return false;			
 		}
-
+		
 		$message = "";
 		$list = $list->getEntries();
 		foreach($list as $entry){
 			$message .= $entry->getName() . ", ";
 		}
 		
-		if(!isset($args[0])) return \false;
-		if($args[0] === "ips"){
-			$sender->sendMessage(Server::getInstance()->getLanguage()->translateString("commands.banlist.ips", [\count($list)]));
-		}elseif($args[0] === "players"){
-			$sender->sendMessage(Server::getInstance()->getLanguage()->translateString("commands.banlist.players", [\count($list)]));
-		}else $sender->sendMessage("共有 ".\count($list)."被ban");
-
+		$sender->sendMessage(Server::getInstance()->getLanguage()->translateString($title, [count($list)]));
 		$sender->sendMessage(\substr($message, 0, -2));
 
-		return \true;
+		return true;
 	}
 }
