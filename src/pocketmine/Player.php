@@ -1439,7 +1439,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		if($this->isSpectator()){
 			$flags |= 0x100;
 		}
-
+		
+		$flags |= 0x02;  
+  		$flags |= 0x04; 
+  		
 		$pk = new AdventureSettingsPacket();
 		$pk->flags = $flags;
 		$pk->userPermission = 2;
