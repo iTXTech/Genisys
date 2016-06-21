@@ -1782,7 +1782,7 @@ class Level implements ChunkManager, Metadatable{
 					$ev->setCancelled();
 				}
 			}
-			if($player->isAdventure() or $player->isSpectator()){
+			if($player->isSpectator()){
 				$ev->setCancelled();
 			}
 			$this->server->getPluginManager()->callEvent($ev);
