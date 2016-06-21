@@ -103,10 +103,10 @@ Most of the code in this repository was written by the PocketMine team and is li
 * NOTE: Please edit **genisys.yml** to enable the desired features, such as Redstone, MobAI, Nether, etc.
 
 ### To-Do List
-* Improve Potions
 * Improve Redstone
 * Fishing
 * New AI for all creatures
+* Rewrite World Generator (Generate mobs)
 * LevelDB support for Windows
 
 ### Servers
@@ -186,10 +186,10 @@ Port: 19132
 * 注意: 请编辑 **genisys.yml** 来启用红石、生物AI和地狱等功能。
 
 ### 计划表
-* 完善 药水
 * 完善 红石系统
 * 加入 钓鱼
 * 用于所有生物的新 AI
+* 重写世界生成器（生成生物）
 * Windows 的 LevelDB 支持
 
 
