@@ -220,9 +220,9 @@ class Weather{
 		$pk2 = new LevelEventPacket;
 		$pk2->evid = LevelEventPacket::EVENT_STOP_THUNDER;
 		$pk2->data = $this->strength2;
+		$p->dataPacket($pk1);
+		$p->dataPacket($pk2);
 		if($p->weatherData[0] != $this->weatherNow){
-			$p->dataPacket($pk1);
-			$p->dataPacket($pk2);
 			if($this->weatherNow == 1){
 				$pk = new LevelEventPacket;
 				$pk->evid = LevelEventPacket::EVENT_START_RAIN;
@@ -284,4 +284,3 @@ class Weather{
 	}
 
 }
-	
