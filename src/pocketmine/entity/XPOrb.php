@@ -97,6 +97,10 @@ class XPOrb extends Entity{
 				$hasUpdate = true;
 			}
 
+			if($this->isInsideOfSolid()){
+				$this->setPosition($expectedPos);
+			}
+
 			if($minDistance <= 1.3){
 				if($this->getLevel()->getServer()->expEnabled){
 					if($this->getExperience() > 0){
