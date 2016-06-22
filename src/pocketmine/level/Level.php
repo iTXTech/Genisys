@@ -913,7 +913,7 @@ class Level implements ChunkManager, Metadatable{
 	 */
 	public function sendBlocks(array $target, array $blocks, $flags = UpdateBlockPacket::FLAG_NONE, $optimizeRebuilds = false){
 		$batchPacketList = [];
-		$top = 0;
+		$top = -1;
 		if($optimizeRebuilds){
 			$chunks = [];
 			foreach($blocks as $b){
