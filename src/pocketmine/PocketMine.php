@@ -77,7 +77,7 @@ namespace pocketmine {
 	const CODENAME = "Ikaros";
 	const MINECRAFT_VERSION = "v0.15.0 alpha";
 	const MINECRAFT_VERSION_NETWORK = "0.15.0";
-	const GENISYS_API_VERSION = '1.7.3';
+	const GENISYS_API_VERSION = '1.8.0';
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.

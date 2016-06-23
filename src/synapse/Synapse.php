@@ -54,6 +54,15 @@ class Synapse{
 	/** @var SynLibInterface */
 	private $synLibInterface;
 	private $clientData = [];
+	/*
+		$client->getHash() => [
+			"ip" => $client->getIp(),
+			"port" => $client->getPort(),
+			"playerCount" => count($client->getPlayers()),
+			"maxPlayers" => $client->getMaxPlayers(),
+			"description" => $client->getDescription(),
+		]
+	 */
 	private $description;
 
 	public function __construct(Server $server, array $config){
