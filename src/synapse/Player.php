@@ -165,9 +165,6 @@ class Player extends PMPlayer{
 				$this->inventory->setHeldItemSlot($this->inventory->getHotbarSlotIndex(0));
 			}
 
-			$pk = new PlayStatusPacket();
-			$pk->status = PlayStatusPacket::LOGIN_SUCCESS;
-			$this->dataPacket($pk);
 			if($this->spawnPosition === null and isset($this->namedtag->SpawnLevel) and ($level = $this->server->getLevelByName($this->namedtag["SpawnLevel"])) instanceof Level){
 				$this->spawnPosition = new Position($this->namedtag["SpawnX"], $this->namedtag["SpawnY"], $this->namedtag["SpawnZ"], $level);
 			}

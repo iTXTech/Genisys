@@ -64,6 +64,7 @@ class ServerConnection{
 				@time_sleep_until($time + 0.01 - ($time - $start));
 			}
 		}
+		$this->tick();
 		$this->socket->close();
 	}
 
