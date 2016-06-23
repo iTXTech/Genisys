@@ -95,7 +95,9 @@ class FloatingTextParticle extends Particle{
 				Entity::DATA_FLAGS => [Entity::DATA_TYPE_BYTE, 1 << Entity::DATA_FLAG_INVISIBLE],
 				Entity::DATA_NAMETAG => [Entity::DATA_TYPE_STRING, $this->title . ($this->text !== "" ? "\n" . $this->text : "")],
 				Entity::DATA_SHOW_NAMETAG => [Entity::DATA_TYPE_BYTE, 1],
-				Entity::DATA_NO_AI => [Entity::DATA_TYPE_BYTE, 1]
+				Entity::DATA_NO_AI => [Entity::DATA_TYPE_BYTE, 1],
+				Entity::DATA_LEAD_HOLDER => [Entity::DATA_TYPE_LONG, -1],
+				Entity::DATA_LEAD => [Entity::DATA_TYPE_BYTE, 0]
             ];
 
 			$p[] = $pk;
