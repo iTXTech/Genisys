@@ -36,6 +36,7 @@ use pocketmine\network\protocol\ChangeDimensionPacket;
 use pocketmine\network\protocol\ContainerSetContentPacket;
 use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\protocol\PlayStatusPacket;
+use pocketmine\network\protocol\SetPlayerGameTypePacket;
 use pocketmine\Player as PMPlayer;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
@@ -169,16 +170,12 @@ class Player extends PMPlayer{
 				$this->spawnPosition = new Position($this->namedtag["SpawnX"], $this->namedtag["SpawnY"], $this->namedtag["SpawnZ"], $level);
 			}
 			$spawnPosition = $this->getSpawn();
+			$this->teleport($spawnPosition);
 
-			$this->setGamemode($this->getGamemode());
-
-			$pk = new ChangeDimensionPacket();
-			$pk->dimension = $this->level->getDimension();
-			$pk->x = $spawnPosition->x;
-			$pk->y = $spawnPosition->y;
-			$pk->z = $spawnPosition->z;
+			$pk = new SetPlayerGameTypePacket();
+			$pk->gamemode = $this->gamemode & 0x01;
 			$this->dataPacket($pk);
-			$this->shouldSendStatus = true;
+			$this->sendSettings();
 
 			if($this->gamemode === Player::SPECTATOR){
 				$pk = new ContainerSetContentPacket();
@@ -190,28 +187,30 @@ class Player extends PMPlayer{
 				$pk->slots = array_merge(Item::getCreativeItems(), $this->personalCreativeItems);
 				$this->dataPacket($pk);
 			}
+
 			$this->forceMovement = $this->teleportPosition = $this->getPosition();
 		}
 	}
 
 	public function transfer(string $hash){
-		if($hash != Synapse::getInstance()->getHash()){
-			$clients = Synapse::getInstance()->getClientData();
-			if(isset($clients[$hash])){
-				$pk = new TransferPacket();
-				$pk->uuid = $this->uuid;
-				$pk->clientHash = $hash;
-				Synapse::getInstance()->sendDataPacket($pk);
-
-				$ip = $clients[$hash]["ip"];
-				$port = $clients[$hash]["port"];
-
-				$this->close("", "Transferred to $ip:$port");
-				Synapse::getInstance()->removePlayer($this);
-				return true;
+		$clients = Synapse::getInstance()->getClientData();
+		if(isset($clients[$hash])){
+			foreach($this->getLevel()->getEntities() as $entity){
+				if(isset($entity->hasSpawned[$this->getLoaderId()])){
+					$entity->despawnFrom($this);
+				}
 			}
+			$pk = new TransferPacket();
+			$pk->uuid = $this->uuid;
+			$pk->clientHash = $hash;
+			Synapse::getInstance()->sendDataPacket($pk);
+
+			$ip = $clients[$hash]["ip"];
+			$port = $clients[$hash]["port"];
+
+			$this->close("", "Transferred to $ip:$port");
+			Synapse::getInstance()->removePlayer($this);
 		}
-		return false;
 	}
 
 	public function handleDataPacket(DataPacket $packet){
