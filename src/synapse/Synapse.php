@@ -49,6 +49,7 @@ class Synapse{
 	private $interface;
 	private $verified = false;
 	private $lastUpdate;
+	private $lastRecvInfo;
 	/** @var Player[] */
 	private $players = [];
 	/** @var SynLibInterface */
@@ -77,6 +78,7 @@ class Synapse{
 		$this->interface = new SynapseInterface($this, $this->serverIp, $this->port);
 		$this->synLibInterface = new SynLibInterface($this, $this->interface);
 		$this->lastUpdate = microtime(true);
+		$this->lastRecvInfo = microtime(true);
 		$this->connect();
 	}
 
@@ -139,6 +141,9 @@ class Synapse{
 			$pk->upTime = microtime(true) - \pocketmine\START_TIME;
 			$this->sendDataPacket($pk);
 		}
+		if(((($time = microtime(true)) - $this->lastUpdate) >= 30) and $this->interface->isConnected()){//30 seconds timeout
+			$this->interface->reconnect();
+		}
 	}
 
 	public function getServerIp() : string{
@@ -198,6 +203,7 @@ class Synapse{
 					break;
 					case InformationPacket::TYPE_CLIENT_DATA:
 						$this->clientData = json_decode($pk->message, true);
+						$this->lastRecvInfo = microtime();
 						break;
 				}
 

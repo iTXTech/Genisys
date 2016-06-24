@@ -42,6 +42,8 @@ class SynapseInterface{
 	private $client;
 	/** @var DataPacket[] */
 	private $packetPool = [];
+	private $connected = true;
+	private $needReconnect = false;
 	
 	public function __construct(Synapse $server, string $ip, int $port){
 		$this->synapse = $server;
@@ -55,6 +57,10 @@ class SynapseInterface{
 		return $this->synapse;
 	}
 
+	public function reconnect(){
+		$this->client->reconnect();
+	}
+
 	public function shutdown(){
 		$this->client->shutdown();
 	}
@@ -66,10 +72,15 @@ class SynapseInterface{
 		$this->client->pushMainToThreadPacket($pk->buffer);
 	}
 
+	public function isConnected() : bool{
+		return $this->connected;
+	}
+
 	public function process(){
 		while(strlen($buffer = $this->client->readThreadToMainPacket()) > 0){
 			$this->handlePacket($buffer);
 		}
+		$this->connected = $this->client->isConnected();
 		if($this->client->isNeedAuth()){
 			$this->synapse->connect();
 			$this->client->setNeedAuth(false);

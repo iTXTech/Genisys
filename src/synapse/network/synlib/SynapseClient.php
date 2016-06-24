@@ -4,7 +4,7 @@ namespace synapse\network\synlib;
 use pocketmine\Thread;
 
 class SynapseClient extends Thread{
-	const VERSION = "0.1.0";
+	const VERSION = "0.1.1";
 
 	/** @var \ThreadedLogger */
 	private $logger;
@@ -17,6 +17,8 @@ class SynapseClient extends Thread{
 	private $externalQueue, $internalQueue;
 	private $mainPath;
 	private $needAuth = false;
+	private $connected = true;
+	public $needReconnect = false;
 
 	public function __construct(\ThreadedLogger $logger, \ClassLoader $loader, $port, $interface = "127.0.0.1"){
 		$this->logger = $logger;
@@ -41,12 +43,24 @@ class SynapseClient extends Thread{
 		$this->start();
 	}
 
+	public function reconnect(){
+		$this->needReconnect = true;
+	}
+
 	public function isNeedAuth() : bool{
 		return $this->needAuth;
 	}
 
 	public function setNeedAuth(bool $need){
 		$this->needAuth = $need;
+	}
+
+	public function isConnected() : bool{
+		return $this->connected;
+	}
+
+	public function setConnected(bool $con){
+		$this->connected = $con;
 	}
 
 	public function quit(){

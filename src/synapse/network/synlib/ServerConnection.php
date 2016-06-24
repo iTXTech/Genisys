@@ -91,11 +91,16 @@ class ServerConnection{
 	}
 
 	public function update(){
+		if($this->server->needReconnect and $this->connected){
+			$this->connected = false;
+			$this->server->needReconnect = false;
+		}
 		if($this->connected){
 			$err = socket_last_error($this->socket->getSocket());
 			if($err == 10057 or $err == 10054){
 				$this->server->getLogger()->error("Synapse connection has disconnected unexpectedly");
 				$this->connected = false;
+				$this->server->setConnected(false);
 			}else{
 				$this->receiveBuffer .= @socket_read($this->socket->getSocket(), 2048, PHP_BINARY_READ);
 				if($this->sendBuffer != ""){
@@ -111,6 +116,7 @@ class ServerConnection{
 					@socket_getpeername($this->socket->getSocket(), $address, $port);
 					$this->ip = $address;
 					$this->port = $port;
+					$this->server->setConnected(true);
 					$this->server->setNeedAuth(true);
 				}
 				$this->lastCheck = $time;
