@@ -3110,7 +3110,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}
 
 						$this->craftingType = 0;
-
+						
+						if($this->server->netherEnabled){
+							if($this->level == $this->server->netherLevel){
+								$this->teleport($pos = $this->server->getDefaultLevel()->getSafeSpawn());
+							}
+						}
+						
 						$this->server->getPluginManager()->callEvent($ev = new PlayerRespawnEvent($this, $this->getSpawn()));
 
 						$this->teleport($ev->getRespawnPosition());
@@ -4231,13 +4237,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		$pos = $this->getSpawn();
-
-		if($this->server->netherEnabled){
-			if($this->level == $this->server->netherLevel){
-				$this->teleport($pos = $this->server->getDefaultLevel()->getSafeSpawn());
-			}
-		}
-
+		
 		$this->setHealth(0);
 
 		$pk = new RespawnPacket();
