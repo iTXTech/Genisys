@@ -171,7 +171,6 @@ class Player extends PMPlayer{
 			$spawnPosition = $this->getSpawn();
 
 			$this->setGamemode($this->getGamemode());
-			$this->sendSettings();
 
 			$pk = new ChangeDimensionPacket();
 			$pk->dimension = $this->level->getDimension();
