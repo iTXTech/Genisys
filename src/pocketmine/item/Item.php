@@ -519,7 +519,7 @@ class Item{
 	const PUFFER_FISH = 462;
 	const COOKED_SALMON = 463;
 
-	const ENCHANTING_GOLDEN_APPLE = 466;
+	const ENCHANTED_GOLDEN_APPLE = 466;
 
 
 	/** @var \SplFixedArray */
@@ -687,6 +687,7 @@ class Item{
 			self::$list[self::REPEATER] = Repeater::class;
 			self::$list[self::CAULDRON] = Cauldron::class;
 			self::$list[self::ROTTEN_FLESH] = RottenFlesh::class;
+			self::$list[self::ENCHANTED_GOLDEN_APPLE] = EnchantedGoldenApple::class;
 
 			for($i = 0; $i < 256; ++$i){
 				if(Block::$list[$i] !== null){
@@ -1068,7 +1069,7 @@ class Item{
 			self::addCreativeItem(Item::get(Item::BEETROOT_SEEDS, 0));
 			self::addCreativeItem(Item::get(Item::APPLE, 0));
 			self::addCreativeItem(Item::get(Item::GOLDEN_APPLE, 0));
-			self::addCreativeItem(Item::get(Item::ENCHANTING_GOLDEN_APPLE, 0));
+			self::addCreativeItem(Item::get(Item::ENCHANTED_GOLDEN_APPLE, 0));
 			self::addCreativeItem(Item::get(Item::RAW_FISH, 0));
 			for($i = 0; $i <= 2; $i++){
 				self::addCreativeItem(Item::get(460 + $i, 0));
