@@ -31,6 +31,10 @@ class ChangeDimensionPacket extends DataPacket{
 
 	public $dimension;
 
+	public $x;
+	public $y;
+	public $z;
+
 	public function decode(){
 
 	}
@@ -38,6 +42,9 @@ class ChangeDimensionPacket extends DataPacket{
 	public function encode(){
 		$this->reset();
 		$this->putByte($this->dimension);
+		$this->putFloat($this->x);
+		$this->putFloat($this->y);
+		$this->putFloat($this->z);
 		$this->putByte(0);
 	}
 

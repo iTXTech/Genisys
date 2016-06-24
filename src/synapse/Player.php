@@ -170,11 +170,16 @@ class Player extends PMPlayer{
 			}
 			$spawnPosition = $this->getSpawn();
 
+			$this->setGamemode($this->getGamemode());
+			$this->sendSettings();
+
 			$pk = new ChangeDimensionPacket();
 			$pk->dimension = $this->level->getDimension();
+			$pk->x = $spawnPosition->x;
+			$pk->y = $spawnPosition->y;
+			$pk->z = $spawnPosition->z;
 			$this->dataPacket($pk);
 			$this->shouldSendStatus = true;
-			$this->teleport($spawnPosition);
 
 			if($this->gamemode === Player::SPECTATOR){
 				$pk = new ContainerSetContentPacket();

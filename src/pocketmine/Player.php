@@ -827,6 +827,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			if($targetLevel->getDimension() != $oldLevel->getDimension()){
 				$pk = new ChangeDimensionPacket();
 				$pk->dimension = $targetLevel->getDimension();
+				$pk->x = $this->x;
+				$pk->y = $this->y;
+				$pk->z = $this->z;
 				$this->dataPacket($pk);
 				$this->shouldSendStatus = true;
 			}
