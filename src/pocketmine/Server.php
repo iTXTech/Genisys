@@ -1690,6 +1690,7 @@ class Server{
 			"isMainServer" => $this->getAdvancedProperty("synapse.is-main-server", true),
 			"password" => $this->getAdvancedProperty("synapse.server-password", "123456"),
 			"description" => $this->getAdvancedProperty("synapse.description", "A Synapse client"),
+			"disable-rak" => $this->getAdvancedProperty("synapse.disable-rak", false),
 		];
 	}
 
@@ -1823,7 +1824,9 @@ class Server{
 
 			$this->loadAdvancedConfig();
 
-			if($this->expWriteAhead > 0) $this->generateExpCache($this->expWriteAhead);
+			if($this->expWriteAhead > 0){
+				$this->generateExpCache($this->expWriteAhead);
+			}
 
 			$this->logger->info("Loading server properties...");
 			$this->properties = new Config($this->dataPath . "server.properties", Config::PROPERTIES, [
@@ -1976,7 +1979,11 @@ class Server{
 
 			$this->queryRegenerateTask = new QueryRegenerateEvent($this, 5);
 
-			$this->network->registerInterface(new RakLibInterface($this));
+			if(!$this->synapseConfig["enabled"] or ($this->synapseConfig["enabled"] and !$this->synapseConfig["disable-rak"])){
+				$this->network->registerInterface(new RakLibInterface($this));
+			}else{
+				$this->logger->notice("RakLib has been disabled by synapse.disable-rak option");
+			}
 
 			$this->pluginManager->loadPlugins($this->pluginPath);
 
