@@ -1093,7 +1093,7 @@ class CraftingManager{
 			"XXX"
 		))->setIngredient("X", Item::get(Item::GOLD_INGOT, 0, 9))->setIngredient("Y", Item::get(Item::APPLE, 0, 1)));
 
-		$this->registerRecipe((new BigShapedRecipe(Item::get(Item::GOLDEN_APPLE, 1, 1),
+		$this->registerRecipe((new BigShapedRecipe(Item::get(Item::ENCHANTED_GOLDEN_APPLE, 1, 1),
 			"XXX",
 			"XYX",
 			"XXX"
