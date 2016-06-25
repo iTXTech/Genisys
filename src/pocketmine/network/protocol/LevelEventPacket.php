@@ -46,7 +46,6 @@ class LevelEventPacket extends DataPacket{
 	const EVENT_SOUND_ZOMBIE_HEAL = 1017;
 	const EVENT_SOUND_ENDERMAN_TELEPORT = 1018;
 
-	const EVENT_SOUND_ANVIL_BREAK = 1020;
 	const EVENT_SOUND_ANVIL_USE = 1021;
 	const EVENT_SOUND_ANVIL_FALL = 1022;
 
