@@ -80,49 +80,49 @@ class Potion extends Item{
 		self::THICK => false,
 		self::AWKWARD => false,
 		
-		self::NIGHT_VISION =>	[Effect::NIGHT_VISION,	(180 * 20), 0],
-		self::NIGHT_VISION_T =>	[Effect::NIGHT_VISION,	(480 * 20), 0],
+		self::NIGHT_VISION => [Effect::NIGHT_VISION, (180 * 20), 0],
+		self::NIGHT_VISION_T =>	[Effect::NIGHT_VISION, (480 * 20), 0],
 		
-		self::INVISIBILITY =>	[Effect::INVISIBILITY,	(180 * 20), 0],
-		self::INVISIBILITY_T =>	[Effect::INVISIBILITY,	(480 * 20), 0],
+		self::INVISIBILITY => [Effect::INVISIBILITY, (180 * 20), 0],
+		self::INVISIBILITY_T => [Effect::INVISIBILITY, (480 * 20), 0],
 		
-		self::LEAPING => 		[Effect::JUMP,			(180 * 20), 0],
-		self::LEAPING_T =>		[Effect::JUMP, 			(480 * 20), 0],
-		self::LEAPING_TWO =>	[Effect::JUMP,			( 90 * 20), 1],
+		self::LEAPING => [Effect::JUMP, (180 * 20), 0],
+		self::LEAPING_T => [Effect::JUMP, (480 * 20), 0],
+		self::LEAPING_TWO => [Effect::JUMP, (90 * 20), 1],
 		
 		self::FIRE_RESISTANCE => [Effect::FIRE_RESISTANCE, (180 * 20), 0],
 		self::FIRE_RESISTANCE_T => [Effect::FIRE_RESISTANCE, (480 * 20), 0],
 		
-		self::SWIFTNESS =>		 [Effect::SPEED, (180 * 20), 0],
-		self::SWIFTNESS_T =>	 [Effect::SPEED, (480 * 20), 0],
-		self::SWIFTNESS_TWO =>	 [Effect::SPEED, ( 90 * 20), 1],
+		self::SWIFTNESS => [Effect::SPEED, (180 * 20), 0],
+		self::SWIFTNESS_T => [Effect::SPEED, (480 * 20), 0],
+		self::SWIFTNESS_TWO => [Effect::SPEED, (90 * 20), 1],
 		
-		self::SLOWNESS => 	[Effect::SLOWNESS, ( 90 * 20), 0],
+		self::SLOWNESS => [Effect::SLOWNESS, (90 * 20), 0],
 		self::SLOWNESS_T => [Effect::SLOWNESS, (240 * 20), 0],
 		
 		self::WATER_BREATHING => [Effect::WATER_BREATHING, (180 * 20), 0],
 		self::WATER_BREATHING_T => [Effect::WATER_BREATHING, (480 * 20), 0],
 		
-		self::HEALING => 	 [Effect::HEALING, (1), 0],
+		self::HEALING => [Effect::HEALING, (1), 0],
 		self::HEALING_TWO => [Effect::HEALING, (1), 1],
 		
-		self::HARMING => 	 [Effect::HARMING, (1), 0],
+		self::HARMING => [Effect::HARMING, (1), 0],
 		self::HARMING_TWO => [Effect::HARMING, (1), 1],
 		
-		self::POISON => 	[Effect::POISON, ( 45 * 20), 0],
-		self::POISON_T => 	[Effect::POISON, (120 * 20), 0],
-		self::POISON_TWO => [Effect::POISON, ( 22 * 20), 1],
+		self::POISON => [Effect::POISON, (45 * 20), 0],
+		self::POISON_T => [Effect::POISON, (120 * 20), 0],
+		self::POISON_TWO => [Effect::POISON, (22 * 20), 1],
 		
-		self::REGENERATION =>		[Effect::REGENERATION, ( 45 * 20), 0],
-		self::REGENERATION_T =>		[Effect::REGENERATION, (120 * 20), 0],
-		self::REGENERATION_TWO => 	[Effect::REGENERATION, ( 22 * 20), 1],
+		self::REGENERATION => [Effect::REGENERATION, (45 * 20), 0],
+		self::REGENERATION_T => [Effect::REGENERATION, (120 * 20), 0],
+		self::REGENERATION_TWO => [Effect::REGENERATION, (22 * 20), 1],
 		
-		self::STRENGTH => 		[Effect::STRENGTH, (180 * 20), 0],
-		self::STRENGTH_T => 	[Effect::STRENGTH, (480 * 20), 0],
-		self::STRENGTH_TWO => 	[Effect::STRENGTH, ( 90 * 20), 1],
+		self::STRENGTH => [Effect::STRENGTH, (180 * 20), 0],
+		self::STRENGTH_T => [Effect::STRENGTH, (480 * 20), 0],
+		self::STRENGTH_TWO => [Effect::STRENGTH, (90 * 20), 1],
 		
-		self::WEAKNESS => 		[Effect::WEAKNESS, ( 90 * 20), 0],
-		self::WEAKNESS_T => 	[Effect::WEAKNESS, (240 * 20), 0]
+		self::WEAKNESS => [Effect::WEAKNESS, (90 * 20), 0],
+		self::WEAKNESS_T => [Effect::WEAKNESS, (240 * 20), 0]
 	];
 	
 	public function __construct($meta = 0, $count = 1){
