@@ -130,10 +130,8 @@ use pocketmine\utils\Config;
 use pocketmine\utils\LevelException;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\ServerException;
-use pocketmine\utils\ServerKiller;
 use pocketmine\utils\Terminal;
 use pocketmine\utils\TextFormat;
-//use pocketmine\utils\TextWrapper;
 use pocketmine\utils\Utils;
 use pocketmine\utils\UUID;
 use pocketmine\utils\VersionString;
@@ -342,7 +340,6 @@ class Server{
 	public $netherLevel = null;
 	public $weatherRandomDurationMin = 6000;
 	public $weatherRandomDurationMax = 12000;
-	public $lookup = [];
 	public $hungerHealth = 10;
 	public $lightningTime = 200;
 	public $lightningFire = false;
@@ -2096,56 +2093,6 @@ class Server{
 	public function getSynapse(){
 		return $this->synapse;
 	}
-
-	//@Deprecated
-	public function transferPlayer(Player $player, $address, $port = 19132){
-		$this->logger->error("Use synapse instead");
-	}
-	/*$ev = new PlayerTransferEvent($player, $address, $port);
-	$this->getPluginManager()->callEvent($ev);
-	if ($ev->isCancelled()) {
-		return false;
-	}
-
-	$ip = $this->lookupAddress($ev->getAddress());
-
-	if ($ip === null) {
-		return false;
-	}
-
-	$packet = new StrangePacket();
-	$packet->address = $ip;
-	$packet->port = $ev->getPort();
-	$player->dataPacket($packet);
-	$player->setTransferred($address . ":" . $port);
-
-	return true;
-}
-
-public function cleanLookupCache() {
-	$this->lookup = [];
-}
-
-private function lookupAddress($address) {
-	//IP address
-	if (preg_match("/^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$/", $address) > 0) {
-		return $address;
-	}
-
-	$address = strtolower($address);
-
-	if (isset($this->lookup[$address])) {
-		return $this->lookup[$address];
-	}
-
-	$host = gethostbyname($address);
-	if ($host === $address) {
-		return null;
-	}
-
-	$this->lookup[$address] = $host;
-	return $host;
-}*/
 
 	/**
 	 * @param string        $message
