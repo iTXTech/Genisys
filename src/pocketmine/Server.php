@@ -165,6 +165,7 @@ use pocketmine\entity\Boat;
 use pocketmine\entity\Minecart;
 use pocketmine\entity\ThrownPotion;
 use pocketmine\entity\Painting;
+use pocketmine\entity\Husk;
 use pocketmine\scheduler\DServerTask;
 use pocketmine\scheduler\CallbackTask;
 use synapse\Synapse;
@@ -3064,6 +3065,7 @@ class Server{
 		Entity::registerEntity(MinecartChest::class);
 		Entity::registerEntity(MinecartHopper::class);
 		Entity::registerEntity(MinecartTNT::class);
+		Entity::registerEntity(Husk::class);
 
 		Entity::registerEntity(Human::class, true);
 	}

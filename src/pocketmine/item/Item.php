@@ -999,6 +999,7 @@ class Item{
 			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 35));
 			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 32));
 			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 36));
+			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 47));
 			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 17));
 			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 40));
 			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 42));
