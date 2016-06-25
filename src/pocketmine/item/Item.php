@@ -496,6 +496,10 @@ class Item{
 	const RABBIT_STEW = 413;
 	const RABBIT_FOOT = 414;
 	const RABBIT_HIDE = 415;
+	
+	const RAW_MUTTON = 423;
+	const COOKED_MUTTON = 424;
+	
 	const SPRUCE_DOOR = 427;
 	const BIRCH_DOOR = 428;
 	const JUNGLE_DOOR = 429;
@@ -674,6 +678,7 @@ class Item{
 			self::$list[self::BEETROOT] = Beetroot::class;
 			self::$list[self::FLOWER_POT] = FlowerPot::class;
 			self::$list[self::SKULL] = Skull::class;
+			self::$list[self::RAW_RABBIT] = RawRabbit::class;
 			self::$list[self::COOKED_RABBIT] = CookedRabbit::class;
 			self::$list[self::GOLDEN_CARROT] = GoldenCarrot::class;
 			self::$list[self::NETHER_WART] = NetherWart::class;
@@ -688,6 +693,8 @@ class Item{
 			self::$list[self::CAULDRON] = Cauldron::class;
 			self::$list[self::ROTTEN_FLESH] = RottenFlesh::class;
 			self::$list[self::ENCHANTED_GOLDEN_APPLE] = EnchantedGoldenApple::class;
+			self::$list[self::RAW_MUTTON] = RawMutton::class;
+			self::$list[self::COOKED_MUTTON] = CookedMutton::class;
 
 			for($i = 0; $i < 256; ++$i){
 				if(Block::$list[$i] !== null){
@@ -1083,6 +1090,8 @@ class Item{
 			self::addCreativeItem(Item::get(Item::COOKED_PORKCHOP, 0));
 			self::addCreativeItem(Item::get(Item::RAW_CHICKEN, 0));
 			self::addCreativeItem(Item::get(Item::COOKED_CHICKEN, 0));
+			self::addCreativeItem(Item::get(Item::RAW_MUTTON, 0));
+			self::addCreativeItem(Item::get(Item::COOKED_MUTTON, 0));
 			self::addCreativeItem(Item::get(Item::RAW_BEEF, 0));
 			self::addCreativeItem(Item::get(Item::STEAK, 0));
 			self::addCreativeItem(Item::get(Item::MELON, 0));

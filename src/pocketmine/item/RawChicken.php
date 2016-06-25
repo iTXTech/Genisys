@@ -35,13 +35,14 @@ class RawChicken extends Food{
 	public function getSaturationRestore() : float{
 		return 1.2;
 	}
-
+	
 	public function getAdditionalEffects() : array{
-		if(mt_rand(0, 9) < 3){
-			return [Effect::getEffect(Effect::HUNGER)->setDuration(600)];
-		} else {
-                        return [];
-                }
+		$chance = mt_rand(0, 100);
+		if($chance >= 70){
+			return [Effect::getEffect(Effect::HUNGER)->setDuration(30 * 20)];
+		}else{
+			return [];
+		}
 	}
 }
 

@@ -2008,199 +2008,20 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	public $eatCoolDown = 0;
 
-	public function eatFoodInHand(){
+	public function consumeHeldItem(){
+		//TODO: Move this into entity class so that any mob can eat/drink
 		if($this->eatCoolDown + 2000 >= time() || !$this->spawned){
 			return;
 		}
-
-		$items = [ //TODO: move this to item classes
-			Item::APPLE => 4,
-			Item::MUSHROOM_STEW => 6,
-			Item::RABBIT_STEW => 10,
-			Item::BEETROOT_SOUP => 5,
-			Item::BREAD => 5,
-			Item::RAW_PORKCHOP => 2,
-			Item::COOKED_PORKCHOP => 8,
-			Item::RAW_BEEF => 3,
-			Item::STEAK => 8,
-			Item::COOKED_CHICKEN => 6,
-			Item::RAW_CHICKEN => 2,
-			Item::MELON_SLICE => 2,
-			Item::GOLDEN_APPLE => 4,
-			Item::PUMPKIN_PIE => 8,
-			Item::CARROT => 3,
-			Item::POTATO => 1,
-			Item::BAKED_POTATO => 5,
-			Item::COOKIE => 2,
-			Item::COOKED_FISH => [
-				0 => 5,
-				1 => 6
-			],
-			Item::RAW_FISH => [
-				0 => 2,
-				1 => 2,
-				2 => 1,
-				3 => 1
-			],
-			Item::POTION => 0,
-			Item::ROTTEN_FLESH => 4,
-			Item::ENCHANTED_GOLDEN_APPLE => 4
-		];
-
-		$slot = $this->inventory->getItemInHand();
-		if(isset($items[$slot->getId()]) and $this->isAlive()){
-			if($this->getFood() <= 20 and isset($items[$slot->getId()])){
-				$this->server->getPluginManager()->callEvent($ev = new PlayerItemConsumeEvent($this, $slot));
+		$item = $this->inventory->getItemInHand();
+		if($item instanceof FoodSource or $item instanceof Potion){
+			if($item->canBeConsumedBy($this)){
+				$this->server->getPluginManager()->callEvent($ev = new PlayerItemConsumeEvent($this, $item));
 				if($ev->isCancelled()){
 					$this->inventory->sendContents($this);
 					return;
 				}
-
-				if($slot instanceof FoodSource){
-					$this->server->getPluginManager()->callEvent($ev = new EntityEatItemEvent($this, $slot));
-					if($ev->isCancelled()){
-						$this->inventory->sendContents($this);
-						return;
-					}
-				}
-
-				$pk = new EntityEventPacket();
-				$pk->eid = $this->getId();
-				$pk->event = EntityEventPacket::USE_ITEM;
-				$this->dataPacket($pk);
-				Server::broadcastPacket($this->getViewers(), $pk);
-
-				$amount = $items[$slot->getId()];
-				if(is_array($amount)){
-					$amount = isset($amount[$slot->getDamage()]) ? $amount[$slot->getDamage()] : 0;
-				}
-				if($this->getFood() + $amount >= 20){
-					$this->setFood(20);
-				}else{
-					$this->setFood($this->getFood() + $amount);
-				}
-
-				--$slot->count;
-				$this->inventory->setItemInHand($slot);
-				if($slot->getId() === Item::MUSHROOM_STEW or $slot->getId() === Item::BEETROOT_SOUP){
-					$this->inventory->addItem(Item::get(Item::BOWL, 0, 1));
-				}elseif($slot->getId() === Item::ROTTEN_FLESH){
-					if(mt_rand(0, 100) < 80){
-						$this->addEffect(Effect::getEffect(Effect::HUNGER)->setAmplifier(0)->setDuration(30 * 20));
-					}
-				}elseif($slot->getId() === Item::RAW_FISH and $slot->getDamage() === 3){ //Pufferfish
-					$this->addEffect(Effect::getEffect(Effect::HUNGER)->setAmplifier(2)->setDuration(15 * 20));
-					$this->addEffect(Effect::getEffect(Effect::NAUSEA)->setAmplifier(1)->setDuration(15 * 20));
-					$this->addEffect(Effect::getEffect(Effect::POISON)->setAmplifier(3)->setDuration(60 * 20));
-				}elseif($slot->getId() === Item::ENCHANTED_GOLDEN_APPLE){
-					$this->setFood($this->getFood() + 4);
-					$this->addEffect(Effect::getEffect(Effect::HEALTH_BOOST)->setAmplifier(0)->setDuration(2 * 60 * 20));
-					$this->addEffect(Effect::getEffect(Effect::REGENERATION)->setAmplifier(4)->setDuration(30 * 20));
-					$this->addEffect(Effect::getEffect(Effect::FIRE_RESISTANCE)->setAmplifier(0)->setDuration(5 * 60 * 20));
-					$this->addEffect(Effect::getEffect(Effect::DAMAGE_RESISTANCE)->setAmplifier(0)->setDuration(5 * 60 * 20));
-					$this->addEffect(Effect::getEffect(Effect::ABSORPTION)->setDuration(2 * 60 * 20));
-				}elseif($slot->getId() === Item::GOLDEN_APPLE){
-					$this->setFood($this->getFood() + 4);
-					$this->addEffect(Effect::getEffect(Effect::HEALTH_BOOST)->setAmplifier(0)->setDuration(2 * 60 * 20));
-					$this->addEffect(Effect::getEffect(Effect::REGENERATION)->setAmplifier(1)->setDuration(5 * 20));
-				}elseif($slot->getId() == Item::POTION){
-					$this->inventory->addItem(Item::get(Item::GLASS_BOTTLE, 0, 1));
-					switch($slot->getDamage()){
-						case Potion::NIGHT_VISION:
-							$this->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setAmplifier(0)->setDuration(3 * 60 * 20));
-							break;
-						case Potion::NIGHT_VISION_T:
-							$this->addEffect(Effect::getEffect(Effect::NIGHT_VISION)->setAmplifier(0)->setDuration(8 * 60 * 20));
-							break;
-						case Potion::INVISIBILITY:
-							$this->addEffect(Effect::getEffect(Effect::INVISIBILITY)->setAmplifier(0)->setDuration(3 * 60 * 20));
-							break;
-						case Potion::INVISIBILITY_T:
-							$this->addEffect(Effect::getEffect(Effect::INVISIBILITY)->setAmplifier(0)->setDuration(8 * 60 * 20));
-							break;
-						case Potion::LEAPING:
-							$this->addEffect(Effect::getEffect(Effect::JUMP)->setAmplifier(0)->setDuration(3 * 60 * 20));
-							break;
-						case Potion::LEAPING_T:
-							$this->addEffect(Effect::getEffect(Effect::JUMP)->setAmplifier(0)->setDuration(8 * 60 * 20));
-							break;
-						case Potion::LEAPING_TWO:
-							$this->addEffect(Effect::getEffect(Effect::JUMP)->setAmplifier(1)->setDuration(1.5 * 60 * 20));
-							break;
-						case Potion::FIRE_RESISTANCE:
-							$this->addEffect(Effect::getEffect(Effect::FIRE_RESISTANCE)->setAmplifier(0)->setDuration(3 * 60 * 20));
-							break;
-						case Potion::FIRE_RESISTANCE_T:
-							$this->addEffect(Effect::getEffect(Effect::FIRE_RESISTANCE)->setAmplifier(0)->setDuration(8 * 60 * 20));
-							break;
-						case Potion::SPEED:
-							$this->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(0)->setDuration(3 * 60 * 20));
-							break;
-						case Potion::SPEED_T:
-							$this->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(0)->setDuration(8 * 60 * 20));
-							break;
-						case Potion::SPEED_TWO:
-							$this->addEffect(Effect::getEffect(Effect::SPEED)->setAmplifier(1)->setDuration(1.5 * 60 * 20));
-							break;
-						case Potion::SLOWNESS:
-							$this->addEffect(Effect::getEffect(Effect::SLOWNESS)->setAmplifier(0)->setDuration(1 * 60 * 20));
-							break;
-						case Potion::SLOWNESS_T:
-							$this->addEffect(Effect::getEffect(Effect::SLOWNESS)->setAmplifier(0)->setDuration(4 * 60 * 20));
-							break;
-						case Potion::WATER_BREATHING:
-							$this->addEffect(Effect::getEffect(Effect::WATER_BREATHING)->setAmplifier(0)->setDuration(3 * 60 * 20));
-							break;
-						case Potion::WATER_BREATHING_T:
-							$this->addEffect(Effect::getEffect(Effect::WATER_BREATHING)->setAmplifier(0)->setDuration(8 * 60 * 20));
-							break;
-						case Potion::POISON:
-							$this->addEffect(Effect::getEffect(Effect::POISON)->setAmplifier(0)->setDuration(45 * 20));
-							break;
-						case Potion::POISON_T:
-							$this->addEffect(Effect::getEffect(Effect::POISON)->setAmplifier(0)->setDuration(2 * 60 * 20));
-							break;
-						case Potion::POISON_TWO:
-							$this->addEffect(Effect::getEffect(Effect::POISON)->setAmplifier(0)->setDuration(22 * 20));
-							break;
-						case Potion::REGENERATION:
-							$this->addEffect(Effect::getEffect(Effect::REGENERATION)->setAmplifier(0)->setDuration(45 * 20));
-							break;
-						case Potion::REGENERATION_T:
-							$this->addEffect(Effect::getEffect(Effect::REGENERATION)->setAmplifier(0)->setDuration(2 * 60 * 20));
-							break;
-						case Potion::REGENERATION_TWO:
-							$this->addEffect(Effect::getEffect(Effect::REGENERATION)->setAmplifier(1)->setDuration(22 * 20));
-							break;
-						case Potion::STRENGTH:
-							$this->addEffect(Effect::getEffect(Effect::STRENGTH)->setAmplifier(0)->setDuration(3 * 60 * 20));
-							break;
-						case Potion::STRENGTH_T:
-							$this->addEffect(Effect::getEffect(Effect::STRENGTH)->setAmplifier(0)->setDuration(8 * 60 * 20));
-							break;
-						case Potion::STRENGTH_TWO:
-							$this->addEffect(Effect::getEffect(Effect::STRENGTH)->setAmplifier(1)->setDuration(1.5 * 60 * 20));
-							break;
-						case Potion::WEAKNESS:
-							$this->addEffect(Effect::getEffect(Effect::WEAKNESS)->setAmplifier(0)->setDuration(1.5 * 60 * 20));
-							break;
-						case Potion::WEAKNESS_T:
-							$this->addEffect(Effect::getEffect(Effect::WEAKNESS)->setAmplifier(0)->setDuration(4 * 60 * 20));
-							break;
-						case Potion::HEALING:
-							$this->addEffect(Effect::getEffect(Effect::HEALING)->setAmplifier(0)->setDuration(1));
-							break;
-						case Potion::HEALING_TWO:
-							$this->addEffect(Effect::getEffect(Effect::HEALING)->setAmplifier(1)->setDuration(1));
-							break;
-						case Potion::HARMING:
-							$this->addEffect(Effect::getEffect(Effect::HARMING)->setAmplifier(0)->setDuration(1));
-							break;
-						case Potion::HARMING_TWO:
-							$this->addEffect(Effect::getEffect(Effect::HARMING)->setAmplifier(1)->setDuration(1));
-							break;
-					}
-				}
+				$item->onConsume($this);
 			}
 		}
 	}
@@ -2976,7 +2797,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 				break;
 			case ProtocolInfo::PLAYER_ACTION_PACKET:
-				//$this->eatFoodInHand();
+				//$this->consumeHeldItem();
 				if($this->spawned === false or $this->blocked === true or (!$this->isAlive() and $packet->action !== PlayerActionPacket::ACTION_RESPAWN and $packet->action !== PlayerActionPacket::ACTION_DIMENSION_CHANGE)){
 					break;
 				}
@@ -3377,7 +3198,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 				switch($packet->event){
 					case 9: //Eating
-						$this->eatFoodInHand();
+						$this->consumeHeldItem();
 						break;
 				}
 				break;

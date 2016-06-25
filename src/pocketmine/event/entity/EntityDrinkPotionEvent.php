@@ -19,29 +19,30 @@
  *
  */
 
-namespace pocketmine\item;
+namespace pocketmine\event\entity;
 
-use pocketmine\entity\Effect;
+use pocketmine\entity\Entity;
+use pocketmine\event\Cancellable;
+use pocketmine\item\Item;
+use pocketmine\item\Potion;
 
-class RottenFlesh extends Food{
-	public function __construct($meta = 0, $count = 1){
-		parent::__construct(self::ROTTEN_FLESH, 0, $count, "Rotten Flesh");
+class EntityDrinkPotionEvent extends EntityEvent implements Cancellable{
+	
+	public static $handlerList = null;
+	
+	/* @var Potion */
+	private $potion;
+	
+	/* @var Effect[] */
+	private $effects;
+	
+	public function __construct(Entity $entity, Potion $potion){
+		$this->entity = $entity;
+		$this->potion = $potion;
+		$this->effects = $potion->getEffects();
 	}
 	
-	public function getFoodRestore() : int{
-		return 4;
-	}
-
-	public function getSaturationRestore() : float{
-		return 0.8;
-	}
-
-	public function getAdditionalEffects() : array{
-		$chance = mt_rand(0, 100);
-		if($chance >= 20){
-			return [Effect::getEffect(Effect::HUNGER)->setDuration(30 * 20)];
-		}else{
-			return [];
-		}
+	public function getEffects(){
+		return $this->effects;
 	}
 }
