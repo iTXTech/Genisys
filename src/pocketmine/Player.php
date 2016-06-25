@@ -2140,7 +2140,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 			}
 		}
-		$this->setNameTag($this->username);
+		$this->setNameTag($this->getDisplayName());
 		
 		$nbt = $this->server->getOfflinePlayerData($this->username);
 		$this->playedBefore = ($nbt["lastPlayed"] - $nbt["firstPlayed"]) > 1;
