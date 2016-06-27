@@ -221,6 +221,7 @@ class CrashDump{
 		$this->addLine("PHP version: " . phpversion());
 		$this->addLine("Zend version: " . zend_version());
 		$this->addLine("OS : " . PHP_OS . ", " . Utils::getOS());
+		$this->addLine("Server uptime: ".$this->server->getUptime());
 	}
 
 	public function addLine($line = ""){
