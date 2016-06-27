@@ -47,7 +47,7 @@ class EntityDamageByEntityEvent extends EntityDamageEvent{
 
 	protected function addAttackerModifiers(Entity $damager){
 		if($damager->hasEffect(Effect::STRENGTH)){
-			$this->setDamage(1 + 0.3 * ($damager->getEffect(Effect::STRENGTH)->getAmplifier() + 1), self::MODIFIER_STRENGTH);
+			$this->setRateDamage(1 + 0.3 * ($damager->getEffect(Effect::STRENGTH)->getAmplifier() + 1), self::MODIFIER_STRENGTH);
 		}
 
 		if($damager->hasEffect(Effect::WEAKNESS)){
@@ -55,7 +55,7 @@ class EntityDamageByEntityEvent extends EntityDamageEvent{
 			if($eff_level < 0){
 				$eff_level = 0;
 			}
-			$this->setDamage($eff_level, self::MODIFIER_WEAKNESS);
+			$this->setRateDamage($eff_level, self::MODIFIER_WEAKNESS);
 		}
 	}
 
