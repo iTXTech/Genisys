@@ -64,7 +64,6 @@ class AddEntityPacket extends DataPacket{
 		$this->putInt($this->modifiers);
 		$meta = Binary::writeMetadata($this->metadata);
 		$this->put($meta);
-		$this->putShort(0);
 		$this->putShort(count($this->links));
 		foreach($this->links as $link){
 			$this->putLong($link[0]);
