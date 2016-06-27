@@ -402,13 +402,13 @@ class Chunk extends BaseFullChunk{
 		$nbt->Entities->setTagType(NBT::TAG_Compound);
 
 
-		$tiles = [];
-		foreach($this->getTiles() as $tile){
-			$tile->saveNBT();
-			$tiles[] = $tile->namedtag;
+		$blockEntities = [];
+		foreach($this->getBlockEntities() as $blockEntity){
+			$blockEntity->saveNBT();
+			$blockEntities[] = $blockEntity->namedtag;
 		}
 
-		$nbt->TileEntities = new ListTag("TileEntities", $tiles);
+		$nbt->TileEntities = new ListTag("TileEntities", $blockEntities);
 		$nbt->TileEntities->setTagType(NBT::TAG_Compound);
 
 		$extraData = new BinaryStream();

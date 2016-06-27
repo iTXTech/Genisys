@@ -46,9 +46,9 @@ class LevelTimings{
 	/** @var TimingsHandler */
 	public $entityTick;
 	/** @var TimingsHandler */
-	public $tileEntityTick;
+	public $blockEntityEntityTick;
 	/** @var TimingsHandler */
-	public $tileEntityPending;
+	public $blockEntityEntityPending;
 	/** @var TimingsHandler */
 	public $tracker;
 	/** @var TimingsHandler */

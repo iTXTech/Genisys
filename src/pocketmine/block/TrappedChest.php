@@ -30,8 +30,8 @@ use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
-use pocketmine\tile\Chest as TileChest;
-use pocketmine\tile\Tile;
+use pocketmine\blockentity\Chest as BlockEntityChest;
+use pocketmine\blockentity\BlockEntity;
 
 class TrappedChest extends RedstoneSource{
 	protected $id = self::TRAPPED_CHEST;
@@ -105,9 +105,9 @@ class TrappedChest extends RedstoneSource{
 			}
 			$c = $this->getSide($side);
 			if($c instanceof Chest and $c->getDamage() === $this->meta){
-				$tile = $this->getLevel()->getTile($c);
-				if($tile instanceof TileChest and !$tile->isPaired()){
-					$chest = $tile;
+				$blockEntity = $this->getLevel()->getBlockEntity($c);
+				if($blockEntity instanceof BlockEntityChest and !$blockEntity->isPaired()){
+					$chest = $blockEntity;
 					break;
 				}
 			}
@@ -116,7 +116,7 @@ class TrappedChest extends RedstoneSource{
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [
 				new ListTag("Items", []),
-				new StringTag("id", Tile::CHEST),
+				new StringTag("id", BlockEntity::CHEST),
 				new IntTag("x", $this->x),
 				new IntTag("y", $this->y),
 				new IntTag("z", $this->z)
@@ -133,19 +133,19 @@ class TrappedChest extends RedstoneSource{
 			}
 		}
 
-		$tile = Tile::createTile("Chest", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+		$blockEntity = BlockEntity::createBlockEntity("Chest", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 
-		if($chest instanceof TileChest and $tile instanceof TileChest){
-			$chest->pairWith($tile);
-			$tile->pairWith($chest);
+		if($chest instanceof BlockEntityChest and $blockEntity instanceof BlockEntityChest){
+			$chest->pairWith($blockEntity);
+			$blockEntity->pairWith($chest);
 		}
 
 		return true;
 	}
 
 	public function onBreak(Item $item){
-		$t = $this->getLevel()->getTile($this);
-		if($t instanceof TileChest){
+		$t = $this->getLevel()->getBlockEntity($this);
+		if($t instanceof BlockEntityChest){
 			$t->unpair();
 		}
 		$this->getLevel()->setBlock($this, new Air(), true, true);
@@ -160,20 +160,20 @@ class TrappedChest extends RedstoneSource{
 				return true;
 			}
 
-			$t = $this->getLevel()->getTile($this);
+			$t = $this->getLevel()->getBlockEntity($this);
 			$chest = null;
-			if($t instanceof TileChest){
+			if($t instanceof BlockEntityChest){
 				$chest = $t;
 			}else{
 				$nbt = new CompoundTag("", [
 						new ListTag("Items", []),
-						new StringTag("id", Tile::CHEST),
+						new StringTag("id", BlockEntity::CHEST),
 						new IntTag("x", $this->x),
 						new IntTag("y", $this->y),
 						new IntTag("z", $this->z)
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
-				$chest = Tile::createTile("Chest", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+				$chest = BlockEntity::createBlockEntity("Chest", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 			}
 
 			if(isset($chest->namedtag->Lock) and $chest->namedtag->Lock instanceof StringTag){

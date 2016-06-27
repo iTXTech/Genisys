@@ -26,11 +26,11 @@ use pocketmine\level\Level;
 use pocketmine\network\protocol\BlockEventPacket;
 use pocketmine\Player;
 
-use pocketmine\tile\Chest;
+use pocketmine\blockentity\Chest;
 
 class ChestInventory extends ContainerInventory{
-	public function __construct(Chest $tile){
-		parent::__construct($tile, InventoryType::get(InventoryType::CHEST));
+	public function __construct(Chest $blockEntity){
+		parent::__construct($blockEntity, InventoryType::get(InventoryType::CHEST));
 	}
 
 	/**

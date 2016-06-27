@@ -22,11 +22,11 @@
 namespace pocketmine\inventory;
 
 use pocketmine\item\Item;
-use pocketmine\tile\BrewingStand;
+use pocketmine\blockentity\BrewingStand;
 
 class BrewingInventory extends ContainerInventory{
-	public function __construct(BrewingStand $tile){
-		parent::__construct($tile, InventoryType::get(InventoryType::BREWING_STAND));
+	public function __construct(BrewingStand $blockEntity){
+		parent::__construct($blockEntity, InventoryType::get(InventoryType::BREWING_STAND));
 	}
 
 	/**

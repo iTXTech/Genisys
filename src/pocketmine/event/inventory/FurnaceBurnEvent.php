@@ -24,7 +24,7 @@ namespace pocketmine\event\inventory;
 use pocketmine\event\block\BlockEvent;
 use pocketmine\event\Cancellable;
 use pocketmine\item\Item;
-use pocketmine\tile\Furnace;
+use pocketmine\blockentity\Furnace;
 
 class FurnaceBurnEvent extends BlockEvent implements Cancellable{
 	public static $handlerList = null;

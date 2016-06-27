@@ -43,17 +43,17 @@ class GarbageCollectorCommand extends VanillaCommand{
 
 		$chunksCollected = 0;
 		$entitiesCollected = 0;
-		$tilesCollected = 0;
+		$blockEntitiesCollected = 0;
 
 		$memory = memory_get_usage();
 
 		foreach($sender->getServer()->getLevels() as $level){
-			$diff = [count($level->getChunks()), count($level->getEntities()), count($level->getTiles())];
+			$diff = [count($level->getChunks()), count($level->getEntities()), count($level->getBlockEntities())];
 			$level->doChunkGarbageCollection();
 			$level->unloadChunks(true);
 			$chunksCollected += $diff[0] - count($level->getChunks());
 			$entitiesCollected += $diff[1] - count($level->getEntities());
-			$tilesCollected += $diff[2] - count($level->getTiles());
+			$blockEntitiesCollected += $diff[2] - count($level->getBlockEntities());
 			$level->clearCache(true);
 		}
 
@@ -61,7 +61,7 @@ class GarbageCollectorCommand extends VanillaCommand{
 		$sender->sendMessage(TextFormat::GREEN . "---- " . TextFormat::WHITE . "%pocketmine.command.gc.title" . TextFormat::GREEN . " ----");
 		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.gc.chunks" . TextFormat::RED . \number_format($chunksCollected));
 		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.gc.entities" . TextFormat::RED . \number_format($entitiesCollected));
-		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.gc.tiles" . TextFormat::RED . \number_format($tilesCollected));
+		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.gc.blockentities" . TextFormat::RED . \number_format($blockEntitiesCollected));
 		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.gc.cycles" . TextFormat::RED . \number_format($cyclesCollected));
 		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.gc.memory" . TextFormat::RED . \number_format(\round((($memory - \memory_get_usage()) / 1024) / 1024, 2))." MB");
 		return true;

@@ -29,8 +29,8 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\Player;
-use pocketmine\tile\Tile;
-use pocketmine\tile\BrewingStand as TileBrewingStand;
+use pocketmine\blockentity\BlockEntity;
+use pocketmine\blockentity\BrewingStand as BlockEntityBrewingStand;
 use pocketmine\math\Vector3;
 
 class BrewingStand extends Transparent{
@@ -46,7 +46,7 @@ class BrewingStand extends Transparent{
 			$this->getLevel()->setBlock($block, $this, true, true);
 			$nbt = new CompoundTag("", [
 				new ListTag("Items", []),
-				new StringTag("id", Tile::BREWING_STAND),
+				new StringTag("id", BlockEntity::BREWING_STAND),
 				new IntTag("x", $this->x),
 				new IntTag("y", $this->y),
 				new IntTag("z", $this->z)
@@ -62,7 +62,7 @@ class BrewingStand extends Transparent{
 				}
 			}
 
-			Tile::createTile(Tile::BREWING_STAND, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+			BlockEntity::createBlockEntity(BlockEntity::BREWING_STAND, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 
 			return true;
 		}
@@ -95,20 +95,20 @@ class BrewingStand extends Transparent{
 			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
-			$t = $this->getLevel()->getTile($this);
+			$t = $this->getLevel()->getBlockEntity($this);
 			//$brewingStand = false;
-			if($t instanceof TileBrewingStand){
+			if($t instanceof BlockEntityBrewingStand){
 				$brewingStand = $t;
 			}else{
 				$nbt = new CompoundTag("", [
 					new ListTag("Items", []),
-					new StringTag("id", Tile::BREWING_STAND),
+					new StringTag("id", BlockEntity::BREWING_STAND),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),
 					new IntTag("z", $this->z)
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
-				$brewingStand = Tile::createTile(Tile::BREWING_STAND, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+				$brewingStand = BlockEntity::createBlockEntity(BlockEntity::BREWING_STAND, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 			}
 			$player->addWindow($brewingStand->getInventory());
 		}

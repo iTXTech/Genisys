@@ -29,7 +29,7 @@ class DaylightDetectorInverted extends DaylightDetector{
 
 	public function onActivate(Item $item, Player $player = null){
 		$this->getLevel()->setBlock($this, new DaylightDetector(), true, true);
-		$this->getTile()->onUpdate();
+		$this->getBlockEntity()->onUpdate();
 		return true;
 	}
 }

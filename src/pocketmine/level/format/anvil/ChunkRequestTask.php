@@ -26,7 +26,7 @@ use pocketmine\nbt\NBT;
 use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
-use pocketmine\tile\Spawnable;
+use pocketmine\blockentity\Spawnable;
 use pocketmine\utils\BinaryStream;
 
 
@@ -38,7 +38,7 @@ class ChunkRequestTask extends AsyncTask{
 	protected $chunkX;
 	protected $chunkZ;
 
-	protected $tiles;
+	protected $blockEntities;
 
 	public function __construct(Level $level, Chunk $chunk){
 		$this->levelId = $level->getId();
@@ -47,16 +47,16 @@ class ChunkRequestTask extends AsyncTask{
 		$this->chunkX = $chunk->getX();
 		$this->chunkZ = $chunk->getZ();
 
-		$tiles = "";
+		$blockEntities = "";
 		$nbt = new NBT(NBT::LITTLE_ENDIAN);
-		foreach($chunk->getTiles() as $tile){
-			if($tile instanceof Spawnable){
-				$nbt->setData($tile->getSpawnCompound());
-				$tiles .= $nbt->write();
+		foreach($chunk->getBlockEntities() as $blockEntity){
+			if($blockEntity instanceof Spawnable){
+				$nbt->setData($blockEntity->getSpawnCompound());
+				$blockEntities .= $nbt->write();
 			}
 		}
 
-		$this->tiles = $tiles;
+		$this->blockEntities = $blockEntities;
 	}
 
 	public function onRun(){
@@ -76,7 +76,7 @@ class ChunkRequestTask extends AsyncTask{
 			pack("C*", ...$chunk->getHeightMapArray()) .
 			pack("N*", ...$chunk->getBiomeColorArray()) .
 			$extraData->getBuffer() .
-			$this->tiles;
+			$this->blockEntities;
 
 		$this->setResult($ordered, false);
 	}

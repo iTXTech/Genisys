@@ -22,7 +22,7 @@
 namespace pocketmine\level\format;
 
 use pocketmine\entity\Entity;
-use pocketmine\tile\Tile;
+use pocketmine\blockentity\BlockEntity;
 
 interface FullChunk{
 
@@ -260,14 +260,14 @@ interface FullChunk{
 	public function removeEntity(Entity $entity);
 
 	/**
-	 * @param Tile $tile
+	 * @param BlockEntity $blockEntity
 	 */
-	public function addTile(Tile $tile);
+	public function addBlockEntity(BlockEntity $blockEntity);
 
 	/**
-	 * @param Tile $tile
+	 * @param BlockEntity $blockEntity
 	 */
-	public function removeTile(Tile $tile);
+	public function removeBlockEntity(BlockEntity $blockEntity);
 
 	/**
 	 * @return \pocketmine\entity\Entity[]
@@ -275,16 +275,16 @@ interface FullChunk{
 	public function getEntities();
 
 	/**
-	 * @return \pocketmine\tile\Tile[]
+	 * @return \pocketmine\blockentity\BlockEntity[]
 	 */
-	public function getTiles();
+	public function getBlockEntities();
 
 	/**
 	 * @param int $x 0-15
 	 * @param int $y 0-127
 	 * @param int $z 0-15
 	 */
-	public function getTile($x, $y, $z);
+	public function getBlockEntity($x, $y, $z);
 
 	/**
 	 * @return bool
