@@ -68,14 +68,16 @@ class Fire extends Flowable{
 	}
 
 	public function onEntityCollide(Entity $entity){
+		$ProtectL = 0;
 		if(!$entity->hasEffect(Effect::FIRE_RESISTANCE)){
 			$ev = new EntityDamageByBlockEvent($this, $entity, EntityDamageEvent::CAUSE_FIRE, 1);
 			if($entity->attack($ev->getFinalDamage(), $ev) === true){
 				$ev->useArmors();
 			}
+			$ProtectL = $ev->getMaxEnchantLevel();
 		}
 
-		$ev = new EntityCombustByBlockEvent($this, $entity, 8);
+		$ev = new EntityCombustByBlockEvent($this, $entity, 8, $ProtectL);
 		if($entity instanceof Arrow){
 			$ev->setCancelled();
 		}
