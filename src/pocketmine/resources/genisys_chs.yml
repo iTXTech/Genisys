@@ -2,7 +2,7 @@
 
 #配置文件版本
 config:
- version: 14
+ version: 16
  
 level:
  #设置是否变换天气
@@ -91,6 +91,19 @@ redstone:
  frequency-pulse: false
  #设置脉冲频率, 默认: 1s
  pulse-frequency: 1
+
+ synapse:
+  #如果你想使用 Synapse API 或连接到一个synapse服务器,请将enabled置为true
+  enabled: false
+  server-ip: 127.0.0.1
+  server-port: 10305
+  #设置该服务器是否为接待大厅服务器或主服务器
+  is-main-server: true
+  server-password: 32bitlongkey
+  #设置该服务器唯一的标识符
+  description: "A Synapse client"
+  #启用Disable RakLib设置玩家仅能通过接待大厅服务器或主服务器加入游戏
+  disable-rak: false
  
 dserver:
  #多服统统一人数
