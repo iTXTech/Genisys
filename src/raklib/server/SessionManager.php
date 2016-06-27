@@ -344,6 +344,10 @@ class SessionManager{
 			$this->block[$address] = $final;
 		}
 	}
+	
+	public function unblockAddress($address){
+		unset($this->block[$address]);
+	}
 
 	/**
 	 * @param string $ip
