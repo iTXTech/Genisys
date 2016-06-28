@@ -288,6 +288,17 @@ class Network {
 		}
 	}
 
+	/**
+         * Unblocks an IP address from the main interface.
+         *
+         * @param string $address
+         */
+        public function unblockAddress($address, $timeout = 300) {
+                foreach ($this->advancedInterfaces as $interface) {
+                        $interface->unblockAddress($address, $timeout);
+                }
+        }
+
 	private function registerPackets() {
 		$this->packetPool = new \SplFixedArray(256);
 

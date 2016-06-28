@@ -141,6 +141,14 @@ abstract class RakLib{
     const PACKET_BLOCK_ADDRESS = 0x09;
 
     /*
+     * RAW payload:
+     * byte (address length)
+     * byte[] (address)
+     */
+
+    const PACKET_UNBLOCK_ADDRESS = 0x0a;
+
+    /*
      * No payload
      *
      * Sends the disconnect message, removes sessions correctly, closes sockets.
