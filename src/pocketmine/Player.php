@@ -1870,7 +1870,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		if($this->spawned){
 			if($this->server->netherEnabled){
-				if(($this->isCreative() or $this->isSurvival() and $this->server->getTick() - $this->portalTime >= 30) and $this->portalTime > 0){
+				if(($this->isCreative() or $this->isSurvival() and $this->server->getTick() - $this->portalTime >= 80) and $this->portalTime > 0){
 					if($this->server->netherLevel instanceof Level){
 						if($this->getLevel() != $this->server->netherLevel){
 							$this->fromPos = $this->getPosition();
