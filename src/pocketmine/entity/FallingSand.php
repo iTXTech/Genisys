@@ -109,7 +109,6 @@ class FallingSand extends Entity{
 			if($this->ticksLived === 1){
 				$block = $this->level->getBlock($pos);
 				if($block->getId() !== $this->blockId){
-					$this->kill();
 					return true;
 				}
 				$this->level->setBlock($pos, Block::get(0), true);
