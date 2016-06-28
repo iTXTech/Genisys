@@ -15,17 +15,17 @@
  * (at your option) any later version.
  *
  * @author iTX Technologies
- * @link https://mcper.cn
+ * @link https://itxtech.org
  *
  */
 
 namespace pocketmine\inventory;
 
-use pocketmine\tile\Dropper;
+use pocketmine\blockentity\Dropper;
 
 class DropperInventory extends ContainerInventory{
-	public function __construct(Dropper $tile){
-		parent::__construct($tile, InventoryType::get(InventoryType::DROPPER));
+	public function __construct(Dropper $blockEntity){
+		parent::__construct($blockEntity, InventoryType::get(InventoryType::DROPPER));
 	}
 
 	/**

@@ -15,7 +15,7 @@
  * (at your option) any later version.
  *
  * @author iTX Technologies
- * @link https://mcper.cn
+ * @link https://itxtech.org
  *
  */
 
@@ -29,8 +29,8 @@ use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
-use pocketmine\tile\Dispenser as TileDispenser;
-use pocketmine\tile\Tile;
+use pocketmine\blockentity\Dispenser as BlockEntityDispenser;
+use pocketmine\blockentity\BlockEntity;
 
 class Dispenser extends Solid{
 
@@ -78,7 +78,7 @@ class Dispenser extends Solid{
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [
 			new ListTag("Items", []),
-			new StringTag("id", Tile::DISPENSER),
+			new StringTag("id", BlockEntity::DISPENSER),
 			new IntTag("x", $this->x),
 			new IntTag("y", $this->y),
 			new IntTag("z", $this->z)
@@ -95,34 +95,34 @@ class Dispenser extends Solid{
 			}
 		}
 
-		Tile::createTile(Tile::DISPENSER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+		BlockEntity::createBlockEntity(BlockEntity::DISPENSER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 
 		return true;
 	}
 
 	public function activate(){
-		$tile = $this->getLevel()->getTile($this);
-		if($tile instanceof TileDispenser){
-			$tile->activate();
+		$blockEntity = $this->getLevel()->getBlockEntity($this);
+		if($blockEntity instanceof BlockEntityDispenser){
+			$blockEntity->activate();
 		}
 	}
 
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
-			$t = $this->getLevel()->getTile($this);
+			$t = $this->getLevel()->getBlockEntity($this);
 			$dispenser = null;
-			if($t instanceof TileDispenser){
+			if($t instanceof BlockEntityDispenser){
 				$dispenser = $t;
 			}else{
 				$nbt = new CompoundTag("", [
 					new ListTag("Items", []),
-					new StringTag("id", Tile::DISPENSER),
+					new StringTag("id", BlockEntity::DISPENSER),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),
 					new IntTag("z", $this->z)
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
-				$dispenser = Tile::createTile(Tile::DISPENSER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+				$dispenser = BlockEntity::createBlockEntity(BlockEntity::DISPENSER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 			}
 
 			if($player->isCreative() and $player->getServer()->limitedCreative){

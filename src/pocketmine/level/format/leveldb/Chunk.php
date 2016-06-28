@@ -36,7 +36,7 @@ class Chunk extends BaseFullChunk{
 	protected $isPopulated = false;
 	protected $isGenerated = false;
 
-	public function __construct($level, $chunkX, $chunkZ, $terrain, array $entityData = null, array $tileData = null){
+	public function __construct($level, $chunkX, $chunkZ, $terrain, array $entityData = null, array $blockEntityData = null){
 		$offset = 0;
 
 		$blocks = substr($terrain, $offset, 32768);
@@ -60,7 +60,7 @@ class Chunk extends BaseFullChunk{
 		}
 		$offset += 1024;
 
-		parent::__construct($level, $chunkX, $chunkZ, $blocks, $data, $skyLight, $blockLight, $biomeColors, $heightMap, $entityData === null ? [] : $entityData, $tileData === null ? [] : $tileData);
+		parent::__construct($level, $chunkX, $chunkZ, $blocks, $data, $skyLight, $blockLight, $biomeColors, $heightMap, $entityData === null ? [] : $entityData, $blockEntityData === null ? [] : $blockEntityData);
 	}
 
 	public function getBlockId($x, $y, $z){
@@ -260,7 +260,7 @@ class Chunk extends BaseFullChunk{
 			$flags = ord(substr($data, -1));
 
 			$entities = null;
-			$tiles = null;
+			$blockEntities = null;
 			$extraData = [];
 
 			if($provider instanceof LevelDB){
@@ -274,17 +274,17 @@ class Chunk extends BaseFullChunk{
 						$entities = [$entities];
 					}
 				}
-				$tileData = $provider->getDatabase()->get(substr($data, 0, 8) . LevelDB::ENTRY_TILES);
-				if($tileData !== false and strlen($tileData) > 0){
-					$nbt->read($tileData, true);
-					$tiles = $nbt->getData();
-					if(!is_array($tiles)){
-						$tiles = [$tiles];
+				$blockEntityData = $provider->getDatabase()->get(substr($data, 0, 8) . LevelDB::ENTRY_TILES);
+				if($blockEntityData !== false and strlen($blockEntityData) > 0){
+					$nbt->read($blockEntityData, true);
+					$blockEntities = $nbt->getData();
+					if(!is_array($blockEntities)){
+						$blockEntities = [$blockEntities];
 					}
 				}
-				$tileData = $provider->getDatabase()->get(substr($data, 0, 8) . LevelDB::ENTRY_EXTRA_DATA);
-				if($tileData !== false and strlen($tileData) > 0){
-					$stream = new BinaryStream($tileData);
+				$blockEntityData = $provider->getDatabase()->get(substr($data, 0, 8) . LevelDB::ENTRY_EXTRA_DATA);
+				if($blockEntityData !== false and strlen($blockEntityData) > 0){
+					$stream = new BinaryStream($blockEntityData);
 					$count = $stream->getInt();
 					for($i = 0; $i < $count; ++$i){
 						$key = $stream->getInt();
@@ -294,7 +294,7 @@ class Chunk extends BaseFullChunk{
 				}
 			}
 
-			$chunk = new Chunk($provider instanceof LevelProvider ? $provider : LevelDB::class, $chunkX, $chunkZ, $chunkData, $entities, $tiles);
+			$chunk = new Chunk($provider instanceof LevelProvider ? $provider : LevelDB::class, $chunkX, $chunkZ, $chunkData, $entities, $blockEntities);
 			if($flags & 0x01){
 				$chunk->setGenerated();
 			}
@@ -337,17 +337,17 @@ class Chunk extends BaseFullChunk{
 			}
 
 
-			$tiles = [];
+			$blockEntities = [];
 
-			foreach($this->getTiles() as $tile){
-				if(!$tile->closed){
-					$tile->saveNBT();
-					$tiles[] = $tile->namedtag;
+			foreach($this->getBlockEntities() as $blockEntity){
+				if(!$blockEntity->closed){
+					$blockEntity->saveNBT();
+					$blockEntities[] = $blockEntity->namedtag;
 				}
 			}
 
-			if(count($tiles) > 0){
-				$nbt->setData($tiles);
+			if(count($blockEntities) > 0){
+				$nbt->setData($blockEntities);
 				$provider->getDatabase()->put($chunkIndex . LevelDB::ENTRY_TILES, $nbt->write());
 			}else{
 				$provider->getDatabase()->delete($chunkIndex . LevelDB::ENTRY_TILES);

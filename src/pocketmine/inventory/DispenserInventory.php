@@ -15,17 +15,17 @@
  * (at your option) any later version.
  *
  * @author iTX Technologies
- * @link https://mcper.cn
+ * @link https://itxtech.org
  *
  */
 
 namespace pocketmine\inventory;
 
-use pocketmine\tile\Dispenser;
+use pocketmine\blockentity\Dispenser;
 
 class DispenserInventory extends ContainerInventory{
-	public function __construct(Dispenser $tile){
-		parent::__construct($tile, InventoryType::get(InventoryType::DISPENSER));
+	public function __construct(Dispenser $blockEntity){
+		parent::__construct($blockEntity, InventoryType::get(InventoryType::DISPENSER));
 	}
 
 	/**

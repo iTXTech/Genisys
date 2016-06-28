@@ -15,7 +15,7 @@
  * (at your option) any later version.
  *
  * @author iTX Technologies
- * @link https://mcper.cn
+ * @link https://itxtech.org
  *
  */
 
@@ -25,7 +25,7 @@ use pocketmine\block\Block;
 use pocketmine\event\Cancellable;
 use pocketmine\item\Item;
 use pocketmine\Player;
-use pocketmine\tile\ItemFrame;
+use pocketmine\blockentity\ItemFrame;
 
 class ItemFrameDropItemEvent extends BlockEvent implements Cancellable{
 	public static $handlerList = null;

@@ -109,20 +109,20 @@ use pocketmine\plugin\ScriptPluginLoader;
 use pocketmine\scheduler\FileWriteTask;
 use pocketmine\scheduler\SendUsageTask;
 use pocketmine\scheduler\ServerScheduler;
-use pocketmine\tile\BrewingStand;
-use pocketmine\tile\Cauldron;
-use pocketmine\tile\Chest;
-use pocketmine\tile\Dispenser;
-use pocketmine\tile\DLDetector;
-use pocketmine\tile\Dropper;
-use pocketmine\tile\EnchantTable;
-use pocketmine\tile\FlowerPot;
-use pocketmine\tile\Furnace;
-use pocketmine\tile\ItemFrame;
-use pocketmine\tile\MobSpawner;
-use pocketmine\tile\Sign;
-use pocketmine\tile\Skull;
-use pocketmine\tile\Tile;
+use pocketmine\blockentity\BrewingStand;
+use pocketmine\blockentity\Cauldron;
+use pocketmine\blockentity\Chest;
+use pocketmine\blockentity\Dispenser;
+use pocketmine\blockentity\DLDetector;
+use pocketmine\blockentity\Dropper;
+use pocketmine\blockentity\EnchantTable;
+use pocketmine\blockentity\FlowerPot;
+use pocketmine\blockentity\Furnace;
+use pocketmine\blockentity\ItemFrame;
+use pocketmine\blockentity\MobSpawner;
+use pocketmine\blockentity\Sign;
+use pocketmine\blockentity\Skull;
+use pocketmine\blockentity\BlockEntity;
 use pocketmine\updater\AutoUpdater;
 use pocketmine\utils\Binary;
 use pocketmine\utils\Color;
@@ -1982,7 +1982,7 @@ class Server{
 			$this->commandMap = new SimpleCommandMap($this);
 
 			$this->registerEntities();
-			$this->registerTiles();
+			$this->registerBlockEntity();
 
 			InventoryType::init($this->inventoryNum);
 			Block::init();
@@ -3102,19 +3102,19 @@ class Server{
 		Entity::registerEntity(Human::class, true);
 	}
 
-	private function registerTiles(){
-		Tile::registerTile(BrewingStand::class);
-		Tile::registerTile(Chest::class);
-		Tile::registerTile(Furnace::class);
-		Tile::registerTile(Sign::class);
-		Tile::registerTile(EnchantTable::class);
-		Tile::registerTile(FlowerPot::class);
-		Tile::registerTile(Skull::class);
-		Tile::registerTile(MobSpawner::class);
-		Tile::registerTile(ItemFrame::class);
-		Tile::registerTile(Dispenser::class);
-		Tile::registerTile(Dropper::class);
-		Tile::registerTile(DLDetector::class);
-		Tile::registerTile(Cauldron::class);
+	private function registerBlockEntity(){
+		BlockEntity::registerBlockEntity(BrewingStand::class);
+		BlockEntity::registerBlockEntity(Chest::class);
+		BlockEntity::registerBlockEntity(Furnace::class);
+		BlockEntity::registerBlockEntity(Sign::class);
+		BlockEntity::registerBlockEntity(EnchantTable::class);
+		BlockEntity::registerBlockEntity(FlowerPot::class);
+		BlockEntity::registerBlockEntity(Skull::class);
+		BlockEntity::registerBlockEntity(MobSpawner::class);
+		BlockEntity::registerBlockEntity(ItemFrame::class);
+		BlockEntity::registerBlockEntity(Dispenser::class);
+		BlockEntity::registerBlockEntity(Dropper::class);
+		BlockEntity::registerBlockEntity(DLDetector::class);
+		BlockEntity::registerBlockEntity(Cauldron::class);
 	}
 }

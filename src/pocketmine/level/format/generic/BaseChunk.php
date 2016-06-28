@@ -41,11 +41,11 @@ abstract class BaseChunk extends BaseFullChunk implements Chunk{
 	 * @param int[]          $biomeColors
 	 * @param int[]          $heightMap
 	 * @param CompoundTag[]     $entities
-	 * @param CompoundTag[]     $tiles
+	 * @param CompoundTag[]     $blockEntities
 	 *
 	 * @throws ChunkException
 	 */
-	protected function __construct($provider, $x, $z, array $sections, array $biomeColors = [], array $heightMap = [], array $entities = [], array $tiles = []){
+	protected function __construct($provider, $x, $z, array $sections, array $biomeColors = [], array $heightMap = [], array $entities = [], array $blockEntities = []){
 		$this->provider = $provider;
 		$this->x = (int) $x;
 		$this->z = (int) $z;
@@ -73,7 +73,7 @@ abstract class BaseChunk extends BaseFullChunk implements Chunk{
 			$this->heightMap = array_fill(0, 256, 127);
 		}
 
-		$this->NBTtiles = $tiles;
+		$this->NBTtiles = $blockEntities;
 		$this->NBTentities = $entities;
 	}
 

@@ -3,7 +3,7 @@
 /*
  * PocketMine-iTX Genisys
  * @author PocketMine-iTX Team & iTX Technologies LLC.
- * @link http://mcper.cn 
+ * @link http://itxtech.org 
  *       http://mcpe.asia 
  *       http://pl.zxda.net
 */

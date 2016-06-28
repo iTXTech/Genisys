@@ -31,7 +31,7 @@ use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
-use pocketmine\tile\MobSpawner;
+use pocketmine\blockentity\MobSpawner;
 
 class SpawnEgg extends Item{
 	public function __construct($meta = 0, $count = 1){

@@ -149,15 +149,14 @@ use pocketmine\network\protocol\TakeItemEntityPacket;
 use pocketmine\network\protocol\TextPacket;
 use pocketmine\network\protocol\UpdateAttributesPacket;
 use pocketmine\network\protocol\UpdateBlockPacket;
-use pocketmine\network\protocol\UseItemPacket;
 use pocketmine\network\SourceInterface;
 use pocketmine\permission\PermissibleBase;
 use pocketmine\permission\PermissionAttachment;
 use pocketmine\plugin\Plugin;
-use pocketmine\tile\ItemFrame;
-use pocketmine\tile\Sign;
-use pocketmine\tile\Spawnable;
-use pocketmine\tile\Tile;
+use pocketmine\blockentity\ItemFrame;
+use pocketmine\blockentity\Sign;
+use pocketmine\blockentity\Spawnable;
+use pocketmine\blockentity\BlockEntity;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\UUID;
 use raklib\Binary;
@@ -2331,23 +2330,23 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		switch($packet::NETWORK_ID){
 			case ProtocolInfo::ITEM_FRAME_DROP_ITEM_PACKET:
-				$tile = $this->level->getTile($this->temporalVector->setComponents($packet->x, $packet->y, $packet->z));
-				if($tile instanceof ItemFrame){
-					$block = $this->level->getBlock($tile);
+				$blockEntity = $this->level->getBlockEntity($this->temporalVector->setComponents($packet->x, $packet->y, $packet->z));
+				if($blockEntity instanceof ItemFrame){
+					$block = $this->level->getBlock($blockEntity);
 					$this->server->getPluginManager()->callEvent($ev = new BlockBreakEvent($this, $block, $this->getInventory()->getItemInHand(), true));
 					if(!$ev->isCancelled()){
-						$item = $tile->getItem();
-						$this->server->getPluginManager()->callEvent($ev = new ItemFrameDropItemEvent($this, $block, $tile, $item));
+						$item = $blockEntity->getItem();
+						$this->server->getPluginManager()->callEvent($ev = new ItemFrameDropItemEvent($this, $block, $blockEntity, $item));
 						if(!$ev->isCancelled()){
 							if($item->getId() !== Item::AIR){
-								if((mt_rand(0, 10) / 10) < $tile->getItemDropChance()){
-									$this->level->dropItem($tile, $item);
+								if((mt_rand(0, 10) / 10) < $blockEntity->getItemDropChance()){
+									$this->level->dropItem($blockEntity, $item);
 								}
-								$tile->setItem(Item::get(Item::AIR));
-								$tile->setItemRotation(0);
+								$blockEntity->setItem(Item::get(Item::AIR));
+								$blockEntity->setItemRotation(0);
 							}
-						}else $tile->spawnTo($this);
-					}else $tile->spawnTo($this);
+						}else $blockEntity->spawnTo($this);
+					}else $blockEntity->spawnTo($this);
 				}
 				break;
 			case ProtocolInfo::REQUEST_CHUNK_RADIUS_PACKET:
@@ -3045,14 +3044,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 				$this->inventory->sendContents($this);
 				$target = $this->level->getBlock($vector);
-				$tile = $this->level->getTile($vector);
+				$blockEntity = $this->level->getBlockEntity($vector);
 
 				$this->level->sendBlocks([$this], [$target], UpdateBlockPacket::FLAG_ALL_PRIORITY);
 
 				$this->inventory->sendHeldItem($this);
 
-				if($tile instanceof Spawnable){
-					$tile->spawnTo($this);
+				if($blockEntity instanceof Spawnable){
+					$blockEntity->spawnTo($this);
 				}
 				break;
 
@@ -3576,12 +3575,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					break;
 				}
 
-				$t = $this->level->getTile($pos);
+				$t = $this->level->getBlockEntity($pos);
 				if($t instanceof Sign){
 					$nbt = new NBT(NBT::LITTLE_ENDIAN);
 					$nbt->read($packet->namedtag);
 					$nbt = $nbt->getData();
-					if($nbt["id"] !== Tile::SIGN){
+					if($nbt["id"] !== BlockEntity::SIGN){
 						$t->spawnTo($this);
 					}else{
 						$ev = new SignChangeEvent($t->getBlock(), $this, [
