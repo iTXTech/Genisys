@@ -220,7 +220,10 @@ class CrashDump{
 		$this->addLine("PHP version: " . phpversion());
 		$this->addLine("Zend version: " . zend_version());
 		$this->addLine("OS : " . PHP_OS . ", " . Utils::getOS());
-		$this->addLine("Server uptime: ".$this->server->getUptime());
+		$this->addLine();
+		$this->addLine("Server uptime: " . $this->server->getUptime());
+		$this->addLine("Number of loaded worlds: " . count($this->server->getLevels()));
+		$this->addLine("Players online: ".count($this->server->getOnlinePlayers())."/".$this->server->getMaxPlayers());
 	}
 
 	public function addLine($line = ""){
