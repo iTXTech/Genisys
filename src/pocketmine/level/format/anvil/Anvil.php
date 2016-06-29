@@ -29,7 +29,7 @@ use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\ByteArrayTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\protocol\FullChunkDataPacket;
-use pocketmine\blockentity\Spawnable;
+use pocketmine\tile\Spawnable;
 use pocketmine\utils\BinaryStream;
 use pocketmine\utils\ChunkException;
 
@@ -80,18 +80,18 @@ class Anvil extends McRegion{
 			$task = new ChunkRequestTask($this->getLevel(), $chunk);
 			$this->getServer()->getScheduler()->scheduleAsyncTask($task);
 		}else{
-			$blockEntities = "";
+			$tiles = "";
 
-			if(count($chunk->getBlockEntities()) > 0){
+			if(count($chunk->getTiles()) > 0){
 				$nbt = new NBT(NBT::LITTLE_ENDIAN);
 				$list = [];
-				foreach($chunk->getBlockEntities() as $blockEntity){
-					if($blockEntity instanceof Spawnable){
-						$list[] = $blockEntity->getSpawnCompound();
+				foreach($chunk->getTiles() as $tile){
+					if($tile instanceof Spawnable){
+						$list[] = $tile->getSpawnCompound();
 					}
 				}
 				$nbt->setData($list);
-				$blockEntities = $nbt->write();
+				$tiles = $nbt->write();
 			}
 
 			$extraData = new BinaryStream();
@@ -108,7 +108,7 @@ class Anvil extends McRegion{
 				pack("C*", ...$chunk->getHeightMapArray()) .
 				pack("N*", ...$chunk->getBiomeColorArray()) .
 				$extraData->getBuffer() .
-				$blockEntities;
+				$tiles;
 
 			$this->getLevel()->chunkRequestCallback($x, $z, $ordered, FullChunkDataPacket::ORDER_LAYERED);
 		}

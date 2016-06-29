@@ -32,10 +32,10 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
-use pocketmine\blockentity\BlockEntity;
+use pocketmine\tile\Tile;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\blockentity\Skull;
+use pocketmine\tile\Skull;
 
 class SkullBlock extends Transparent{
 
@@ -78,7 +78,7 @@ class SkullBlock extends Transparent{
 				$rot = new ByteTag("Rot", 0);
 			}
 			$nbt = new CompoundTag("", [
-				new StringTag("id", BlockEntity::SKULL),
+				new StringTag("id", Tile::SKULL),
 				new IntTag("x", $block->x),
 				new IntTag("y", $block->y),
 				new IntTag("z", $block->z),
@@ -93,7 +93,7 @@ class SkullBlock extends Transparent{
 			}
 
 			$chunk = $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4);
-			$pot = BlockEntity::createBlockEntity(BlockEntity::SKULL, $chunk, $nbt);
+			$pot = Tile::createTile(Tile::SKULL, $chunk, $nbt);
 			$this->getLevel()->setBlock($block, Block::get(Block::SKULL_BLOCK, $face), true, true);
 			return true;
 		}
@@ -125,9 +125,9 @@ class SkullBlock extends Transparent{
 	}
 
 	public function getDrops(Item $item) : array {
-		/** @var Skull $blockEntity */
-		if($this->getLevel()!=null && (($blockEntity = $this->getLevel()->getBlockEntity($this)) instanceof Skull)){
-			return [[Item::SKULL, $blockEntity->getSkullType(), 1]];
+		/** @var Skull $tile */
+		if($this->getLevel()!=null && (($tile = $this->getLevel()->getTile($this)) instanceof Skull)){
+			return [[Item::SKULL, $tile->getSkullType(), 1]];
 		}else
 			return [[Item::SKULL, 0, 1]];
 	}

@@ -21,9 +21,59 @@
 
 namespace pocketmine\tile;
 
-/**
- * @deprecated
- */
-class EnchantTable extends \pocketmine\blockentity\EnchantTable{
-	
+use pocketmine\inventory\EnchantInventory;
+use pocketmine\inventory\InventoryHolder;
+use pocketmine\item\Item;
+use pocketmine\level\format\FullChunk;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\StringTag;
+
+class EnchantTable extends Spawnable implements InventoryHolder, Nameable{
+	/** @var EnchantInventory */
+	protected $inventory;
+
+	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+		parent::__construct($chunk, $nbt);
+		$this->inventory = new EnchantInventory($this);
+	}
+
+	public function getName() : string{
+		return $this->hasName() ? $this->namedtag->CustomName->getValue() : "Enchanting Table";
+	}
+
+	public function hasName(){
+		return isset($this->namedtag->CustomName);
+	}
+
+	public function setName($str){
+		if($str === ""){
+			unset($this->namedtag->CustomName);
+			return;
+		}
+
+		$this->namedtag->CustomName = new StringTag("CustomName", $str);
+	}
+
+	/**
+	 * @return EnchantInventory
+	 */
+	public function getInventory(){
+		return $this->inventory;
+	}
+
+	public function getSpawnCompound(){
+		$nbt = new CompoundTag("", [
+			new StringTag("id", Tile::ENCHANT_TABLE),
+			new IntTag("x", (int) $this->x),
+			new IntTag("y", (int) $this->y),
+			new IntTag("z", (int) $this->z)
+		]);
+
+		if($this->hasName()){
+			$nbt->CustomName = $this->namedtag->CustomName;
+		}
+
+		return $nbt;
+	}
 }

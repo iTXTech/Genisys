@@ -28,7 +28,7 @@ use pocketmine\Player;
 use pocketmine\plugin\PluginManager;
 use pocketmine\scheduler\PluginTask;
 use pocketmine\scheduler\TaskHandler;
-use pocketmine\blockentity\BlockEntity;
+use pocketmine\tile\Tile;
 
 abstract class Timings{
 
@@ -108,7 +108,7 @@ abstract class Timings{
 	/** @var TimingsHandler[] */
 	public static $entityTypeTimingMap = [];
 	/** @var TimingsHandler[] */
-	public static $blockEntityEntityTypeTimingMap = [];
+	public static $tileEntityTypeTimingMap = [];
 	/** @var TimingsHandler[] */
 	public static $packetReceiveTimingMap = [];
 	/** @var TimingsHandler[] */
@@ -214,24 +214,20 @@ abstract class Timings{
 	}
 
 	/**
-	 * @param BlockEntity $blockEntity
+	 * @param Tile $tile
 	 *
 	 * @return TimingsHandler
 	 */
-	public static function getBlockEntityTimings(BlockEntity $blockEntity){
-		$blockEntityType = (new \ReflectionClass($blockEntity))->getShortName();
-		if(!isset(self::$blockEntityEntityTypeTimingMap[$blockEntityType])){
-			self::$blockEntityEntityTypeTimingMap[$blockEntityType] = new TimingsHandler("** tickTileEntity - " . $blockEntityType, self::$tickTileEntityTimer);
+	public static function getTileEntityTimings(Tile $tile){
+		$tileType = (new \ReflectionClass($tile))->getShortName();
+		if(!isset(self::$tileEntityTypeTimingMap[$tileType])){
+			self::$tileEntityTypeTimingMap[$tileType] = new TimingsHandler("** tickTileEntity - " . $tileType, self::$tickTileEntityTimer);
 		}
 
-		return self::$blockEntityEntityTypeTimingMap[$blockEntityType];
+		return self::$tileEntityTypeTimingMap[$tileType];
 	}
 
-	public static function getTileEntityTimings(BlockEntity $blockEntity){
-		return self::getBlockEntityTimings($blockEntity);
-	}
-
-		/**
+	/**
 	 * @param DataPacket $pk
 	 *
 	 * @return TimingsHandler

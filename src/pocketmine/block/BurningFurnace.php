@@ -29,8 +29,8 @@ use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
-use pocketmine\blockentity\Furnace;
-use pocketmine\blockentity\BlockEntity;
+use pocketmine\tile\Furnace;
+use pocketmine\tile\Tile;
 
 class BurningFurnace extends Solid{
 
@@ -71,7 +71,7 @@ class BurningFurnace extends Solid{
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [
 			new ListTag("Items", []),
-			new StringTag("id", BlockEntity::FURNACE),
+			new StringTag("id", Tile::FURNACE),
 			new IntTag("x", $this->x),
 			new IntTag("y", $this->y),
 			new IntTag("z", $this->z)
@@ -88,7 +88,7 @@ class BurningFurnace extends Solid{
 			}
 		}
 
-		BlockEntity::createBlockEntity("Furnace", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+		Tile::createTile("Furnace", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 
 		return true;
 	}
@@ -101,20 +101,20 @@ class BurningFurnace extends Solid{
 
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
-			$t = $this->getLevel()->getBlockEntity($this);
+			$t = $this->getLevel()->getTile($this);
 			$furnace = false;
 			if($t instanceof Furnace){
 				$furnace = $t;
 			}else{
 				$nbt = new CompoundTag("", [
 					new ListTag("Items", []),
-					new StringTag("id", BlockEntity::FURNACE),
+					new StringTag("id", Tile::FURNACE),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),
 					new IntTag("z", $this->z)
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
-				$furnace = BlockEntity::createBlockEntity("Furnace", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+				$furnace = Tile::createTile("Furnace", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 			}
 
 			if(isset($furnace->namedtag->Lock) and $furnace->namedtag->Lock instanceof StringTag){

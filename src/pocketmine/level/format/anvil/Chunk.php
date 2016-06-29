@@ -246,13 +246,13 @@ class Chunk extends BaseChunk{
 		$nbt->Entities->setTagType(NBT::TAG_Compound);
 
 
-		$blockEntities = [];
-		foreach($this->getBlockEntities() as $blockEntity){
-			$blockEntity->saveNBT();
-			$blockEntities[] = $blockEntity->namedtag;
+		$tiles = [];
+		foreach($this->getTiles() as $tile){
+			$tile->saveNBT();
+			$tiles[] = $tile->namedtag;
 		}
 
-		$nbt->TileEntities = new ListTag("TileEntities", $blockEntities);
+		$nbt->TileEntities = new ListTag("TileEntities", $tiles);
 		$nbt->TileEntities->setTagType(NBT::TAG_Compound);
 
 		$extraData = new BinaryStream();
@@ -309,13 +309,13 @@ class Chunk extends BaseChunk{
 		$nbt->Entities->setTagType(NBT::TAG_Compound);
 
 
-		$blockEntities = [];
-		foreach($this->getBlockEntities() as $blockEntity){
-			$blockEntity->saveNBT();
-			$blockEntities[] = $blockEntity->namedtag;
+		$tiles = [];
+		foreach($this->getTiles() as $tile){
+			$tile->saveNBT();
+			$tiles[] = $tile->namedtag;
 		}
 
-		$nbt->TileEntities = new ListTag("TileEntities", $blockEntities);
+		$nbt->TileEntities = new ListTag("TileEntities", $tiles);
 		$nbt->TileEntities->setTagType(NBT::TAG_Compound);
 
 		$extraData = new BinaryStream();

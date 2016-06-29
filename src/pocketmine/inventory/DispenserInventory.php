@@ -21,11 +21,11 @@
 
 namespace pocketmine\inventory;
 
-use pocketmine\blockentity\Dispenser;
+use pocketmine\tile\Dispenser;
 
 class DispenserInventory extends ContainerInventory{
-	public function __construct(Dispenser $blockEntity){
-		parent::__construct($blockEntity, InventoryType::get(InventoryType::DISPENSER));
+	public function __construct(Dispenser $tile){
+		parent::__construct($tile, InventoryType::get(InventoryType::DISPENSER));
 	}
 
 	/**

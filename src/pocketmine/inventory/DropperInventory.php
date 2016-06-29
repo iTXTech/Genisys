@@ -21,11 +21,11 @@
 
 namespace pocketmine\inventory;
 
-use pocketmine\blockentity\Dropper;
+use pocketmine\tile\Dropper;
 
 class DropperInventory extends ContainerInventory{
-	public function __construct(Dropper $blockEntity){
-		parent::__construct($blockEntity, InventoryType::get(InventoryType::DROPPER));
+	public function __construct(Dropper $tile){
+		parent::__construct($tile, InventoryType::get(InventoryType::DROPPER));
 	}
 
 	/**

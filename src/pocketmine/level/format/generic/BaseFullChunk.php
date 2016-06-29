@@ -29,7 +29,7 @@ use pocketmine\level\generator\biome\Biome;
 use pocketmine\level\Level;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
-use pocketmine\blockentity\BlockEntity;
+use pocketmine\tile\Tile;
 
 
 abstract class BaseFullChunk implements FullChunk{
@@ -37,11 +37,11 @@ abstract class BaseFullChunk implements FullChunk{
 	/** @var Entity[] */
 	protected $entities = [];
 
-	/** @var BlockEntity[] */
-	protected $blockEntities = [];
+	/** @var Tile[] */
+	protected $tiles = [];
 
-	/** @var BlockEntity[] */
-	protected $blockEntityList = [];
+	/** @var Tile[] */
+	protected $tileList = [];
 
 	/** @var int[256] */
 	protected $biomeColors;
@@ -83,9 +83,9 @@ abstract class BaseFullChunk implements FullChunk{
 	 * @param int[]         $biomeColors
 	 * @param int[]         $heightMap
 	 * @param CompoundTag[]    $entities
-	 * @param CompoundTag[]    $blockEntities
+	 * @param CompoundTag[]    $tiles
 	 */
-	protected function __construct($provider, $x, $z, $blocks, $data, $skyLight, $blockLight, array $biomeColors = [], array $heightMap = [], array $entities = [], array $blockEntities = [], array $extraData = []){
+	protected function __construct($provider, $x, $z, $blocks, $data, $skyLight, $blockLight, array $biomeColors = [], array $heightMap = [], array $entities = [], array $tiles = [], array $extraData = []){
 		$this->provider = $provider;
 		$this->x = (int) $x;
 		$this->z = (int) $z;
@@ -109,7 +109,7 @@ abstract class BaseFullChunk implements FullChunk{
 
 		$this->extraData = $extraData;
 
-		$this->NBTtiles = $blockEntities;
+		$this->NBTtiles = $tiles;
 		$this->NBTentities = $entities;
 	}
 
@@ -168,7 +168,7 @@ abstract class BaseFullChunk implements FullChunk{
 							continue; //Fixes tiles allocated in wrong chunks.
 						}
 
-						if(BlockEntity::createBlockEntity($nbt["id"], $this, $nbt) === null){
+						if(Tile::createTile($nbt["id"], $this, $nbt) === null){
 							$changed = true;
 							continue;
 						}
@@ -332,20 +332,20 @@ abstract class BaseFullChunk implements FullChunk{
 		}
 	}
 
-	public function addBlockEntity(BlockEntity $blockEntity){
-		$this->blockEntities[$blockEntity->getId()] = $blockEntity;
-		if(isset($this->blockEntityList[$index = (($blockEntity->z & 0x0f) << 12) | (($blockEntity->x & 0x0f) << 8) | ($blockEntity->y & 0xff)]) and $this->blockEntityList[$index] !== $blockEntity){
-			$this->blockEntityList[$index]->close();
+	public function addTile(Tile $tile){
+		$this->tiles[$tile->getId()] = $tile;
+		if(isset($this->tileList[$index = (($tile->z & 0x0f) << 12) | (($tile->x & 0x0f) << 8) | ($tile->y & 0xff)]) and $this->tileList[$index] !== $tile){
+			$this->tileList[$index]->close();
 		}
-		$this->blockEntityList[$index] = $blockEntity;
+		$this->tileList[$index] = $tile;
 		if($this->isInit){
 			$this->hasChanged = true;
 		}
 	}
 
-	public function removeBlockEntity(BlockEntity $blockEntity){
-		unset($this->blockEntities[$blockEntity->getId()]);
-		unset($this->blockEntityList[(($blockEntity->z & 0x0f) << 12) | (($blockEntity->x & 0x0f) << 8) | ($blockEntity->y & 0xff)]);
+	public function removeTile(Tile $tile){
+		unset($this->tiles[$tile->getId()]);
+		unset($this->tileList[(($tile->z & 0x0f) << 12) | (($tile->x & 0x0f) << 8) | ($tile->y & 0xff)]);
 		if($this->isInit){
 			$this->hasChanged = true;
 		}
@@ -355,17 +355,17 @@ abstract class BaseFullChunk implements FullChunk{
 		return $this->entities;
 	}
 
-	public function getBlockEntities(){
-		return $this->blockEntities;
+	public function getTiles(){
+		return $this->tiles;
 	}
 
 	public function getBlockExtraDataArray(){
 		return $this->extraData;
 	}
 
-	public function getBlockEntity($x, $y, $z){
+	public function getTile($x, $y, $z){
 		$index = ($z << 12) | ($x << 8) | $y;
-		return isset($this->blockEntityList[$index]) ? $this->blockEntityList[$index] : null;
+		return isset($this->tileList[$index]) ? $this->tileList[$index] : null;
 	}
 
 	public function isLoaded(){
@@ -398,8 +398,8 @@ abstract class BaseFullChunk implements FullChunk{
 			}
 			$entity->close();
 		}
-		foreach($this->getBlockEntities() as $blockEntity){
-			$blockEntity->close();
+		foreach($this->getTiles() as $tile){
+			$tile->close();
 		}
 		$this->provider = null;
 		return true;

@@ -63,7 +63,7 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\Timings;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
-use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\enchantment\enchantment;
 use pocketmine\level\format\Chunk;
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\format\generic\BaseLevelProvider;
@@ -104,8 +104,8 @@ use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 
 use pocketmine\Server;
-use pocketmine\blockentity\BlockEntity;
-use pocketmine\blockentity\Chest;
+use pocketmine\tile\Chest;
+use pocketmine\tile\Tile;
 use pocketmine\utils\LevelException;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\Random;
@@ -146,8 +146,8 @@ class Level implements ChunkManager, Metadatable{
 	const DIMENSION_NORMAL = 0;
 	const DIMENSION_NETHER = 1;
 
-	/** @var BlockEntity[] */
-	private $blockEntities = [];
+	/** @var Tile[] */
+	private $tiles = [];
 
 	private $motionToSend = [];
 	private $moveToSend = [];
@@ -160,8 +160,8 @@ class Level implements ChunkManager, Metadatable{
 
 	/** @var Entity[] */
 	public $updateEntities = [];
-	/** @var BlockEntity[] */
-	public $updateBlockEntites = [];
+	/** @var Tile[] */
+	public $updateTiles = [];
 
 	private $blockCache = [];
 
@@ -795,10 +795,10 @@ class Level implements ChunkManager, Metadatable{
 		$this->timings->tileEntityTick->startTiming();
 		Timings::$tickTileEntityTimer->startTiming();
 		//Update tiles that need update
-		if(count($this->updateBlockEntites) > 0){
-			foreach($this->updateBlockEntites as $id => $blockEntity){
-				if($blockEntity->onUpdate() !== true){
-					unset($this->updateBlockEntites[$id]);
+		if(count($this->updateTiles) > 0){
+			foreach($this->updateTiles as $id => $tile){
+				if($tile->onUpdate() !== true){
+					unset($this->updateTiles[$id]);
 				}
 			}
 		}
@@ -1675,7 +1675,7 @@ class Level implements ChunkManager, Metadatable{
 		}elseif($item !== null and !$target->isBreakable($item)){
 			return false;
 		}else{
-			$drops = $target->getDrops($item); //Fixes block entities being deleted before getting drops
+			$drops = $target->getDrops($item); //Fixes tile entities being deleted before getting drops
 			foreach($drops as $k => $i){
 				if((isset ($i[0])) && (isset ($i[1])) && (isset ($i[2]))) $drops[$k] = Item::get($i[0], $i[1], $i[2]);
 			}
@@ -1717,19 +1717,19 @@ class Level implements ChunkManager, Metadatable{
 
 		$target->onBreak($item);
 
-		$blockEntity = $this->getBlockEntity($target);
-		if($blockEntity !== null){
-			if($blockEntity instanceof InventoryHolder){
-				if($blockEntity instanceof Chest){
-					$blockEntity->unpair();
+		$tile = $this->getTile($target);
+		if($tile !== null){
+			if($tile instanceof InventoryHolder){
+				if($tile instanceof Chest){
+					$tile->unpair();
 				}
 
-				foreach($blockEntity->getInventory()->getContents() as $chestItem){
+				foreach($tile->getInventory()->getContents() as $chestItem){
 					$this->dropItem($target, $chestItem);
 				}
 			}
 
-			$blockEntity->close();
+			$tile->close();
 		}
 
 		if($item !== null){
@@ -1909,7 +1909,7 @@ class Level implements ChunkManager, Metadatable{
 		if($hand->getId() === Item::SIGN_POST or $hand->getId() === Item::WALL_SIGN){
 
 			$nbt = new CompoundTag("", [
-				"id" => new StringTag("id", BlockEntity::SIGN),
+				"id" => new StringTag("id", Tile::SIGN),
 				"x" => new IntTag("x", $block->x),
 				"y" => new IntTag("y", $block->y),
 				"z" => new IntTag("z", $block->z),
@@ -1929,7 +1929,7 @@ class Level implements ChunkManager, Metadatable{
 				}
 			}
 
-			BlockEntity::createBlockEntity("Sign", $this->getChunk($block->x >> 4, $block->z >> 4), $nbt);
+			Tile::createTile("Sign", $this->getChunk($block->x >> 4, $block->z >> 4), $nbt);
 		}
 		if ($player != null && $player->isCreative()) {
 			$item->setCount($item->getCount());
@@ -2040,40 +2040,21 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	/**
-	 * Returns a list of the BlockEntity entities in this level
+	 * Returns a list of the Tile entities in this level
 	 *
-	 * @return BlockEntity[]
-	 */
-	public function getBlockEntities(){
-		return $this->blockEntities;
-	}
-
-	/**
-	 * @deprecated
-	 *
-	 * @return BlockEntity[]
+	 * @return Tile[]
 	 */
 	public function getTiles(){
-		return $this->getBlockEntities();
+		return $this->tiles;
 	}
 
 	/**
-	 * @param $blockEntityId
+	 * @param $tileId
 	 *
-	 * @return BlockEntity
+	 * @return Tile
 	 */
-	public function getBlockEntityById($blockEntityId){
-		return isset($this->blockEntities[$blockEntityId]) ? $this->blockEntities[$blockEntityId] : null;
-	}
-
-	/**
-	 * @deprecated 
-	 *
-	 * @param $blockEntityId
-	 * @return BlockEntity
-	 */
-	public function getTileById($blockEntityId){
-		return $this->getBlockEntityById($blockEntityId);
+	public function getTileById($tileId){
+		return isset($this->tiles[$tileId]) ? $this->tiles[$tileId] : null;
 	}
 
 	/**
@@ -2093,30 +2074,20 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	/**
-	 * Returns the BlockEntity in a position, or null if not found
+	 * Returns the Tile in a position, or null if not found
 	 *
 	 * @param Vector3 $pos
 	 *
-	 * @return BlockEntity
+	 * @return Tile
 	 */
-	public function getBlockEntity(Vector3 $pos){
+	public function getTile(Vector3 $pos){
 		$chunk = $this->getChunk($pos->x >> 4, $pos->z >> 4, false);
 
 		if($chunk !== null){
-			return $chunk->getBlockEntity($pos->x & 0x0f, $pos->y & 0xff, $pos->z & 0x0f);
+			return $chunk->getTile($pos->x & 0x0f, $pos->y & 0xff, $pos->z & 0x0f);
 		}
 
 		return null;
-	}
-
-	/**
-	 * @deprecated
-	 *
-	 * @param Vector3 $pos
-	 * @return BlockEntity
-	 */
-	public function getTile(Vector3 $pos){
-		return $this->getBlockEntity($pos);
 	}
 
 	/**
@@ -2132,26 +2103,15 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	/**
-	 * Gives a list of the BlockEntity entities on a given chunk
+	 * Gives a list of the Tile entities on a given chunk
 	 *
 	 * @param int $X
 	 * @param int $Z
 	 *
-	 * @return BlockEntity[]
-	 */
-	public function getChunkBlockEntities($X, $Z){
-		return ($chunk = $this->getChunk($X, $Z)) !== null ? $chunk->getBlockEntities() : [];
-	}
-
-	/**
-	 * @deprecated
-	 *
-	 * @param $X
-	 * @param $Z
-	 * @return BlockEntity[]
+	 * @return Tile[]
 	 */
 	public function getChunkTiles($X, $Z){
-		return $this->getChunkBlockEntities($X, $Z);
+		return ($chunk = $this->getChunk($X, $Z)) !== null ? $chunk->getTiles() : [];
 	}
 
 	/**
@@ -2449,7 +2409,7 @@ class Level implements ChunkManager, Metadatable{
 			$this->chunks[$index] = $chunk;
 		}else{
 			$oldEntities = $oldChunk !== null ? $oldChunk->getEntities() : [];
-			$oldTiles = $oldChunk !== null ? $oldChunk->getBlockEntities() : [];
+			$oldTiles = $oldChunk !== null ? $oldChunk->getTiles() : [];
 
 			$this->provider->setChunk($chunkX, $chunkZ, $chunk);
 			$this->chunks[$index] = $chunk;
@@ -2459,9 +2419,9 @@ class Level implements ChunkManager, Metadatable{
 				$entity->chunk = $chunk;
 			}
 
-			foreach($oldTiles as $blockEntity){
-				$chunk->addBlockEntity($blockEntity);
-				$blockEntity->chunk = $chunk;
+			foreach($oldTiles as $tile){
+				$chunk->addTile($tile);
+				$tile->chunk = $chunk;
 			}
 		}
 
@@ -2749,49 +2709,31 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	/**
-	 * @param BlockEntity $blockEntity
+	 * @param Tile $tile
 	 *
 	 * @throws LevelException
 	 */
-	public function addBlockEntity(BlockEntity $blockEntity){
-		if($blockEntity->getLevel() !== $this){
-			throw new LevelException("Invalid BlockEntity level");
+	public function addTile(Tile $tile){
+		if($tile->getLevel() !== $this){
+			throw new LevelException("Invalid Tile level");
 		}
-		$this->blockEntities[$blockEntity->getId()] = $blockEntity;
-		$this->clearChunkCache($blockEntity->getX() >> 4, $blockEntity->getZ() >> 4);
+		$this->tiles[$tile->getId()] = $tile;
+		$this->clearChunkCache($tile->getX() >> 4, $tile->getZ() >> 4);
 	}
 
 	/**
-	 * @deprecated
-	 *
-	 * @param BlockEntity $blockEntity
-	 */
-	public function addTile(BlockEntity $blockEntity){
-		$this->addBlockEntity($blockEntity);
-	}
-
-	/**
-	 * @param BlockEntity $blockEntity
+	 * @param Tile $tile
 	 *
 	 * @throws LevelException
 	 */
-	public function removeBlockEntity(BlockEntity $blockEntity){
-		if($blockEntity->getLevel() !== $this){
-			throw new LevelException("Invalid BlockEntity level");
+	public function removeTile(Tile $tile){
+		if($tile->getLevel() !== $this){
+			throw new LevelException("Invalid Tile level");
 		}
 
-		unset($this->blockEntities[$blockEntity->getId()]);
-		unset($this->updateBlockEntites[$blockEntity->getId()]);
-		$this->clearChunkCache($blockEntity->getX() >> 4, $blockEntity->getZ() >> 4);
-	}
-
-	/**
-	 * @deprecated
-	 *
-	 * @param BlockEntity $blockEntity
-	 */
-	public function removeTile(BlockEntity $blockEntity){
-		$this->removeBlockEntity($blockEntity);
+		unset($this->tiles[$tile->getId()]);
+		unset($this->updateTiles[$tile->getId()]);
+		$this->clearChunkCache($tile->getX() >> 4, $tile->getZ() >> 4);
 	}
 
 	/**
@@ -2922,7 +2864,7 @@ class Level implements ChunkManager, Metadatable{
 						++$entities;
 					}
 
-					if($chunk->hasChanged() or count($chunk->getBlockEntities()) > 0 or $entities > 0){
+					if($chunk->hasChanged() or count($chunk->getTiles()) > 0 or $entities > 0){
 						$this->provider->setChunk($x, $z, $chunk);
 						$this->provider->saveChunk($x, $z);
 					}

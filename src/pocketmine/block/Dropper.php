@@ -29,8 +29,8 @@ use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
-use pocketmine\blockentity\Dropper as BlockEntityDropper;
-use pocketmine\blockentity\BlockEntity;
+use pocketmine\tile\Dropper as TileDropper;
+use pocketmine\tile\Tile;
 
 class Dropper extends Solid implements ElectricalAppliance{
 
@@ -78,7 +78,7 @@ class Dropper extends Solid implements ElectricalAppliance{
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [
 			new ListTag("Items", []),
-			new StringTag("id", BlockEntity::DROPPER),
+			new StringTag("id", Tile::DROPPER),
 			new IntTag("x", $this->x),
 			new IntTag("y", $this->y),
 			new IntTag("z", $this->z)
@@ -95,34 +95,34 @@ class Dropper extends Solid implements ElectricalAppliance{
 			}
 		}
 
-		BlockEntity::createBlockEntity(BlockEntity::DROPPER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+		Tile::createTile(Tile::DROPPER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 
 		return true;
 	}
 
 	public function activate(){
-		$blockEntity = $this->getLevel()->getBlockEntity($this);
-		if($blockEntity instanceof BlockEntityDropper){
-			$blockEntity->activate();
+		$tile = $this->getLevel()->getTile($this);
+		if($tile instanceof TileDropper){
+			$tile->activate();
 		}
 	}
 
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
-			$t = $this->getLevel()->getBlockEntity($this);
+			$t = $this->getLevel()->getTile($this);
 			$dropper = null;
-			if($t instanceof BlockEntityDropper){
+			if($t instanceof TileDropper){
 				$dropper = $t;
 			}else{
 				$nbt = new CompoundTag("", [
 					new ListTag("Items", []),
-					new StringTag("id", BlockEntity::DROPPER),
+					new StringTag("id", Tile::DROPPER),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),
 					new IntTag("z", $this->z)
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
-				$dropper = BlockEntity::createBlockEntity(BlockEntity::DROPPER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+				$dropper = Tile::createTile(Tile::DROPPER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 			}
 
 			if($player->isCreative() and $player->getServer()->limitedCreative){

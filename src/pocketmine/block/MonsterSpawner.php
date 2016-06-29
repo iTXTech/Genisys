@@ -26,8 +26,8 @@ use pocketmine\item\Tool;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\blockentity\BlockEntity;
-use pocketmine\blockentity\MobSpawner;
+use pocketmine\tile\Tile;
+use pocketmine\tile\MobSpawner;
 use pocketmine\Player;
 
 class MonsterSpawner extends Solid{
@@ -57,11 +57,11 @@ class MonsterSpawner extends Solid{
 	public function onActivate(Item $item, Player $player = null){
 		if($this->getDamage() == 0){
 			if($item->getId() == Item::SPAWN_EGG){
-				$blockEntity = $this->getLevel()->getBlockEntity($this);
-				if($blockEntity instanceof MobSpawner){
+				$tile = $this->getLevel()->getTile($this);
+				if($tile instanceof MobSpawner){
 					$this->meta = $item->getDamage();
 					//$this->getLevel()->setBlock($this, $this, true, false);
-					$blockEntity->setEntityId($this->meta);
+					$tile->setEntityId($this->meta);
 				}
 				return true;
 			}
@@ -73,7 +73,7 @@ class MonsterSpawner extends Solid{
 
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [
-			new StringTag("id", BlockEntity::MOB_SPAWNER),
+			new StringTag("id", Tile::MOB_SPAWNER),
 			new IntTag("x", $block->x),
 			new IntTag("y", $block->y),
 			new IntTag("z", $block->z),
@@ -86,7 +86,7 @@ class MonsterSpawner extends Solid{
 			}
 		}
 		
-		BlockEntity::createBlockEntity(BlockEntity::MOB_SPAWNER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+		Tile::createTile(Tile::MOB_SPAWNER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 		return true;
 	}
 

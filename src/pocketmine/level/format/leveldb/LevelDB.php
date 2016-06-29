@@ -31,7 +31,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\LongTag;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\blockentity\Spawnable;
+use pocketmine\tile\Spawnable;
 use pocketmine\utils\Binary;
 use pocketmine\utils\BinaryStream;
 use pocketmine\utils\ChunkException;
@@ -146,12 +146,12 @@ class LevelDB extends BaseLevelProvider{
 			throw new ChunkException("Invalid Chunk sent");
 		}
 
-		$blockEntities = "";
+		$tiles = "";
 		$nbt = new NBT(NBT::LITTLE_ENDIAN);
-		foreach($chunk->getBlockEntities() as $blockEntity){
-			if($blockEntity instanceof Spawnable){
-				$nbt->setData($blockEntity->getSpawnCompound());
-				$blockEntities .= $nbt->write();
+		foreach($chunk->getTiles() as $tile){
+			if($tile instanceof Spawnable){
+				$nbt->setData($tile->getSpawnCompound());
+				$tiles .= $nbt->write();
 			}
 		}
 
@@ -172,7 +172,7 @@ class LevelDB extends BaseLevelProvider{
 			$heightmap .
 			$biomeColors .
 			$extraData->getBuffer() .
-			$blockEntities;
+			$tiles;
 
 		$this->getLevel()->chunkRequestCallback($x, $z, $ordered);
 

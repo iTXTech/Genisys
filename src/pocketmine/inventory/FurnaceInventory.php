@@ -23,11 +23,11 @@ namespace pocketmine\inventory;
 
 
 use pocketmine\item\Item;
-use pocketmine\blockentity\Furnace;
+use pocketmine\tile\Furnace;
 
 class FurnaceInventory extends ContainerInventory{
-	public function __construct(Furnace $blockEntity){
-		parent::__construct($blockEntity, InventoryType::get(InventoryType::FURNACE));
+	public function __construct(Furnace $tile){
+		parent::__construct($tile, InventoryType::get(InventoryType::FURNACE));
 	}
 
 	/**
