@@ -1814,7 +1814,6 @@ class Server{
 		   §fTarget client Version: §d" . \pocketmine\MINECRAFT_VERSION . "
 		   §fLatest source code is available at https://github.com/iTXTech/Genisys
 		   §fDonate link: http://pl.zxda.net/plugins/203.html
-		   §f如果你在免费使用本核心，希望你可以进入上面的链接捐赠给我们，这会成为我们前进的动力。
 		\n";
 
 			$this->about();
