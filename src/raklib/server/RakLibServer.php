@@ -17,20 +17,20 @@ namespace raklib\server;
 
 
 class RakLibServer extends \Thread{
-    protected $port;
-    protected $interface;
-    /** @var \ThreadedLogger */
-    protected $logger;
-    protected $loader;
+	protected $port;
+	protected $interface;
+	/** @var \ThreadedLogger */
+	protected $logger;
+	protected $loader;
 
-    public $loadPaths;
+	public $loadPaths;
 
-    protected $shutdown;
+	protected $shutdown;
 
-    /** @var \Threaded */
-    protected $externalQueue;
-    /** @var \Threaded */
-    protected $internalQueue;
+	/** @var \Threaded */
+	protected $externalQueue;
+	/** @var \Threaded */
+	protected $internalQueue;
 
 	protected $mainPath;
 
@@ -42,98 +42,98 @@ class RakLibServer extends \Thread{
 	 *
 	 * @throws \Throwable
 	 */
-    public function __construct(\ThreadedLogger $logger, \ClassLoader $loader, $port, $interface = "0.0.0.0"){
-        $this->port = (int) $port;
-        if($port < 1 or $port > 65536){
-            throw new \Exception("Invalid port range");
-        }
+	public function __construct(\ThreadedLogger $logger, \ClassLoader $loader, $port, $interface = "0.0.0.0"){
+		$this->port = (int) $port;
+		if($port < 1 or $port > 65536){
+			throw new \Exception("Invalid port range");
+		}
 
-        $this->interface = $interface;
-        $this->logger = $logger;
-        $this->loader = $loader;
-        $loadPaths = [];
-        $this->addDependency($loadPaths, new \ReflectionClass($logger));
-        $this->addDependency($loadPaths, new \ReflectionClass($loader));
-        $this->loadPaths = array_reverse($loadPaths);
-        $this->shutdown = false;
+		$this->interface = $interface;
+		$this->logger = $logger;
+		$this->loader = $loader;
+		$loadPaths = [];
+		$this->addDependency($loadPaths, new \ReflectionClass($logger));
+		$this->addDependency($loadPaths, new \ReflectionClass($loader));
+		$this->loadPaths = array_reverse($loadPaths);
+		$this->shutdown = false;
 
-        $this->externalQueue = new \Threaded;
-        $this->internalQueue = new \Threaded;
+		$this->externalQueue = new \Threaded;
+		$this->internalQueue = new \Threaded;
 
-	    if(\Phar::running(true) !== ""){
-		    $this->mainPath = \Phar::running(true);
-	    }else{
-		    $this->mainPath = \getcwd() . DIRECTORY_SEPARATOR;
-	    }
-        $this->start();
-    }
+		if(\Phar::running(true) !== ""){
+			$this->mainPath = \Phar::running(true);
+		}else{
+			$this->mainPath = \getcwd() . DIRECTORY_SEPARATOR;
+		}
+		$this->start();
+	}
 
-    protected function addDependency(array &$loadPaths, \ReflectionClass $dep){
-        if($dep->getFileName() !== false){
-            $loadPaths[$dep->getName()] = $dep->getFileName();
-        }
+	protected function addDependency(array &$loadPaths, \ReflectionClass $dep){
+		if($dep->getFileName() !== false){
+			$loadPaths[$dep->getName()] = $dep->getFileName();
+		}
 
-        if($dep->getParentClass() instanceof \ReflectionClass){
-            $this->addDependency($loadPaths, $dep->getParentClass());
-        }
+		if($dep->getParentClass() instanceof \ReflectionClass){
+			$this->addDependency($loadPaths, $dep->getParentClass());
+		}
 
-        foreach($dep->getInterfaces() as $interface){
-            $this->addDependency($loadPaths, $interface);
-        }
-    }
+		foreach($dep->getInterfaces() as $interface){
+			$this->addDependency($loadPaths, $interface);
+		}
+	}
 
-    public function isShutdown(){
-        return $this->shutdown === true;
-    }
+	public function isShutdown(){
+		return $this->shutdown === true;
+	}
 
-    public function shutdown(){
-        $this->shutdown = true;
-    }
+	public function shutdown(){
+		$this->shutdown = true;
+	}
 
-    public function getPort(){
-        return $this->port;
-    }
+	public function getPort(){
+		return $this->port;
+	}
 
-    public function getInterface(){
-        return $this->interface;
-    }
+	public function getInterface(){
+		return $this->interface;
+	}
 
-    /**
-     * @return \ThreadedLogger
-     */
-    public function getLogger(){
-        return $this->logger;
-    }
+	/**
+	 * @return \ThreadedLogger
+	 */
+	public function getLogger(){
+		return $this->logger;
+	}
 
-    /**
-     * @return \Threaded
-     */
-    public function getExternalQueue(){
-        return $this->externalQueue;
-    }
+	/**
+	 * @return \Threaded
+	 */
+	public function getExternalQueue(){
+		return $this->externalQueue;
+	}
 
-    /**
-     * @return \Threaded
-     */
-    public function getInternalQueue(){
-        return $this->internalQueue;
-    }
+	/**
+	 * @return \Threaded
+	 */
+	public function getInternalQueue(){
+		return $this->internalQueue;
+	}
 
-    public function pushMainToThreadPacket($str){
-        $this->internalQueue[] = $str;
-    }
+	public function pushMainToThreadPacket($str){
+		$this->internalQueue[] = $str;
+	}
 
-    public function readMainToThreadPacket(){
-        return $this->internalQueue->shift();
-    }
+	public function readMainToThreadPacket(){
+		return $this->internalQueue->shift();
+	}
 
-    public function pushThreadToMainPacket($str){
-        $this->externalQueue[] = $str;
-    }
+	public function pushThreadToMainPacket($str){
+		$this->externalQueue[] = $str;
+	}
 
-    public function readThreadToMainPacket(){
-        return $this->externalQueue->shift();
-    }
+	public function readThreadToMainPacket(){
+		return $this->externalQueue->shift();
+	}
 
 	public function shutdownHandler(){
 		if($this->shutdown !== true){
@@ -212,26 +212,26 @@ class RakLibServer extends \Thread{
 		return rtrim(str_replace(["\\", ".php", "phar://", rtrim(str_replace(["\\", "phar://"], ["/", ""], $this->mainPath), "/")], ["/", "", "", ""], $path), "/");
 	}
 
-    public function run(){
-        //Load removed dependencies, can't use require_once()
-        foreach($this->loadPaths as $name => $path){
-            if(!class_exists($name, false) and !interface_exists($name, false)){
-                require($path);
-            }
-        }
-        $this->loader->register(true);
+	public function run(){
+		//Load removed dependencies, can't use require_once()
+		foreach($this->loadPaths as $name => $path){
+			if(!class_exists($name, false) and !interface_exists($name, false)){
+				require($path);
+			}
+		}
+		$this->loader->register(true);
 
-	    gc_enable();
-	    error_reporting(-1);
-	    ini_set("display_errors", 1);
-	    ini_set("display_startup_errors", 1);
+		gc_enable();
+		error_reporting(-1);
+		ini_set("display_errors", 1);
+		ini_set("display_startup_errors", 1);
 
-	    set_error_handler([$this, "errorHandler"], E_ALL);
-	    register_shutdown_function([$this, "shutdownHandler"]);
+		set_error_handler([$this, "errorHandler"], E_ALL);
+		register_shutdown_function([$this, "shutdownHandler"]);
 
 
-        $socket = new UDPServerSocket($this->getLogger(), $this->port, $this->interface);
-        new SessionManager($this, $socket);
-    }
+		$socket = new UDPServerSocket($this->getLogger(), $this->port, $this->interface);
+		new SessionManager($this, $socket);
+	}
 
 }
