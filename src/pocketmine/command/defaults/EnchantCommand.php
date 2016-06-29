@@ -28,6 +28,7 @@ use pocketmine\entity\InstantEffect;
 use pocketmine\event\TranslationContainer;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\utils\TextFormat;
+use pocketmine\Server;
 
 class EnchantCommand extends VanillaCommand{
 
@@ -47,7 +48,6 @@ class EnchantCommand extends VanillaCommand{
 
 		if(count($args) < 2){
 			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
-
 			return true;
 		}
 
@@ -73,6 +73,11 @@ class EnchantCommand extends VanillaCommand{
 
 		if($item->getId() <= 0){
 			$sender->sendMessage(new TranslationContainer("commands.enchant.noItem"));
+			return true;
+		}
+		
+		if(Enchantment::getEnchantAbility($item) === 0){
+			$sender->sendMessage(TextFormat::RED . Server::getInstance()->getLanguage()->translateString("commands.enchant.badItem"));
 			return true;
 		}
 
