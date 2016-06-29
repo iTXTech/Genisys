@@ -56,6 +56,11 @@ class ServerHandler{
         $this->server->pushMainToThreadPacket($buffer);
     }
 
+    public function unblockAddress($address){
+        $buffer = chr(RakLib::PACKET_UNBLOCK_ADDRESS) . chr(strlen($address)) . $address;
+        $this->server->pushMainToThreadPacket($buffer);
+    }
+
     public function shutdown(){
         $buffer = chr(RakLib::PACKET_SHUTDOWN);
         $this->server->pushMainToThreadPacket($buffer);
