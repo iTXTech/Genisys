@@ -77,7 +77,7 @@ class EnchantCommand extends VanillaCommand{
 		}
 		
 		if(Enchantment::getEnchantAbility($item) === 0){
-			$sender->sendMessage(TextFormat::RED . Server::getInstance()->getLanguage()->translateString("commands.enchant.badItem"));
+			$sender->sendMessage(new TranslationContainer(TextFormat::RED . "%commands.enchant.cantEnchant"));
 			return true;
 		}
 
