@@ -21,7 +21,7 @@
 
 namespace pocketmine\block;
 
-use pocketmine\event\entity\EntityRegainHealthEvent;
+//use pocketmine\event\entity\EntityEatBlockEvent ;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
 use pocketmine\math\AxisAlignedBB;
@@ -90,11 +90,11 @@ class Cake extends Transparent{
 	}
 
 	public function onActivate(Item $item, Player $player = null){
-		if($player instanceof Player and $player->getHealth() < $player->getMaxHealth()){
+		if($player instanceof Player and $player->getFood() < 20){
 			++$this->meta;
 
-			$ev = new EntityRegainHealthEvent($player, 3, EntityRegainHealthEvent::CAUSE_EATING);
-			$player->heal($ev->getAmount(), $ev);
+			$player->subtractFood(-2);
+			//to do :  add ($sender->getServer()->getPluginManager()->callEvent($ev = new EntityEatBlockEvent ($player, )));
 
 			if($this->meta >= 0x06){
 				$this->getLevel()->setBlock($this, new Air(), true);
