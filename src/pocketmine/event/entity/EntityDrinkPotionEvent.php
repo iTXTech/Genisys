@@ -45,4 +45,8 @@ class EntityDrinkPotionEvent extends EntityEvent implements Cancellable{
 	public function getEffects(){
 		return $this->effects;
 	}
+	
+	public function getPotion(){
+		return $this->potion;
+	}
 }
