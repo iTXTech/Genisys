@@ -93,16 +93,11 @@ class Fire extends Flowable{
 
 	public function onUpdate($type){
 		if($type == Level::BLOCK_UPDATE_NORMAL or $type == Level::BLOCK_UPDATE_RANDOM or $type == Level::BLOCK_UPDATE_SCHEDULED){
-			if($type == Level::BLOCK_UPDATE_SCHEDULED and $this->getLevel()->getWeather()->isRainy() and $this->getLevel()->canBlockSeeSky($this)){
-				$this->getLevel()->setBlock($this, new Air(), true, false);
-				return $type;
-			}
-			if($this->getLevel()->getWeather()->isRainy() and $this->getLevel()->canBlockSeeSky($this)){
-				$this->getLevel()->scheduleUpdate($this, 20 * 2);
-			}
 			if(!$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() and !$this->canNeighborBurn()){
 				$this->getLevel()->setBlock($this, new Air(), true);
 				return Level::BLOCK_UPDATE_NORMAL;
+			}elseif($type == Level::BLOCK_UPDATE_NORMAL or $type == Level::BLOCK_UPDATE_RANDOM){
+				$this->getLevel()->scheduleUpdate($this, $this->getTickRate() + mt_rand(0, 10));
 			}elseif($type == Level::BLOCK_UPDATE_SCHEDULED and $this->getLevel()->getServer()->fireSpread){
 				$forever = $this->getSide(Vector3::SIDE_DOWN)->getId() == Block::NETHERRACK;
 
