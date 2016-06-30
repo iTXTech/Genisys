@@ -47,7 +47,6 @@ use pocketmine\event\block\SignChangeEvent;
 use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
-use pocketmine\event\entity\EntityEatItemEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\entity\EntityShootBowEvent;
 use pocketmine\event\entity\ProjectileLaunchEvent;
@@ -149,7 +148,6 @@ use pocketmine\network\protocol\TakeItemEntityPacket;
 use pocketmine\network\protocol\TextPacket;
 use pocketmine\network\protocol\UpdateAttributesPacket;
 use pocketmine\network\protocol\UpdateBlockPacket;
-use pocketmine\network\protocol\UseItemPacket;
 use pocketmine\network\SourceInterface;
 use pocketmine\permission\PermissibleBase;
 use pocketmine\permission\PermissionAttachment;
@@ -294,6 +292,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/** @var Item[] */
 	protected $personalCreativeItems = [];
+	
+	/** @var Item */
+	private $anvilItem;
 
 	public function linkHookToPlayer(FishingHook $entity){
 		if($entity->isAlive()){
@@ -416,6 +417,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, 0, $level, PlayerExperienceChangeEvent::ADD_EXPERIENCE));
 		if(!$ev->isCancelled()){
 			$this->expLevel = $this->expLevel + $ev->getExpLevel();
+			$this->exp = $this->server->getExpectedExperience($this->expLevel);
 			$this->calcExpLevel();
 			$this->updateExperience();
 			return true;
@@ -3277,8 +3279,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->craftingType = 0;
 				$this->currentTransaction = null;
 				if(isset($this->windowIndex[$packet->windowid])){
-					if($this->windowIndex[$packet->windowid] instanceof EnchantInventory){
+					if($this->windowIndex[$packet->windowid] instanceof EnchantInventory or $this->windowIndex[$packet->windowid] instanceof AnvilInventory){
 						$this->updateExperience();
+					}
+					if($this->windowIndex[$packet->windowid] instanceof AnvilInventory){
+						$this->anvilItem = null;
 					}
 					$this->server->getPluginManager()->callEvent(new InventoryCloseEvent($this->windowIndex[$packet->windowid], $this));
 					$this->removeWindow($this->windowIndex[$packet->windowid]);
@@ -3512,8 +3517,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$inv->onEnchant($this, $inv->getItem($packet->slot), $packet->item);
 					}
 
-					if($inv instanceof AnvilInventory and $packet->item->hasCustomName()){
-						//TODO
+					if($inv instanceof AnvilInventory){
+						if($packet->slot == 2){
+							if($packet->item->getId() != Item::AIR){
+								$this->anvilItem = $packet->item;
+							}elseif($this->anvilItem != null){
+								$cost = $this->anvilItem->getRepairCost();
+								$this->addExpLevel(-$cost);
+								$this->anvilItem = null;
+							}
+						}
 					}
 
 					$transaction = new BaseTransaction($inv, $packet->slot, $inv->getItem($packet->slot), $packet->item);
