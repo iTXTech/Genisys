@@ -58,14 +58,10 @@ class Item{
 	const STONE = 1;
 	const GRASS = 2;
 	const DIRT = 3;
-	const COBBLESTONE = 4;
-	const COBBLE = 4;
-	const PLANK = 5;
-	const PLANKS = 5;
-	const WOODEN_PLANK = 5;
-	const WOODEN_PLANKS = 5;
-	const SAPLING = 6;
-	const SAPLINGS = 6;
+	const COBBLESTONE = 4;  const COBBLE = 4;
+	const PLANK = 5; const PLANKS = 5;
+	const WOODEN_PLANK = 5; const WOODEN_PLANKS = 5;
+	const SAPLING = 6; const SAPLINGS = 6;
 	const BEDROCK = 7;
 	const WATER = 8;
 	const STILL_WATER = 9;
@@ -76,255 +72,200 @@ class Item{
 	const GOLD_ORE = 14;
 	const IRON_ORE = 15;
 	const COAL_ORE = 16;
-	const LOG = 17;
-	const WOOD = 17;
-	const TRUNK = 17;
+	const LOG = 17; const WOOD = 17; const TRUNK = 17;
 	const LEAVES = 18;
-	const LEAVE = 18;
 	const SPONGE = 19;
 	const GLASS = 20;
 	const LAPIS_ORE = 21;
 	const LAPIS_BLOCK = 22;
-
 	const DISPENSER = 23;
-
 	const SANDSTONE = 24;
 	const NOTEBLOCK = 25;
 	const BED_BLOCK = 26;
 	const POWERED_RAIL = 27;
 	const DETECTOR_RAIL = 28;
+	const STICKY_PISTON = 29;
 	const COBWEB = 30;
 	const TALL_GRASS = 31;
 	const BUSH = 32;
 	const DEAD_BUSH = 32;
+	const PISTON = 33;
+	const PISTON_HEAD = 34;
 	const WOOL = 35;
+
 	const DANDELION = 37;
-	const POPPY = 38;
-	const ROSE = 38;
-	const RED_FLOWER = 38;
+	const POPPY = 38; const ROSE = 38; const RED_FLOWER = 38;
 	const BROWN_MUSHROOM = 39;
 	const RED_MUSHROOM = 40;
 	const GOLD_BLOCK = 41;
 	const IRON_BLOCK = 42;
-	const DOUBLE_SLAB = 43;
-	const DOUBLE_SLABS = 43;
-	const SLAB = 44;
-	const SLABS = 44;
-	const BRICKS = 45;
-	const BRICKS_BLOCK = 45;
+	const DOUBLE_SLAB = 43; const DOUBLE_SLABS = 43;
+	const SLAB = 44; const SLABS = 44;
+	const BRICKS = 45; const BRICKS_BLOCK = 45;
 	const TNT = 46;
 	const BOOKSHELF = 47;
-	const MOSS_STONE = 48;
-	const MOSSY_STONE = 48;
+	const MOSS_STONE = 48; const MOSSY_STONE = 48;
 	const OBSIDIAN = 49;
 	const TORCH = 50;
 	const FIRE = 51;
 	const MONSTER_SPAWNER = 52;
-	const WOOD_STAIRS = 53;
-	const WOODEN_STAIRS = 53;
-	const OAK_WOOD_STAIRS = 53;
-	const OAK_WOODEN_STAIRS = 53;
+	const WOOD_STAIRS = 53; const WOODEN_STAIRS = 53; const OAK_WOOD_STAIRS = 53; const OAK_WOODEN_STAIRS = 53;
 	const CHEST = 54;
 	const REDSTONE_WIRE = 55;
 	const DIAMOND_ORE = 56;
 	const DIAMOND_BLOCK = 57;
-	const CRAFTING_TABLE = 58;
-	const WORKBENCH = 58;
+	const CRAFTING_TABLE = 58; const WORKBENCH = 58;
 	const WHEAT_BLOCK = 59;
 	const FARMLAND = 60;
 	const FURNACE = 61;
-	const BURNING_FURNACE = 62;
-	const LIT_FURNACE = 62;
+	const BURNING_FURNACE = 62; const LIT_FURNACE = 62;
 	const SIGN_POST = 63;
-	const DOOR_BLOCK = 64;
-	const WOODEN_DOOR_BLOCK = 64;
-	const WOOD_DOOR_BLOCK = 64;
+	const DOOR_BLOCK = 64; const WOODEN_DOOR_BLOCK = 64; const WOOD_DOOR_BLOCK = 64;
 	const LADDER = 65;
 	const RAIL = 66;
-	const COBBLE_STAIRS = 67;
-	const COBBLESTONE_STAIRS = 67;
+	const COBBLESTONE_STAIRS = 67; const COBBLE_STAIRS = 67;
 	const WALL_SIGN = 68;
 	const LEVER = 69;
 	const STONE_PRESSURE_PLATE = 70;
 	const IRON_DOOR_BLOCK = 71;
 	const WOODEN_PRESSURE_PLATE = 72;
 	const REDSTONE_ORE = 73;
-	const GLOWING_REDSTONE_ORE = 74;
-	const LIT_REDSTONE_ORE = 74;
-	const REDSTONE_TORCH = 75;
-	const LIT_REDSTONE_TORCH = 76;
+	const GLOWING_REDSTONE_ORE = 74; const LIT_REDSTONE_ORE = 74;
 	const UNLIT_REDSTONE_TORCH = 75;
+	const REDSTONE_TORCH = 76; const LIT_REDSTONE_TORCH = 76;
 	const STONE_BUTTON = 77;
-	const SNOW = 78;
-	const SNOW_LAYER = 78;
+	const SNOW = 78; const SNOW_LAYER = 78;
 	const ICE = 79;
 	const SNOW_BLOCK = 80;
 	const CACTUS = 81;
 	const CLAY_BLOCK = 82;
-	const REEDS = 83;
-	const SUGARCANE_BLOCK = 83;
+	const REEDS = 83; const SUGARCANE_BLOCK = 83;
 
 	const FENCE = 85;
 	const PUMPKIN = 86;
 	const NETHERRACK = 87;
 	const SOUL_SAND = 88;
-	const GLOWSTONE = 89;
-	const GLOWSTONE_BLOCK = 89;
-
-	const PORTAL_BLOCK = 90;
-	const PORTAL = 90;
-	const LIT_PUMPKIN = 91;
-	const JACK_O_LANTERN = 91;
+	const GLOWSTONE = 89; const GLOWSTONE_BLOCK = 89;
+	const PORTAL_BLOCK = 90; const PORTAL = 90;
+	const JACK_O_LANTERN = 91; const LIT_PUMPKIN = 91;
 	const CAKE_BLOCK = 92;
-
-	const UNPOWERED_REPEATER = 93;
-	const POWERED_REPEATER = 94;
-
+	const REPEATER_BLOCK = 93; const UNPOWERED_REPEATER_BLOCK = 93;
+	const POWERED_REPEATER_BLOCK = 94;
+	const INVISIBLE_BEDROCK = 95;
 	const TRAPDOOR = 96;
 	const MONSTER_EGG_BLOCK = 97;
-	const STONE_BRICKS = 98;
-	const STONE_BRICK = 98;
+	const STONE_BRICKS = 98; const STONE_BRICK = 98;
 	const BROWN_MUSHROOM_BLOCK = 99;
 	const RED_MUSHROOM_BLOCK = 100;
-	const IRON_BAR = 101;
-	const IRON_BARS = 101;
-	const GLASS_PANE = 102;
-	const GLASS_PANEL = 102;
+	const IRON_BAR = 101; const IRON_BARS = 101;
+	const GLASS_PANE = 102; const GLASS_PANEL = 102;
 	const MELON_BLOCK = 103;
 	const PUMPKIN_STEM = 104;
 	const MELON_STEM = 105;
-	const VINE = 106;
-	const VINES = 106;
+	 const VINES = 106; const VINE = 106;
 	const FENCE_GATE = 107;
 	const BRICK_STAIRS = 108;
 	const STONE_BRICK_STAIRS = 109;
 	const MYCELIUM = 110;
-	const WATER_LILY = 111;
-	const LILY_PAD = 111;
-	const NETHER_BRICKS = 112;
-	const NETHER_BRICK_BLOCK = 112;
+	const LILY_PAD = 111; const WATER_LILY = 111;
+	const NETHER_BRICKS = 112; const NETHER_BRICK_BLOCK = 112;
 	const NETHER_BRICK_FENCE = 113;
 	const NETHER_BRICKS_STAIRS = 114;
 	const NETHER_WART_BLOCK = 115;
-	const ENCHANTING_TABLE = 116;
-	const ENCHANT_TABLE = 116;
-	const ENCHANTMENT_TABLE = 116;
+	const ENCHANTING_TABLE = 116; const ENCHANT_TABLE = 116; const ENCHANTMENT_TABLE = 116;
 	const BREWING_STAND_BLOCK = 117;
+	const CAULDRON_BLOCK = 118;
 
-	const END_PORTAL = 120;
+	const END_PORTAL_FRAME = 120; const END_PORTAL = 120;
 	const END_STONE = 121;
-	const REDSTONE_LAMP = 122;
-	const LIT_REDSTONE_LAMP = 123;
-	const INACTIVE_REDSTONE_LAMP = 123;
-	const ACTIVE_REDSTONE_LAMP = 124;
 
+	const REDSTONE_LAMP = 123; const INACTIVE_REDSTONE_LAMP = 123;
+	const LIT_REDSTONE_LAMP = 124; const ACTIVE_REDSTONE_LAMP = 124;
 	const DROPPER = 125;
-
 	const ACTIVATOR_RAIL = 126;
-	const COCOA_BLOCK = 127;
-	const COCOA_PODS = 127;
+	const COCOA_BLOCK = 127; const COCOA_PODS = 127;
 	const SANDSTONE_STAIRS = 128;
 	const EMERALD_ORE = 129;
 
 	const TRIPWIRE_HOOK = 131;
 	const TRIPWIRE = 132;
 	const EMERALD_BLOCK = 133;
-	const SPRUCE_WOOD_STAIRS = 134;
-	const SPRUCE_WOODEN_STAIRS = 134;
-	const BIRCH_WOOD_STAIRS = 135;
-	const BIRCH_WOODEN_STAIRS = 135;
-	const JUNGLE_WOOD_STAIRS = 136;
-	const JUNGLE_WOODEN_STAIRS = 136;
+	const SPRUCE_WOOD_STAIRS = 134; const SPRUCE_WOODEN_STAIRS = 134;
+	const BIRCH_WOOD_STAIRS = 135; const BIRCH_WOODEN_STAIRS = 135;
+	const JUNGLE_WOOD_STAIRS = 136; const JUNGLE_WOODEN_STAIRS = 136;
 
-	const COBBLE_WALL = 139;
-	const STONE_WALL = 139;
-	const COBBLESTONE_WALL = 139;
+	const COBBLESTONE_WALL = 139; const COBBLE_WALL = 139; const STONE_WALL = 139;
 	const FLOWER_POT_BLOCK = 140;
 	const CARROT_BLOCK = 141;
 	const POTATO_BLOCK = 142;
 	const WOODEN_BUTTON = 143;
-	const MOB_HEAD_BLOCK = 144;
-	const SKULL_BLOCK = 144;
-	const TRAPPED_CHEST = 146;
+	const MOB_HEAD_BLOCK = 144; const SKULL_BLOCK = 144;
 	const ANVIL = 145;
-	const WEIGHTED_PRESSURE_PLATE_LIGHT = 147;
-	const WEIGHTED_PRESSURE_PLATE_HEAVY = 148;
-	const LIGHT_WEIGHTED_PRESSURE_PLATE = 147;
-	const HEAVY_WEIGHTED_PRESSURE_PLATE = 148;
-
+	const TRAPPED_CHEST = 146;
+	const WEIGHTED_PRESSURE_PLATE_LIGHT = 147; const LIGHT_WEIGHTED_PRESSURE_PLATE = 147; const GOLD_PRESSURE_PLATE = 147;
+	const WEIGHTED_PRESSURE_PLATE_HEAVY = 148; const HEAVY_WEIGHTED_PRESSURE_PLATE = 148; const IRON_PRESSURE_PLATE = 148;
+	const COMPARATOR_BLOCK = 149; const UNPOWERED_COMPARATOR_BLOCK = 149;
+	const POWERED_COMPARATOR_BLOCK = 150;
 	const DAYLIGHT_SENSOR = 151;
 	const REDSTONE_BLOCK = 152;
 	const NETHER_QUARTZ_ORE = 153;
-
+	const HOPPER_BLOCK = 154;
 	const QUARTZ_BLOCK = 155;
 	const QUARTZ_STAIRS = 156;
-	const DOUBLE_WOOD_SLAB = 157;
-	const DOUBLE_WOODEN_SLAB = 157;
-	const DOUBLE_WOOD_SLABS = 157;
-	const DOUBLE_WOODEN_SLABS = 157;
-	const WOOD_SLAB = 158;
-	const WOODEN_SLAB = 158;
-	const WOOD_SLABS = 158;
-	const WOODEN_SLABS = 158;
-	const STAINED_CLAY = 159;
-	const STAINED_HARDENED_CLAY = 159;
-
+	const DOUBLE_WOOD_SLAB = 157; const DOUBLE_WOODEN_SLAB = 157; const DOUBLE_WOOD_SLABS = 157; const DOUBLE_WOODEN_SLABS = 157;
+	const WOOD_SLAB = 158; const WOODEN_SLAB = 158; const WOOD_SLABS = 158; const WOODEN_SLABS = 158;
+	const STAINED_CLAY = 159; const STAINED_HARDENED_CLAY = 159;
+	
 	const LEAVES2 = 161;
-	const LEAVE2 = 161;
-	const WOOD2 = 162;
-	const TRUNK2 = 162;
-	const LOG2 = 162;
-	const ACACIA_WOOD_STAIRS = 163;
-	const ACACIA_WOODEN_STAIRS = 163;
-	const DARK_OAK_WOOD_STAIRS = 164;
-	const DARK_OAK_WOODEN_STAIRS = 164;
+	const WOOD2 = 162; const TRUNK2 = 162; const LOG2 = 162;
+	const ACACIA_WOOD_STAIRS = 163; const ACACIA_WOODEN_STAIRS = 163;
+	const DARK_OAK_WOOD_STAIRS = 164; const DARK_OAK_WOODEN_STAIRS = 164;
 	const SLIME_BLOCK = 165;
+	
 	const IRON_TRAPDOOR = 167;
-
+	
 	const HAY_BALE = 170;
 	const CARPET = 171;
 	const HARDENED_CLAY = 172;
 	const COAL_BLOCK = 173;
 	const PACKED_ICE = 174;
 	const DOUBLE_PLANT = 175;
-
-	const INVERTED_DAYLIGHT_SENSOR = 178;
-	const DAYLIGHT_SENSOR_INVERTED = 178;
-
+	
+	const INVERTED_DAYLIGHT_SENSOR = 178; const DAYLIGHT_SENSOR_INVERTED = 178;
 	const RED_SANDSTONE = 179;
 	const RED_SANDSTONE_STAIRS = 180;
 	const DOUBLE_RED_SANDSTONE_SLAB = 181;
 	const RED_SANDSTONE_SLAB = 182;
-
-	const FENCE_GATE_SPRUCE = 183;
-	const FENCE_GATE_BIRCH = 184;
-	const FENCE_GATE_JUNGLE = 185;
-	const FENCE_GATE_DARK_OAK = 186;
-	const FENCE_GATE_ACACIA = 187;
-
+	const SPRUCE_FENCE_GATE = 183; const FENCE_GATE_SPRUCE = 183;
+	const BIRCH_FENCE_GATE = 184; const FENCE_GATE_BIRCH = 184;
+	const JUNGLE_FENCE_GATE = 185; const FENCE_GATE_JUNGLE = 185;
+	const DARK_OAK_FENCE_GATE = 186; const FENCE_GATE_DARK_OAK = 186;
+	const ACACIA_FENCE_GATE = 187; const FENCE_GATE_ACACIA = 187;
+	
 	const SPRUCE_DOOR_BLOCK = 193;
 	const BIRCH_DOOR_BLOCK = 194;
 	const JUNGLE_DOOR_BLOCK = 195;
 	const ACACIA_DOOR_BLOCK = 196;
 	const DARK_OAK_DOOR_BLOCK = 197;
-
 	const GRASS_PATH = 198;
-
 	const ITEM_FRAME_BLOCK = 199;
-
+	
 	const PODZOL = 243;
 	const BEETROOT_BLOCK = 244;
 	const STONECUTTER = 245;
 	const GLOWING_OBSIDIAN = 246;
 	const NETHER_REACTOR = 247;
-
+	const UPDATE_BLOCK = 248;
+	const ATEUPD_BLOCK = 249;
+	const BLOCK_MOVED_BY_PISTON = 250;
+	const OBSERVER = 251;
+	const INFO_RESERVED6 = 255;
 
 	//Normal Item IDs
 	const IRON_SHOVEL = 256;
 	const IRON_PICKAXE = 257;
 	const IRON_AXE = 258;
-	const FLINT_STEEL = 259;
-	const FLINT_AND_STEEL = 259;
+	const FLINT_AND_STEEL = 259; const FLINT_STEEL = 259;
 	const APPLE = 260;
 	const BOW = 261;
 	const ARROW = 262;
@@ -345,18 +286,13 @@ class Item{
 	const DIAMOND_SHOVEL = 277;
 	const DIAMOND_PICKAXE = 278;
 	const DIAMOND_AXE = 279;
-	const STICK = 280;
-	const STICKS = 280;
+	const STICK = 280; const STICKS = 280;
 	const BOWL = 281;
 	const MUSHROOM_STEW = 282;
-	const GOLD_SWORD = 283;
-	const GOLD_SHOVEL = 284;
-	const GOLD_PICKAXE = 285;
-	const GOLD_AXE = 286;
-	const GOLDEN_SWORD = 283;
-	const GOLDEN_SHOVEL = 284;
-	const GOLDEN_PICKAXE = 285;
-	const GOLDEN_AXE = 286;
+	const GOLD_SWORD = 283; const GOLDEN_SWORD = 283;
+	const GOLD_SHOVEL = 284; const GOLDEN_SHOVEL = 284;
+	const GOLD_PICKAXE = 285; const GOLDEN_PICKAXE = 285;
+	const GOLD_AXE = 286; const GOLDEN_AXE = 286;
 	const STRING = 287;
 	const FEATHER = 288;
 	const GUNPOWDER = 289;
@@ -364,10 +300,8 @@ class Item{
 	const STONE_HOE = 291;
 	const IRON_HOE = 292;
 	const DIAMOND_HOE = 293;
-	const GOLD_HOE = 294;
-	const GOLDEN_HOE = 294;
-	const SEEDS = 295;
-	const WHEAT_SEEDS = 295;
+	const GOLD_HOE = 294; const GOLDEN_HOE = 294;
+	const SEEDS = 295; const WHEAT_SEEDS = 295;
 	const WHEAT = 296;
 	const BREAD = 297;
 	const LEATHER_CAP = 298;
@@ -407,16 +341,15 @@ class Item{
 	const SNOWBALL = 332;
 	const BOAT = 333;
 	const LEATHER = 334;
-
+	
 	const BRICK = 336;
 	const CLAY = 337;
-	const SUGARCANE = 338;
-	const SUGAR_CANE = 338;
-	const SUGAR_CANES = 338;
+	const SUGARCANE = 338; const SUGAR_CANE = 338; const SUGAR_CANES = 338;
 	const PAPER = 339;
 	const BOOK = 340;
 	const SLIMEBALL = 341;
-
+	const MINECART_WITH_CHEST = 342;
+	
 	const EGG = 344;
 	const COMPASS = 345;
 	const FISHING_ROD = 346;
@@ -429,29 +362,22 @@ class Item{
 	const SUGAR = 353;
 	const CAKE = 354;
 	const BED = 355;
-
 	const REPEATER = 356;
-
 	const COOKIE = 357;
-
 	const FILLED_MAP = 358;
-
 	const SHEARS = 359;
-	const MELON = 360;
-	const MELON_SLICE = 360;
+	const MELON = 360; const MELON_SLICE = 360;
 	const PUMPKIN_SEEDS = 361;
 	const MELON_SEEDS = 362;
 	const RAW_BEEF = 363;
-	const STEAK = 364;
-	const COOKED_BEEF = 364;
+	const STEAK = 364; const COOKED_BEEF = 364;
 	const RAW_CHICKEN = 365;
 	const COOKED_CHICKEN = 366;
 	const ROTTEN_FLESH = 367;
 
 	const BLAZE_ROD = 369;
 	const GHAST_TEAR = 370;
-	const GOLD_NUGGET = 371;
-	const GOLDEN_NUGGET = 371;
+	const GOLD_NUGGET = 371; const GOLDEN_NUGGET = 371;
 	const NETHER_WART = 372;
 	const POTION = 373;
 	const GLASS_BOTTLE = 374;
@@ -459,31 +385,26 @@ class Item{
 	const FERMENTED_SPIDER_EYE = 376;
 	const BLAZE_POWDER = 377;
 	const MAGMA_CREAM = 378;
-
 	const BREWING_STAND = 379;
 	const CAULDRON = 380;
 
 	const GLISTERING_MELON = 382;
 	const SPAWN_EGG = 383;
-	const BOTTLE_O_ENCHANTING = 384;
-	const ENCHANTING_BOTTLE = 384;
-
+	const BOTTLE_O_ENCHANTING = 384; const ENCHANTING_BOTTLE = 384;
+	const FIRE_CHARGE = 385;
+	
 	const EMERALD = 388;
-
 	const ITEM_FRAME = 389;
-
 	const FLOWER_POT = 390;
-	const CARROT = 391;
-	const CARROTS = 391;
-	const POTATO = 392;
-	const POTATOES = 392;
-	const BAKED_POTATO = 393;
-	const BAKED_POTATOES = 393;
+	const CARROT = 391; const CARROTS = 391;
+	const POTATO = 392; const POTATOES = 392;
+	const BAKED_POTATO = 393; const BAKED_POTATOES = 393;
 	const POISONOUS_POTATO = 394;
-	const MAP = 395;
+	const MAP = 395; const EMPTY_MAP = 395;
 	const GOLDEN_CARROT = 396;
-	const MOB_HEAD = 397;
-	const SKULL = 397;
+	const MOB_HEAD = 397; const SKULL = 397;
+	const CARROT_ON_A_STICK = 398;
+	
 	const PUMPKIN_PIE = 400;
 
 	const ENCHANTED_BOOK = 403;
@@ -491,12 +412,21 @@ class Item{
 	const NETHER_BRICK = 405;
 	const QUARTZ = 406;
 	const NETHER_QUARTZ = 406;
-
+	const MINECART_WITH_TNT = 407;
+	const MINECART_WITH_HOPPER = 408;
+	
+	const HOPPER = 410;
 	const RAW_RABBIT = 411;
 	const COOKED_RABBIT = 412;
 	const RABBIT_STEW = 413;
 	const RABBIT_FOOT = 414;
 	const RABBIT_HIDE = 415;
+	const LEATHER_HORSE_ARMOR = 416; //I hate being forced to spell this wrong
+	const IRON_HORSE_ARMOR = 417;
+	const GOLD_HORSE_ARMOR = 418;
+	const DIAMOND_HORSE_ARMOR = 419;
+	const LEAD = 420; const LEASH = 420;
+	const NAMETAG = 421;
 	
 	const RAW_MUTTON = 423;
 	const COOKED_MUTTON = 424;
@@ -506,25 +436,20 @@ class Item{
 	const JUNGLE_DOOR = 429;
 	const ACACIA_DOOR = 430;
 	const DARK_OAK_DOOR = 431;
+	
 	const SPLASH_POTION = 438;
-	const SPRUCE_BOAT = 444;
-	const BIRCH_BOAT = 445;
-	const JUNGLE_BOAT = 446;
-	const ACACIA_BOAT = 447;
-	const DARK_OAK_BOAT = 448;
-
-	const CAMERA = 439;
+	
 	const BEETROOT = 457;
-	const BEETROOT_SEEDS = 458;
-	const BEETROOT_SEED = 458;
+	const BEETROOT_SEEDS = 458; const BEETROOT_SEED = 458;
 	const BEETROOT_SOUP = 459;
-
 	const RAW_SALMON = 460;
 	const CLOWN_FISH = 461;
 	const PUFFER_FISH = 462;
 	const COOKED_SALMON = 463;
 
 	const ENCHANTED_GOLDEN_APPLE = 466;
+
+	const CAMERA = 498; #blamemojang
 
 
 	/** @var \SplFixedArray */
