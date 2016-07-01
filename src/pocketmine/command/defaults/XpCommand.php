@@ -48,11 +48,16 @@ class XpCommand extends VanillaCommand{
 			return false;
 		}else{
 <<<<<<< HEAD
+<<<<<<< HEAD
 			$player = $sender->getServer()->getPlayerExact($name = $args[1]);
 =======
 			$player = $sender->getServer()->getPlayer($args[1]);
 >>>>>>> parent of 5886983... Revert "XP autoname"
+=======
+			$player = $sender->getServer()->getPlayer($args[1]);
+>>>>>>> refs/remotes/origin/master
 			if($player instanceof Player){
+				$name = $player->getName();
 				if(strcasecmp(substr($args[0], -1), "L") == 0){			//Set Experience Level(with "L" after args[0])
 					$level = rtrim($args[0], "Ll");
 					if(is_numeric($level)){
