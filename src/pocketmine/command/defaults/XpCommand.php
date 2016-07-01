@@ -47,7 +47,11 @@ class XpCommand extends VanillaCommand{
 			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
 			return false;
 		}else{
+<<<<<<< HEAD
 			$player = $sender->getServer()->getPlayerExact($name = $args[1]);
+=======
+			$player = $sender->getServer()->getPlayer($args[1]);
+>>>>>>> parent of 5886983... Revert "XP autoname"
 			if($player instanceof Player){
 				if(strcasecmp(substr($args[0], -1), "L") == 0){			//Set Experience Level(with "L" after args[0])
 					$level = rtrim($args[0], "Ll");
