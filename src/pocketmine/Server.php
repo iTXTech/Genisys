@@ -360,7 +360,7 @@ class Server{
 	public $dserverAllPlayers = 0;
 	public $redstoneEnabled = false;
 	public $allowFrequencyPulse = true;
-	public $anviletEnabled = false;
+	public $anvilEnabled = false;
 	public $pulseFrequency = 20;
 	public $playerMsgType = self::PLAYER_MSG_TYPE_MESSAGE;
 	public $playerLoginMsg = "";
@@ -379,6 +379,8 @@ class Server{
 	public $fireSpread = false;
 	public $advancedCommandSelector = false;
 	public $synapseConfig = [];
+	public $enchantingTableEnabled = true;
+	public $countBookshelf = false;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -1699,7 +1701,6 @@ class Server{
 		$this->redstoneEnabled = $this->getAdvancedProperty("redstone.enable", false);
 		$this->allowFrequencyPulse = $this->getAdvancedProperty("redstone.allow-frequency-pulse", false);
 		$this->pulseFrequency = $this->getAdvancedProperty("redstone.pulse-frequency", 20);
-		$this->anviletEnabled = $this->getAdvancedProperty("server.allow-anvilandenchanttable", true);
 		$this->getLogger()->setWrite(!$this->getAdvancedProperty("server.disable-log", false));
 		$this->antiFly = $this->getAdvancedProperty("server.anti-fly", true);
 		$this->asyncChunkRequest = $this->getAdvancedProperty("server.async-chunk-request", true);
@@ -1722,6 +1723,9 @@ class Server{
 			"description" => $this->getAdvancedProperty("synapse.description", "A Synapse client"),
 			"disable-rak" => $this->getAdvancedProperty("synapse.disable-rak", false),
 		];
+		$this->anvilEnabled = $this->getAdvancedProperty("enchantment.enable-anvil", true);
+		$this->enchantingTableEnabled = $this->getAdvancedProperty("enchantment.enable-enchanting-table", true);
+		$this->countBookshelf = $this->getAdvancedProperty("enchantment.count-bookshelf", false);
 	}
 
 	public function isSynapseEnabled() : bool {

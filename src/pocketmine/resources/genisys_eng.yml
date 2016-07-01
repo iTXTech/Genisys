@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 16
+ version: 17
 
 level:
  #Set if turn on the weather system
@@ -50,8 +50,6 @@ server:
  allow-iron-golem: false
  #Choose if spawning snow golem is allowed
  allow-snow-golem: false
- #Choose if anvil and enchanttable are allowed
- allow-anvilandenchanttable: true
  #Choose if disable server.log
  disable-log: false
  #Choose if enable auto anti fly
@@ -80,6 +78,15 @@ server:
  allow-splash-potion: true
  #Set if enable advanced Command Selector
  advanced-command-selector: false
+
+enchantment:
+ #Choose if anvil is allowed
+ enable-anvil: true
+ #Choose if EnchantingTable is allowed
+ enable-enchanting-table: true
+ #Choose if to count bookshelves, may cause server lag.
+ #If this option is false, server will use a random count (0~15)
+ count-bookshelf: false
 
 redstone:
  ##########################################
