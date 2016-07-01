@@ -166,6 +166,7 @@ use pocketmine\entity\Minecart;
 use pocketmine\entity\ThrownPotion;
 use pocketmine\entity\Painting;
 use pocketmine\entity\Husk;
+use pocketmine\entity\Stray;
 use pocketmine\scheduler\DServerTask;
 use pocketmine\scheduler\CallbackTask;
 use synapse\Synapse;
@@ -3094,6 +3095,7 @@ class Server{
 		Entity::registerEntity(SnowGolem::class);
 		Entity::registerEntity(Spider::class);
 		Entity::registerEntity(Squid::class);
+		Entity::registerEntity(Stray::class);
 		Entity::registerEntity(ThrownExpBottle::class);
 		Entity::registerEntity(ThrownPotion::class);
 		Entity::registerEntity(Villager::class);
