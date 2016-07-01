@@ -2,7 +2,7 @@
 
 #Phiên bản file cài đặt
 config:
- version: 16
+ version: 17
 
 level:
  #Chỉnh nếu muốn bật/tắt thời tiết (true/false)
@@ -78,6 +78,15 @@ server:
  allow-splash-potion: true
  #Bật/tắt nếu muốn thêm Lệnh Nâng Cao (mặc định: false) (true/false)
  advanced-command-selector: false
+ 
+enchantment:
+ #Bật/tắt nếu muốn kích hoạt Cái Đe
+ enable-anvil: true
+ #Bật/tắt nếu muốn kích hoạt Bàn Phù Phép
+ enable-enchanting-table: true
+ #Bật/tắt nếu muốn đếm sách trong tủ sách, có thể gây server lag
+ #Nếu để false, server sẽ tự động đếm từ (0~15)
+ count-bookshelf: false
 
 enchantment:
  #Choose if anvil is allowed
@@ -105,12 +114,13 @@ synapse:
  enabled: false
  server-ip: 127.0.0.1
  server-port: 10305
- #If this client is the lobby or the main server
+ #Nếu Client này là server chính hoặc sv lobby
  is-main-server: true
+ #Mật khẩu Synapse (có thể tham khảo ở server.properties tại Synapse)
  server-password: 32bitlongkey
- #Description of this client is the identifier of this client
+ #Mô tả về hệ thống Synapse của bạn
  description: "A Synapse client"
- #Disable RakLib means that players can only join via Synapse
+ #Hủy RakLib tức là chỉ có thể vào Synapse mà không vào server này (mặc định là false)
  disable-rak: false
 
 dserver:
