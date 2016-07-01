@@ -27,6 +27,9 @@ use pocketmine\level\Level;
 use pocketmine\Player;
 
 class TallGrass extends Flowable{
+	
+	const NORMAL = 1;
+	const FERN = 2;
 
 	protected $id = self::TALL_GRASS;
 

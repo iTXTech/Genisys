@@ -31,6 +31,8 @@ use pocketmine\Server;
 
 use pocketmine\block\Fence;
 
+use pocketmine\inventory\CreativeItems;
+
 class Item{
 	/** @var NBT */
 	private static $cachedParser = null;
@@ -100,7 +102,7 @@ class Item{
 	const GOLD_BLOCK = 41;
 	const IRON_BLOCK = 42;
 	const DOUBLE_SLAB = 43; const DOUBLE_SLABS = 43;
-	const SLAB = 44; const SLABS = 44;
+	const SLAB = 44; const SLABS = 44; const STONE_SLAB = 44;
 	const BRICKS = 45; const BRICKS_BLOCK = 45;
 	const TNT = 46;
 	const BOOKSHELF = 47;
@@ -152,18 +154,18 @@ class Item{
 	const REPEATER_BLOCK = 93; const UNPOWERED_REPEATER_BLOCK = 93;
 	const POWERED_REPEATER_BLOCK = 94;
 	const INVISIBLE_BEDROCK = 95;
-	const TRAPDOOR = 96;
+	const TRAPDOOR = 96; const WOODEN_TRAPDOOR = 96;
 	const MONSTER_EGG_BLOCK = 97;
 	const STONE_BRICKS = 98; const STONE_BRICK = 98;
 	const BROWN_MUSHROOM_BLOCK = 99;
 	const RED_MUSHROOM_BLOCK = 100;
-	const IRON_BAR = 101; const IRON_BARS = 101;
+	const IRON_BARS = 101; const IRON_BAR = 101;
 	const GLASS_PANE = 102; const GLASS_PANEL = 102;
 	const MELON_BLOCK = 103;
 	const PUMPKIN_STEM = 104;
 	const MELON_STEM = 105;
 	const VINES = 106; const VINE = 106;
-	const FENCE_GATE = 107;
+	const FENCE_GATE = 107; const OAK_FENCE_GATE = 107;
 	const BRICK_STAIRS = 108;
 	const STONE_BRICK_STAIRS = 109;
 	const MYCELIUM = 110;
@@ -330,7 +332,7 @@ class Item{
 	const PAINTING = 321;
 	const GOLDEN_APPLE = 322;
 	const SIGN = 323;
-	const WOODEN_DOOR = 324;
+	const WOODEN_DOOR = 324; const OAK_DOOR = 324;
 	const BUCKET = 325;
 
 	const MINECART = 328;
@@ -408,7 +410,7 @@ class Item{
 	const PUMPKIN_PIE = 400;
 
 	const ENCHANTED_BOOK = 403;
-
+	const COMPARATOR = 404;
 	const NETHER_BRICK = 405;
 	const QUARTZ = 406;
 	const NETHER_QUARTZ = 406;
@@ -637,437 +639,20 @@ class Item{
 	private static function initCreativeItems($readFromJson = false){
 		self::clearCreativeItems();
 		if(!$readFromJson){
-			//Building
-			self::addCreativeItem(Item::get(Item::COBBLESTONE, 0));
-			self::addCreativeItem(Item::get(Item::STONE_BRICKS, 0));
-			self::addCreativeItem(Item::get(Item::STONE_BRICKS, 1));
-			self::addCreativeItem(Item::get(Item::STONE_BRICKS, 2));
-			self::addCreativeItem(Item::get(Item::STONE_BRICKS, 3));
-			self::addCreativeItem(Item::get(Item::MOSS_STONE, 0));
-			self::addCreativeItem(Item::get(Item::WOODEN_PLANKS, 0));
-			self::addCreativeItem(Item::get(Item::WOODEN_PLANKS, 1));
-			self::addCreativeItem(Item::get(Item::WOODEN_PLANKS, 2));
-			self::addCreativeItem(Item::get(Item::WOODEN_PLANKS, 3));
-			self::addCreativeItem(Item::get(Item::WOODEN_PLANKS, 4));
-			self::addCreativeItem(Item::get(Item::WOODEN_PLANKS, 5));
-			self::addCreativeItem(Item::get(Item::BRICKS, 0));
-			self::addCreativeItem(Item::get(Item::STONE, 0));
-			self::addCreativeItem(Item::get(Item::STONE, 1));
-			self::addCreativeItem(Item::get(Item::STONE, 2));
-			self::addCreativeItem(Item::get(Item::STONE, 3));
-			self::addCreativeItem(Item::get(Item::STONE, 4));
-			self::addCreativeItem(Item::get(Item::STONE, 5));
-			self::addCreativeItem(Item::get(Item::STONE, 6));
-			self::addCreativeItem(Item::get(Item::DIRT, 0));
-			self::addCreativeItem(Item::get(Item::PODZOL, 0));
-			self::addCreativeItem(Item::get(Item::GRASS, 0));
-			self::addCreativeItem(Item::get(Item::MYCELIUM, 0));
-			self::addCreativeItem(Item::get(Item::CLAY_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::HARDENED_CLAY, 0));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 0));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 1));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 2));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 3));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 4));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 5));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 6));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 7));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 8));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 9));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 10));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 11));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 12));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 13));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 14));
-			self::addCreativeItem(Item::get(Item::STAINED_CLAY, 15));
-			self::addCreativeItem(Item::get(Item::SANDSTONE, 0));
-			self::addCreativeItem(Item::get(Item::SANDSTONE, 1));
-			self::addCreativeItem(Item::get(Item::SANDSTONE, 2));
-			self::addCreativeItem(Item::get(Item::RED_SANDSTONE, 0));
-			self::addCreativeItem(Item::get(Item::RED_SANDSTONE, 1));
-			self::addCreativeItem(Item::get(Item::RED_SANDSTONE, 2));
-			self::addCreativeItem(Item::get(Item::SAND, 0));
-			self::addCreativeItem(Item::get(Item::SAND, 1));
-			self::addCreativeItem(Item::get(Item::GRAVEL, 0));
-			self::addCreativeItem(Item::get(Item::TRUNK, 0));
-			self::addCreativeItem(Item::get(Item::TRUNK, 1));
-			self::addCreativeItem(Item::get(Item::TRUNK, 2));
-			self::addCreativeItem(Item::get(Item::TRUNK, 3));
-			self::addCreativeItem(Item::get(Item::TRUNK2, 0));
-			self::addCreativeItem(Item::get(Item::TRUNK2, 1));
-			self::addCreativeItem(Item::get(Item::NETHER_BRICKS, 0));
-			self::addCreativeItem(Item::get(Item::NETHERRACK, 0));
-			self::addCreativeItem(Item::get(Item::SOUL_SAND, 0));
-			self::addCreativeItem(Item::get(Item::BEDROCK, 0));
-			self::addCreativeItem(Item::get(Item::COBBLESTONE_STAIRS, 0));
-			self::addCreativeItem(Item::get(Item::OAK_WOODEN_STAIRS, 0));
-			self::addCreativeItem(Item::get(Item::SPRUCE_WOODEN_STAIRS, 0));
-			self::addCreativeItem(Item::get(Item::BIRCH_WOODEN_STAIRS, 0));
-			self::addCreativeItem(Item::get(Item::JUNGLE_WOODEN_STAIRS, 0));
-			self::addCreativeItem(Item::get(Item::ACACIA_WOODEN_STAIRS, 0));
-			self::addCreativeItem(Item::get(Item::DARK_OAK_WOODEN_STAIRS, 0));
-			self::addCreativeItem(Item::get(Item::BRICK_STAIRS, 0));
-			self::addCreativeItem(Item::get(Item::SANDSTONE_STAIRS, 0));
-			self::addCreativeItem(Item::get(Item::RED_SANDSTONE_STAIRS, 0));
-			self::addCreativeItem(Item::get(Item::STONE_BRICK_STAIRS, 0));
-			self::addCreativeItem(Item::get(Item::NETHER_BRICKS_STAIRS, 0));
-			self::addCreativeItem(Item::get(Item::QUARTZ_STAIRS, 0));
-			self::addCreativeItem(Item::get(Item::SLAB, 0));
-			self::addCreativeItem(Item::get(Item::SLAB, 3));
-			self::addCreativeItem(Item::get(Item::WOODEN_SLAB, 0));
-			self::addCreativeItem(Item::get(Item::WOODEN_SLAB, 1));
-			self::addCreativeItem(Item::get(Item::WOODEN_SLAB, 2));
-			self::addCreativeItem(Item::get(Item::WOODEN_SLAB, 3));
-			self::addCreativeItem(Item::get(Item::WOODEN_SLAB, 4));
-			self::addCreativeItem(Item::get(Item::WOODEN_SLAB, 5));
-			self::addCreativeItem(Item::get(Item::SLAB, 4));
-			self::addCreativeItem(Item::get(Item::SLAB, 1));
-			self::addCreativeItem(Item::get(Item::SLAB, 5));
-			self::addCreativeItem(Item::get(Item::SLAB, 6));
-			self::addCreativeItem(Item::get(Item::SLAB, 7));
-			self::addCreativeItem(Item::get(Item::RED_SANDSTONE_SLAB, 0));
-			self::addCreativeItem(Item::get(Item::QUARTZ_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::QUARTZ_BLOCK, 1));
-			self::addCreativeItem(Item::get(Item::QUARTZ_BLOCK, 2));
-			self::addCreativeItem(Item::get(Item::COAL_ORE, 0));
-			self::addCreativeItem(Item::get(Item::IRON_ORE, 0));
-			self::addCreativeItem(Item::get(Item::GOLD_ORE, 0));
-			self::addCreativeItem(Item::get(Item::DIAMOND_ORE, 0));
-			self::addCreativeItem(Item::get(Item::LAPIS_ORE, 0));
-			self::addCreativeItem(Item::get(Item::REDSTONE_ORE, 0));
-			self::addCreativeItem(Item::get(Item::EMERALD_ORE, 0));
-			self::addCreativeItem(Item::get(Item::NETHER_QUARTZ_ORE, 0));
-			self::addCreativeItem(Item::get(Item::OBSIDIAN, 0));
-			self::addCreativeItem(Item::get(Item::ICE, 0));
-			self::addCreativeItem(Item::get(Item::PACKED_ICE, 0));
-			self::addCreativeItem(Item::get(Item::SNOW_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::END_STONE, 0));
-			//Decoration
-			self::addCreativeItem(Item::get(Item::COBBLESTONE_WALL, 0));
-			self::addCreativeItem(Item::get(Item::COBBLESTONE_WALL, 1));
-			self::addCreativeItem(Item::get(Item::WATER_LILY, 0));
-			self::addCreativeItem(Item::get(Item::GOLD_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::IRON_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::DIAMOND_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::LAPIS_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::COAL_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::EMERALD_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::REDSTONE_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::SNOW_LAYER, 0));
-			self::addCreativeItem(Item::get(Item::GLASS, 0));
-			self::addCreativeItem(Item::get(Item::GLOWSTONE_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::VINES, 0));
-			self::addCreativeItem(Item::get(Item::LADDER, 0));
-			self::addCreativeItem(Item::get(Item::SPONGE, 0));
-			self::addCreativeItem(Item::get(Item::GLASS_PANE, 0));
-			self::addCreativeItem(Item::get(Item::WOODEN_DOOR, 0));
-			self::addCreativeItem(Item::get(Item::SPRUCE_DOOR, 0));
-			self::addCreativeItem(Item::get(Item::BIRCH_DOOR, 0));
-			self::addCreativeItem(Item::get(Item::JUNGLE_DOOR, 0));
-			self::addCreativeItem(Item::get(Item::ACACIA_DOOR, 0));
-			self::addCreativeItem(Item::get(Item::DARK_OAK_DOOR, 0));
-			self::addCreativeItem(Item::get(Item::IRON_DOOR, 0));
-			self::addCreativeItem(Item::get(Item::TRAPDOOR, 0));
-			self::addCreativeItem(Item::get(Item::IRON_TRAPDOOR, 0));
-			self::addCreativeItem(Item::get(Item::FENCE, Fence::FENCE_OAK));
-			self::addCreativeItem(Item::get(Item::FENCE, Fence::FENCE_SPRUCE));
-			self::addCreativeItem(Item::get(Item::FENCE, Fence::FENCE_BIRCH));
-			self::addCreativeItem(Item::get(Item::FENCE, Fence::FENCE_JUNGLE));
-			self::addCreativeItem(Item::get(Item::FENCE, Fence::FENCE_ACACIA));
-			self::addCreativeItem(Item::get(Item::FENCE, Fence::FENCE_DARKOAK));
-			self::addCreativeItem(Item::get(Item::NETHER_BRICK_FENCE, 0));
-			self::addCreativeItem(Item::get(Item::FENCE_GATE, 0));
-			self::addCreativeItem(Item::get(Item::FENCE_GATE_BIRCH, 0));
-			self::addCreativeItem(Item::get(Item::FENCE_GATE_SPRUCE, 0));
-			self::addCreativeItem(Item::get(Item::FENCE_GATE_DARK_OAK, 0));
-			self::addCreativeItem(Item::get(Item::FENCE_GATE_JUNGLE, 0));
-			self::addCreativeItem(Item::get(Item::FENCE_GATE_ACACIA, 0));
-			self::addCreativeItem(Item::get(Item::IRON_BARS, 0));
-			self::addCreativeItem(Item::get(Item::BED, 0));
-			self::addCreativeItem(Item::get(Item::BOOKSHELF, 0));
-			self::addCreativeItem(Item::get(Item::PAINTING, 0));
-			self::addCreativeItem(Item::get(Item::ITEM_FRAME, 0));
-			self::addCreativeItem(Item::get(Item::WORKBENCH, 0));
-			self::addCreativeItem(Item::get(Item::STONECUTTER, 0));
-			self::addCreativeItem(Item::get(Item::CHEST, 0));
-			self::addCreativeItem(Item::get(Item::TRAPPED_CHEST, 0));
-			self::addCreativeItem(Item::get(Item::FURNACE, 0));
-			self::addCreativeItem(Item::get(Item::BREWING_STAND, 0));
-			self::addCreativeItem(Item::get(Item::CAULDRON, 0));
-			self::addCreativeItem(Item::get(Item::NOTEBLOCK, 0));
-			self::addCreativeItem(Item::get(Item::END_PORTAL, 0));
-			self::addCreativeItem(Item::get(Item::ANVIL, 0));
-			self::addCreativeItem(Item::get(Item::ANVIL, 4));
-			self::addCreativeItem(Item::get(Item::ANVIL, 8));
-			self::addCreativeItem(Item::get(Item::DANDELION, 0));
-			self::addCreativeItem(Item::get(Item::RED_FLOWER, Flower::TYPE_POPPY));
-			self::addCreativeItem(Item::get(Item::RED_FLOWER, Flower::TYPE_BLUE_ORCHID));
-			self::addCreativeItem(Item::get(Item::RED_FLOWER, Flower::TYPE_ALLIUM));
-			self::addCreativeItem(Item::get(Item::RED_FLOWER, Flower::TYPE_AZURE_BLUET));
-			self::addCreativeItem(Item::get(Item::RED_FLOWER, Flower::TYPE_RED_TULIP));
-			self::addCreativeItem(Item::get(Item::RED_FLOWER, Flower::TYPE_ORANGE_TULIP));
-			self::addCreativeItem(Item::get(Item::RED_FLOWER, Flower::TYPE_WHITE_TULIP));
-			self::addCreativeItem(Item::get(Item::RED_FLOWER, Flower::TYPE_PINK_TULIP));
-			self::addCreativeItem(Item::get(Item::RED_FLOWER, Flower::TYPE_OXEYE_DAISY));
-			self::addCreativeItem(Item::get(Item::DOUBLE_PLANT, 0));
-			self::addCreativeItem(Item::get(Item::DOUBLE_PLANT, 1));
-			self::addCreativeItem(Item::get(Item::DOUBLE_PLANT, 2));
-			self::addCreativeItem(Item::get(Item::DOUBLE_PLANT, 3));
-			self::addCreativeItem(Item::get(Item::DOUBLE_PLANT, 4));
-			self::addCreativeItem(Item::get(Item::DOUBLE_PLANT, 5));
-			self::addCreativeItem(Item::get(Item::BROWN_MUSHROOM, 0));
-			self::addCreativeItem(Item::get(Item::RED_MUSHROOM, 0));
-			self::addCreativeItem(Item::get(Item::BROWN_MUSHROOM_BLOCK, 14));
-			self::addCreativeItem(Item::get(Item::RED_MUSHROOM_BLOCK, 14));
-			self::addCreativeItem(Item::get(Item::BROWN_MUSHROOM_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::BROWN_MUSHROOM_BLOCK, 10));
-			self::addCreativeItem(Item::get(Item::CACTUS, 0));
-			self::addCreativeItem(Item::get(Item::MELON_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::PUMPKIN, 0));
-			self::addCreativeItem(Item::get(Item::LIT_PUMPKIN, 0));
-			self::addCreativeItem(Item::get(Item::COBWEB, 0));
-			self::addCreativeItem(Item::get(Item::HAY_BALE, 0));
-			self::addCreativeItem(Item::get(Item::TALL_GRASS, 1));
-			self::addCreativeItem(Item::get(Item::TALL_GRASS, 2));
-			self::addCreativeItem(Item::get(Item::DEAD_BUSH, 0));
-			self::addCreativeItem(Item::get(Item::SAPLING, 0));
-			self::addCreativeItem(Item::get(Item::SAPLING, 1));
-			self::addCreativeItem(Item::get(Item::SAPLING, 2));
-			self::addCreativeItem(Item::get(Item::SAPLING, 3));
-			self::addCreativeItem(Item::get(Item::SAPLING, 4));
-			self::addCreativeItem(Item::get(Item::SAPLING, 5));
-			self::addCreativeItem(Item::get(Item::LEAVES, 0));
-			self::addCreativeItem(Item::get(Item::LEAVES, 1));
-			self::addCreativeItem(Item::get(Item::LEAVES, 2));
-			self::addCreativeItem(Item::get(Item::LEAVES, 3));
-			self::addCreativeItem(Item::get(Item::LEAVES2, 0));
-			self::addCreativeItem(Item::get(Item::LEAVES2, 1));
-			self::addCreativeItem(Item::get(Item::CAKE, 0));
-			self::addCreativeItem(Item::get(Item::SKULL, 0));
-			self::addCreativeItem(Item::get(Item::SKULL, 1));
-			self::addCreativeItem(Item::get(Item::SKULL, 2));
-			self::addCreativeItem(Item::get(Item::SKULL, 3));
-			self::addCreativeItem(Item::get(Item::SKULL, 4));
-			self::addCreativeItem(Item::get(Item::SIGN, 0));
-			self::addCreativeItem(Item::get(Item::FLOWER_POT, 0));
-			self::addCreativeItem(Item::get(Item::MONSTER_SPAWNER, 0));
-			self::addCreativeItem(Item::get(Item::ENCHANTING_TABLE, 0));
-			self::addCreativeItem(Item::get(Item::SLIME_BLOCK, 0));
-			self::addCreativeItem(Item::get(Item::WOOL, 0));
-			self::addCreativeItem(Item::get(Item::WOOL, 8));
-			self::addCreativeItem(Item::get(Item::WOOL, 7));
-			self::addCreativeItem(Item::get(Item::WOOL, 15));
-			self::addCreativeItem(Item::get(Item::WOOL, 12));
-			self::addCreativeItem(Item::get(Item::WOOL, 14));
-			self::addCreativeItem(Item::get(Item::WOOL, 1));
-			self::addCreativeItem(Item::get(Item::WOOL, 4));
-			self::addCreativeItem(Item::get(Item::WOOL, 5));
-			self::addCreativeItem(Item::get(Item::WOOL, 13));
-			self::addCreativeItem(Item::get(Item::WOOL, 9));
-			self::addCreativeItem(Item::get(Item::WOOL, 3));
-			self::addCreativeItem(Item::get(Item::WOOL, 11));
-			self::addCreativeItem(Item::get(Item::WOOL, 10));
-			self::addCreativeItem(Item::get(Item::WOOL, 2));
-			self::addCreativeItem(Item::get(Item::WOOL, 6));
-			self::addCreativeItem(Item::get(Item::CARPET, 0));
-			self::addCreativeItem(Item::get(Item::CARPET, 8));
-			self::addCreativeItem(Item::get(Item::CARPET, 7));
-			self::addCreativeItem(Item::get(Item::CARPET, 15));
-			self::addCreativeItem(Item::get(Item::CARPET, 12));
-			self::addCreativeItem(Item::get(Item::CARPET, 14));
-			self::addCreativeItem(Item::get(Item::CARPET, 1));
-			self::addCreativeItem(Item::get(Item::CARPET, 4));
-			self::addCreativeItem(Item::get(Item::CARPET, 5));
-			self::addCreativeItem(Item::get(Item::CARPET, 13));
-			self::addCreativeItem(Item::get(Item::CARPET, 9));
-			self::addCreativeItem(Item::get(Item::CARPET, 3));
-			self::addCreativeItem(Item::get(Item::CARPET, 11));
-			self::addCreativeItem(Item::get(Item::CARPET, 10));
-			self::addCreativeItem(Item::get(Item::CARPET, 2));
-			self::addCreativeItem(Item::get(Item::CARPET, 6));
-			//Tools
-			self::addCreativeItem(Item::get(Item::RAIL, 0));
-			self::addCreativeItem(Item::get(Item::POWERED_RAIL, 0));
-			self::addCreativeItem(Item::get(Item::DETECTOR_RAIL, 0));
-			self::addCreativeItem(Item::get(Item::ACTIVATOR_RAIL, 0));
-			self::addCreativeItem(Item::get(Item::TORCH, 0));
-			self::addCreativeItem(Item::get(Item::BUCKET, 0));
-			self::addCreativeItem(Item::get(Item::BUCKET, 1));
-			self::addCreativeItem(Item::get(Item::BUCKET, 8));
-			self::addCreativeItem(Item::get(Item::BUCKET, 10));
-			self::addCreativeItem(Item::get(Item::TNT, 0));
-			self::addCreativeItem(Item::get(Item::REDSTONE, 0));
-			self::addCreativeItem(Item::get(Item::BOW, 0));
-			self::addCreativeItem(Item::get(Item::FISHING_ROD, 0));
-			self::addCreativeItem(Item::get(Item::FLINT_AND_STEEL, 0));
-			self::addCreativeItem(Item::get(Item::SHEARS, 0));
-			self::addCreativeItem(Item::get(Item::CLOCK, 0));
-			self::addCreativeItem(Item::get(Item::COMPASS, 0));
-			self::addCreativeItem(Item::get(Item::MINECART, 0));
-			for($i = 0; $i <= 5; $i++){
-				self::addCreativeItem(Item::get(Item::BOAT, $i));
-			}
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 15));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 10));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 11));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 12));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 13));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 14));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 22));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 16));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 19));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 18));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 33));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 38));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 39));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 34));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 37));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 35));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 32));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 36));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 47));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 17));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 40));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 42));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 41));
-			self::addCreativeItem(Item::get(Item::SPAWN_EGG, 43));
-			self::addCreativeItem(Item::get(Item::WOODEN_SWORD, 0));
-			self::addCreativeItem(Item::get(Item::WOODEN_HOE, 0));
-			self::addCreativeItem(Item::get(Item::WOODEN_SHOVEL, 0));
-			self::addCreativeItem(Item::get(Item::WOODEN_PICKAXE, 0));
-			self::addCreativeItem(Item::get(Item::WOODEN_AXE, 0));
-			self::addCreativeItem(Item::get(Item::STONE_SWORD, 0));
-			self::addCreativeItem(Item::get(Item::STONE_HOE, 0));
-			self::addCreativeItem(Item::get(Item::STONE_SHOVEL, 0));
-			self::addCreativeItem(Item::get(Item::STONE_PICKAXE, 0));
-			self::addCreativeItem(Item::get(Item::STONE_AXE, 0));
-			self::addCreativeItem(Item::get(Item::IRON_SWORD, 0));
-			self::addCreativeItem(Item::get(Item::IRON_HOE, 0));
-			self::addCreativeItem(Item::get(Item::IRON_SHOVEL, 0));
-			self::addCreativeItem(Item::get(Item::IRON_PICKAXE, 0));
-			self::addCreativeItem(Item::get(Item::IRON_AXE, 0));
-			self::addCreativeItem(Item::get(Item::DIAMOND_SWORD, 0));
-			self::addCreativeItem(Item::get(Item::DIAMOND_HOE, 0));
-			self::addCreativeItem(Item::get(Item::DIAMOND_SHOVEL, 0));
-			self::addCreativeItem(Item::get(Item::DIAMOND_PICKAXE, 0));
-			self::addCreativeItem(Item::get(Item::DIAMOND_AXE, 0));
-			self::addCreativeItem(Item::get(Item::GOLD_SWORD, 0));
-			self::addCreativeItem(Item::get(Item::GOLD_HOE, 0));
-			self::addCreativeItem(Item::get(Item::GOLD_SHOVEL, 0));
-			self::addCreativeItem(Item::get(Item::GOLD_PICKAXE, 0));
-			self::addCreativeItem(Item::get(Item::GOLD_AXE, 0));
-			for($i = 298; $i < 318; $i++){ //All armor
-				self::addCreativeItem(Item::get($i, 0));
-			}
-			self::addCreativeItem(Item::get(Item::LEVER, 0));
-			self::addCreativeItem(Item::get(Item::INACTIVE_REDSTONE_LAMP, 0));
-			self::addCreativeItem(Item::get(Item::LIT_REDSTONE_TORCH, 0));
-			self::addCreativeItem(Item::get(Item::WOODEN_PRESSURE_PLATE, 0));
-			self::addCreativeItem(Item::get(Item::STONE_PRESSURE_PLATE, 0));
-			self::addCreativeItem(Item::get(Item::LIGHT_WEIGHTED_PRESSURE_PLATE, 0));
-			self::addCreativeItem(Item::get(Item::HEAVY_WEIGHTED_PRESSURE_PLATE, 0));
-			self::addCreativeItem(Item::get(Item::WOODEN_BUTTON, 0));
-			self::addCreativeItem(Item::get(Item::STONE_BUTTON, 0));
-			self::addCreativeItem(Item::get(Item::DAYLIGHT_SENSOR, 0));
-			self::addCreativeItem(Item::get(Item::TRIPWIRE_HOOK, 0));
-			self::addCreativeItem(Item::get(Item::REPEATER));
-			self::addCreativeItem(Item::get(Item::DROPPER, 3));
-			self::addCreativeItem(Item::get(Item::DISPENSER, 3));
-			self::addCreativeItem(Item::get(Item::SNOWBALL));
-			//Seeds
-			self::addCreativeItem(Item::get(Item::COAL, 0));
-			self::addCreativeItem(Item::get(Item::COAL, 1));
-			self::addCreativeItem(Item::get(Item::DIAMOND, 0));
-			self::addCreativeItem(Item::get(Item::IRON_INGOT, 0));
-			self::addCreativeItem(Item::get(Item::GOLD_INGOT, 0));
-			self::addCreativeItem(Item::get(Item::EMERALD, 0));
-			self::addCreativeItem(Item::get(Item::STICKS, 0));
-			self::addCreativeItem(Item::get(Item::BOWL, 0));
-			self::addCreativeItem(Item::get(Item::STRING, 0));
-			self::addCreativeItem(Item::get(Item::FEATHER, 0));
-			self::addCreativeItem(Item::get(Item::FLINT, 0));
-			self::addCreativeItem(Item::get(Item::LEATHER, 0));
-			self::addCreativeItem(Item::get(Item::RABBIT_HIDE, 0));
-			self::addCreativeItem(Item::get(Item::CLAY, 0));
-			self::addCreativeItem(Item::get(Item::SUGAR, 0));
-			self::addCreativeItem(Item::get(Item::QUARTZ, 0));
-			self::addCreativeItem(Item::get(Item::PAPER, 0));
-			self::addCreativeItem(Item::get(Item::MELON, 0));
-			self::addCreativeItem(Item::get(Item::ARROW, 0));
-			self::addCreativeItem(Item::get(Item::BONE, 0));
-			self::addCreativeItem(Item::get(Item::SUGAR_CANES, 0));
-			self::addCreativeItem(Item::get(Item::WHEAT, 0));
-			self::addCreativeItem(Item::get(Item::SEEDS, 0));
-			self::addCreativeItem(Item::get(Item::PUMPKIN_SEEDS, 0));
-			self::addCreativeItem(Item::get(Item::MELON_SEEDS, 0));
-			self::addCreativeItem(Item::get(Item::BEETROOT_SEEDS, 0));
-			self::addCreativeItem(Item::get(Item::APPLE, 0));
-			self::addCreativeItem(Item::get(Item::GOLDEN_APPLE, 0));
-			self::addCreativeItem(Item::get(Item::ENCHANTED_GOLDEN_APPLE, 0));
-			self::addCreativeItem(Item::get(Item::RAW_FISH, 0));
-			for($i = 0; $i <= 2; $i++){
-				self::addCreativeItem(Item::get(460 + $i, 0));
-			}//All kinds of fish
-			self::addCreativeItem(Item::get(Item::COOKED_FISH, 0));
-			self::addCreativeItem(Item::get(Item::COOKED_SALMON, 0));//Cooked Fish
-			self::addCreativeItem(Item::get(Item::ROTTEN_FLESH, 0));
-			self::addCreativeItem(Item::get(Item::MUSHROOM_STEW, 0));
-			self::addCreativeItem(Item::get(Item::BREAD, 0));
-			self::addCreativeItem(Item::get(Item::RAW_PORKCHOP, 0));
-			self::addCreativeItem(Item::get(Item::COOKED_PORKCHOP, 0));
-			self::addCreativeItem(Item::get(Item::RAW_CHICKEN, 0));
-			self::addCreativeItem(Item::get(Item::COOKED_CHICKEN, 0));
-			self::addCreativeItem(Item::get(Item::RAW_MUTTON, 0));
-			self::addCreativeItem(Item::get(Item::COOKED_MUTTON, 0));
-			self::addCreativeItem(Item::get(Item::RAW_BEEF, 0));
-			self::addCreativeItem(Item::get(Item::STEAK, 0));
-			self::addCreativeItem(Item::get(Item::MELON, 0));
-			self::addCreativeItem(Item::get(Item::CARROT, 0));
-			self::addCreativeItem(Item::get(Item::POTATO, 0));
-			self::addCreativeItem(Item::get(Item::BAKED_POTATO, 0));
-			self::addCreativeItem(Item::get(Item::POISONOUS_POTATO, 0));
-			self::addCreativeItem(Item::get(Item::COOKIE, 0));
-			self::addCreativeItem(Item::get(Item::PUMPKIN_PIE, 0));
-			self::addCreativeItem(Item::get(Item::RAW_RABBIT, 0));
-			self::addCreativeItem(Item::get(Item::COOKED_RABBIT, 0));
-			self::addCreativeItem(Item::get(Item::RABBIT_STEW, 0));
-			self::addCreativeItem(Item::get(Item::MAGMA_CREAM, 0));
-			self::addCreativeItem(Item::get(Item::BLAZE_ROD, 0));
-			self::addCreativeItem(Item::get(Item::GOLD_NUGGET, 0));
-			self::addCreativeItem(Item::get(Item::GOLDEN_CARROT, 0));
-			self::addCreativeItem(Item::get(Item::GLISTERING_MELON, 0));
-			self::addCreativeItem(Item::get(Item::RABBIT_FOOT, 0));
-			self::addCreativeItem(Item::get(Item::GHAST_TEAR, 0));
-			self::addCreativeItem(Item::get(Item::SLIMEBALL, 0));
-			self::addCreativeItem(Item::get(Item::BLAZE_POWDER, 0));
-			self::addCreativeItem(Item::get(Item::NETHER_WART, 0));
-			self::addCreativeItem(Item::get(Item::GUNPOWDER, 0));
-			self::addCreativeItem(Item::get(Item::GLOWSTONE_DUST, 0));
-			self::addCreativeItem(Item::get(Item::SPIDER_EYE, 0));
-			self::addCreativeItem(Item::get(Item::FERMENTED_SPIDER_EYE, 0));
-			self::addCreativeItem(Item::get(Item::ENCHANTING_BOTTLE, 0));
-			self::addCreativeItem(Item::get(Item::DYE, 0));
-			self::addCreativeItem(Item::get(Item::DYE, 8));
-			self::addCreativeItem(Item::get(Item::DYE, 7));
-			self::addCreativeItem(Item::get(Item::DYE, 15));
-			self::addCreativeItem(Item::get(Item::DYE, 12));
-			self::addCreativeItem(Item::get(Item::DYE, 14));
-			self::addCreativeItem(Item::get(Item::DYE, 1));
-			self::addCreativeItem(Item::get(Item::DYE, 4));
-			self::addCreativeItem(Item::get(Item::DYE, 5));
-			self::addCreativeItem(Item::get(Item::DYE, 13));
-			self::addCreativeItem(Item::get(Item::DYE, 9));
-			self::addCreativeItem(Item::get(Item::DYE, 3));
-			self::addCreativeItem(Item::get(Item::DYE, 11));
-			self::addCreativeItem(Item::get(Item::DYE, 10));
-			self::addCreativeItem(Item::get(Item::DYE, 2));
-			self::addCreativeItem(Item::get(Item::DYE, 6));
-			self::addCreativeItem(Item::get(Item::GLASS_BOTTLE, 0));
-			for($i = 0; $i <= 35; $i++){
-				self::addCreativeItem(Item::get(Item::POTION, $i));
-			}
-			for($i = 0; $i <= 35; $i++){
-				self::addCreativeItem(Item::get(Item::SPLASH_POTION, $i));
+			foreach(CreativeItems::ITEMS as $category){
+				foreach($category as $itemData){
+					if(!isset($itemData["meta"])){
+						$itemData["meta"] = 0;
+					}
+					$item = Item::get($itemData["id"], @$itemData["meta"]);
+					if(isset($itemData["ench"])){
+						//Support multiple enchantments. Unnecessary really but nice to have.
+						foreach($itemData["ench"] as $ench){
+							$item->addEnchantment(Enchantment::getEnchantment($ench["id"])->setLevel($ench["lvl"]));
+						}
+					}
+					self::addCreativeItem($item);
+				}
 			}
 		}else{
 			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems.json", Config::JSON, []);
@@ -1075,6 +660,7 @@ class Item{
 				self::addCreativeItem(Item::get($item["ID"], $item["Damage"]));
 			}
 		}
+		
 	}
 
 	public static function clearCreativeItems(){
@@ -1084,9 +670,10 @@ class Item{
 	public static function getCreativeItems() : array{
 		return Item::$creative;
 	}
-
+	
 	public static function addCreativeItem(Item $item){
-		Item::$creative[] = Item::get($item->getId(), $item->getDamage());
+		//Doing it this way allows adding enchanted items to inventory, like enchanted books
+		Item::$creative[] = $item;
 	}
 
 	public static function removeCreativeItem(Item $item){

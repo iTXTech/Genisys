@@ -1989,10 +1989,10 @@ class Server{
 
 			InventoryType::init($this->inventoryNum);
 			Block::init();
+			Enchantment::init();
 			Item::init($this->creativeItemsFromJson);
 			Biome::init();
 			Effect::init();
-			Enchantment::init();
 			Attribute::init();
 			EnchantmentLevelTable::init();
 			Color::init();
