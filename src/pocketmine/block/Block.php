@@ -49,8 +49,7 @@ class Block extends Position implements Metadatable{
 	const GRASS = 2;
 	const DIRT = 3;
 	const COBBLESTONE = 4;  const COBBLE = 4;
-	const PLANK = 5; const PLANKS = 5;
-	const WOODEN_PLANK = 5; const WOODEN_PLANKS = 5;
+	const PLANK = 5; const PLANKS = 5; const WOODEN_PLANK = 5; const WOODEN_PLANKS = 5;
 	const SAPLING = 6; const SAPLINGS = 6;
 	const BEDROCK = 7;
 	const WATER = 8;
@@ -160,7 +159,7 @@ class Block extends Position implements Metadatable{
 	const LILY_PAD = 111; const WATER_LILY = 111;
 	const NETHER_BRICKS = 112; const NETHER_BRICK_BLOCK = 112;
 	const NETHER_BRICK_FENCE = 113;
-	const NETHER_BRICKS_STAIRS = 114;
+	const NETHER_BRICK_STAIRS = 114; const NETHER_BRICKS_STAIRS = 114;
 	const NETHER_WART_BLOCK = 115;
 	const ENCHANTING_TABLE = 116; const ENCHANT_TABLE = 116; const ENCHANTMENT_TABLE = 116;
 	const BREWING_STAND_BLOCK = 117;
