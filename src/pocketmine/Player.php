@@ -3279,9 +3279,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->craftingType = 0;
 				$this->currentTransaction = null;
 				if(isset($this->windowIndex[$packet->windowid])){
-					if($this->windowIndex[$packet->windowid] instanceof EnchantInventory or $this->windowIndex[$packet->windowid] instanceof AnvilInventory){
-						$this->updateExperience();
-					}
 					if($this->windowIndex[$packet->windowid] instanceof AnvilInventory){
 						$this->anvilItem = null;
 					}
