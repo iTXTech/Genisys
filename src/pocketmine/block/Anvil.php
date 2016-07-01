@@ -60,7 +60,9 @@ class Anvil extends Fallable{
 	}
 
 	public function onActivate(Item $item, Player $player = null){
-		if(!$this->getLevel()->getServer()->anviletEnabled) return true;
+		if(!$this->getLevel()->getServer()->anvilEnabled){
+			return true;
+		}
 		if($player instanceof Player){
 			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;

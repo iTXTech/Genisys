@@ -21,6 +21,7 @@
 
 namespace pocketmine\inventory;
 
+use pocketmine\block\Block;
 use pocketmine\item\Dye;
 use pocketmine\item\EnchantedBook;
 use pocketmine\item\enchantment\Enchantment;
@@ -29,6 +30,7 @@ use pocketmine\item\enchantment\EnchantmentLevelTable;
 use pocketmine\item\enchantment\EnchantmentList;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
+use pocketmine\math\Vector3;
 use pocketmine\network\protocol\CraftingDataPacket;
 use pocketmine\Player;
 use pocketmine\Server;
@@ -163,7 +165,7 @@ class EnchantInventory extends ContainerInventory{
 							}
 						}
 
-						$this->entries[$i] = new EnchantmentEntry($result, $level, Enchantment::generateName());
+						$this->entries[$i] = new EnchantmentEntry($result, $level, Enchantment::getRandomName());
 					}
 
 					$this->sendEnchantmentList();
@@ -236,9 +238,25 @@ class EnchantInventory extends ContainerInventory{
 		}
 	}
 
-	public function countBookshelf(){
-		return mt_rand(0, 15);
-		//TODO: calculate bookshelf around
+	public function countBookshelf() : int{
+		if($this->getHolder()->getLevel()->getServer()->countBookshelf){
+			$count = 0;
+			$pos = $this->getHolder();
+			$offsets = [[2, 0], [-2, 0], [0, 2], [0, -2], [2, 1], [2, -1], [-2, 1], [-2, 1], [1, 2], [-1, 2], [1, -2], [-1, -2]];
+			for($i = 0; $i < 3; $i++){
+				foreach($offsets as $offset){
+					if($pos->getLevel()->getBlockIdAt($pos->x + $offset[0], $pos->y + $i, $pos->z + $offset[1]) == Block::BOOKSHELF){
+						$count++;
+					}
+					if($count >= 15){
+						break 2;
+					}
+				}
+			}
+			return $count;
+		}else{
+			return mt_rand(0, 15);
+		}
 	}
 
 	public function sendEnchantmentList(){

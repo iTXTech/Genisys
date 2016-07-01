@@ -25,6 +25,7 @@ use pocketmine\inventory\EnchantInventory;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 
+use pocketmine\math\AxisAlignedBB;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
@@ -38,6 +39,21 @@ class EnchantingTable extends Transparent{
 
 	public function __construct(){
 
+	}
+
+	public function getLightLevel(){
+		return 12;
+	}
+
+	public function getBoundingBox(){
+		return new AxisAlignedBB(
+			$this->x,
+			$this->y,
+			$this->z,
+			$this->x + 1,
+			$this->y + 0.75,
+			$this->z + 1
+		);
 	}
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
@@ -85,7 +101,9 @@ class EnchantingTable extends Transparent{
 	}
 
 	public function onActivate(Item $item, Player $player = null){
-		if(!$this->getLevel()->getServer()->anviletEnabled) return true;
+		if(!$this->getLevel()->getServer()->enchantingTableEnabled){
+			return true;
+		}
 		if($player instanceof Player){
 			//TODO lock
 			if($player->isCreative() and $player->getServer()->limitedCreative){
