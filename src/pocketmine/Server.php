@@ -3058,50 +3058,50 @@ class Server{
 
 	private function registerEntities(){
 		Entity::registerEntity(Arrow::class);
-		Entity::registerEntity(DroppedItem::class);
-		Entity::registerEntity(FallingSand::class);
-		Entity::registerEntity(PrimedTNT::class);
-		Entity::registerEntity(Snowball::class);
-		Entity::registerEntity(Villager::class);
-		Entity::registerEntity(Zombie::class);
-		Entity::registerEntity(Squid::class);
-		Entity::registerEntity(Chicken::class);
-		Entity::registerEntity(Cow::class);
-		Entity::registerEntity(Pig::class);
-		Entity::registerEntity(Sheep::class);
-		Entity::registerEntity(Wolf::class);
-		Entity::registerEntity(Mooshroom::class);
-		Entity::registerEntity(Creeper::class);
-		Entity::registerEntity(Skeleton::class);
-		Entity::registerEntity(Spider::class);
-		Entity::registerEntity(PigZombie::class);
-		Entity::registerEntity(Slime::class);
-		Entity::registerEntity(Enderman::class);
-		Entity::registerEntity(Silverfish::class);
-		Entity::registerEntity(CaveSpider::class);
-		Entity::registerEntity(Ghast::class);
-		Entity::registerEntity(LavaSlime::class);
 		Entity::registerEntity(Bat::class);
 		Entity::registerEntity(Blaze::class);
-		Entity::registerEntity(Ocelot::class);
-		Entity::registerEntity(SnowGolem::class);
-		Entity::registerEntity(IronGolem::class);
-		Entity::registerEntity(Lightning::class);
-		Entity::registerEntity(XPOrb::class);
-		Entity::registerEntity(ThrownExpBottle::class);
 		Entity::registerEntity(Boat::class);
-		Entity::registerEntity(Minecart::class);
-		Entity::registerEntity(ThrownPotion::class);
-		Entity::registerEntity(Painting::class);
-		Entity::registerEntity(FishingHook::class);
+		Entity::registerEntity(CaveSpider::class);
+		Entity::registerEntity(Chicken::class);
+		Entity::registerEntity(Cow::class);
+		Entity::registerEntity(Creeper::class);
+		Entity::registerEntity(DroppedItem::class);
 		Entity::registerEntity(Egg::class);
-		Entity::registerEntity(ZombieVillager::class);
-		Entity::registerEntity(Rabbit::class);
+		Entity::registerEntity(Enderman::class);
+		Entity::registerEntity(FallingSand::class);
+		Entity::registerEntity(FishingHook::class);
+		Entity::registerEntity(Ghast::class);
+		Entity::registerEntity(Husk::class);
+		Entity::registerEntity(IronGolem::class);
+		Entity::registerEntity(LavaSlime::class); //Magma Cube
+		Entity::registerEntity(Lightning::class);
+		Entity::registerEntity(Minecart::class);
 		Entity::registerEntity(MinecartChest::class);
 		Entity::registerEntity(MinecartHopper::class);
 		Entity::registerEntity(MinecartTNT::class);
-		Entity::registerEntity(Husk::class);
-
+		Entity::registerEntity(Mooshroom::class);
+		Entity::registerEntity(Ocelot::class);
+		Entity::registerEntity(Painting::class);
+		Entity::registerEntity(Pig::class);
+		Entity::registerEntity(PigZombie::class);
+		Entity::registerEntity(PrimedTNT::class);
+		Entity::registerEntity(Rabbit::class);
+		Entity::registerEntity(Sheep::class);
+		Entity::registerEntity(Silverfish::class);
+		Entity::registerEntity(Skeleton::class);
+		Entity::registerEntity(Slime::class);
+		Entity::registerEntity(Snowball::class);
+		Entity::registerEntity(SnowGolem::class);
+		Entity::registerEntity(Spider::class);
+		Entity::registerEntity(Squid::class);
+		Entity::registerEntity(ThrownExpBottle::class);
+		Entity::registerEntity(ThrownPotion::class);
+		Entity::registerEntity(Villager::class);
+		Entity::registerEntity(Wolf::class);
+		Entity::registerEntity(XPOrb::class);
+		Entity::registerEntity(Zombie::class);
+		Entity::registerEntity(ZombieVillager::class);
+		
 		Entity::registerEntity(Human::class, true);
 	}
 
