@@ -1443,9 +1443,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		if($this->isSpectator()){
 			$flags |= 0x100;
 		}
-		
-		$flags |= 0x02;  
-  		$flags |= 0x04; 
+
+		$flags |= 0x02; // No PvP (Remove hit markers client-side).
+		$flags |= 0x04; // No PvM (Remove hit markers client-side).
+		$flags |= 0x08; // No PvE (Remove hit markers client-side).
   		
 		$pk = new AdventureSettingsPacket();
 		$pk->flags = $flags;
