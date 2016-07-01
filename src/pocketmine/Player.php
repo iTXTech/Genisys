@@ -3519,8 +3519,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							if($packet->item->getId() != Item::AIR){
 								$this->anvilItem = $packet->item;
 							}elseif($this->anvilItem != null){
-								$cost = $this->anvilItem->getRepairCost();
-								$this->addExpLevel(-$cost);
+								if(!$inv->onRename($this->anvilItem, $this)){
+									break; //maybe cheating!
+								}
 								$this->anvilItem = null;
 							}
 						}

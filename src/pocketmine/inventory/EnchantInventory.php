@@ -237,7 +237,7 @@ class EnchantInventory extends ContainerInventory{
 	}
 
 	public function countBookshelf(){
-		return 15;
+		return mt_rand(0, 15);
 		//TODO: calculate bookshelf around
 	}
 
