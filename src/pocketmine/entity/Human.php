@@ -346,7 +346,9 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 	}
 
 	public function entityBaseTick($tickDiff = 1, $EnchantL = 0){
-		$EnchantL = $this->getInventory()->getHelmet()->getEnchantmentLevel(Enchantment::TYPE_WATER_BREATHING);
+		if($this->getInventory() instanceof PlayerInventory){
+			$EnchantL = $this->getInventory()->getHelmet()->getEnchantmentLevel(Enchantment::TYPE_WATER_BREATHING);
+		}
 		$hasUpdate = parent::entityBaseTick($tickDiff, $EnchantL);
 
 		/*$food = $this->getFood();
