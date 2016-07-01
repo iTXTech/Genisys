@@ -4096,9 +4096,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	public function setFood(float $amount){
-		if(!$this->server->foodEnabled) $amount = 20;
-		if($amount > 20) $amount = 20;
-		if($amount < 0) $amount = 0;
+		if(!$this->server->foodEnabled){
+			$amount = 20;
+		}
+		$amount = min(20, max(0, $amount));
 		$this->server->getPluginManager()->callEvent($ev = new PlayerHungerChangeEvent($this, $amount));
 
 		if($ev->isCancelled()) return false;
