@@ -50,8 +50,6 @@ server:
  allow-iron-golem: false
  #是否允许生成雪傀儡
  allow-snow-golem: false
- #是否允许铁砧和附魔台
- allow-anvilandenchanttable: true
  #是否禁用server.log
  disable-log: false
  #是否启用反飞行作弊
@@ -79,6 +77,15 @@ server:
  allow-splash-potion: true
  #是否启用高级指令选择器
  advanced-command-selector: false
+
+enchantment:
+ #是否允许使用铁砧
+ enable-anvil: true
+ #是否允许使用附魔台
+ enable-enchanting-table: true
+ #是否启用计算附魔等级(计算书架数量)，可能造成服务器延迟
+ #如果不启用本项, 附魔等级将在0-15间随机选取
+ count-bookshelf: false
 
 redstone:
  ##############################
