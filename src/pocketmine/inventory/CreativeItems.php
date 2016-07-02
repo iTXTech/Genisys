@@ -549,7 +549,7 @@ class CreativeItems{
 			["id" => Item::FERMENTED_SPIDER_EYE],
 			["id" => Item::CARROT_ON_A_STICK],
 			["id" => Item::BOTTLE_O_ENCHANTING],
-			["id" => Item::ENCHANTED_BOOK, "ench" => [["id" => Enchantment::TYPE_ARMOR_PROTECTION, "lvl" => 1]]],
+			/*["id" => Item::ENCHANTED_BOOK, "ench" => [["id" => Enchantment::TYPE_ARMOR_PROTECTION, "lvl" => 1]]],
 			["id" => Item::ENCHANTED_BOOK, "ench" => [["id" => Enchantment::TYPE_ARMOR_PROTECTION, "lvl" => 2]]],
 			["id" => Item::ENCHANTED_BOOK, "ench" => [["id" => Enchantment::TYPE_ARMOR_PROTECTION, "lvl" => 3]]],
 			["id" => Item::ENCHANTED_BOOK, "ench" => [["id" => Enchantment::TYPE_ARMOR_PROTECTION, "lvl" => 4]]],
@@ -627,7 +627,7 @@ class CreativeItems{
 			["id" => Item::ENCHANTED_BOOK, "ench" => [["id" => Enchantment::TYPE_FISHING_FORTUNE, "lvl" => 3]]],
 			["id" => Item::ENCHANTED_BOOK, "ench" => [["id" => Enchantment::TYPE_FISHING_LURE, "lvl" => 1]]],
 			["id" => Item::ENCHANTED_BOOK, "ench" => [["id" => Enchantment::TYPE_FISHING_LURE, "lvl" => 2]]],
-			["id" => Item::ENCHANTED_BOOK, "ench" => [["id" => Enchantment::TYPE_FISHING_LURE, "lvl" => 3]]],
+			["id" => Item::ENCHANTED_BOOK, "ench" => [["id" => Enchantment::TYPE_FISHING_LURE, "lvl" => 3]]],*/
 			["id" => Item::DYE, "meta" => Dye::BLACK],
 			["id" => Item::DYE, "meta" => Dye::GRAY],
 			["id" => Item::DYE, "meta" => Dye::LIGHT_GRAY],
