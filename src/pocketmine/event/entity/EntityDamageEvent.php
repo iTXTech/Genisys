@@ -27,6 +27,7 @@ use pocketmine\event\Cancellable;
 use pocketmine\Player;
 use pocketmine\item\Item;
 use pocketmine\item\enchantment\enchantment;
+use pocketmine\inventory\PlayerInventory;
 
 class EntityDamageEvent extends EntityEvent implements Cancellable{
 	public static $handlerList = null;
@@ -107,75 +108,77 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 
 		//TODO: add zombie
 		if($entity instanceof Player){
-			switch($cause){
-				case self::CAUSE_CONTACT:
-				case self::CAUSE_ENTITY_ATTACK:
-				case self::CAUSE_PROJECTILE:
-				case self::CAUSE_FIRE:
-				case self::CAUSE_LAVA:
-				case self::CAUSE_BLOCK_EXPLOSION:
-				case self::CAUSE_ENTITY_EXPLOSION:
-				case self::CAUSE_LIGHTNING:
-					$points = 0;
-					foreach($entity->getInventory()->getArmorContents() as  $i){
-						if($i->isArmor()){
-							$points += $i->getArmorValue();
-						}
-					}
-					if($points !== 0){
-						$this->setRateDamage(1 - 0.04 * $points, self::MODIFIER_ARMOR);
-						$this->use_armors = $entity->getInventory()->getArmorContents();
-					}
-					//For Protection
-					$spe_Prote = null;
-					switch ($cause){
-						case self::CAUSE_ENTITY_EXPLOSION:
-						case self::CAUSE_BLOCK_EXPLOSION:
-							$spe_Prote = Enchantment::TYPE_ARMOR_EXPLOSION_PROTECTION;
-							break;
-						case self::CAUSE_FIRE:
-						case self::CAUSE_LAVA:
-							$spe_Prote = Enchantment::TYPE_ARMOR_FIRE_PROTECTION;
-							break;
-						case self::CAUSE_PROJECTILE:
-							$spe_Prote = Enchantment::TYPE_ARMOR_PROJECTILE_PROTECTION;
-							break;
-						default;
-							break;
-					}
-					foreach($this->use_armors as  $i){
-						if($i->isArmor()){
-							$this->EPF += $i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_PROTECTION);
-							if($spe_Prote !== null){
-								$this->EPF += 2 * $i->getEnchantmentLevel($spe_Prote);
-								$this->MaxEnchantLevel = max($this->MaxEnchantLevel, $i->getEnchantmentLevel($spe_Prote));
+			if($entity->getInventory() instanceof PlayerInventory){ 
+				switch($cause){
+					case self::CAUSE_CONTACT:
+					case self::CAUSE_ENTITY_ATTACK:
+					case self::CAUSE_PROJECTILE:
+					case self::CAUSE_FIRE:
+					case self::CAUSE_LAVA:
+					case self::CAUSE_BLOCK_EXPLOSION:
+					case self::CAUSE_ENTITY_EXPLOSION:
+					case self::CAUSE_LIGHTNING:
+						$points = 0;
+						foreach($entity->getInventory()->getArmorContents() as  $i){
+							if($i->isArmor()){
+								$points += $i->getArmorValue();
 							}
 						}
-					}
-					break;
-				case self::CAUSE_FALL:
-					//Feather Falling
-					$i = $entity->getInventory()->getBoots();
-					if($i->isArmor()){
-						$this->EPF += $i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_PROTECTION);
-						$this->EPF += 3 * $i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_FALL_PROTECTION);
-					}
-					break;
-				case self::CAUSE_FIRE_TICK:
-				case self::CAUSE_SUFFOCATION:
-				case self::CAUSE_DROWNING:
-				case self::CAUSE_VOID:
-				case self::CAUSE_SUICIDE:
-				case self::CAUSE_MAGIC:
-				case self::CAUSE_CUSTOM:
-				case self::CAUSE_STARVATION:
-					break;
-				default:
-					break;
-			}
-			if($this->EPF !== 0){
-				$this->EPF = min(20, ceil($this->EPF * mt_rand(50, 100) / 100));
-				$this->setRateDamage(1 - 0.04 * $this->EPF, self::MODIFIER_PROTECTION);
+						if($points !== 0){
+							$this->setRateDamage(1 - 0.04 * $points, self::MODIFIER_ARMOR);
+							$this->use_armors = $entity->getInventory()->getArmorContents();
+						}
+						//For Protection
+						$spe_Prote = null;
+						switch ($cause){
+							case self::CAUSE_ENTITY_EXPLOSION:
+							case self::CAUSE_BLOCK_EXPLOSION:
+								$spe_Prote = Enchantment::TYPE_ARMOR_EXPLOSION_PROTECTION;
+								break;
+							case self::CAUSE_FIRE:
+							case self::CAUSE_LAVA:
+								$spe_Prote = Enchantment::TYPE_ARMOR_FIRE_PROTECTION;
+								break;
+							case self::CAUSE_PROJECTILE:
+								$spe_Prote = Enchantment::TYPE_ARMOR_PROJECTILE_PROTECTION;
+								break;
+							default;
+								break;
+						}
+						foreach($this->use_armors as  $i){
+							if($i->isArmor()){
+								$this->EPF += $i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_PROTECTION);
+								if($spe_Prote !== null){
+									$this->EPF += 2 * $i->getEnchantmentLevel($spe_Prote);
+									$this->MaxEnchantLevel = max($this->MaxEnchantLevel, $i->getEnchantmentLevel($spe_Prote));
+								}
+							}
+						}
+						break;
+					case self::CAUSE_FALL:
+						//Feather Falling
+						$i = $entity->getInventory()->getBoots();
+						if($i->isArmor()){
+							$this->EPF += $i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_PROTECTION);
+							$this->EPF += 3 * $i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_FALL_PROTECTION);
+						}
+						break;
+					case self::CAUSE_FIRE_TICK:
+					case self::CAUSE_SUFFOCATION:
+					case self::CAUSE_DROWNING:
+					case self::CAUSE_VOID:
+					case self::CAUSE_SUICIDE:
+					case self::CAUSE_MAGIC:
+					case self::CAUSE_CUSTOM:
+					case self::CAUSE_STARVATION:
+						break;
+					default:
+						break;
+				}
+				if($this->EPF !== 0){
+					$this->EPF = min(20, ceil($this->EPF * mt_rand(50, 100) / 100));
+					$this->setRateDamage(1 - 0.04 * $this->EPF, self::MODIFIER_PROTECTION);
+				}
 			}
 		}
 	}
