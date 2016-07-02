@@ -22,6 +22,7 @@
 namespace synapse;
 
 use pocketmine\entity\Entity;
+use pocketmine\entity\Human;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
@@ -149,7 +150,7 @@ class Player extends PMPlayer{
 				$this->server->saveOfflinePlayerData($this->username, $nbt, true);
 			}
 
-			Entity::__construct($this->level->getChunk($nbt["Pos"][0] >> 4, $nbt["Pos"][2] >> 4, true), $nbt);
+			Human::__construct($this->level->getChunk($nbt["Pos"][0] >> 4, $nbt["Pos"][2] >> 4, true), $nbt);
 			$this->loggedIn = true;
 			$this->server->addOnlinePlayer($this);
 
