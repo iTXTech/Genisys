@@ -228,7 +228,8 @@ class Synapse{
 				/** @var PlayerLogoutPacket $pk */
 				if(isset($this->players[$uuid = $pk->uuid->toBinary()])){
 					$this->players[$uuid]->setConnected(false);
-					$this->players[$uuid]->close("", $pk->reason);
+					$this->players[$uuid]->kick($this->players[$uuid]->getName() . " Close");
+					$this->players[$uuid]->close("Close", $pk->reason);
 					$this->removePlayer($this->players[$uuid]);
 				}
 				break;
