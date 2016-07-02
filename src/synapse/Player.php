@@ -206,11 +206,11 @@ class Player extends PMPlayer{
 			$pk->clientHash = $hash;
 			Synapse::getInstance()->sendDataPacket($pk);
 
-			$ip = $clients[$hash]["ip"];
+			/*$ip = $clients[$hash]["ip"];
 			$port = $clients[$hash]["port"];
 
 			$this->close("", "Transferred to $ip:$port");
-			Synapse::getInstance()->removePlayer($this);
+			Synapse::getInstance()->removePlayer($this);*/
 		}
 	}
 
