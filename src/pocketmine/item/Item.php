@@ -903,7 +903,7 @@ class Item{
 	 * @param bool $compareLevel
 	 * @return bool
 	 */
-	public function hasEnchantment(int $id, $level = 1, bool $compareLevel = false) : bool{
+	public function hasEnchantment(int $id, int $level = 1, bool $compareLevel = false) : bool{
 		if($this->hasEnchantments()){
 			foreach($this->getEnchantments() as $enchantment){
 				if($enchantment->getId() == $id){
