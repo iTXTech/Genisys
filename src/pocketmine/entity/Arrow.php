@@ -21,10 +21,15 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\item\Potion;
 use pocketmine\level\format\FullChunk;
+use pocketmine\level\particle\BubbleParticle;
 use pocketmine\level\particle\CriticalParticle;
+use pocketmine\level\particle\MobSpellParticle;
+use pocketmine\level\particle\SpellParticle;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\network\Network;
+use pocketmine\nbt\tag\ShortTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
@@ -41,10 +46,22 @@ class Arrow extends Projectile{
 	protected $damage = 2;
 
 	protected $isCritical;
+	protected $potionId;
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null, $critical = false){
 		$this->isCritical = (bool) $critical;
+		if(!isset($nbt->Potion)){
+			$nbt->Potion = new ShortTag("Potion", 0);
+		}
 		parent::__construct($chunk, $nbt, $shootingEntity);
+		$this->potionId = $this->namedtag["Potion"];
+	}
+
+	public function attack($damage, EntityDamageEvent $source){
+		foreach(Potion::getEffectsById($this->potionId - 1) as $effect){
+			$source->getEntity()->addEffect($effect->setDuration($effect->getDuration() / 8));
+		}
+		parent::attack($damage, $source);
 	}
 
 	public function onUpdate($currentTick){
@@ -56,13 +73,23 @@ class Arrow extends Projectile{
 
 		$hasUpdate = parent::onUpdate($currentTick);
 
-		if(!$this->hadCollision and $this->isCritical){
-			$this->level->addParticle(new CriticalParticle($this->add(
-				$this->width / 2 + mt_rand(-100, 100) / 500,
-				$this->height / 2 + mt_rand(-100, 100) / 500,
-				$this->width / 2 + mt_rand(-100, 100) / 500)));
+		if(!$this->hadCollision){
+			if($this->isCritical){
+				$this->level->addParticle(new CriticalParticle($this->add(
+					$this->width / 2 + mt_rand(-100, 100) / 500,
+					$this->height / 2 + mt_rand(-100, 100) / 500,
+					$this->width / 2 + mt_rand(-100, 100) / 500)));
+			}
+			if($this->potionId != 0){
+				$color = Potion::getColor($this->potionId - 1);
+				$this->level->addParticle(new MobSpellParticle($this->add(
+					$this->width / 2 + mt_rand(-100, 100) / 500,
+					$this->height / 2 + mt_rand(-100, 100) / 500,
+					$this->width / 2 + mt_rand(-100, 100) / 500), $color[0], $color[1], $color[2]));
+			}
 		}elseif($this->onGround){
 			$this->isCritical = false;
+			$this->potionId = 0;
 		}
 
 		if($this->age > 1200){
