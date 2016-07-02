@@ -896,26 +896,24 @@ class Item{
 
 		return null;
 	}
-	
+
 	/**
-	 * @param $id
-	 * @param int $level
+	 * @param int  $id
+	 * @param int  $level
 	 * @param bool $compareLevel
-	 * @return bool*
+	 * @return bool
 	 */
-	public function hasEnchantment($id, $level = 1, bool $compareLevel = false){
+	public function hasEnchantment(int $id, $level = 1, bool $compareLevel = false) : bool{
 		if($this->hasEnchantments()){
-			foreach($this->getEnchantments() as $enchant){
-				if($enchant->getId() == $id){
-					if($compareLevel == true){
-						if($enchant->getLevel() == $level){
+			foreach($this->getEnchantments() as $enchantment){
+				if($enchantment->getId() == $id){
+					if($compareLevel){
+						if($enchantment->getLevel() == $level){
 							return true;
 						}
-					}
-					else {
+					}else{
 						return true;
 					}
-
 				}
 			}
 		}
