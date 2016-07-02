@@ -20,7 +20,7 @@ If version is invalid, the issue will be CLOSED -->
 * PHP:
 * OS:
 
-#### Crashdump, backtrace or other files
+#### Crashdump, backtrace, Plugins list or other files
 ```
 Paste here
 ```
