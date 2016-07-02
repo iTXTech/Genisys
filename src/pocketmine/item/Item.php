@@ -897,6 +897,17 @@ class Item{
 		return null;
 	}
 	
+	public function hasEnchantment(Enchantment $enchantment){
+		if($this->hasEnchantments()){
+			foreach($this->getEnchantments() as $enchant){
+				if($this->getEnchantment($enchant->getId()) == $enchantment){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * @param $id
 	 * @return Int level|0(for null)
