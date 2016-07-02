@@ -113,8 +113,9 @@ LICENSE;
 	private function generateBaseConfig(){
 		$config = new Config(\pocketmine\DATA . "server.properties", Config::PROPERTIES);
 		echo "[?] " . $this->lang->name_your_server . " (" . self::DEFAULT_NAME . "): ";
-		$config->set("server-name", $this->getInput(self::DEFAULT_NAME));
-		$config->set("motd", $this->getInput(self::DEFAULT_NAME));
+		$server_name = $this->getInput(self::DEFAULT_NAME);
+		$config->set("server-name", $server_name);
+		$config->set("motd", $server_name); //MOTD is now used as server name
 		echo "[*] " . $this->lang->port_warning . "\n";
 		do{
 			echo "[?] " . $this->lang->server_port . " (" . self::DEFAULT_PORT . "): ";
@@ -130,11 +131,11 @@ LICENSE;
 		
 		do{
 			echo "[?] " . $this->lang->level_type . " (" . self::DEFAULT_LEVEL_TYPE . "): ";
-			$type = (string) $this->getInput(self::DEFAULT_LEVEL_TYPE);
-			if($type != "flat" or $type != "default"){
+			$type = strtoupper((string) $this->getInput(self::DEFAULT_LEVEL_TYPE));
+			if($type != "FLAT" and $type != "DEFAULT"){
 				echo "[!] " . $this->lang->invalid_level_type . "\n";
 			}
-		}while($type == "flat" or $type == "default");
+		}while($type != "FLAT" and $type != "DEFAULT");
 		$config->set("level-type", $type);
 		
 		/*echo "[*] " . $this->lang->ram_warning . "\n";
