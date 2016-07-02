@@ -301,29 +301,31 @@ class Effect{
 			}
 
 			$entity->dataPacket($pk);
+
+			if($this->id === Effect::SPEED){
+				$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+				if($modify and $oldEffect !== null){
+					$speed = $attr->getValue() / (1 + 0.2 * $oldEffect->getAmplifier());
+				}else{
+					$speed = $attr->getValue();
+				}
+				$speed *= (1 + 0.2 * $this->amplifier);
+				$attr->setValue($speed);
+			}elseif($this->id === Effect::SLOWNESS){
+				$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+				if($modify and $oldEffect !== null){
+					$speed = $attr->getValue() / (1 - 0.15 * $oldEffect->getAmplifier());
+				}else{
+					$speed = $attr->getValue();
+				}
+				$speed *= (1 - 0.15 * $this->amplifier);
+				$attr->setValue($speed);
+			}
 		}
 
 		if($this->id === Effect::INVISIBILITY){
 			$entity->setDataFlag(Entity::DATA_FLAGS, Entity::DATA_FLAG_INVISIBLE, true);
 			$entity->setDataProperty(Entity::DATA_SHOW_NAMETAG, Entity::DATA_TYPE_BYTE, 0);
-		}elseif($this->id === Effect::SPEED){
-			$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-			if($modify and $oldEffect !== null){
-				$speed = $attr->getValue() / (1 + 0.2 * $oldEffect->getAmplifier());
-			}else{
-				$speed = $attr->getValue();
-			}
-			$speed *= (1 + 0.2 * $this->amplifier);
-			$attr->setValue($speed);
-		}elseif($this->id === Effect::SLOWNESS){
-			$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-			if($modify and $oldEffect !== null){
-				$speed = $attr->getValue() / (1 - 0.15 * $oldEffect->getAmplifier());
-			}else{
-				$speed = $attr->getValue();
-			}
-			$speed *= (1 - 0.15 * $this->amplifier);
-			$attr->setValue($speed);
 		}
 	}
 
@@ -335,17 +337,19 @@ class Effect{
 			$pk->effectId = $this->getId();
 
 			$entity->dataPacket($pk);
+
+			if($this->id === Effect::SPEED){
+				$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+				$attr->setValue($attr->getValue() / (1 + 0.2 * $this->amplifier));
+			}elseif($this->id === Effect::SLOWNESS){
+				$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+				$attr->setValue($attr->getValue() / (1 - 0.15 * $this->amplifier));
+			}
 		}
 
 		if($this->id === Effect::INVISIBILITY){
 			$entity->setDataFlag(Entity::DATA_FLAGS, Entity::DATA_FLAG_INVISIBLE, false);
 			$entity->setDataProperty(Entity::DATA_SHOW_NAMETAG, Entity::DATA_TYPE_BYTE, 1);
-		}elseif($this->id === Effect::SPEED){
-			$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-			$attr->setValue($attr->getValue() / (1 + 0.2 * $this->amplifier));
-		}elseif($this->id === Effect::SLOWNESS){
-			$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-			$attr->setValue($attr->getValue() / (1 - 0.15 * $this->amplifier));
 		}
 	}
 }
