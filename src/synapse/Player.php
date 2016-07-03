@@ -33,10 +33,8 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\LongTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\network\protocol\ChangeDimensionPacket;
 use pocketmine\network\protocol\ContainerSetContentPacket;
 use pocketmine\network\protocol\DataPacket;
-use pocketmine\network\protocol\PlayStatusPacket;
 use pocketmine\network\protocol\SetPlayerGameTypePacket;
 use pocketmine\Player as PMPlayer;
 use pocketmine\Server;
@@ -150,7 +148,7 @@ class Player extends PMPlayer{
 				$this->server->saveOfflinePlayerData($this->username, $nbt, true);
 			}
 
-			Human::__construct($this->level->getChunk($nbt["Pos"][0] >> 4, $nbt["Pos"][2] >> 4, true), $nbt);
+			Entity::__construct($this->level->getChunk($nbt["Pos"][0] >> 4, $nbt["Pos"][2] >> 4, true), $nbt);
 			$this->loggedIn = true;
 			$this->server->addOnlinePlayer($this);
 

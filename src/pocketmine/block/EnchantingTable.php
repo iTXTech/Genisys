@@ -105,37 +105,38 @@ class EnchantingTable extends Transparent{
 			return true;
 		}
 		if($player instanceof Player){
-			//TODO lock
 			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
 			$tile = $this->getLevel()->getTile($this);
 			$enchantTable = null;
-			if($tile instanceof EnchantTable)
+			if($tile instanceof EnchantTable){
 				$enchantTable = $tile;
-		}else{
-			$this->getLevel()->setBlock($this, $this, true, true);
-			$nbt = new CompoundTag("", [
-				new StringTag("id", Tile::ENCHANT_TABLE),
-				new IntTag("x", $this->x),
-				new IntTag("y", $this->y),
-				new IntTag("z", $this->z)
-			]);
+			}else{
+				$this->getLevel()->setBlock($this, $this, true, true);
+				$nbt = new CompoundTag("", [
+					new StringTag("id", Tile::ENCHANT_TABLE),
+					new IntTag("x", $this->x),
+					new IntTag("y", $this->y),
+					new IntTag("z", $this->z)
+				]);
 
-			if($item->hasCustomName()){
-				$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
-			}
-
-			if($item->hasCustomBlockData()){
-				foreach($item->getCustomBlockData() as $key => $v){
-					$nbt->{$key} = $v;
+				if($item->hasCustomName()){
+					$nbt->CustomName = new StringTag("CustomName", $item->getCustomName());
 				}
-			}
 
-			$enchantTable = Tile::createTile(Tile::ENCHANT_TABLE, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+				if($item->hasCustomBlockData()){
+					foreach($item->getCustomBlockData() as $key => $v){
+						$nbt->{$key} = $v;
+					}
+				}
+
+				/** @var EnchantTable $enchantTable */
+				$enchantTable = Tile::createTile(Tile::ENCHANT_TABLE, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+			}
+			$player->addWindow($enchantTable->getInventory());
 		}
 
-		$player->addWindow($enchantTable->getInventory());
 
 		return true;
 	}
