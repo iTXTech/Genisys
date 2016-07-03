@@ -229,10 +229,6 @@ class Player extends PMPlayer{
 		$this->uuid = $uuid;
 	}
 
-	public function setConnected(bool $connected){
-		$this->connected = $connected;
-	}
-
 	public function dataPacket(DataPacket $packet, $needACK = false){
 		$this->interface->putPacket($this, $packet, $needACK);
 	}

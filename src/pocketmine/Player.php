@@ -2073,6 +2073,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		//TODO: implement authentication after it is available
 		$this->authenticateCallback(true);
 	}
+
 	public function authenticateCallback($valid){
 
 		//TODO add more stuff after authentication is available
