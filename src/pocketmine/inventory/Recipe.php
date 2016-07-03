@@ -31,7 +31,7 @@ interface Recipe{
 	public function getResult();
 
 	public function registerToCraftingManager();
-
+	
 	/**
 	 * @return UUID
 	 */
