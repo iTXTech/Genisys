@@ -24,7 +24,9 @@ namespace pocketmine\entity;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
+use pocketmine\inventory\CraftingInventory;
 use pocketmine\inventory\InventoryHolder;
+use pocketmine\inventory\InventoryType;
 use pocketmine\inventory\PlayerInventory;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item as ItemItem;
@@ -51,6 +53,9 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 
 	/** @var PlayerInventory */
 	protected $inventory;
+	
+	/** @var CraftingInventory */
+	protected $craftingInventory;
 
 	/** @var UUID */
 	protected $uuid;
@@ -258,6 +263,10 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		$this->setDataProperty(self::DATA_PLAYER_BED_POSITION, self::DATA_TYPE_POS, [0, 0, 0]);
 
 		$this->inventory = new PlayerInventory($this);
+		
+		//Virtual inventory for desktop GUI crafting
+		$this->craftingInventory = new CraftingInventory($this, InventoryType::get(InventoryType::WORKBENCH));
+		
 		if($this instanceof Player){
 			$this->addWindow($this->inventory, 0);
 		}else{

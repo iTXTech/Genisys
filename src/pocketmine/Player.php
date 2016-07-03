@@ -209,6 +209,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public $craftingType = 0; //0 = 2x2 crafting, 1 = 3x3 crafting, 2 = stonecutter
 
 	protected $isCrafting = false;
+	
+	/** @var CraftingInventory 
+	 * Stores items removed from Win10 inventory that have not been dropped
+	 * These items will be the ones in the crafting grid.
+	 */
+	protected $craftingInventory = null;
 
 	/**
 	 * @deprecated
@@ -238,7 +244,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/** @var Vector3 */
 	protected $sleeping = null;
 	protected $clientID = null;
-
+	
+	//Assume client is desktop until told otherwise. This won't affect PE and helps W10
+	//Crafting events and container slot changes help us decide whether the client is a desktop client or not.
+	//Okay, apparently this causes PE to lose stuff put into chests until they craft something. Argh!
+	protected $isDesktopClient = true;
+	
 	private $loaderId = null;
 
 	protected $stepHeight = 0.6;
@@ -723,6 +734,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->expLevel = 0;
 		$this->food = 20;
 		Entity::setHealth(20);
+		
 	}
 
 	/**
@@ -796,6 +808,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 */
 	public function getPort() : int{
 		return $this->port;
+	}
+	
+	public function isDesktop(): bool{
+		return $this->isDesktopClient;
 	}
 
 	public function getNextPosition(){
@@ -2103,6 +2119,65 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		return -1;
 	}
+	
+	public function handleInventoryChange(Inventory $inventory, $slot, Item $newItem, Item $oldItem){
+		if($newItem->getCount() > $newItem->getMaxStackSize() or $newItem->getCount() < 0){
+			$this->inventory->sendContents($this);
+		}
+		if($newItem != $oldItem and count($this->windowIndex) > 0){ 
+			//Some inventory change has taken place, handle it, but only if there are windows open. Fixes problems with picking items up
+			if($newItem->getId() === Item::AIR and $oldItem->getId() !== Item::AIR){ //Selected a whole slot
+				$this->craftingInventory->addItem($oldItem);
+				$inventory->clear($slot);
+			}elseif($newItem->deepEquals($oldItem)){ //Slot count changed
+				if($newItem->getCount() > $oldItem->getCount()){ //Slot count increased
+					$amountAdded = $newItem->getCount() - $oldItem->getCount();
+					$itemsAdded = clone $newItem;
+					$itemsAdded->setCount($amountAdded);
+					if(!$this->craftingInventory->contains($itemsAdded)){
+						//Illegal action: player is attempting to place more items than they have.
+						//Set the item count back to what it was before.
+						$inventory->setItem($slot, $oldItem);
+						return;
+					}else{
+						$this->craftingInventory->removeItem($itemsAdded);
+						$inventory->setItem($slot, $newItem);
+					}
+				}else{
+					//Slot count decreased or stayed the same
+					$amountTaken = $oldItem->getCount() - $newItem->getCount();
+					if($amountTaken < 1){
+						//Somehow the slot count didn't change
+						$inventory->setItem($slot, $oldItem);
+						return;
+					}
+					$itemsTaken = clone $newItem;
+					$itemsTaken->setCount($amountTaken);
+					$this->craftingInventory->addItem($itemsTaken);
+					$inventory->setItem($slot, $newItem);
+				}
+				
+			}elseif($newItem->getId() !== Item::AIR and $oldItem->getId() === Item::AIR){ //Added a full slot
+				if(!$this->craftingInventory->contains($newItem)){ //Trying to add a slot that isn't in the crafting inventory
+					$inventory->setItem($slot, $oldItem);
+					return;
+				}
+				$this->craftingInventory->removeItem($newItem);
+				$inventory->setItem($slot, $newItem);
+			}elseif(!$newItem->deepEquals($oldItem)){ //Swapped a slot or slot changed
+				if($oldItem->deepEquals($newItem, false)){ //Durability change
+					return;
+				}
+				if(!$this->craftingInventory->contains($newItem)){ //Trying to place an item that's not in the crafting inventory
+					$inventory->setItem($slot, $oldItem);
+					return;
+				}else{ //Swap the slot
+					$this->craftingInventory->addItem($oldItem);
+					$inventory->setItem($slot, $newItem);
+				}
+			}
+		}
+	}
 
 	protected function processLogin(){
 		if(!$this->server->isWhitelisted(strtolower($this->getName()))){
@@ -2321,7 +2396,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$timings->stopTiming();
 			return;
 		}
-
 		switch($packet::NETWORK_ID){
 			case ProtocolInfo::ITEM_FRAME_DROP_ITEM_PACKET:
 				$tile = $this->level->getTile($this->temporalVector->setComponents($packet->x, $packet->y, $packet->z));
@@ -3232,20 +3306,63 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				if($slot == -1){
 					$this->inventory->sendContents($this);
 					break;
+				}				
+				
+				$replacementItem = Item::get(Item::AIR, 0, 1);
+				$droppedItem = null;
+				if($this->craftingInventory->contains($packet->item)){
+					//We're okay to go ahead and drop as Desktop GUI style
+					//We're dropping an item that we've clicked on and picked up.
+					$droppedItem = $packet->item;
+					$this->craftingInventory->remove($droppedItem);
+					$replacementItem = null;					
+				}else{
+					//Crafting inventory doesn't contain the item we are trying to drop
+					//This means we're trying to drop our held item slot, or at least part
+					//of it.
+					$heldItem = clone $this->inventory->getItemInHand();
+					if(!$heldItem->deepEquals($packet->item)){
+						//Should be impossible
+						//Player tried to drop something that wasn't the same as their held item
+						break;
+					}elseif($heldItem->getCount() !== $packet->item->getCount()){
+						//Player is trying to drop part of a slot
+						$remaining = $heldItem->getCount() - $packet->item->getCount();
+						if($remaining < 0){
+							//Again, should be impossible
+							//Client trying to drop more of an item than they are holding
+							break;
+						}else{
+							$heldItem->setCount($remaining);
+							$droppedItem = $packet->item;
+							$replacementItem = $heldItem;
+						}
+					}else{
+						//Dropping the entire held slot
+						$droppedItem = $heldItem;
+					}
 				}
-				$dropItem = $this->inventory->getItem($slot);
-				$ev = new PlayerDropItemEvent($this, $dropItem);
+				if($droppedItem === null){
+					//No idea when or why this would ever happen, but okay...
+					break;
+				}
+				$ev = new PlayerDropItemEvent($this, $droppedItem);	
 				$this->server->getPluginManager()->callEvent($ev);
 				if($ev->isCancelled()){
 					$this->inventory->sendSlot($slot, $this);
 					break;
 				}
+				
+				if($replacementItem !== null){
+					//Not sure this will cut it, may have to actually remove it
+					$this->inventory->setItemInHand($replacementItem);
+					//$this->inventory->remove($dropItem);
+				}
 
-				$this->inventory->remove($dropItem);
 				//$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
 				$motion = $this->getDirectionVector()->multiply(0.4);
 
-				$this->level->dropItem($this->add(0, 1.3, 0), $dropItem, $motion, 40);
+				$this->level->dropItem($this->add(0, 1.3, 0), $droppedItem, $motion, 40);
 
 				$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 				break;
@@ -3312,9 +3429,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->dataPacket($pk);
 					break;
 				}
-
+				
 				$recipe = $this->server->getCraftingManager()->getRecipe($packet->id);
-
 
 				if($recipe === null or (($recipe instanceof BigShapelessRecipe or $recipe instanceof BigShapedRecipe) and $this->craftingType === 0)){
 					$this->inventory->sendContents($this);
@@ -3333,67 +3449,110 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				$canCraft = true;
+				
+				//Tells the server whether to add the resulting item to the inventory directly.
+				// We do not want to do this with Desktop GUI as this might result in duplication.
+				//$isDesktopCrafting = false;
+				
+				if(count($packet->input) === 0){
+					$this->isDesktopClient = true;
+					/* If the packet "input" field is empty this needs to be handled differently.
+					 * "input" is used to tell the server what items to remove from the client's inventory
+					 * Because crafting takes the materials in the crafting grid, nothing needs to be taken from the inventory
+					 * Instead, we take the materials from the crafting inventory
+					 * To know what materials we need to take, we have to guess the crafting recipe used based on the
+					 * output item and the materials stored in the crafting items
+					 */
+					$possibleRecipes = $this->server->getCraftingManager()->getRecipesByResult($packet->output[0]);
+					foreach($possibleRecipes as $r){
+						//Check the ingredient list and see if it matches the ingredients we've put into the crafting grid
+						//As soon as we find a recipe that we have all the ingredients for, take it and run with it.
+						
+						//Make a copy of the crafting inventory that we can make changes to.
+						$craftingInventory = clone $this->craftingInventory;
+						$ingredients = $r->getIngredientList();
 
-
-				if($recipe instanceof ShapedRecipe){
-					for($x = 0; $x < 3 and $canCraft; ++$x){
-						for($y = 0; $y < 3; ++$y){
-							$item = $packet->input[$y * 3 + $x];
-							$ingredient = $recipe->getIngredient($x, $y);
-							if($item->getCount() > 0 and $item->getId() > 0){
-								if($ingredient == null){
-									$canCraft = false;
-									break;
-								}
-								if($ingredient->getId() != 0 and !$ingredient->deepEquals($item, $ingredient->getDamage() !== null, $ingredient->getCompoundTag() !== null)){
-									$canCraft = false;
-									break;
-								}
-
-							}elseif($ingredient !== null and $item->getId() !== 0){
+						//Check we have all the necessary ingredients.
+						foreach($ingredients as $ingredient){
+							if(!$craftingInventory->contains($ingredient)){
+								//We're short on ingredients, try the next recipe
 								$canCraft = false;
 								break;
 							}
+							//This will only be reached if we have the item to take away.
+							$craftingInventory->removeItem($ingredient);
 						}
-					}
-				}elseif($recipe instanceof ShapelessRecipe){
-					$needed = $recipe->getIngredientList();
-
-					for($x = 0; $x < 3 and $canCraft; ++$x){
-						for($y = 0; $y < 3; ++$y){
-							$item = clone $packet->input[$y * 3 + $x];
-
-							foreach($needed as $k => $n){
-								if($n->deepEquals($item, $n->getDamage() !== null, $n->getCompoundTag() !== null)){
-									$remove = min($n->getCount(), $item->getCount());
-									$n->setCount($n->getCount() - $remove);
-									$item->setCount($item->getCount() - $remove);
-
-									if($n->getCount() === 0){
-										unset($needed[$k]);
-									}
-								}
-							}
-
-							if($item->getCount() > 0){
-								$canCraft = false;
-								break;
-							}
+						if($canCraft){
+							//Found a recipe that works, take it and run with it.
+							$recipe = $r;
+							$this->craftingInventory = $craftingInventory; //Set player crafting inv to the idea one created in this process
+							$this->craftingInventory->addItem(clone $recipe->getResult()); //Add the result to our picture of the crafting inventory
+							break;
 						}
-					}
-
-					if(count($needed) > 0){
-						$canCraft = false;
 					}
 				}else{
-					$canCraft = false;
-				}
+					$this->isDesktopClient = false;
+					if($recipe instanceof ShapedRecipe){
+						for($x = 0; $x < 3 and $canCraft; ++$x){
+							for($y = 0; $y < 3; ++$y){
+								$item = $packet->input[$y * 3 + $x];
+								$ingredient = $recipe->getIngredient($x, $y);
+								if($item->getCount() > 0 and $item->getId() > 0){
+									if($ingredient == null){
+										$canCraft = false;
+										break;
+									}
+									if($ingredient->getId() != 0 and !$ingredient->deepEquals($item, $ingredient->getDamage() !== null, $ingredient->getCompoundTag() !== null)){
+										$canCraft = false;
+										break;
+									}
 
-				/** @var Item[] $ingredients */
+								}elseif($ingredient !== null and $item->getId() !== 0){
+									$canCraft = false;
+									break;
+								}
+							}
+						}
+					}elseif($recipe instanceof ShapelessRecipe){
+						$needed = $recipe->getIngredientList();
+
+						for($x = 0; $x < 3 and $canCraft; ++$x){
+							for($y = 0; $y < 3; ++$y){
+								$item = clone $packet->input[$y * 3 + $x];
+
+								foreach($needed as $k => $n){
+									if($n->deepEquals($item, $n->getDamage() !== null, $n->getCompoundTag() !== null)){
+										$remove = min($n->getCount(), $item->getCount());
+										$n->setCount($n->getCount() - $remove);
+										$item->setCount($item->getCount() - $remove);
+
+										if($n->getCount() === 0){
+											unset($needed[$k]);
+										}
+									}
+								}
+
+								if($item->getCount() > 0){
+									$canCraft = false;
+									break;
+								}
+							}
+						}
+						if(count($needed) > 0){
+							$canCraft = false;
+						}
+					}else{
+						$canCraft = false;
+					}	
+				}
+				
+				//Nasty hack. TODO: Get rid
 				$canCraft = true;//0.13.1大量物品本地配方出现问题,无法解决,使用极端(唯一)方法修复.
+				
+				/** @var Item[] $ingredients */
 				$ingredients = $packet->input;
 				$result = $packet->output[0];
-
+				
 				if(!$canCraft or !$recipe->getResult()->deepEquals($result)){
 					$this->server->getLogger()->debug("Unmatched recipe " . $recipe->getId() . " from player " . $this->getName() . ": expected " . $recipe->getResult() . ", got " . $result . ", using: " . implode(", ", $ingredients));
 					$this->inventory->sendContents($this);
@@ -3431,32 +3590,35 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					break;
 				}
 
-				foreach($used as $slot => $count){
-					if($count === 0){
-						continue;
+				//Only do this if the crafting was not desktop style
+				if(!$this->isDesktopClient){
+					foreach($used as $slot => $count){
+						if($count === 0){
+							continue;
+						}
+
+						$item = $this->inventory->getItem($slot);
+
+						if($item->getCount() > $count){
+							$newItem = clone $item;
+							$newItem->setCount($item->getCount() - $count);
+						}else{
+							$newItem = Item::get(Item::AIR, 0, 0);
+						}
+
+						$this->inventory->setItem($slot, $newItem);
 					}
-
-					$item = $this->inventory->getItem($slot);
-
-					if($item->getCount() > $count){
-						$newItem = clone $item;
-						$newItem->setCount($item->getCount() - $count);
-					}else{
-						$newItem = Item::get(Item::AIR, 0, 0);
-					}
-
-					$this->inventory->setItem($slot, $newItem);
-				}
-
-				$extraItem = $this->inventory->addItem($recipe->getResult());
-				if(count($extraItem) > 0){
-					foreach($extraItem as $item){
-						$this->level->dropItem($this, $item);
+					
+					$extraItem = $this->inventory->addItem($recipe->getResult());
+					if(count($extraItem) > 0){
+						foreach($extraItem as $item){
+							$this->level->dropItem($this, $item);
+						}
 					}
 				}
 
 				switch($recipe->getResult()->getId()){
-					case Item::WORKBENCH:
+ 					case Item::WORKBENCH:
 						$this->awardAchievement("buildWorkBench");
 						break;
 					case Item::WOODEN_PICKAXE:
@@ -3491,7 +3653,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				break;
-
+				
 			case ProtocolInfo::CONTAINER_SET_SLOT_PACKET:
 				if($this->spawned === false or $this->blocked === true or !$this->isAlive()){
 					break;
@@ -3564,8 +3726,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				$this->currentTransaction->addTransaction($transaction);
-
-				if($this->currentTransaction->canExecute()){
+				
+				if(count($this->currentTransaction->getTransactions()) > 1){
+					//Win10 can't make more than 1 inventory transaction at a time.
+					//If we get more than 1, this must be PE (adding items to a chest for example)
+					$this->isDesktopClient = false;
+				}
+				
+				if($this->currentTransaction->canExecute() or $this->isDesktopClient){
 					$achievements = [];
 					foreach($this->currentTransaction->getTransactions() as $ts){
 						$inv = $ts->getInventory();

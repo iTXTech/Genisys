@@ -134,7 +134,7 @@ class SimpleTransactionGroup implements TransactionGroup{
 	}
 
 	public function execute(){
-		if($this->hasExecuted() or !$this->canExecute()){
+		if($this->hasExecuted() or (!$this->canExecute() and !$this->source->isDesktop())){
 			return false;
 		}
 
@@ -151,7 +151,14 @@ class SimpleTransactionGroup implements TransactionGroup{
 		}
 
 		foreach($this->transactions as $transaction){
-			$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem());
+			if($this->source->isDesktop()){
+				echo "Handling desktop inventory change\n";
+				$this->source->handleInventoryChange($transaction->getInventory(), $transaction->getSlot(), $transaction->getTargetItem(), $transaction->getSourceItem());
+			}else{
+				echo "Handling PE inventory change\n";
+				$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem());
+			}
+			
 		}
 
 		$this->hasExecuted = true;
