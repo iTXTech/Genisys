@@ -220,8 +220,10 @@ class Synapse{
 				/** @var RedirectPacket $pk */
 				if(isset($this->players[$uuid = $pk->uuid->toBinary()])){
 					$pk = $this->getPacket($pk->mcpeBuffer);
-					$pk->decode();
-					$this->players[$uuid]->handleDataPacket($pk);
+					if($pk != null){//drop unknown packet
+						$pk->decode();
+						$this->players[$uuid]->handleDataPacket($pk);
+					}
 				}
 				break;
 			case Info::PLAYER_LOGOUT_PACKET:
