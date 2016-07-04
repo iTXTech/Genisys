@@ -1556,7 +1556,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			}
 
 			if($entity instanceof Arrow and $entity->hadCollision){
-				$item = Item::get(Item::ARROW, 0, 1);
+				$item = Item::get(Item::ARROW, $entity->getPotionId(), 1);
 				if($this->isSurvival() and !$this->inventory->canAddItem($item)){
 					continue;
 				}
@@ -1577,7 +1577,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->dataPacket($pk);*/
 				//This may cause client crash
 
-				if(!$this->isCreative()) $this->inventory->addItem(clone $item);
+				$this->inventory->addItem(clone $item);
 				$entity->kill();
 			}elseif($entity instanceof DroppedItem){
 				if($entity->getPickupDelay() <= 0){
@@ -2838,7 +2838,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						if($this->startAction > -1 and $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION)){
 							if($this->inventory->getItemInHand()->getId() === Item::BOW){
 								$bow = $this->inventory->getItemInHand();
-								if($this->isSurvival() and !$this->inventory->contains(Item::get(Item::ARROW))){
+								if($this->isSurvival() and !$this->inventory->contains(Item::get(Item::ARROW, null))){
 									$this->inventory->sendContents($this);
 									break;
 								}
@@ -2848,9 +2848,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 										$arrow = $item;
 									}
 								}
-								if(!$arrow and $this->isCreative()){
+								if($arrow === false and $this->isCreative()){
 									$arrow = Item::get(Item::ARROW, 0 , 1);
-								}else{
+								}elseif($arrow === false){
 									break;
 								}
 

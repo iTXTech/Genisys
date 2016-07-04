@@ -21,7 +21,6 @@
 
 namespace pocketmine\entity;
 
-use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Potion;
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\particle\CriticalParticle;
@@ -55,11 +54,8 @@ class Arrow extends Projectile{
 		$this->potionId = $this->namedtag["Potion"];
 	}
 
-	public function attack($damage, EntityDamageEvent $source){
-		foreach(Potion::getEffectsById($this->potionId - 1) as $effect){
-			$source->getEntity()->addEffect($effect->setDuration($effect->getDuration() / 8));
-		}
-		parent::attack($damage, $source);
+	public function getPotionId() : int{
+		return $this->potionId;
 	}
 
 	public function onUpdate($currentTick){
@@ -71,23 +67,21 @@ class Arrow extends Projectile{
 
 		$hasUpdate = parent::onUpdate($currentTick);
 
-		if(!$this->hadCollision){
-			if($this->isCritical){
-				$this->level->addParticle(new CriticalParticle($this->add(
-					$this->width / 2 + mt_rand(-100, 100) / 500,
-					$this->height / 2 + mt_rand(-100, 100) / 500,
-					$this->width / 2 + mt_rand(-100, 100) / 500)));
-			}
-			if($this->potionId != 0){
-				$color = Potion::getColor($this->potionId - 1);
-				$this->level->addParticle(new MobSpellParticle($this->add(
-					$this->width / 2 + mt_rand(-100, 100) / 500,
-					$this->height / 2 + mt_rand(-100, 100) / 500,
-					$this->width / 2 + mt_rand(-100, 100) / 500), $color[0], $color[1], $color[2]));
-			}
+		if(!$this->hadCollision and $this->isCritical){
+			$this->level->addParticle(new CriticalParticle($this->add(
+				$this->width / 2 + mt_rand(-100, 100) / 500,
+				$this->height / 2 + mt_rand(-100, 100) / 500,
+				$this->width / 2 + mt_rand(-100, 100) / 500)));
 		}elseif($this->onGround){
 			$this->isCritical = false;
-			$this->potionId = 0;
+		}
+
+		if($this->potionId != 0){
+			$color = Potion::getColor($this->potionId - 1);
+			$this->level->addParticle(new MobSpellParticle($this->add(
+				$this->width / 2 + mt_rand(-100, 100) / 500,
+				$this->height / 2 + mt_rand(-100, 100) / 500,
+				$this->width / 2 + mt_rand(-100, 100) / 500), $color[0], $color[1], $color[2]));
 		}
 
 		if($this->age > 1200){
