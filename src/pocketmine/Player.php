@@ -2842,13 +2842,18 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 									$this->inventory->sendContents($this);
 									break;
 								}
+								$arrow = false;
 								foreach($this->inventory->getContents() as $item){
 									if($item->getId() == Item::ARROW){
 										$arrow = $item;
 									}
 								}
+								if(!$arrow and $this->isCreative()){
+									$arrow = Item::get(Item::ARROW, 0 , 1);
+								}else{
+									break;
+								}
 
-								/** @var \pocketmine\item\Arrow $arrow */
 								$nbt = new CompoundTag("", [
 									"Pos" => new ListTag("Pos", [
 										new DoubleTag("", $this->x),
