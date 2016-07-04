@@ -9,6 +9,7 @@ use pocketmine\math\Vector3;
 use pocketmine\math\Vector2;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Zombie;
+use pocketmine\entity\Husk;
 use pocketmine\scheduler\CallbackTask;
 use pocketmine\network\protocol\SetEntityMotionPacket;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -527,7 +528,7 @@ $xxx =0;$zzz=0;
 	public function ZombieFire() {
 		foreach ($this->AIHolder->getServer()->getLevels() as $level) {
 			foreach ($level->getEntities() as $zo){
-				if ($zo instanceof Zombie) {
+				if ($zo instanceof Zombie and !($zo instanceof Husk)) {
 					//var_dump($p->getLevel()->getTime());
 					/* Don't use time directly
 					 * Instead, get remainder of current time divided by 24,000

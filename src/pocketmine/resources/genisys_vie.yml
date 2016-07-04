@@ -117,7 +117,7 @@ synapse:
  #Nếu Client này là server chính hoặc sv lobby
  is-main-server: true
  #Mật khẩu Synapse (có thể tham khảo ở server.properties tại Synapse)
- server-password: 32bitlongkey
+ server-password: 16bitlongkey
  #Mô tả về hệ thống Synapse của bạn
  description: "A Synapse client"
  #Hủy RakLib tức là chỉ có thể vào Synapse mà không vào server này (mặc định là false)
