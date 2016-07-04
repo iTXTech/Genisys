@@ -31,7 +31,14 @@ class CrashDump{
 		$this->data["time"] = $this->time;
 		$this->addLine($this->server->getName() . " Crash Dump " . date("D M j H:i:s T Y", $this->time));
 		$this->addLine();
-		$this->baseCrash();
+		try{
+			$this->baseCrash();
+		}catch(\Exception $e){
+			//Attempt to fix incomplete crashdumps
+			$this->addLine("CrashDump crashed while generating base crash data");
+			$this->addLine();
+		}
+		
 		$this->generalData();
 		$this->pluginsData();
 
