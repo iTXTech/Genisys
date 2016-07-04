@@ -382,6 +382,9 @@ abstract class Entity extends Location implements Metadatable{
 			$effect = $this->effects[$effectId];
 			unset($this->effects[$effectId]);
 			$effect->remove($this);
+			if($effectId === Effect::ABSORPTION and $this instanceof Human){
+				$this->setAbsorption(0);
+			}
 
 			$this->recalculateEffectColor();
 		}
@@ -396,13 +399,16 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	public function addEffect(Effect $effect){
+		if($effect->getId() === Effect::HEALTH_BOOST){
+			$this->setHealth($this->getHealth() + 4 * ($effect->getAmplifier() + 1));
+		}
+		if($effect->getId() === Effect::ABSORPTION and $this instanceof Human){
+			$this->setAbsorption(4 * ($effect->getAmplifier() + 1));
+		}
+
 		if(isset($this->effects[$effect->getId()])){
 			$oldEffect = $this->effects[$effect->getId()];
-			if(
-				abs($effect->getAmplifier()) <= ($oldEffect->getAmplifier())
-				or (abs($effect->getAmplifier()) === abs($oldEffect->getAmplifier())
-					and $effect->getDuration() < $oldEffect->getDuration())
-			){
+			if(($effect->getAmplifier() <= ($oldEffect->getAmplifier())) and $effect->getDuration() < $oldEffect->getDuration()){
 				return;
 			}
 			$effect->add($this, true);
@@ -413,10 +419,6 @@ abstract class Entity extends Location implements Metadatable{
 		$this->effects[$effect->getId()] = $effect;
 
 		$this->recalculateEffectColor();
-
-		if($effect->getId() === Effect::HEALTH_BOOST){
-			$this->setHealth($this->getHealth() + 4 * ($effect->getAmplifier() + 1));
-		}
 	}
 
 	protected function recalculateEffectColor(){

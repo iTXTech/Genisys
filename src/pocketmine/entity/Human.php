@@ -333,6 +333,14 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		}
 	}
 
+	public function getAbsorption() : int{
+		return $this->attributeMap->getAttribute(Attribute::ABSORPTION)->getValue();
+	}
+
+	public function setAbsorption(int $absorption){
+		$this->attributeMap->getAttribute(Attribute::ABSORPTION)->setValue($absorption);
+	}
+
 	protected function addAttributes(){
 		parent::addAttributes();
 
@@ -343,6 +351,33 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		$this->attributeMap->addAttribute(Attribute::getAttribute(Attribute::EXPERIENCE));
 		$this->attributeMap->addAttribute(Attribute::getAttribute(Attribute::HEALTH));
 		$this->attributeMap->addAttribute(Attribute::getAttribute(Attribute::MOVEMENT_SPEED));
+		$this->attributeMap->addAttribute(Attribute::getAttribute(Attribute::ABSORPTION));
+	}
+
+	public function attack($damage, EntityDamageEvent $source){
+		if($this->hasEffect(Effect::FIRE_RESISTANCE)
+			and ($source->getCause() === EntityDamageEvent::CAUSE_FIRE
+				or $source->getCause() === EntityDamageEvent::CAUSE_FIRE_TICK
+				or $source->getCause() === EntityDamageEvent::CAUSE_LAVA)
+		){
+			$source->setCancelled();
+		}
+
+		$this->server->getPluginManager()->callEvent($source);
+		if($source->isCancelled()){
+			return false;
+		}
+		$this->setLastDamageCause($source);
+
+		$damage = round($source->getFinalDamage());
+		if($this->getAbsorption() > 0){
+			$absorption = $this->getAbsorption() - $damage;
+			$this->setAbsorption($absorption <= 0 ? 0 : $absorption);
+			$this->setHealth($this->getHealth() + $absorption);
+		}else{
+			$this->setHealth($this->getHealth() - $damage);
+		}
+		return true;
 	}
 
 	public function entityBaseTick($tickDiff = 1, $EnchantL = 0){
