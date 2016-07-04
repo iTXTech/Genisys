@@ -77,7 +77,7 @@ namespace pocketmine {
 	const CODENAME = "Ikaros";
 	const MINECRAFT_VERSION = "v0.15.0 alpha";
 	const MINECRAFT_VERSION_NETWORK = "0.15.0";
-	const GENISYS_API_VERSION = '1.9.0';
+	const GENISYS_API_VERSION = '1.8.0';
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
@@ -92,8 +92,8 @@ namespace pocketmine {
 		@define('pocketmine\PATH', \getcwd() . DIRECTORY_SEPARATOR);
 	}
 
-	if(version_compare("7.1", PHP_VERSION) > 0){
-		echo "[CRITICAL] You must use PHP >= 7.1" . PHP_EOL;
+	if(version_compare("7.0", PHP_VERSION) > 0){
+		echo "[CRITICAL] You must use PHP >= 7.0" . PHP_EOL;
 		echo "[CRITICAL] Please use the installer provided on the homepage." . PHP_EOL;
 		exit(1);
 	}
