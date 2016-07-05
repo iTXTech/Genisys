@@ -22,6 +22,7 @@
 namespace pocketmine\level\generator\object;
 
 use pocketmine\block\Block;
+use pocketmine\block\Leaves;
 use pocketmine\block\Wood;
 use pocketmine\level\ChunkManager;
 use pocketmine\utils\Random;
@@ -31,6 +32,7 @@ class OakTree extends Tree{
 	public function __construct(){
 		$this->trunkBlock = Block::LOG;
 		$this->leafBlock = Block::LEAVES;
+		$this->leafType = Leaves::OAK;
 		$this->type = Wood::OAK;
 	}
 
