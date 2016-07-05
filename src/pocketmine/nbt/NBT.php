@@ -181,6 +181,19 @@ class NBT{
 		return true;
 	}
 
+	public static function combineCompoundTags(CompoundTag $tag1, CompoundTag $tag2, bool $override = false) : CompoundTag{
+		$tag1 = clone $tag1;
+		foreach($tag2 as $k => $v){
+			if(!($v instanceof Tag)){
+				continue;
+			}
+			if(!isset($tag1->{$k}) or (isset($tag1->{$k}) and $override)){
+				$tag1->{$k} = clone $v;
+			}
+		}
+		return $tag1;
+	}
+
 	public static function parseJSON($data, &$offset = 0){
 		$len = strlen($data);
 		for(; $offset < $len; ++$offset){

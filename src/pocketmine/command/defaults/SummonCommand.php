@@ -11,6 +11,7 @@ namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
+use pocketmine\nbt\NBT;
 use pocketmine\Player;
 use pocketmine\entity\Entity;
 use pocketmine\utils\TextFormat;
@@ -43,58 +44,57 @@ class SummonCommand extends VanillaCommand{
 		$x = 0;
 		$y = 0;
 		$z = 0;
-		if(count($args) == 4 or count($args) == 5){			//position is set
+		if(count($args) == 4 or count($args) == 5){            //position is set
 			//TODO:simpilify them to one piece of code
 			//Code for setting $x
-			if(is_numeric($args[1])){							//x is given directly
+			if(is_numeric($args[1])){                            //x is given directly
 				$x = $args[1];
-			}elseif(strcmp($args[1], "~") >= 0){	//x is given with a "~"
+			}elseif(strcmp($args[1], "~") >= 0){    //x is given with a "~"
 				$offset_x = trim($args[1], "~");
-				if($sender instanceof Player){			//using in-game
+				if($sender instanceof Player){            //using in-game
 					$x = is_numeric($offset_x) ? ($sender->x + $offset_x) : $sender->x;
-				}else{															//using in console
+				}else{                                                            //using in console
 					$sender->sendMessage(TextFormat::RED . "You must specify a position where the entity is spawned to when using in console");
 					return false;
 				}
-			}else{																//other circumstances
+			}else{                                                                //other circumstances
 				$sender->sendMessage(TextFormat::RED . "Argument error");
 				return false;
 			}
 
 			//Code for setting $y
-			if(is_numeric($args[2])){							//y is given directly
+			if(is_numeric($args[2])){                            //y is given directly
 				$y = $args[2];
-			}elseif(strcmp($args[2], "~") >= 0){	//y is given with a "~"
+			}elseif(strcmp($args[2], "~") >= 0){    //y is given with a "~"
 				$offset_y = trim($args[2], "~");
-				if($sender instanceof Player){			//using in-game
+				if($sender instanceof Player){            //using in-game
 					$y = is_numeric($offset_y) ? ($sender->y + $offset_y) : $sender->y;
-					if($y < 0) $y = 0;								//in case y is outside the range of [0,128]
-					if($y > 128) $y = 128;
-				}else{															//using in console
+					$y = min(128, max(0, $y));
+				}else{                                                            //using in console
 					$sender->sendMessage(TextFormat::RED . "You must specify a position where the entity is spawned to when using in console");
 					return false;
 				}
-			}else{																//other circumstances
+			}else{                                                                //other circumstances
 				$sender->sendMessage(TextFormat::RED . "Argument error");
 				return false;
 			}
 
 			//Code for setting $z
-			if(is_numeric($args[3])){							//z is given directly
+			if(is_numeric($args[3])){                            //z is given directly
 				$z = $args[3];
-			}elseif(strcmp($args[3], "~") >= 0){	//z is given with a "~"
+			}elseif(strcmp($args[3], "~") >= 0){    //z is given with a "~"
 				$offset_z = trim($args[3], "~");
-				if($sender instanceof Player){			//using in-game
+				if($sender instanceof Player){            //using in-game
 					$z = is_numeric($offset_z) ? ($sender->z + $offset_z) : $sender->z;
-				}else{															//using in console
+				}else{                                                            //using in console
 					$sender->sendMessage(TextFormat::RED . "You must specify a position where the entity is spawned to when using in console");
 					return false;
 				}
-			}else{																//other circumstances
+			}else{                                                                //other circumstances
 				$sender->sendMessage(TextFormat::RED . "Argument error");
 				return false;
 			}
-		}	//finish setting the location
+		}    //finish setting the location
 
 		if(count($args) == 1){
 			if($sender instanceof Player){
@@ -127,6 +127,10 @@ class SummonCommand extends VanillaCommand{
 				new FloatTag("", 0)
 			]),
 		]);
+		if(count($args) == 5 and $args[4]{0} == "{"){//Tags are found
+			$nbtExtra = NBT::parseJSON($args[4]);
+			$nbt = NBT::combineCompoundTags($nbt, $nbtExtra, true);
+		}
 
 		$entity = Entity::createEntity($type, $chunk, $nbt);
 		if($entity instanceof Entity){
