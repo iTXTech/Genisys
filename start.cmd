@@ -2,8 +2,23 @@
 TITLE Genisys server software for Minecraft: Pocket Edition
 cd /d %~dp0
 
-For /F "UseBackQ tokens=1-2 delims==( " %%a in ("server.properties") do if "%%a"=="server-port" set sport=%%b
+:: Loop starting
+:: Don't edit this if you don't know what this does!
+set LOOP="no"
 
+if exist "server.properties" (
+	For /F "UseBackQ tokens=1-2 delims==" %%a in ("server.properties") do if "%%a"=="server-port" set sport=%%b
+) else (
+	set sport=19132
+)
+
+if %LOOP% == "no" (
+	goto :StartPM
+) else (
+	goto :startloop
+)
+
+:startloop
 netstat -o -n -a | findstr 0.0.0.0:%sport%>nul
 if %ERRORLEVEL% equ 0 (
     echo Your server is running.
@@ -60,4 +75,8 @@ if exist bin\mintty.exe (
 ) else (
 	%PHP_BINARY% -c bin\php %POCKETMINE_FILE% %*
 )
-goto :loop
+if %LOOP% == "no" (
+	exit
+) else (
+	goto :loop
+)
