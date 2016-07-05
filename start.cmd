@@ -2,7 +2,8 @@
 TITLE Genisys server software for Minecraft: Pocket Edition
 cd /d %~dp0
 
-netstat -o -n -a | findstr 0.0.0.0:19132>nul
+::Enter here the port of the server
+netstat -o -n -a | findstr 0.0.0.0:19132>nul 
 if %ERRORLEVEL% equ 0 (
     echo Your server is running.
     goto :loop
@@ -15,6 +16,7 @@ if %ERRORLEVEL% equ 0 (
 echo Checking if server is online...
 PING 127.0.0.1 -n 20 >NUL
 
+::Enter here the port of the server
 netstat -o -n -a | findstr 0.0:19132>nul
 if %ERRORLEVEL% equ 0 (
     echo Server is running.
