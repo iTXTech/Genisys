@@ -2,6 +2,32 @@
 TITLE Genisys server software for Minecraft: Pocket Edition
 cd /d %~dp0
 
+For /F "UseBackQ tokens=1-2 delims==( " %%a in ("server.properties") do if "%%a"=="server-port" set sport=%%b
+
+netstat -o -n -a | findstr 0.0.0.0:%sport%>nul
+if %ERRORLEVEL% equ 0 (
+    echo Your server is running.
+    goto :loop
+) ELSE (
+    echo Starting your Genisys server.
+    goto :StartPM
+)
+
+:loop
+echo Checking if server is online...
+PING 127.0.0.1 -n 20 >NUL
+
+netstat -o -n -a | findstr 0.0:%sport%>nul
+if %ERRORLEVEL% equ 0 (
+    echo Server is running.
+    goto :loop
+) ELSE (
+    echo Starting Genisys in 10 seconds...
+    PING 127.0.0.1 -n 10 >NUL
+    goto :StartPM
+)
+
+:StartPM
 if exist bin\php\php.exe (
 	set PHPRC=""
 	set PHP_BINARY=bin\php\php.exe
@@ -34,3 +60,4 @@ if exist bin\mintty.exe (
 ) else (
 	%PHP_BINARY% -c bin\php %POCKETMINE_FILE% %*
 )
+goto :loop
