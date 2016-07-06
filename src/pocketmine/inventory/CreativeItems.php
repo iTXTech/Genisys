@@ -102,11 +102,11 @@ class CreativeItems{
 			["id" => Item::STAINED_CLAY, "meta" => 14],
 			["id" => Item::STAINED_CLAY, "meta" => 15],
 			["id" => Item::SANDSTONE],
-			["id" => Item::SANDSTONE, Sandstone::CHISELED], //Creeper sandstone
-			["id" => Item::SANDSTONE, Sandstone::SMOOTH],
+			["id" => Item::SANDSTONE, "meta" => Sandstone::CHISELED], //Creeper sandstone
+			["id" => Item::SANDSTONE, "meta" => Sandstone::SMOOTH],
 			["id" => Item::RED_SANDSTONE],
-			["id" => Item::RED_SANDSTONE, Sandstone::CHISELED], //Wither sandstone
-			["id" => Item::RED_SANDSTONE, Sandstone::SMOOTH],
+			["id" => Item::RED_SANDSTONE, "meta" => Sandstone::CHISELED], //Wither sandstone
+			["id" => Item::RED_SANDSTONE, "meta" => Sandstone::SMOOTH],
 			["id" => Item::SAND],
 			["id" => Item::SAND, "meta" => Sand::RED],
 			["id" => Item::GRAVEL],

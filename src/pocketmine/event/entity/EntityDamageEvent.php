@@ -226,13 +226,13 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 	/**
 	 * @param int $type
 	 *
-	 * @return float
+	 * @return float 1 - the percentage
 	 */
 	public function getRateDamage($type = self::MODIFIER_BASE){
 		if(isset($this->ratemodifiers[$type])){
 			return $this->ratemodifiers[$type];
 		}
-		return 0;
+		return 1;
 	}
 
 	/**
