@@ -301,7 +301,7 @@ class MemoryManager{
 
 	public function dumpServerMemory($outputFolder, $maxNesting, $maxStringSize){
 		gc_disable();
-
+		ini_set("memory_limit",-1);
 		if(!file_exists($outputFolder)){
 			mkdir($outputFolder, 0777, true);
 		}
