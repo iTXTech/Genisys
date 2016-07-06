@@ -70,6 +70,7 @@ class PlayerInventory extends BaseInventory{
 	public function setHeldItemIndex($index){
 		if($index >= 0 and $index < $this->getHotbarSize()){
 			$this->itemInHandIndex = $index;
+			$this->sendHeldItem($this->getHolder()->getViewers());
 		}
 	}
 
@@ -110,7 +111,6 @@ class PlayerInventory extends BaseInventory{
 			}
 
 			$this->setHotbarSlotIndex($itemIndex, $slot);
-			$this->sendHeldItem($this->getHolder()->getViewers());
 		}
 	}
 
@@ -408,11 +408,6 @@ class PlayerInventory extends BaseInventory{
 		}
 
 		$pk = new ContainerSetSlotPacket();
-		/*$pk->hotbarSlot = [];
-		for($i = 0; $i < $this->getHotbarSize(); ++$i){
-			$index = $this->getHotbarSlotIndex($i);
-			$pk->hotbarSlot[] = $index <= -1 ? -1 : $index + $this->getHotbarSize();
-		}*/
 		$pk->slot = $index;
 		$pk->item = clone $this->getItem($index);
 
