@@ -84,7 +84,7 @@ class Caves extends Populator{
 							chunk.setBlockLight(x, y, z, bl);*/
 						}else{
 							//LAVA
-							$chunk->setBlockId($x, $y, $z, Block::LAVA);
+							$chunk->setBlockId($x, $y, $z, Block::STILL_LAVA);
 							/*chunk.setBlockSkyLight(x, y, z, 0);
 							chunk.setBlockLight(x, y, z, 15);*/
 						}
