@@ -174,6 +174,8 @@ Port: 19132
   - setblock
   - fill
   - summon
+  - weather
+  - xp
 * 文件夹插件加载器
 * 刷怪箱
 * 物品展示柜
