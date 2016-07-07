@@ -2,7 +2,7 @@
 
 #配置文件版本
 config:
- version: 16
+ version: 17
  
 level:
  #设置是否变换天气
@@ -50,8 +50,6 @@ server:
  allow-iron-golem: false
  #是否允许生成雪傀儡
  allow-snow-golem: false
- #是否允许铁砧和附魔台
- allow-anvilandenchanttable: true
  #是否禁用server.log
  disable-log: false
  #是否启用反飞行作弊
@@ -80,6 +78,15 @@ server:
  #是否启用高级指令选择器
  advanced-command-selector: false
 
+enchantment:
+ #是否允许使用铁砧
+ enable-anvil: true
+ #是否允许使用附魔台
+ enable-enchanting-table: true
+ #是否启用计算附魔等级(计算书架数量)，可能造成服务器延迟
+ #如果不启用本项, 附魔等级将在0-15间随机选取
+ count-bookshelf: false
+
 redstone:
  ##############################
  #######是否开启红石系统#######
@@ -92,18 +99,18 @@ redstone:
  #设置脉冲频率, 默认: 1s
  pulse-frequency: 1
 
- synapse:
-  #如果你想使用 Synapse API 或连接到一个synapse服务器,请将enabled置为true
-  enabled: false
-  server-ip: 127.0.0.1
-  server-port: 10305
-  #设置该服务器是否为接待大厅服务器或主服务器
-  is-main-server: true
-  server-password: 32bitlongkey
-  #设置该服务器唯一的标识符
-  description: "A Synapse client"
-  #启用Disable RakLib设置玩家仅能通过接待大厅服务器或主服务器加入游戏
-  disable-rak: false
+synapse:
+ #如果你想使用 Synapse API 或连接到一个synapse服务器,请将enabled置为true
+ enabled: false
+ server-ip: 127.0.0.1
+ server-port: 10305
+ #设置该服务器是否为接待大厅服务器或主服务器
+ is-main-server: true
+ server-password: 16bitlongkey
+ #设置该服务器唯一的标识符
+ description: "A Synapse client"
+ #启用Disable RakLib设置玩家仅能通过接待大厅服务器或主服务器加入游戏
+ disable-rak: false
  
 dserver:
  #多服统统一人数

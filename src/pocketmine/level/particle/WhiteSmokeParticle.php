@@ -19,10 +19,12 @@
  *
  */
 
-namespace pocketmine\item;
+namespace pocketmine\level\particle;
 
-class Arrow extends Item{
-	public function __construct($meta = 0, $count = 1) {
-		parent::__construct(self::ARROW, $meta, $count, "Arrow");
+use pocketmine\math\Vector3;
+
+class WhiteSmokeParticle extends GenericParticle{
+	public function __construct(Vector3 $pos, $scale = 0){
+		parent::__construct($pos, Particle::TYPE_WHITE_SMOKE, (int) $scale);
 	}
 }

@@ -19,10 +19,18 @@
  *
  */
 
-namespace pocketmine\item;
+namespace pocketmine\level\generator\object;
 
-class Arrow extends Item{
-	public function __construct($meta = 0, $count = 1) {
-		parent::__construct(self::ARROW, $meta, $count, "Arrow");
+use pocketmine\block\Block;
+use pocketmine\block\Leaves2;
+use pocketmine\block\Wood2;
+
+class DarkOakTree extends Tree{
+	public function __construct(){
+		$this->trunkBlock = Block::WOOD2;
+		$this->leafBlock = Block::LEAVES2;
+		$this->leafType = Leaves2::DARK_OAK;
+		$this->type = Wood2::DARK_OAK;
+		$this->treeHeight = 8;
 	}
 }

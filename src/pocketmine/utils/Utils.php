@@ -34,7 +34,7 @@ class Utils{
 	public static $os;
 	private static $serverUniqueId = null;
 
-	const CIPHER = MCRYPT_RIJNDAEL_256;
+	const CIPHER = MCRYPT_RIJNDAEL_128;
 
 	const MODE = MCRYPT_MODE_ECB;
 

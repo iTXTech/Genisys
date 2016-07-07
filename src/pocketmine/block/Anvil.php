@@ -28,7 +28,11 @@ use pocketmine\level\sound\AnvilFallSound;
 use pocketmine\Player;
 
 class Anvil extends Fallable{
-
+	
+	const NORMAL = 0;
+	const SLIGHTLY_DAMAGED = 4;
+	const VERY_DAMAGED = 8;
+	
 	protected $id = self::ANVIL;
 
 	public function isSolid(){
@@ -60,7 +64,9 @@ class Anvil extends Fallable{
 	}
 
 	public function onActivate(Item $item, Player $player = null){
-		if(!$this->getLevel()->getServer()->anviletEnabled) return true;
+		if(!$this->getLevel()->getServer()->anvilEnabled){
+			return true;
+		}
 		if($player instanceof Player){
 			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;

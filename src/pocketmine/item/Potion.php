@@ -148,7 +148,11 @@ class Potion extends Item{
 	public function getEffects(): array{
 		return self::getEffectsById($this->meta);
 	}
-	
+
+	/**
+	 * @param int $id
+	 * @return Effect[]
+	 */
 	public static function getEffectsById(int $id) : array{
 		if(count(self::POTIONS[$id]) === 3){
 			return [Effect::getEffect(self::POTIONS[$id][0])->setDuration(self::POTIONS[$id][1])->setAmplifier(self::POTIONS[$id][2])];

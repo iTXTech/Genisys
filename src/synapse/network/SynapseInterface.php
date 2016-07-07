@@ -43,7 +43,6 @@ class SynapseInterface{
 	/** @var DataPacket[] */
 	private $packetPool = [];
 	private $connected = true;
-	private $needReconnect = false;
 	
 	public function __construct(Synapse $server, string $ip, int $port){
 		$this->synapse = $server;

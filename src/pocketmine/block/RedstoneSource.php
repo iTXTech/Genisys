@@ -76,7 +76,7 @@ class RedstoneSource extends Flowable{
 		if($block->getId() == Block::DROPPER or $block->getId() == Block::DISPENSER) $block->activate();
 
 		/** @var PoweredRepeater $block */
-		if($block->getId() == Block::UNPOWERED_REPEATER){
+		if($block->getId() == Block::UNPOWERED_REPEATER_BLOCK){
 			if($this->equals($block->getSide($block->getDirection()))) $block->activate();
 		}
 	}
@@ -109,7 +109,7 @@ class RedstoneSource extends Flowable{
 			if($block->getId() == Block::ACTIVE_REDSTONE_LAMP) $block->turnOff();
 		}
 		/** @var PoweredRepeater $block */
-		if($block->getId() == Block::POWERED_REPEATER){
+		if($block->getId() == Block::POWERED_REPEATER_BLOCK){
 			if($this->equals($block->getSide($block->getDirection()))) $block->deactivate();
 		}
 	}

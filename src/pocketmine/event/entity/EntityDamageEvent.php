@@ -24,6 +24,7 @@ namespace pocketmine\event\entity;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 use pocketmine\event\Cancellable;
+use pocketmine\inventory\PlayerInventory;
 use pocketmine\Player;
 use pocketmine\item\Item;
 use pocketmine\item\enchantment\enchantment;
@@ -106,7 +107,7 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 		}
 
 		//TODO: add zombie
-		if($entity instanceof Player){
+		if($entity instanceof Player and $entity->getInventory() instanceof PlayerInventory){
 			switch($cause){
 				case self::CAUSE_CONTACT:
 				case self::CAUSE_ENTITY_ATTACK:
@@ -225,13 +226,13 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 	/**
 	 * @param int $type
 	 *
-	 * @return float
+	 * @return float 1 - the percentage
 	 */
 	public function getRateDamage($type = self::MODIFIER_BASE){
 		if(isset($this->ratemodifiers[$type])){
 			return $this->ratemodifiers[$type];
 		}
-		return 0;
+		return 1;
 	}
 
 	/**

@@ -38,6 +38,12 @@ use pocketmine\nbt\tag\ByteTag;
 use pocketmine\tile\Skull;
 
 class SkullBlock extends Transparent{
+	
+	const SKELETON = 0;
+	const WITHER_SKELETON = 1;
+	const ZOMBIE_HEAD = 2;
+	const STEVE_HEAD = 3;
+	const CREEPER_HEAD = 4;
 
 	protected $id = self::SKULL_BLOCK;
 

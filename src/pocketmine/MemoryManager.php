@@ -301,12 +301,11 @@ class MemoryManager{
 
 	public function dumpServerMemory($outputFolder, $maxNesting, $maxStringSize){
 		gc_disable();
-
+		ini_set("memory_limit",-1);
 		if(!file_exists($outputFolder)){
 			mkdir($outputFolder, 0777, true);
 		}
-
-		$this->server->getLogger()->notice("[Dump] After the memory dump is done, the server might crash");
+		$this->server->getLogger()->notice("[Dump] After the memory dump is done, the server will shut down");
 
 		$obData = fopen($outputFolder . "/objects.js", "wb+");
 

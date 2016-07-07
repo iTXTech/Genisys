@@ -130,7 +130,7 @@ class Fire extends Flowable{
 						if(!$this->getSide(Vector3::SIDE_DOWN)->isTopFacingSurfaceSolid() or $meta > 3){
 							$this->getLevel()->setBlock($this, new Air(), true);
 						}
-					}else if(!$forever && !($this->getSide(Vector3::SIDE_DOWN)->getBurnAbility() > 0) && $meta == 15 && mt_rand(0, 4) == 0){
+					}elseif(!$forever && !($this->getSide(Vector3::SIDE_DOWN)->getBurnAbility() > 0) && $meta >= 15 && mt_rand(0, 4) == 0){
 						$this->getLevel()->setBlock($this, new Air(), true);
 					}else{
 						$o = 0;

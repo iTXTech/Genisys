@@ -22,6 +22,7 @@
 namespace synapse;
 
 use pocketmine\entity\Entity;
+use pocketmine\entity\Human;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
@@ -32,10 +33,8 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\LongTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\network\protocol\ChangeDimensionPacket;
 use pocketmine\network\protocol\ContainerSetContentPacket;
 use pocketmine\network\protocol\DataPacket;
-use pocketmine\network\protocol\PlayStatusPacket;
 use pocketmine\network\protocol\SetPlayerGameTypePacket;
 use pocketmine\Player as PMPlayer;
 use pocketmine\Server;
@@ -205,11 +204,11 @@ class Player extends PMPlayer{
 			$pk->clientHash = $hash;
 			Synapse::getInstance()->sendDataPacket($pk);
 
-			$ip = $clients[$hash]["ip"];
+			/*$ip = $clients[$hash]["ip"];
 			$port = $clients[$hash]["port"];
 
 			$this->close("", "Transferred to $ip:$port");
-			Synapse::getInstance()->removePlayer($this);
+			Synapse::getInstance()->removePlayer($this);*/
 		}
 	}
 

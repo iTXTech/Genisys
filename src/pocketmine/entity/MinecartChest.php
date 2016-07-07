@@ -50,6 +50,6 @@ class MinecartChest extends Minecart{
 		$pk->metadata = $this->dataProperties;
 		$player->dataPacket($pk);
 
-		parent::spawnTo($player);
+		Entity::spawnTo($player);
 	}
 }

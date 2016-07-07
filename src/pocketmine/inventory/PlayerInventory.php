@@ -58,16 +58,8 @@ class PlayerInventory extends BaseInventory{
 	}
 
 	public function setHotbarSlotIndex($index, $slot){
-		if($index >= 0 and $index < $this->getHotbarSize() and $slot >= -1 and $slot < $this->getSize()){
-			for($i = 0; $i < $this->getHotbarSize(); ++$i){
-				$index2 = $this->getHotbarSlotIndex($i);
-				if($index2 == $slot and $slot != -1){
-					$this->hotbar[$i] = $this->getHotbarSlotIndex($index);
-					break;
-				}
-			};
-
-			$this->hotbar[$index] = $slot;
+		if ($index >= 0 and $index < $this->getHotbarSize() and $slot >= -1 and $slot < $this->getSize()) {
+			$this->hotbar[$index] = $slot;//calculate has been done by client
 		}
 	}
 
@@ -78,13 +70,7 @@ class PlayerInventory extends BaseInventory{
 	public function setHeldItemIndex($index){
 		if($index >= 0 and $index < $this->getHotbarSize()){
 			$this->itemInHandIndex = $index;
-			/*
-			if($this->getHolder() instanceof Player){
-				$this->sendHeldItem($this->getHolder());
-			}
-
 			$this->sendHeldItem($this->getHolder()->getViewers());
-			*/
 		}
 	}
 
@@ -125,7 +111,6 @@ class PlayerInventory extends BaseInventory{
 			}
 
 			$this->setHotbarSlotIndex($itemIndex, $slot);
-			$this->sendHeldItem($this->getHolder()->getViewers());
 		}
 	}
 
@@ -168,10 +153,6 @@ class PlayerInventory extends BaseInventory{
 		if($index >= $this->getSize()){
 			$this->sendArmorSlot($index, $this->getViewers());
 			$this->sendArmorSlot($index, $this->getHolder()->getViewers());
-		}else{
-			if(!$holder->getServer()->limitedCreative or $holder->isSurvival()){
-				$this->sendContents($holder);
-			}
 		}
 	}
 
@@ -399,25 +380,13 @@ class PlayerInventory extends BaseInventory{
 		for($i = 0; $i < $this->getSize(); ++$i){ //Do not send armor by error here
 			$pk->slots[$i] = $this->getItem($i);
 		}
-		/*if($holder instanceof Player and $holder->isCreative()){
-			for($current = 0; $current < $this->getSize(); ++$current){
-				$pk->slots[$current] = $this->getItem($current);
-			}
-			/*foreach(Item::getCreativeItems() as $i => $item){
-				$pk->slots[$i + $current] = Item::getCreativeItem($i);
-			}*
-		}else{
-			for($i = 0; $i < $this->getSize(); ++$i){ //Do not send armor by error here
-				$pk->slots[$i] = $this->getItem($i);
-			}
-		}*/
 
 		foreach($target as $player){
 			$pk->hotbar = [];
 			if($player === $this->getHolder()){
 				for($i = 0; $i < $this->getHotbarSize(); ++$i){
 					$index = $this->getHotbarSlotIndex($i);
-					$pk->hotbar[] = $index <= -1 ? -1 : $index + 9;
+					$pk->hotbar[] = $index <= -1 ? -1 : $index + $this->getHotbarSize();
 				}
 			}
 			if(($id = $player->getWindowId($this)) === -1 or $player->spawned !== true){
@@ -439,11 +408,6 @@ class PlayerInventory extends BaseInventory{
 		}
 
 		$pk = new ContainerSetSlotPacket();
-		$pk->hotbar = [];
-		for($i = 0; $i < $this->getHotbarSize(); ++$i){
-			$index = $this->getHotbarSlotIndex($i);
-			$pk->hotbar[] = $index <= -1 ? -1 : $index + 9;
-		}
 		$pk->slot = $index;
 		$pk->item = clone $this->getItem($index);
 

@@ -500,6 +500,7 @@ class SkeletonAI{
 									   
 									   
 								 //$ev = new EntityShootBowEvent($this, $bow, Entity::createEntity("Arrow", $this->chunk, $nbt, $this), $f);
+									//ToDo: Make Strays shoot arrows of slowness
 									$ev = new EntityShootBowEvent($zo, new ITEM(262,0), Entity::createEntity("Arrow", $chunk, $nbt2, $zo), $f);
 									   
 									}

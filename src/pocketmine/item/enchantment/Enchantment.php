@@ -361,7 +361,7 @@ class Enchantment{
 		return false;
 	}
 
-	public static function generateName(){
+	public static function getRandomName(){
 		$count = mt_rand(3, 6);
 		$set = [];
 		while(count($set) < $count){

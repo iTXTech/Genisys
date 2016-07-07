@@ -57,21 +57,21 @@ class Normal extends Generator{
 	const NAME = "Normal";
 
 	/** @var Populator[] */
-	private $populators = [];
+	protected $populators = [];
 	/** @var ChunkManager */
-	private $level;
+	protected $level;
 	/** @var Random */
-	private $random;
-	private $waterHeight = 62;
-	private $bedrockDepth = 5;
+	protected $random;
+	protected $waterHeight = 62;
+	protected $bedrockDepth = 5;
 
 	/** @var Populator[] */
-	private $generationPopulators = [];
+	protected $generationPopulators = [];
 	/** @var Simplex */
-	private $noiseBase;
+	protected $noiseBase;
 
 	/** @var BiomeSelector */
-	private $selector;
+	protected $selector;
 
 	private static $GAUSSIAN_KERNEL = null;
 	private static $SMOOTH_SIZE = 2;
