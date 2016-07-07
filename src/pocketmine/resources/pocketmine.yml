@@ -23,7 +23,7 @@ settings:
  #Used for plugin asynchronous tasks, world generation, compression and web communication.
  #Set this approximately to your number of cores.
  #If set to auto, it'll try to detect the number of cores (or use 2)
- async-workers: auto
+ async-workers: 4
 
 memory:
  #Global soft memory limit in megabytes. Set to 0 to disable
