@@ -26,7 +26,9 @@ use pocketmine\event\entity\EntityDamageEvent;
 
 use pocketmine\event\entity\ExplosionPrimeEvent;
 use pocketmine\level\Explosion;
+use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\tag\ByteTag;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
@@ -44,6 +46,10 @@ class PrimedTNT extends Entity implements Explosive{
 	protected $fuse;
 
 	public $canCollide = false;
+
+	public function __construct(FullChunk $chunk, CompoundTag $nbt, $dropItem = true){
+		parent::__construct($chunk, $nbt);
+	}
 
 
 	public function attack($damage, EntityDamageEvent $source){
