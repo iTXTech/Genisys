@@ -85,8 +85,7 @@ class Caves extends Populator{
 						}else{
 							//LAVA
 							$chunk->setBlockId($x, $y, $z, Block::STILL_LAVA);
-							/*chunk.setBlockSkyLight(x, y, z, 0);
-							chunk.setBlockLight(x, y, z, 15);*/
+							$chunk->setBlockLight($x, $y + 1, $z, 15);
 						}
 
 					}elseif($highest){
