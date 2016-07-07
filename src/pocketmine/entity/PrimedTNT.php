@@ -47,8 +47,11 @@ class PrimedTNT extends Entity implements Explosive{
 
 	public $canCollide = false;
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt, $dropItem = true){
+	private $dropItem = true;
+
+	public function __construct(FullChunk $chunk, CompoundTag $nbt, bool $dropItem = true){
 		parent::__construct($chunk, $nbt);
+		$this->dropItem = $dropItem;
 	}
 
 
@@ -128,10 +131,10 @@ class PrimedTNT extends Entity implements Explosive{
 	}
 
 	public function explode(){
-		$this->server->getPluginManager()->callEvent($ev = new ExplosionPrimeEvent($this, 4));
+		$this->server->getPluginManager()->callEvent($ev = new ExplosionPrimeEvent($this, 4, $this->dropItem));
 
 		if(!$ev->isCancelled()){
-			$explosion = new Explosion($this, $ev->getForce(), $this);
+			$explosion = new Explosion($this, $ev->getForce(), $this, $ev->dropItem());
 			if($ev->isBlockBreaking()){
 				$explosion->explodeA();
 			}

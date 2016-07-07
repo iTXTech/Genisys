@@ -62,8 +62,13 @@ class TNT extends Solid implements ElectricalAppliance{
 		return 100;
 	}
 
-	public function prime(){
+	public function prime(Player $player = null){
 		$this->meta = 1;
+		if($player != null and $player->isCreative()){
+			$dropItem = false;
+		}else{
+			$dropItem = true;
+		}
 		$mot = (new Random())->nextSignedFloat() * M_PI * 2;
 		$tnt = Entity::createEntity("PrimedTNT", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), new CompoundTag("", [
 			"Pos" => new ListTag("Pos", [
@@ -81,7 +86,7 @@ class TNT extends Solid implements ElectricalAppliance{
 				new FloatTag("", 0)
 			]),
 			"Fuse" => new ByteTag("Fuse", 80)
-		]));
+		]), $dropItem);
 
 		$tnt->spawnToAll();
 		$this->level->addSound(new TNTPrimeSound($this));
@@ -111,9 +116,9 @@ class TNT extends Solid implements ElectricalAppliance{
 
 	public function onActivate(Item $item, Player $player = null){
 		if($item->getId() === Item::FLINT_STEEL){
-			$this->prime();
+			$this->prime($player);
 			$this->getLevel()->setBlock($this, new Air(), true);
-			$item->useOn($this, 2);
+			$item->useOn($this);
 			return true;
 		}
 
