@@ -190,6 +190,11 @@ class Synapse{
 	public function handleDataPacket(DataPacket $pk){
 		$this->logger->debug("Received packet " . $pk::NETWORK_ID . " from {$this->serverIp}:{$this->port}");
 		switch($pk::NETWORK_ID){
+			case Info::DISCONNECT_PACKET:
+				/** @var DisconnectPacket $pk */
+				$this->getLogger()->notice("Synapse Client has disconnected due to " . $pk->message);
+				$this->interface->reconnect();
+				break;
 			case Info::INFORMATION_PACKET:
 				/** @var InformationPacket $pk */
 				switch($pk->type){
