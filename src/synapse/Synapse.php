@@ -192,8 +192,16 @@ class Synapse{
 		switch($pk::NETWORK_ID){
 			case Info::DISCONNECT_PACKET:
 				/** @var DisconnectPacket $pk */
-				$this->getLogger()->notice("Synapse Client has disconnected due to " . $pk->message);
-				$this->interface->reconnect();
+				$this->verified = false;
+				switch($pk->type){
+					case DisconnectPacket::TYPE_GENERIC:
+						$this->getLogger()->notice("Synapse Client has disconnected due to " . $pk->message);
+						$this->interface->reconnect();
+						break;
+					case DisconnectPacket::TYPE_WRONG_PROTOCOL:
+						$this->getLogger()->error($pk->message);
+						break;
+				}
 				break;
 			case Info::INFORMATION_PACKET:
 				/** @var InformationPacket $pk */
@@ -211,7 +219,6 @@ class Synapse{
 						$this->lastRecvInfo = microtime();
 						break;
 				}
-
 				break;
 			case Info::PLAYER_LOGIN_PACKET:
 				/** @var PlayerLoginPacket $pk */
