@@ -102,7 +102,10 @@ class ServerConnection{
 				$this->connected = false;
 				$this->server->setConnected(false);
 			}else{
-				$this->receiveBuffer .= @socket_read($this->socket->getSocket(), 2048, PHP_BINARY_READ);
+				$data = @socket_read($this->socket->getSocket(), 65535, PHP_BINARY_READ);
+				if($data != ""){
+					$this->receiveBuffer .= $data;
+				}
 				if($this->sendBuffer != ""){
 					@socket_write($this->socket->getSocket(), $this->sendBuffer);
 					$this->sendBuffer = "";
