@@ -42,6 +42,7 @@ interface Info{
 	const TEXT_PACKET = 0x07;
 	const SET_TIME_PACKET = 0x08;
 	const START_GAME_PACKET = 0x09;
+	//const REMOVE_PLAYER_PACKET = ??
 	const ADD_PLAYER_PACKET = 0x0a;
 	const ADD_ENTITY_PACKET = 0x0b;
 	const REMOVE_ENTITY_PACKET = 0x0c;
