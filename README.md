@@ -16,10 +16,11 @@ GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.
 You can get a prebuilt phar from [Jenkins](https://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/genisys/pipelines).
 
 ### Installation
-If you are on Linux, use Docker to install Genisys.
+For Linux:  
 See the [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys) for more details.
 
-For other platform, see below.
+For Windows:  
+PHP binary can be downloaded from [here](https://itxtech.org/download/PHP%20for%20Genisys/).
 
 ## Contents
 
@@ -31,8 +32,6 @@ For other platform, see below.
 * One Core to rule anything
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO and iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original code was written by the [PocketMine Team](https://github.com/PocketMine).
-* [Download php7 for Genisys](https://github.com/iTXTech/PHP-Genisys/)
-* [Download Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
 * Feel free to create a Pull Request or open an Issue. English and Chinese are both welcome. Communication in English is recommended.
 
 ### Acknowledgements
@@ -121,8 +120,6 @@ Port: 19132
 * 一个核心统治一切。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
 * 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
-* [点击获取 php7](https://github.com/iTXTech/PHP-Genisys/tree/master/php7)
-* [点击获取 Genisys Installer for Windows](https://raw.githubusercontent.com/iTXTech/Genisys-Installer/master/setup.exe)
 * 欢迎创建 Pull Request。请使用中文或者英文进行交流（但为了交流方便，请尽量使用英文进行交流）。
 
 ### 鸣谢
