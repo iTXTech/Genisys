@@ -15,11 +15,11 @@ SEARCH EXISTING ISSUES BEFORE YOU SUBMIT A NEW ONE.
 use the 'version' command in Genisys
 Valid version must contain build number or git hash
 Version "latest" is INVALID! Please write properly
-If version is invalid, the issue will be CLOSED -->
+If version is invalid, the issue will be CLOSED 
+Game versions include Pocket Edition and Windows 10 Edition Beta -->
 * Genisys:
 * PHP:
 * OS (server):
-<!--- Game versions include Pocket Edition and Windows 10 Edition Beta -->
 * Game version: 
 #### Crashdump, backtrace, memory dumps, plugins list or other files
 ```
