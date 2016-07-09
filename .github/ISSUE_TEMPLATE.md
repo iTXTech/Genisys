@@ -1,7 +1,7 @@
 <!--- WARNING
 ANY ISSUE ON OUTDATED GENISYS WILL BE CLOSED. CONTINUING SPAMMNG WILL CAUSE A BAN. CHECK YOUR VERSION BEFORE CONTINUING.
 ANY ISSUE ASKING UPDATE TO ANY NEW VERSION OF MCPE WILL BE CLOSED.
-CHECK THE OPEN ISSUES BEFORE YOU SUBMIT A NEW ONE. 
+SEARCH EXISTING ISSUES BEFORE YOU SUBMIT A NEW ONE. 
 -->
 
 #### Issue description
@@ -18,8 +18,9 @@ Version "latest" is INVALID! Please write properly
 If version is invalid, the issue will be CLOSED -->
 * Genisys:
 * PHP:
-* OS:
-
+* OS (server):
+<!--- Game versions include Pocket Edition and Windows 10 Edition Beta -->
+* Game version: 
 #### Crashdump, backtrace, memory dumps, plugins list or other files
 ```
 Paste here
