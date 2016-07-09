@@ -256,6 +256,10 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 	public function getInventory(){
 		return $this->inventory;
 	}
+	
+	public function getCraftingInventory(){
+		return $this->craftingInventory;
+	}
 
 	protected function initEntity(){
 

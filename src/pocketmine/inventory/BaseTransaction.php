@@ -68,4 +68,56 @@ class BaseTransaction implements Transaction{
 	public function getTargetItem(){
 		return clone $this->targetItem;
 	}
+	
+	/**
+	 * Returns the change in inventory resulting from this transaction
+	 * @return Item[
+	 *				"in" => items added to the inventory
+	 *				"out" => items removed from the inventory
+	 * ]
+	 */
+	public function getChange(){
+		
+		if($this->sourceItem->deepEquals($this->targetItem, true, true, true)){
+			//This should never happen, somehow a change happened where nothing changed
+			return null;
+			
+		}elseif($this->sourceItem->deepEquals($this->targetItem)){ //Same item, change of count
+			$countDiff = $this->targetItem->getCount() - $this->sourceItem->getCount();
+			
+			if($countDiff < 0){	//Count decreased
+				return ["in" => null,
+						"out" => (clone $this->sourceItem)->setCount(-$countDiff)]; //Negative negative = positive
+			}elseif($countDiff > 0){ //Count increased
+				return [
+						"in" => (clone $this->sourceItem)->setCount($countDiff),
+						"out" => null];
+			}else{
+				//Should be impossible (identical items and no count change)
+				//This should be caught by the first condition even if it was possible, so it's safe enough to...
+				echo "Wow, you broke the code\n";
+				return null; 
+			}
+		}elseif($this->sourceItem->getId() !== Item::AIR and $this->targetItem->getId() === Item::AIR){
+			//Slot emptied
+			//return the item removed
+			return ["in" => null,
+					"out" => clone $this->sourceItem];
+			
+		}elseif($this->sourceItem->getId() === Item::AIR and $this->targetItem->getId() !== Item::AIR){
+			//Slot filled with a new item (item added)
+			return ["in" => clone $this->targetItem,
+					"out" => null];
+
+		}elseif(!$this->sourceItem->deepEquals($this->targetItem, false) and $this->sourceItem->canBeDamaged()){
+			//Tool/armour damage change, no inventory change to speak of (not really)
+			return null;
+			
+		}else{
+			//Some other slot change - an item swap or a non-tool/armour meta change
+			return ["in" => clone $this->targetItem, 
+					"out" => clone $this->sourceItem];
+		}
+		//Don't remove this comment until you're sure there's nothing missing.
+	}
 }

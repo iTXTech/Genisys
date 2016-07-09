@@ -99,6 +99,7 @@ class SimpleTransactionGroup implements TransactionGroup{
 			$checkSourceItem = $ts->getInventory()->getItem($ts->getSlot());
 			$sourceItem = $ts->getSourceItem();
 			if(!$checkSourceItem->deepEquals($sourceItem, true, false) or $sourceItem->getCount() !== $checkSourceItem->getCount()){
+				//I believe this may be the cause of a large number of inventory bugs.
 				return false;
 			}
 			if($sourceItem->getId() !== Item::AIR){
@@ -127,14 +128,14 @@ class SimpleTransactionGroup implements TransactionGroup{
 	}
 
 	public function canExecute(){
-		$haveItems = [];
-		$needItems = [];
+		/*$haveItems = [];
+		$needItems = [];*/
 
-		return $this->matchItems($haveItems, $needItems) and count($haveItems) === 0 and count($needItems) === 0 and count($this->transactions) > 0;
+		return /*$this->matchItems($haveItems, $needItems) and count($haveItems) === 0 and count($needItems) === 0 and*/ count($this->transactions) > 0;
 	}
 
 	public function execute(){
-		if($this->hasExecuted() or (!$this->canExecute() and !$this->source->isDesktop())){
+		if($this->hasExecuted() or !$this->canExecute()){
 			return false;
 		}
 
@@ -149,15 +150,47 @@ class SimpleTransactionGroup implements TransactionGroup{
 
 			return false;
 		}
-
+		
 		foreach($this->transactions as $transaction){
-			if($this->source->isDesktop()){
-				echo "Handling desktop inventory change\n";
-				$this->source->handleInventoryChange($transaction->getInventory(), $transaction->getSlot(), $transaction->getTargetItem(), $transaction->getSourceItem());
-			}else{
-				echo "Handling PE inventory change\n";
+			$change = $transaction->getChange();
+			if($change !== null){
+				//Some change has taken place, handle it
+				if($change["in"] instanceof Item){
+					//Added items to the inventory
+					if($this->getSource()->getCraftingInventory()->contains($change["in"]) or $this->getSource()->isCreative()){
+					
+						if($this->getSource()->getCraftingInventory()->contains($change["in"])){
+							//Allows duplication and crafting with nonexistent items in creative
+							$this->getSource()->getCraftingInventory()->removeItem($change["in"]);
+						}
+					}else{
+						//Illegal transaction
+						continue;
+					}
+				}
+				if($change["out"] instanceof Item){
+					//Taken items out of the inventory
+					//Check if the target slot contains the item we are taking out
+					if($transaction->getInventory()->slotContains($transaction->getSlot(), $change["out"]) or $this->getSource()->isCreative()){
+						
+						if($this->getSource()->getCraftingInventory()->canAddItem($change["out"])){
+							//Allows duplication and crafting with nonexistent items in creative
+							$this->getSource()->getCraftingInventory()->addItem($change["out"]);
+						}
+					}else{
+						//Illegal transaction
+						continue;
+					}
+				}
+				//Set the item in the target slot at the end
 				$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem());
 			}
+			
+
+			
+			//$this->source->handleInventoryChange($transaction->getInventory(), $transaction->getSlot(), $transaction->getTargetItem(), $transaction->getSourceItem());
+			//echo "Handling PE inventory change\n";
+			//$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem());
 			
 		}
 
