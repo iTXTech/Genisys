@@ -21,6 +21,7 @@ Game versions include Pocket Edition and Windows 10 Edition Beta -->
 * PHP:
 * OS (server):
 * Game version: 
+
 #### Crashdump, backtrace, memory dumps, plugins list or other files
 ```
 Paste here
