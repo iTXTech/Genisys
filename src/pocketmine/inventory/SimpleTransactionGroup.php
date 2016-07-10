@@ -155,19 +155,6 @@ class SimpleTransactionGroup implements TransactionGroup{
 			$change = $transaction->getChange();
 			if($change !== null){
 				//Some change has taken place, handle it
-				if($change["in"] instanceof Item){
-					//Added items to the inventory
-					if($this->getSource()->getCraftingInventory()->contains($change["in"]) or $this->getSource()->isCreative()){
-					
-						if($this->getSource()->getCraftingInventory()->contains($change["in"])){
-							//Allows duplication and crafting with nonexistent items in creative
-							$this->getSource()->getCraftingInventory()->removeItem($change["in"]);
-						}
-					}else{
-						//Illegal transaction
-						continue;
-					}
-				}
 				if($change["out"] instanceof Item){
 					//Taken items out of the inventory
 					//Check if the target slot contains the item we are taking out
@@ -175,10 +162,28 @@ class SimpleTransactionGroup implements TransactionGroup{
 						
 						if($this->getSource()->getCraftingInventory()->canAddItem($change["out"])){
 							//Allows duplication and crafting with nonexistent items in creative
+							echo "Adding an item to the crafting inventory\n";
 							$this->getSource()->getCraftingInventory()->addItem($change["out"]);
 						}
 					}else{
 						//Illegal transaction
+						echo "Illegal transaction occurred (out)\n";
+						continue;
+					}
+				}
+				
+				if($change["in"] instanceof Item){
+					//Added items to the inventory
+					if($this->getSource()->getCraftingInventory()->contains($change["in"]) or $this->getSource()->isCreative()){
+					
+						if($this->getSource()->getCraftingInventory()->contains($change["in"])){
+							//Allows duplication and crafting with nonexistent items in creative
+							echo "Removing an item from the crafting inventory\n";
+							$this->getSource()->getCraftingInventory()->removeItem($change["in"]);
+						}
+					}else{
+						//Illegal transaction
+						echo "Illegal transaction occurred (in)\n";
 						continue;
 					}
 				}
