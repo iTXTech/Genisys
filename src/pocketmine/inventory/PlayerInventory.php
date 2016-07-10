@@ -94,6 +94,31 @@ class PlayerInventory extends BaseInventory{
 	public function setItemInHand(Item $item){
 		return $this->setItem($this->getHeldItemSlot(), $item);
 	}
+	
+	public function getHotbar(){
+		return $this->hotbar;
+	}
+	
+	
+	/**
+	 * @param int[] $indices
+	 *
+	 * Sets the hotbar slot indices to an array of supplied values.
+	 */
+	public function setHotbar(array $indices){
+		if(count($indices) < $this->getHotbarSize()){
+			throw new \InvalidArgumentException("Expecting an array with 9 items, got ".count($indexes));
+		}
+		foreach($indices as $position => $index){
+			if(!is_int($index)){
+				throw new \InvalidArgumentException("All parameters must be integers");
+			}
+			if($index < -1 or $index > $this->getHotbarSize()){
+				$index = -1;
+			}
+			$this->hotbar[$position] = $index;
+		}
+	}
 
 	public function getHeldItemSlot(){
 		return $this->getHotbarSlotIndex($this->itemInHandIndex);

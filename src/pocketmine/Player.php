@@ -3309,17 +3309,32 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					//Crafting inventory doesn't contain the item we are trying to drop
 					//This means we're trying to drop our held item slot, or at least part
 					//of it.
-					$heldItem = clone $this->inventory->getItemInHand();
-					if(!$heldItem->deepEquals($packet->item)){
-						//Should be impossible
+					$chosenSlot = clone $this->inventory->getItemInHand();
+					if(!$chosenSlot->deepEquals($packet->item)){
 						//Player tried to drop something that wasn't the same as their held item
-						//STUPID: you can do this on PE. *facepalm*
-						echo "Player attempted to drop a wrong item\n";
-						$this->inventory->sendContents($this);
-						break;
-					}elseif($heldItem->getCount() !== $packet->item->getCount()){
+						//You can do this on PE, as you can drop items directly from the hotbar on PE
+						//without actually having to hold them.
+
+						//There's no foolproof way to do this. If there's multiple identical slots in the hotbar
+						//it will choose the first one.
+						
+						$chosenSlot = null;
+						foreach($this->inventory->getHotbar() as $index){
+							if($this->inventory->getItem($index)->deepEquals($packet->item, true, true, true)){
+								$chosenSlot = $this->inventory->getItem($index);
+								break;
+							}
+						}
+						if($chosenSlot === null){
+							echo "Player attempted to drop a wrong item\n";
+							$this->inventory->sendContents($this);
+							break;
+						}
+					}
+					
+					if($chosenSlot->getCount() !== $packet->item->getCount()){
 						//Player is trying to drop part of a slot
-						$remaining = $heldItem->getCount() - $packet->item->getCount();
+						$remaining = $chosenSlot->getCount() - $packet->item->getCount();
 						if($remaining < 0){
 							//Again, should be impossible
 							//Client trying to drop more of an item than they are holding
@@ -3328,14 +3343,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							break;
 						}else{
 							echo "Player dropping part of a held slot\n";
-							$heldItem->setCount($remaining);
+							$chosenSlot->setCount($remaining);
 							$droppedItem = $packet->item;
 							$replacementItem = $heldItem;
 						}
 					}else{
 						//Dropping the entire held slot
 						echo "Dropping a whole held slot\n";
-						$droppedItem = $heldItem;
+						$droppedItem = $chosenSlot;
 					}
 				}
 				if($droppedItem === null){
@@ -3924,6 +3939,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public final function close($message = "", $reason = "generic reason", $notify = true){
 		foreach($this->getCraftingInventory()->getContents() as $craftingItem){
 			$this->level->dropItem($this, $craftingItem);
+			echo "Dropping a crafting item\n";
+			var_dump($craftingItem);
 		}
 		if($this->connected and !$this->closed){
 			if($notify and strlen((string) $reason) > 0){
