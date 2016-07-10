@@ -34,6 +34,8 @@ class BaseTransaction implements Transaction{
 	protected $targetItem;
 	/** @var float */
 	protected $creationTime;
+	/** @var int */
+	protected $failures = 0;
 
 	/**
 	 * @param Inventory $inventory
@@ -69,6 +71,22 @@ class BaseTransaction implements Transaction{
 		return clone $this->targetItem;
 	}
 	
+	public function setSourceItem(Item $item){
+		$this->sourceItem = clone $item;
+	}
+	
+	public function setTargetItem(Item $item){
+		$this->targetItem = clone $item;
+	}
+	
+	public function getFailures(){
+		return $this->failures;
+	}
+	
+	public function addFailure(){
+		$this->failures++;
+	}
+	
 	/**
 	 * Returns the change in inventory resulting from this transaction
 	 * @return Item[
@@ -83,14 +101,19 @@ class BaseTransaction implements Transaction{
 			return null;
 			
 		}elseif($this->sourceItem->deepEquals($this->targetItem)){ //Same item, change of count
+			$item = clone $this->sourceItem;
+		
 			$countDiff = $this->targetItem->getCount() - $this->sourceItem->getCount();
+			
+			$item->setCount(abs($countDiff));
+			echo "Slot count changed by ".$countDiff."\n";
 			
 			if($countDiff < 0){	//Count decreased
 				return ["in" => null,
-						"out" => (clone $this->sourceItem)->setCount(-$countDiff)]; //Negative negative = positive
+						"out" => $item];
 			}elseif($countDiff > 0){ //Count increased
 				return [
-						"in" => (clone $this->sourceItem)->setCount($countDiff),
+						"in" => $item,
 						"out" => null];
 			}else{
 				//Should be impossible (identical items and no count change)

@@ -526,6 +526,13 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 
 	public function close(){
 		if(!$this->closed){
+			if($this->getCraftingInventory() instanceof CraftingInventory){
+				foreach($this->getCraftingInventory()->getContents() as $craftingItem){
+					$this->level->dropItem($this, $craftingItem);
+				}
+			}else{
+				$this->server->getLogger()->debug("Attempted to drop a null crafting inventory\n");
+			}
 			if(!($this instanceof Player) or $this->loggedIn){
 				foreach($this->inventory->getViewers() as $viewer){
 					$viewer->removeWindow($this->inventory);

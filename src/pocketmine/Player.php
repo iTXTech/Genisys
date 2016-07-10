@@ -92,10 +92,11 @@ use pocketmine\inventory\EnchantInventory;
 use pocketmine\inventory\FurnaceInventory;
 use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
+//use pocketmine\inventory\OrderedTransactionGroup;
 use pocketmine\inventory\PlayerInventory;
 use pocketmine\inventory\ShapedRecipe;
 use pocketmine\inventory\ShapelessRecipe;
-use pocketmine\inventory\SimpleTransactionGroup;
+//use pocketmine\inventory\SimpleTransactionGroup;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\FoodSource;
 use pocketmine\item\Item;
@@ -204,17 +205,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public $blocked = false;
 	public $achievements = [];
 	public $lastCorrect;
-	/** @var SimpleTransactionGroup */
-	protected $currentTransaction = null;
+	
+	/** @var SimpleTransactionQueue */
+	protected $transactionQueue = null;
+	
+	//protected $currentTransaction = null;
+	
+	
 	public $craftingType = 0; //0 = 2x2 crafting, 1 = 3x3 crafting, 2 = stonecutter
 
 	protected $isCrafting = false;
-	
-	/** @var CraftingInventory 
-	 * Stores items removed from Win10 inventory that have not been dropped
-	 * These items will be the ones in the crafting grid.
-	 */
-	protected $craftingInventory = null;
 
 	/**
 	 * @deprecated
@@ -1998,6 +1998,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->foodTick++;
 				}
 			}
+			
+			if($this->transactionQueue !== null){
+				$this->transactionQueue->execute();
+				/*if($this->transactionQueue->execute() or $this->currentTransaction->hasExecuted()){
+					$this->currentTransaction = null;
+				}*/
+			}
 		}
 
 		$this->checkTeleportPosition();
@@ -3283,16 +3290,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					break;
 				}
 
-				if(!$this->inventory->contains($packet->item) or ($this->isCreative() and $this->server->limitedCreative)){
+				if(/*!$this->inventory->contains($packet->item) or */($this->isCreative() and $this->server->limitedCreative)){
 					$this->inventory->sendContents($this);
 					break;
 				}
 
-				$slot = $this->inventory->first($packet->item);
+				/*$slot = $this->inventory->first($packet->item);
 				if($slot == -1){
 					$this->inventory->sendContents($this);
 					break;
-				}				
+				}*/				
 				
 				$replacementItem = Item::get(Item::AIR, 0, 1);
 				$droppedItem = null;
@@ -3301,7 +3308,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					//We're dropping an item that we've clicked on and picked up.
 					echo "Dropped an item from the crafting inventory\n";
 					$droppedItem = $packet->item;
-					$this->craftingInventory->remove($droppedItem);
+					//$this->craftingInventory->remove($droppedItem);
 					$replacementItem = null;					
 				}else{
 					//Something fails under here, breaking item drops on PE -_-
@@ -3345,7 +3352,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							echo "Player dropping part of a held slot\n";
 							$chosenSlot->setCount($remaining);
 							$droppedItem = $packet->item;
-							$replacementItem = $heldItem;
+							$replacementItem = $chosenSlot;
 						}
 					}else{
 						//Dropping the entire held slot
@@ -3420,7 +3427,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					break;
 				}
 				$this->craftingType = 0;
-				$this->currentTransaction = null;
+				//$this->currentTransaction = null;
 				if(isset($this->windowIndex[$packet->windowid])){
 					if($this->windowIndex[$packet->windowid] instanceof AnvilInventory){
 						$this->anvilItem = null;
@@ -3674,25 +3681,33 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				if($packet->slot < 0){
 					break;
 				}
-
+				//var_dump($packet);
 				if($packet->windowid === 0){ //Our inventory
+					echo "Transferring items in this inventory\n";
 					if($packet->slot >= $this->inventory->getSize()){
 						break;
 					}
-					if($this->isCreative()){
+					/*if($this->isCreative()){
 						if(Item::getCreativeItemIndex($packet->item) !== -1){
-							$this->inventory->setItem($packet->slot, $packet->item);
+							//This is bad. This will be done in the BaseTransaction anyway, all this will do is cause more bugs.
+							//$this->inventory->setItem($packet->slot, $packet->item);
+							
+							
 							$this->inventory->setHotbarSlotIndex($packet->slot, $packet->slot); //links $hotbar[$packet->slot] to $slots[$packet->slot]
 						}
-					}
+					}*/
 					$transaction = new BaseTransaction($this->inventory, $packet->slot, $this->inventory->getItem($packet->slot), $packet->item);
 				}elseif($packet->windowid === ContainerSetContentPacket::SPECIAL_ARMOR){ //Our armor
+					echo "Changing armour slots\n";
+					
 					if($packet->slot >= 4){
 						break;
 					}
 
 					$transaction = new BaseTransaction($this->inventory, $packet->slot + $this->inventory->getSize(), $this->inventory->getArmorItem($packet->slot), $packet->item);
-				}elseif(isset($this->windowIndex[$packet->windowid])){
+				}elseif(isset($this->windowIndex[$packet->windowid])){ //Other type of inventory window
+					echo "Transfer for other inventory type\n";
+					
 					$this->craftingType = 0;
 					$inv = $this->windowIndex[$packet->windowid];
 
@@ -3716,16 +3731,35 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 					$transaction = new BaseTransaction($inv, $packet->slot, $inv->getItem($packet->slot), $packet->item);
 				}else{
+					echo "no window open; dropped an item?\n";
 					break;
+					//Dropped an item?
+					//$transaction = new BaseTransaction($this->inventory, $packet->slot, $this->inventory->getItem($packet->slot), $packet->item);
 				}
-
-				if($transaction->getSourceItem()->deepEquals($transaction->getTargetItem()) and $transaction->getTargetItem()->getCount() === $transaction->getSourceItem()->getCount()){ //No changes!
+				
+				if($transaction->getSourceItem()->deepEquals($transaction->getTargetItem(), true, true, true)){ //No changes!
 					//No changes, just a local inventory update sent by the server
+					echo "ignoring slot change\n";
 					break;
 				}
-
-
-				if($this->currentTransaction === null or $this->currentTransaction->getCreationTime() < (microtime(true) - 8)){
+				
+				if($this->transactionQueue === null){
+					$this->transactionQueue = new SimpleTransactionQueue($this);
+				}
+				
+				echo "adding a transaction\n";
+				$this->transactionQueue->addTransaction($transaction);
+				
+				/*if($this->currentTransaction === null){
+					echo "creating a new transaction group\n";
+					$this->currentTransaction = new OrderedTransactionGroup($this);
+				}
+				//What happens if the transaction is already in progress when you add another one? Potential issue there
+				
+				$this->currentTransaction->addTransaction($transaction);*/
+				
+				
+				/*if($this->currentTransaction === null or $this->currentTransaction->getCreationTime() < (microtime(true) - 8)){
 					if($this->currentTransaction !== null){
 						foreach($this->currentTransaction->getInventories() as $inventory){
 							if($inventory instanceof PlayerInventory){
@@ -3761,7 +3795,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 
 					$this->currentTransaction = null;
-				}
+				}*/
 				break;
 			case ProtocolInfo::BLOCK_ENTITY_DATA_PACKET:
 				if($this->spawned === false or $this->blocked === true or !$this->isAlive()){
@@ -3937,11 +3971,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @param bool   $notify
 	 */
 	public final function close($message = "", $reason = "generic reason", $notify = true){
-		foreach($this->getCraftingInventory()->getContents() as $craftingItem){
-			$this->level->dropItem($this, $craftingItem);
-			echo "Dropping a crafting item\n";
-			var_dump($craftingItem);
-		}
 		if($this->connected and !$this->closed){
 			if($notify and strlen((string) $reason) > 0){
 				$pk = new DisconnectPacket;
