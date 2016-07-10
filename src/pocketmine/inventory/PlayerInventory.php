@@ -67,10 +67,13 @@ class PlayerInventory extends BaseInventory{
 		return $this->itemInHandIndex;
 	}
 
-	public function setHeldItemIndex($index){
+	public function setHeldItemIndex($index, $sendHeldItem = true){
 		if($index >= 0 and $index < $this->getHotbarSize()){
 			$this->itemInHandIndex = $index;
-			$this->sendHeldItem($this->getHolder()->getViewers());
+
+			if($sendHeldItem){
+				$this->sendHeldItem($this->getHolder()->getViewers());
+			}
 		}
 	}
 

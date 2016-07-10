@@ -2511,7 +2511,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						for($i = 0; $i < $this->inventory->getHotbarSize(); ++$i){
 							if($this->inventory->getHotbarSlotIndex($i) === -1){
 								$this->inventory->setHeldItemIndex($i);
-								$this->inventory->sendHeldItem($this->getViewers());
 								$found = true;
 								break;
 							}
@@ -2523,8 +2522,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}
 					}else{
 						if($packet->selectedSlot >= 0 and $packet->selectedSlot < 9){
-							$this->inventory->setHeldItemIndex($packet->selectedSlot);
+							$this->inventory->setHeldItemIndex($packet->selectedSlot, false);
 							$this->inventory->setHeldItemSlot($packet->slot);
+							$this->inventory->sendHeldItem($this->getViewers());
 						}else{
 							$this->inventory->sendContents($this);
 							break;
@@ -2534,13 +2534,15 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->inventory->sendContents($this);
 					break;
 				}elseif($this->isCreative()){
-					$this->inventory->setHeldItemIndex($packet->selectedSlot);
+					$this->inventory->setHeldItemIndex($packet->selectedSlot, false);
 					$this->inventory->setItem($packet->selectedSlot, $item);
 					$this->inventory->setHeldItemSlot($packet->selectedSlot);
+					$this->inventory->sendHeldItem($this->getViewers());
 				}else{
 					if($packet->selectedSlot >= 0 and $packet->selectedSlot < $this->inventory->getHotbarSize()){
+						$this->inventory->setHeldItemIndex($packet->selectedSlot, false);
 						$this->inventory->setHeldItemSlot($slot);
-						$this->inventory->setHeldItemIndex($packet->selectedSlot);
+						$this->inventory->sendHeldItem($this->getViewers());
 					}else{
 						$this->inventory->sendContents($this);
 						break;
