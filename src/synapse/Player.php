@@ -56,7 +56,7 @@ class Player extends PMPlayer{
 		$this->handleDataPacket($pk);
 	}
 
-	protected function processLogin(){
+	/*protected function processLogin(){
 		if($this->isFirstTimeLogin){
 			parent::processLogin();
 		}else{
@@ -138,7 +138,7 @@ class Player extends PMPlayer{
 
 			$this->achievements = [];
 
-			/** @var ByteTag $achievement */
+			/** @var ByteTag $achievement 
 			foreach($nbt->Achievements as $achievement){
 				$this->achievements[$achievement->getName()] = $achievement->getValue() > 0 ? true : false;
 			}
@@ -189,7 +189,7 @@ class Player extends PMPlayer{
 
 			$this->forceMovement = $this->teleportPosition = $this->getPosition();
 		}
-	}
+	}*/
 
 	public function transfer(string $hash){
 		$clients = Synapse::getInstance()->getClientData();
