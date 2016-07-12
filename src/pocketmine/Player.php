@@ -3437,6 +3437,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}else{
 					unset($this->windowIndex[$packet->windowid]);
 				}
+				
+				//This should never be needed when these changes are stabilized
+				//Drop the contents of the floating inventory
+				foreach($this->getCraftingInventory()->getContents() as $item){
+					$this->level->dropItem($this, $item);
+				}
 				break;
 
 			case ProtocolInfo::CRAFTING_EVENT_PACKET:
