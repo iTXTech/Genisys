@@ -934,16 +934,15 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			if((count($this->loadQueue) == 0) and $this->shouldSendStatus){
 				$this->shouldSendStatus = false;
 
-				/*$pos = $this->shouldResPos;
-				$pk = new RespawnPacket();
-				$pk->x = $pos->x;
-				$pk->y = $pos->y;
-				$pk->z = $pos->z;
-				$this->dataPacket($pk);*/
-
 				$pk = new PlayStatusPacket();
 				$pk->status = PlayStatusPacket::PLAYER_SPAWN;
 				$this->dataPacket($pk);
+
+				/*$pk = new RespawnPacket();
+				$pk->x = $this->x;
+				$pk->y = $this->y;
+				$pk->z = $this->z;
+				$this->dataPacket($pk);*/
 			}
 		}
 
@@ -973,11 +972,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pos = $ev->getRespawnPosition();
 		if($pos->getY() < 127) $pos = $pos->add(0, 0.2, 0);
 
-		$pk = new RespawnPacket();
+		/*$pk = new RespawnPacket();
 		$pk->x = $pos->x;
 		$pk->y = $pos->y;
 		$pk->z = $pos->z;
-		$this->dataPacket($pk);
+		$this->dataPacket($pk);*/
 
 		$pk = new PlayStatusPacket();
 		$pk->status = PlayStatusPacket::PLAYER_SPAWN;
@@ -2309,9 +2308,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @param DataPacket $packet
 	 */
 	public function handleDataPacket(DataPacket $packet){
-
-
-
+		
 		if($this->connected === false){
 			return;
 		}
