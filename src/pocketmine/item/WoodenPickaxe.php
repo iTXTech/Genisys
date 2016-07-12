@@ -30,4 +30,8 @@ class WoodenPickaxe extends Tool{
 	public function isPickaxe(){
 		return Tool::TIER_WOODEN;
 	}
+
+	public function getAttackDamage(){
+		return 3;
+	}
 }
