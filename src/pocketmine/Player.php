@@ -44,6 +44,7 @@ use pocketmine\entity\ThrownPotion;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\ItemFrameDropItemEvent;
 use pocketmine\event\block\SignChangeEvent;
+use pocketmine\event\entity\EntityCombustByEntityEvent;
 use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -95,6 +96,7 @@ use pocketmine\inventory\PlayerInventory;
 use pocketmine\inventory\ShapedRecipe;
 use pocketmine\inventory\ShapelessRecipe;
 use pocketmine\inventory\SimpleTransactionGroup;
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\FoodSource;
 use pocketmine\item\Item;
 use pocketmine\item\Potion;
@@ -3143,6 +3145,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 
 					if($target->attack($ev->getFinalDamage(), $ev) === true){
+						$fireAspectL = $item->getEnchantmentLevel(Enchantment::TYPE_WEAPON_FIRE_ASPECT);
+						if($fireAspectL > 0){
+							$fireEv = new EntityCombustByEntityEvent($this, $target, $fireAspectL * 4 - 1, $ev->getFireProtectL());
+							Server::getInstance()->getPluginManager()->callEvent($fireEv);
+							if(!$fireEv->isCancelled()){
+								$target->setOnFire($fireEv->getDuration());
+							}
+						}
 						$ev->useArmors();
 					}
 
