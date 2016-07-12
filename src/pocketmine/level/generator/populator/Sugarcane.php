@@ -45,36 +45,32 @@ class Sugarcane extends Populator{
 		for($i = 0; $i < $amount; ++$i){
 			$x = $random->nextRange($chunkX * 16, $chunkX * 16 + 15);
 			$z = $random->nextRange($chunkZ * 16, $chunkZ * 16 + 15);
+
 			$y = $this->getHighestWorkableBlock($x, $z);
-
-			if($y !== -1 and $this->canSugarcaneStay($x, $y, $z)){
-				$this->level->setBlockIdAt($x, $y, $z, Block::SUGARCANE_BLOCK);
-				$this->level->setBlockDataAt($x, $y, $z, 1);
-			}
-		}
-	}
-
-	private function findWater($x, $y, $z){
-		$count = 0;
-		for($i = $x - 4; $i < ($x + 4); $i++){
-			for($j = $z - 4; $j < ($z + 4); $j++){
-				$b = $this->level->getBlockIdAt($i, $y, $j);
-				//echo "$i $y $j $b $count \n";
-				if($b === Block::WATER or $b === Block::STILL_WATER){
-					$count++;
-				}
-				if($count > 10){
-					return true;
+			$tallRand = $random->nextRange(0, 17);
+			$yMax = $y + 2 + (int) ($tallRand > 10) + (int) ($tallRand > 15);
+			if($y !== -1){
+				for(; $y < 127 and $y < $yMax; $y++){
+					if($this->canSugarcaneStay($x, $y, $z)){
+						$this->level->setBlockIdAt($x, $y, $z, Block::SUGARCANE_BLOCK);
+						$this->level->setBlockDataAt($x, $y, $z, 1);
+					}
 				}
 			}
 		}
-		return ($count > 10);
 	}
 
 	private function canSugarcaneStay($x, $y, $z){
 		$b = $this->level->getBlockIdAt($x, $y, $z);
 		$below = $this->level->getBlockIdAt($x, $y - 1, $z);
-		return ($b === Block::AIR) and ($below === Block::SAND or $below === Block::GRASS) and $this->findWater($x, $y - 1, $z);
+		$water = false;
+		foreach(array($this->level->getBlockIdAt($x + 1, $y - 1, $z), $this->level->getBlockIdAt($x - 1, $y - 1, $z), $this->level->getBlockIdAt($x, $y - 1, $z + 1), $this->level->getBlockIdAt($x, $y - 1, $z - 1)) as $adjacent){
+			if($adjacent === Block::WATER or $adjacent === Block::STILL_WATER){
+				$water = true;
+				break;
+			}
+		}
+		return ($b === Block::AIR) and ((($below === Block::SAND or $below === Block::GRASS) and $water) or ($below === Block::SUGARCANE_BLOCK));
 	}
 
 	private function getHighestWorkableBlock($x, $z){
