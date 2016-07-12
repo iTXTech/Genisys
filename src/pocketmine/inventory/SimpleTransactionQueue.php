@@ -157,7 +157,7 @@ class SimpleTransactionQueue implements TransactionQueue{
 					echo "out transaction executing\n";
 
 					$this->player->getCraftingInventory()->addItem($change["out"]);
-					$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem());
+					$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
 				}else{
 					//Transaction unsuccessful
 					echo "out transaction failed\n";
@@ -180,7 +180,7 @@ class SimpleTransactionQueue implements TransactionQueue{
 					echo "in transaction executing\n";
 					
 					$this->player->getCraftingInventory()->removeItem($change["in"]);
-					$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem());
+					$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
 				}else{
 					//Transaction unsuccessful
 					echo "in transaction failed\n";
