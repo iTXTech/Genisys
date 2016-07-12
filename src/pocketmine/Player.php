@@ -2806,7 +2806,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				break;
 			case ProtocolInfo::PLAYER_ACTION_PACKET:
 				//$this->consumeHeldItem();
-				if($this->spawned === false or $this->blocked === true or (!$this->isAlive() and $packet->action !== PlayerActionPacket::ACTION_RESPAWN and $packet->action !== PlayerActionPacket::ACTION_DIMENSION_CHANGE)){
+				if($this->spawned === false or $this->blocked === true or (!$this->isAlive() and $packet->action !== PlayerActionPacket::ACTION_SPAWN_SAME_DIMENSION and $packet->action !== PlayerActionPacket::ACTION_SPAWN_OVERWORLD)){
 					break;
 				}
 
@@ -2941,8 +2941,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					case PlayerActionPacket::ACTION_STOP_SLEEPING:
 						$this->stopSleep();
 						break;
-					case PlayerActionPacket::ACTION_RESPAWN:
-						if($this->spawned === false or $this->isAlive() or !$this->isOnline()){
+					case PlayerActionPacket::ACTION_SPAWN_SAME_DIMENSION: 
+					case PlayerActionPacket::ACTION_SPAWN_OVERWORLD:
+						if($this->isAlive() or !$this->isOnline()){
 							break;
 						}
 
