@@ -127,8 +127,8 @@ class SimpleTransactionQueue implements TransactionQueue{
 		/*if($this->isExecuting()){
 			echo "execution already in progress\n";
 			return false;
-		}else*/if(microtime(true) - $this->lastUpdate < 1){
-			echo "last update time less than 20 ticks ago\n";
+		}else*/if(microtime(true) - $this->lastUpdate < 0.5){
+			echo "last update time less than 10 ticks ago\n";
 			return false;
 		}
 		//echo "Starting queue execution\n";
