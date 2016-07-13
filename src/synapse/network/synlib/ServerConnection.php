@@ -97,7 +97,8 @@ class ServerConnection{
 		}
 		if($this->connected){
 			$err = socket_last_error($this->socket->getSocket());
-			if($err == 10057 or $err == 10054){
+			socket_clear_error($this->socket);
+			if($err !== 0 && $err !== 35){
 				$this->server->getLogger()->error("Synapse connection has disconnected unexpectedly");
 				$this->connected = false;
 				$this->server->setConnected(false);
