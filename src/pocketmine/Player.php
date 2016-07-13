@@ -2549,67 +2549,78 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				if($this->spawned === false or !$this->isAlive()){
 					break;
 				}
+				echo "Received MobEquipmentPacket\n";
+				var_dump($packet);
+				
+				/**
+				 * Handle hotbar slot remapping
+				 * This is the only time and place when hotbar mapping should ever be changed.
+				 */
+				$this->inventory->setHeldItemIndex($packet->selectedSlot, false, $packet->slot);
+				
+				
+				
+				//TODO: Rewrite this mess
+				// if($packet->slot === 0x28 or $packet->slot === 0 or $packet->slot === 255){ //0 for 0.8.0 compatibility
+					// $packet->slot = -1; //Air
+				// }else{
+					// $packet->slot -= 9; //Get real block slot
+				// }
 
-				if($packet->slot === 0x28 or $packet->slot === 0 or $packet->slot === 255){ //0 for 0.8.0 compatibility
-					$packet->slot = -1; //Air
-				}else{
-					$packet->slot -= 9; //Get real block slot
-				}
+				// /** @var Item $item */
+				// $item = null;
 
-				/** @var Item $item */
-				$item = null;
+				// /*if($this->isCreative()){ //Creative mode match
+					// $item = $packet->item;
+					// $slot = Item::getCreativeItemIndex($item);
+				// }else{*/
+					// $item = $this->inventory->getItem($packet->slot);
+					// $slot = $packet->slot;
+				// //}
 
-				if($this->isCreative()){ //Creative mode match
-					$item = $packet->item;
-					$slot = Item::getCreativeItemIndex($item);
-				}else{
-					$item = $this->inventory->getItem($packet->slot);
-					$slot = $packet->slot;
-				}
+				// if($packet->slot === -1){ //Air
+					// if($this->isCreative()){
+						// $found = false;
+						// for($i = 0; $i < $this->inventory->getHotbarSize(); ++$i){
+							// if($this->inventory->getHotbarSlotIndex($i) === -1){
+								// $this->inventory->setHeldItemIndex($i);
+								// $found = true;
+								// break;
+							// }
+						// }
 
-				if($packet->slot === -1){ //Air
-					if($this->isCreative()){
-						$found = false;
-						for($i = 0; $i < $this->inventory->getHotbarSize(); ++$i){
-							if($this->inventory->getHotbarSlotIndex($i) === -1){
-								$this->inventory->setHeldItemIndex($i);
-								$found = true;
-								break;
-							}
-						}
-
-						if(!$found){ //couldn't find a empty slot (error)
-							$this->inventory->sendContents($this);
-							break;
-						}
-					}else{
-						if($packet->selectedSlot >= 0 and $packet->selectedSlot < 9){
-							$this->inventory->setHeldItemIndex($packet->selectedSlot, false);
-							$this->inventory->setHeldItemSlot($packet->slot);
-							$this->inventory->sendHeldItem($this->getViewers());
-						}else{
-							$this->inventory->sendContents($this);
-							break;
-						}
-					}
-				}elseif($item === null or $slot === -1 or !$item->deepEquals($packet->item)){ // packet error or not implemented
-					$this->inventory->sendContents($this);
-					break;
-				}elseif($this->isCreative()){
-					$this->inventory->setHeldItemIndex($packet->selectedSlot, false);
-					$this->inventory->setItem($packet->selectedSlot, $item);
-					$this->inventory->setHeldItemSlot($packet->selectedSlot);
-					$this->inventory->sendHeldItem($this->getViewers());
-				}else{
-					if($packet->selectedSlot >= 0 and $packet->selectedSlot < $this->inventory->getHotbarSize()){
-						$this->inventory->setHeldItemIndex($packet->selectedSlot, false);
-						$this->inventory->setHeldItemSlot($slot);
-						$this->inventory->sendHeldItem($this->getViewers());
-					}else{
-						$this->inventory->sendContents($this);
-						break;
-					}
-				}
+						// if(!$found){ //couldn't find a empty slot (error)
+							// $this->inventory->sendContents($this);
+							// break;
+						// }
+					// }else{
+						// if($packet->selectedSlot >= 0 and $packet->selectedSlot < 9){
+							// $this->inventory->setHeldItemIndex($packet->selectedSlot, false);
+							// $this->inventory->setHeldItemSlot($packet->slot);
+							// $this->inventory->sendHeldItem($this->getViewers());
+						// }else{
+							// $this->inventory->sendContents($this);
+							// break;
+						// }
+					// }
+				// }elseif($item === null or $slot === -1 or !$item->deepEquals($packet->item)){ // packet error or not implemented
+					// $this->inventory->sendContents($this);
+					// break;
+				// }elseif($this->isCreative()){
+					// $this->inventory->setHeldItemIndex($packet->selectedSlot, false);
+					// $this->inventory->setItem($packet->selectedSlot, $item);
+					// $this->inventory->setHeldItemSlot($packet->selectedSlot);
+					// $this->inventory->sendHeldItem($this->getViewers());
+				// }else{
+					// if($packet->selectedSlot >= 0 and $packet->selectedSlot < $this->inventory->getHotbarSize()){
+						// $this->inventory->setHeldItemIndex($packet->selectedSlot, false);
+						// $this->inventory->setHeldItemSlot($slot);
+						// $this->inventory->sendHeldItem($this->getViewers());
+					// }else{
+						// $this->inventory->sendContents($this);
+						// break;
+					// }
+				// }
 
 				$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 				break;
@@ -3319,24 +3330,30 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					//$this->craftingInventory->remove($droppedItem);
 					$replacementItem = null;					
 				}else{
-					//Something fails under here, breaking item drops on PE -_-
-					
 					//Crafting inventory doesn't contain the item we are trying to drop
 					//This means we're trying to drop our held item slot, or at least part
 					//of it.
 					$chosenSlot = clone $this->inventory->getItemInHand();
+					$chosenSlotIndex = $this->inventory->getHeldItemIndex();
 					if(!$chosenSlot->deepEquals($packet->item)){
-						//Player tried to drop something that wasn't the same as their held item
-						//You can do this on PE, as you can drop items directly from the hotbar on PE
-						//without actually having to hold them.
-
-						//There's no foolproof way to do this. If there's multiple identical slots in the hotbar
-						//it will choose the first one.
+						/*
+						 * Player tried to drop something that wasn't the same as their held item
+						 * You can do this on PE, as you can drop items directly from the hotbar on PE
+						 * without actually having to hold them.
+						 *
+						 * There's no foolproof way to do this. If there's multiple identical slots in the hotbar
+						 * it will choose the first one.
+						 *
+						 * Actually, there _is_ a way to do this properly, but it requires DropItem packets to be
+						 * correctly paired with the relevant ContainerSetSlot packets when dropping items. I knew
+						 * there had to be _some_ way of doing it.
+						 */
 						
 						$chosenSlot = null;
 						foreach($this->inventory->getHotbar() as $index){
 							if($this->inventory->getItem($index)->deepEquals($packet->item, true, true, true)){
 								$chosenSlot = $this->inventory->getItem($index);
+								$chosenSlotIndex = $index;
 								break;
 							}
 						}
@@ -3380,13 +3397,18 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->inventory->sendSlot($slot, $this);
 					break;
 				}
-				
+				/**
+				 * Allow this to be handled by the container set slot packet, will fix some bugs with PE
+				 * Pairing will be required at a later date to ensure that players cannot cheat,
+				 * or duplicate items on a bad network.
+				 */
 				if($replacementItem !== null){
 					//Not sure this will cut it, may have to actually remove it
-					$this->inventory->setItemInHand($replacementItem);
+					$this->inventory->setItem($chosenSlotIndex, $replacementItem);
 					//$this->inventory->remove($dropItem);
 				}
-
+				
+	
 				//$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
 				$motion = $this->getDirectionVector()->multiply(0.4);
 
@@ -3450,6 +3472,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				//Drop the contents of the floating inventory
 				foreach($this->getCraftingInventory()->getContents() as $item){
 					$this->level->dropItem($this, $item);
+					$this->getCraftingInventory()->remove($item);
 				}
 				break;
 
@@ -3761,9 +3784,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->transactionQueue = new SimpleTransactionQueue($this);
 				}
 				
-				echo "adding a transaction\n";
+				//echo "adding a transaction\n";
 				$this->transactionQueue->addTransaction($transaction);
-				
+				echo "Added a transaction concerning slot number ".$packet->slot."\n";
 				/*if($this->currentTransaction === null){
 					echo "creating a new transaction group\n";
 					$this->currentTransaction = new OrderedTransactionGroup($this);
