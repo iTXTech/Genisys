@@ -109,12 +109,12 @@ class SimpleTransactionQueue implements TransactionQueue{
 	 */
 	private function handleFailure(Transaction $transaction, array &$failed){
 		$transaction->addFailure();
-		//if($transaction->getFailures() > 2){
+		if($transaction->getFailures() > 2){
 			$failed[] = $transaction;
-		/*}else{
+		}else{
 			//Add the transaction to the back of the queue to be retried
 			$this->transactionQueue->enqueue($transaction);
-		}*/
+		}
 	}
 	
 	/**
@@ -134,21 +134,17 @@ class SimpleTransactionQueue implements TransactionQueue{
 		//echo "Starting queue execution\n";
 		
 		$failed = [];
-		$completeFails = [];
 		
 		$this->isExecuting = true;
 		
 		$allowedRetries = $this->transactionQueue->count();
 		
-		foreach($this->failures as $index => $failure){
-			if($failure->getFailures() <= $allowedRetries){ //hmm, this may be inaccurate
-				$this->transactionQueue->enqueue($failure);
-			}
-			unset($this->failures[$index]);
-		}
-		
 		while(!$this->transactionQueue->isEmpty()){
 			$transaction = $this->transactionQueue->dequeue();
+			
+			//Quick hack for proof of concept. This will need fixing properly.
+			$transaction->setSourceItem($transaction->getInventory()->getItem($transaction->getSlot()));
+			
 			$change = $transaction->getChange();
 			//var_dump($change);
 			if($change["out"] instanceof Item){
@@ -161,8 +157,8 @@ class SimpleTransactionQueue implements TransactionQueue{
 				}else{
 					//Transaction unsuccessful
 					echo "out transaction failed\n";
-					$transaction->addFailure();
-					$failed[] = $transaction;
+					//$transaction->addFailure();
+					//$failed[] = $transaction;
 					//Relocate the transaction to the end of the list
 					/*$transaction->addFailure();
 					if($transaction->getFailures() > 2){
@@ -171,12 +167,12 @@ class SimpleTransactionQueue implements TransactionQueue{
 						//Add the transaction to the back of the queue to be retried
 						$this->transactionQueue->enqueue($transaction);
 					}*/
-					//$this->handleFailure($transaction, $failed);
+					$this->handleFailure($transaction, $failed);
 					continue;
 				}
 			}
 			if($change["in"] instanceof Item){
-				if($this->player->getCraftingInventory()->contains($change["in"])){
+				if($this->player->getCraftingInventory()->contains($change["in"]) or $this->player->isCreative()){
 					echo "in transaction executing\n";
 					
 					$this->player->getCraftingInventory()->removeItem($change["in"]);
@@ -184,17 +180,17 @@ class SimpleTransactionQueue implements TransactionQueue{
 				}else{
 					//Transaction unsuccessful
 					echo "in transaction failed\n";
-					$transaction->addFailure();
+					/*$transaction->addFailure();
 					$failed[] = $transaction;
 					//Relocate the transaction to the end of the list
-					/*$transaction->addFailure();
+					$transaction->addFailure();
 					if($transaction->getFailures() > 2){
 						$failed[] = $transaction;
 					}else{
 						//Add the transaction to the back of the queue to be retried
 						$this->transactionQueue->enqueue($transaction);
 					}*/
-					//$this->handleFailure($transaction, $failed);
+					$this->handleFailure($transaction, $failed);
 					continue;
 				}
 			}
@@ -202,9 +198,12 @@ class SimpleTransactionQueue implements TransactionQueue{
 		$this->isExecuting = false;
 		//echo "Finished queue execution\n";
 		//$this->transactionQueue = null;
-		foreach($this->inventories as $inventory){
-			$inventory->sendContents($inventory->getViewers());
+		foreach($failed as $f){
+			$f->getInventory()->sendSlot($f->getSlot, $f->getInventory()->getViewers());
 		}
+		/*foreach($this->inventories as $inventory){
+			$inventory->sendContents($inventory->getViewers());
+		}*/
 		
 		$this->inventories = [];
 		$this->lastExecution = microtime(true);
@@ -212,5 +211,6 @@ class SimpleTransactionQueue implements TransactionQueue{
 		
 		$this->failures = $failed;
 		//return $failed;
+		return true;
 	}
 }

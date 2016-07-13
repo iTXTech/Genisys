@@ -40,7 +40,7 @@ class PlayerInventory extends BaseInventory{
 	protected $hotbar;
 
 	public function __construct(Human $player){
-		$this->hotbar = array_fill(0, $this->getHotbarSize(), -1);
+		$this->hotbar = range(0, $this->getHotbarSize()-1, 1);
 		parent::__construct($player, InventoryType::get(InventoryType::PLAYER));
 	}
 
@@ -52,31 +52,67 @@ class PlayerInventory extends BaseInventory{
 		parent::setSize($size + 4);
 		$this->sendContents($this->getViewers());
 	}
-
+	
+	/**
+	 * @param int $index
+	 *
+	 * @return int
+	 *
+	 * Returns the index of the inventory slot linked to the specified hotbar slot#
+	 */
 	public function getHotbarSlotIndex($index){
 		return ($index >= 0 and $index < $this->getHotbarSize()) ? $this->hotbar[$index] : -1;
 	}
 
+	/**
+	 * @deprecated
+	 *
+	 * Changes the linkage of the specified hotbar slot. This should never be done unless it is requested by the client.
+	 */
 	public function setHotbarSlotIndex($index, $slot){
-		if ($index >= 0 and $index < $this->getHotbarSize() and $slot >= -1 and $slot < $this->getSize()) {
+		trigger_error("Hotbar linkage should never be changed unless requested by the client", E_USER_DEPRECATED);
+		/*if ($index >= 0 and $index < $this->getHotbarSize() and $slot >= -1 and $slot < $this->getSize()) {
 			$this->hotbar[$index] = $slot;//calculate has been done by client
-		}
+		}*/
 	}
 
+	/**
+	 * @return int
+	 *
+	 * Returns the index of the inventory slot the player is currently holding
+	 */
 	public function getHeldItemIndex(){
 		return $this->itemInHandIndex;
 	}
 
-	public function setHeldItemIndex($index, $sendHeldItem = true){
-		if($index >= 0 and $index < $this->getHotbarSize()){
-			$this->itemInHandIndex = $index;
-
-			if($sendHeldItem){
-				$this->sendHeldItem($this->getHolder()->getViewers());
+	/**
+	 * @param int  $hotbarSlotIndex
+	 * @param bool $sendToHolder
+	 * @param int  $slotMapping
+	 *
+	 * Sets which hotbar slot the player is currently holding.
+	 * Allows slot remapping as specified by a MobEquipmentPacket. DO NOT CHANGE SLOT MAPPING IN PLUGINS!
+	 * This new implementation is fully compatible with older APIs.
+	 */
+	public function setHeldItemIndex($hotbarSlotIndex, $sendToHolder = true, $slotMapping = null){
+		if(0 <= $hotbarSlotIndex and $hotbarSlotIndex < $this->getHotbarSize()){
+			$this->itemInHandIndex = $hotbarSlotIndex;
+			if($slotMapping !== null){
+				//Handle a hotbar slot mapping change (for PE)
+				$this->hotbar[$this->itemInHandIndex] = $slotMapping - $this->getHotbarSize();
+			}
+			$this->sendHeldItem($this->getHolder()->getViewers());
+			if($sendToHolder){
+				$this->sendHeldItem($this->getHolder());
 			}
 		}
 	}
-
+	
+	/**
+	 * @return Item
+	 *
+	 * Returns the item the player is currently holding
+	 */
 	public function getItemInHand(){
 		$item = $this->getItem($this->getHeldItemSlot());
 		if($item instanceof Item){
@@ -90,34 +126,20 @@ class PlayerInventory extends BaseInventory{
 	 * @param Item $item
 	 *
 	 * @return bool
+	 *
+	 * Sets the item in the inventory slot the player is currently holding.
 	 */
 	public function setItemInHand(Item $item){
 		return $this->setItem($this->getHeldItemSlot(), $item);
 	}
 	
+	/**
+	 * @return int[]
+	 *
+	 * Returns an array of hotbar indices
+	 */
 	public function getHotbar(){
 		return $this->hotbar;
-	}
-	
-	
-	/**
-	 * @param int[] $indices
-	 *
-	 * Sets the hotbar slot indices to an array of supplied values.
-	 */
-	public function setHotbar(array $indices){
-		if(count($indices) < $this->getHotbarSize()){
-			throw new \InvalidArgumentException("Expecting an array with 9 items, got ".count($indexes));
-		}
-		foreach($indices as $position => $index){
-			if(!is_int($index)){
-				throw new \InvalidArgumentException("All parameters must be integers");
-			}
-			if($index < -1 or $index > $this->getHotbarSize()){
-				$index = -1;
-			}
-			$this->hotbar[$position] = $index;
-		}
 	}
 
 	public function getHeldItemSlot(){
@@ -138,7 +160,7 @@ class PlayerInventory extends BaseInventory{
 				}
 			}
 
-			$this->setHotbarSlotIndex($itemIndex, $slot);
+			//$this->setHotbarSlotIndex($itemIndex, $slot);
 		}
 	}
 
@@ -414,7 +436,7 @@ class PlayerInventory extends BaseInventory{
 			if($player === $this->getHolder()){
 				for($i = 0; $i < $this->getHotbarSize(); ++$i){
 					$index = $this->getHotbarSlotIndex($i);
-					$pk->hotbar[] = $index <= -1 ? -1 : $index + $this->getHotbarSize();
+					$pk->hotbar[] = $index + $this->getHotbarSize();
 				}
 			}
 			if(($id = $player->getWindowId($this)) === -1 or $player->spawned !== true){

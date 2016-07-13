@@ -45,7 +45,7 @@ class ContainerSetSlotPacket extends DataPacket{
 		$this->reset();
 		$this->putByte($this->windowid);
 		$this->putShort($this->slot);
-		$this->putShort($this->hotbarSlot);
+		$this->putShort($this->hotbarSlot); //Hotbar linkage should only be changed by the client
 		$this->putSlot($this->item);
 	}
 
