@@ -68,7 +68,7 @@ class XPOrb extends Entity{
 		$minDistance = PHP_INT_MAX;
 		$expectedPos = null;
 		foreach($this->getLevel()->getEntities() as $e){
-			if($e instanceof Player){
+			if($e instanceof Player and !$e->isSpectator()){
 				if($e->distance($this) <= $minDistance) {
 					$expectedPos = $e;
 					$minDistance = $e->distance($this);
