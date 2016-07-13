@@ -3289,12 +3289,20 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				if($this->spawned === false or $this->blocked === true or !$this->isAlive()){
 					break;
 				}
-
-				if(/*!$this->inventory->contains($packet->item) or */($this->isCreative() and $this->server->limitedCreative)){
-					$this->inventory->sendContents($this);
+				if($packet->item->getId() === Item::AIR){
+					/**
+					 * This is so stupid it's unreal. 
+					 * Win10 drops the contents of the crafting grid when the inventory closes - including air.
+					 */
 					break;
 				}
 
+				if(($this->isCreative() and $this->server->limitedCreative)){
+					$this->inventory->sendContents($this);
+					break;
+				}
+				
+				
 				/*$slot = $this->inventory->first($packet->item);
 				if($slot == -1){
 					$this->inventory->sendContents($this);
