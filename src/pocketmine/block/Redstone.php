@@ -32,8 +32,8 @@ class Redstone extends RedstoneSource{
 
 	}
 
-	public function isTransparent(){
-		return false;
+	public function getBoundingBox() {
+		return Block::getBoundingBox();
 	}
 
 	public function canBeFlowedInto(){
@@ -57,7 +57,7 @@ class Redstone extends RedstoneSource{
 	}
 
 	public function getName() : string{
-		return "Redstone Block";
+		return "Block of Redstone";
 	}
 
 	public function getDrops(Item $item) : array {
