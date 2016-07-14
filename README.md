@@ -16,7 +16,7 @@ GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.
 You can get a prebuilt phar from [Jenkins](https://jenkins.mcper.cn/job/Genisys-master/) or [GitLab](https://gitlab.com/itxtech/genisys/pipelines).
 
 ### Installation
-Installation instructions can be found in the [wiki](https://github.com/iTXTech/Genisys/wiki/Use-Docker-to-run-Genisys).
+Installation instructions can be found in the [wiki](https://github.com/iTXTech/Genisys/wiki).
 
 ## Contents
 
