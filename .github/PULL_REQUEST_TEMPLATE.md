@@ -3,7 +3,8 @@
 
 
 ### Reason to modify
-<!-- Think twice before modifying: is it the best way? will it break things? -->
+<!-- Think twice before modifying: is it the best way? will it break things? 
+Have you made sure that there is actually a problem before trying to fix it? -->
 
 
 ### Tests & Reviews
