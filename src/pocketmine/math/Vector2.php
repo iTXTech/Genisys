@@ -20,6 +20,7 @@
 */
 
 namespace pocketmine\math;
+use pocketmine\utils\Random;
 
 /**
  * WARNING: This class is available on the PocketMine-MP Zephir project.
@@ -129,6 +130,14 @@ class Vector2{
 
 	public function __toString(){
 		return "Vector2(x=" . $this->x . ",y=" . $this->y . ")";
+	}
+
+	public static function createRandomDirection(Random $random){
+		return self::createDirection($random->nextFloat() * 2 * pi());
+	}
+
+	public static function createDirection(float $angle){
+		return new Vector2(cos($angle), sin($angle));
 	}
 
 }
