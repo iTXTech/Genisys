@@ -29,6 +29,12 @@ use pocketmine\utils\VectorIterator;
 use pocketmine\utils\Random;
 
 class BigTree extends Tree{
+	public $overridable = [
+		Block::AIR => true,
+		Block::LEAVES => true,
+		Block::SAPLING => true
+	];
+
 	/** @var Random */
 	private $random;
 	private $trunkHeightMultiplier = 0.618;
@@ -38,15 +44,15 @@ class BigTree extends Tree{
 	private $widthScale = 1;
 	private $branchSlope = 0.381;
 
-	private $totalHeight = 6;
+	private $totalHeight;
 	private $baseHeight = 5;
-	protected $radiusIncrease = 0;
 
 	public function canPlaceObject(ChunkManager $level, $x, $y, $z, Random $random){
 		if(!parent::canPlaceObject($level, $x, $y, $z, $random) or $level->getBlockIdAt($x, $y, $z) == Block::WATER or $level->getBlockIdAt($x, $y, $z) == Block::STILL_WATER){
 			return false;
 		}
 		$base = new Vector3($x, $y, $z);
+		$this->totalHeight = $this->baseHeight + $random->nextBoundedInt(12);
 		$availableSpace = $this->getAvailableBlockSpace($level, $base, $base->add(0, $this->totalHeight - 1, 0));
 		if($availableSpace > $this->baseHeight or $availableSpace == -1){
 			if($availableSpace != -1){
@@ -107,7 +113,7 @@ class BigTree extends Tree{
 				$groupX = (int) ($randomOffset->getX() + $x + 0.5);
 				$groupZ = (int) ($randomOffset->getY() + $z + 0.5);
 				$group = new Vector3($groupX, $groupY, $groupZ);
-				if($this->getAvailableBlockSpace($level, $group, $group->add(0, $this->leafDistanceLimit,0)) != -1){
+				if($this->getAvailableBlockSpace($level, $group, $group->add(0, $this->leafDistanceLimit, 0)) != -1){
 					continue;
 				}
 				$xOff = (int) ($x - $groupX);
@@ -152,7 +158,7 @@ class BigTree extends Tree{
 
 	private function getRoughLayerSize(int $layer) : float {
 		$halfHeight = $this->totalHeight / 2;
-		if($layer < $this->totalHeight){
+		if($layer < ($this->totalHeight / 3)){
 			return -1;
 		}elseif($layer == $halfHeight){
 			return $halfHeight / 4;
@@ -173,6 +179,7 @@ class BigTree extends Tree{
 					$branch->next();
 					$pos = $branch->current();
 					$level->setBlockIdAt($pos->x, $pos->y, $pos->z, Block::LOG);
+					$level->updateBlockLight($pos->x, $pos->y, $pos->z);
 				}
 			}
 		}
