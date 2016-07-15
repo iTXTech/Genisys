@@ -1,4 +1,4 @@
-4<?php
+<?php
 
 /*
  *
@@ -41,11 +41,7 @@ class VersionString{
 			$this->major = 0;
 			$this->minor = 0;
 			$this->development = true;
-			if($version[5] !== ""){
-				$this->build = intval(substr($version[6], 1));
-			}else{
-				$this->build = 0;
-			}
+			$this->build = 0;
 		}
 	}
 
