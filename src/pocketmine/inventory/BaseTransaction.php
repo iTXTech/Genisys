@@ -22,6 +22,7 @@
 namespace pocketmine\inventory;
 
 use pocketmine\item\Item;
+use pocketmine\Player;
 
 class BaseTransaction implements Transaction{
 	/** @var Inventory */
@@ -36,12 +37,14 @@ class BaseTransaction implements Transaction{
 	protected $creationTime;
 	/** @var int */
 	protected $failures = 0;
+	/** @var bool */
+	protected $wasSuccessful = false;
 
 	/**
-	 * @param Inventory $inventory
-	 * @param int       $slot
-	 * @param Item      $sourceItem
-	 * @param Item      $targetItem
+	 * @param Inventory|null $inventory
+	 * @param int|null       $slot
+	 * @param Item|null		 $sourceItem
+	 * @param Item      	 $targetItem
 	 */
 	public function __construct(Inventory $inventory, $slot, Item $sourceItem, Item $targetItem){
 		$this->inventory = $inventory;
@@ -85,6 +88,34 @@ class BaseTransaction implements Transaction{
 	
 	public function addFailure(){
 		$this->failures++;
+	}
+	
+	public function succeeded(){
+		return $this->wasSuccessful;
+	}
+	
+	public function setSuccess($value = true){
+		$this->wasSuccessful = $value;
+	}
+	
+	/**
+	 * @param Player $source
+	 *
+	 * Sends a slot update to inventory viewers, excepting those specified as parameters.
+	 * For successful transactions, the source does not need to be updated, only the viewers
+	 * For failed transactions, only the source needs to be updated, and not the viewers.
+	 */
+	public function sendSlotUpdate(Player $source){
+		//If the transaction was successful, send updates _only_ to non-instigators
+		//If it failed, send updates _only_ to the instigator.
+		$targets = [];
+		if($this->wasSuccessful){
+			$targets = $this->getInventory()->getViewers();
+			unset($targets[spl_object_hash($source)]); //Remove the source player from the list of players to update
+		}else{
+			$targets = [$source];
+		}
+		$this->inventory->sendSlot($this->slot, $targets);
 	}
 	
 	/**
@@ -134,6 +165,7 @@ class BaseTransaction implements Transaction{
 
 		}elseif(!$this->sourceItem->deepEquals($this->targetItem, false) and $this->sourceItem->canBeDamaged()){
 			//Tool/armour damage change, no inventory change to speak of (not really)
+			//BUG: Swapping two of the same tool with different damages will cause the second one to be lost. This will need fixing.
 			return null;
 			
 		}else{
