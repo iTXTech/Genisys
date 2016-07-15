@@ -1835,6 +1835,10 @@ class Server{
 			}
 			$this->config = new Config($configPath = $this->dataPath . "pocketmine.yml", Config::YAML, []);
 			$nowLang = $this->getProperty("settings.language", "eng");
+			if(strpos(\pocketmine\VERSION, "unsupported") !== false and $this->getProperty("settings.enable-testing", false) !== true and getenv("GITLAB_CI") === false){
+				throw new ServerException("This version is not supported, put enable-testing: true under pocketmine.yml server section to run this build at 
+your risk.");
+			}
 			if($defaultLang != "unknown" and $nowLang != $defaultLang){
 				@file_put_contents($configPath, str_replace('language: "' . $nowLang . '"', 'language: "' . $defaultLang . '"', file_get_contents($configPath)));
 				$this->config->reload();
