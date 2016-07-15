@@ -26,11 +26,15 @@ use pocketmine\item\Item;
 
 class SimpleTransactionQueue implements TransactionQueue{
 	
+	const ALLOWED_RETRIES = 20;
+	
 	/** @var Player[] */
 	protected $player = null;
 	
 	/** @var \SplQueue */
 	protected $transactionQueue;
+	/** @var \SplQueue */
+	protected $transactionsToRetry;
 	
 	/** @var bool */
 	protected $isExecuting = false;
@@ -41,15 +45,13 @@ class SimpleTransactionQueue implements TransactionQueue{
 	/** @var Inventory[] */	
 	protected $inventories = [];
 	
-	/** @var Transaction[] */
-	protected $failures = [];
-	
 	/**
 	 * @param Player $player
 	 */
 	public function __construct(Player $player = null){
 		$this->player = $player;
 		$this->transactionQueue = new \SplQueue();
+		$this->transactionsToRetry = new \SplQueue();
 	}
 
 	/**
@@ -103,17 +105,19 @@ class SimpleTransactionQueue implements TransactionQueue{
 	
 	/** 
 	 * @param Transaction 	$transaction
-	 * @param Transaction[] &$failed
+	 * @param Transaction[] &$completed
 	 *
 	 * Handles a failed transaction
 	 */
-	private function handleFailure(Transaction $transaction, array &$failed){
+	private function handleFailure(Transaction $transaction, &$failed){
 		$transaction->addFailure();
-		if($transaction->getFailures() > 2){
+		if($transaction->getFailures() > self::ALLOWED_RETRIES){
+			//Transaction failed after several retries
+			echo "transaction completely failed\n";
 			$failed[] = $transaction;
 		}else{
 			//Add the transaction to the back of the queue to be retried
-			$this->transactionQueue->enqueue($transaction);
+			$this->transactionsToRetry->enqueue($transaction);
 		}
 	}
 	
@@ -133,11 +137,16 @@ class SimpleTransactionQueue implements TransactionQueue{
 		}
 		//echo "Starting queue execution\n";
 		
+		/** @var Transaction[] */
 		$failed = [];
 		
 		$this->isExecuting = true;
 		
-		$allowedRetries = $this->transactionQueue->count();
+		while(!$this->transactionsToRetry->isEmpty()){
+			//Some failed transactions are waiting from the previous execution to be retried
+			echo "adding a transaction to retry\n";
+			$this->transactionQueue->enqueue($this->transactionsToRetry->dequeue());
+		}
 		
 		while(!$this->transactionQueue->isEmpty()){
 			$transaction = $this->transactionQueue->dequeue();
@@ -154,6 +163,9 @@ class SimpleTransactionQueue implements TransactionQueue{
 
 					$this->player->getCraftingInventory()->addItem($change["out"]);
 					$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
+					
+					$transaction->setSuccess();
+					$transaction->sendSlotUpdate($this->player);
 				}else{
 					//Transaction unsuccessful
 					echo "out transaction failed\n";
@@ -177,6 +189,9 @@ class SimpleTransactionQueue implements TransactionQueue{
 					
 					$this->player->getCraftingInventory()->removeItem($change["in"]);
 					$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
+					
+					$transaction->setSuccess();
+					$transaction->sendSlotUpdate($this->player);
 				}else{
 					//Transaction unsuccessful
 					echo "in transaction failed\n";
@@ -199,18 +214,18 @@ class SimpleTransactionQueue implements TransactionQueue{
 		//echo "Finished queue execution\n";
 		//$this->transactionQueue = null;
 		foreach($failed as $f){
-			$f->getInventory()->sendSlot($f->getSlot, $f->getInventory()->getViewers());
+			//No, no no. Only send failed transaction updates to the _instigator_.
+			//Send successful transaction updates to _viewers_
+			$f->sendSlotUpdate($this->player);
 		}
 		/*foreach($this->inventories as $inventory){
 			$inventory->sendContents($inventory->getViewers());
 		}*/
 		
-		$this->inventories = [];
+		//$this->inventories = [];
 		$this->lastExecution = microtime(true);
 		$this->hasExecuted = true;
-		
-		$this->failures = $failed;
-		//return $failed;
+
 		return true;
 	}
 }
