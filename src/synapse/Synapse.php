@@ -123,7 +123,7 @@ class Synapse{
 	public function connect(){
 		$this->verified = false;
 		$pk = new ConnectPacket();
-		$pk->encodedPassword = password_hash($this->password, PASSWORD_DEFAULT);
+		$pk->password = $this->password;
 		$pk->isMainServer = $this->isMainServer();
 		$pk->description = $this->description;
 		$pk->maxPlayers = $this->server->getMaxPlayers();

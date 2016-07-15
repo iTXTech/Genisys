@@ -22,7 +22,7 @@
 namespace synapse\network\protocol\spp;
 
 class Info{
-	const CURRENT_PROTOCOL = 2;
+	const CURRENT_PROTOCOL = 3;
 
 	const HEARTBEAT_PACKET = 0x01;
 	const CONNECT_PACKET = 0x02;

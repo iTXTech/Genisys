@@ -28,7 +28,7 @@ class ConnectPacket extends DataPacket{
 	public $maxPlayers;
 	public $isMainServer;
 	public $description;
-	public $encodedPassword;
+	public $password;
 
 	public function encode(){
 		$this->reset();
@@ -36,7 +36,7 @@ class ConnectPacket extends DataPacket{
 		$this->putInt($this->maxPlayers);
 		$this->putByte($this->isMainServer ? 1 : 0);
 		$this->putString($this->description);
-		$this->putString($this->encodedPassword);
+		$this->putString($this->password);
 	}
 
 	public function decode(){
@@ -44,7 +44,7 @@ class ConnectPacket extends DataPacket{
 		$this->maxPlayers = $this->getInt();
 		$this->isMainServer = ($this->getByte() == 1) ? true : false;
 		$this->description = $this->getString();
-		$this->encodedPassword = $this->getString();
+		$this->password = $this->getString();
 	}
 
 }
