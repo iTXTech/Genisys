@@ -9,10 +9,10 @@ Special thanks to [JetBrains](https://www.jetbrains.com) for providing free lice
 
 ### Build status
 Travis-CI: [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)  
-GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines)
+GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
 
 ### Downloads
-You can get a prebuilt phar from [GitLab](https://gitlab.com/itxtech/genisys/pipelines).
+You can get a prebuilt phar from [GitLab](https://gitlab.com/itxtech/genisys/pipelines?scope=branches).
 
 ### Installation
 Installation instructions can be found in the [wiki](https://github.com/iTXTech/Genisys/wiki).
