@@ -133,11 +133,6 @@ class Vector2{
 	}
 
 	public static function createRandomDirection(Random $random){
-		return self::createDirection($random->nextFloat() * 2 * pi());
+		return VectorMath::getDirection2D($random->nextFloat() * 2 * pi());
 	}
-
-	public static function createDirection(float $angle){
-		return new Vector2(cos($angle), sin($angle));
-	}
-
 }

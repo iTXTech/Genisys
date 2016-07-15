@@ -105,17 +105,17 @@ class BiomeCommand extends VanillaCommand{
 			}elseif($args[0] == "pos1"){
 				$x = floor($sender->getX());
 				$z = floor($sender->getZ());
-				$sender->selectedLev[0] = $sender->getlevel();
+				$sender->selectedLev[0] = $sender->getLevel();
 				$sender->selectedPos[0][0] = $x;
 				$sender->selectedPos[0][1] = $z;
 				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.posset", [$sender->selectedLev[0]->getName(), $x, $z, "1"]));
 			}elseif($args[0] == "pos2"){
 				$x = floor($sender->getX());
 				$z = floor($sender->getZ());
-				$sender->selectedLev[1] = $sender->getlevel();
+				$sender->selectedLev[1] = $sender->getLevel();
 				$sender->selectedPos[1][0] = $x;
 				$sender->selectedPos[1][1] = $z;
-				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.posset", [$sender->selectedLev[1]->getname(), $x, $z, "2"]));
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.posset", [$sender->selectedLev[1]->getName(), $x, $z, "2"]));
 			}elseif($args[0] == "get"){
 				$x = floor($sender->getX());
 				$z = floor($sender->getZ());
@@ -130,5 +130,6 @@ class BiomeCommand extends VanillaCommand{
 			$sender->sendMessage(new TranslationContainer("commands.generic.runingame"));
 			return false;
 		}
+		return true;
 	}
 }

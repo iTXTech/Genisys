@@ -23,76 +23,201 @@ namespace pocketmine\level\generator\populator;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
-use pocketmine\level\generator\biome\Biome;
-use pocketmine\level\generator\Generator;
-use pocketmine\level\generator\noise\Simplex;
-use pocketmine\level\generator\normal\biome\WateryBiome;
+use pocketmine\math\Math;
+use pocketmine\math\Vector3;
+use pocketmine\math\VectorMath;
 use pocketmine\utils\Random;
 
 class Caves extends Populator{
-
-	/** @var Simplex */
-	private $cavesSimplex = null;
-
-	public function initPopulate(Random $random){
-		if($this->cavesSimplex != null){
+	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
+		$chunk = new Vector3($chunkX << 4, 0, $chunkZ << 4);
+		if($random->nextBoundedInt(15) != 0){
 			return;
 		}
-		$this->cavesSimplex = new Simplex($random, 4.1, 15, 1 / 200);
-		//实在太密啦啦啦
+
+		$numberOfCaves = $random->nextBoundedInt($random->nextBoundedInt($random->nextBoundedInt(40) + 1) + 1);
+		for($caveCount = 0; $caveCount < $numberOfCaves; $caveCount++){
+			$target = new Vector3($chunk->getX() + $random->nextBoundedInt(16), $random->nextBoundedInt($random->nextBoundedInt(120) + 8), $chunk->getZ() + $random->nextBoundedInt(16));
+
+			$numberOfSmallCaves = 1;
+
+			if($random->nextBoundedInt(4) == 0){
+				$this->generateLargeCaveBranch($level, $chunk, $target, new Random($random->nextInt()));
+				$numberOfSmallCaves += $random->nextBoundedInt(4);
+			}
+
+			for($count = 0; $count < $numberOfSmallCaves; $count++){
+				$randomHorizontalAngle = $random->nextFloat() * pi() * 2;
+				$randomVerticalAngle = (($random->nextFloat() - 0.5) * 2) / 8;
+				$horizontalScale = $random->nextFloat() * 2 + $random->nextFloat();
+
+				if($random->nextBoundedInt(10) == 0){
+					$horizontalScale *= $random->nextFloat() * $random->nextFloat() * 3 + 1;
+				}
+
+				$this->generateCaveBranch($level, $chunk, $target, $horizontalScale, 1, $randomHorizontalAngle, $randomVerticalAngle, 0, 0, new Random($random->nextInt()));
+			}
+		}
 	}
 
+	private function generateCaveBranch(ChunkManager $level, Vector3 $chunk, Vector3 $target, $horizontalScale, $verticalScale, $horizontalAngle, $verticalAngle, int $startingNode, int $nodeAmount, Random $random){
+		$middle = new Vector3($chunk->getX() + 8, 0, $chunk->getZ() + 8);
+		$horizontalOffset = 0;
+		$verticalOffset = 0;
 
-	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
-		$this->initPopulate($random);
-		$chunk = $level->getChunk($chunkX, $chunkZ);
-		$cavesGenerate = Generator::getFastNoise3D($this->cavesSimplex, 16, 128, 16, 4, 4, 4, $chunkX * 16, 0, $chunkZ * 16);
-		for($x = 0; $x < 16; $x++){
-			for($z = 0; $z < 16; $z++){
+		if($nodeAmount <= 0){
+			$size = 7 * 16;
+			$nodeAmount = $size - $random->nextBoundedInt($size / 4);
+		}
 
-				$biome = Biome::getBiome($chunk->getBiomeId($x, $z));
-				$hasWater = false;
-				$highest = true;
-				if($biome instanceof WateryBiome){
-					$hasWater = true;
-					$highest = false;
+		$intersectionMode = $random->nextBoundedInt($nodeAmount / 2) + $nodeAmount / 4;
+		$extraVerticalScale = $random->nextBoundedInt(6) == 0;
+
+		if($startingNode == -1){
+			$startingNode = $nodeAmount / 2;
+			$lastNode = true;
+		}else{
+			$lastNode = false;
+		}
+
+		for(; $startingNode < $nodeAmount; $startingNode++){
+			$horizontalSize = 1.5 + sin($startingNode * pi() / $nodeAmount) * $horizontalScale;
+			$verticalSize = $horizontalSize * $verticalScale;
+			$target = $target->add(VectorMath::getDirection3D($horizontalAngle, $verticalAngle));
+			if($extraVerticalScale){
+				$verticalAngle *= 0.92;
+			}else{
+				$verticalScale *= 0.7;
+			}
+
+			$verticalAngle += $verticalOffset * 0.1;
+			$horizontalAngle += $horizontalOffset * 0.1;
+			$verticalOffset *= 0.9;
+			$horizontalOffset *= 0.75;
+			$verticalOffset += ($random->nextFloat() - $random->nextFloat()) * $random->nextFloat() * 2;
+			$horizontalOffset += ($random->nextFloat() - $random->nextFloat()) * $random->nextFloat() * 4;
+
+			if(!$lastNode){
+				if($startingNode == $intersectionMode and $horizontalScale > 1 and $nodeAmount > 0){
+					$this->generateCaveBranch($level, $chunk, $target, $random->nextFloat() * 0.5 + 0.5, 1, $horizontalAngle - pi() / 2, $verticalAngle / 3, $startingNode, $nodeAmount, new Random($random->nextInt()));
+					$this->generateCaveBranch($level, $chunk, $target, $random->nextFloat() * 0.5 + 0.5, 1, $horizontalAngle - pi() / 2, $verticalAngle / 3, $startingNode, $nodeAmount, new Random($random->nextInt()));
+					return;
 				}
-				for($y = 127; $y >= 20; $y--){
-					if($chunk->getBlockId($x, $y, $z) == Block::AIR){
-						continue;
-					}
-					if($chunk->getBlockId($x, $y, $z) == Block::WATER or $chunk->getBlockId($x, $y, $z) == Block::STILL_WATER){
-						$hasWater = true;
-						$highest = false;
-						continue;
-					}
-					if($hasWater){
-						$y -= 5;
-						$hasWater = false;
-						continue;
-					}
-					if($cavesGenerate[$x][$z][$y] > 0.35){
-						if($y > 20){
-							$chunk->setBlockId($x, $y, $z, Block::AIR);
-							$highest = $chunk->getHighestBlockAt($x, $z);
-							/*int light = y < highest ? (highest - y < 10 ? highest - y : 1)  : 10;
-							chunk.setBlockSkyLight(x, y, z, light);
-							int bl = 0;
-							if (y < 25) {
-								bl = (25 - y) * 2;
-							}
-							chunk.setBlockLight(x, y, z, bl);*/
-						}else{
-							//LAVA
-							$chunk->setBlockId($x, $y, $z, Block::STILL_LAVA);
-							$chunk->setBlockLight($x, $y + 1, $z, 15);
-						}
 
-					}elseif($highest){
-						if($chunk->getBlockId($x, $y, $z) == Block::DIRT){
-							$chunk->setBlockId($x, $y, $z, Block::GRASS);
+				if($random->nextBoundedInt(4) == 0){
+					continue;
+				}
+			}
+
+			$xOffset = $target->getX() - $middle->getX();
+			$zOffset = $target->getZ() - $middle->getZ();
+			$nodesLeft = $nodeAmount - $startingNode;
+			$offsetHorizontalScale = $horizontalScale + 18;
+
+			if((($xOffset * $xOffset + $zOffset * $zOffset) - $nodesLeft * $nodesLeft) > ($offsetHorizontalScale * $offsetHorizontalScale)){
+				return;
+			}
+
+			if($target->getX() < ($middle->getX() - 16 - $horizontalSize * 2)
+				or $target->getZ() < ($middle->getZ() - 16 - $horizontalSize * 2)
+				or $target->getX() > ($middle->getX() + 16 + $horizontalSize * 2)
+				or $target->getZ() > ($middle->getZ() + 16 + $horizontalSize * 2)
+			){
+				continue;
+			}
+
+			$start = new Vector3(floor($target->getX() - $horizontalSize) - $chunk->getX() - 1, floor($target->getY() - $verticalSize) - 1, floor($target->getZ() - $horizontalSize) - $chunk->getZ() - 1);
+			$end = new Vector3(floor($target->getX() + $horizontalSize) - $chunk->getX() + 1, floor($target->getY() + $verticalSize) + 1, floor($target->getZ() + $horizontalSize) - $chunk->getZ() + 1);
+			$node = new CaveNode($level, $chunk, $start, $end, $target, $verticalSize, $horizontalSize);
+
+			if($node->canPlace()){
+				$node->place();
+			}
+
+			if($lastNode){
+				break;
+			}
+		}
+	}
+
+	private function generateLargeCaveBranch(ChunkManager $level, Vector3 $chunk, Vector3 $target, Random $random){
+		$this->generateCaveBranch($level, $chunk, $target, $random->nextFloat() * 6 + 1, 0.5, 0, 0, -1, -1, $random);
+	}
+}
+
+class CaveNode{
+	/** @var ChunkManager */
+	private $level;
+	/** @var Vector3 */
+	private $chunk;
+	/** @var Vector3 */
+	private $start;
+	/** @var Vector3 */
+	private $end;
+	/** @var Vector3 */
+	private $target;
+	private $verticalSize;
+	private $horizontalSize;
+
+	public function __construct(ChunkManager $level, Vector3 $chunk, Vector3 $start, Vector3 $end, Vector3 $target, $verticalSize, $horizontalSize){
+		$this->level = $level;
+		$this->chunk = $chunk;
+		$this->start = $this->clamp($start);
+		$this->end = $this->clamp($end);
+		$this->target = $target;
+		$this->verticalSize = $verticalSize;
+		$this->horizontalSize = $horizontalSize;
+	}
+
+	private function clamp(Vector3 $pos){
+		return new Vector3(
+			Math::clamp($pos->getFloorX(), 0, 16),
+			Math::clamp($pos->getFloorY(), 1, 120),
+			Math::clamp($pos->getFloorZ(), 0, 16)
+		);
+	}
+
+	public function canPlace(){
+		for($x = $this->start->getFloorX(); $x < $this->end->getFloorX(); $x++){
+			for($z = $this->start->getFloorZ(); $z < $this->end->getFloorZ(); $z++){
+				for($y = $this->end->getFloorY() + 1; $y >= $this->start->getFloorY() - 1; $y--){
+					$blockId = $this->level->getBlockIdAt($this->chunk->getX() + $x, $y, $this->chunk->getZ() + $z);
+					if($blockId == Block::WATER or $blockId == Block::STILL_WATER){
+						return false;
+					}
+					if($y != ($this->start->getFloorY() - 1) and $x != ($this->start->getFloorX()) and $x != ($this->end->getFloorX() - 1) and $z != ($this->start->getFloorZ()) and $z != ($this->end->getFloorZ() - 1)){
+						$y = $this->start->getFloorY();
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	public function place(){
+		for($x = $this->start->getFloorX(); $x < $this->end->getFloorX(); $x++){
+			$xOffset = ($this->chunk->getX() + $x + 0.5 - $this->target->getX()) / $this->horizontalSize;
+			for($z = $this->start->getFloorZ(); $z < $this->end->getFloorZ(); $z++){
+				$zOffset = ($this->chunk->getZ() + $z + 0.5 - $this->target->getZ()) / $this->horizontalSize;
+				if(($xOffset * $xOffset + $zOffset * $zOffset) >= 1){
+					continue;
+				}
+				for($y = $this->end->getFloorY() - 1; $y >= $this->start->getFloorY(); $y--){
+					$yOffset = ($y + 0.5 - $this->target->getY()) / $this->verticalSize;
+					if($yOffset > -0.7 and ($xOffset * $xOffset + $yOffset * $yOffset + $zOffset * $zOffset) < 1){
+						$xx = $this->chunk->getX() + $x;
+						$zz = $this->chunk->getZ() + $z;
+						$blockId = $this->level->getBlockIdAt($xx, $y, $zz);
+						if($blockId == Block::STONE or $blockId == Block::DIRT or $blockId == Block::GRASS){
+							if($y < 10){
+								$this->level->setBlockIdAt($xx, $y, $zz, Block::STILL_LAVA);
+							}else{
+								if($blockId == Block::GRASS and $this->level->getBlockIdAt($xx, $y - 1, $zz) == Block::DIRT){
+									$this->level->setBlockIdAt($xx, $y - 1, $zz, Block::GRASS);
+								}
+								$this->level->setBlockIdAt($xx, $y, $zz, Block::AIR);
+							}
 						}
-						$highest = false;
 					}
 				}
 			}
