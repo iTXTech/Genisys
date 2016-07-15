@@ -25,7 +25,7 @@ use pocketmine\item\enchantment\Enchantment;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\item\Item;
+use pocketmine\item\Item as ItemItem;
 
 class Cow extends Animal{
 	const NETWORK_ID = 11;
@@ -64,8 +64,8 @@ class Cow extends Animal{
 		if($cause instanceof EntityDamageByEntityEvent and $cause->getDamager() instanceof Player){
 			$lootingL = $cause->getDamager()->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
 		}
-		$drops = array(Item::get(Item::RAW_BEEF, 0, mt_rand(1, 3 + $lootingL)));
-		$drops[] = Item::get(Item::LEATHER, 0, mt_rand(0, 2 + $lootingL));
+		$drops = array(ItemItem::get(ItemItem::RAW_BEEF, 0, mt_rand(1, 3 + $lootingL)));
+		$drops[] = ItemItem::get(ItemItem::LEATHER, 0, mt_rand(0, 2 + $lootingL));
 		//TODO: add judgement for Steak
 		/*if ($this->lastDamageCause instanceof EntityDamageByEntityEvent and $this->lastDamageCause->getEntity() instanceof Player) {
 			$drops[] = ItemItem::get(ItemItem::LEATHER, 0, mt_rand(0,2));
