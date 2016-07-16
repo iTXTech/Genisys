@@ -133,11 +133,8 @@ class BaseTransaction implements Transaction{
 			
 		}elseif($this->sourceItem->deepEquals($this->targetItem)){ //Same item, change of count
 			$item = clone $this->sourceItem;
-		
 			$countDiff = $this->targetItem->getCount() - $this->sourceItem->getCount();
-			
 			$item->setCount(abs($countDiff));
-			echo "Slot count changed by ".$countDiff."\n";
 			
 			if($countDiff < 0){	//Count decreased
 				return ["in" => null,

@@ -25,7 +25,7 @@ interface TransactionQueue{
 	
 	function getTransactions();
 	
-	function getInventories();
+	//function getInventories();
 	
 	function isExecuting();
 	
