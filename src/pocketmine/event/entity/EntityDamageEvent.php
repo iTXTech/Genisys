@@ -62,7 +62,7 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 
 	private $cause;
 	private $EPF = 0;
-	private $MaxEnchantLevel = 0;
+	private $fireProtectL = 0;
 	/** @var array */
 	private $modifiers;
 	private $ratemodifiers = [];
@@ -147,9 +147,9 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 					foreach($this->use_armors as  $i){
 						if($i->isArmor()){
 							$this->EPF += $i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_PROTECTION);
+							$this->fireProtectL = max($this->fireProtectL, $i->getEnchantmentLevel(Enchantment::TYPE_ARMOR_FIRE_PROTECTION));
 							if($spe_Prote !== null){
 								$this->EPF += 2 * $i->getEnchantmentLevel($spe_Prote);
-								$this->MaxEnchantLevel = max($this->MaxEnchantLevel, $i->getEnchantmentLevel($spe_Prote));
 							}
 						}
 					}
@@ -280,10 +280,10 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 	}
 
 	/**
-	 * @return Int $MaxEnchantLevel
+	 * @return Int $fireProtectL
 	 */
-	public function getMaxEnchantLevel(){
-		return $this->MaxEnchantLevel;
+	public function getFireProtectL(){
+		return $this->fireProtectL;
 	}
 
 	/**

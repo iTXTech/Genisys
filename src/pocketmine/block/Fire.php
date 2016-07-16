@@ -74,7 +74,7 @@ class Fire extends Flowable{
 			if($entity->attack($ev->getFinalDamage(), $ev) === true){
 				$ev->useArmors();
 			}
-			$ProtectL = $ev->getMaxEnchantLevel();
+			$ProtectL = $ev->getFireProtectL();
 		}
 
 		$ev = new EntityCombustByBlockEvent($this, $entity, 8, $ProtectL);
