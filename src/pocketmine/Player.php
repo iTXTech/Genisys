@@ -2113,65 +2113,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		return -1;
 	}
-	
-	public function handleInventoryChange(Inventory $inventory, $slot, Item $newItem, Item $oldItem){
-		if($newItem->getCount() > $newItem->getMaxStackSize() or $newItem->getCount() < 0){
-			$this->inventory->sendContents($this);
-		}
-		if($newItem != $oldItem and count($this->windowIndex) > 0){ 
-			//Some inventory change has taken place, handle it, but only if there are windows open. -Fixes problems with picking items up- nope
-			if($newItem->getId() === Item::AIR and $oldItem->getId() !== Item::AIR){ //Selected a whole slot
-				$this->craftingInventory->addItem($oldItem);
-				$inventory->clear($slot);
-			}elseif($newItem->deepEquals($oldItem)){ //Slot count changed
-				if($newItem->getCount() > $oldItem->getCount()){ //Slot count increased
-					$amountAdded = $newItem->getCount() - $oldItem->getCount();
-					$itemsAdded = clone $newItem;
-					$itemsAdded->setCount($amountAdded);
-					if(!$this->craftingInventory->contains($itemsAdded)){
-						//Illegal action: player is attempting to place more items than they have.
-						//Set the item count back to what it was before.
-						$inventory->setItem($slot, $oldItem);
-						return;
-					}else{
-						$this->craftingInventory->removeItem($itemsAdded);
-						$inventory->setItem($slot, $newItem);
-					}
-				}else{
-					//Slot count decreased or stayed the same
-					$amountTaken = $oldItem->getCount() - $newItem->getCount();
-					if($amountTaken < 1){
-						//Somehow the slot count didn't change
-						$inventory->setItem($slot, $oldItem);
-						return;
-					}
-					$itemsTaken = clone $newItem;
-					$itemsTaken->setCount($amountTaken);
-					$this->craftingInventory->addItem($itemsTaken);
-					$inventory->setItem($slot, $newItem);
-				}
-				
-			}elseif($newItem->getId() !== Item::AIR and $oldItem->getId() === Item::AIR){ //Added a full slot
-				if(!$this->craftingInventory->contains($newItem)){ //Trying to add a slot that isn't in the crafting inventory
-					$inventory->setItem($slot, $oldItem);
-					return;
-				}
-				$this->craftingInventory->removeItem($newItem);
-				$inventory->setItem($slot, $newItem);
-			}elseif(!$newItem->deepEquals($oldItem)){ //Swapped a slot or slot changed
-				if($oldItem->deepEquals($newItem, false)){ //Durability change
-					return;
-				}
-				if(!$this->craftingInventory->contains($newItem)){ //Trying to place an item that's not in the crafting inventory
-					$inventory->setItem($slot, $oldItem);
-					return;
-				}else{ //Swap the slot
-					$this->craftingInventory->addItem($oldItem);
-					$inventory->setItem($slot, $newItem);
-				}
-			}
-		}
-	}
 
 	protected function processLogin(){
 		if(!$this->server->isWhitelisted(strtolower($this->getName()))){
@@ -3714,43 +3655,31 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				if($packet->slot < 0){
 					break;
 				}
-				var_dump($packet);
+
 				if($packet->windowid === 0){ //Our inventory
-					echo "Transferring items in this inventory\n";
 					if($packet->slot >= $this->inventory->getSize()){
-						
 						break;
 					}
-					/*if($this->isCreative()){
-						if(Item::getCreativeItemIndex($packet->item) !== -1){
-							//This is bad. This will be done in the BaseTransaction anyway, all this will do is cause more bugs.
-							//$this->inventory->setItem($packet->slot, $packet->item);
-							
-							
-							$this->inventory->setHotbarSlotIndex($packet->slot, $packet->slot); //links $hotbar[$packet->slot] to $slots[$packet->slot]
-						}
-					}*/
 					$transaction = new BaseTransaction($this->inventory, $packet->slot, $this->inventory->getItem($packet->slot), $packet->item);
 				}elseif($packet->windowid === ContainerSetContentPacket::SPECIAL_ARMOR){ //Our armor
-					echo "Changing armour slots\n";
-					
 					if($packet->slot >= 4){
 						break;
 					}
 
 					$transaction = new BaseTransaction($this->inventory, $packet->slot + $this->inventory->getSize(), $this->inventory->getArmorItem($packet->slot), $packet->item);
 				}elseif(isset($this->windowIndex[$packet->windowid])){ //Other type of inventory window
-					echo "Transfer for other inventory type\n";
-					
+				
+					//TODO: Make Anvils use the floating inventory. They do not currently function on Win10.
+				
 					$this->craftingType = 0;
 					$inv = $this->windowIndex[$packet->windowid];
 
 					/** @var $packet \pocketmine\network\protocol\ContainerSetSlotPacket */
 					if($inv instanceof EnchantInventory and $packet->item->hasEnchantments()){
 						$inv->onEnchant($this, $inv->getItem($packet->slot), $packet->item);
-					}
-
-					if($inv instanceof AnvilInventory){
+						
+					}elseif($inv instanceof AnvilInventory){
+						
 						if($packet->slot == 2){
 							if($packet->item->getId() != Item::AIR){
 								$this->anvilItem = $packet->item;
@@ -3771,19 +3700,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					//$transaction = new BaseTransaction($this->inventory, $packet->slot, $this->inventory->getItem($packet->slot), $packet->item);
 				}
 				
-				if($transaction->getSourceItem()->deepEquals($transaction->getTargetItem(), true, true, true)){ //No changes!
-					//No changes, just a local inventory update sent by the server
-					echo "ignoring slot change\n";
-					break;
-				}
-				
 				if($this->transactionQueue === null){
 					$this->transactionQueue = new SimpleTransactionQueue($this);
 				}
 				
 				//echo "adding a transaction\n";
 				$this->transactionQueue->addTransaction($transaction);
-				echo "Added a transaction concerning slot number ".$packet->slot."\n";
 				/*if($this->currentTransaction === null){
 					echo "creating a new transaction group\n";
 					$this->currentTransaction = new OrderedTransactionGroup($this);

@@ -26,7 +26,8 @@ use pocketmine\item\Item;
 
 class SimpleTransactionQueue implements TransactionQueue{
 	
-	const ALLOWED_RETRIES = 20;
+	const ALLOWED_RETRIES = 2;
+	//const MAX_QUEUE_LENGTH = 3;
 	
 	/** @var Player[] */
 	protected $player = null;
@@ -71,9 +72,9 @@ class SimpleTransactionQueue implements TransactionQueue{
 	/**
 	 * @return Inventory[]
 	 */
-	public function getInventories(){
+	/*public function getInventories(){
 		return $this->inventories;
-	}
+	}*/
 	
 	/**
 	 * @return bool
@@ -90,16 +91,28 @@ class SimpleTransactionQueue implements TransactionQueue{
 	 * Returns true if the addition was successful, false if not.
 	 */
 	public function addTransaction(Transaction $transaction){
-		$change = $transaction->getChange();
+		/*if($this->transactionQueue->count() >= self::MAX_QUEUE_LENGTH){
+			//Max pending transactions already queued.
+			echo "new transaction rejected\n";
+			$transaction->sendSlotUpdate($this->player);
+			return false;
+		}*/
 		
+		$change = $transaction->getChange();
 		if(@$change["in"] instanceof Item or @$change["out"] instanceof Item){
 			$this->transactionQueue->enqueue($transaction);
-			$this->inventories[] = $transaction->getInventory();
+			/*$transaction2 = $this->transactionQueue->pop();
+			if($transaction === $transaction2){
+				echo "Looks like you boxed clever\n";
+			}
+			$this->transactionQueue->enqueue($transaction);
+			//$this->inventories[] = $transaction->getInventory();*/
 			$this->lastUpdate = microtime(true);
-			return true;
 		}else{
-			return false;
+			//Null change detected, nothing needs to be done
 		}
+		
+		return true;
 	}
 	
 	
@@ -111,7 +124,7 @@ class SimpleTransactionQueue implements TransactionQueue{
 	 */
 	private function handleFailure(Transaction $transaction, &$failed){
 		$transaction->addFailure();
-		if($transaction->getFailures() > self::ALLOWED_RETRIES){
+		if($transaction->getFailures() >= self::ALLOWED_RETRIES){
 			//Transaction failed after several retries
 			echo "transaction completely failed\n";
 			$failed[] = $transaction;
@@ -131,23 +144,25 @@ class SimpleTransactionQueue implements TransactionQueue{
 		/*if($this->isExecuting()){
 			echo "execution already in progress\n";
 			return false;
-		}else*/if(microtime(true) - $this->lastUpdate < 0.5){
-			echo "last update time less than 10 ticks ago\n";
+		}else*/if(microtime(true) - $this->lastUpdate < 0.05){
+			//echo "last update time less than 10 ticks ago\n";
 			return false;
 		}
-		//echo "Starting queue execution\n";
 		
 		/** @var Transaction[] */
 		$failed = [];
 		
 		$this->isExecuting = true;
 		
+		$failCount = $this->transactionsToRetry->count();
 		while(!$this->transactionsToRetry->isEmpty()){
 			//Some failed transactions are waiting from the previous execution to be retried
-			echo "adding a transaction to retry\n";
 			$this->transactionQueue->enqueue($this->transactionsToRetry->dequeue());
 		}
 		
+		if($this->transactionQueue->count() !== 0){
+			echo "Batch-handling ".$this->transactionQueue->count()." changes, with ".$failCount." retries.\n";
+		}
 		while(!$this->transactionQueue->isEmpty()){
 			$transaction = $this->transactionQueue->dequeue();
 			
@@ -155,11 +170,10 @@ class SimpleTransactionQueue implements TransactionQueue{
 			$transaction->setSourceItem($transaction->getInventory()->getItem($transaction->getSlot()));
 			
 			$change = $transaction->getChange();
-			//var_dump($change);
+
 			if($change["out"] instanceof Item){
 				if(($transaction->getInventory()->slotContains($transaction->getSlot(), $change["out"]) and $transaction->getInventory()->slotContains($transaction->getSlot(), $transaction->getSourceItem(), true)) or $this->player->isCreative()){
 					//Allow adding nonexistent items to the crafting inventory in creative.
-					echo "out transaction executing\n";
 
 					$this->player->getCraftingInventory()->addItem($change["out"]);
 					$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
@@ -167,25 +181,12 @@ class SimpleTransactionQueue implements TransactionQueue{
 					$transaction->setSuccess();
 					$transaction->sendSlotUpdate($this->player);
 				}else{
-					//Transaction unsuccessful
-					echo "out transaction failed\n";
-					//$transaction->addFailure();
-					//$failed[] = $transaction;
-					//Relocate the transaction to the end of the list
-					/*$transaction->addFailure();
-					if($transaction->getFailures() > 2){
-						$failed[] = $transaction;
-					}else{
-						//Add the transaction to the back of the queue to be retried
-						$this->transactionQueue->enqueue($transaction);
-					}*/
 					$this->handleFailure($transaction, $failed);
 					continue;
 				}
 			}
 			if($change["in"] instanceof Item){
 				if($this->player->getCraftingInventory()->contains($change["in"]) or $this->player->isCreative()){
-					echo "in transaction executing\n";
 					
 					$this->player->getCraftingInventory()->removeItem($change["in"]);
 					$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
@@ -193,36 +194,17 @@ class SimpleTransactionQueue implements TransactionQueue{
 					$transaction->setSuccess();
 					$transaction->sendSlotUpdate($this->player);
 				}else{
-					//Transaction unsuccessful
-					echo "in transaction failed\n";
-					/*$transaction->addFailure();
-					$failed[] = $transaction;
-					//Relocate the transaction to the end of the list
-					$transaction->addFailure();
-					if($transaction->getFailures() > 2){
-						$failed[] = $transaction;
-					}else{
-						//Add the transaction to the back of the queue to be retried
-						$this->transactionQueue->enqueue($transaction);
-					}*/
 					$this->handleFailure($transaction, $failed);
 					continue;
 				}
 			}
 		}
 		$this->isExecuting = false;
-		//echo "Finished queue execution\n";
-		//$this->transactionQueue = null;
+
 		foreach($failed as $f){
-			//No, no no. Only send failed transaction updates to the _instigator_.
-			//Send successful transaction updates to _viewers_
 			$f->sendSlotUpdate($this->player);
 		}
-		/*foreach($this->inventories as $inventory){
-			$inventory->sendContents($inventory->getViewers());
-		}*/
 		
-		//$this->inventories = [];
 		$this->lastExecution = microtime(true);
 		$this->hasExecuted = true;
 
