@@ -36,7 +36,7 @@ use pocketmine\level\generator\biome\BiomeSelector;
 use pocketmine\level\generator\Generator;
 use pocketmine\level\generator\noise\Simplex;
 use pocketmine\level\generator\object\OreType;
-use pocketmine\level\generator\populator\Caves;
+use pocketmine\level\generator\populator\Cave;
 use pocketmine\level\generator\populator\GroundCover;
 use pocketmine\level\generator\populator\Ore;
 use pocketmine\math\Vector3;
@@ -150,7 +150,7 @@ class Normal2 extends Normal{
 		$cover = new GroundCover();
 		$this->generationPopulators[] = $cover;;
 
-		$caves = new Caves();
+		$caves = new Cave();
 		$this->generationPopulators[] = $caves;
 
 		$ores = new Ore();

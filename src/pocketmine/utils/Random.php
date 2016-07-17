@@ -47,6 +47,10 @@ class Random{
 		$this->seed = crc32(pack("N", $seed));
 	}
 
+	public function getSeed(){
+		return $this->seed;
+	}
+
 	/**
 	 * Returns an 31-bit integer (not signed)
 	 *

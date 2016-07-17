@@ -28,9 +28,30 @@ use pocketmine\math\Vector3;
 use pocketmine\math\VectorMath;
 use pocketmine\utils\Random;
 
-class Caves extends Populator{
+class Cave extends Populator{
 	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
-		$chunk = new Vector3($chunkX << 4, 0, $chunkZ << 4);
+		/*$overLap = 8;
+		$firstSeed = $random->nextInt();
+		$secondSeed = $random->nextInt();
+		for($cxx = 0; $cxx < 16; $cxx++){
+			for($czz = 0; $czz < 16; $czz++){
+				$dcx = $chunkX + $cxx;
+				$dcz = $chunkZ + $czz;
+				for($cxxx = -$overLap; $cxxx <= $overLap; $cxxx++){
+					for($czzz = -$overLap; $czzz <= $overLap; $czzz++){
+						$dcxx = $dcx + $cxxx;
+						$dczz = $dcz + $czzz;
+						$this->pop($level, $dcxx, $dczz, $dcx, $dcz, new Random(($dcxx * $firstSeed) ^ ($dczz * $secondSeed) ^ $random->getSeed()));
+					}
+				}
+			}
+		}
+	}
+
+	private function pop(ChunkManager $level, $x, $z, $chunkX, $chunkZ, Random $random){
+		$chunk = new Vector3($x << 4, 0, $z << 4);*/
+		$originChunk = new Vector3($chunkX << 4, 0, $chunkZ << 4);
+		$chunk = $originChunk;
 		if($random->nextBoundedInt(15) != 0){
 			return;
 		}
@@ -42,7 +63,7 @@ class Caves extends Populator{
 			$numberOfSmallCaves = 1;
 
 			if($random->nextBoundedInt(4) == 0){
-				$this->generateLargeCaveBranch($level, $chunk, $target, new Random($random->nextInt()));
+				$this->generateLargeCaveBranch($level, $originChunk, $target, new Random($random->nextInt()));
 				$numberOfSmallCaves += $random->nextBoundedInt(4);
 			}
 
@@ -55,7 +76,7 @@ class Caves extends Populator{
 					$horizontalScale *= $random->nextFloat() * $random->nextFloat() * 3 + 1;
 				}
 
-				$this->generateCaveBranch($level, $chunk, $target, $horizontalScale, 1, $randomHorizontalAngle, $randomVerticalAngle, 0, 0, new Random($random->nextInt()));
+				$this->generateCaveBranch($level, $originChunk, $target, $horizontalScale, 1, $randomHorizontalAngle, $randomVerticalAngle, 0, 0, new Random($random->nextInt()));
 			}
 		}
 	}
@@ -207,7 +228,7 @@ class CaveNode{
 					if($yOffset > -0.7 and ($xOffset * $xOffset + $yOffset * $yOffset + $zOffset * $zOffset) < 1){
 						$xx = $this->chunk->getX() + $x;
 						$zz = $this->chunk->getZ() + $z;
-						$blockId = $this->level->getBlockIdAt($xx, $y, $zz);
+						$blockId = $this->level->getBlockIdAt($xx, $y, $zz);echo "$xx, $y, $zz $blockId \n";
 						if($blockId == Block::STONE or $blockId == Block::DIRT or $blockId == Block::GRASS){
 							if($y < 10){
 								$this->level->setBlockIdAt($xx, $y, $zz, Block::STILL_LAVA);
