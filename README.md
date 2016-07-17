@@ -43,7 +43,8 @@ Installation instructions can be found in the [wiki](https://github.com/iTXTech/
 * Our leaders are **@ishitatsuyuki** and **@jasonczc**
 
 ### License
-Most of the code in this repository was written by the PocketMine team and is licensed under GPLv3. 
+Most of the code in this repository was written by the PocketMine team and is licensed under GPLv3.
+
 **NOTE:** Some AI is based on **proprietary code** from **@Zzm317**'s MyOwnWorld (used by permission of the author). Copying of such code is prohibited without the original author's approval.
 
 ### Official Development Documentation
