@@ -87,16 +87,7 @@ enchantment:
  #Bật/tắt nếu muốn đếm sách trong tủ sách, có thể gây server lag
  #Nếu để false, server sẽ tự động đếm từ (0~15)
  count-bookshelf: false
-
-enchantment:
- #Choose if anvil is allowed
- enable-anvil: true
- #Choose if EnchantingTable is allowed
- enable-enchanting-table: true
- #Choose if to count bookshelves, may cause server lag.
- #If this option is false, server will use a random count (0~15)
- count-bookshelf: false
-
+ 
 redstone:
  ##########################################
  ###Bật/tắt nếu muốn thêm chế độ đá đỏ###
