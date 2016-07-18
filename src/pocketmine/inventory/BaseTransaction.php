@@ -36,6 +36,8 @@ class BaseTransaction implements Transaction{
 	/** @var float */
 	protected $creationTime;
 	/** @var int */
+	protected $transactionType = Transaction::TYPE_NORMAL;
+	/** @var int */
 	protected $failures = 0;
 	/** @var bool */
 	protected $wasSuccessful = false;
@@ -46,12 +48,13 @@ class BaseTransaction implements Transaction{
 	 * @param Item|null		 $sourceItem
 	 * @param Item      	 $targetItem
 	 */
-	public function __construct(Inventory $inventory, $slot, Item $sourceItem, Item $targetItem){
+	public function __construct($inventory, $slot, $sourceItem, Item $targetItem, $transactionType = Transaction::TYPE_NORMAL){
 		$this->inventory = $inventory;
 		$this->slot = (int) $slot;
-		$this->sourceItem = clone $sourceItem;
+		$this->sourceItem = ($sourceItem instanceof Item? clone $sourceItem: null);
 		$this->targetItem = clone $targetItem;
 		$this->creationTime = microtime(true);
+		$this->transactionType = $transactionType;
 	}
 
 	public function getCreationTime(){
@@ -98,6 +101,10 @@ class BaseTransaction implements Transaction{
 		$this->wasSuccessful = $value;
 	}
 	
+	public function getTransactionType(){
+		return $this->transactionType;
+	}
+	
 	/**
 	 * @param Player $source
 	 *
@@ -108,10 +115,18 @@ class BaseTransaction implements Transaction{
 	public function sendSlotUpdate(Player $source){
 		//If the transaction was successful, send updates _only_ to non-instigators
 		//If it failed, send updates _only_ to the instigator.
+		if($this->getTransactionType() === Transaction::TYPE_DROP_ITEM){
+			//Do not send updates for drop item transactions as there is nothing to update
+			return;
+		}
 		$targets = [];
 		if($this->wasSuccessful){
 			$targets = $this->getInventory()->getViewers();
-			unset($targets[spl_object_hash($source)]); //Remove the source player from the list of players to update
+			foreach($targets as $hash => $t){
+				if($t === $source){
+					unset($targets[$hash]); //Remove the source player from the list of players to update
+				}
+			}
 		}else{
 			$targets = [$source];
 		}
@@ -126,13 +141,17 @@ class BaseTransaction implements Transaction{
 	 * ]
 	 */
 	public function getChange(){
+		if($this->getTransactionType() === Transaction::TYPE_DROP_ITEM){
+			return ["in" => $this->getTargetItem(),
+					"out" => null];
+		}
 		
 		if($this->sourceItem->deepEquals($this->targetItem, true, true, true)){
 			//This should never happen, somehow a change happened where nothing changed
 			return null;
 			
 		}elseif($this->sourceItem->deepEquals($this->targetItem)){ //Same item, change of count
-			$item = clone $this->sourceItem;
+			$item = $this->getSourceItem();
 			$countDiff = $this->targetItem->getCount() - $this->sourceItem->getCount();
 			$item->setCount(abs($countDiff));
 			
@@ -153,22 +172,22 @@ class BaseTransaction implements Transaction{
 			//Slot emptied
 			//return the item removed
 			return ["in" => null,
-					"out" => clone $this->sourceItem];
+					"out" => $this->getSourceItem()];
 			
 		}elseif($this->sourceItem->getId() === Item::AIR and $this->targetItem->getId() !== Item::AIR){
 			//Slot filled with a new item (item added)
-			return ["in" => clone $this->targetItem,
+			return ["in" => $this->getTargetItem(),
 					"out" => null];
 
-		}elseif(!$this->sourceItem->deepEquals($this->targetItem, false) and $this->sourceItem->canBeDamaged()){
+		}elseif($this->sourceItem->deepEquals($this->targetItem, false) and $this->sourceItem->canBeDamaged()){
 			//Tool/armour damage change, no inventory change to speak of (not really)
 			//BUG: Swapping two of the same tool with different damages will cause the second one to be lost. This will need fixing.
 			return null;
 			
 		}else{
 			//Some other slot change - an item swap or a non-tool/armour meta change
-			return ["in" => clone $this->targetItem, 
-					"out" => clone $this->sourceItem];
+			return ["in" => $this->getTargetItem(), 
+					"out" => $this->getSourceItem()];
 		}
 		//Don't remove this comment until you're sure there's nothing missing.
 	}

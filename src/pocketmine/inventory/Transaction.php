@@ -24,6 +24,10 @@ namespace pocketmine\inventory;
 use pocketmine\item\Item;
 
 interface Transaction{
+	
+	//Transaction type constants
+	const TYPE_NORMAL = 0;
+	const TYPE_DROP_ITEM = 1;
 
 	/**
 	 * @return Inventory

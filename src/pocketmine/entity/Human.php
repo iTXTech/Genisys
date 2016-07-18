@@ -28,6 +28,7 @@ use pocketmine\inventory\CraftingInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\inventory\InventoryType;
 use pocketmine\inventory\PlayerInventory;
+use pocketmine\inventory\SimpleTransactionQueue;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\nbt\NBT;
@@ -56,6 +57,9 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 	
 	/** @var CraftingInventory */
 	protected $craftingInventory;
+	
+	/** @var SimpleTransactionQueue */
+	protected $transactionQueue = null;
 
 	/** @var UUID */
 	protected $uuid;
@@ -259,6 +263,15 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 	
 	public function getCraftingInventory(){
 		return $this->craftingInventory;
+	}
+	
+	public function getTransactionQueue(){
+		//Is creating the transaction queue ondemand a good idea? I think only if it's destroyed afterwards. hmm...
+		if($this->transactionQueue === null){
+			//Potential for crashes here if a plugin attempts to use this, say for an NPC plugin or something...
+			$this->transactionQueue = new SimpleTransactionQueue($this);
+		}
+		return $this->transactionQueue;
 	}
 
 	protected function initEntity(){
