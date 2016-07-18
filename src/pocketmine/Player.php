@@ -92,11 +92,12 @@ use pocketmine\inventory\EnchantInventory;
 use pocketmine\inventory\FurnaceInventory;
 use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
-//use pocketmine\inventory\OrderedTransactionGroup;
 use pocketmine\inventory\PlayerInventory;
 use pocketmine\inventory\ShapedRecipe;
 use pocketmine\inventory\ShapelessRecipe;
 //use pocketmine\inventory\SimpleTransactionGroup;
+use pocketmine\inventory\Transaction;
+use pocketmine\inventory\transaction\DropItemTransaction;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\FoodSource;
 use pocketmine\item\Item;
@@ -205,9 +206,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public $blocked = false;
 	public $achievements = [];
 	public $lastCorrect;
-	
-	/** @var SimpleTransactionQueue */
-	protected $transactionQueue = null;
 	
 	//protected $currentTransaction = null;
 	
@@ -1998,8 +1996,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->foodTick++;
 				}
 			}
-			if($this->transactionQueue !== null){
-				$this->transactionQueue->execute();
+			if($this->getTransactionQueue() !== null){
+				$this->getTransactionQueue()->execute();
 			}
 		}
 
@@ -3253,110 +3251,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				if(($this->isCreative() and $this->server->limitedCreative)){
-					//Sending contents here is utterly pointless.
-					//$this->inventory->sendContents($this);
 					break;
 				}
 				
-				
-				/*$slot = $this->inventory->first($packet->item);
-				if($slot == -1){
-					$this->inventory->sendContents($this);
-					break;
-				}*/				
-				
-				//TODO: Throw out all this mess and handle it in transaction queue instead				
-				$replacementItem = Item::get(Item::AIR, 0, 1);
-				$droppedItem = null;
-				if($this->craftingInventory->contains($packet->item)){
-					//We're okay to go ahead and drop as Desktop GUI style
-					//We're dropping an item that we've clicked on and picked up.
-					echo "Dropped an item from the crafting inventory\n";
-					$droppedItem = $packet->item;
-					//$this->craftingInventory->remove($droppedItem);
-					$replacementItem = null;					
-				}else{
-					//Crafting inventory doesn't contain the item we are trying to drop
-					//This means we're trying to drop our held item slot, or at least part
-					//of it.
-					$chosenSlot = clone $this->inventory->getItemInHand();
-					$chosenSlotIndex = $this->inventory->getHeldItemIndex();
-					if(!$chosenSlot->deepEquals($packet->item)){
-						/*
-						 * Player tried to drop something that wasn't the same as their held item
-						 * You can do this on PE, as you can drop items directly from the hotbar on PE
-						 * without actually having to hold them.
-						 *
-						 * There's no foolproof way to do this. If there's multiple identical slots in the hotbar
-						 * it will choose the first one.
-						 *
-						 * Actually, there _is_ a way to do this properly, but it requires DropItem packets to be
-						 * correctly paired with the relevant ContainerSetSlot packets when dropping items. I knew
-						 * there had to be _some_ way of doing it.
-						 */
-						
-						$chosenSlot = null;
-						foreach($this->inventory->getHotbar() as $index){
-							if($this->inventory->getItem($index)->deepEquals($packet->item, true, true, true)){
-								$chosenSlot = $this->inventory->getItem($index);
-								$chosenSlotIndex = $index;
-								break;
-							}
-						}
-						if($chosenSlot === null){
-							echo "Player attempted to drop a wrong item\n";
-							$this->inventory->sendContents($this);
-							break;
-						}
-					}
-					
-					if($chosenSlot->getCount() !== $packet->item->getCount()){
-						//Player is trying to drop part of a slot
-						$remaining = $chosenSlot->getCount() - $packet->item->getCount();
-						if($remaining < 0){
-							//Again, should be impossible
-							//Client trying to drop more of an item than they are holding
-							echo "Player attempted to drop more of an item than they have\n";
-							$this->inventory->sendContents($this);
-							break;
-						}else{
-							echo "Player dropping part of a held slot\n";
-							$chosenSlot->setCount($remaining);
-							$droppedItem = $packet->item;
-							$replacementItem = $chosenSlot;
-						}
-					}else{
-						//Dropping the entire held slot
-						echo "Dropping a whole held slot\n";
-						$droppedItem = $chosenSlot;
-					}
-				}
-				if($droppedItem === null){
-					//No idea when or why this would ever happen, but okay...
-					echo "Dropped item was null, breaking\n";
-					$this->inventory->sendContents($this);
-					break;
-				}
-				$ev = new PlayerDropItemEvent($this, $droppedItem);	
-				$this->server->getPluginManager()->callEvent($ev);
-				if($ev->isCancelled()){
-					$this->inventory->sendSlot($slot, $this);
-					break;
-				}
-
-				if($replacementItem !== null){
-					//Not sure this will cut it, may have to actually remove it
-					$this->inventory->setItem($chosenSlotIndex, $replacementItem);
-					//$this->inventory->remove($dropItem);
-				}
-				
-	
-				//$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
-				$motion = $this->getDirectionVector()->multiply(0.4);
-
-				$this->level->dropItem($this->add(0, 1.3, 0), $droppedItem, $motion, 40);
-
-				$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
+				$this->getTransactionQueue()->addTransaction(new DropItemTransaction($packet->item));
 				break;
 			case ProtocolInfo::TEXT_PACKET:
 				if($this->spawned === false or !$this->isAlive()){
@@ -3413,8 +3311,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				//This should never be needed when these changes are stabilized
 				//Drop the contents of the floating inventory
 				foreach($this->getCraftingInventory()->getContents() as $item){
-					$this->level->dropItem($this, $item);
-					$this->getCraftingInventory()->remove($item);
+					$this->getTransactionQueue()->addTransaction(new DropItemTransaction($item));
 				}
 				break;
 
@@ -3705,12 +3602,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					//$transaction = new BaseTransaction($this->inventory, $packet->slot, $this->inventory->getItem($packet->slot), $packet->item);
 				}
 				
-				if($this->transactionQueue === null){
-					$this->transactionQueue = new SimpleTransactionQueue($this);
-				}
-				
 				//echo "adding a transaction\n";
-				$this->transactionQueue->addTransaction($transaction);
+				$this->getTransactionQueue()->addTransaction($transaction);
 				/*if($this->currentTransaction === null){
 					echo "creating a new transaction group\n";
 					$this->currentTransaction = new OrderedTransactionGroup($this);
@@ -3831,6 +3724,39 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		return false;
+	}
+	
+	/**
+	 * @param Item $item
+	 *
+	 * Drops the specified item in front of the player.
+	 */
+	public function dropItem(Item $item){
+		if($this->spawned === false or $this->blocked === true or !$this->isAlive()){
+			return;
+		}
+		
+		if(($this->isCreative() and $this->server->limitedCreative) or $this->isSpectator()){
+			//Ignore for limited creative
+			return;
+		}
+		
+		if($item->getId() === Item::AIR or $item->getCount() < 1){
+			//Ignore dropping air or items with bad counts
+			return;
+		}
+		
+		$ev = new PlayerDropItemEvent($this, $item);	
+		$this->server->getPluginManager()->callEvent($ev);
+		if($ev->isCancelled()){
+			return;
+		}
+		
+		$motion = $this->getDirectionVector()->multiply(0.4);
+
+		$this->level->dropItem($this->add(0, 1.3, 0), $item, $motion, 40);
+
+		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 	}
 
 	/**
