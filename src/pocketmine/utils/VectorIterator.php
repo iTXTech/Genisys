@@ -58,6 +58,11 @@ class VectorIterator implements \Iterator{
 	private $thirdFace;
 
 	public function __construct(ChunkManager $level, Vector3 $from, Vector3 $to){
+		if($from->equals($to)){
+			$this->end = true;
+			$this->currentBlock = -1;
+			return;
+		}
 		$direction = $to->subtract($from)->normalize();
 		$maxDistance = $from->distance($to);
 		$this->level = $level;
