@@ -13,6 +13,8 @@ GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.
 
 ### Downloads
 You can get a prebuilt phar from [GitLab](https://gitlab.com/itxtech/genisys/pipelines?scope=branches).
+**The Master branch is the only officially supported branch.**
+_All other branches are in testing and will contain errors and issues not present in the latest Master release._
 
 ### Installation
 Installation instructions can be found in the [wiki](https://github.com/iTXTech/Genisys/wiki).
