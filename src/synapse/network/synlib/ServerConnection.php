@@ -26,7 +26,6 @@ use pocketmine\utils\Binary;
 class ServerConnection{
 
 	private $receiveBuffer = "";
-	private $sendBuffer = "";
 	/** @var resource */
 	private $socket;
 	private $ip;
@@ -107,10 +106,6 @@ class ServerConnection{
 				if($data != ""){
 					$this->receiveBuffer .= $data;
 				}
-				if($this->sendBuffer != ""){
-					@socket_write($this->socket->getSocket(), $this->sendBuffer);
-					$this->sendBuffer = "";
-				}
 			}
 		}else{
 			if((($time = microtime(true)) - $this->lastCheck) >= 3){//re-connect
@@ -163,7 +158,7 @@ class ServerConnection{
 	}
 
 	public function writePacket($data){
-		$this->sendBuffer .= Binary::writeInt(strlen($data)) . $data;
+		@socket_write($this->socket->getSocket(), Binary::writeInt(strlen($data)) . $data);
 	}
 
 }
