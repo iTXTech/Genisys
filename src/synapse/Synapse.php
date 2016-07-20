@@ -159,7 +159,7 @@ class Synapse{
 		return $this->isMainServer;
 	}
 
- 	public void broadcastPacket(array $players, DataPacket $packet, $direct = false){
+ 	public function broadcastPacket(array $players, DataPacket $packet, $direct = false){
  		$packet->encode();
 		$pk = new BroadcastPacket();
  		$pk->direct = direct;
