@@ -70,8 +70,10 @@ class ServerConnection{
 
 	private function tick(){
 		$this->update();
-		while(($data = $this->readPacket()) !== null){
-			$this->server->pushThreadToMainPacket($data);
+		if(($data = $this->readPacket()) !== null){
+			foreach($data as $pk){
+				$this->server->pushThreadToMainPacket($pk);
+			}
 		}
 		while(strlen($data = $this->server->readMainToThreadPacket()) > 0){
 			$this->writePacket($data);
@@ -133,33 +135,26 @@ class ServerConnection{
 	}
 
 	public function readPacket(){
-		$end = explode(self::MAGIC_BYTES, $this->receiveBuffer, 2);//用MAGIC_BYTES分割缓存，仅分割成两个
-		if(count($end) <= 2){//如果存在两个及以下（废话）
-			if(count($end) == 1){//如果只有一个
-				if(strstr($end[0], self::MAGIC_BYTES)){//判断是否为MAGIC_BYTES结尾，是的话就是一个完整的包
-					$this->receiveBuffer = "";//清空缓存
-				}else{
-					return null;
-				}
-			}else{
-				$this->receiveBuffer = $end[1];//否则剩余缓存为数组的第一个成员
+		$packets = [];
+		if($this->receiveBuffer !== ""){
+			$len = strlen($this->receiveBuffer);
+			$offset = 0;
+			while($offset < $len){
+				$pkLen = Binary::readInt(substr($this->receiveBuffer, $offset, 4));
+				$offset += 4;
+				$buf = substr($this->receiveBuffer, $offset, $pkLen);
+				$offset += $pkLen;
+				
+				$packets[] = $buf;
 			}
-			$buffer = $end[0];
-			if(strlen($buffer) < 4){//如果长度小于4
-				return null;
-			}
-			$len = Binary::readLInt(substr($buffer, 0, 4));//开头四个字节是包长度
-			$buffer = substr($buffer, 4);//截取剩余的缓存，长度后面的都是包的内容了
-			if($len != strlen($buffer)){//校验长度
-				throw new \Exception("Wrong packet $buffer");
-			}
-			return $buffer;
 		}
-		return null;
+		
+		$this->receiveBuffer = "";
+		return $packets;
 	}
 
 	public function writePacket($data){
-		$this->sendBuffer .= Binary::writeLInt(strlen($data)) . $data . self::MAGIC_BYTES;
+		$this->sendBuffer .= Binary::writeInt(strlen($data)) . $data;
 	}
 
 }
