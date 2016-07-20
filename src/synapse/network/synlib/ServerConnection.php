@@ -138,6 +138,7 @@ class ServerConnection{
 			$len = strlen($this->receiveBuffer);
 			$offset = 0;
 			while($offset < $len){
+				if($offset > $len - 4) break;
 				$pkLen = Binary::readInt(substr($this->receiveBuffer, $offset, 4));
 				$offset += 4;
 				
