@@ -134,20 +134,30 @@ class ServerConnection{
 
 	public function readPacket(){
 		$packets = [];
-		if($this->receiveBuffer !== ""){
+		if($this->receiveBuffer !== "" && strlen($this->receiveBuffer) > 0){
 			$len = strlen($this->receiveBuffer);
 			$offset = 0;
 			while($offset < $len){
 				$pkLen = Binary::readInt(substr($this->receiveBuffer, $offset, 4));
 				$offset += 4;
-				$buf = substr($this->receiveBuffer, $offset, $pkLen);
-				$offset += $pkLen;
 				
-				$packets[] = $buf;
+				if($pkLen <= ($len - $offset)) {
+					$buf = substr($this->receiveBuffer, $offset, $pkLen);
+					$offset += $pkLen;
+				
+					$packets[] = $buf;
+				} else {
+					$offset -= 4;
+					break;
+				}
 			}
+			if(offset < len){
+                $this->receiveBuffer = substr($this->receiveBuffer, offset);
+            }else{
+                $this->receiveBuffer = "";
+             }
 		}
 		
-		$this->receiveBuffer = "";
 		return $packets;
 	}
 
