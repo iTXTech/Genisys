@@ -24,6 +24,7 @@ namespace synapse;
 use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\Utils;
+use synapse\network\protocol\spp\BroadcastPacket;
 use synapse\network\protocol\spp\ConnectPacket;
 use synapse\network\protocol\spp\DataPacket;
 use synapse\network\protocol\spp\DisconnectPacket;
@@ -157,6 +158,17 @@ class Synapse{
 	public function isMainServer() : bool{
 		return $this->isMainServer;
 	}
+
+ 	public void broadcastPacket(array $players, DataPacket $packet, $direct = false){
+ 		$packet->encode();
+		$pk = new BroadcastPacket();
+ 		$pk->direct = direct;
+		$pk->payload = $packet->getBuffer();
+ 		foreach($players as $player){
+			$pk->entries[] = $player->getUniqueId();
+ 		}
+ 		$this->sendDataPacket(pk);
+ 	}
 
 	public function getLogger(){
 		return $this->logger;
