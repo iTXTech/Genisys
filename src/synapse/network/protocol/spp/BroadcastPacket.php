@@ -36,8 +36,8 @@ class BroadcastPacket extends DataPacket{
 		$this->putByte($this->direct ? 1 : 0);
 		$this->putShort(count($this->entries));
 		foreach($this->entries as $uuid){
-	  	$this->putUUID($uuid);
-	  }
+			$this->putUUID($uuid);
+		}
 		$this->putString($this->payload);
 	}
 	
@@ -45,7 +45,7 @@ class BroadcastPacket extends DataPacket{
 		$this->direct = ($this->getByte() == 1) ? true : false;
 		$len = $this->getShort();
 		for($i = 0; $i < $len; $i++){
-		  $this->entries[] = $this->getUUID();
+			$this->entries[] = $this->getUUID();
 		}
 		$this->payload = $this->getString();
 	}
