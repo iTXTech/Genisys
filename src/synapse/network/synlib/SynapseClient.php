@@ -182,6 +182,10 @@ class SynapseClient extends Thread{
 		$this->externalQueue[] = $str;
 	}
 
+	public function getInternalQueueSize(){
+		return count($this->internalQueue);
+	}
+
 	public function readThreadToMainPacket(){
 		return $this->externalQueue->shift();
 	}
