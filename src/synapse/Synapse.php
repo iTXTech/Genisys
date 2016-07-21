@@ -167,7 +167,7 @@ class Synapse{
  		foreach($players as $player){
 			$pk->entries[] = $player->getUniqueId();
  		}
- 		$this->sendDataPacket(pk);
+ 		$this->sendDataPacket($pk);
  	}
 
 	public function getLogger(){
