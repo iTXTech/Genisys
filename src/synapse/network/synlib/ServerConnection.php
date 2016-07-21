@@ -155,6 +155,8 @@ class ServerConnection{
                 $this->receiveBuffer = "";
              }
 		}
+
+                $this->receiveBuffer = ""; //Now I know - eeceiveBuffer is empty
 		
 		return $packets;
 	}
