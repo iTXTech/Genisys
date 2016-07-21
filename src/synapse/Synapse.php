@@ -227,7 +227,7 @@ class Synapse{
 						}
 					break;
 					case InformationPacket::TYPE_CLIENT_DATA:
-						$this->clientData = json_decode($pk->message, true);
+						$this->clientData = json_decode($pk->message, true)["clientList"];
 						$this->lastRecvInfo = microtime();
 						break;
 				}
