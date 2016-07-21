@@ -76,6 +76,7 @@ class ServerConnection{
 		while(strlen($data = $this->server->readMainToThreadPacket()) > 0){
 			$this->writePacket($data);
 		}
+                unset($data); //Hmmmmm....... :|
 	}
 
 	public function getHash(){
