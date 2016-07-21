@@ -149,14 +149,12 @@ class ServerConnection{
 					break;
 				}
 			}
-			if(offset < len){
+			if($offset < $len){
                 $this->receiveBuffer = substr($this->receiveBuffer, offset);
             }else{
                 $this->receiveBuffer = "";
              }
 		}
-
-                $this->receiveBuffer = ""; //Now I know - eeceiveBuffer is empty
 		
 		return $packets;
 	}
