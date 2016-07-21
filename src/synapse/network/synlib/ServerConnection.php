@@ -71,6 +71,7 @@ class ServerConnection{
 			foreach($data as $pk){
 				$this->server->pushThreadToMainPacket($pk);
 			}
+                        unset($data); //Hm.... :/
 		}
 		while(strlen($data = $this->server->readMainToThreadPacket()) > 0){
 			$this->writePacket($data);
