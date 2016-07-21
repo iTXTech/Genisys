@@ -305,20 +305,20 @@ class Effect{
 			if($this->id === Effect::SPEED){
 				$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
 				if($modify and $oldEffect !== null){
-					$speed = $attr->getValue() / (1 + 0.2 * $oldEffect->getAmplifier());
+					$speed = $attr->getValue() / (1 + 0.2 * ($oldEffect->getAmplifier() + 1));
 				}else{
 					$speed = $attr->getValue();
 				}
-				$speed *= (1 + 0.2 * $this->amplifier);
+				$speed *= (1 + 0.2 * ($this->amplifier + 1));
 				$attr->setValue($speed);
 			}elseif($this->id === Effect::SLOWNESS){
 				$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
 				if($modify and $oldEffect !== null){
-					$speed = $attr->getValue() / (1 - 0.15 * $oldEffect->getAmplifier());
+					$speed = $attr->getValue() / (1 - 0.15 * ($oldEffect->getAmplifier() + 1));
 				}else{
 					$speed = $attr->getValue();
 				}
-				$speed *= (1 - 0.15 * $this->amplifier);
+				$speed *= (1 - (0.15 * $this->amplifier + 1));
 				$attr->setValue($speed);
 			}
 		}
@@ -340,10 +340,10 @@ class Effect{
 
 			if($this->id === Effect::SPEED){
 				$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-				$attr->setValue($attr->getValue() / (1 + 0.2 * $this->amplifier));
+				$attr->setValue($attr->getValue() / (1 + 0.2 * ($this->amplifier + 1)));
 			}elseif($this->id === Effect::SLOWNESS){
 				$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-				$attr->setValue($attr->getValue() / (1 - 0.15 * $this->amplifier));
+				$attr->setValue($attr->getValue() / (1 - 0.15 * ($this->amplifier + 1)));
 			}
 		}
 
