@@ -175,9 +175,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	const SPECTATOR = 3;
 	const VIEW = Player::SPECTATOR;
 
-	const SURVIVAL_SLOTS = 36;
-	const CREATIVE_SLOTS = 112;
-
 	/** @var SourceInterface */
 	protected $interface;
 
@@ -2483,10 +2480,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			case ProtocolInfo::MOB_EQUIPMENT_PACKET:
 				if($this->spawned === false or !$this->isAlive()){
 					break;
-				}
-				echo "Received MobEquipmentPacket\n";
-				var_dump($packet);
-				
+				}				
 				/**
 				 * Handle hotbar slot remapping
 				 * This is the only time and place when hotbar mapping should ever be changed.
@@ -2494,70 +2488,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				 * issues with Windows 10 Edition Beta.
 				 */
 				$this->inventory->setHeldItemIndex($packet->selectedSlot, false, $packet->slot);
-				
-				
-				
-				//TODO: Rewrite this mess
-				// if($packet->slot === 0x28 or $packet->slot === 0 or $packet->slot === 255){ //0 for 0.8.0 compatibility
-					// $packet->slot = -1; //Air
-				// }else{
-					// $packet->slot -= 9; //Get real block slot
-				// }
-
-				// /** @var Item $item */
-				// $item = null;
-
-				// /*if($this->isCreative()){ //Creative mode match
-					// $item = $packet->item;
-					// $slot = Item::getCreativeItemIndex($item);
-				// }else{*/
-					// $item = $this->inventory->getItem($packet->slot);
-					// $slot = $packet->slot;
-				// //}
-
-				// if($packet->slot === -1){ //Air
-					// if($this->isCreative()){
-						// $found = false;
-						// for($i = 0; $i < $this->inventory->getHotbarSize(); ++$i){
-							// if($this->inventory->getHotbarSlotIndex($i) === -1){
-								// $this->inventory->setHeldItemIndex($i);
-								// $found = true;
-								// break;
-							// }
-						// }
-
-						// if(!$found){ //couldn't find a empty slot (error)
-							// $this->inventory->sendContents($this);
-							// break;
-						// }
-					// }else{
-						// if($packet->selectedSlot >= 0 and $packet->selectedSlot < 9){
-							// $this->inventory->setHeldItemIndex($packet->selectedSlot, false);
-							// $this->inventory->setHeldItemSlot($packet->slot);
-							// $this->inventory->sendHeldItem($this->getViewers());
-						// }else{
-							// $this->inventory->sendContents($this);
-							// break;
-						// }
-					// }
-				// }elseif($item === null or $slot === -1 or !$item->deepEquals($packet->item)){ // packet error or not implemented
-					// $this->inventory->sendContents($this);
-					// break;
-				// }elseif($this->isCreative()){
-					// $this->inventory->setHeldItemIndex($packet->selectedSlot, false);
-					// $this->inventory->setItem($packet->selectedSlot, $item);
-					// $this->inventory->setHeldItemSlot($packet->selectedSlot);
-					// $this->inventory->sendHeldItem($this->getViewers());
-				// }else{
-					// if($packet->selectedSlot >= 0 and $packet->selectedSlot < $this->inventory->getHotbarSize()){
-						// $this->inventory->setHeldItemIndex($packet->selectedSlot, false);
-						// $this->inventory->setHeldItemSlot($slot);
-						// $this->inventory->sendHeldItem($this->getViewers());
-					// }else{
-						// $this->inventory->sendContents($this);
-						// break;
-					// }
-				// }
 
 				$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 				break;

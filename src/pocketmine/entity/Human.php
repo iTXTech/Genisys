@@ -279,7 +279,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		$this->setDataFlag(self::DATA_PLAYER_FLAGS, self::DATA_PLAYER_FLAG_SLEEP, false);
 		$this->setDataProperty(self::DATA_PLAYER_BED_POSITION, self::DATA_TYPE_POS, [0, 0, 0]);
 
-		$this->inventory = new PlayerInventory($this);
+		$inventoryContents = ($this->namedtag->Inventory ?? null);
+		$this->inventory = new PlayerInventory($this, $inventoryContents);
 		
 		//Virtual inventory for desktop GUI crafting
 		$this->craftingInventory = new CraftingInventory($this, InventoryType::get(InventoryType::WORKBENCH));
@@ -297,18 +298,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 
 			$this->uuid = UUID::fromData($this->getId(), $this->getSkinData(), $this->getNameTag());
 		}
-
-		if(isset($this->namedtag->Inventory) and $this->namedtag->Inventory instanceof ListTag){
-			foreach($this->namedtag->Inventory as $item){
-				if($item["Slot"] >= 0 and $item["Slot"] < $this->inventory->getHotbarSize()){ //Hotbar
-					$this->inventory->setHotbarSlotIndex($item["Slot"], isset($item["TrueSlot"]) ? $item["TrueSlot"] : -1);
-				}elseif($item["Slot"] >= 100 and $item["Slot"] < 104){ //Armor
-					$this->inventory->setItem($this->inventory->getSize() + $item["Slot"] - 100, NBT::getItemHelper($item));
-				}else{
-					$this->inventory->setItem($item["Slot"] - $this->inventory->getHotbarSize(), NBT::getItemHelper($item));
-				}
-			}
-		}
+		
+		//TODO: Move this to PlayerInventory
 
 		parent::initEntity();
 
@@ -442,37 +433,25 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		$this->namedtag->Inventory = new ListTag("Inventory", []);
 		$this->namedtag->Inventory->setTagType(NBT::TAG_Compound);
 		if($this->inventory !== null){
+			
+			//Hotbar
 			for($slot = 0; $slot < $this->inventory->getHotbarSize(); ++$slot){
-				$hotbarSlot = $this->inventory->getHotbarSlotIndex($slot);
-				if($hotbarSlot !== -1){
-					$item = $this->inventory->getItem($hotbarSlot);
-					if($item->getId() !== 0 and $item->getCount() > 0){
-						$tag = NBT::putItemHelper($item, $slot);
-						$tag->TrueSlot = new ByteTag("TrueSlot", $hotbarSlot);
-						$this->namedtag->Inventory[$slot] = $tag;
-
-						continue;
-					}
-				}
-
-				$this->namedtag->Inventory[$slot] = new CompoundTag("", [
-					new ByteTag("Count", 0),
-					new ShortTag("Damage", 0),
-					new ByteTag("Slot", $slot),
-					new ByteTag("TrueSlot", -1),
-					new ShortTag("id", 0),
-				]);
+				$inventorySlotIndex = $this->inventory->getHotbarSlotIndex($slot);
+				$item = $this->inventory->getItem($inventorySlotIndex);
+				$tag = NBT::putItemHelper($item, $slot);
+				$tag->TrueSlot = new ByteTag("TrueSlot", $inventorySlotIndex);
+				$this->namedtag->Inventory[$slot] = $tag;
 			}
 
 			//Normal inventory
-			$slotCount = $this->getLevel()->getServer()->inventoryNum + $this->inventory->getHotbarSize();
-			//$slotCount = (($this instanceof Player and ($this->gamemode & 0x01) === 1) ? Player::CREATIVE_SLOTS : Player::SURVIVAL_SLOTS) + $this->inventory->getHotbarSize();
+			$slotCount = $this->inventory->getSize() + $this->inventory->getHotbarSize();
 			for($slot = $this->inventory->getHotbarSize(); $slot < $slotCount; ++$slot){
 				$item = $this->inventory->getItem($slot - $this->inventory->getHotbarSize());
+				//As NBT, real inventory slots are slots 9-44, NOT 0-35
 				$this->namedtag->Inventory[$slot] = NBT::putItemHelper($item, $slot);
 			}
 
-			//Armor
+			//Armour
 			for($slot = 100; $slot < 104; ++$slot){
 				$item = $this->inventory->getItem($this->inventory->getSize() + $slot - 100);
 				if($item instanceof ItemItem and $item->getId() !== ItemItem::AIR){
