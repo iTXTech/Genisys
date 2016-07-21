@@ -209,10 +209,10 @@ abstract class Door extends Transparent implements ElectricalAppliance{
 
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
-			if($this->getSide(0)->getId() === self::AIR and $this->getSide(1) instanceof Door){ //Block underneath the door was broken
+			if($this->getSide(Vector3::SIDE_DOWN)->getId() === self::AIR and $this->getSide(Vector3::SIDE_UP) instanceof Door){ //Block underneath the door was broken
 			
 				$this->getLevel()->setBlock($this, new Air(), false, false);
-				$this->getLevel()->setBlock($this->getSide(1), new Air(), false);
+				$this->getLevel()->setBlock($this->getSide(Vector3::SIDE_UP), new Air(), false);
 				
 				foreach($this->getDrops(Item::get(Item::DIAMOND_PICKAXE)) as $drop){
 					$this->getLevel()->dropItem($this, Item::get($drop[0], $drop[1], $drop[2]));
@@ -227,8 +227,8 @@ abstract class Door extends Transparent implements ElectricalAppliance{
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		if($face === 1){
-			$blockUp = $this->getSide(1);
-			$blockDown = $this->getSide(0);
+			$blockUp = $this->getSide(Vector3::SIDE_UP);
+			$blockDown = $this->getSide(Vector3::SIDE_DOWN);
 			if($blockUp->canBeReplaced() === false or $blockDown->isTransparent() === true){
 				return false;
 			}
@@ -257,12 +257,12 @@ abstract class Door extends Transparent implements ElectricalAppliance{
 
 	public function onBreak(Item $item){
 		if(($this->getDamage() & 0x08) === 0x08){
-			$down = $this->getSide(0);
+			$down = $this->getSide(Vector3::SIDE_DOWN);
 			if($down->getId() === $this->getId()){
 				$this->getLevel()->setBlock($down, new Air(), true);
 			}
 		}else{
-			$up = $this->getSide(1);
+			$up = $this->getSide(Vector3::SIDE_UP);
 			if($up->getId() === $this->getId()){
 				$this->getLevel()->setBlock($up, new Air(), true);
 			}
@@ -278,7 +278,7 @@ abstract class Door extends Transparent implements ElectricalAppliance{
 
 	public function onActivate(Item $item, Player $player = null){
 		if(($this->getDamage() & 0x08) === 0x08){ //Top
-			$down = $this->getSide(0);
+			$down = $this->getSide(Vector3::SIDE_DOWN);
 			if($down->getId() === $this->getId()){
 				$meta = $down->getDamage() ^ 0x04;
 				$this->getLevel()->setBlock($down, Block::get($this->getId(), $meta), true);
