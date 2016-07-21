@@ -71,12 +71,12 @@ class ServerConnection{
 			foreach($data as $pk){
 				$this->server->pushThreadToMainPacket($pk);
 			}
-                        unset($data); //Hm.... :/
+                        $data = null; //Hm.... :/
 		}
 		while(strlen($data = $this->server->readMainToThreadPacket()) > 0){
 			$this->writePacket($data);
 		}
-                unset($data); //Hmmmmm....... :|
+                $data = null; //Hmmmmm....... :|
 	}
 
 	public function getHash(){
@@ -149,14 +149,12 @@ class ServerConnection{
 					break;
 				}
 			}
-			/*if($offset < $len){
-                $this->receiveBuffer = substr($this->receiveBuffer, offset);
+			if($offset < $len){
+                $this->receiveBuffer = substr($this->receiveBuffer, $offset);
             }else{
                 $this->receiveBuffer = "";
-             }*/
+             }
 		}
-
-                $this->receiveBuffer = "";
 		
 		return $packets;
 	}
