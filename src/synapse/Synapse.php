@@ -162,7 +162,7 @@ class Synapse{
  	public function broadcastPacket(array $players, DataPacket $packet, $direct = false){
  		$packet->encode();
 		$pk = new BroadcastPacket();
- 		$pk->direct = direct;
+ 		$pk->direct = $direct;
 		$pk->payload = $packet->getBuffer();
  		foreach($players as $player){
 			$pk->entries[] = $player->getUniqueId();
