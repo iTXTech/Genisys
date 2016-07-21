@@ -26,6 +26,8 @@ use pocketmine\event\entity\EntityArmorChangeEvent;
 use pocketmine\event\entity\EntityInventoryChangeEvent;
 use pocketmine\event\player\PlayerItemHeldEvent;
 use pocketmine\item\Item;
+use pocketmine\nbt\NBT;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\network\protocol\ContainerSetContentPacket;
 use pocketmine\network\protocol\ContainerSetSlotPacket;
 use pocketmine\network\protocol\MobArmorEquipmentPacket;
@@ -39,9 +41,35 @@ class PlayerInventory extends BaseInventory{
 	/** @var int[] */
 	protected $hotbar;
 
-	public function __construct(Human $player){
-		$this->hotbar = range(0, $this->getHotbarSize()-1, 1);
+	public function __construct(Human $player, $contents = null){
+		$this->hotbar = range(0, $this->getHotbarSize() - 1, 1);
 		parent::__construct($player, InventoryType::get(InventoryType::PLAYER));
+		
+		if($contents !== null){
+			if($contents instanceof ListTag){ //Saved data to be loaded into the inventory
+				//TODO: test
+				foreach($contents as $item){
+					if($item["Slot"] >= 0 and $item["Slot"] < $this->getHotbarSize()){ //Hotbar
+						if(isset($item["TrueSlot"])){ //Valid slot was found, change the linkage to this slot
+							$this->hotbar[$item["Slot"]] = $item["TrueSlot"]; //WTF is going on here
+							echo "Linking hotbar slot ".$item["Slot"]." to slot ".$item["TrueSlot"]."\n";
+						}
+						//If TrueSlot is not set, leave the slot index as its default which was filled in above
+						//This only overwrites slot indexes for valid links
+					}elseif($item["Slot"] >= 100 and $item["Slot"] < 104){ //Armor
+						//Goddamn it this is so stupid
+						//Why isn't this just done the way default Minecraft does it? -_-
+						//So much room for inconsistency, it's idiotic
+						//Just do it the way MCPE expects it to be done, and then no problems
+						$this->setItem($this->getSize() + $item["Slot"] - 100, NBT::getItemHelper($item));
+					}else{
+						$this->setItem($item["Slot"] - $this->getHotbarSize(), NBT::getItemHelper($item));
+					}
+				}
+			}else{
+				throw new \InvalidArgumentException("Expecting ListTag, received ".gettype($contents));
+			}
+		}
 	}
 
 	public function getSize(){
@@ -58,7 +86,7 @@ class PlayerInventory extends BaseInventory{
 	 *
 	 * @return int
 	 *
-	 * Returns the index of the inventory slot linked to the specified hotbar slot#
+	 * Returns the index of the inventory slot linked to the specified hotbar slot
 	 */
 	public function getHotbarSlotIndex($index){
 		return ($index >= 0 and $index < $this->getHotbarSize()) ? $this->hotbar[$index] : -1;
@@ -70,7 +98,7 @@ class PlayerInventory extends BaseInventory{
 	 * Changes the linkage of the specified hotbar slot. This should never be done unless it is requested by the client.
 	 */
 	public function setHotbarSlotIndex($index, $slot){
-		trigger_error("Hotbar linkage should never be changed unless requested by the client", E_USER_DEPRECATED);
+		trigger_error("Do not attempt to change hotbar links in plugins!", E_USER_DEPRECATED);
 		/*if ($index >= 0 and $index < $this->getHotbarSize() and $slot >= -1 and $slot < $this->getSize()) {
 			$this->hotbar[$index] = $slot;//calculate has been done by client
 		}*/
@@ -97,8 +125,16 @@ class PlayerInventory extends BaseInventory{
 	public function setHeldItemIndex($hotbarSlotIndex, $sendToHolder = true, $slotMapping = null){
 		if(0 <= $hotbarSlotIndex and $hotbarSlotIndex < $this->getHotbarSize()){
 			$this->itemInHandIndex = $hotbarSlotIndex;
-			if($slotMapping !== null){
-				//Handle a hotbar slot mapping change (for PE)
+			if($slotMapping !== null){ //Handle a hotbar slot mapping change (for PE)
+				//Get the index of the slot in the actual inventory
+				$targetInventorySlot = $slotMapping - $this->getHotbarSize();
+				
+				if(($key = array_search($targetInventorySlot, $this->hotbar)) !== false){
+					//Chosen slot is already linked to a hotbar slot, swap the two slots around.
+					//This will already have been done on the client-side so no changes need to be sent.
+					$this->hotbar[$key] = $this->hotbar[$this->itemInHandIndex];					
+				}
+				
 				$this->hotbar[$this->itemInHandIndex] = $slotMapping - $this->getHotbarSize();
 			}
 			$this->sendHeldItem($this->getHolder()->getViewers());
