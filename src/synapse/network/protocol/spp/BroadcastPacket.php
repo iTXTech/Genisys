@@ -1,5 +1,4 @@
 <?php
-
 /*
  *
  *  _____   _____   __   _   _   _____  __    __  _____
@@ -18,19 +17,37 @@
  * @link https://itxtech.org
  *
  */
-
+ 
 namespace synapse\network\protocol\spp;
 
-class Info{
-	const CURRENT_PROTOCOL = 5;
+use pocketmine\utils\UUID;
 
-	const HEARTBEAT_PACKET = 0x01;
-	const CONNECT_PACKET = 0x02;
-	const DISCONNECT_PACKET = 0x03;
-	const REDIRECT_PACKET = 0x04;
-	const PLAYER_LOGIN_PACKET = 0x05;
-	const PLAYER_LOGOUT_PACKET = 0x06;
-	const INFORMATION_PACKET = 0x07;
-	const TRANSFER_PACKET = 0x08;
-	const BROADCAST_PACKET = 0x09;
+class BroadcastPacket extends DataPacket{
+
+	const NETWORK_ID = Info::BROADCAST_PACKET;
+	
+	/** @var UUID[] */
+	public $entries = [];
+	public $direct;
+	public $payload;
+	
+	public function encode(){
+		$this->reset();
+		$this->putByte($this->direct ? 1 : 0);
+		$this->putShort(count($this->entries));
+		foreach($this->entries as $uuid){
+			$this->putUUID($uuid);
+		}
+		$this->putString($this->payload);
+	}
+	
+	public function decode(){
+		$this->direct = ($this->getByte() == 1) ? true : false;
+		$len = $this->getShort();
+		for($i = 0; $i < $len; $i++){
+			$this->entries[] = $this->getUUID();
+		}
+		$this->payload = $this->getString();
+	}
+	
 }

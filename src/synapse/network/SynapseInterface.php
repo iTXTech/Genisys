@@ -21,6 +21,7 @@
  
 namespace synapse\network;
 
+use synapse\network\protocol\spp\BroadcastPacket;
 use synapse\network\protocol\spp\ConnectPacket;
 use synapse\network\protocol\spp\DataPacket;
 use synapse\network\protocol\spp\DisconnectPacket;
@@ -130,5 +131,6 @@ class SynapseInterface{
 		$this->registerPacket(Info::PLAYER_LOGOUT_PACKET, PlayerLogoutPacket::class);
 		$this->registerPacket(Info::INFORMATION_PACKET, InformationPacket::class);
 		$this->registerPacket(Info::TRANSFER_PACKET, TransferPacket::class);
+		$this->registerPacket(Info::BROADCAST_PACKET, BroadcastPacket::class);
 	}
 }
