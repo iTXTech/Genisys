@@ -55,52 +55,24 @@ Most of the code in this repository was written by the PocketMine team and is li
 [Genisys Official Development Documentation Page](http://docs.mcper.cn/en-US/)
 
 ### Features
-* Performance optimization (Let 100+ players join in a server)
-* Bug fixes in PocketMine-MP
 * Weather
 * Experience
+* Basic redstone functionality (not all components are available or implemented currently.)
+* Nether
+* Rails
 * More Effects
-* Redstone (Button, Lever, Pressure Plate, Redstone Wire, Redstone Torch and more)
-* Nether (Red sky!)
-* Rail & Powered Rail
-* Minecart (doesn't follow rails)
-* Boat
-* More Doors
-* Potions
-* Splash Potions
-* Anvil
+* Potions, Splash Potions and Brewing
 * Better Crafting
-* Better Inventory
-* More Items
 * Hunger (Based on Katana)
 * AI (Based on MOW)
-* More commands
-  - bancid
-  - bancidbyname
-  - banipbyname
-  - biome
-  - extractphar
-  - extractplugin
-  - fill
-  - loadplugin
-  - lvdat
-  - makeplugin
-  - ms
-  - pardoncid
-  - setblock
-  - summon
-  - weather
-  - xp
 * FolderPluginLoader
 * Monster Spawner
 * Item Frame
-* Dispenser and Dropper
-* Colorful Sheep
+* Colourful Sheep
 * Multiple types of Boat, Villager and Rabbit
-* Enchantment
-* Brewing
 * Enchantment effects
-* NOTE: Please edit **genisys.yml** to enable the desired features, such as Redstone, MobAI, Nether, etc.
+
+NOTE: Please edit **genisys.yml** to enable the desired features, such as Redstone, MobAI, Nether, etc.
 
 ### To-Do List
 * Improve Redstone
