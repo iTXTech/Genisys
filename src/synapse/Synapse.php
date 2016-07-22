@@ -243,7 +243,7 @@ class Synapse{
 				if(isset($this->players[$uuid = $pk->uuid->toBinary()])){
 					$this->players[$uuid]->close("", $pk->reason, false);
 					$this->removePlayer($this->players[$uuid]);
-				}
+				} 
 				break;
 		}
 	}
