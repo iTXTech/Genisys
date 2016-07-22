@@ -443,6 +443,10 @@ class Server{
 	public function getPocketMineVersion(){
 		return \pocketmine\VERSION;
 	}
+	
+	public function getFormattedVersion($prefix = ""){
+		return (\pocketmine\VERSION !== ""? $prefix . \pocketmine\VERSION : "");
+	}
 
 	/**
 	 * @return string
@@ -1983,7 +1987,7 @@ class Server{
 
 			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.info", [
 				$this->getName(),
-				$this->getPocketMineVersion(),
+				$this->getFormattedVersion("-"),
 				$this->getCodename(),
 				$this->getApiVersion()
 			]));
