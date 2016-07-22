@@ -2,6 +2,7 @@
 
 ### Advanced Minecraft: Pocket Edition Server
 
+Chat on Mattermost: [Join](https://mattermost.itxtech.org/itxtechnologies/channels/genisys)  
 Chat on Gitter: [![Gitter](https://img.shields.io/gitter/room/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
 IRC: #genisys at freenode
 
