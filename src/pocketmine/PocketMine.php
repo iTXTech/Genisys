@@ -72,6 +72,7 @@ namespace pocketmine {
 	use pocketmine\utils\Utils;
 	use pocketmine\wizard\Installer;
 
+	const VERSION = ""; //will be set by CI to a git hash
 	const API_VERSION = "2.0.0";
 	const CODENAME = "Kyrios";
 	const MINECRAFT_VERSION = "v0.15.0 alpha";
