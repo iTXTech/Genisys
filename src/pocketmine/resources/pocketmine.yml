@@ -153,17 +153,6 @@ anonymous-statistics:
  enabled: true
  host: stats.pocketmine.net
 
-auto-updater:
- enabled: false
- on-update:
-  warn-console: false
-  warn-ops: false
- #Can be development, beta or stable.
- preferred-channel: stable
- #If using a development version, it will suggest changing the channel
- suggest-channels: false
- host: www.pocketmine.net
-
 aliases:
  #Examples:
  #showtheversion: version

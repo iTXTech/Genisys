@@ -36,10 +36,27 @@ class Installer{
 	const DEFAULT_GAMEMODE = 0;
 	const DEFAULT_LEVEL_NAME = "world";
 	const DEFAULT_LEVEL_TYPE = "DEFAULT";
+	
+	const LEVEL_TYPES = [
+		"DEFAULT",
+		"FLAT",
+		"NORMAL",
+		"NORMAL2",
+		"HELL", //nether type, in case anyone wants to generate a blue-skies nether, which actually does look pretty awesome
+		"VOID"
+	];
 
 	private $defaultLang;
 
 	public function __construct(){
+		echo PHP_EOL;
+		echo "  _____   _____   __   _   _   _____  __    __  _____".PHP_EOL;
+		echo " /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/".PHP_EOL;
+		echo " | |     | |__   |   \| | | | | |___   \ \/ /  | |___".PHP_EOL;
+		echo " | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \\".PHP_EOL;
+		echo " | |_| | | |___  | | \  | | |  ___| |   / /     ___| |".PHP_EOL;
+		echo " \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/".PHP_EOL;
+		echo PHP_EOL . PHP_EOL;
 		echo "[*] Genisys set-up wizard\n";
 		echo "[*] Please select a language:\n";
 		foreach(InstallerLang::$languages as $short => $native){
@@ -132,10 +149,10 @@ LICENSE;
 		do{
 			echo "[?] " . $this->lang->level_type . " (" . self::DEFAULT_LEVEL_TYPE . "): ";
 			$type = strtoupper((string) $this->getInput(self::DEFAULT_LEVEL_TYPE));
-			if($type != "FLAT" and $type != "DEFAULT"){
+			if(!in_array($type, self::LEVEL_TYPES)){
 				echo "[!] " . $this->lang->invalid_level_type . "\n";
 			}
-		}while($type != "FLAT" and $type != "DEFAULT");
+		}while(!in_array($type, self::LEVEL_TYPES));
 		$config->set("level-type", $type);
 		
 		/*echo "[*] " . $this->lang->ram_warning . "\n";
