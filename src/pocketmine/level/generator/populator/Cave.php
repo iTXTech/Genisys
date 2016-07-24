@@ -30,11 +30,11 @@ use pocketmine\utils\Random;
 
 class Cave extends Populator{
 	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
-		/*$overLap = 8;
+		$overLap = 8;
 		$firstSeed = $random->nextInt();
 		$secondSeed = $random->nextInt();
-		for($cxx = 0; $cxx < 16; $cxx++){
-			for($czz = 0; $czz < 16; $czz++){
+		for($cxx = 0; $cxx < 1; $cxx++){
+			for($czz = 0; $czz < 1; $czz++){
 				$dcx = $chunkX + $cxx;
 				$dcz = $chunkZ + $czz;
 				for($cxxx = -$overLap; $cxxx <= $overLap; $cxxx++){
@@ -49,9 +49,13 @@ class Cave extends Populator{
 	}
 
 	private function pop(ChunkManager $level, $x, $z, $chunkX, $chunkZ, Random $random){
-		$chunk = new Vector3($x << 4, 0, $z << 4);*/
+		$c = $level->getChunk($x, $z);
+		$oC = $level->getChunk($chunkX, $chunkZ);
+		if($c == null or $oC == null or ($c != null and !$c->isGenerated()) or ($oC != null and !$oC->isGenerated())){
+			return;
+		}
+		$chunk = new Vector3($x << 4, 0, $z << 4);
 		$originChunk = new Vector3($chunkX << 4, 0, $chunkZ << 4);
-		$chunk = $originChunk;
 		if($random->nextBoundedInt(15) != 0){
 			return;
 		}
