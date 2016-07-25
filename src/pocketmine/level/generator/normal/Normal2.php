@@ -150,8 +150,8 @@ class Normal2 extends Normal{
 		$cover = new GroundCover();
 		$this->generationPopulators[] = $cover;;
 
-		$caves = new Cave();
-		$this->generationPopulators[] = $caves;
+		$cave = new Cave();
+		$this->populators[] = $cave;
 
 		$ores = new Ore();
 		$ores->setOreTypes([
