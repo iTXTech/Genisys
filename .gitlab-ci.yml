@@ -6,11 +6,10 @@ stages:
 phar:
   stage: package
   script:
-   - mkdir plugins
    - sed -i "s/const VERSION \?= \?\"\(.*\)\"/const VERSION = \"\1$([ ${CI_BUILD_REF_NAME} != master ] && echo unsupported-)${CI_BUILD_REF:0:7}\"/" src/pocketmine/PocketMine.php
    - sed -i "/GIT_COMMIT/s/0000000000000000000000000000000000000000/${CI_BUILD_REF}/" src/pocketmine/PocketMine.php
    - ./tests/ci.sh
-   - mv plugins/Genisys/Genisys*.phar .
+   - mv plugins/Genisys-DevTools_OUTPUT/Genisys*.phar .
   artifacts:
     paths:
      - Genisys*.phar
