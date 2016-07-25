@@ -24,6 +24,8 @@ settings:
  #Set this approximately to your number of cores.
  #If set to auto, it'll try to detect the number of cores (or use 2)
  async-workers: 4
+ #Enables use of non-production, development builds. WARNING: DO NOT enable this unless you are sure you know what you are doing.
+ enable-testing: false
 
 memory:
  #Global soft memory limit in megabytes. Set to 0 to disable
