@@ -232,7 +232,7 @@ class CaveNode{
 					if($yOffset > -0.7 and ($xOffset * $xOffset + $yOffset * $yOffset + $zOffset * $zOffset) < 1){
 						$xx = $this->chunk->getX() + $x;
 						$zz = $this->chunk->getZ() + $z;
-						$blockId = $this->level->getBlockIdAt($xx, $y, $zz);echo "$xx, $y, $zz $blockId \n";
+						$blockId = $this->level->getBlockIdAt($xx, $y, $zz);
 						if($blockId == Block::STONE or $blockId == Block::DIRT or $blockId == Block::GRASS){
 							if($y < 10){
 								$this->level->setBlockIdAt($xx, $y, $zz, Block::STILL_LAVA);
