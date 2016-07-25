@@ -3149,7 +3149,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					if($target->attack($ev->getFinalDamage(), $ev) === true){
 						$fireAspectL = $item->getEnchantmentLevel(Enchantment::TYPE_WEAPON_FIRE_ASPECT);
 						if($fireAspectL > 0){
-							$fireEv = new EntityCombustByEntityEvent($this, $target, $fireAspectL * 4 - 1, $ev->getFireProtectL());
+							$fireEv = new EntityCombustByEntityEvent($this, $target, $fireAspectL * 4, $ev->getFireProtectL());
 							Server::getInstance()->getPluginManager()->callEvent($fireEv);
 							if(!$fireEv->isCancelled()){
 								$target->setOnFire($fireEv->getDuration());
