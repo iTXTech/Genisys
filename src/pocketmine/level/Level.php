@@ -27,6 +27,7 @@ namespace pocketmine\level;
 use pocketmine\block\Air;
 use pocketmine\block\Beetroot;
 use pocketmine\block\Block;
+use pocketmine\block\BlockIds;
 use pocketmine\block\BrownMushroom;
 use pocketmine\block\Cactus;
 use pocketmine\block\Carrot;
@@ -938,10 +939,10 @@ class Level implements ChunkManager, Metadatable{
 				}
 
 				if($b instanceof Block){
-					$batchPacketList[$top]->records[] = [$b->x, $b->z, $b->y, $b->getId(), $b->getDamage(), $first ? $flags : UpdateBlockPacket::FLAG_NONE];
+					$batchPacketList[$top]->records[] = [$b->x, $b->z, $b->y, (in_array($b->getId(), new ReflectionClass(BlockIds::class)->getConstants()) ? $b->getId() : 248), $b->getDamage(), $first ? $flags : UpdateBlockPacket::FLAG_NONE];
 				}else{
 					$fullBlock = $this->getFullBlock($b->x, $b->y, $b->z);
-					$batchPacketList[$top]->records[] = [$b->x, $b->z, $b->y, $fullBlock >> 4, $fullBlock & 0xf, $first ? $flags : UpdateBlockPacket::FLAG_NONE];
+					$batchPacketList[$top]->records[] = [$b->x, $b->z, $b->y, (in_array($fullBlock >> 4, new ReflectionClass(BlockIds::class)->getConstants()) ? $fullBlock >> 4 : 248), $fullBlock & 0xf, $first ? $flags : UpdateBlockPacket::FLAG_NONE];
 				}
 			}
 		}else{
