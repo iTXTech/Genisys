@@ -108,7 +108,7 @@ class Normal2 extends Normal{
 				if($temperature < 0.25){
 					return Biome::ICE_PLAINS;
 				}elseif($temperature < 0.75){
-					return Biome::MESA;
+					return Biome::PLAINS;
 				}else{
 					return Biome::DESERT;
 				}

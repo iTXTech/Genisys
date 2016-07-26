@@ -162,11 +162,15 @@ class Normal extends Generator{
 					return Biome::MOUNTAINS;
 				}elseif($temperature < 0.70){
 					return Biome::SMALL_MOUNTAINS;
+				}elseif($temperature <= 2.0){
+					return Biome::MESA;
 				}else{
 					return Biome::RIVER;
 				}
 			}
 		}, Biome::getBiome(Biome::OCEAN));
+
+		$this->heightOffset = $random->nextRange(-5, 3);
 
 		$this->selector->addBiome(Biome::getBiome(Biome::OCEAN));
 		$this->selector->addBiome(Biome::getBiome(Biome::PLAINS));
@@ -179,6 +183,8 @@ class Normal extends Generator{
 		$this->selector->addBiome(Biome::getBiome(Biome::ICE_PLAINS));
 		$this->selector->addBiome(Biome::getBiome(Biome::SMALL_MOUNTAINS));
 		$this->selector->addBiome(Biome::getBiome(Biome::BIRCH_FOREST));
+		$this->selector->addBiome(Biome::getBiome(Biome::BEACH));
+		$this->selector->addBiome(Biome::getBiome(Biome::MESA));
 
 		$this->selector->recalculate();
 
