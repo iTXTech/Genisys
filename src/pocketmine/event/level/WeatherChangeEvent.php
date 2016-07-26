@@ -30,11 +30,13 @@ class WeatherChangeEvent extends LevelEvent implements Cancellable{
 
 	private $weather;
 	private $duration;
+	private $level;
 
 	public function __construct(Level $level, int $weather, int $duration){
 		parent::__construct($level);
 		$this->weather = $weather;
 		$this->duration = $duration;
+		$this->level = $level;
 	}
 
 	public function getWeather() : int{
@@ -53,4 +55,7 @@ class WeatherChangeEvent extends LevelEvent implements Cancellable{
 		$this->duration = $duration;
 	}
 
+	public function getLevel() {
+		$this->level;
+	}
 }
