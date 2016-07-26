@@ -36,4 +36,8 @@ abstract class Math{
 		$i = (int) ($n + 1);
 		return $n >= $i ? $i : $i - 1;
 	}
+
+	public static function clamp($value, $low, $high){
+		return min($high, max($low, $value));
+	}
 }
