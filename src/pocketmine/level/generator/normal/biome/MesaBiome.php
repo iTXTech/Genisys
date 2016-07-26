@@ -29,6 +29,8 @@ use pocketmine\level\generator\populator\DeadBush;
 class MesaBiome extends SandyBiome{
 
 	public function __construct(){
+		parent::__construct();
+
 		$cactus = new Cactus();
 		$cactus->setBaseAmount(0);
 		$cactus->setRandomAmount(2);

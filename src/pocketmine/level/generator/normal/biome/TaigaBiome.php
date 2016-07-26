@@ -40,7 +40,7 @@ class TaigaBiome extends SnowyBiome{
 
 		$this->addPopulator($mossStone);
 
-		$this->setElevation(63, 81);
+		$this->setElevation(63, 83);
 
 		$this->temperature = 0.05;
 		$this->rainfall = 0.8;

@@ -108,7 +108,7 @@ class Normal2 extends Normal{
 				if($temperature < 0.25){
 					return Biome::ICE_PLAINS;
 				}elseif($temperature < 0.75){
-					return Biome::PLAINS;
+					return Biome::MESA;
 				}else{
 					return Biome::DESERT;
 				}
@@ -146,6 +146,8 @@ class Normal2 extends Normal{
 		$this->selector->addBiome(Biome::getBiome(Biome::ICE_PLAINS));
 		$this->selector->addBiome(Biome::getBiome(Biome::SMALL_MOUNTAINS));
 		$this->selector->addBiome(Biome::getBiome(Biome::BIRCH_FOREST));
+		$this->selector->addBiome(Biome::getBiome(Biome::BEACH));
+		$this->selector->addBiome(Biome::getBiome(Biome::MESA));
 
 		$this->selector->recalculate();
 
