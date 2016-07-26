@@ -19,18 +19,32 @@
  *
 */
 
-namespace pocketmine\math;
+namespace pocketmine\block;
 
+use pocketmine\item\Item;
 
-abstract class VectorMath{
+class InvisibleBedrock extends Transparent{
 
-	public static function getDirection2D($azimuth) : Vector2{
-		return new Vector2(cos($azimuth), sin($azimuth));
+	protected $id = self::INVISIBLE_BEDROCK;
+
+	public function __construct(){
+
 	}
 
-	public static function getDirection3D($azimuth, $inclination) : Vector3{
-		$yFact = cos($inclination);
-		return new Vector3($yFact * cos($azimuth), sin($inclination), $yFact * sin($azimuth));
+	public function getName() : string{
+		return "Invisible Bedrock";
+	}
+
+	public function getHardness() {
+		return -1;
+	}
+
+	public function getResistance(){
+		return 18000000;
+	}
+
+	public function isBreakable(Item $item){
+		return false;
 	}
 
 }

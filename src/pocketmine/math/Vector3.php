@@ -21,6 +21,8 @@
 
 namespace pocketmine\math;
 
+use pocketmine\utils\Random;
+
 class Vector3{
 
 	const SIDE_DOWN = 0;
@@ -344,4 +346,7 @@ class Vector3{
 		return "Vector3(x=" . $this->x . ",y=" . $this->y . ",z=" . $this->z . ")";
 	}
 
+	public static function createRandomDirection(Random $random){
+		return VectorMath::getDirection3D($random->nextFloat() * 2 * pi(), $random->nextFloat() * 2 * pi());
+	}
 }
