@@ -57,8 +57,7 @@ abstract class Tool extends Item{
 	 *
 	 * @return bool
 	 */
-	public function useOn($object, $type = 1)
-	{
+	public function useOn($object, $type = 1){
 		if($this->isUnbreakable()){
 			return true;
 		}
