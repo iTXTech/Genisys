@@ -30,7 +30,7 @@ class BeachBiome extends SandyBiome{
 
 		$sugarCane = new Sugarcane();
 		$sugarCane->setBaseAmount(0);
-		$sugarCane->setRandomAmount(2);
+		$sugarCane->setRandomAmount(10);
 		$this->addPopulator($sugarCane);
 
 		$this->setElevation(62, 65);
