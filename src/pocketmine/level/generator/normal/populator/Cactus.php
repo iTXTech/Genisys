@@ -23,6 +23,7 @@ namespace pocketmine\level\generator\normal\populator;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
+use pocketmine\level\generator\populator\Populator;
 use pocketmine\utils\Random;
 
 class Cactus extends Populator{
