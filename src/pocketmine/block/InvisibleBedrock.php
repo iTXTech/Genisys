@@ -19,25 +19,32 @@
  *
 */
 
-namespace pocketmine\network\protocol;
+namespace pocketmine\block;
 
-#include <rules/DataPacket.h>
+use pocketmine\item\Item;
 
+class InvisibleBedrock extends Transparent{
 
-class RemovePlayerPacket extends DataPacket{
-	const NETWORK_ID = Info::REMOVE_PLAYER_PACKET;
+	protected $id = self::INVISIBLE_BEDROCK;
 
-	public $eid;
-	public $clientId;
-
-	public function decode(){
+	public function __construct(){
 
 	}
 
-	public function encode(){
-		$this->reset();
-		$this->putLong($this->eid);
-		$this->putUUID($this->clientId);
+	public function getName() : string{
+		return "Invisible Bedrock";
+	}
+
+	public function getHardness() {
+		return -1;
+	}
+
+	public function getResistance(){
+		return 18000000;
+	}
+
+	public function isBreakable(Item $item){
+		return false;
 	}
 
 }

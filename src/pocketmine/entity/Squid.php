@@ -21,7 +21,7 @@
 
 namespace pocketmine\entity;
 
-
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Item as ItemItem;
@@ -168,8 +168,13 @@ class Squid extends WaterAnimal implements Ageable{
 	}
 
 	public function getDrops(){
+		$lootingL = 0;
+		$cause = $this->lastDamageCause;
+		if($cause instanceof EntityDamageByEntityEvent and $cause->getDamager() instanceof Player){
+			$lootingL = $cause->getDamager()->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
+		}
 		return [
-			ItemItem::get(ItemItem::DYE, 0, mt_rand(1, 3))
+			ItemItem::get(ItemItem::DYE, 0, mt_rand(1, 3 + $lootingL))
 		];
 	}
 }

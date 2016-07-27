@@ -158,7 +158,6 @@ use pocketmine\tile\MobSpawner;
 use pocketmine\tile\Sign;
 use pocketmine\tile\Skull;
 use pocketmine\tile\Tile;
-use pocketmine\updater\AutoUpdater;
 use pocketmine\utils\Binary;
 use pocketmine\utils\Color;
 use pocketmine\utils\Config;
@@ -214,9 +213,6 @@ class Server{
 	private $pluginManager = null;
 
 	private $profilingTickRate = 20;
-
-	/** @var AutoUpdater */
-	private $updater = null;
 
 	/** @var ServerScheduler */
 	private $scheduler = null;
@@ -442,6 +438,10 @@ class Server{
 	 */
 	public function getPocketMineVersion(){
 		return \pocketmine\VERSION;
+	}
+	
+	public function getFormattedVersion($prefix = ""){
+		return (\pocketmine\VERSION !== ""? $prefix . \pocketmine\VERSION : "");
 	}
 
 	/**
@@ -752,13 +752,6 @@ class Server{
 	 */
 	public function getLevelMetadata(){
 		return $this->levelMetadata;
-	}
-
-	/**
-	 * @return AutoUpdater
-	 */
-	public function getUpdater(){
-		return $this->updater;
 	}
 
 	/**
@@ -1828,16 +1821,18 @@ class Server{
 			$this->logger->info("Loading pocketmine.yml...");
 			if(!file_exists($this->dataPath . "pocketmine.yml")){
 				$content = file_get_contents($this->filePath . "src/pocketmine/resources/pocketmine.yml");
-				if($version->isDev()){
-					$content = str_replace("preferred-channel: stable", "preferred-channel: beta", $content);
-				}
 				@file_put_contents($this->dataPath . "pocketmine.yml", $content);
 			}
 			$this->config = new Config($configPath = $this->dataPath . "pocketmine.yml", Config::YAML, []);
 			$nowLang = $this->getProperty("settings.language", "eng");
-			if(strpos(\pocketmine\VERSION, "unsupported") !== false and $this->getProperty("settings.enable-testing", false) !== true and getenv("GITLAB_CI") === false){
-				throw new ServerException("This version is not supported, put enable-testing: true under pocketmine.yml server section to run this build at 
-your risk.");
+			
+			//Crashes unsupported builds without the correct configuration
+			if(strpos(\pocketmine\VERSION, "unsupported") !== false and getenv("GITLAB_CI") === false){
+				if($this->getProperty("settings.enable-testing", false) !== true){
+					throw new ServerException("This build is not intended for production use. You may set 'settings.enable-testing: true' under pocketmine.yml to allow use of non-production builds. Do so at your own risk and ONLY if you know what you are doing.");
+				}else{
+					$this->logger->warning("You are using an unsupported build. Do not use this build in a production environment.");
+				}
 			}
 			if($defaultLang != "unknown" and $nowLang != $defaultLang){
 				@file_put_contents($configPath, str_replace('language: "' . $nowLang . '"', 'language: "' . $defaultLang . '"', file_get_contents($configPath)));
@@ -1980,7 +1975,7 @@ your risk.");
 
 			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.info", [
 				$this->getName(),
-				$this->getPocketMineVersion(),
+				$this->getFormattedVersion("-"),
 				$this->getCodename(),
 				$this->getApiVersion()
 			]));
@@ -2026,8 +2021,6 @@ your risk.");
 			}
 
 			$this->pluginManager->loadPlugins($this->pluginPath);
-
-			$this->updater = new AutoUpdater($this, $this->getProperty("auto-updater.host", "www.pocketmine.net"));
 
 			$this->enablePlugins(PluginLoadOrder::STARTUP);
 
@@ -2880,9 +2873,8 @@ your risk.");
 
 		$u = Utils::getMemoryUsage(true);
 		$usage = round(($u[0] / 1024) / 1024, 2) . "/" . round(($d[0] / 1024) / 1024, 2) . "/" . round(($u[1] / 1024) / 1024, 2) . "/" . round(($u[2] / 1024) / 1024, 2) . " MB @ " . Utils::getThreadCount() . " threads";
-
-		echo "\x1b]0;" . $this->getName() . " " .
-			$this->getGameVersion() . "-#" . $this->getBuild() .
+		
+		echo "\x1b]0;" . $this->getName() . $this->getFormattedVersion("-") .
 			" | Online " . count($this->players) . "/" . $this->getMaxPlayers() .
 			" | Memory " . $usage .
 			" | U " . round($this->network->getUpload() / 1024, 2) .

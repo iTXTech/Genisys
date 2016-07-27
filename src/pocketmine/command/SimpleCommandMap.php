@@ -21,7 +21,10 @@
 
 namespace pocketmine\command;
 
+use pocketmine\command\defaults\BanCidCommand;
+use pocketmine\command\defaults\BancidbynameCommand;
 use pocketmine\command\defaults\BanCommand;
+use pocketmine\command\defaults\BanipbynameCommand;
 use pocketmine\command\defaults\BanIpCommand;
 use pocketmine\command\defaults\BanListCommand;
 use pocketmine\command\defaults\BiomeCommand;
@@ -33,6 +36,7 @@ use pocketmine\command\defaults\DifficultyCommand;
 use pocketmine\command\defaults\DumpMemoryCommand;
 use pocketmine\command\defaults\EffectCommand;
 use pocketmine\command\defaults\EnchantCommand;
+use pocketmine\command\defaults\FillCommand;
 use pocketmine\command\defaults\GamemodeCommand;
 use pocketmine\command\defaults\GarbageCollectorCommand;
 use pocketmine\command\defaults\GiveCommand;
@@ -40,11 +44,11 @@ use pocketmine\command\defaults\HelpCommand;
 use pocketmine\command\defaults\KickCommand;
 use pocketmine\command\defaults\KillCommand;
 use pocketmine\command\defaults\ListCommand;
-use pocketmine\command\defaults\LoadPluginCommand;
 use pocketmine\command\defaults\LvdatCommand;
 use pocketmine\command\defaults\MeCommand;
 use pocketmine\command\defaults\OpCommand;
 use pocketmine\command\defaults\PardonCommand;
+use pocketmine\command\defaults\PardonCidCommand;
 use pocketmine\command\defaults\PardonIpCommand;
 use pocketmine\command\defaults\ParticleCommand;
 use pocketmine\command\defaults\PluginsCommand;
@@ -66,24 +70,15 @@ use pocketmine\command\defaults\TimeCommand;
 use pocketmine\command\defaults\TimingsCommand;
 use pocketmine\command\defaults\VanillaCommand;
 use pocketmine\command\defaults\VersionCommand;
+use pocketmine\command\defaults\WeatherCommand;
 use pocketmine\command\defaults\WhitelistCommand;
 use pocketmine\command\defaults\XpCommand;
-use pocketmine\command\defaults\FillCommand;
+
 use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
-
-use pocketmine\command\defaults\MakeServerCommand;
-use pocketmine\command\defaults\ExtractPluginCommand;
-use pocketmine\command\defaults\ExtractPharCommand;
-use pocketmine\command\defaults\MakePluginCommand;
-use pocketmine\command\defaults\BancidbynameCommand;
-use pocketmine\command\defaults\BanipbynameCommand;
-use pocketmine\command\defaults\BanCidCommand;
-use pocketmine\command\defaults\PardonCidCommand;
-use pocketmine\command\defaults\WeatherCommand;
 
 class SimpleCommandMap implements CommandMap{
 
@@ -107,16 +102,6 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new PardonCidCommand("pardoncid"));
 		$this->register("pocketmine", new BancidbynameCommand("bancidbyname"));
 		$this->register("pocketmine", new BanipbynameCommand("banipbyname"));
-
-		$this->register("pocketmine", new ExtractPharCommand("extractphar"));
-		$this->register("pocketmine", new ExtractPluginCommand("extractplugin"));
-		$this->register("pocketmine", new MakePluginCommand("makeplugin"));
-		$this->register("pocketmine", new MakeServerCommand("ms"));
-		//$this->register("pocketmine", new MakeServerCommand("makeserver"));
-		$this->register("pocketmine", new ExtractPluginCommand("ep"));
-		$this->register("pocketmine", new MakePluginCommand("mp"));
-
-		$this->register("pocketmine", new LoadPluginCommand("loadplugin"));
 
 		$this->register("pocketmine", new LvdatCommand("lvdat"));
 		$this->register("pocketmine", new BiomeCommand("biome"));

@@ -15,7 +15,14 @@ namespace pocketmine\item;
 
 use pocketmine\block\Block;
 use pocketmine\block\Flower;
+use pocketmine\entity\CaveSpider;
 use pocketmine\entity\Entity;
+use pocketmine\entity\PigZombie;
+use pocketmine\entity\Silverfish;
+use pocketmine\entity\Skeleton;
+use pocketmine\entity\Spider;
+use pocketmine\entity\Witch;
+use pocketmine\entity\Zombie;
 use pocketmine\inventory\Fuel;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\level\Level;
@@ -907,6 +914,31 @@ class Item implements ItemIds{
 
 	public function isChestplate(){
 		return false;
+	}
+
+	public function getAttackDamage(){
+		return 1;
+	}
+
+	public function getModifyAttackDamage(Entity $target){
+		$rec = $this->getAttackDamage();
+		$sharpL = $this->getEnchantmentLevel(Enchantment::TYPE_WEAPON_SHARPNESS);
+		if($sharpL > 0){
+			$rec += 0.5 * ($sharpL + 1);
+		}
+
+		if($target instanceof Skeleton or $target instanceof Zombie or
+			$target instanceof Witch or $target instanceof PigZombie){
+			//SMITE    wither skeletons
+			$rec += 2.5 * $this->getEnchantmentLevel(Enchantment::TYPE_WEAPON_SMITE);
+
+		}elseif($target instanceof Spider or $target instanceof CaveSpider or
+			$target instanceof Silverfish){
+			//Bane of Arthropods    wither skeletons
+			$rec += 2.5 * $this->getEnchantmentLevel(Enchantment::TYPE_WEAPON_ARTHROPODS);
+
+		}
+		return $rec;
 	}
 
 	final public function __toString(){ //Get error here..

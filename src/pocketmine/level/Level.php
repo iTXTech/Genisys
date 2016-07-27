@@ -105,6 +105,7 @@ use pocketmine\plugin\Plugin;
 
 use pocketmine\Server;
 use pocketmine\tile\Chest;
+use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
 use pocketmine\utils\LevelException;
 use pocketmine\utils\MainLogger;
@@ -1624,6 +1625,13 @@ class Level implements ChunkManager, Metadatable{
 			}
 			$this->server->getPluginManager()->callEvent($ev);
 			if($ev->isCancelled()){
+				$pk = new UpdateBlockPacket();
+				$pk->records[] = [$target->x, $target->z, $target->y, $target->getId(), $target->getDamage(), UpdateBlockPacket::FLAG_ALL_PRIORITY];
+				$player->dataPacket($pk);
+				$tile = $this->getTile($vector);
+				if($tile != null and $tile instanceof Spawnable and $player instanceof Player){
+					$tile->spawnTo($player);
+				}
 				return false;
 			}
 

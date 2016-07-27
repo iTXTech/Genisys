@@ -40,7 +40,6 @@ use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\biome\Biome;
 use pocketmine\level\generator\biome\BiomeSelector;
 use pocketmine\level\generator\Generator;
-use pocketmine\level\generator\noise\Perlin;
 use pocketmine\level\generator\noise\Simplex;
 use pocketmine\level\generator\normal\biome\NormalBiome;
 use pocketmine\level\generator\normal\object\OreType;
@@ -190,6 +189,9 @@ class Normal extends Generator{
 
 		$cover = new GroundCover();
 		$this->generationPopulators[] = $cover;
+
+		$cave = new Cave();
+		$this->populators[] = $cave;
 
 		$ores = new Ore();
 		$ores->setOreTypes([

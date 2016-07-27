@@ -304,6 +304,7 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::POWERED_REPEATER_BLOCK] = PoweredRepeater::class;
 			self::$list[self::UNPOWERED_REPEATER_BLOCK] = UnpoweredRepeater::class;
 			self::$list[self::CAULDRON_BLOCK] = Cauldron::class;
+			self::$list[self::INVISIBLE_BEDROCK] = InvisibleBedrock::class;
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){

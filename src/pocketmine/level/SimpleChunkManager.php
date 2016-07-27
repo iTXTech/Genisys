@@ -33,15 +33,9 @@ class SimpleChunkManager implements ChunkManager{
 	protected $chunks = [];
 
 	protected $seed;
-	protected $waterHeight = 0;
 
-	public function __construct($seed, $waterHeight = 0){
+	public function __construct($seed){
 		$this->seed = $seed;
-		$this->waterHeight = $waterHeight;
-	}
-
-	public function getWaterHeight() : int{
-		return $this->waterHeight;
 	}
 
 	/**

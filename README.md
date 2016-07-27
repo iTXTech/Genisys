@@ -1,7 +1,8 @@
 # Genisys (创世纪)
 
-### Advanced Minecraft: Pocket Edition Server
+### Advanced Minecraft: Pocket Edition Server based on [PocketMine-MP](https://github.com/PocketMine/PocketMine-MP)
 
+Chat on Mattermost: [Join](https://mattermost.itxtech.org/itxtechnologies/channels/genisys)  
 Chat on Gitter: [![Gitter](https://img.shields.io/gitter/room/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
 IRC: #genisys at freenode
 
@@ -9,10 +10,13 @@ Special thanks to [JetBrains](https://www.jetbrains.com) for providing free lice
 
 ### Build status
 Travis-CI: [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)  
-GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines)
+GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
 
 ### Downloads
-You can get a prebuilt phar from [GitLab](https://gitlab.com/itxtech/genisys/pipelines).
+You can get a prebuilt phar from [GitLab](https://gitlab.com/itxtech/genisys/pipelines?scope=branches).
+
+**The master branch is the only officially supported branch.**
+_All other branches are in testing and may be unstable. Do not use builds from other branches unless you are sure you understand the risks._
 
 ### Installation
 Installation instructions can be found in the [wiki](https://github.com/iTXTech/Genisys/wiki).
@@ -43,58 +47,32 @@ Installation instructions can be found in the [wiki](https://github.com/iTXTech/
 * Our leaders are **@ishitatsuyuki** and **@jasonczc**
 
 ### License
-Most of the code in this repository was written by the PocketMine team and is licensed under GPLv3. Some AI is proprietary, copying is prohibited.
+Most of the code in this repository was written by the PocketMine team and is licensed under GPLv3.
+
+**NOTE:** Some AI is based on **proprietary code** from **@Zzm317**'s MyOwnWorld (used by permission of the author). Copying of such code is prohibited without the original author's approval.
 
 ### Official Development Documentation
 [Genisys Official Development Documentation Page](http://docs.mcper.cn/en-US/)
 
 ### Features
-* Performance optimization (Let 100+ players join in a server)
-* Bug fixes in PocketMine-MP
 * Weather
 * Experience
+* Basic redstone functionality (not all components are available or implemented currently.)
+* Nether
+* Rails
 * More Effects
-* Redstone (Button, Lever, Pressure Plate, Redstone Wire, Redstone Torch and more)
-* Nether (Red sky!)
-* Rail & Powered Rail
-* Minecart (doesn't follow rails)
-* Boat
-* More Doors
-* Potions
-* Splash Potions
-* Anvil
+* Potions, Splash Potions and Brewing
 * Better Crafting
-* Better Inventory
-* More Items
 * Hunger (Based on Katana)
 * AI (Based on MOW)
-* More commands
-  - bancid
-  - bancidbyname
-  - banipbyname
-  - biome
-  - extractphar
-  - extractplugin
-  - fill
-  - loadplugin
-  - lvdat
-  - makeplugin
-  - ms
-  - pardoncid
-  - setblock
-  - summon
-  - weather
-  - xp
 * FolderPluginLoader
 * Monster Spawner
 * Item Frame
-* Dispenser and Dropper
-* Colorful Sheep
+* Colourful Sheep
 * Multiple types of Boat, Villager and Rabbit
-* Enchantment
-* Brewing
 * Enchantment effects
-* NOTE: Please edit **genisys.yml** to enable the desired features, such as Redstone, MobAI, Nether, etc.
+
+NOTE: Please edit **genisys.yml** to enable the desired features, such as Redstone, MobAI, Nether, etc.
 
 ### To-Do List
 * Improve Redstone

@@ -21,7 +21,9 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\network\protocol\AddEntityPacket;
@@ -99,14 +101,21 @@ class Rabbit extends Animal{
 	}
 
 	public function getDrops(){
-		$drops = [ItemItem::get(ItemItem::RABBIT_HIDE, 0, mt_rand(0, 2))];
-
-		if($this->getLastDamageCause() === EntityDamageEvent::CAUSE_FIRE){
-			$drops[] = ItemItem::get(ItemItem::COOKED_RABBIT, 0, mt_rand(1, 2));
-		}else{
-			$drops[] = ItemItem::get(ItemItem::RAW_RABBIT, 0, mt_rand(1, 2));
+		$lootingL = 0;
+		$cause = $this->lastDamageCause;
+		if($cause instanceof EntityDamageByEntityEvent and $cause->getDamager() instanceof Player){
+			$lootingL = $cause->getDamager()->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
 		}
-
+		$drops = [ItemItem::get(ItemItem::RABBIT_HIDE, 0, mt_rand(0, 1))];
+		if($this->getLastDamageCause() === EntityDamageEvent::CAUSE_FIRE){
+			$drops[] = ItemItem::get(ItemItem::COOKED_RABBIT, 0, mt_rand(0, 1));
+		}else{
+			$drops[] = ItemItem::get(ItemItem::RAW_RABBIT, 0, mt_rand(0, 1));
+		}
+		//Rare drop
+		if(mt_rand(1, 200) <= (5 + 2 * $lootingL)){
+			$drops[] = ItemItem::get(ItemItem::RABBIT_FOOT, 0, 1);
+		}
 		return $drops;
 	}
 
