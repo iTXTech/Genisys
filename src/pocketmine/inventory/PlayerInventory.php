@@ -51,8 +51,12 @@ class PlayerInventory extends BaseInventory{
 				foreach($contents as $item){
 					if($item["Slot"] >= 0 and $item["Slot"] < $this->getHotbarSize()){ //Hotbar
 						if(isset($item["TrueSlot"])){ //Valid slot was found, change the linkage to this slot
-							$this->hotbar[$item["Slot"]] = $item["TrueSlot"]; //WTF is going on here
-							echo "Linking hotbar slot ".$item["Slot"]." to slot ".$item["TrueSlot"]."\n";
+							if(0 <= $item["TrueSlot"] and $item["TrueSlot"] < $this->getSize()){
+								$this->hotbar[$item["Slot"]] = $item["TrueSlot"]; //WTF is going on here
+								echo "Linking hotbar slot ".$item["Slot"]." to slot ".$item["TrueSlot"]."\n";
+							}elseif($item["TrueSlot"] < 0){ //Null slot link
+								$this->hotbar[$item["Slot"]] = -1;
+							}
 						}
 						//If TrueSlot is not set, leave the slot index as its default which was filled in above
 						//This only overwrites slot indexes for valid links
@@ -135,7 +139,7 @@ class PlayerInventory extends BaseInventory{
 					$this->hotbar[$key] = $this->hotbar[$this->itemInHandIndex];					
 				}
 				
-				$this->hotbar[$this->itemInHandIndex] = $slotMapping - $this->getHotbarSize();
+				$this->hotbar[$this->itemInHandIndex] = $targetInventorySlot;
 			}
 			$this->sendHeldItem($this->getHolder()->getViewers());
 			if($sendToHolder){

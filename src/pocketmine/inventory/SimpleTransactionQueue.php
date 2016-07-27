@@ -111,9 +111,6 @@ class SimpleTransactionQueue implements TransactionQueue{
 		return true;
 	}
 	
-	
-	private $allowedRetries = 2;
-	
 	/** 
 	 * @param Transaction 	$transaction
 	 * @param Transaction[] &$completed
@@ -122,7 +119,7 @@ class SimpleTransactionQueue implements TransactionQueue{
 	 */
 	private function handleFailure(Transaction $transaction, &$failed){
 		$transaction->addFailure();
-		if($transaction->getFailures() >= $this->allowedRetries){
+		if($transaction->getFailures() >= self::DEFAULT_ALLOWED_RETRIES){
 			//Transaction failed after several retries
 			echo "transaction completely failed\n";
 			$failed[] = $transaction;
@@ -139,11 +136,7 @@ class SimpleTransactionQueue implements TransactionQueue{
 	 * Returns an array of transactions which failed
 	 */
 	public function execute(){
-		/*if($this->isExecuting()){
-			echo "execution already in progress\n";
-			return false;
-		}elseif(microtime(true) - $this->lastUpdate < 0.05){
-			//echo "last update time less than 10 ticks ago\n";
+		/*if(microtime(true) - $this->lastUpdate < 0.1){
 			return false;
 		}*/
 		
@@ -153,6 +146,7 @@ class SimpleTransactionQueue implements TransactionQueue{
 		$this->isExecuting = true;
 		
 		$failCount = $this->transactionsToRetry->count();
+
 		while(!$this->transactionsToRetry->isEmpty()){
 			//Some failed transactions are waiting from the previous execution to be retried
 			$this->transactionQueue->enqueue($this->transactionsToRetry->dequeue());
@@ -161,8 +155,6 @@ class SimpleTransactionQueue implements TransactionQueue{
 		if($this->transactionQueue->count() !== 0){
 			echo "Batch-handling ".$this->transactionQueue->count()." changes, with ".$failCount." retries.\n";
 		}
-		
-		$this->allowedRetries = max(self::DEFAULT_ALLOWED_RETRIES, $this->transactionQueue->count()); //Statistically at least 50% of transactions will succeed
 		
 		while(!$this->transactionQueue->isEmpty()){
 			
