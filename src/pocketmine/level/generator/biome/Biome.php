@@ -35,7 +35,7 @@ use pocketmine\level\generator\normal\biome\PlainBiome;
 use pocketmine\level\generator\normal\biome\RiverBiome;
 use pocketmine\level\generator\normal\biome\SmallMountainsBiome;
 use pocketmine\level\generator\normal\biome\TaigaBiome;
-use pocketmine\level\generator\hell\HellBiome;
+use pocketmine\level\generator\nether\HellBiome;
 use pocketmine\level\generator\normal\populator\Populator;
 use pocketmine\utils\Random;
 

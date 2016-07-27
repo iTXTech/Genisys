@@ -19,7 +19,7 @@
  *
 */
 
-namespace pocketmine\level\generator\hell;
+namespace pocketmine\level\generator\nether;
 
 use pocketmine\block\Block;
 use pocketmine\block\Gravel;

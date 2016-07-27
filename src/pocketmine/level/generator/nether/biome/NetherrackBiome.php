@@ -19,14 +19,18 @@
  *
 */
 
-namespace pocketmine\level\generator\hell;
+namespace pocketmine\level\generator\nether\biome;
 
 use pocketmine\level\generator\biome\Biome;
 
-class HellBiome extends Biome{
+class NetherrackBiome extends Biome{
+
+	public function __construct(){
+		//Todo:populators
+	}
 
 	public function getName() : string{
-		return "Hell";
+		return "NetherrackBiome";
 	}
 
 	public function getColor(){
