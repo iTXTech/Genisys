@@ -35,10 +35,10 @@ use pocketmine\level\generator\biome\Biome;
 use pocketmine\level\generator\biome\BiomeSelector;
 use pocketmine\level\generator\Generator;
 use pocketmine\level\generator\noise\Simplex;
-use pocketmine\level\generator\object\OreType;
-use pocketmine\level\generator\populator\Caves;
-use pocketmine\level\generator\populator\GroundCover;
-use pocketmine\level\generator\populator\Ore;
+use pocketmine\level\generator\normal\object\OreType;
+use pocketmine\level\generator\normal\populator\Caves;
+use pocketmine\level\generator\normal\populator\GroundCover;
+use pocketmine\level\generator\normal\populator\Ore;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
 

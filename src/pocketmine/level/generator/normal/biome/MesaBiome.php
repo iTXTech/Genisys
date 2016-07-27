@@ -23,8 +23,8 @@ namespace pocketmine\level\generator\normal\biome;
 
 use pocketmine\block\Block;
 use pocketmine\block\StainedClay;
-use pocketmine\level\generator\populator\Cactus;
-use pocketmine\level\generator\populator\DeadBush;
+use pocketmine\level\generator\normal\populator\Cactus;
+use pocketmine\level\generator\normal\populator\DeadBush;
 
 class MesaBiome extends SandyBiome{
 

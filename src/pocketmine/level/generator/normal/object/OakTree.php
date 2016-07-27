@@ -19,39 +19,25 @@
  *
 */
 
-namespace pocketmine\level\generator\normal\biome;
+namespace pocketmine\level\generator\normal\object;
 
 use pocketmine\block\Block;
-use pocketmine\block\Flower as FlowerBlock;
-use pocketmine\level\generator\normal\populator\Flower;
-use pocketmine\level\generator\normal\populator\LilyPad;
+use pocketmine\block\Leaves;
+use pocketmine\block\Wood;
+use pocketmine\level\ChunkManager;
+use pocketmine\utils\Random;
 
-class SwampBiome extends GrassyBiome{
+class OakTree extends Tree{
 
 	public function __construct(){
-		parent::__construct();
-
-		$flower = new Flower();
-		$flower->setBaseAmount(8);
-		$flower->addType([Block::RED_FLOWER, FlowerBlock::TYPE_BLUE_ORCHID]);
-
-		$this->addPopulator($flower);
-
-		$lilypad = new LilyPad();
-		$lilypad->setBaseAmount(4);
-		$this->addPopulator($lilypad);
-
-		$this->setElevation(62, 63);
-
-		$this->temperature = 0.8;
-		$this->rainfall = 0.9;
+		$this->trunkBlock = Block::LOG;
+		$this->leafBlock = Block::LEAVES;
+		$this->leafType = Leaves::OAK;
+		$this->type = Wood::OAK;
 	}
 
-	public function getName() : string{
-		return "Swamp";
-	}
-
-	public function getColor(){
-		return 0x6a7039;
+	public function placeObject(ChunkManager $level, $x, $y, $z, Random $random){
+		$this->treeHeight = $random->nextBoundedInt(3) + 4;
+		parent::placeObject($level, $x, $y, $z, $random);
 	}
 }

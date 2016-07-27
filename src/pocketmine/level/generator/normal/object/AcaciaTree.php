@@ -19,24 +19,24 @@
  *
  */
 
-namespace pocketmine\level\generator\normal\biome;
+namespace pocketmine\level\generator\normal\object;
 
-use pocketmine\level\generator\normal\populator\Sugarcane;
+use pocketmine\block\Block;
+use pocketmine\block\Leaves2;
+use pocketmine\block\Wood2;
+use pocketmine\level\ChunkManager;
+use pocketmine\utils\Random;
 
-class BeachBiome extends SandyBiome{
-
+class AcaciaTree extends Tree{
 	public function __construct(){
-		parent::__construct();
-
-		$sugarCane = new Sugarcane();
-		$sugarCane->setBaseAmount(0);
-		$sugarCane->setRandomAmount(10);
-		$this->addPopulator($sugarCane);
-
-		$this->setElevation(62, 65);
+		$this->trunkBlock = Block::WOOD2;
+		$this->leafBlock = Block::LEAVES2;
+		$this->leafType = Leaves2::ACACIA;
+		$this->type = Wood2::ACACIA;
+		$this->treeHeight = 8;
 	}
 
-	public function getName() : string{
-		return "Beach";
-	}
+	/*public function placeObject(ChunkManager $level, $x, $y, $z, Random $random){
+	}*/
+	//TODO: rewrite
 }
