@@ -25,7 +25,7 @@ class CaveCommand extends VanillaCommand{
 		parent::__construct(
 			$name,
 			"Generate a cave",
-			"%commands.cave.usage"
+			"commands.cave.usage"
 		);
 		$this->setPermission("pocketmine.command.cave");
 	}
