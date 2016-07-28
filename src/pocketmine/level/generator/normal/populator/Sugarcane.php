@@ -23,14 +23,15 @@ namespace pocketmine\level\generator\normal\populator;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
+use pocketmine\level\generator\normal\object\SugarCaneStack;
 use pocketmine\level\generator\populator\Populator;
 use pocketmine\utils\Random;
 
-class Sugarcane extends Populator{
+class SugarCane extends Populator{
 	/** @var ChunkManager */
 	private $level;
-	private $randomAmount;
-	private $baseAmount;
+	private $randomAmount = 10;
+	private $baseAmount = 1;
 
 	public function setRandomAmount($amount){
 		$this->randomAmount = $amount;
@@ -42,42 +43,36 @@ class Sugarcane extends Populator{
 
 	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
 		$this->level = $level;
-		$amount = $random->nextRange(0, $this->randomAmount + 1) + $this->baseAmount;
-		for($i = 0; $i < $amount; ++$i){
+		$canes = new SugarCaneStack($random);
+		$successfulClusterCount = 0;
+		for($count = 0; $count < $this->randomAmount; $count++){
 			$x = $random->nextRange($chunkX * 16, $chunkX * 16 + 15);
 			$z = $random->nextRange($chunkZ * 16, $chunkZ * 16 + 15);
-
 			$y = $this->getHighestWorkableBlock($x, $z);
-			$tallRand = $random->nextRange(0, 17);
-			$yMax = $y + 2 + (int) ($tallRand > 10) + (int) ($tallRand > 15);
-			if($y !== -1){
-				for(; $y < 127 and $y < $yMax; $y++){
-					if($this->canSugarcaneStay($x, $y, $z)){
-						$this->level->setBlockIdAt($x, $y, $z, Block::SUGARCANE_BLOCK);
-						$this->level->setBlockDataAt($x, $y, $z, 1);
-					}
+			if($y == -1 or !$canes->canPlaceObject($level, $x, $y, $z)){
+				continue;
+			}
+			$successfulClusterCount++;
+			$canes->randomize();
+			$canes->placeObject($level, $x, $y, $z);
+			for($placed = 1; $placed < 4; $placed++){
+				$xx = $x - 3 + $random->nextBoundedInt(7);
+				$zz = $z - 3 + $random->nextBoundedInt(7);
+				$canes->randomize();
+				if($canes->canPlaceObject($level, $xx, $y, $zz)){
+					$canes->placeObject($level, $xx, $y, $zz);
 				}
 			}
-		}
-	}
-
-	private function canSugarcaneStay($x, $y, $z){
-		$b = $this->level->getBlockIdAt($x, $y, $z);
-		$below = $this->level->getBlockIdAt($x, $y - 1, $z);
-		$water = false;
-		foreach(array($this->level->getBlockIdAt($x + 1, $y - 1, $z), $this->level->getBlockIdAt($x - 1, $y - 1, $z), $this->level->getBlockIdAt($x, $y - 1, $z + 1), $this->level->getBlockIdAt($x, $y - 1, $z - 1)) as $adjacent){
-			if($adjacent === Block::WATER or $adjacent === Block::STILL_WATER){
-				$water = true;
-				break;
+			if($successfulClusterCount >= $this->baseAmount){
+				return;
 			}
 		}
-		return ($b === Block::AIR) and ((($below === Block::SAND or $below === Block::GRASS) and $water) or ($below === Block::SUGARCANE_BLOCK));
 	}
 
 	private function getHighestWorkableBlock($x, $z){
 		for($y = 127; $y >= 0; --$y){
 			$b = $this->level->getBlockIdAt($x, $y, $z);
-			if($b !== Block::AIR and $b !== Block::LEAVES and $b !== Block::LEAVES2){
+			if($b !== Block::DIRT and $b !== Block::GRASS and $b !== Block::SAND){
 				break;
 			}
 		}

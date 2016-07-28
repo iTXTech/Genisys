@@ -25,6 +25,8 @@ use pocketmine\block\Block;
 use pocketmine\block\Flower as FlowerBlock;
 use pocketmine\level\generator\normal\populator\Flower;
 use pocketmine\level\generator\normal\populator\LilyPad;
+use pocketmine\level\generator\normal\populator\SugarCane;
+use pocketmine\level\generator\normal\populator\TallGrass;
 
 class SwampBiome extends GrassyBiome{
 
@@ -35,13 +37,24 @@ class SwampBiome extends GrassyBiome{
 		$flower->setBaseAmount(8);
 		$flower->addType([Block::RED_FLOWER, FlowerBlock::TYPE_BLUE_ORCHID]);
 
-		$this->addPopulator($flower);
-
 		$lilypad = new LilyPad();
 		$lilypad->setBaseAmount(4);
-		$this->addPopulator($lilypad);
 
-		$this->setElevation(62, 63);
+		$tallGrass = new TallGrass();
+		$tallGrass->setBaseAmount(1);
+
+		//mushroom
+
+		$sugarCane = new SugarCane();
+		$sugarCane->setBaseAmount(2);
+		$sugarCane->setRandomAmount(15);
+
+		$this->addPopulator($lilypad);
+		$this->addPopulator($flower);
+		$this->addPopulator($tallGrass);
+		$this->addPopulator($sugarCane);
+
+		$this->setElevation(60, 66);
 
 		$this->temperature = 0.8;
 		$this->rainfall = 0.9;

@@ -32,7 +32,8 @@ class SandyBiome extends GrassyBiome{
 		parent::__construct();
 
 		$cactus = new Cactus();
-		$cactus->setBaseAmount(6);
+		$cactus->setBaseAmount(2);
+		$cactus->setRandomAmount(1);
 		$deadBush = new DeadBush();
 		$deadBush->setBaseAmount(2);
 
