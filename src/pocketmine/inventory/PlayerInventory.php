@@ -47,24 +47,21 @@ class PlayerInventory extends BaseInventory{
 		
 		if($contents !== null){
 			if($contents instanceof ListTag){ //Saved data to be loaded into the inventory
-				//TODO: test
 				foreach($contents as $item){
 					if($item["Slot"] >= 0 and $item["Slot"] < $this->getHotbarSize()){ //Hotbar
-						if(isset($item["TrueSlot"])){ //Valid slot was found, change the linkage to this slot
+						if(isset($item["TrueSlot"])){
+							
+							//Valid slot was found, change the linkage to this slot
 							if(0 <= $item["TrueSlot"] and $item["TrueSlot"] < $this->getSize()){
-								$this->hotbar[$item["Slot"]] = $item["TrueSlot"]; //WTF is going on here
-								echo "Linking hotbar slot ".$item["Slot"]." to slot ".$item["TrueSlot"]."\n";
-							}elseif($item["TrueSlot"] < 0){ //Null slot link
+								$this->hotbar[$item["Slot"]] = $item["TrueSlot"];
+								
+							}elseif($item["TrueSlot"] < 0){ //Link to an empty slot (empty hand)
 								$this->hotbar[$item["Slot"]] = -1;
 							}
 						}
-						//If TrueSlot is not set, leave the slot index as its default which was filled in above
-						//This only overwrites slot indexes for valid links
+						/* If TrueSlot is not set, leave the slot index as its default which was filled in above
+						 * This only overwrites slot indexes for valid links */
 					}elseif($item["Slot"] >= 100 and $item["Slot"] < 104){ //Armor
-						//Goddamn it this is so stupid
-						//Why isn't this just done the way default Minecraft does it? -_-
-						//So much room for inconsistency, it's idiotic
-						//Just do it the way MCPE expects it to be done, and then no problems
 						$this->setItem($this->getSize() + $item["Slot"] - 100, NBT::getItemHelper($item));
 					}else{
 						$this->setItem($item["Slot"] - $this->getHotbarSize(), NBT::getItemHelper($item));
@@ -103,9 +100,6 @@ class PlayerInventory extends BaseInventory{
 	 */
 	public function setHotbarSlotIndex($index, $slot){
 		trigger_error("Do not attempt to change hotbar links in plugins!", E_USER_DEPRECATED);
-		/*if ($index >= 0 and $index < $this->getHotbarSize() and $slot >= -1 and $slot < $this->getSize()) {
-			$this->hotbar[$index] = $slot;//calculate has been done by client
-		}*/
 	}
 
 	/**
@@ -133,12 +127,13 @@ class PlayerInventory extends BaseInventory{
 			$slotMapping -= $this->getHotbarSize();
 		}
 		if(0 <= $hotbarSlotIndex and $hotbarSlotIndex < $this->getHotbarSize()){
-			echo "handling hotbar slot index change\n";
 			$this->itemInHandIndex = $hotbarSlotIndex;
-			if($slotMapping !== null){ //Handle a hotbar slot mapping change (for PE)
+			if($slotMapping !== null){ 
+				/* Handle a hotbar slot mapping change. This allows PE to select different inventory slots.
+				 * This is the only time slot mapping should ever be changed. */
 				if(($key = array_search($slotMapping, $this->hotbar)) !== false){
-					//Chosen slot is already linked to a hotbar slot, swap the two slots around.
-					//This will already have been done on the client-side so no changes need to be sent.
+					/* Chosen slot is already linked to a hotbar slot, swap the two slots around.
+					 * This will already have been done on the client-side so no changes need to be sent. */
 					$this->hotbar[$key] = $this->hotbar[$this->itemInHandIndex];					
 				}
 				

@@ -42,11 +42,6 @@ interface Transaction{
 	/**
 	 * @return Item
 	 */
-	public function getSourceItem();
-
-	/**
-	 * @return Item
-	 */
 	public function getTargetItem();
 
 	/**

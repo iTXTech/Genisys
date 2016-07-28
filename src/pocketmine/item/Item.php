@@ -915,10 +915,6 @@ class Item implements ItemIds{
 	public function isChestplate(){
 		return false;
 	}
-	
-	public function canBeDamaged(){
-		return false;
-	}
 
 	public function getAttackDamage(){
 		return 1;
