@@ -141,7 +141,7 @@ abstract class BaseInventory implements Inventory{
 		if($index < 0 or $index >= $this->size){
 			return false;
 		}elseif($item->getId() === 0 or $item->getCount() <= 0){
-			return $this->clear($index);
+			return $this->clear($index, $send);
 		}
 
 		$holder = $this->getHolder();
@@ -156,9 +156,7 @@ abstract class BaseInventory implements Inventory{
 
 		$old = $this->getItem($index);
 		$this->slots[$index] = clone $item;
-		if($send){
-			$this->onSlotChange($index, $old);
-		}
+		$this->onSlotChange($index, $old, $send);
 		
 
 		return true;
@@ -377,9 +375,7 @@ abstract class BaseInventory implements Inventory{
 			}else{
 				unset($this->slots[$index]);
 			}
-			if($send){
-				$this->onSlotChange($index, $old);
-			}
+			$this->onSlotChange($index, $old, $send);
 		}
 
 		return true;
@@ -428,8 +424,10 @@ abstract class BaseInventory implements Inventory{
 		unset($this->viewers[spl_object_hash($who)]);
 	}
 
-	public function onSlotChange($index, $before){
-		$this->sendSlot($index, $this->getViewers());
+	public function onSlotChange($index, $before, $send){
+		if($send){
+			$this->sendSlot($index, $this->getViewers());
+		}
 	}
 
 
