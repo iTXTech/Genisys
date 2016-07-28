@@ -23,27 +23,17 @@ namespace pocketmine\level\generator\nether\populator;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
-use pocketmine\level\generator\populator\Populator;
+use pocketmine\level\generator\populator\VariableAmountPopulator;
 use pocketmine\utils\Random;
 
-class NetherLava extends Populator{
+class NetherLava extends VariableAmountPopulator{
 	/** @var ChunkManager */
 	private $level;
-	private $randomAmount;
-	private $baseAmount;
-
-	public function setRandomAmount($amount){
-		$this->randomAmount = $amount;
-	}
-
-	public function setBaseAmount($amount){
-		$this->baseAmount = $amount;
-	}
 
 	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
 		if(mt_rand(0, 100) < 5){
 			$this->level = $level;
-			$amount = $random->nextRange(0, $this->randomAmount + 1) + $this->baseAmount;
+			$amount = $this->getAmount($random);
 			for($i = 0; $i < $amount; ++$i){
 				$x = $random->nextRange($chunkX * 16, $chunkX * 16 + 15);
 				$z = $random->nextRange($chunkZ * 16, $chunkZ * 16 + 15);

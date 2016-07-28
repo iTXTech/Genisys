@@ -23,10 +23,11 @@ namespace pocketmine\level\generator\nether\object;
 
 use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\normal\object\OreType;
+use pocketmine\level\generator\object\Object;
 use pocketmine\math\VectorMath;
 use pocketmine\utils\Random;
 
-class NetherOre{
+class NetherOre extends Object{
 	private $random;
 	public $type;
 

@@ -23,9 +23,10 @@ namespace pocketmine\level\generator\normal\object;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
+use pocketmine\level\generator\object\Object;
 use pocketmine\utils\Random;
 
-class SugarCaneStack{
+class SugarCaneStack extends Object{
 	/** @var Random */
 	private $random;
 	private $baseHeight = 2;

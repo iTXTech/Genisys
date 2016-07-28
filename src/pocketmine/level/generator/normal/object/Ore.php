@@ -22,10 +22,11 @@
 namespace pocketmine\level\generator\normal\object;
 
 use pocketmine\level\ChunkManager;
+use pocketmine\level\generator\object\Object;
 use pocketmine\math\VectorMath;
 use pocketmine\utils\Random;
 
-class Ore{
+class Ore extends Object{
 	private $random;
 	public $type;
 
