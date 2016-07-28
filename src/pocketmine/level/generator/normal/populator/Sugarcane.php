@@ -24,22 +24,14 @@ namespace pocketmine\level\generator\normal\populator;
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\normal\object\SugarCaneStack;
-use pocketmine\level\generator\populator\Populator;
+use pocketmine\level\generator\populator\VariableAmountPopulator;
 use pocketmine\utils\Random;
 
-class SugarCane extends Populator{
+class SugarCane extends VariableAmountPopulator{
 	/** @var ChunkManager */
 	private $level;
-	private $randomAmount = 10;
-	private $baseAmount = 1;
-
-	public function setRandomAmount($amount){
-		$this->randomAmount = $amount;
-	}
-
-	public function setBaseAmount($amount){
-		$this->baseAmount = $amount;
-	}
+	protected $randomAmount = 10;
+	protected $baseAmount = 1;
 
 	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
 		$this->level = $level;
