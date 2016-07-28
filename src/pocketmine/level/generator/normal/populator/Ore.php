@@ -23,6 +23,7 @@ namespace pocketmine\level\generator\normal\populator;
 
 use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\normal\object\Ore as ObjectOre;
+use pocketmine\level\generator\populator\Populator;
 use pocketmine\utils\Random;
 
 class Ore extends Populator{

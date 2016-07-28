@@ -34,11 +34,11 @@ use pocketmine\level\generator\Generator;
 use pocketmine\level\generator\noise\Simplex;
 
 use pocketmine\level\generator\normal\object\OreType;
-use pocketmine\level\generator\normal\populator\GroundFire;
-use pocketmine\level\generator\normal\populator\NetherGlowStone;
-use pocketmine\level\generator\normal\populator\NetherLava;
-use pocketmine\level\generator\normal\populator\NetherOre;
-use pocketmine\level\generator\normal\populator\Populator;
+use pocketmine\level\generator\nether\populator\GroundFire;
+use pocketmine\level\generator\nether\populator\NetherGlowStone;
+use pocketmine\level\generator\nether\populator\NetherLava;
+use pocketmine\level\generator\nether\populator\NetherOre;
+use pocketmine\level\generator\populator\Populator;
 
 use pocketmine\math\Vector3 as Vector3;
 use pocketmine\utils\Random;

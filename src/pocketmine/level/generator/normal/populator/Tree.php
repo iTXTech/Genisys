@@ -25,6 +25,7 @@ use pocketmine\block\Block;
 use pocketmine\block\Sapling;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\normal\object\Tree as ObjectTree;
+use pocketmine\level\generator\populator\Populator;
 use pocketmine\utils\Random;
 
 class Tree extends Populator{

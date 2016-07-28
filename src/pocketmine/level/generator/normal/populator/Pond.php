@@ -23,6 +23,7 @@ namespace pocketmine\level\generator\normal\populator;
 
 use pocketmine\block\Water;
 use pocketmine\level\ChunkManager;
+use pocketmine\level\generator\populator\Populator;
 use pocketmine\utils\Random;
 
 class Pond extends Populator{

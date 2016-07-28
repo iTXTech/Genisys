@@ -41,13 +41,11 @@ use pocketmine\level\generator\biome\Biome;
 use pocketmine\level\generator\biome\BiomeSelector;
 use pocketmine\level\generator\Generator;
 use pocketmine\level\generator\noise\Simplex;
-use pocketmine\level\generator\normal\biome\NormalBiome;
 use pocketmine\level\generator\normal\object\OreType;
+use pocketmine\level\generator\normal\populator\Cave;
 use pocketmine\level\generator\normal\populator\GroundCover;
 use pocketmine\level\generator\normal\populator\Ore;
-use pocketmine\level\generator\normal\populator\Populator;
-use pocketmine\level\generator\normal\populator\TallGrass;
-use pocketmine\level\generator\normal\populator\Tree;
+use pocketmine\level\generator\populator\Populator;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3 as Vector3;
 use pocketmine\utils\Random;
@@ -168,8 +166,6 @@ class Normal extends Generator{
 				}
 			}
 		}, Biome::getBiome(Biome::OCEAN));
-
-		$this->heightOffset = $random->nextRange(-5, 3);
 
 		$this->selector->addBiome(Biome::getBiome(Biome::OCEAN));
 		$this->selector->addBiome(Biome::getBiome(Biome::PLAINS));

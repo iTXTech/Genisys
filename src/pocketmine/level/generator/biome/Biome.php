@@ -35,8 +35,8 @@ use pocketmine\level\generator\normal\biome\PlainBiome;
 use pocketmine\level\generator\normal\biome\RiverBiome;
 use pocketmine\level\generator\normal\biome\SmallMountainsBiome;
 use pocketmine\level\generator\normal\biome\TaigaBiome;
-use pocketmine\level\generator\nether\HellBiome;
-use pocketmine\level\generator\normal\populator\Populator;
+use pocketmine\level\generator\nether\biome\NetherrackBiome;
+use pocketmine\level\generator\populator\Populator;
 use pocketmine\utils\Random;
 
 use pocketmine\level\generator\normal\populator\Flower;
@@ -51,7 +51,7 @@ abstract class Biome{
 	const TAIGA = 5;
 	const SWAMP = 6;
 	const RIVER = 7;
-	const HELL = 8;
+	const HELL = 8; const NETHERRACK = 8;
 	const END = 9;
 	const FROZEN_OCEAN = 10;
 	const FROZEN_RIVER = 11;
@@ -142,7 +142,7 @@ abstract class Biome{
 
 
 		self::register(self::SMALL_MOUNTAINS, new SmallMountainsBiome());
-		self::register(self::HELL, new HellBiome());
+		self::register(self::HELL, new NetherrackBiome());
 
 		self::register(self::BIRCH_FOREST, new ForestBiome(ForestBiome::TYPE_BIRCH));
 	}

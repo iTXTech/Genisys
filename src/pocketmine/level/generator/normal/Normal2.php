@@ -36,7 +36,7 @@ use pocketmine\level\generator\biome\BiomeSelector;
 use pocketmine\level\generator\Generator;
 use pocketmine\level\generator\noise\Simplex;
 use pocketmine\level\generator\normal\object\OreType;
-use pocketmine\level\generator\normal\populator\Caves;
+use pocketmine\level\generator\normal\populator\Cave;
 use pocketmine\level\generator\normal\populator\GroundCover;
 use pocketmine\level\generator\normal\populator\Ore;
 use pocketmine\math\Vector3;

@@ -19,12 +19,13 @@
  *
  */
 
-namespace pocketmine\level\generator\normal\populator;
+namespace pocketmine\level\generator\nether\populator;
 
 use pocketmine\block\Glowstone;
 use pocketmine\level\ChunkManager;
-use pocketmine\level\generator\normal\object\NetherOreTop as ObjectOre;
+use pocketmine\level\generator\nether\object\NetherOreTop as ObjectOre;
 use pocketmine\level\generator\normal\object\OreType;
+use pocketmine\level\generator\populator\Populator;
 use pocketmine\utils\Random;
 
 class NetherGlowStone extends Populator{

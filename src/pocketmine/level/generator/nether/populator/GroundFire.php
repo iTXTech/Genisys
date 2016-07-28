@@ -19,11 +19,11 @@
  *
 */
 
-namespace pocketmine\level\generator\normal\populator;
+namespace pocketmine\level\generator\nether\populator;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
-use pocketmine\level\SimpleChunkManager;
+use pocketmine\level\generator\populator\Populator;
 use pocketmine\utils\Random;
 
 class GroundFire extends Populator{

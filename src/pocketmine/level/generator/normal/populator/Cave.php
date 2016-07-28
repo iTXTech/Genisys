@@ -19,10 +19,11 @@
  *
  */
 
-namespace pocketmine\level\generator\populator;
+namespace pocketmine\level\generator\normal\populator;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
+use pocketmine\level\generator\populator\Populator;
 use pocketmine\math\Math;
 use pocketmine\math\Vector3;
 use pocketmine\math\VectorMath;
@@ -30,15 +31,15 @@ use pocketmine\utils\Random;
 
 class Cave extends Populator{
 	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
-		$overLap = 8;
+		$overlap = 8;
 		$firstSeed = $random->nextInt();
 		$secondSeed = $random->nextInt();
 		for($cxx = 0; $cxx < 1; $cxx++){
 			for($czz = 0; $czz < 1; $czz++){
 				$dcx = $chunkX + $cxx;
 				$dcz = $chunkZ + $czz;
-				for($cxxx = -$overLap; $cxxx <= $overLap; $cxxx++){
-					for($czzz = -$overLap; $czzz <= $overLap; $czzz++){
+				for($cxxx = -$overlap; $cxxx <= $overlap; $cxxx++){
+					for($czzz = -$overlap; $czzz <= $overlap; $czzz++){
 						$dcxx = $dcx + $cxxx;
 						$dczz = $dcz + $czzz;
 						$this->pop($level, $dcxx, $dczz, $dcx, $dcz, new Random(($dcxx * $firstSeed) ^ ($dczz * $secondSeed) ^ $random->getSeed()));

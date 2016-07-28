@@ -19,10 +19,11 @@
  *
  */
 
-namespace pocketmine\level\generator\normal\populator;
+namespace pocketmine\level\generator\nether\populator;
 
 use pocketmine\level\ChunkManager;
-use pocketmine\level\generator\normal\object\NetherOre as ObjectOre;
+use pocketmine\level\generator\nether\object\NetherOre as ObjectOre;
+use pocketmine\level\generator\populator\Populator;
 use pocketmine\utils\Random;
 
 class NetherOre extends Populator{
