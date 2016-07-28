@@ -51,6 +51,9 @@ class CraftingManager{
 	private static $RECIPE_COUNT = 0;
 
 	public function __construct(bool $useJson = false){
+		
+		//TODO: Rewrite this mess
+		
 		$this->registerBrewingStand();
 		if($useJson){
 			// load recipes from src/pocketmine/recipes.json
@@ -110,6 +113,9 @@ class CraftingManager{
 			$this->registerArmor();
 			$this->registerFood();
 			$this->registerBrewingStand();
+			
+			//TODO: Get rid of this idiocy
+			
 			$this->registerRecipe((new ShapedRecipe(Item::get(Item::CLAY_BLOCK, 0, 1),
 				"XX ",
 				"XX ",
@@ -131,9 +137,6 @@ class CraftingManager{
 				"XX",
 				"XX"
 			))->setIngredient("X", Item::get(Item::SNOWBALL)));
-			$this->registerRecipe((new ShapedRecipe(Item::get(Item::SNOW_LAYER, 0, 6),
-				"X"
-			))->setIngredient("X", Item::get(Item::SNOW_BLOCK, 0, 3)));
 			$this->registerRecipe((new ShapedRecipe(Item::get(Item::STICK, 0, 4),
 				"X ",
 				"X "
@@ -171,6 +174,11 @@ class CraftingManager{
 			$this->registerRecipe((new ShapedRecipe(Item::get(Item::SUGAR, 0, 1),
 				"S"
 			))->setIngredient("S", Item::get(Item::SUGARCANE, 0, 1)));
+
+			//Who thought Snow Layers was a small recipe?
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SNOW_LAYER, 0, 6),
+				"XXX"
+			))->setIngredient("X", Item::get(Item::SNOW_BLOCK, 0, 3)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BED, 0, 1),
 				"WWW",
 				"PPP",

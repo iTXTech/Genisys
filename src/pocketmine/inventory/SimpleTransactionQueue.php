@@ -27,7 +27,7 @@ use pocketmine\item\Item;
 
 class SimpleTransactionQueue implements TransactionQueue{
 	
-	const DEFAULT_ALLOWED_RETRIES = 20;
+	const DEFAULT_ALLOWED_RETRIES = 5;
 	//const MAX_QUEUE_LENGTH = 3;
 	
 	/** @var Player[] */
@@ -92,15 +92,8 @@ class SimpleTransactionQueue implements TransactionQueue{
 	 * Returns true if the addition was successful, false if not.
 	 */
 	public function addTransaction(Transaction $transaction){
-		
-		$change = $transaction->getChange();
-		if(@$change["in"] instanceof Item or @$change["out"] instanceof Item){
-			$this->transactionQueue->enqueue($transaction);
-			$this->lastUpdate = microtime(true);
-		}else{
-			//Null change detected, nothing needs to be done
-			return false;
-		}
+		$this->transactionQueue->enqueue($transaction);
+		$this->lastUpdate = microtime(true);
 		
 		return true;
 	}
@@ -149,51 +142,39 @@ class SimpleTransactionQueue implements TransactionQueue{
 		while(!$this->transactionQueue->isEmpty()){
 			
 			$transaction = $this->transactionQueue->dequeue();
+				
+			$change = $transaction->getChange();
+
+			if($change["out"] instanceof Item){
+				if(($transaction->getInventory()->slotContains($transaction->getSlot(), $change["out"])) or $this->player->isCreative()){
+					//Allow adding nonexistent items to the crafting inventory in creative.
+
+					$this->player->getCraftingInventory()->addItem($change["out"]);
+					$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
 			
-			if($transaction instanceof DropItemTransaction){ //Dropped item
-				$droppedItem = $transaction->getTargetItem();
-				if($this->player->getCraftingInventory()->contains($droppedItem) or $this->player->isCreative()){
-					
-					$this->player->getCraftingInventory()->removeItem($droppedItem);
-					
-					$transaction->setSuccess();
-					$this->player->dropItem($droppedItem);
 				}else{
 					$this->handleFailure($transaction, $failed);
 					continue;
 				}
-			}else{ //Normal inventory transaction
-				//Quick hack for proof of concept. This will need fixing properly.
-				$transaction->setSourceItem($transaction->getInventory()->getItem($transaction->getSlot()));
-				
-				$change = $transaction->getChange();
-
-				if($change["out"] instanceof Item){
-					if(($transaction->getInventory()->slotContains($transaction->getSlot(), $change["out"]) and $transaction->getInventory()->slotContains($transaction->getSlot(), $transaction->getSourceItem(), true)) or $this->player->isCreative()){
-						//Allow adding nonexistent items to the crafting inventory in creative.
-
-						$this->player->getCraftingInventory()->addItem($change["out"]);
-						$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
-				
-					}else{
-						$this->handleFailure($transaction, $failed);
-						continue;
-					}
-				}
-				if($change["in"] instanceof Item){
-					if($this->player->getCraftingInventory()->contains($change["in"]) or $this->player->isCreative()){
-						
-						$this->player->getCraftingInventory()->removeItem($change["in"]);
-						$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
-						
-					}else{
-						$this->handleFailure($transaction, $failed);
-						continue;
-					}
-				}
-				$transaction->setSuccess();
-				$transaction->sendSlotUpdate($this->player);				
 			}
+			if($change["in"] instanceof Item){
+				if($this->player->getCraftingInventory()->contains($change["in"]) or $this->player->isCreative()){
+					
+					$this->player->getCraftingInventory()->removeItem($change["in"]);
+					
+					if($transaction instanceof DropItemTransaction){
+						$this->player->dropItem($transaction->getTargetItem());
+					}else{
+						$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
+					}
+					
+				}else{
+					$this->handleFailure($transaction, $failed);
+					continue;
+				}
+			}
+			$transaction->setSuccess();
+			$transaction->sendSlotUpdate($this->player);
 		}
 		$this->isExecuting = false;
 
