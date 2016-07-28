@@ -125,21 +125,24 @@ class PlayerInventory extends BaseInventory{
 	 * Sets which hotbar slot the player is currently holding.
 	 * Allows slot remapping as specified by a MobEquipmentPacket. DO NOT CHANGE SLOT MAPPING IN PLUGINS!
 	 * This new implementation is fully compatible with older APIs.
+	 * NOTE: Slot mapping is the raw slot index sent by MCPE, which will be between 9 and 44.
 	 */
 	public function setHeldItemIndex($hotbarSlotIndex, $sendToHolder = true, $slotMapping = null){
+		if($slotMapping !== null){
+			//Get the index of the slot in the actual inventory
+			$slotMapping -= $this->getHotbarSize();
+		}
 		if(0 <= $hotbarSlotIndex and $hotbarSlotIndex < $this->getHotbarSize()){
+			echo "handling hotbar slot index change\n";
 			$this->itemInHandIndex = $hotbarSlotIndex;
 			if($slotMapping !== null){ //Handle a hotbar slot mapping change (for PE)
-				//Get the index of the slot in the actual inventory
-				$targetInventorySlot = $slotMapping - $this->getHotbarSize();
-				
-				if(($key = array_search($targetInventorySlot, $this->hotbar)) !== false){
+				if(($key = array_search($slotMapping, $this->hotbar)) !== false){
 					//Chosen slot is already linked to a hotbar slot, swap the two slots around.
 					//This will already have been done on the client-side so no changes need to be sent.
 					$this->hotbar[$key] = $this->hotbar[$this->itemInHandIndex];					
 				}
 				
-				$this->hotbar[$this->itemInHandIndex] = $targetInventorySlot;
+				$this->hotbar[$this->itemInHandIndex] = $slotMapping;
 			}
 			$this->sendHeldItem($this->getHolder()->getViewers());
 			if($sendToHolder){
@@ -199,8 +202,6 @@ class PlayerInventory extends BaseInventory{
 					return;
 				}
 			}
-
-			//$this->setHotbarSlotIndex($itemIndex, $slot);
 		}
 	}
 
@@ -232,17 +233,19 @@ class PlayerInventory extends BaseInventory{
 		}
 	}
 
-	public function onSlotChange($index, $before){
-		$holder = $this->getHolder();
-		if(!$holder instanceof Player or !$holder->spawned){
-			return;
-		}
+	public function onSlotChange($index, $before, $send){
+		if($send){
+			$holder = $this->getHolder();
+			if(!$holder instanceof Player or !$holder->spawned){
+				return;
+			}
 
-		parent::onSlotChange($index, $before);
+			parent::onSlotChange($index, $before, $send);
 
-		if($index >= $this->getSize()){
-			$this->sendArmorSlot($index, $this->getViewers());
-			$this->sendArmorSlot($index, $this->getHolder()->getViewers());
+			if($index >= $this->getSize()){
+				$this->sendArmorSlot($index, $this->getViewers());
+				$this->sendArmorSlot($index, $this->getHolder()->getViewers());
+			}
 		}
 	}
 
@@ -290,11 +293,11 @@ class PlayerInventory extends BaseInventory{
 		return $this->setItem($this->getSize() + 3, $boots);
 	}
 
-	public function setItem($index, Item $item){
+	public function setItem($index, Item $item, $send = true){
 		if($index < 0 or $index >= $this->size){
 			return false;
 		}elseif($item->getId() === 0 or $item->getCount() <= 0){
-			return $this->clear($index);
+			return $this->clear($index, $send);
 		}
 
 		if($index >= $this->getSize()){ //Armor change
@@ -316,12 +319,12 @@ class PlayerInventory extends BaseInventory{
 
 		$old = $this->getItem($index);
 		$this->slots[$index] = clone $item;
-		$this->onSlotChange($index, $old);
+		$this->onSlotChange($index, $old, $send);
 
 		return true;
 	}
 
-	public function clear($index){
+	public function clear($index, $send = true){
 		if(isset($this->slots[$index])){
 			$item = Item::get(Item::AIR, null, 0);
 			$old = $this->slots[$index];
@@ -354,7 +357,7 @@ class PlayerInventory extends BaseInventory{
 				unset($this->slots[$index]);
 			}
 
-			$this->onSlotChange($index, $old);
+			$this->onSlotChange($index, $old, $send);
 		}
 
 		return true;
