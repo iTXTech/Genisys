@@ -1813,7 +1813,6 @@ class Server{
 		   §fVersion: §6" . $this->getPocketMineVersion() . "
 		   §fTarget client Version: §d" . \pocketmine\MINECRAFT_VERSION . "
 		   §fLatest source code is available at https://github.com/iTXTech/Genisys
-		   §fDonate link: http://pl.zxda.net/plugins/203.html
 		\n";
 
 			$this->about();
