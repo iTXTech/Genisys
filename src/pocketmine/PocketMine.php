@@ -75,8 +75,8 @@ namespace pocketmine {
 	const VERSION = ""; //will be set by CI to a git hash
 	const API_VERSION = "2.0.0";
 	const CODENAME = "Kyrios";
-	const MINECRAFT_VERSION = "v0.15.0 alpha";
-	const MINECRAFT_VERSION_NETWORK = "0.15.0";
+	const MINECRAFT_VERSION = "v0.15.4 alpha";
+	const MINECRAFT_VERSION_NETWORK = "0.15.4";
 	const GENISYS_API_VERSION = '1.8.0';
 
 	/*

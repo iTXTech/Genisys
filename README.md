@@ -9,7 +9,7 @@ Genisys
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU Lesser General Public License for more details.
+	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
@@ -20,8 +20,8 @@ __Feature-rich server software for Minecraft: Pocket Edition__
 
 Introduction
 -------------
-Genisys is a server software for Minecraft: Pocket Edition.
-It is only a fork of __[PocketMine-MP](https://github.com/PocketMine/PocketMine-MP)__.
+Genisys is a server software for Minecraft: Pocket Edition.<br>
+It is only a fork of __[PocketMine-MP](https://github.com/PocketMine/PocketMine-MP)__ and most of the codes are written by **PocketMine Team**.<br>
 There are a few difference between Genisys and PocketMine-MP:
 
 * Extra plugin APls (GeniAPI)
