@@ -1725,7 +1725,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->server->getPluginManager()->callEvent($ev);
 
 				if(!($revert = $ev->isCancelled())){ //Yes, this is intended
-					//$teleported = false;
 					if($this->server->netherEnabled){
 						if($this->isInsideOfPortal()){
 							if($this->portalTime == 0){
@@ -1736,13 +1735,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}
 					}
 
-					//if($this->server->redstoneEnabled) $this->getLevel()->updateAround($ev->getTo()->round());
-
-					//	if(!$teleported){
 					if($to->distanceSquared($ev->getTo()) > 0.01){ //If plugins modify the destination
 						$this->teleport($ev->getTo());
 					}else{
-						$this->level->addEntityMovement($this->x >> 4, $this->z >> 4, $this->getId(), $this->x, $this->y + $this->getEyeHeight(), $this->z, $this->yaw, $this->pitch, $this->yaw);
+						$this->addMovement($this->x, $this->y + $this->getEyeHeight(), $this->z, $this->yaw, $this->pitch, $this->yaw);
 					}
 
 					if($this->fishingHook instanceof FishingHook){
@@ -1750,17 +1746,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$this->setFishingHook();
 						}
 					}
-					//	}
-
-					/*if($this->server->expEnabled){
-						/** @var \pocketmine\entity\ExperienceOrb $e *
-						foreach($this->level->getNearbyExperienceOrb(new AxisAlignedBB($this->x - 1, $this->y - 1, $this->z - 1, $this->x + 1, $this->y + 2, $this->z + 1)) as $e){
-							if($e->getExperience() > 0){
-								$e->close();
-								$this->addExperience($e->getExperience());
-							}
-						}
-					}*/
 				}
 			}
 
@@ -1793,6 +1778,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		$this->newPosition = null;
+	}
+
+	public function addMovement($x, $y, $z, $yaw, $pitch, $headYaw = null){
+		$this->level->addPlayerMovement($this->chunk->getX(), $this->chunk->getZ(), $this->id, $x, $y, $z, $yaw, $pitch, $this->onGround, $headYaw === null ? $yaw : $headYaw);
 	}
 
 	public function setMotion(Vector3 $mot){
