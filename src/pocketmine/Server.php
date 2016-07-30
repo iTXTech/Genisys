@@ -326,7 +326,7 @@ class Server{
 	/** @var Level */
 	private $levelDefault = null;
 
-	public $aboutstring = "";
+	private $aboutContent = "";
 
 	/** Advanced Config */
 	public $advancedConfig = null;
@@ -1640,7 +1640,7 @@ class Server{
 	}
 
 	public function about(){
-		$this->logger->info($this->aboutstring);
+		$this->logger->info($this->aboutContent);
 	}
 
 	public function loadAdvancedConfig(){
@@ -1808,13 +1808,17 @@ class Server{
 			$this->version = $version;
 
 
-			$this->aboutstring = "\n
-		   §5PocketMine-iTX §3Genisys §fis a fork of PocketMine-MP, made by §5iTX Technologies LLC§f.
-		   §fVersion: §6" . $this->getPocketMineVersion() . "
-		   §fTarget client Version: §d" . \pocketmine\MINECRAFT_VERSION . "
-		   §fLatest source code is available at https://github.com/iTXTech/Genisys
-		   §fDonate link: http://pl.zxda.net/plugins/203.html
-		\n";
+			$this->aboutContent = '
+                  _____   _____   __   _   _   _____  __    __  _____
+                 /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+                 | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+                 | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+                 | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+                 \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+
+                 §5PocketMine-iTX §aGenisys §fis only a fork of §bPocketMine-MP§f.
+                 §fSource code: §dhttps://github.com/iTXTech/Genisys§f
+            ';
 
 			$this->about();
 
