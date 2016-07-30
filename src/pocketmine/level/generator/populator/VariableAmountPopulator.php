@@ -33,7 +33,7 @@ abstract class VariableAmountPopulator extends Populator{
 	}
 
 	public function getAmount(Random $random){
-		return $this->getAmount($random);
+		return $this->baseAmount + $random->nextRange(0, $this->randomAmount + 1);
 	}
 
 	public final function setBaseAmount(int $baseAmount){
