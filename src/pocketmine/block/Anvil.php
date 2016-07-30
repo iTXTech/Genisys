@@ -56,7 +56,13 @@ class Anvil extends Fallable{
 	}
 
 	public function getName() : string{
-		return "Anvil";
+		$names = [
+			self::NORMAL => "Anvil",
+			self::SLIGHTLY_DAMAGED => "Slightly Damaged Anvil",
+			self::VERY_DAMAGED => "Very Damaged Anvil",
+			12 => "Anvil" //just in case somebody uses /give to get an anvil with damage 12 or higher, to prevent crash
+		];
+		return $names[$this->meta & 0x0c];
 	}
 
 	public function getToolType(){
