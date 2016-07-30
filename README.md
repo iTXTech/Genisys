@@ -42,7 +42,7 @@ Build status
 Get Genisys
 -------------
 * Download from __[GitLab CI](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)__<br>
-* __[Installtion instructions](https://github.com/iTXTech/Genisys/wiki)__
+* Installation instructions can be found in the __[wiki](https://github.com/iTXTech/Genisys/wiki)__.
 
 NOTE: **The master branch is the only officially supported branch.**
 _All other branches are in testing and may be unstable. Do not use builds from other branches unless you are sure you understand the risks._
