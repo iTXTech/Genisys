@@ -326,7 +326,7 @@ class Server{
 	/** @var Level */
 	private $levelDefault = null;
 
-	public $aboutstring = "";
+	private $aboutContent = "";
 
 	/** Advanced Config */
 	public $advancedConfig = null;
@@ -1640,7 +1640,7 @@ class Server{
 	}
 
 	public function about(){
-		$this->logger->info($this->aboutstring);
+		$this->logger->info($this->aboutContent);
 	}
 
 	public function loadAdvancedConfig(){
@@ -1808,7 +1808,7 @@ class Server{
 			$this->version = $version;
 
 
-			$this->aboutstring = '
+			$this->aboutContent = '
                   _____   _____   __   _   _   _____  __    __  _____
                  /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
                  | |     | |__   |   \| | | | | |___   \ \/ /  | |___
