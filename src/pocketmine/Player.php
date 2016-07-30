@@ -3508,15 +3508,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$inv->onEnchant($this, $inv->getItem($packet->slot), $packet->item);
 						
 					}elseif($inv instanceof AnvilInventory){
-						
-						if($packet->slot == 2){
-							if($packet->item->getId() != Item::AIR){
-								$this->anvilItem = $packet->item;
-							}elseif($this->anvilItem != null){
-								if(!$inv->onRename($this->anvilItem, $this)){
+						if($packet->slot === 2){
+							if($packet->item->getId() !== Item::AIR){
+								$inv->setItem($packet->slot, $packet->item, false);
+							}else{
+								if(!$inv->onRename($this)){
 									break; //maybe cheating!
 								}
-								$this->anvilItem = null;
 							}
 						}
 					}
