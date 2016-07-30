@@ -25,7 +25,7 @@ use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\item\enchantment\enchantment;
 
-class Glowstone extends Transparent{
+class Glowstone extends Transparent implements SolidLight{
 
 	protected $id = self::GLOWSTONE_BLOCK;
 
@@ -55,10 +55,10 @@ class Glowstone extends Transparent{
 				[Item::GLOWSTONE_BLOCK, 0, 1],
 			];
 		}else{
-			$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
-			$fortunel = $fortunel > 3 ? 3 : $fortunel;
+			$fortuneL = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+			$fortuneL = $fortuneL > 3 ? 3 : $fortuneL;
 			$times = [1,1,2,3,4];
-			$time = $times[mt_rand(0, $fortunel + 1)];
+			$time = $times[mt_rand(0, $fortuneL + 1)];
 			$num = mt_rand(2, 4) * $time;
 			$num = $num > 4 ? 4 : $num;
 			return [
