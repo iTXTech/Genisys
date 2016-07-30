@@ -64,7 +64,7 @@ class SugarCane extends VariableAmountPopulator{
 	private function getHighestWorkableBlock($x, $z){
 		for($y = 127; $y >= 0; --$y){
 			$b = $this->level->getBlockIdAt($x, $y, $z);
-			if($b !== Block::DIRT and $b !== Block::GRASS and $b !== Block::SAND){
+			if($b !== Block::DIRT and $b !== Block::GRASS and $b !== Block::SAND and $b !== Block::LEAVES and $b !== Block::LEAVES2){
 				break;
 			}
 		}

@@ -152,7 +152,7 @@ class Normal2 extends Normal{
 		$this->selector->recalculate();
 
 		$cover = new GroundCover();
-		$this->generationPopulators[] = $cover;;
+		$this->generationPopulators[] = $cover;
 
 		$cave = new Cave();
 		$this->populators[] = $cave;
