@@ -146,31 +146,33 @@ class SimpleTransactionQueue implements TransactionQueue{
 			$change = $transaction->getChange();
 
 			if($change["out"] instanceof Item){
-				if(($transaction->getInventory()->slotContains($transaction->getSlot(), $change["out"])) or $this->player->isCreative()){
-					//Allow adding nonexistent items to the crafting inventory in creative.
-
-					$this->player->getCraftingInventory()->addItem($change["out"]);
-					$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
-			
-				}else{
-					$this->handleFailure($transaction, $failed);
-					continue;
+				if(!$this->player->getServer()->allowInventoryCheats){
+					if($transaction->getInventory()->slotContains($transaction->getSlot(), $change["out"]) and !$this->player->isCreative()){
+						//Do not add items to the crafting inventory in creative to prevent weird duplication bugs.
+						$this->player->getCraftingInventory()->addItem($change["out"]);
+						
+					}elseif(!$player->isCreative()){ //Transaction failed, if the player is not in creative then this needs to be retried.
+						$this->handleFailure($transaction, $failed);
+						continue;
+					}
 				}
+				$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
 			}
 			if($change["in"] instanceof Item){
-				if($this->player->getCraftingInventory()->contains($change["in"]) or $this->player->isCreative()){
-					
-					$this->player->getCraftingInventory()->removeItem($change["in"]);
-					
-					if($transaction instanceof DropItemTransaction){
-						$this->player->dropItem($transaction->getTargetItem());
-					}else{
-						$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
+				if(!$this->player->getServer()->allowInventoryCheats){
+					if($this->player->getCraftingInventory()->contains($change["in"]) and !$player->isCreative()){
+						$this->player->getCraftingInventory()->removeItem($change["in"]);
+						
+					}elseif(!$this->player->isCreative()){ //Transaction failed, if the player was not creative then transaction is illegal
+						$this->handleFailure($transaction, $failed);
+						continue;
 					}
-					
+				}
+				
+				if($transaction instanceof DropItemTransaction){
+					$this->player->dropItem($transaction->getTargetItem());
 				}else{
-					$this->handleFailure($transaction, $failed);
-					continue;
+					$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
 				}
 			}
 			$transaction->setSuccess();

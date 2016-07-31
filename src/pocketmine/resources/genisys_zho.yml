@@ -2,7 +2,7 @@
 
 #設定檔案版本
 config:
- version: 17
+ version: 18
 
 level:
  #設定是否變換天氣
@@ -166,3 +166,7 @@ ai:
  creeper-explode-destroy-block: false
  #是否允許自動生成生物
  mobgenerate: false
+ 
+inventory:
+ #Set this to true if you have problems with anvils. Will process inventory transactions in a vanilla fashion with no anti-cheats or verification.
+ allow-cheats: false
