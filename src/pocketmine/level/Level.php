@@ -3221,8 +3221,8 @@ class Level implements ChunkManager, Metadatable{
 		$pk->x = $x;
 		$pk->y = $y;
 		$pk->z = $z;
-		$pk->yaw = $yaw;
-		$pk->headYaw = $headYaw === null ? $yaw : $headYaw;
+		$pk->yaw = $headYaw === null ? $yaw : $headYaw;
+		$pk->bodyYaw = $yaw;
 		$pk->pitch = $pitch;
 		$pk->onGround = $onGround;
 		$pk->mode = MovePlayerPacket::MODE_NORMAL;
