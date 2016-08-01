@@ -12,7 +12,19 @@ use pocketmine\math\Vector3;
 use pocketmine\Player;
 
 class Rail extends Flowable{
-
+	
+	const STRAIGHT_EAST_WEST = 0; 
+	const STRAIGHT_NORTH_SOUTH = 1; 
+	const SLOPED_ASCENDING_NORTH = 2;
+	const SLOPED_ASCENDING_SOUTH = 3;
+	const SLOPED_ASCENDING_EAST = 4;  
+	const SLOPED_ASCENDING_WEST = 5;
+	const CURVED_NORTH_WEST = 7; 
+	const CURVED_SOUTH_WEST = 6; 
+	const CURVED_SOUTH_EAST = 9;
+	const CURVED_NORTH_EAST = 8;
+	
+	
 	protected $id = self::RAIL;
 	/** @var Vector3 [] */
 	protected $connected = [];
