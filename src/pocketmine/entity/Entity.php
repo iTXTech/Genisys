@@ -760,7 +760,7 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	public function canCollideWith(Entity $entity){
-		return !$this->justCreated and $entity !== $this;
+		return !$this->justCreated and $entity !== $this and !($entity instanceof Player and !$entity->isSpectator());
 	}
 
 	protected function checkObstruction($x, $y, $z){
