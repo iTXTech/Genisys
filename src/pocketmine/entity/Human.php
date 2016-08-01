@@ -24,7 +24,7 @@ namespace pocketmine\entity;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
-use pocketmine\inventory\CraftingInventory;
+use pocketmine\inventory\FloatingInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\inventory\InventoryType;
 use pocketmine\inventory\PlayerInventory;
@@ -55,8 +55,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 	/** @var PlayerInventory */
 	protected $inventory;
 	
-	/** @var CraftingInventory */
-	protected $craftingInventory;
+	/** @var FloatingInventory */
+	protected $floatingInventory;
 	
 	/** @var SimpleTransactionQueue */
 	protected $transactionQueue = null;
@@ -261,8 +261,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		return $this->inventory;
 	}
 	
-	public function getCraftingInventory(){
-		return $this->craftingInventory;
+	public function getFloatingInventory(){
+		return $this->floatingInventory;
 	}
 	
 	public function getTransactionQueue(){
@@ -282,8 +282,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		$inventoryContents = ($this->namedtag->Inventory ?? null);
 		$this->inventory = new PlayerInventory($this, $inventoryContents);
 		
-		//Virtual inventory for desktop GUI crafting
-		$this->craftingInventory = new CraftingInventory($this, InventoryType::get(InventoryType::WORKBENCH));
+		//Virtual inventory for desktop GUI crafting and anti-cheat transaction processing
+		$this->floatingInventory = new FloatingInventory($this, InventoryType::get(InventoryType::PLAYER_FLOATING));
 		
 		if($this instanceof Player){
 			$this->addWindow($this->inventory, 0);
@@ -518,8 +518,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 
 	public function close(){
 		if(!$this->closed){
-			if($this->getCraftingInventory() instanceof CraftingInventory){
-				foreach($this->getCraftingInventory()->getContents() as $craftingItem){
+			if($this->getFloatingInventory() instanceof FloatingInventory){
+				foreach($this->getFloatingInventory()->getContents() as $craftingItem){
 					$this->level->dropItem($this, $craftingItem);
 				}
 			}else{

@@ -27,9 +27,6 @@ use pocketmine\item\Item;
 
 class SimpleTransactionQueue implements TransactionQueue{
 	
-	const DEFAULT_ALLOWED_RETRIES = 5;
-	//const MAX_QUEUE_LENGTH = 3;
-	
 	/** @var Player[] */
 	protected $player = null;
 	
@@ -38,14 +35,11 @@ class SimpleTransactionQueue implements TransactionQueue{
 	/** @var \SplQueue */
 	protected $transactionsToRetry;
 	
-	/** @var bool */
-	protected $isExecuting = false;
-	
 	/** @var float */
 	protected $lastUpdate = -1;
 	
-	/** @var Inventory[] */	
-	protected $inventories = [];
+	/** @var int */
+	protected $transactionCount = 0;
 	
 	/**
 	 * @param Player $player
@@ -63,6 +57,10 @@ class SimpleTransactionQueue implements TransactionQueue{
 		return $this->player;
 	}
 	
+	public function getTransactionCount(){
+		return $this->transactionCount;
+	}
+	
 	/**
 	 * @return \SplQueue
 	 */
@@ -71,47 +69,29 @@ class SimpleTransactionQueue implements TransactionQueue{
 	}
 	
 	/**
-	 * @return Inventory[]
-	 */
-	/*public function getInventories(){
-		return $this->inventories;
-	}*/
-	
-	/**
-	 * @return bool
-	 */
-	public function isExecuting(){
-		return $this->isExecuting;
-	}
-	
-	/**
 	 * @param Transaction $transaction
-	 * @return bool
 	 *
 	 * Adds a transaction to the queue
-	 * Returns true if the addition was successful, false if not.
 	 */
 	public function addTransaction(Transaction $transaction){
 		$this->transactionQueue->enqueue($transaction);
 		$this->lastUpdate = microtime(true);
-		
-		return true;
+		$this->transactionCount += 1;
 	}
 	
 	/** 
 	 * @param Transaction 	$transaction
-	 * @param Transaction[] &$completed
+	 * @param Transaction[] &$failed
 	 *
 	 * Handles a failed transaction
 	 */
 	private function handleFailure(Transaction $transaction, &$failed){
 		$transaction->addFailure();
 		if($transaction->getFailures() >= self::DEFAULT_ALLOWED_RETRIES){
-			//Transaction failed after several retries
-			echo "transaction completely failed\n";
+			/* Transaction failed after several retries */
 			$failed[] = $transaction;
 		}else{
-			//Add the transaction to the back of the queue to be retried
+			/* Add the transaction to the back of the queue to be retried on the next tick */
 			$this->transactionsToRetry->enqueue($transaction);
 		}
 	}
@@ -126,18 +106,18 @@ class SimpleTransactionQueue implements TransactionQueue{
 		/** @var Transaction[] */
 		$failed = [];
 		
-		$this->isExecuting = true;
+		/*$this->isExecuting = true;
 		
-		$failCount = $this->transactionsToRetry->count();
+		$failCount = $this->transactionsToRetry->count();*/
 
 		while(!$this->transactionsToRetry->isEmpty()){
 			//Some failed transactions are waiting from the previous execution to be retried
 			$this->transactionQueue->enqueue($this->transactionsToRetry->dequeue());
 		}
 		
-		if($this->transactionQueue->count() !== 0){
+		/*if($this->transactionQueue->count() !== 0){
 			echo "Batch-handling ".$this->transactionQueue->count()." changes, with ".$failCount." retries.\n";
-		}
+		}*/
 		
 		while(!$this->transactionQueue->isEmpty()){
 			
@@ -149,9 +129,9 @@ class SimpleTransactionQueue implements TransactionQueue{
 				if(!$this->player->getServer()->allowInventoryCheats){
 					if($transaction->getInventory()->slotContains($transaction->getSlot(), $change["out"]) and !$this->player->isCreative()){
 						//Do not add items to the crafting inventory in creative to prevent weird duplication bugs.
-						$this->player->getCraftingInventory()->addItem($change["out"]);
+						$this->player->getFloatingInventory()->addItem($change["out"]);
 						
-					}elseif(!$player->isCreative()){ //Transaction failed, if the player is not in creative then this needs to be retried.
+					}elseif(!$this->player->isCreative()){ //Transaction failed, if the player is not in creative then this needs to be retried.
 						$this->handleFailure($transaction, $failed);
 						continue;
 					}
@@ -160,8 +140,8 @@ class SimpleTransactionQueue implements TransactionQueue{
 			}
 			if($change["in"] instanceof Item){
 				if(!$this->player->getServer()->allowInventoryCheats){
-					if($this->player->getCraftingInventory()->contains($change["in"]) and !$player->isCreative()){
-						$this->player->getCraftingInventory()->removeItem($change["in"]);
+					if($this->player->getFloatingInventory()->contains($change["in"]) and !$this->player->isCreative()){
+						$this->player->getFloatingInventory()->removeItem($change["in"]);
 						
 					}elseif(!$this->player->isCreative()){ //Transaction failed, if the player was not creative then transaction is illegal
 						$this->handleFailure($transaction, $failed);
@@ -175,17 +155,15 @@ class SimpleTransactionQueue implements TransactionQueue{
 					$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
 				}
 			}
+			$this->transactionCount -= 1;
 			$transaction->setSuccess();
 			$transaction->sendSlotUpdate($this->player);
 		}
-		$this->isExecuting = false;
 
 		foreach($failed as $f){
 			$f->sendSlotUpdate($this->player);
 		}
 		
-		$this->lastExecution = microtime(true);
-		$this->hasExecuted = true;
 
 		return true;
 	}

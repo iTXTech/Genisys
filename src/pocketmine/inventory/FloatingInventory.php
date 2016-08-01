@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  *
  *  _____   _____   __   _   _   _____  __    __  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
@@ -21,16 +21,21 @@
 
 namespace pocketmine\inventory;
 
-interface TransactionQueue{
-	
-	const DEFAULT_ALLOWED_RETRIES = 5;
-	
-	function getTransactions();
-	
-	function getTransactionCount();
-	
-	function addTransaction(Transaction $transaction);
-	
-	function execute();
-	
+/**
+ * The in-between inventory where items involved in transactions are stored temporarily
+ */
+class FloatingInventory extends BaseInventory{
+
+	/**
+	 * @param InventoryHolder $holder
+	 * @param InventoryType   $inventoryType
+	 *
+	 * @throws \Throwable
+	 */
+	public function __construct(InventoryHolder $holder, InventoryType $inventoryType){
+		if($inventoryType->getDefaultTitle() !== "Floating"){
+			throw new \InvalidStateException("Invalid Inventory type, expected FLOATING");
+		}
+		parent::__construct($holder, $inventoryType);
+	}
 }
