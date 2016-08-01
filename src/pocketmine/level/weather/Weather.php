@@ -69,30 +69,19 @@ class Weather{
 		if($this->canCalculate()){
 			$tickDiff = $currentTick - $this->lastUpdate;
 			$this->duration -= $tickDiff;
+			
 			if($this->duration <= 0){
-				//0晴天1下雨2雷雨3阴天雷
-				if($this->weatherNow == self::SUNNY){
+				
+				$duration = mt_rand(
+						min($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax), 
+						max($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax));
+
+				if($this->weatherNow === self::SUNNY){ 
 					$weather = $this->randomWeatherData[array_rand($this->randomWeatherData)];
-					$duration = mt_rand(min($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax), max($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax));;
-					$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $weather, $duration));
-					if(!$ev->isCancelled()){
-						$this->weatherNow = $ev->getWeather();
-						$this->strength1 = mt_rand(90000, 110000);
-						$this->strength2 = mt_rand(30000, 40000);
-						$this->duration = $ev->getDuration();
-						$this->changeWeather($this->weatherNow, $this->strength1, $this->strength2);
-					}
+					$this->setWeather($weather, $duration);
 				}else{
 					$weather = self::SUNNY;
-					$duration = mt_rand(min($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax), max($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax));
-					$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $weather, $duration));
-					if(!$ev->isCancelled()){
-						$this->weatherNow = $ev->getWeather();
-						$this->strength1 = 0;
-						$this->strength2 = 0;
-						$this->duration = $ev->getDuration();
-						$this->changeWeather($this->weatherNow, $this->strength1, $this->strength2);
-					}
+					$this->setWeather($weather, $duration);
 				}
 			}
 			if(($this->weatherNow > 0) and ($this->level->getServer()->lightningTime > 0) and is_int($this->duration / $this->level->getServer()->lightningTime)){
@@ -104,14 +93,6 @@ class Weather{
 					$y = $this->level->getHighestBlockAt($x, $z);
 					$this->level->spawnLightning($this->temporalVector->setComponents($x, $y, $z));
 				}
-				/*foreach($this->level->getPlayers() as $p){
-					if(mt_rand(0, 1) == 1){
-						$x = $p->getX() + rand(-100, 100);
-						$y = $p->getY() + rand(20, 50);
-						$z = $p->getZ() + rand(-100, 100);
-						$this->level->sendLighting($x, $y, $z, $p);
-					}
-				}*/
 			}
 		}
 		$this->lastUpdate = $currentTick;
@@ -120,11 +101,11 @@ class Weather{
 	public function setWeather(int $wea, int $duration = 12000){
 		$this->level->getServer()->getPluginManager()->callEvent($ev = new WeatherChangeEvent($this->level, $wea, $duration));
 		if(!$ev->isCancelled()){
-			$this->weatherNow = $ev->getWeather();;
-			$this->strength1 = mt_rand(90000, 110000);
+			$this->weatherNow = $ev->getWeather();
+			$this->strength1 = mt_rand(90000, 110000); //If we're clearing the weather, it doesn't matter what strength values we set
 			$this->strength2 = mt_rand(30000, 40000);
 			$this->duration = $ev->getDuration();
-			$this->changeWeather($wea, $this->strength1, $this->strength2);
+			$this->sendWeatherToAll();
 		}
 	}
 
@@ -214,72 +195,45 @@ class Weather{
 	}
 
 	public function sendWeather(Player $p){
-		$pk1 = new LevelEventPacket;
-		$pk1->evid = LevelEventPacket::EVENT_STOP_RAIN;
-		$pk1->data = $this->strength1;
-		$pk2 = new LevelEventPacket;
-		$pk2->evid = LevelEventPacket::EVENT_STOP_THUNDER;
-		$pk2->data = $this->strength2;
-		$p->dataPacket($pk1);
-		$p->dataPacket($pk2);
-		if($p->weatherData[0] != $this->weatherNow){
-			if($this->weatherNow == 1){
-				$pk = new LevelEventPacket;
-				$pk->evid = LevelEventPacket::EVENT_START_RAIN;
-				$pk->data = $this->strength1;
-				$p->dataPacket($pk);
-			}elseif($this->weatherNow == 2){
-				$pk = new LevelEventPacket;
-				$pk->evid = LevelEventPacket::EVENT_START_RAIN;
-				$pk->data = $this->strength1;
-				$p->dataPacket($pk);
-				$pk = new LevelEventPacket;
-				$pk->evid = LevelEventPacket::EVENT_START_THUNDER;
-				$pk->data = $this->strength2;
-				$p->dataPacket($pk);
-			}elseif($this->weatherNow == 3){
-				$pk = new LevelEventPacket;
-				$pk->evid = LevelEventPacket::EVENT_START_THUNDER;
-				$pk->data = $this->strength2;
-				$p->dataPacket($pk);
-			}
-			$p->weatherData = [$this->weatherNow, $this->strength1, $this->strength2];
+		$pks = [
+			new LevelEventPacket(),
+			new LevelEventPacket()
+		];
+		
+		//Set defaults. These will be sent if the case statement defaults.
+		$pks[0]->evid = LevelEventPacket::EVENT_STOP_RAIN;
+		$pks[0]->data = $this->strength1;	
+		$pks[1]->evid = LevelEventPacket::EVENT_STOP_THUNDER;
+		$pks[1]->data = $this->strength2;
+		
+		switch($this->weatherNow){
+			//If the weather is not clear, overwrite the packet values with these
+			case self::RAIN:
+				$pks[0]->evid = LevelEventPacket::EVENT_START_RAIN;
+				$pks[0]->data = $this->strength1;
+				break;
+			case self::RAINY_THUNDER:
+				$pks[0]->evid = LevelEventPacket::EVENT_START_RAIN;
+				$pks[0]->data = $this->strength1;
+				$pks[1]->evid = LevelEventPacket::EVENT_START_THUNDER;
+				$pks[1]->data = $this->strength2;
+				break;
+			case self::THUNDER:
+				$pks[1]->evid = LevelEventPacket::EVENT_START_THUNDER;
+				$pks[1]->data = $this->strength2;
+				break;
+			default: break;
 		}
+		
+		foreach($pks as $pk){
+			$p->dataPacket($pk);
+		}
+		$p->weatherData = [$this->weatherNow, $this->strength1, $this->strength2];
 	}
 
-	public function changeWeather(int $wea, int $strength1, int $strength2){
-		$pk1 = new LevelEventPacket;
-		$pk1->evid = LevelEventPacket::EVENT_STOP_RAIN;
-		$pk1->data = $this->strength1;
-		$pk2 = new LevelEventPacket;
-		$pk2->evid = LevelEventPacket::EVENT_STOP_THUNDER;
-		$pk2->data = $this->strength2;
-		foreach($this->level->getPlayers() as $p){
-			if($p->weatherData[0] != $wea){
-				$p->dataPacket($pk1);
-				$p->dataPacket($pk2);
-				if($wea == 1){
-					$pk = new LevelEventPacket;
-					$pk->evid = LevelEventPacket::EVENT_START_RAIN;
-					$pk->data = $strength1;
-					$p->dataPacket($pk);
-				}elseif($wea == 2){
-					$pk = new LevelEventPacket;
-					$pk->evid = LevelEventPacket::EVENT_START_RAIN;
-					$pk->data = $strength1;
-					$p->dataPacket($pk);
-					$pk = new LevelEventPacket;
-					$pk->evid = LevelEventPacket::EVENT_START_THUNDER;
-					$pk->data = $strength2;
-					$p->dataPacket($pk);
-				}elseif($wea == 3){
-					$pk = new LevelEventPacket;
-					$pk->evid = LevelEventPacket::EVENT_START_THUNDER;
-					$pk->data = $strength2;
-					$p->dataPacket($pk);
-				}
-				$p->weatherData = [$wea, $strength1, $strength2];
-			}
+	public function sendWeatherToAll(){
+		foreach($this->level->getPlayers() as $player){
+			$this->sendWeather($player);
 		}
 	}
 

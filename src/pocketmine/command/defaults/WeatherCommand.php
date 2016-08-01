@@ -73,7 +73,7 @@ class WeatherCommand extends VanillaCommand{
 		}
 
 		if(count($args) < 2){
-			$sender->sendMessage(TextFormat::RED . "%pocketmine.command.weather.wrong");
+			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
 			return false;
 		}
 

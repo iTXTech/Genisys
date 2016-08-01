@@ -2293,6 +2293,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pk->metadata = [self::DATA_LEAD_HOLDER => [self::DATA_TYPE_LONG, -1]];
 		$this->dataPacket($pk);
 		
+		$this->level->getWeather()->sendWeather($this);
+		
 		$this->forceMovement = $this->teleportPosition = $this->getPosition();
 	}
 
