@@ -29,30 +29,32 @@ namespace pocketmine\inventory;
  */
 class CraftingInventory extends BaseInventory{
 
-	/** @var Item */
-	private $resultItem;
+	/** @var Inventory */
+	private $resultInventory;
 
 	/**
 	 * @param InventoryHolder $holder
+	 * @param Inventory       $resultInventory
 	 * @param InventoryType   $inventoryType
 	 *
 	 * @throws \Throwable
 	 */
-	public function __construct(InventoryHolder $holder, InventoryType $inventoryType){
+	public function __construct(InventoryHolder $holder, Inventory $resultInventory, InventoryType $inventoryType){
 		if($inventoryType->getDefaultTitle() !== "Crafting"){
 			throw new \InvalidStateException("Invalid Inventory type, expected CRAFTING or WORKBENCH");
 		}
+		$this->resultInventory = $resultInventory;
 		parent::__construct($holder, $inventoryType);
 	}
-	
-	public function setResultItem(Item $item){
-		$this->resultItem = $item;
-	}
-	
+
 	/**
-	 * @return Item
+	 * @return Inventory
 	 */
-	public function getResultItem(){
-		return $this->resultItem;
+	public function getResultInventory(){
+		return $this->resultInventory;
+	}
+
+	public function getSize(){
+		return $this->getResultInventory()->getSize() + parent::getSize();
 	}
 }
