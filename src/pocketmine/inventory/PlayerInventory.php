@@ -236,11 +236,13 @@ class PlayerInventory extends BaseInventory{
 			}
 
 			parent::onSlotChange($index, $before, $send);
-
-			if($index >= $this->getSize()){
-				$this->sendArmorSlot($index, $this->getViewers());
-				$this->sendArmorSlot($index, $this->getHolder()->getViewers());
-			}
+		}
+		if($index === $this->itemInHandIndex){
+			$this->sendHeldItem($this->getHolder()->getViewers());
+			
+		}elseif($index >= $this->getSize()){ //Armour equipment
+			$this->sendArmorSlot($index, $this->getViewers());
+			$this->sendArmorSlot($index, $this->getHolder()->getViewers());
 		}
 	}
 
