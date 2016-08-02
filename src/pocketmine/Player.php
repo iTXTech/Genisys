@@ -436,8 +436,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	public function updateExperience(){
 		if($this->getAttributeMap() instanceof AttributeMap){
-			$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE)->setValue(($this->exp - $this->server->getExpectedExperience($this->expLevel)) / ($this->getLevelUpExpectedExperience()));
-			$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE_LEVEL)->setValue($this->expLevel);
+			$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE)->setValue(($this->exp - $this->server->getExpectedExperience($this->expLevel)) / ($this->getLevelUpExpectedExperience()), true, true);
+			$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE_LEVEL)->setValue($this->expLevel, true, true);
 		}
 	}
 
@@ -4014,9 +4014,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		Entity::kill();
 
-		$this->server->getPluginManager()->callEvent($ev = new PlayerDeathEvent($this, $this->getDrops(), new TranslationContainer($message, $params)));
+		$ev = new PlayerDeathEvent($this, $this->getDrops(), new TranslationContainer($message, $params));
+		$ev->setKeepInventory($this->server->keepInventory);
+		$ev->setKeepExperience($this->server->keepExperience);
+		$this->server->getPluginManager()->callEvent($ev);
 
-		if(!$ev->getKeepInventory() and !$this->server->keepInventory){
+		if(!$ev->getKeepInventory()){
 			foreach($ev->getDrops() as $item){
 				$this->level->dropItem($this, $item);
 			}
@@ -4026,9 +4029,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			}
 		}
 
-		if($this->server->expEnabled and (!$ev->getKeepExperience() and !$this->server->keepInventory)){
+		if($this->server->expEnabled and !$ev->getKeepExperience()){
 			$exp = $this->getExp();
-			if($exp > 100) $exp = 100;
+			$exp = min(100, $exp);
 			$this->getLevel()->spawnXPOrb($this->add(0, 0.2, 0), $exp);
 			$this->setExperienceAndLevel(0, 0);
 		}
