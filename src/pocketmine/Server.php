@@ -1640,7 +1640,15 @@ class Server{
 	}
 
 	public function about(){
-		$this->logger->info($this->aboutContent);
+		$string = '
+
+	§3Genisys§f is a fork of §bPocketMine-MP§f, made by §5iTX Technologies LLC§f
+	Version: §6' . $this->getPocketMineVersion() . '§f
+	Target client version: §b' . \pocketmine\MINECRAFT_VERSION . '§f
+	Source code: §dhttps://github.com/iTXTech/Genisys§f
+	';
+	
+		$this->getLogger()->info($string);
 	}
 
 	public function loadAdvancedConfig(){
@@ -1807,19 +1815,6 @@ class Server{
 			$version = new VersionString($this->getPocketMineVersion());
 			$this->version = $version;
 
-
-			$this->aboutContent = '
-                  _____   _____   __   _   _   _____  __    __  _____
-                 /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
-                 | |     | |__   |   \| | | | | |___   \ \/ /  | |___
-                 | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
-                 | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
-                 \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
-
-                 §5PocketMine-iTX §aGenisys §fis only a fork of §bPocketMine-MP§f.
-                 §fSource code: §dhttps://github.com/iTXTech/Genisys§f
-            ';
-
 			$this->about();
 
 			$this->logger->info("Loading pocketmine.yml...");
@@ -1899,8 +1894,6 @@ class Server{
 
 			$this->memoryManager = new MemoryManager($this);
 
-			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.start", [TextFormat::AQUA . $this->getVersion(). TextFormat::WHITE]));
-
 			if(($poolSize = $this->getProperty("settings.async-workers", "auto")) === "auto"){
 				$poolSize = ServerScheduler::$WORKERS;
 				$processors = Utils::getCoreCount() - 2;
@@ -1976,13 +1969,6 @@ class Server{
 			$this->network = new Network($this);
 			$this->network->setName($this->getMotd());
 
-
-			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.info", [
-				$this->getName(),
-				$this->getFormattedVersion("-"),
-				$this->getCodename(),
-				$this->getApiVersion()
-			]));
 			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.license", [$this->getName()]));
 
 			Timings::init();
