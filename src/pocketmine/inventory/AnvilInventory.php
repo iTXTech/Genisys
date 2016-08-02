@@ -25,7 +25,13 @@ use pocketmine\item\Item;
 use pocketmine\level\Position;
 use pocketmine\Player;
 
-class AnvilInventory extends ContainerInventory{
+class AnvilInventory extends TemporaryInventory{
+	
+	const TARGET = 0;
+	const SACRIFICE = 1;
+	const RESULT = 2;
+	
+	
 	public function __construct(Position $pos){
 		parent::__construct(new FakeBlockMenu($this, $pos), InventoryType::get(InventoryType::ANVIL));
 	}
@@ -37,8 +43,9 @@ class AnvilInventory extends ContainerInventory{
 		return $this->holder;
 	}
 
+	
 	public function onRename(Player $player) : bool{
-		$item = $this->getItem(2);
+		$item = $this->getItem(self::RESULT);
 		if($player->getExpLevel() > $item->getRepairCost()){
 			$player->setExpLevel($player->getExpLevel() - $item->getRepairCost());
 			return true;
