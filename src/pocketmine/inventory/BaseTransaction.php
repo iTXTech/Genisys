@@ -108,6 +108,12 @@ class BaseTransaction implements Transaction{
 			//Do not send updates for drop item transactions as there is nothing to update
 			return;
 		}
+		
+		if($this->getInventory() instanceof TemporaryInventory){
+			//Attempting to change anvil slots server-side causes PE to crash.
+			return;
+		}
+		
 		$targets = [];
 		if($this->wasSuccessful){
 			$targets = $this->getInventory()->getViewers();
@@ -171,5 +177,37 @@ class BaseTransaction implements Transaction{
 					"out" => clone $sourceItem];
 		}
 		//Don't remove this comment until you're sure there's nothing missing.
+	}
+	
+	
+	public function execute(Player $source): bool{
+		
+		//How to do this... When the inventory is a temporary inventory, we want to recalculate all slots
+		//When it's a normal inventory, do whatever
+		if($this->getInventory()->processSlotChange($this)){ //This means that the transaction should be handled the normal way
+			if(!$source->getServer()->allowInventoryCheats){
+				$change = $this->getChange();
+				
+				if($change["out"] instanceof Item){
+					if($this->getInventory()->slotContains($this->getSlot(), $change["out"]) and !$source->isCreative()){
+						//Do not add items to the crafting inventory in creative to prevent weird duplication bugs.
+						$source->getFloatingInventory()->addItem($change["out"]);
+
+					}elseif(!$source->isCreative()){ //Transaction failed, if the player is not in creative then this needs to be retried.
+						return false;
+					}
+				}
+				if($change["in"] instanceof Item){
+					if($source->getFloatingInventory()->contains($change["in"]) and !$source->isCreative()){
+						$source->getFloatingInventory()->removeItem($change["in"]);
+						
+					}elseif(!$source->isCreative()){ //Transaction failed, if the player was not creative then transaction is illegal
+						return false;
+					}
+				}
+			}
+			$this->getInventory()->setItem($this->getSlot(), $this->getTargetItem(), false);
+		}
+		return true;
 	}
 }

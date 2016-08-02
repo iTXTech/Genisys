@@ -79,82 +79,36 @@ class SimpleTransactionQueue implements TransactionQueue{
 		$this->transactionCount += 1;
 	}
 	
-	/** 
-	 * @param Transaction 	$transaction
-	 * @param Transaction[] &$failed
-	 *
-	 * Handles a failed transaction
-	 */
-	private function handleFailure(Transaction $transaction, &$failed){
-		$transaction->addFailure();
-		if($transaction->getFailures() >= self::DEFAULT_ALLOWED_RETRIES){
-			/* Transaction failed after several retries */
-			$failed[] = $transaction;
-		}else{
-			/* Add the transaction to the back of the queue to be retried on the next tick */
-			$this->transactionsToRetry->enqueue($transaction);
-		}
-	}
-	
 	/**
 	 * @return bool
 	 *
 	 * Handles transaction queue execution
 	 */
 	public function execute(){
-		
 		/** @var Transaction[] */
 		$failed = [];
 		
-		/*$this->isExecuting = true;
-		
-		$failCount = $this->transactionsToRetry->count();*/
-
 		while(!$this->transactionsToRetry->isEmpty()){
 			//Some failed transactions are waiting from the previous execution to be retried
 			$this->transactionQueue->enqueue($this->transactionsToRetry->dequeue());
 		}
 		
-		/*if($this->transactionQueue->count() !== 0){
-			echo "Batch-handling ".$this->transactionQueue->count()." changes, with ".$failCount." retries.\n";
-		}*/
-		
 		while(!$this->transactionQueue->isEmpty()){
 			
 			$transaction = $this->transactionQueue->dequeue();
-				
-			$change = $transaction->getChange();
-
-			if($change["out"] instanceof Item){
-				if(!$this->player->getServer()->allowInventoryCheats){
-					if($transaction->getInventory()->slotContains($transaction->getSlot(), $change["out"]) and !$this->player->isCreative()){
-						//Do not add items to the crafting inventory in creative to prevent weird duplication bugs.
-						$this->player->getFloatingInventory()->addItem($change["out"]);
-						
-					}elseif(!$this->player->isCreative()){ //Transaction failed, if the player is not in creative then this needs to be retried.
-						$this->handleFailure($transaction, $failed);
-						continue;
-					}
-				}
-				$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
-			}
-			if($change["in"] instanceof Item){
-				if(!$this->player->getServer()->allowInventoryCheats){
-					if($this->player->getFloatingInventory()->contains($change["in"]) and !$this->player->isCreative()){
-						$this->player->getFloatingInventory()->removeItem($change["in"]);
-						
-					}elseif(!$this->player->isCreative()){ //Transaction failed, if the player was not creative then transaction is illegal
-						$this->handleFailure($transaction, $failed);
-						continue;
-					}
-				}
-				
-				if($transaction instanceof DropItemTransaction){
-					$this->player->dropItem($transaction->getTargetItem());
+			
+			if(!$transaction->execute($this->player)){
+				$transaction->addFailure();
+				if($transaction->getFailures() >= self::DEFAULT_ALLOWED_RETRIES){
+					/* Transaction failed completely after several retries, hold onto it to send a slot update */
+					$failed[] = $transaction;
 				}else{
-					$transaction->getInventory()->setItem($transaction->getSlot(), $transaction->getTargetItem(), false);
+					/* Add the transaction to the back of the queue to be retried on the next tick */
+					$this->transactionsToRetry->enqueue($transaction);
 				}
+				continue;
 			}
+
 			$this->transactionCount -= 1;
 			$transaction->setSuccess();
 			$transaction->sendSlotUpdate($this->player);
@@ -164,7 +118,6 @@ class SimpleTransactionQueue implements TransactionQueue{
 			$f->sendSlotUpdate($this->player);
 		}
 		
-
 		return true;
 	}
 }
