@@ -96,6 +96,7 @@ use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\network\protocol\MoveEntityPacket;
+use pocketmine\network\protocol\MovePlayerPacket;
 use pocketmine\network\protocol\SetEntityMotionPacket;
 use pocketmine\network\protocol\SetTimePacket;
 use pocketmine\network\protocol\UpdateBlockPacket;
@@ -841,15 +842,7 @@ class Level implements ChunkManager, Metadatable{
 		foreach($this->moveToSend as $index => $entry){
 			Level::getXZ($index, $chunkX, $chunkZ);
 			foreach($entry as $e) {
-				$pk = new MoveEntityPacket();
-				$pk->eid = $e[0];
-				$pk->x = $e[1];
-				$pk->y = $e[2];
-				$pk->z = $e[3];
-				$pk->yaw = $e[4];
-				$pk->headYaw = $e[5];
-				$pk->pitch = $e[6];
-				$this->addChunkPacket($chunkX, $chunkZ, $pk);
+				$this->addChunkPacket($chunkX, $chunkZ, $e);
 			}
 		}
 		$this->moveToSend = [];
@@ -3206,6 +3199,33 @@ class Level implements ChunkManager, Metadatable{
 		if(!isset($this->moveToSend[$index = Level::chunkHash($chunkX, $chunkZ)])){
 			$this->moveToSend[$index] = [];
 		}
-		$this->moveToSend[$index][$entityId] = [$entityId, $x, $y, $z, $yaw, $headYaw === null ? $yaw : $headYaw, $pitch];
+
+		$pk = new MoveEntityPacket();
+		$pk->eid = $entityId;
+		$pk->x = $x;
+		$pk->y = $y;
+		$pk->z = $z;
+		$pk->yaw = $yaw;
+		$pk->headYaw = $headYaw === null ? $yaw : $headYaw;
+		$pk->pitch = $pitch;
+		$this->moveToSend[$index][$entityId] = $pk;
+	}
+
+	public function addPlayerMovement($chunkX, $chunkZ, $entityId, $x, $y, $z, $yaw, $pitch, $onGround, $headYaw = null){
+		if(!isset($this->moveToSend[$index = Level::chunkHash($chunkX, $chunkZ)])){
+			$this->moveToSend[$index] = [];
+		}
+
+		$pk = new MovePlayerPacket();
+		$pk->eid = $entityId;
+		$pk->x = $x;
+		$pk->y = $y;
+		$pk->z = $z;
+		$pk->yaw = $headYaw === null ? $yaw : $headYaw;
+		$pk->bodyYaw = $yaw;
+		$pk->pitch = $pitch;
+		$pk->onGround = $onGround;
+		$pk->mode = MovePlayerPacket::MODE_NORMAL;
+		$this->moveToSend[$index][$entityId] = $pk;
 	}
 }
