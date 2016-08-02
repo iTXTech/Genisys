@@ -33,6 +33,7 @@ class PardonCommand extends VanillaCommand{
 			$name,
 			"%pocketmine.command.unban.player.description",
 			"%commands.unban.usage"
+			["unban"]
 		);
 		$this->setPermission("pocketmine.command.unban.player");
 	}
