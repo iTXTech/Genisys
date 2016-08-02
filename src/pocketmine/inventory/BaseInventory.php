@@ -161,6 +161,16 @@ abstract class BaseInventory implements Inventory{
 
 		return true;
 	}
+	
+	public function setSlotCount($index, $count, $send){
+		if($count <= 0){
+			$this->clear($index, $send);
+		}else{
+			$before = clone $this->slots[$index];
+			$this->slots[$index]->setCount($count);
+			$this->onSlotChange($index, $before, $send);
+		}
+	}
 
 	public function contains(Item $item){
 		$count = max(1, $item->getCount());
@@ -428,6 +438,10 @@ abstract class BaseInventory implements Inventory{
 		if($send){
 			$this->sendSlot($index, $this->getViewers());
 		}
+	}
+	
+	public function processSlotChange(Transaction $transaction): bool{
+		return true;
 	}
 
 
