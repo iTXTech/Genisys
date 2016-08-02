@@ -2791,10 +2791,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}else{
 							$thrownPotion->spawnToAll();
 						}
+					}elseif($item->getId() == Item::BOW){
+						$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, true);
+						$this->startAction = $this->server->getTick();
 					}
-
-					$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, true);
-					$this->startAction = $this->server->getTick();
 				}
 				break;
 			case ProtocolInfo::PLAYER_ACTION_PACKET:
@@ -2905,6 +2905,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 									}
 								}
 							}
+
+							$this->startAction = -1;
+							$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 						}elseif($this->inventory->getItemInHand()->getId() === Item::BUCKET and $this->inventory->getItemInHand()->getDamage() === 1){ //Milk!
 							$this->server->getPluginManager()->callEvent($ev = new PlayerItemConsumeEvent($this, $this->inventory->getItemInHand()));
 							if($ev->isCancelled()){
@@ -3024,9 +3027,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}
 						break;
 				}
-
-				$this->startAction = -1;
-				$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
 				break;
 
 			case ProtocolInfo::REMOVE_BLOCK_PACKET:
