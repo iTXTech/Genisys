@@ -28,8 +28,6 @@ player:
  experience: true
  #是否開啟死亡不掉落
  keep-inventory: false
- #背包格數
- inventory-num: 36
  #是否開啟切換模式自動清除背包
  auto-clear-inventory: true
  #是否開啟死亡經驗不掉落

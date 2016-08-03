@@ -56,14 +56,14 @@ class InventoryType{
 		return isset(static::$default[$index]) ? static::$default[$index] : null;
 	}
 
-	public static function init($num = 36){
+	public static function init(){
 		if(count(static::$default) > 0){
 			return;
 		}
 
 		static::$default[static::CHEST] = new InventoryType(27, "Chest", 0);
 		static::$default[static::DOUBLE_CHEST] = new InventoryType(27 + 27, "Double Chest", 0);
-		static::$default[static::PLAYER] = new InventoryType($num + 4 + 9, "Player", 0); //36 CONTAINER, 4 ARMOR (9 reference HOTBAR slots)
+		static::$default[static::PLAYER] = new InventoryType(36 + 4, "Player", 0); //36 CONTAINER, 4 ARMOR
 		static::$default[static::FURNACE] = new InventoryType(3, "Furnace", 2);
 		static::$default[static::CRAFTING] = new InventoryType(5, "Crafting", 1); //4 CRAFTING slots, 1 RESULT
 		static::$default[static::WORKBENCH] = new InventoryType(10, "Crafting", 1); //9 CRAFTING slots, 1 RESULT
