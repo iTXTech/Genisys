@@ -28,8 +28,6 @@ player:
  experience: true
  #Choose if keep inventory when a player died
  keep-inventory: false
- #The space of inventory
- inventory-num: 36
  #Clear the inventory automatically when change the gamemode into creative
  auto-clear-inventory : true
  #Choose if keep experience when a player died

@@ -348,7 +348,6 @@ class Server{
 	public $aiConfig = [];
 	public $aiEnabled = false;
 	public $aiHolder = null;
-	public $inventoryNum = 36;
 	public $hungerTimer = 80;
 	public $version;
 	public $allowSnowGolem;
@@ -1684,7 +1683,6 @@ class Server{
 			"creeperexplode" => $this->getAdvancedProperty("ai.creeper-explode-destroy-block", false),
 			"mobgenerate" => $this->getAdvancedProperty("ai.mobgenerate", false),
 		];
-		$this->inventoryNum = min(91, $this->getAdvancedProperty("player.inventory-num", 36));
 		$this->hungerTimer = $this->getAdvancedProperty("player.hunger-timer", 80);
 		$this->allowSnowGolem = $this->getAdvancedProperty("server.allow-snow-golem", false);
 		$this->allowIronGolem = $this->getAdvancedProperty("server.allow-iron-golem", false);
@@ -1990,7 +1988,7 @@ class Server{
 			$this->registerEntities();
 			$this->registerTiles();
 
-			InventoryType::init($this->inventoryNum);
+			InventoryType::init();
 			Block::init();
 			Enchantment::init();
 			Item::init($this->creativeItemsFromJson);

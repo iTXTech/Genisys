@@ -28,8 +28,6 @@ player:
  experience: true
  #Bật/tắt nếu muốn server chết không mất đồ (true/false)
  keep-inventory: false
- #Số lượng đồ trong kho đồ (mặc định là 36 slot)
- inventory-num: 36
  #Bật/tắt nếu tự động quét hết đồ trong kho đồ khi chuyển sang chế độ sáng tạo (true/false)
  auto-clear-inventory : true
  #Bật/tắt nếu muốn chết không mất kinh nghiệm (true/false)
