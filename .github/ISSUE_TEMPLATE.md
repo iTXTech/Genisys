@@ -2,7 +2,7 @@
 - Any issues regarding outdated Genisys versions will be CLOSED. Make sure you can reproduce the issue on the latest build before submitting an issue.
 - Make sure you are using a build from the MASTER branch. Issues relating to non-production builds will be closed.
 - Any issues requesting updates to new versions of MCPE will be treated as spam. We do not need spamming with issues to know that there is a new version available.
-- SEARCH EXISTING ISSUES before you open a new one. Duplicate issues will be treated as spam and dealt with accordingly.
+- SEARCH EXISTING ISSUES before you open a new one. This INCLUDES searching OUR issue tracker AND Mojang's issue tracker at https://bugs.mojang.com/browse/MCPE. Duplicate issues will be treated as spam and dealt with accordingly.
 - Issues not following this template will also be closed as spam. If you do not supply the information we ask for then your issue cannot be resolved.
 - Repeated spamming will result in a ban. You have been warned!
 -->
