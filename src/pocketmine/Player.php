@@ -3025,8 +3025,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						break;
 				}
 
-				$this->startAction = -1;
-				$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
+				if($packet->action !== PlayerActionPacket::ACTION_JUMP){
+					$this->startAction = -1;
+					$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
+				}
 				break;
 
 			case ProtocolInfo::REMOVE_BLOCK_PACKET:
