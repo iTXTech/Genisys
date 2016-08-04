@@ -3239,11 +3239,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				break;
 
 			case ProtocolInfo::CRAFTING_EVENT_PACKET:
-			
-				//TODO: Rewrite this entire stupid mess
-				/* Under here is a lot of excess, conflicting, duplicated and useless code.
-				 * Throw the whole lot out and clean it up. */
-				
 				if($this->spawned === false or !$this->isAlive()){
 					break;
 				}elseif(!isset($this->windowIndex[$packet->windowId])){
@@ -3274,12 +3269,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 				$canCraft = true;
 				
-				//Tells the server whether to add the resulting item to the inventory directly.
-				// We do not want to do this with Desktop GUI as this might result in duplication.
-				$isDesktopCrafting = false;
-				
 				if(count($packet->input) === 0){
-					$isDesktopCrafting = true;
 					/* If the packet "input" field is empty this needs to be handled differently.
 					 * "input" is used to tell the server what items to remove from the client's inventory
 					 * Because crafting takes the materials in the crafting grid, nothing needs to be taken from the inventory
@@ -3288,6 +3278,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					 * output item and the materials stored in the crafting items
 					 */
 					$possibleRecipes = $this->server->getCraftingManager()->getRecipesByResult($packet->output[0]);
+					$recipe = null;
 					foreach($possibleRecipes as $r){
 						/* Check the ingredient list and see if it matches the ingredients we've put into the crafting grid
 						 * As soon as we find a recipe that we have all the ingredients for, take it and run with it. */
@@ -3309,10 +3300,24 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						if($canCraft){
 							//Found a recipe that works, take it and run with it.
 							$recipe = $r;
-							$this->floatingInventory = $floatingInventory; //Set player crafting inv to the idea one created in this process
-							$this->floatingInventory->addItem(clone $recipe->getResult()); //Add the result to our picture of the crafting inventory
 							break;
 						}
+					}
+					
+					if($recipe !== null){
+						$this->server->getPluginManager()->callEvent($ev = new CraftItemEvent($this, $ingredients, $recipe));
+
+						if($ev->isCancelled()){
+							$this->inventory->sendContents($this);
+							break;
+						}
+						
+						$this->floatingInventory = $floatingInventory; //Set player crafting inv to the idea one created in this process
+						$this->floatingInventory->addItem(clone $recipe->getResult()); //Add the result to our picture of the crafting inventory
+					}else{
+						$this->server->getLogger()->debug("Unmatched desktop crafting recipe " . $recipe->getId() . " from player " . $this->getName());
+						$this->inventory->sendContents($this);
+						break;
 					}
 				}else{
 					if($recipe instanceof ShapedRecipe){
@@ -3366,55 +3371,52 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}
 					}else{
 						$canCraft = false;
-					}	
-				}
+					}
 
-				//Nasty hack. TODO: Get rid
-				$canCraft = true;//0.13.1大量物品本地配方出现问题,无法解决,使用极端(唯一)方法修复.
-				
-				/** @var Item[] $ingredients */
-				$ingredients = $packet->input;
-				$result = $packet->output[0];
+					//Nasty hack. TODO: Get rid
+					$canCraft = true;//0.13.1大量物品本地配方出现问题,无法解决,使用极端(唯一)方法修复.
+					
+					/** @var Item[] $ingredients */
+					$ingredients = $packet->input;
+					$result = $packet->output[0];
 
-				if(!$canCraft or !$recipe->getResult()->deepEquals($result)){
-					$this->server->getLogger()->debug("Unmatched recipe " . $recipe->getId() . " from player " . $this->getName() . ": expected " . $recipe->getResult() . ", got " . $result . ", using: " . implode(", ", $ingredients));
-					$this->inventory->sendContents($this);
-					break;
-				}
+					if(!$canCraft or !$recipe->getResult()->deepEquals($result)){
+						$this->server->getLogger()->debug("Unmatched recipe " . $recipe->getId() . " from player " . $this->getName() . ": expected " . $recipe->getResult() . ", got " . $result . ", using: " . implode(", ", $ingredients));
+						$this->inventory->sendContents($this);
+						break;
+					}
 
-				$used = array_fill(0, $this->inventory->getSize(), 0);
+					$used = array_fill(0, $this->inventory->getSize(), 0);
 
-				foreach($ingredients as $ingredient){
-					$slot = -1;
-					foreach($this->inventory->getContents() as $index => $i){
-						if($ingredient->getId() !== 0 and $ingredient->deepEquals($i, $ingredient->getDamage() !== null) and ($i->getCount() - $used[$index]) >= 1){
-							$slot = $index;
-							$used[$index]++;
+					foreach($ingredients as $ingredient){
+						$slot = -1;
+						foreach($this->inventory->getContents() as $index => $i){
+							if($ingredient->getId() !== 0 and $ingredient->deepEquals($i, $ingredient->getDamage() !== null) and ($i->getCount() - $used[$index]) >= 1){
+								$slot = $index;
+								$used[$index]++;
+								break;
+							}
+						}
+
+						if($ingredient->getId() !== 0 and $slot === -1){
+							$canCraft = false;
 							break;
 						}
 					}
 
-					if($ingredient->getId() !== 0 and $slot === -1){
-						$canCraft = false;
+					if(!$canCraft){
+						$this->server->getLogger()->debug("Unmatched recipe " . $recipe->getId() . " from player " . $this->getName() . ": client does not have enough items, using: " . implode(", ", $ingredients));
+						$this->inventory->sendContents($this);
 						break;
 					}
-				}
 
-				if(!$canCraft){
-					$this->server->getLogger()->debug("Unmatched recipe " . $recipe->getId() . " from player " . $this->getName() . ": client does not have enough items, using: " . implode(", ", $ingredients));
-					$this->inventory->sendContents($this);
-					break;
-				}
+					$this->server->getPluginManager()->callEvent($ev = new CraftItemEvent($this, $ingredients, $recipe));
 
-				$this->server->getPluginManager()->callEvent($ev = new CraftItemEvent($this, $ingredients, $recipe));
+					if($ev->isCancelled()){
+						$this->inventory->sendContents($this);
+						break;
+					}
 
-				if($ev->isCancelled()){
-					$this->inventory->sendContents($this);
-					break;
-				}
-
-				//Only do this if the crafting was NOT desktop style
-				if(!$isDesktopCrafting){
 					foreach($used as $slot => $count){
 						if($count === 0){
 							continue;
