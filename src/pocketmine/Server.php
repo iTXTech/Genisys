@@ -1960,6 +1960,11 @@ class Server{
 			}
 
 			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.networkStart", [$this->getIp() === "" ? "*" : $this->getIp(), $this->getPort()]));
+
+			$externalIP = Utils::getIP();
+			$internalIP = gethostbyname(trim(`hostname`));
+			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.ip_warning", [$externalIP, $internalIP]));
+
 			define("BOOTUP_RANDOM", @Utils::getRandomBytes(16));
 			$this->serverID = Utils::getMachineUniqueId($this->getIp() . $this->getPort());
 

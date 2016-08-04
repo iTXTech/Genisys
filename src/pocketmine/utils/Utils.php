@@ -159,8 +159,8 @@ class Utils{
 		}elseif(Utils::$ip !== false and $force !== true){
 			return Utils::$ip;
 		}
-		$ip = trim(strip_tags(Utils::getURL("http://checkip.dyndns.org/")));
-		if(preg_match('#Current IP Address\: ([0-9a-fA-F\:\.]*)#', $ip, $matches) > 0){
+		$ip = trim(strip_tags(Utils::getURL("https://api.ipify.org")));
+		if(preg_match('#([0-9a-fA-F\:\.]*)#', $ip, $matches) > 0){
 			Utils::$ip = $matches[1];
 		}else{
 			$ip = Utils::getURL("http://www.checkip.org/");
