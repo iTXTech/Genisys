@@ -100,6 +100,7 @@ class SimpleTransactionQueue implements TransactionQueue{
 				$transaction->addFailure();
 				if($transaction->getFailures() >= self::DEFAULT_ALLOWED_RETRIES){
 					/* Transaction failed completely after several retries, hold onto it to send a slot update */
+					$this->transactionCount -= 1;
 					$failed[] = $transaction;
 				}else{
 					/* Add the transaction to the back of the queue to be retried on the next tick */

@@ -1610,7 +1610,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$pk->target = $entity->getId();
 						$this->dataPacket($pk);
 
-						$this->inventory->addItem(clone $item);
+						$this->getFloatingInventory()->addItem(clone $item);
 						$entity->kill();
 					}
 				}
@@ -3275,8 +3275,17 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					 * Instead, we take the materials from the crafting inventory
 					 * To know what materials we need to take, we have to guess the crafting recipe used based on the
 					 * output item and the materials stored in the crafting items
+					 * The reason we have to guess is because Win10 sometimes sends a different recipe UUID
+					 * say, if you put the wood for a door in the right hand side of the crafting grid instead of the left
+					 * it will send the recipe UUID for a wooden pressure plate. Unknown currently whether this is a client
+					 * bug or if there is something wrong with the way the server handles recipes.
+					 * TODO: Remove recipe correction and fix desktop crafting recipes properly.
+					 * In fact, TODO: Rewrite crafting entirely.
 					 */
 					$possibleRecipes = $this->server->getCraftingManager()->getRecipesByResult($packet->output[0]);
+					if(!$packet->output[0]->deepEquals($recipe->getResult())){
+						$this->server->getLogger()->debug("Mismatched desktop recipe received from player ".$this->getName());
+					}
 					$recipe = null;
 					foreach($possibleRecipes as $r){
 						/* Check the ingredient list and see if it matches the ingredients we've put into the crafting grid
