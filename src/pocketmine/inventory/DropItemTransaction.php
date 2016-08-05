@@ -19,10 +19,8 @@
  *
  */
 
-namespace pocketmine\inventory\transaction;
+namespace pocketmine\inventory;
 
-use pocketmine\inventory\BaseTransaction;
-use pocketmine\inventory\Transaction;
 use pocketmine\item\Item;
 use pocketmine\Player;
 
