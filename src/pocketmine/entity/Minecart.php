@@ -52,7 +52,7 @@ class Minecart extends Vehicle{
 	public $isMoving = false;
 	public $moveSpeed = 0.4;
 	
-	private $onRail = Minecart::STATE_INITIAL;
+	private $state = Minecart::STATE_INITIAL;
 	private $direction = -1;
 	private $moveVector = [];
 	private $requestedPosition = null;
@@ -60,10 +60,6 @@ class Minecart extends Vehicle{
 	public function initEntity(){
 		$this->setMaxHealth(1);
 		$this->setHealth($this->getMaxHealth());
-		$this->moveVector[Entity::NORTH] = new Vector3(-1, 0, 0);
-		$this->moveVector[Entity::SOUTH] = new Vector3(1, 0, 0);
-		$this->moveVector[Entity::EAST] = new Vector3(0, 0, -1);
-		$this->moveVector[Entity::WEST] = new Vector3(0, 0, 1);
 		$this->moveVector[Entity::NORTH] = new Vector3(-1, 0, 0);
 		$this->moveVector[Entity::SOUTH] = new Vector3(1, 0, 0);
 		$this->moveVector[Entity::EAST] = new Vector3(0, 0, -1);
@@ -153,14 +149,39 @@ class Minecart extends Vehicle{
 	 * Check if minecart is currently on a rail and if so center the cart.
 	 */
 	private function checkIfOnRail() {
-		$rail = $this->level->getBlock($this->temporalVector->setComponents($this->x, $this->y - 1, $this->z));
-		if ($rail != null && in_array($rail->getId(), [Block::RAIL, Block::ACTIVATOR_RAIL, Block::DETECTOR_RAIL, Block::POWERED_RAIL])) {
-			$rail = $rail->floor()->add(.5, 0, .5); 
-			$this->setPosition($rail);    // Move minecart to center of rail
-			$this->state = Minecart::STATE_ON_RAIL;
-		} else {
+		for ($y = -1; $y !=2 && $this->state == Minecart::STATE_INITIAL; $y++) {
+			$positionToCheck = $this->temporalVector->setComponents($this->x, $this->y + $y, $this->z);
+			$block = $this->level->getBlock($positionToCheck);
+			if ($this->isRail($block)) {
+				$minecartPosition = $positionToCheck->floor()->add(.5, 0, .5);
+				$this->setPosition($minecartPosition);    // Move minecart to center of rail
+				$this->state = Minecart::STATE_ON_RAIL;
+			}
+		}
+		if ($this->state != Minecart::STATE_ON_RAIL) {
 			$this->state = Minecart::STATE_OFF_RAIL;
 		}
+	}
+	
+	private function isRail($rail) {
+		if ($rail != null && in_array($rail->getId(), [Block::RAIL, Block::ACTIVATOR_RAIL, Block::DETECTOR_RAIL, Block::POWERED_RAIL])) {
+			return true;
+		}
+		return false;
+	}
+	
+	private function getCurrentRail() {
+		$block = $this->getLevel()->getBlock($this);
+		if ($this->isRail($block)) {
+			return $block;
+		} 
+		// Rail could be one block below descending down
+		$down = $this->temporalVector->setComponents($this->x, $this->y - 1, $this->z);
+		$block = $this->getLevel()->getBlock($down);
+		if ($this->isRail($block)) {
+			return $block;
+		}
+		return null;
 	}
 	
 	/**
@@ -175,14 +196,24 @@ class Minecart extends Vehicle{
 		} else {
 			$candidateDirection = $this->direction;
 		}
-		$block = $this->getLevel()->getBlock($this);
-		$railType = $block->getDamage ();
-		$nextDirection = $this->getDirectionToMove($railType, $candidateDirection);
-		if ($nextDirection != -1) {
-			$this->direction = $nextDirection;
-			return $this->moveIfRail();
+		$rail = $this->getCurrentRail();
+		if ($rail != null) {
+			$railType = $rail->getDamage ();
+			$nextDirection = $this->getDirectionToMove($railType, $candidateDirection);
+			if ($nextDirection != -1) {
+				$this->direction = $nextDirection;
+				$moved = $this->checkForVertical($railType, $nextDirection);
+				if (!$moved) {
+					return $this->moveIfRail();
+				} else {
+					return true;
+				}
+			} else {
+				$this->direction = -1;  // Was not able to determine direction to move, so wait for player to look in valid direction
+			}
 		} else {
-			$this->direction = -1;  // Was not able to determine direction to move, so wait for player to look in valid direction
+			// Not able to find rail
+			$this->state = Minecart::STATE_INITIAL;
 		}
 		return false;
 	}
@@ -301,33 +332,131 @@ class Minecart extends Vehicle{
 			case Entity::NORTH:
 				$diff = $this->x - $this->getFloorX();
 				if ($diff != 0 && $diff <= .5) {
-					$this->x = $this->getFloorX() + .5;
+					$dx = ($this->getFloorX() + .5) - $this->x;
+					$this->move($dx, 0, 0);
 					return $newDirection;
 				}
 				break;
 			case Entity::SOUTH:
 				$diff = $this->x - $this->getFloorX();
 				if ($diff != 0 && $diff >= .5) {
-					$this->x = $this->getFloorX() + .5;
+					$dx = ($this->getFloorX() + .5) - $this->x;
+					$this->move($dx, 0, 0);
 					return $newDirection;
 				}
 				break;
 			case Entity::EAST:
 				$diff = $this->z - $this->getFloorZ();
 				if ($diff != 0 && $diff <= .5) {
-					$this->z = $this->getFloorZ() + .5;
+					$dz = ($this->getFloorZ() + .5) - $this->z;
+					$this->move(0, 0, $dz);
 					return $newDirection;
 				}
 				break;
 			case Entity::WEST:
 				$diff = $this->z - $this->getFloorZ();
 				if ($diff != 0 && $diff >= .5) {
-					$this->z = $this->getFloorZ() + .5;
+					$dz = $dz = ($this->getFloorZ() + .5) - $this->z;
+					$this->move(0, 0, $dz);
 					return $newDirection;
 				}
 				break;
 		}
-		return $currentDirection; // Keep going noth until half way.
+		return $currentDirection;
+	}
+	
+	private function checkForVertical($railType, $currentDirection) {
+		switch ($railType) {
+			case Rail::SLOPED_ASCENDING_NORTH:
+				switch($currentDirection) {
+					case Entity::NORTH:
+						// Headed north up
+						$diff = $this->x - $this->getFloorX();
+						if ($diff != 0 && $diff <= .5) {
+							$dx = ($this->getFloorX() - .1) - $this->x;
+							$this->move($dx, 1, 0);
+							return true;
+						}
+						break;
+					case ENTITY::SOUTH:
+						// Headed south down
+						$diff = $this->x - $this->getFloorX();
+						if ($diff != 0 && $diff >= .5) {
+							$dx = ($this->getFloorX() + 1 ) - $this->x;
+							$this->move($dx, -1, 0);
+							return true;
+						}
+						break;
+				}
+				break;
+			case Rail::SLOPED_ASCENDING_SOUTH:
+				switch($currentDirection) {
+					case Entity::SOUTH:
+						// Headed south up
+						$diff = $this->x - $this->getFloorX();
+						if ($diff != 0 && $diff >= .5) {
+							$dx = ($this->getFloorX() + 1 ) - $this->x;
+							$this->move($dx, 1, 0);
+							return true;
+						}
+						break;
+					case Entity::NORTH:
+						// Headed north down
+						$diff = $this->x - $this->getFloorX();
+						if ($diff != 0 && $diff <= .5) {
+							$dx = ($this->getFloorX() - .1) - $this->x;
+							$this->move($dx, -1, 0);
+							return true;
+						}
+						break;
+				}
+				break;
+			case Rail::SLOPED_ASCENDING_EAST:
+				switch($currentDirection) {
+					case Entity::EAST:
+						// Headed east up
+						$diff = $this->z - $this->getFloorZ();
+						if ($diff != 0 && $diff <= .5) {
+							$dz = ($this->getFloorZ() - .1) - $this->z;
+							$this->move(0, 1, $dz);
+							return true;
+						}
+						break;
+					case Entity::WEST:
+						// Headed west down
+						$diff = $this->z - $this->getFloorZ();
+						if ($diff != 0 && $diff >= .5) {
+							$dz = ($this->getFloorZ() + 1) - $this->z;
+							$this->move(0, -1, $dz);
+							return true;
+						}
+						break;
+				}
+				break;
+			case Rail::SLOPED_ASCENDING_WEST:
+				switch($currentDirection) {
+					case Entity::WEST:
+						// Headed west up
+						$diff = $this->z - $this->getFloorZ();
+						if ($diff != 0 && $diff >= .5) {
+							$dz = ($this->getFloorZ() + 1) - $this->z;
+							$this->move(0, 1, $dz);
+							return true;
+						}
+						break;
+					case Entity::EAST:
+						// Headed east down
+						$diff = $this->z - $this->getFloorZ();
+						if ($diff != 0 && $diff <= .5) {
+							$dz = ($this->getFloorZ() - .1) - $this->z;
+							$this->move(0, -1, $dz);
+							return true;
+						}
+						break;
+				}
+				break;
+		}
+		return false;
 	}
 	
 	/**
@@ -338,31 +467,11 @@ class Minecart extends Vehicle{
 		$nextMoveVector = $this->moveVector[$this->direction];
 		$nextMoveVector = $nextMoveVector->multiply($this->moveSpeed);
 		$newVector = $this->add($nextMoveVector->x, $nextMoveVector->y, $nextMoveVector->z);
-		$possibleRail = $this->level->getBlock($newVector);
+		$possibleRail = $this->getCurrentRail();
 		if(in_array($possibleRail->getId(), [Block::RAIL, Block::ACTIVATOR_RAIL, Block::DETECTOR_RAIL, Block::POWERED_RAIL])) {
 			$this->moveUsingVector($newVector);
 			return true;
-		} else {
-			$newVector = $newVector->add(0, -1, 0);
-			// Rail could be one block down since sloping down
-			$possibleRail = $this->level->getBlock($newVector);
-			$damage = $possibleRail->getDamage();
-			if(in_array($possibleRail->getId(), [Block::RAIL, Block::ACTIVATOR_RAIL, Block::DETECTOR_RAIL, Block::POWERED_RAIL])) {
-				$this->moveUsingVector($newVector);
-				return true;
-			} else {
-				$newVector = $newVector->add(0, 2, 0);
-				// Rail could be one block up since sloping up
-				$possibleRail = $this->level->getBlock($newVector);
-				if(in_array($possibleRail->getId(), [Block::RAIL, Block::ACTIVATOR_RAIL, Block::DETECTOR_RAIL, Block::POWERED_RAIL])) {
-					$this->moveUsingVector($newVector);
-					return true;
-				} else {
-					return false;
-					// TODO Need a way to update state to say cart is stuck?
-				}
-			}
-		}
+		} 
 	}
 	
 	/**
@@ -374,14 +483,7 @@ class Minecart extends Vehicle{
 		$dx = $desiredPosition->x - $this->x;
 		$dy = $desiredPosition->y - $this->y;
 		$dz = $desiredPosition->z - $this->z;
-		if ($this->requestedPosition != null && $desiredPosition->x == $this->requestedPosition->x && $desiredPosition->y == $this->requestedPosition->y &&
-			$desiredPosition->z == $this->requestedPosition->z) {
-				// TODO Why doesn't just setting $dy to $dy + 1 work?
-				$upPosition = $this->add(0, 1, 0); // tried $dy = $dy + 1 but didn't work
-				$this->setPosition($upPosition);
-			}
-			$this->requestedPosition = $this->add($dx, $dy, $dz);
-			$this->move($dx, $dy, $dz);
+		$this->move($dx, $dy, $dz);
 	}
 
 
