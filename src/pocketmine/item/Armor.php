@@ -34,10 +34,10 @@ abstract class Armor extends Item{
 	const TIER_IRON = 4;
 	const TIER_DIAMOND = 5;
 
-	const TYPE_HELMET = 1;
-	const TYPE_CHESTPLATE = 2;
-	const TYPE_LEGGINGS = 3;
-	const TYPE_BOOTS = 4;
+	const TYPE_HELMET = 0;
+	const TYPE_CHESTPLATE = 1;
+	const TYPE_LEGGINGS = 2;
+	const TYPE_BOOTS = 3;
 
 	public function getMaxStackSize() : int {
 		return 1;
@@ -50,11 +50,11 @@ abstract class Armor extends Item{
 	/**
 	 *
 	 * @param Item $object
+	 * @param int $cost
 	 *
 	 * @return bool
 	 */
-	public function useOn($object)
-	{
+	public function useOn($object, int $cost = 1){
 		if($this->isUnbreakable()){
 			return true;
 		}
@@ -68,7 +68,7 @@ abstract class Armor extends Item{
 		if(mt_rand(1, 100) > $unbreakings[$unbreakingl]){
 			return true;
 		}
-		$this->setDamage($this->getDamage() + 1);
+		$this->setDamage($this->getDamage() + $cost);
 		if($this->getDamage() >= $this->getMaxDurability()){
 			$this->setCount(0);
 		}
