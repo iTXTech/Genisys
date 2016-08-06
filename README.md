@@ -19,6 +19,7 @@ __Feature-rich Minecraft: Pocket Edition server software__
 [![PayPayl donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=itxtechnologiesllc%40gmail%2ecom&lc=GB&item_name=Genisys&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted)
 [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
 [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
+[![Jenkins](https://img.shields.io/jenkins/s/https/ci.itxtech.org/Genisys.svg)](https://ci.itxtech.org/job/Genisys/lastSuccessfulBuild/)
 
 -------------
 
@@ -40,7 +41,7 @@ Discussion
 
 Get Genisys
 -------------
-* Download from __[GitLab CI](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)__<br>
+* Download from __[GitLab CI](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)__ or __[Jenkins](https://ci.itxtech.org/job/Genisys/lastSuccessfulBuild/)__
 * Installation instructions can be found in the __[wiki](https://github.com/iTXTech/Genisys/wiki)__.
 
 NOTE: **The master branch is the only officially supported branch.**
