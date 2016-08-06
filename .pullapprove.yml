@@ -11,6 +11,6 @@ reject_value: -1
 reset_on_push: true
 reviewers: 
   name: default
-  required: 2
+  required: 3
   teams: 
     - trusted
