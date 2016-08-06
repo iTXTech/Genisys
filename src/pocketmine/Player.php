@@ -4340,11 +4340,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 *
 	 * @return int
 	 */
-	public function addWindow(Inventory $inventory, int $forceId = null) : int{
+	public function addWindow(Inventory $inventory, $forceId = null){
 		if($this->windows->contains($inventory)){
 			return $this->windows[$inventory];
 		}
-
 		if($forceId === null){
 			$this->windowCnt = $cnt = max(2, ++$this->windowCnt % 99);
 		}else{
@@ -4356,7 +4355,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			return $cnt;
 		}else{
 			$this->removeWindow($inventory);
-
 			return -1;
 		}
 	}
