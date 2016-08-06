@@ -29,13 +29,8 @@ class FloatingInventory extends BaseInventory{
 	/**
 	 * @param InventoryHolder $holder
 	 * @param InventoryType   $inventoryType
-	 *
-	 * @throws \Throwable
 	 */
-	public function __construct(InventoryHolder $holder, InventoryType $inventoryType){
-		if($inventoryType->getDefaultTitle() !== "Floating"){
-			throw new \InvalidStateException("Invalid Inventory type, expected FLOATING");
-		}
-		parent::__construct($holder, $inventoryType);
+	public function __construct(InventoryHolder $holder){
+		parent::__construct($holder, InventoryType::get(InventoryType::PLAYER_FLOATING));
 	}
 }

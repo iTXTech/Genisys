@@ -201,7 +201,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public $blocked = false;
 	public $achievements = [];
 	public $lastCorrect;
-	
+
 	public $craftingType = 0; //0 = 2x2 crafting, 1 = 3x3 crafting, 2 = stonecutter
 
 	protected $isCrafting = false;
@@ -289,7 +289,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/** @var Item[] */
 	protected $personalCreativeItems = [];
-	
+
 	/** @var Item */
 	private $anvilItem;
 
@@ -1446,7 +1446,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$flags |= 0x02; // No PvP (Remove hit markers client-side).
 		$flags |= 0x04; // No PvM (Remove hit markers client-side).
 		$flags |= 0x08; // No PvE (Remove hit markers client-side).
-  		
+
 		$pk = new AdventureSettingsPacket();
 		$pk->flags = $flags;
 		$pk->userPermission = 2;
@@ -1593,7 +1593,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						switch($item->getId()){
 							case Item::WOOD:
 								$this->awardAchievement("mineWood");
-							
+
 								break;
 							case Item::DIAMOND:
 								$this->awardAchievement("diamond");
@@ -2135,7 +2135,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			}
 		}
 		$this->setNameTag($this->getDisplayName());
-		
+
 		$nbt = $this->server->getOfflinePlayerData($this->username);
 		$this->playedBefore = ($nbt["lastPlayed"] - $nbt["firstPlayed"]) > 1;
 		if(!isset($nbt->NameTag)){
@@ -2275,14 +2275,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$pk->slots = array_merge(Item::getCreativeItems(), $this->personalCreativeItems);
 			$this->dataPacket($pk);
 		}
-		
+
 		$pk = new SetEntityDataPacket();
 		$pk->eid = 0;
 		$pk->metadata = [self::DATA_LEAD_HOLDER => [self::DATA_TYPE_LONG, -1]];
 		$this->dataPacket($pk);
-		
 		$this->level->getWeather()->sendWeather($this);
-		
 		$this->forceMovement = $this->teleportPosition = $this->getPosition();
 	}
 
@@ -2300,7 +2298,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @param DataPacket $packet
 	 */
 	public function handleDataPacket(DataPacket $packet){
-		
+
 		if($this->connected === false){
 			return;
 		}
@@ -2475,7 +2473,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			case ProtocolInfo::MOB_EQUIPMENT_PACKET:
 				if($this->spawned === false or !$this->isAlive()){
 					break;
-				}				
+				}
 				/**
 				 * Handle hotbar slot remapping
 				 * This is the only time and place when hotbar mapping should ever be changed.
@@ -2879,7 +2877,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					case PlayerActionPacket::ACTION_STOP_SLEEPING:
 						$this->stopSleep();
 						break;
-					case PlayerActionPacket::ACTION_SPAWN_SAME_DIMENSION: 
+					case PlayerActionPacket::ACTION_SPAWN_SAME_DIMENSION:
 					case PlayerActionPacket::ACTION_SPAWN_OVERWORLD:
 						if($this->isAlive() or !$this->isOnline()){
 							break;
@@ -2891,13 +2889,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}
 
 						$this->craftingType = 0;
-						
+
 						if($this->server->netherEnabled){
 							if($this->level == $this->server->netherLevel){
 								$this->teleport($pos = $this->server->getDefaultLevel()->getSafeSpawn());
 							}
 						}
-						
+
 						$this->server->getPluginManager()->callEvent($ev = new PlayerRespawnEvent($this, $this->getSpawn()));
 
 						$this->teleport($ev->getRespawnPosition());
@@ -2987,7 +2985,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$item = $this->inventory->getItemInHand();
 				$oldItem = clone $item;
 
-				//TODO: Fix block break lag in survival
 				if($this->canInteract($vector->add(0.5, 0.5, 0.5), $this->isCreative() ? 13 : 6) and $this->level->useBreakOn($vector, $item, $this, $this->server->destroyBlockParticle)){
 					if($this->isSurvival()){
 						if(!$item->equals($oldItem) or $item->getCount() !== $oldItem->getCount()){
@@ -3160,7 +3157,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 				if($packet->item->getId() === Item::AIR){
 					/**
-					 * This is so stupid it's unreal. 
+					 * This is so stupid it's unreal.
 					 * Windows 10 Edition Beta drops the contents of the crafting grid when the inventory closes - including air.
 					 */
 					break;
@@ -3169,7 +3166,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				if(($this->isCreative() and $this->server->limitedCreative)){
 					break;
 				}
-				
+
 				$this->getTransactionQueue()->addTransaction(new DropItemTransaction($packet->item));
 				break;
 			case ProtocolInfo::TEXT_PACKET:
@@ -3220,7 +3217,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->server->getPluginManager()->callEvent(new InventoryCloseEvent($this->windowIndex[$packet->windowid], $this));
 					$this->removeWindow($this->windowIndex[$packet->windowid]);
 				}
-				
+
 				/**
 				 * Drop anything still left in the crafting inventory
 				 * This will usually never be needed since Windows 10 clients will send DropItemPackets
@@ -3262,7 +3259,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				$canCraft = true;
-				
+
 				if(count($packet->input) === 0){
 					/* If the packet "input" field is empty this needs to be handled differently.
 					 * "input" is used to tell the server what items to remove from the client's inventory
@@ -3285,7 +3282,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					foreach($possibleRecipes as $r){
 						/* Check the ingredient list and see if it matches the ingredients we've put into the crafting grid
 						 * As soon as we find a recipe that we have all the ingredients for, take it and run with it. */
-						
+
 						//Make a copy of the floating inventory that we can make changes to.
 						$floatingInventory = clone $this->floatingInventory;
 						$ingredients = $r->getIngredientList();
@@ -3306,7 +3303,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							break;
 						}
 					}
-					
+
 					if($recipe !== null){
 						$this->server->getPluginManager()->callEvent($ev = new CraftItemEvent($this, $ingredients, $recipe));
 
@@ -3314,7 +3311,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$this->inventory->sendContents($this);
 							break;
 						}
-						
+
 						$this->floatingInventory = $floatingInventory; //Set player crafting inv to the idea one created in this process
 						$this->floatingInventory->addItem(clone $recipe->getResult()); //Add the result to our picture of the crafting inventory
 					}else{
@@ -3378,7 +3375,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 					//Nasty hack. TODO: Get rid
 					$canCraft = true;//0.13.1大量物品本地配方出现问题,无法解决,使用极端(唯一)方法修复.
-					
+
 					/** @var Item[] $ingredients */
 					$ingredients = $packet->input;
 					$result = $packet->output[0];
@@ -3436,7 +3433,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 						$this->inventory->setItem($slot, $newItem);
 					}
-					
+
 					$extraItem = $this->inventory->addItem($recipe->getResult());
 					if(count($extraItem) > 0){ //Could not add all the items to our inventory (not enough space)
 						foreach($extraItem as $item){
@@ -3463,7 +3460,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						break;
 					case Item::CAKE:
 						//TODO: detect complex recipes like cake that leave remains
-						//I'm going to have to do this, otherwise Win10 will be able to duplicate buckets
 						$this->awardAchievement("bakeCake");
 						$this->inventory->addItem(Item::get(Item::BUCKET, 0, 3));
 						break;
@@ -3503,35 +3499,20 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 
 					$transaction = new BaseTransaction($this->inventory, $packet->slot + $this->inventory->getSize(), $packet->item);
-				}elseif(isset($this->windowIndex[$packet->windowid])){ 
+				}elseif(isset($this->windowIndex[$packet->windowid])){
 					//Transaction for non-player-inventory window, such as anvil, chest, etc.
-				
-					//TODO: Make Anvils use the floating inventory. They do not currently function with the new transaction API.
-				
-					$this->craftingType = 0;
 					$inv = $this->windowIndex[$packet->windowid];
 
 					if($inv instanceof EnchantInventory and $packet->item->hasEnchantments()){
 						$inv->onEnchant($this, $inv->getItem($packet->slot), $packet->item);
-						
-					}/*elseif($inv instanceof AnvilInventory){
-						if($packet->slot === 2){
-							if($packet->item->getId() !== Item::AIR){
-								$inv->setItem($packet->slot, $packet->item, false);
-							}else{
-								if(!$inv->onRename($this)){
-									break; //maybe cheating!
-								}
-							}
-						}
-					}*/
+					}
 
 					$transaction = new BaseTransaction($inv, $packet->slot, $packet->item);
 				}else{
 					//Client sent a transaction for a window which the server doesn't think they have open
 					break;
 				}
-				
+
 				$this->getTransactionQueue()->addTransaction($transaction);
 				//TODO: Fix "Acquire Iron" achievement
 
@@ -3610,7 +3591,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		return false;
 	}
-	
+
 	/**
 	 * @param Item $item
 	 *
@@ -3620,23 +3601,23 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		if($this->spawned === false or $this->blocked === true or !$this->isAlive()){
 			return;
 		}
-		
+
 		if(($this->isCreative() and $this->server->limitedCreative) or $this->isSpectator()){
 			//Ignore for limited creative
 			return;
 		}
-		
+
 		if($item->getId() === Item::AIR or $item->getCount() < 1){
 			//Ignore dropping air or items with bad counts
 			return;
 		}
-		
-		$ev = new PlayerDropItemEvent($this, $item);	
+
+		$ev = new PlayerDropItemEvent($this, $item);
 		$this->server->getPluginManager()->callEvent($ev);
 		if($ev->isCancelled()){
 			return;
 		}
-		
+
 		$motion = $this->getDirectionVector()->multiply(0.4);
 
 		$this->level->dropItem($this->add(0, 1.3, 0), $item, $motion, 40);
@@ -4027,7 +4008,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		$pos = $this->getSpawn();
-		
+
 		$this->setHealth(0);
 
 		$pk = new RespawnPacket();

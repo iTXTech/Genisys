@@ -41,10 +41,11 @@ class BaseTransaction implements Transaction{
 	protected $wasSuccessful = false;
 
 	/**
-	 * @param Inventory|null $inventory
-	 * @param int|null       $slot
-	 * @param Item           $targetItem
-	 * @param int            $transactionType
+	 * @param Inventory $inventory
+	 * @param int       $slot
+	 * @param Item      $targetItem
+	 * @param string[]  $achievements
+	 * @param int       $transactionType
 	 */
 	public function __construct($inventory, $slot, Item $targetItem, $transactionType = Transaction::TYPE_NORMAL){
 		$this->inventory = $inventory;
@@ -65,7 +66,7 @@ class BaseTransaction implements Transaction{
 	public function getSlot(){
 		return $this->slot;
 	}
-	
+
 	public function getTargetItem(){
 		return clone $this->targetItem;
 	}
@@ -73,61 +74,49 @@ class BaseTransaction implements Transaction{
 	public function setTargetItem(Item $item){
 		$this->targetItem = clone $item;
 	}
-	
+
 	public function getFailures(){
 		return $this->failures;
 	}
-	
+
 	public function addFailure(){
 		$this->failures++;
 	}
-	
+
 	public function succeeded(){
 		return $this->wasSuccessful;
 	}
-	
+
 	public function setSuccess($value = true){
 		$this->wasSuccessful = $value;
 	}
-	
+
 	public function getTransactionType(){
 		return $this->transactionType;
 	}
-	
+
 	/**
 	 * @param Player $source
 	 *
-	 * Sends a slot update to inventory viewers, excepting those specified as parameters.
-	 * For successful transactions, the source does not need to be updated, only the viewers
-	 * For failed transactions, only the source needs to be updated, and not the viewers.
+	 * Sends a slot update to inventory viewers
+	 * For successful transactions, update non-source viewers (source does not need updating)
+	 * For failed transactions, update the source (non-source viewers will see nothing anyway)
 	 */
 	public function sendSlotUpdate(Player $source){
-		//If the transaction was successful, send updates _only_ to non-instigators
-		//If it failed, send updates _only_ to the instigator.
-		if($this->getTransactionType() === Transaction::TYPE_DROP_ITEM){
-			//Do not send updates for drop item transactions as there is nothing to update
-			return;
-		}
-		
 		if($this->getInventory() instanceof TemporaryInventory){
-			//Attempting to change anvil slots server-side causes PE to crash.
 			return;
 		}
-		
+
 		$targets = [];
 		if($this->wasSuccessful){
 			$targets = $this->getInventory()->getViewers();
-			foreach($targets as $hash => $t){
-				if($t === $source){
-					unset($targets[$hash]); //Remove the source player from the list of players to update
-				}
-			}
+			unset($targets[spl_object_hash($source)]);
 		}else{
 			$targets = [$source];
 		}
 		$this->inventory->sendSlot($this->slot, $targets);
 	}
-	
+
 	/**
 	 * Returns the change in inventory resulting from this transaction
 	 * @return Item[
@@ -137,16 +126,16 @@ class BaseTransaction implements Transaction{
 	 */
 	public function getChange(){
 		$sourceItem = $this->getInventory()->getItem($this->slot);
-		
+
 		if($sourceItem->deepEquals($this->targetItem, true, true, true)){
 			//This should never happen, somehow a change happened where nothing changed
 			return null;
-			
+
 		}elseif($sourceItem->deepEquals($this->targetItem)){ //Same item, change of count
 			$item = clone $sourceItem;
 			$countDiff = $this->targetItem->getCount() - $sourceItem->getCount();
 			$item->setCount(abs($countDiff));
-			
+
 			if($countDiff < 0){	//Count decreased
 				return ["in" => null,
 						"out" => $item];
@@ -156,38 +145,41 @@ class BaseTransaction implements Transaction{
 						"out" => null];
 			}else{
 				//Should be impossible (identical items and no count change)
-				//This should be caught by the first condition even if it was possible, so it's safe enough to...
-				echo "Wow, you broke the code\n";
-				return null; 
+				//This should be caught by the first condition even if it was possible
+				return null;
 			}
 		}elseif($sourceItem->getId() !== Item::AIR and $this->targetItem->getId() === Item::AIR){
-			//Slot emptied
-			//return the item removed
+			//Slot emptied (item removed)
 			return ["in" => null,
 					"out" => clone $sourceItem];
-			
+
 		}elseif($sourceItem->getId() === Item::AIR and $this->targetItem->getId() !== Item::AIR){
-			//Slot filled with a new item (item added)
+			//Slot filled (item added)
 			return ["in" => $this->getTargetItem(),
 					"out" => null];
 
 		}else{
 			//Some other slot change - an item swap (tool damage changes will be ignored as they are processed server-side before any change is sent by the client
-			return ["in" => $this->getTargetItem(), 
+			return ["in" => $this->getTargetItem(),
 					"out" => clone $sourceItem];
 		}
-		//Don't remove this comment until you're sure there's nothing missing.
 	}
-	
-	
+
+	/**
+	 * @param Player $source
+	 * @return bool
+	 *
+	 * Handles transaction execution. Returns whether transaction was successful or not.
+	 */
+
 	public function execute(Player $source): bool{
-		
+
 		//How to do this... When the inventory is a temporary inventory, we want to recalculate all slots
 		//When it's a normal inventory, do whatever
 		if($this->getInventory()->processSlotChange($this)){ //This means that the transaction should be handled the normal way
 			if(!$source->getServer()->allowInventoryCheats){
 				$change = $this->getChange();
-				
+
 				if($change["out"] instanceof Item){
 					if($this->getInventory()->slotContains($this->getSlot(), $change["out"]) and !$source->isCreative()){
 						//Do not add items to the crafting inventory in creative to prevent weird duplication bugs.
@@ -200,7 +192,7 @@ class BaseTransaction implements Transaction{
 				if($change["in"] instanceof Item){
 					if($source->getFloatingInventory()->contains($change["in"]) and !$source->isCreative()){
 						$source->getFloatingInventory()->removeItem($change["in"]);
-						
+
 					}elseif(!$source->isCreative()){ //Transaction failed, if the player was not creative then transaction is illegal
 						return false;
 					}

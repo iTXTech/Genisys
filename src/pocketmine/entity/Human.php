@@ -54,10 +54,10 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 
 	/** @var PlayerInventory */
 	protected $inventory;
-	
+
 	/** @var FloatingInventory */
 	protected $floatingInventory;
-	
+
 	/** @var SimpleTransactionQueue */
 	protected $transactionQueue = null;
 
@@ -260,11 +260,11 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 	public function getInventory(){
 		return $this->inventory;
 	}
-	
+
 	public function getFloatingInventory(){
 		return $this->floatingInventory;
 	}
-	
+
 	public function getTransactionQueue(){
 		//Is creating the transaction queue ondemand a good idea? I think only if it's destroyed afterwards. hmm...
 		if($this->transactionQueue === null){
@@ -281,10 +281,10 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 
 		$inventoryContents = ($this->namedtag->Inventory ?? null);
 		$this->inventory = new PlayerInventory($this, $inventoryContents);
-		
+
 		//Virtual inventory for desktop GUI crafting and anti-cheat transaction processing
-		$this->floatingInventory = new FloatingInventory($this, InventoryType::get(InventoryType::PLAYER_FLOATING));
-		
+		$this->floatingInventory = new FloatingInventory($this);
+
 		if($this instanceof Player){
 			$this->addWindow($this->inventory, 0);
 		}else{
@@ -298,8 +298,7 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 
 			$this->uuid = UUID::fromData($this->getId(), $this->getSkinData(), $this->getNameTag());
 		}
-		
-		//TODO: Move this to PlayerInventory
+
 
 		parent::initEntity();
 
@@ -433,7 +432,7 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		$this->namedtag->Inventory = new ListTag("Inventory", []);
 		$this->namedtag->Inventory->setTagType(NBT::TAG_Compound);
 		if($this->inventory !== null){
-			
+
 			//Hotbar
 			for($slot = 0; $slot < $this->inventory->getHotbarSize(); ++$slot){
 				$inventorySlotIndex = $this->inventory->getHotbarSlotIndex($slot);

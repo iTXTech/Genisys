@@ -25,7 +25,7 @@ use pocketmine\Player;
 use pocketmine\item\Item;
 
 interface Transaction{
-	
+
 	//Transaction type constants
 	const TYPE_NORMAL = 0;
 	const TYPE_DROP_ITEM = 1;
@@ -49,7 +49,7 @@ interface Transaction{
 	 * @return float
 	 */
 	public function getCreationTime();
-	
+
 	/**
 	 * @param Player $source
 	 * @return bool

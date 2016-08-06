@@ -25,21 +25,21 @@ use pocketmine\Player;
 use pocketmine\item\Item;
 
 class SimpleTransactionQueue implements TransactionQueue{
-	
+
 	/** @var Player[] */
 	protected $player = null;
-	
+
 	/** @var \SplQueue */
 	protected $transactionQueue;
 	/** @var \SplQueue */
 	protected $transactionsToRetry;
-	
+
 	/** @var float */
 	protected $lastUpdate = -1;
-	
+
 	/** @var int */
 	protected $transactionCount = 0;
-	
+
 	/**
 	 * @param Player $player
 	 */
@@ -55,18 +55,18 @@ class SimpleTransactionQueue implements TransactionQueue{
 	public function getPlayer(){
 		return $this->player;
 	}
-	
+
 	public function getTransactionCount(){
 		return $this->transactionCount;
 	}
-	
+
 	/**
 	 * @return \SplQueue
 	 */
 	public function getTransactions(){
 		return $this->transactionQueue;
 	}
-	
+
 	/**
 	 * @param Transaction $transaction
 	 *
@@ -77,7 +77,7 @@ class SimpleTransactionQueue implements TransactionQueue{
 		$this->lastUpdate = microtime(true);
 		$this->transactionCount += 1;
 	}
-	
+
 	/**
 	 * @return bool
 	 *
@@ -86,16 +86,16 @@ class SimpleTransactionQueue implements TransactionQueue{
 	public function execute(){
 		/** @var Transaction[] */
 		$failed = [];
-		
+
 		while(!$this->transactionsToRetry->isEmpty()){
 			//Some failed transactions are waiting from the previous execution to be retried
 			$this->transactionQueue->enqueue($this->transactionsToRetry->dequeue());
 		}
-		
+
 		while(!$this->transactionQueue->isEmpty()){
-			
+
 			$transaction = $this->transactionQueue->dequeue();
-			
+
 			if(!$transaction->execute($this->player)){
 				$transaction->addFailure();
 				if($transaction->getFailures() >= self::DEFAULT_ALLOWED_RETRIES){
@@ -117,7 +117,7 @@ class SimpleTransactionQueue implements TransactionQueue{
 		foreach($failed as $f){
 			$f->sendSlotUpdate($this->player);
 		}
-		
+
 		return true;
 	}
 }
