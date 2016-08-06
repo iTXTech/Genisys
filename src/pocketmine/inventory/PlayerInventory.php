@@ -44,17 +44,17 @@ class PlayerInventory extends BaseInventory{
 	public function __construct(Human $player, $contents = null){
 		$this->hotbar = range(0, $this->getHotbarSize() - 1, 1);
 		parent::__construct($player, InventoryType::get(InventoryType::PLAYER));
-		
+
 		if($contents !== null){
 			if($contents instanceof ListTag){ //Saved data to be loaded into the inventory
 				foreach($contents as $item){
 					if($item["Slot"] >= 0 and $item["Slot"] < $this->getHotbarSize()){ //Hotbar
 						if(isset($item["TrueSlot"])){
-							
+
 							//Valid slot was found, change the linkage to this slot
 							if(0 <= $item["TrueSlot"] and $item["TrueSlot"] < $this->getSize()){
 								$this->hotbar[$item["Slot"]] = $item["TrueSlot"];
-								
+
 							}elseif($item["TrueSlot"] < 0){ //Link to an empty slot (empty hand)
 								$this->hotbar[$item["Slot"]] = -1;
 							}
@@ -81,7 +81,7 @@ class PlayerInventory extends BaseInventory{
 		parent::setSize($size + 4);
 		$this->sendContents($this->getViewers());
 	}
-	
+
 	/**
 	 * @param int $index
 	 *
@@ -128,22 +128,22 @@ class PlayerInventory extends BaseInventory{
 		}
 		if(0 <= $hotbarSlotIndex and $hotbarSlotIndex < $this->getHotbarSize()){
 			$this->itemInHandIndex = $hotbarSlotIndex;
-			if($slotMapping !== null){ 
+			if($slotMapping !== null){
 				/* Handle a hotbar slot mapping change. This allows PE to select different inventory slots.
 				 * This is the only time slot mapping should ever be changed. */
-				
+
 				if($slotMapping < 0 or $slotMapping >= $this->getSize()){
 					//Mapping was not in range of the inventory, set it to -1
 					//This happens if the client selected a blank slot (sends 255)
 					$slotMapping = -1;
-					
+
 				}elseif(($key = array_search($slotMapping, $this->hotbar)) !== false){
 					/* Do not do slot swaps if the slot was null
 					 * Chosen slot is already linked to a hotbar slot, swap the two slots around.
 					 * This will already have been done on the client-side so no changes need to be sent. */
-					$this->hotbar[$key] = $this->hotbar[$this->itemInHandIndex];					
+					$this->hotbar[$key] = $this->hotbar[$this->itemInHandIndex];
 				}
-				
+
 				$this->hotbar[$this->itemInHandIndex] = $slotMapping;
 			}
 			$this->sendHeldItem($this->getHolder()->getViewers());
@@ -152,7 +152,7 @@ class PlayerInventory extends BaseInventory{
 			}
 		}
 	}
-	
+
 	/**
 	 * @return Item
 	 *
@@ -177,7 +177,7 @@ class PlayerInventory extends BaseInventory{
 	public function setItemInHand(Item $item){
 		return $this->setItem($this->getHeldItemSlot(), $item);
 	}
-	
+
 	/**
 	 * @return int[]
 	 *
@@ -246,7 +246,7 @@ class PlayerInventory extends BaseInventory{
 		}
 		if($index === $this->itemInHandIndex){
 			$this->sendHeldItem($this->getHolder()->getViewers());
-			
+
 		}elseif($index >= $this->getSize()){ //Armour equipment
 			$this->sendArmorSlot($index, $this->getViewers());
 			$this->sendArmorSlot($index, $this->getHolder()->getViewers());
@@ -479,7 +479,7 @@ class PlayerInventory extends BaseInventory{
 		for($i = 0; $i < $this->getSize(); ++$i){ //Do not send armor by error here
 			$pk->slots[$i] = $this->getItem($i);
 		}
-		
+
 		//Because PE is stupid and shows 9 less slots than you send it, give it 9 dummy slots so it shows all the REAL slots.
 		for($i = $this->getSize(); $i < $this->getSize() + $this->getHotbarSize(); ++$i){
 			$pk->slots[$i] = Item::get(Item::AIR, 0, 0);
