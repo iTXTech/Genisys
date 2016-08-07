@@ -30,21 +30,22 @@ use pocketmine\item\enchantment\EnchantmentLevelTable;
 use pocketmine\item\enchantment\EnchantmentList;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
+use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 use pocketmine\network\protocol\CraftingDataPacket;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\tile\EnchantTable;
 
-class EnchantInventory extends ContainerInventory{
+class EnchantInventory extends TemporaryInventory{
 	private $bookshelfAmount = 0;
 
 	private $levels = [];
 	/** @var EnchantmentEntry[] */
 	private $entries = null;
 
-	public function __construct(EnchantTable $tile){
-		parent::__construct($tile, InventoryType::get(InventoryType::ENCHANT_TABLE));
+	public function __construct(Position $pos){
+		parent::__construct(new FakeBlockMenu($this, $pos), InventoryType::get(InventoryType::ENCHANT_TABLE));
 	}
 
 	/**
@@ -52,6 +53,10 @@ class EnchantInventory extends ContainerInventory{
 	 */
 	public function getHolder(){
 		return $this->holder;
+	}
+	
+	public function getResultSlotIndex(){
+		return -1; //enchanting tables don't have result slots, they modify the item in the target slot instead
 	}
 
 	public function onOpen(Player $who){
