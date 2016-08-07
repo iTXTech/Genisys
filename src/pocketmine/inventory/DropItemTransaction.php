@@ -26,13 +26,13 @@ use pocketmine\Player;
 
 class DropItemTransaction extends BaseTransaction{
 
+	const TRANSACTION_TYPE = Transaction::TYPE_DROP_ITEM;
+
 	protected $inventory = null;
 
 	protected $slot = null;
 
 	protected $sourceItem = null;
-
-	const TRANSACTION_TYPE = Transaction::TYPE_DROP_ITEM;
 
 	/**
 	 * @param Item $droppedItem
