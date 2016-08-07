@@ -3506,20 +3506,24 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$transaction = new BaseTransaction($this->inventory, $packet->slot + $this->inventory->getSize(), $packet->item);
 				}elseif(isset($this->windowIndex[$packet->windowid])){
 					//Transaction for non-player-inventory window, such as anvil, chest, etc.
-					$inv = $this->windowIndex[$packet->windowid];
 
-					if($inv instanceof EnchantInventory and $packet->item->hasEnchantments()){
+					$inv = $this->windowIndex[$packet->windowid];
+					$achievements = [];
+
+					if($inv instanceof FurnaceInventory and $inv->getItem($packet->slot)->getId() === Item::IRON_INGOT and $packet->slot === FurnaceInventory::RESULT){
+						$achievements[] = "acquireIron";
+
+					}elseif($inv instanceof EnchantInventory and $packet->item->hasEnchantments()){
 						$inv->onEnchant($this, $inv->getItem($packet->slot), $packet->item);
 					}
 
-					$transaction = new BaseTransaction($inv, $packet->slot, $packet->item);
+					$transaction = new BaseTransaction($inv, $packet->slot, $packet->item, $achievements);
 				}else{
 					//Client sent a transaction for a window which the server doesn't think they have open
 					break;
 				}
 
 				$this->getTransactionQueue()->addTransaction($transaction);
-				//TODO: Fix "Acquire Iron" achievement
 
 				break;
 			case ProtocolInfo::BLOCK_ENTITY_DATA_PACKET:
