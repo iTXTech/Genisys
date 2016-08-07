@@ -68,7 +68,7 @@ class DropItemTransaction extends BaseTransaction{
 			if(!$source->getFloatingInventory()->contains($droppedItem)){
 				return false;
 			}
-			$source->getFloatingInventory()->remove($droppedItem);
+			$source->getFloatingInventory()->removeItem($droppedItem);
 		}
 		$source->dropItem($droppedItem);
 		return true;

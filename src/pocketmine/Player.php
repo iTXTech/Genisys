@@ -3276,7 +3276,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					 */
 					$possibleRecipes = $this->server->getCraftingManager()->getRecipesByResult($packet->output[0]);
 					if(!$packet->output[0]->deepEquals($recipe->getResult())){
-						$this->server->getLogger()->debug("Mismatched desktop recipe received from player ".$this->getName());
+						$this->server->getLogger()->debug("Mismatched desktop recipe received from player ".$this->getName().", expected ".$recipe->getResult().", got ".$packet->output[0]);
 					}
 					$recipe = null;
 					foreach($possibleRecipes as $r){
