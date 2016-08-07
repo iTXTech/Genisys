@@ -25,6 +25,7 @@ namespace pocketmine\level\generator\normal\biome;
 
 use pocketmine\block\Block;
 use pocketmine\level\generator\normal\populator\DeadBush;
+use pocketmine\level\generator\normal\populator\Mushroom;
 use pocketmine\level\generator\normal\populator\SugarCane;
 
 class DesertBiome extends SandyBiome{
@@ -38,6 +39,9 @@ class DesertBiome extends SandyBiome{
 		$sugarCane->setRandomAmount(20);
 		$sugarCane->setBaseAmount(3);
 
+		$mushroom = new Mushroom();
+
+		$this->addPopulator($mushroom);
 		$this->addPopulator($deadBush);
 		$this->addPopulator($sugarCane);
 		
