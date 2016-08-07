@@ -47,13 +47,25 @@ class AnvilInventory extends TemporaryInventory{
 		return self::RESULT;
 	}
 
-	public function onRename(Player $player) : bool{
-		$item = $this->getItem(self::RESULT);
-		if($player->getExpLevel() > $item->getRepairCost()){
-			$player->setExpLevel($player->getExpLevel() - $item->getRepairCost());
-			return true;
+	public function onRename(Player $player, Item $resultItem) : bool{
+		if(!$resultItem->deepEquals($this->getItem(self::TARGET), true, false, true)){
+			//Item does not match target item. Everything must match except the tags.
+			return false;
 		}
-		return false;
+
+		if($player->getExpLevel() < $resultItem->getRepairCost()){ //Not enough exp
+			return false;
+		}
+		$player->setExpLevel($player->getExpLevel() - $resultItem->getRepairCost());
+		
+		$this->clearAll();
+		if(!$player->getServer()->allowInventoryCheats and !$player->isCreative()){
+			if(!$player->getFloatingInventory()->canAddItem($resultItem)){
+				return false;
+			}
+			$player->getFloatingInventory()->addItem($resultItem);
+		}
+		return true;
 	}
 
 	public function processSlotChange(Transaction $transaction): bool{

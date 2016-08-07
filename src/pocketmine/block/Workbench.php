@@ -53,7 +53,7 @@ class Workbench extends Solid{
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
 			if($player->getServer()->limitedCreative and $player->isCreative()) return true;
-			$player->craftingType = 1;
+			$player->craftingType = Player::CRAFTING_BIG;
 		}
 
 		return true;
