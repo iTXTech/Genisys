@@ -25,7 +25,7 @@ use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\math\Vector3;
 
-class ActiveRedstoneLamp extends Solid implements ElectricalAppliance{
+class ActiveRedstoneLamp extends Solid implements ElectricalAppliance, SolidLight{
 	protected $id = self::ACTIVE_REDSTONE_LAMP;
 
 	public function __construct($meta = 0){
@@ -115,7 +115,7 @@ class ActiveRedstoneLamp extends Solid implements ElectricalAppliance{
 	}
 
 	public function turnOff(){
-		$this->getLevel()->setBlock($this, new InactiveRedstoneLamp(), true, false);
+		$this->getLevel()->setBlock($this, new InactiveRedstoneLamp(), true, true);
 		//$this->turnAroundOff();
 		return true;
 	}

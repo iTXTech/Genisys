@@ -170,7 +170,7 @@ class Attribute{
 		return $this->currentValue;
 	}
 
-	public function setValue($value, $fit = true){
+	public function setValue($value, bool $fit = true, bool $shouldSend = false){
 		if($value > $this->getMaxValue() or $value < $this->getMinValue()){
 			if(!$fit){
 				Server::getInstance()->getLogger()->error("[Attribute / {$this->getName()}] Value $value exceeds the range!");
@@ -181,6 +181,10 @@ class Attribute{
 		if($this->currentValue != $value){
 			$this->desynchronized = true;
 			$this->currentValue = $value;
+		}
+
+		if($shouldSend){
+			$this->desynchronized = true;
 		}
 		return $this;
 	}

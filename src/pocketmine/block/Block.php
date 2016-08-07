@@ -322,14 +322,12 @@ class Block extends Position implements BlockIds, Metadatable{
 
 					if($block->isSolid()){
 						if($block->isTransparent()){
-							if($block instanceof Lava){
-								self::$lightFilter[$id] = 15;
-							}elseif($block instanceof Liquid or $block instanceof Ice){
+							if($block instanceof Liquid or $block instanceof Ice){
 								self::$lightFilter[$id] = 2;
 							}else{
 								self::$lightFilter[$id] = 1;
 							}
-						}elseif($block->getId() == Block::GLOWSTONE){
+						}elseif($block instanceof SolidLight){
 							self::$lightFilter[$id] = 1;
 						}else{
 							self::$lightFilter[$id] = 15;

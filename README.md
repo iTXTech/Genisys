@@ -16,6 +16,11 @@ Genisys
 
 __Feature-rich Minecraft: Pocket Edition server software__
 
+[![PayPayl donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=itxtechnologiesllc%40gmail%2ecom&lc=GB&item_name=Genisys&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted)
+[![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
+[![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
+[![Jenkins](https://img.shields.io/jenkins/s/https/ci.itxtech.org/Genisys.svg)](https://ci.itxtech.org/job/Genisys/lastSuccessfulBuild/)
+
 -------------
 
 Introduction
@@ -34,15 +39,10 @@ Discussion
 * __[Gitter](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)__
 * IRC: #genisys at freenode
 
-Build status
--------------
-* Travis-CI: [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
-* GitLab CI: [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
-
 Get Genisys
 -------------
-* Download from __[GitLab CI](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)__<br>
-* __[Installtion instructions](https://github.com/iTXTech/Genisys/wiki)__
+* Download from __[GitLab CI](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)__ or __[Jenkins](https://ci.itxtech.org/job/Genisys/lastSuccessfulBuild/)__
+* Installation instructions can be found in the __[wiki](https://github.com/iTXTech/Genisys/wiki)__.
 
 NOTE: **The master branch is the only officially supported branch.**
 _All other branches are in testing and may be unstable. Do not use builds from other branches unless you are sure you understand the risks._

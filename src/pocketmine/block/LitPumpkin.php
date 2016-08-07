@@ -20,7 +20,7 @@ use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
 
-class LitPumpkin extends Solid{
+class LitPumpkin extends Solid implements SolidLight{
 
 	protected $id = self::LIT_PUMPKIN;
 
