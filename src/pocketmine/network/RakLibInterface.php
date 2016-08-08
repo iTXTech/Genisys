@@ -29,6 +29,7 @@ use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 use raklib\protocol\EncapsulatedPacket;
+use raklib\protocol\PacketReliability;
 use raklib\RakLib;
 use raklib\server\RakLibServer;
 use raklib\server\ServerHandler;
@@ -215,7 +216,7 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 					$packet->__encapsulatedPacket = new CachedEncapsulatedPacket;
 					$packet->__encapsulatedPacket->identifierACK = null;
 					$packet->__encapsulatedPacket->buffer = chr(0xfe) . $packet->buffer;
-					$packet->__encapsulatedPacket->reliability = 3;
+					$packet->__encapsulatedPacket->reliability = PacketReliability::RELIABLE_ORDERED;
 					$packet->__encapsulatedPacket->orderChannel = 0;
 				}
 				$pk = $packet->__encapsulatedPacket;
@@ -231,7 +232,7 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 			if($pk === null){
 				$pk = new EncapsulatedPacket();
 				$pk->buffer = chr(0xfe) . $packet->buffer;
-				$packet->reliability = 3;
+				$packet->reliability = PacketReliability::RELIABLE_ORDERED;
 				$packet->orderChannel = 0;
 
 				if($needACK === true){
