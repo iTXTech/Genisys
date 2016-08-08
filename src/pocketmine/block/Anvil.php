@@ -1,5 +1,4 @@
 <?php
-
 /*
  *
  *  ____            _        _   __  __ _                  __  __ ____  
@@ -18,15 +17,12 @@
  * 
  *
 */
-
 namespace pocketmine\block;
-
 use pocketmine\inventory\AnvilInventory;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\level\sound\AnvilFallSound;
 use pocketmine\Player;
-
 class Anvil extends Fallable{
 	
 	const NORMAL = 0;
@@ -34,41 +30,33 @@ class Anvil extends Fallable{
 	const VERY_DAMAGED = 8;
 	
 	protected $id = self::ANVIL;
-
 	public function isSolid(){
 		return false;
 	}
-
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
-
-	public function canBeActivated() : bool {
+	public function canBeActivated() : bool{
 		return true;
 	}
-
-	public function getHardness() {
+	public function getHardness(){
 		return 5;
 	}
-
 	public function getResistance(){
 		return 6000;
 	}
-
 	public function getName() : string{
-		$names = [
-			self::NORMAL => "Anvil",
-			self::SLIGHTLY_DAMAGED => "Slightly Damaged Anvil",
-			self::VERY_DAMAGED => "Very Damaged Anvil",
-			12 => "Anvil" //just in case somebody uses /give to get an anvil with damage 12 or higher, to prevent crash
+		static $names = [
+			self::TYPE_ANVIL => "Anvil",
+			self::TYPE_SLIGHTLY_DAMAGED_ANVIL => "Slighty Damaged Anvil",
+			self::TYPE_VERY_DAMAGED_ANVIL => "Very Damaged Anvil",
+			12 => "Anvil" //just in case 
 		];
 		return $names[$this->meta & 0x0c];
 	}
-
 	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
-
 	public function onActivate(Item $item, Player $player = null){
 		if(!$this->getLevel()->getServer()->anvilEnabled){
 			return true;
@@ -77,21 +65,23 @@ class Anvil extends Fallable{
 			if($player->isCreative() and $player->getServer()->limitedCreative){
 				return true;
 			}
-
 			$player->addWindow(new AnvilInventory($this));
 		}
-
 		return true;
 	}
 	
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
-		$direction = ($player !== null? $player->getDirection(): 0) & 0x03;
-		$this->meta = ($this->meta & 0x0c) | $direction;
-		$this->getLevel()->setBlock($block, $this, true, true);
 		$this->getLevel()->addSound(new AnvilFallSound($this));
+		if($target->isTransparent() === false){
+			$direction = ($player !== null? $player->getDirection(): 0) & 0x03;
+			$this->meta = ($this->meta & 0x0c) | $direction;
+			$this->getLevel()->setBlock($block, $this, true, true);
+			return true;
+		}
+		return false;
 	}
-
-	public function getDrops(Item $item) : array {
+	public function getDrops(Item $item) : array{
+		$damage = $this->getDamage();
 		if($item->isPickaxe() >= 1){
 			return [
 				[$this->id, $this->meta & 0x0c, 1],
