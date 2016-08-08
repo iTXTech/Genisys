@@ -53,7 +53,7 @@ class BanCommand extends VanillaCommand{
 		if(isset($args[0]) and isset($args[1])){
 			$reason = $args[0];
 			if($args[1] != null and is_numeric($args[1])){
-				$until = $args[1] * 86400 + time();
+				$until = new \DateTime('@' . ($args[1] * 86400 + time()));
 			}else{
 				$until = null;
 			}
