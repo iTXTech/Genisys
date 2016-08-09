@@ -30,6 +30,7 @@ use raklib\protocol\OPEN_CONNECTION_REPLY_2;
 use raklib\protocol\OPEN_CONNECTION_REQUEST_1;
 use raklib\protocol\OPEN_CONNECTION_REQUEST_2;
 use raklib\protocol\Packet;
+use raklib\protocol\PacketReliability;
 use raklib\protocol\PING_DataPacket;
 use raklib\protocol\PONG_DataPacket;
 use raklib\protocol\SERVER_HANDSHAKE_DataPacket;
@@ -268,15 +269,15 @@ class Session{
 		}
 
 		if(
-			$packet->reliability === 2 or
-			$packet->reliability === 3 or
-			$packet->reliability === 4 or
-			$packet->reliability === 6 or
-			$packet->reliability === 7
+			$packet->reliability === PacketReliability::RELIABLE or
+			$packet->reliability === PacketReliability::RELIABLE_ORDERED or
+			$packet->reliability === PacketReliability::RELIABLE_SEQUENCED or
+			$packet->reliability === PacketReliability::RELIABLE_WITH_ACK_RECEIPT or
+			$packet->reliability === PacketReliability::RELIABLE_ORDERED_WITH_ACK_RECEIPT
 		){
 			$packet->messageIndex = $this->messageIndex++;
 
-			if($packet->reliability === 3){
+			if($packet->reliability === PacketReliability::RELIABLE_ORDERED){
 				$packet->orderIndex = $this->channelIndex[$packet->orderChannel]++;
 			}
 		}
@@ -297,7 +298,7 @@ class Session{
 				}else{
 					$pk->messageIndex = $packet->messageIndex;
 				}
-				if($pk->reliability === 3){
+				if($pk->reliability === PacketReliability::RELIABLE_ORDERED){
 					$pk->orderChannel = $packet->orderChannel;
 					$pk->orderIndex = $packet->orderIndex;
 				}
@@ -407,7 +408,7 @@ class Session{
 					$pk->encode();
 
 					$sendPacket = new EncapsulatedPacket();
-					$sendPacket->reliability = 0;
+					$sendPacket->reliability = PacketReliability::UNRELIABLE;
 					$sendPacket->buffer = $pk->buffer;
 					$this->addToQueue($sendPacket, RakLib::PRIORITY_IMMEDIATE);
 				}elseif($id === CLIENT_HANDSHAKE_DataPacket::$ID){
@@ -433,7 +434,7 @@ class Session{
 				$pk->encode();
 
 				$sendPacket = new EncapsulatedPacket();
-				$sendPacket->reliability = 0;
+				$sendPacket->reliability = PacketReliability::UNRELIABLE;
 				$sendPacket->buffer = $pk->buffer;
 				$this->addToQueue($sendPacket);
 			}//TODO: add PING/PONG (0x00/0x03) automatic latency measure
