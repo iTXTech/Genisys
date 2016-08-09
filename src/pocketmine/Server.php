@@ -1817,7 +1817,7 @@ class Server{
 
 			$this->about();
 
-			$this->logger->info("Loading pocketmine.yml...");
+			$this->logger->debug("Loading pocketmine.yml...");
 			if(!file_exists($this->dataPath . "pocketmine.yml")){
 				$content = file_get_contents($this->filePath . "src/pocketmine/resources/pocketmine.yml");
 				@file_put_contents($this->dataPath . "pocketmine.yml", $content);
@@ -1839,7 +1839,7 @@ class Server{
 				unset($this->propertyCache["settings.language"]);
 			}
 
-			$this->logger->info("Loading genisys.yml...");
+			$this->logger->debug("Loading genisys.yml...");
 
 			$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
 			if(file_exists($this->filePath . "src/pocketmine/resources/genisys_$lang.yml")){
@@ -2101,7 +2101,7 @@ class Server{
 				$this->synapse = new Synapse($this, $this->synapseConfig);
 			}
 
-			if($cfgVer != $advVer){
+			if($cfgVer > $advVer){
 				$this->logger->notice("Your genisys.yml needs update");
 				$this->logger->notice("Current Version: $advVer   Latest Version: $cfgVer");
 			}
