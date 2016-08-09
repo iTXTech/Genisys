@@ -59,8 +59,9 @@ class BanCommand extends VanillaCommand{
 			}
 
 			$sender->getServer()->getNameBans()->addBan($name, $reason, $until, $sender->getName());
+		}else{
+			$sender->getServer()->getNameBans()->addBan($name, $reason = implode(" ", $args), null, $sender->getName());
 		}
-		$sender->getServer()->getNameBans()->addBan($name, $reason = implode(" ", $args), null, $sender->getName());
 
 
 		if(($player = $sender->getServer()->getPlayerExact($name)) instanceof Player){
