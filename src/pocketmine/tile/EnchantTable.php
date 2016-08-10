@@ -29,13 +29,10 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
 
-class EnchantTable extends Spawnable implements InventoryHolder, Nameable{
-	/** @var EnchantInventory */
-	protected $inventory;
+class EnchantTable extends Spawnable implements Nameable{
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
-		$this->inventory = new EnchantInventory($this);
 	}
 
 	public function getName() : string{
@@ -53,13 +50,6 @@ class EnchantTable extends Spawnable implements InventoryHolder, Nameable{
 		}
 
 		$this->namedtag->CustomName = new StringTag("CustomName", $str);
-	}
-
-	/**
-	 * @return EnchantInventory
-	 */
-	public function getInventory(){
-		return $this->inventory;
 	}
 
 	public function getSpawnCompound(){

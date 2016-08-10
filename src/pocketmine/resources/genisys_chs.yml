@@ -2,7 +2,7 @@
 
 #配置文件版本
 config:
- version: 17
+ version: 18
  
 level:
  #设置是否变换天气
@@ -28,8 +28,6 @@ player:
  experience: true
  #是否开启死亡不掉落
  keep-inventory: false
- #背包格数
- inventory-num: 36
  #是否开启切换模式自动清除背包
  auto-clear-inventory: true
  #是否开启死亡经验不掉落
@@ -165,3 +163,7 @@ ai:
  creeper-explode-destroy-block: false
  #是否允许自动生成生物
  mobgenerate: false
+ 
+inventory:
+ #Set this to true if you have problems with anvils. Will process inventory transactions in a vanilla fashion with no anti-cheats or verification.
+ allow-cheats: false

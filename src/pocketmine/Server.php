@@ -348,7 +348,6 @@ class Server{
 	public $aiConfig = [];
 	public $aiEnabled = false;
 	public $aiHolder = null;
-	public $inventoryNum = 36;
 	public $hungerTimer = 80;
 	public $version;
 	public $allowSnowGolem;
@@ -380,6 +379,7 @@ class Server{
 	public $synapseConfig = [];
 	public $enchantingTableEnabled = true;
 	public $countBookshelf = false;
+	public $allowInventoryCheats = false;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -400,7 +400,7 @@ class Server{
 	public function isRunning(){
 		return $this->isRunning === true;
 	}
-	
+
 	/**
 	 * @return string
 	 * Returns a formatted string of how long the server has been running for
@@ -439,7 +439,7 @@ class Server{
 	public function getPocketMineVersion(){
 		return \pocketmine\VERSION;
 	}
-	
+
 	public function getFormattedVersion($prefix = ""){
 		return (\pocketmine\VERSION !== ""? $prefix . \pocketmine\VERSION : "");
 	}
@@ -1532,7 +1532,7 @@ class Server{
 				$this->operators->remove($opName);
 			}
 		}
-		
+
 		if(($player = $this->getPlayerExact($name)) !== null){
 			$player->recalculatePermissions();
 		}
@@ -1683,7 +1683,6 @@ class Server{
 			"creeperexplode" => $this->getAdvancedProperty("ai.creeper-explode-destroy-block", false),
 			"mobgenerate" => $this->getAdvancedProperty("ai.mobgenerate", false),
 		];
-		$this->inventoryNum = min(91, $this->getAdvancedProperty("player.inventory-num", 36));
 		$this->hungerTimer = $this->getAdvancedProperty("player.hunger-timer", 80);
 		$this->allowSnowGolem = $this->getAdvancedProperty("server.allow-snow-golem", false);
 		$this->allowIronGolem = $this->getAdvancedProperty("server.allow-iron-golem", false);
@@ -1730,6 +1729,8 @@ class Server{
 		$this->anvilEnabled = $this->getAdvancedProperty("enchantment.enable-anvil", true);
 		$this->enchantingTableEnabled = $this->getAdvancedProperty("enchantment.enable-enchanting-table", true);
 		$this->countBookshelf = $this->getAdvancedProperty("enchantment.count-bookshelf", false);
+
+		$this->allowInventoryCheats = $this->getAdvancedProperty("inventory.allow-cheats", false);
 	}
 
 	public function isSynapseEnabled() : bool {
@@ -1817,14 +1818,14 @@ class Server{
 
 			$this->about();
 
-			$this->logger->info("Loading pocketmine.yml...");
+			$this->logger->debug("Loading pocketmine.yml...");
 			if(!file_exists($this->dataPath . "pocketmine.yml")){
 				$content = file_get_contents($this->filePath . "src/pocketmine/resources/pocketmine.yml");
 				@file_put_contents($this->dataPath . "pocketmine.yml", $content);
 			}
 			$this->config = new Config($configPath = $this->dataPath . "pocketmine.yml", Config::YAML, []);
 			$nowLang = $this->getProperty("settings.language", "eng");
-			
+
 			//Crashes unsupported builds without the correct configuration
 			if(strpos(\pocketmine\VERSION, "unsupported") !== false and getenv("GITLAB_CI") === false){
 				if($this->getProperty("settings.enable-testing", false) !== true){
@@ -1839,7 +1840,7 @@ class Server{
 				unset($this->propertyCache["settings.language"]);
 			}
 
-			$this->logger->info("Loading genisys.yml...");
+			$this->logger->debug("Loading genisys.yml...");
 
 			$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
 			if(file_exists($this->filePath . "src/pocketmine/resources/genisys_$lang.yml")){
@@ -1979,7 +1980,7 @@ class Server{
 			$this->registerEntities();
 			$this->registerTiles();
 
-			InventoryType::init($this->inventoryNum);
+			InventoryType::init();
 			Block::init();
 			Enchantment::init();
 			Item::init($this->creativeItemsFromJson);
@@ -2101,7 +2102,7 @@ class Server{
 				$this->synapse = new Synapse($this, $this->synapseConfig);
 			}
 
-			if($cfgVer != $advVer){
+			if($cfgVer > $advVer){
 				$this->logger->notice("Your genisys.yml needs update");
 				$this->logger->notice("Current Version: $advVer   Latest Version: $cfgVer");
 			}
@@ -2863,7 +2864,7 @@ class Server{
 
 		$u = Utils::getMemoryUsage(true);
 		$usage = round(($u[0] / 1024) / 1024, 2) . "/" . round(($d[0] / 1024) / 1024, 2) . "/" . round(($u[1] / 1024) / 1024, 2) . "/" . round(($u[2] / 1024) / 1024, 2) . " MB @ " . Utils::getThreadCount() . " threads";
-		
+
 		echo "\x1b]0;" . $this->getName() . $this->getFormattedVersion("-") .
 			" | Online " . count($this->players) . "/" . $this->getMaxPlayers() .
 			" | Memory " . $usage .
@@ -3093,7 +3094,7 @@ class Server{
 		Entity::registerEntity(XPOrb::class);
 		Entity::registerEntity(Zombie::class);
 		Entity::registerEntity(ZombieVillager::class);
-		
+
 		Entity::registerEntity(Human::class, true);
 	}
 
