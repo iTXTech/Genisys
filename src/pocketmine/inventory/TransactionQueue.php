@@ -21,36 +21,16 @@
 
 namespace pocketmine\inventory;
 
-use pocketmine\item\Item;
-use pocketmine\tile\BrewingStand;
+interface TransactionQueue{
 
-class BrewingInventory extends ContainerInventory{
-	public function __construct(BrewingStand $tile){
-		parent::__construct($tile, InventoryType::get(InventoryType::BREWING_STAND));
-	}
+	const DEFAULT_ALLOWED_RETRIES = 5;
 
-	/**
-	 * @return BrewingStand
-	 */
-	public function getHolder(){
-		return $this->holder;
-	}
+	function getTransactions();
 
-	public function setIngredient(Item $item){
-		$this->setItem(0, $item);
-	}
+	function getTransactionCount();
 
-	/**
-	 * @return Item
-	 */
-	public function getIngredient(){
-		return $this->getItem(0);
-	}
+	function addTransaction(Transaction $transaction);
 
-	public function onSlotChange($index, $before, $send){
-		parent::onSlotChange($index, $before, $send);
+	function execute();
 
-		$this->getHolder()->scheduleUpdate();
-		$this->getHolder()->updateSurface();
-	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  *
  *  _____   _____   __   _   _   _____  __    __  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
@@ -21,36 +21,22 @@
 
 namespace pocketmine\inventory;
 
-use pocketmine\item\Item;
-use pocketmine\tile\BrewingStand;
+use pocketmine\Player;
 
-class BrewingInventory extends ContainerInventory{
-	public function __construct(BrewingStand $tile){
-		parent::__construct($tile, InventoryType::get(InventoryType::BREWING_STAND));
-	}
+abstract class TemporaryInventory extends ContainerInventory{
+	//TODO
 
-	/**
-	 * @return BrewingStand
-	 */
-	public function getHolder(){
-		return $this->holder;
-	}
+	abstract public function getResultSlotIndex();
 
-	public function setIngredient(Item $item){
-		$this->setItem(0, $item);
-	}
 
-	/**
-	 * @return Item
-	 */
-	public function getIngredient(){
-		return $this->getItem(0);
-	}
-
-	public function onSlotChange($index, $before, $send){
-		parent::onSlotChange($index, $before, $send);
-
-		$this->getHolder()->scheduleUpdate();
-		$this->getHolder()->updateSurface();
+	public function onClose(Player $who){
+		foreach($this->getContents() as $slot => $item){
+			if($slot === $this->getResultSlotIndex()){
+				//Do not drop the item in the result slot - it is a virtual item and does not actually exist.
+				continue;
+			}
+			$who->dropItem($item);
+		}
+		$this->clearAll();
 	}
 }
