@@ -235,6 +235,15 @@ abstract class BaseInventory implements Inventory{
 
 		return -1;
 	}
+	
+	public function firstOccupied(){
+		for($i = 0; $i < $this->size; $i++){
+			if(($item = $this->getItem($i))->getId() !== Item::AIR and $item->getCount() > 0){
+				return $i;
+			}
+		}
+		return -1;
+	}
 
 	public function canAddItem(Item $item){
 		$item = clone $item;

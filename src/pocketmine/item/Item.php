@@ -80,6 +80,7 @@ class Item implements ItemIds{
 
 	public static function init($readFromJson = false){
 		if(self::$list === null){
+			//TODO: Sort this mess into some kind of order
 			self::$list = new \SplFixedArray(65536);
 			self::$list[self::SUGARCANE] = Sugarcane::class;
 			self::$list[self::WHEAT_SEEDS] = WheatSeeds::class;
@@ -232,6 +233,7 @@ class Item implements ItemIds{
 			self::$list[self::ENCHANTED_GOLDEN_APPLE] = EnchantedGoldenApple::class;
 			self::$list[self::RAW_MUTTON] = RawMutton::class;
 			self::$list[self::COOKED_MUTTON] = CookedMutton::class;
+			self::$list[self::HOPPER] = Hopper::class;
 
 			for($i = 0; $i < 256; ++$i){
 				if(Block::$list[$i] !== null){
