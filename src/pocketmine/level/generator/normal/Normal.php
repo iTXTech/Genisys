@@ -124,43 +124,7 @@ class Normal extends Generator{
 		$this->random->setSeed($this->level->getSeed());
 		$this->noiseBase = new Simplex($this->random, 4, 1 / 4, 1 / 32);
 		$this->random->setSeed($this->level->getSeed());
-		$this->selector = new BiomeSelector($this->random, function($temperature, $rainfall){
-			if($rainfall < 0.25){
-				if($temperature < 0.7){
-					return Biome::OCEAN;
-				}elseif($temperature < 0.85){
-					return Biome::RIVER;
-				}else{
-					return Biome::SWAMP;
-				}
-			}elseif($rainfall < 0.60){
-				if($temperature < 0.25){
-					return Biome::ICE_PLAINS;
-				}elseif($temperature < 0.75){
-					return Biome::PLAINS;
-				}else{
-					return Biome::DESERT;
-				}
-			}elseif($rainfall < 0.80){
-				if($temperature < 0.25){
-					return Biome::TAIGA;
-				}elseif($temperature < 0.75){
-					return Biome::FOREST;
-				}else{
-					return Biome::BIRCH_FOREST;
-				}
-			}else{
-				if($temperature < 0.25){
-					return Biome::MOUNTAINS;
-				}elseif($temperature < 0.70){
-					return Biome::SMALL_MOUNTAINS;
-				}elseif($temperature <= 2.0){
-					return Biome::MESA;
-				}else{
-					return Biome::RIVER;
-				}
-			}
-		}, Biome::getBiome(Biome::OCEAN));
+		$this->selector = new BiomeSelector($this->random, Biome::getBiome(Biome::OCEAN));
 
 		$this->selector->addBiome(Biome::getBiome(Biome::OCEAN));
 		$this->selector->addBiome(Biome::getBiome(Biome::PLAINS));

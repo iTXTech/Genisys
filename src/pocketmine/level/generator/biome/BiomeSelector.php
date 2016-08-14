@@ -39,13 +39,48 @@ class BiomeSelector{
 
 	private $map = [];
 
-	private $lookup;
-
-	public function __construct(Random $random, callable $lookup, Biome $fallback){
+	public function __construct(Random $random, Biome $fallback){
 		$this->fallback = $fallback;
-		$this->lookup = $lookup;
 		$this->temperature = new Simplex($random, 2, 1 / 16, 1 / 512);
 		$this->rainfall = new Simplex($random, 2, 1 / 16, 1 / 512);
+	}
+
+	public function lookup($temperature, $rainfall){
+		if($rainfall < 0.25){
+			if($temperature < 0.7){
+				return Biome::OCEAN;
+			}elseif($temperature < 0.85){
+				return Biome::RIVER;
+			}else{
+				return Biome::SWAMP;
+			}
+		}elseif($rainfall < 0.60){
+			if($temperature < 0.25){
+				return Biome::ICE_PLAINS;
+			}elseif($temperature < 0.75){
+				return Biome::PLAINS;
+			}else{
+				return Biome::DESERT;
+			}
+		}elseif($rainfall < 0.80){
+			if($temperature < 0.25){
+				return Biome::TAIGA;
+			}elseif($temperature < 0.75){
+				return Biome::FOREST;
+			}else{
+				return Biome::BIRCH_FOREST;
+			}
+		}else{
+			if($temperature < 0.25){
+				return Biome::MOUNTAINS;
+			}elseif($temperature < 0.70){
+				return Biome::SMALL_MOUNTAINS;
+			}elseif($temperature <= 2.0){
+				return Biome::MESA;
+			}else{
+				return Biome::RIVER;
+			}
+		}
 	}
 
 	public function recalculate(){
@@ -53,7 +88,7 @@ class BiomeSelector{
 
 		for($i = 0; $i < 64; ++$i){
 			for($j = 0; $j < 64; ++$j){
-				$this->map[$i + ($j << 6)] = call_user_func($this->lookup, $i / 63, $j / 63);
+				$this->map[$i + ($j << 6)] = $this->lookup($i / 63, $j / 63);
 			}
 		}
 	}
