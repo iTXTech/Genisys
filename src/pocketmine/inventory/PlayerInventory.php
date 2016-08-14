@@ -136,8 +136,19 @@ class PlayerInventory extends BaseInventory{
 					//Mapping was not in range of the inventory, set it to -1
 					//This happens if the client selected a blank slot (sends 255)
 					$slotMapping = -1;
+				}
 
-				}elseif(($key = array_search($slotMapping, $this->hotbar)) !== false){
+				$item = $this->getItem($slotMapping);
+				if($this->getHolder() instanceof Player){
+					Server::getInstance()->getPluginManager()->callEvent($ev = new PlayerItemHeldEvent($this->getHolder(), $item, $slotMapping, $hotbarSlotIndex));
+					if($ev->isCancelled()){
+						$this->sendHeldItem($this->getHolder());
+						$this->sendContents($this->getHolder());
+						return;
+					}
+				}
+
+				if(($key = array_search($slotMapping, $this->hotbar)) !== false and $slotMapping !== -1){
 					/* Do not do slot swaps if the slot was null
 					 * Chosen slot is already linked to a hotbar slot, swap the two slots around.
 					 * This will already have been done on the client-side so no changes need to be sent. */
@@ -187,24 +198,20 @@ class PlayerInventory extends BaseInventory{
 		return $this->hotbar;
 	}
 
+	/**
+	 * @return int
+	 *
+	 * Returns the inventory slot index of the currently equipped slot
+	 */
 	public function getHeldItemSlot(){
 		return $this->getHotbarSlotIndex($this->itemInHandIndex);
 	}
 
+	/**
+	 * @deprecated
+	 * @param int $slot
+	 */
 	public function setHeldItemSlot($slot){
-		if($slot >= -1 and $slot < $this->getSize()){
-			$item = $this->getItem($slot);
-
-			$itemIndex = $this->getHeldItemIndex();
-
-			if($this->getHolder() instanceof Player){
-				Server::getInstance()->getPluginManager()->callEvent($ev = new PlayerItemHeldEvent($this->getHolder(), $item, $slot, $itemIndex));
-				if($ev->isCancelled()){
-					$this->sendContents($this->getHolder());
-					return;
-				}
-			}
-		}
 	}
 
 	/**
