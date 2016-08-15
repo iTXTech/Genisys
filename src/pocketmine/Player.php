@@ -2368,6 +2368,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->iusername = strtolower($this->username);
 				$this->protocol = $packet->protocol;
 
+				if($this->server->getConfigBoolean("online-mode", false) && $packet->identityPublicKey === null){
+					$this->kick("disconnectionScreen.notAuthenticated", false);
+				}
+
 				if(count($this->server->getOnlinePlayers()) >= $this->server->getMaxPlayers() and $this->kick("disconnectionScreen.serverFull", false)){
 					break;
 				}

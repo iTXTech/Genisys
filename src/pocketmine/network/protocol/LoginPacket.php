@@ -32,28 +32,25 @@ class LoginPacket extends DataPacket{
 
 	public $clientUUID;
 	public $clientId;
-	public $identityPublickey;
+	public $identityPublicKey;
 	public $serverAddress;
 
 	public $skinId = null;
 	public $skin = null;
 
 	public function decode(){
-		//$this->username = $this->getString();
-		//$this->protocol1 = $this->getInt();
-		//$this->protocol2 = $this->getInt();
-		/*if($this->protocol1 < Info::CURRENT_PROTOCOL){ //New fields!
-			$this->setBuffer(null, 0); //Skip batch packet handling
-			return;
-		}*/
 		$this->protocol = $this->getInt();
 		
-		$str = zlib_decode($this->get($this->getInt()),1024 *1024 * 64);
-		$this->setBuffer($str,0);
+		$str = zlib_decode($this->get($this->getInt()), 1024 * 1024 * 64);
+		$this->setBuffer($str, 0);
+		
+		$time = time();
 		
 		$chainData = json_decode($this->get($this->getLInt()));
+		// Start with the trusted one
+		$chainKey = "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE8ELkixyLcwlZryUQcu1TvPOmI2B7vX83ndnWRUaXm74wFfa5f/lwQNTfrLVHa2PmenpGI6JhIMUJaWZrjmMj90NoKNFSNBuKdm8rYiXsfaz3K36x/1U26HpG0ZxK/V1V";
 		foreach($chainData->{"chain"} as $chain){
-			$webtoken = $this->decodeToken($chain);
+			list($verified, $webtoken) = $this->decodeToken($chain, $chainKey);
 			if(isset($webtoken["extraData"])){
 				if(isset($webtoken["extraData"]["displayName"])){
 					$this->username = $webtoken["extraData"]["displayName"];
@@ -61,12 +58,17 @@ class LoginPacket extends DataPacket{
 				if(isset($webtoken["extraData"]["identity"])){
 					$this->clientUUID = $webtoken["extraData"]["identity"];
 				}
-				if(isset($webtoken["identityPublicKey"])){
-					$this->identityPublicKey = $webtoken["identityPublicKey"];
-				}
+			}
+			if($verified){
+				$verified = isset($webtoken["nbf"]) && $webtoken["nbf"] <= $time && isset($webtoken["exp"]) && $webtoken["exp"] > $time;
+			}
+			if(isset($webtoken["identityPublicKey"]) and $verified){
+				$chainKey = $webtoken["identityPublicKey"];
+			}else{
+				$chainKey = null;
 			}
 		}
-		$skinToken = $this->decodeToken($this->get($this->getLInt()));
+		list($verified, $skinToken) = $this->decodeToken($this->get($this->getLInt()), $chainKey);
 		if(isset($skinToken["ClientRandomId"])){
 			$this->clientId = $skinToken["ClientRandomId"];
 		}
@@ -79,17 +81,44 @@ class LoginPacket extends DataPacket{
 		if(isset($skinToken["SkinId"])){
 			$this->skinId = $skinToken["SkinId"];
 		}
+		if($verified){
+			$this->identityPublicKey = $chainKey;
+		}
 	}
 
 	public function encode(){
 
 	}
 	
-	public function decodeToken($token){
+	public function decodeToken($token, $key){
 		$tokens = explode(".", $token);
 		list($headB64, $payloadB64, $sigB64) = $tokens;
-	
-		return json_decode(base64_decode($payloadB64), true);
+
+		if($key !== null){
+			$sig = base64_decode(strtr($sigB64, '-_', '+/'), true);
+			$rawLen = 48; // ES384
+			for($i = $rawLen; $i > 0 and $sig[$rawLen - $i] == chr(0); $i--) {}
+			$j = $i + (ord($sig[$rawLen - $i]) >= 128 ? 1 : 0);
+			for($k = $rawLen; $k > 0 and $sig[2 * $rawLen - $k] == chr(0); $k--) {}
+			$l = $k + (ord($sig[2 * $rawLen - $k]) >= 128 ? 1 : 0);
+			$len = 2 + $j + 2 + $l;
+			$derSig = chr(48);
+			if($len > 255){
+				throw new \RuntimeException("Invalid signature format");
+			}elseif($len >= 128){
+				$derSig .= chr(81);
+			}
+			$derSig .= chr($len) . chr(2) . chr($j);
+			$derSig .= str_repeat(chr(0), $j - $i) . substr($sig, $rawLen - $i, $i);
+			$derSig .= chr(2) . chr($l);
+			$derSig .= str_repeat(chr(0), $l - $k) . substr($sig, 2 * $rawLen - $k, $k);
+
+			$verified = openssl_verify($headB64 . "." . $payloadB64, $derSig, "-----BEGIN PUBLIC KEY-----\n" . wordwrap($key, 64, "\n", true) . "\n-----END PUBLIC KEY-----\n", OPENSSL_ALGO_SHA384) === 1;
+		}else{
+			$verified = false;
+		}
+
+		return array($verified, json_decode(base64_decode($payloadB64), true));
 	}
 
 }
