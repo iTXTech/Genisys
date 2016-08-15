@@ -83,6 +83,7 @@ use pocketmine\event\level\LevelInitEvent;
 use pocketmine\event\level\LevelLoadEvent;
 use pocketmine\event\server\QueryRegenerateEvent;
 use pocketmine\event\server\ServerCommandEvent;
+use pocketmine\event\server\ServerShutdownEvent;
 use pocketmine\event\Timings;
 use pocketmine\event\TimingsHandler;
 use pocketmine\event\TranslationContainer;
@@ -1817,7 +1818,7 @@ class Server{
 
 			$this->about();
 
-			$this->logger->debug("Loading pocketmine.yml...");
+			$this->logger->info("Loading pocketmine.yml...");
 			if(!file_exists($this->dataPath . "pocketmine.yml")){
 				$content = file_get_contents($this->filePath . "src/pocketmine/resources/pocketmine.yml");
 				@file_put_contents($this->dataPath . "pocketmine.yml", $content);
@@ -1839,7 +1840,7 @@ class Server{
 				unset($this->propertyCache["settings.language"]);
 			}
 
-			$this->logger->debug("Loading genisys.yml...");
+			$this->logger->info("Loading genisys.yml...");
 
 			$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
 			if(file_exists($this->filePath . "src/pocketmine/resources/genisys_$lang.yml")){
@@ -2101,7 +2102,7 @@ class Server{
 				$this->synapse = new Synapse($this, $this->synapseConfig);
 			}
 
-			if($cfgVer > $advVer){
+			if($cfgVer != $advVer){
 				$this->logger->notice("Your genisys.yml needs update");
 				$this->logger->notice("Current Version: $advVer   Latest Version: $cfgVer");
 			}
@@ -2423,6 +2424,8 @@ class Server{
 			$killer->start();
 			$killer->kill();
 		}*/
+		$this->getPluginManager()->callEvent($ev = new ServerShutdownEvent());
+		if($ev->isCancelled(true)) return;
 		$this->isRunning = false;
 		if($msg != ""){
 			$this->propertyCache["settings.shutdown-message"] = $msg;
