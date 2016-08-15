@@ -9,19 +9,23 @@ if exist bin\php\php.exe (
 	set PHP_BINARY=php
 )
 
-if exist Genisys.phar (
-	set POCKETMINE_FILE=Genisys.phar
+if exist Genisys*.phar (
+	set POCKETMINE_FILE=Genisys*.phar
 ) else (
 	if exist PocketMine-MP.phar (
 		set POCKETMINE_FILE=PocketMine-MP.phar
 	) else (
-		if exist src\pocketmine\PocketMine.php (
-			set POCKETMINE_FILE=src\pocketmine\PocketMine.php
+	    if exist src\pocketmine\PocketMine.php (
+	        set POCKETMINE_FILE=src\pocketmine\PocketMine.php
 		) else (
-			echo "[ERROR] Couldn't find a valid Genisys installation."
-			pause
-			exit 1
-		)
+			if exist Genisys.phar (
+				set POCKETMINE_FILE=Genisys.phar
+			) else (
+		        echo "[ERROR] Couldn't find a valid Genisys installation."
+		        pause
+		        exit 8
+		    )
+	    )
 	)
 )
 
