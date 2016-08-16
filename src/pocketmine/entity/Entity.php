@@ -71,10 +71,78 @@ use pocketmine\utils\ChunkException;
 
 abstract class Entity extends Location implements Metadatable{
 
-
 	const NETWORK_ID = -1;
 
 
+	/** Entity network IDs */
+	const CHICKEN = 10;
+	const COW = 11;
+	const PIG = 12;
+	const SHEEP = 13;
+	const WOLF = 14; const DOG = 14;
+	const VILLAGER = 15;
+	const MOOSHROOM = 16;
+	const SQUID = 17;
+	const RABBIT = 18;
+	const BAT = 19;
+	const IRON_GOLEM = 20;
+	const SNOW_GOLEM = 21;
+	const OCELOT = 22; const CAT = 22;
+	const HORSE = 23;
+	const DONKEY = 24;
+	const MULE = 25;
+	const SKELETON_HORSE = 26;
+	const ZOMBIE_HORSE = 27;
+	
+	const ZOMBIE = 32;
+	const CREEPER = 33;
+	const SKELETON = 34;
+	const SPIDER = 35;
+	const PIGMAN = 36; const ZOMBIE_PIGMAN = 36;
+	const SLIME = 37;
+	const ENDERMAN = 38;
+	const SILVERFISH = 39;
+	const CAVE_SPIDER = 40;
+	const GHAST = 41;
+	const MAGMA_CUBE = 42;
+	const BLAZE = 43;
+	const ZOMBIE_VILLAGER = 44;
+	const WITCH = 45;
+	const STRAY = 46;
+	const HUSK = 47;
+	const WITHER_SKELETON = 48;
+	
+	const CAMERA = 62;
+	const HUMAN = 63; const PLAYER = 63;
+	const DROPPED_ITEM = 64;
+	const PRIMED_TNT = 65;
+	const FALLING_BLOCK = 66; const FALLING_SAND = 66;
+	
+	const BOTTLE_O_ENCHANTING = 68; const ENCHANTING_BOTTLE = 68;
+	const EXPERIENCE_ORB = 69;
+	
+	const FISHING_HOOK = 77;
+	
+	const ARROW = 80;
+	const SNOWBALL = 81;
+	const EGG = 82;
+	const PAINTING = 83;
+	const MINECART = 84;
+	const GHAST_FIREBALL = 85;
+	const SPLASH_POTION = 86;
+	const ENDER_PEARL = 87;
+	const LEASH_KNOT = 88;
+	
+	const BOAT = 90;
+	
+	const LIGHTNING = 93; const LIGHTNING_BOLT = 93;
+	const BLAZE_FIREBALL = 94;
+	
+	const MINECART_HOPPER = 96;
+	const MINECART_TNT = 97;
+	const MINECART_CHEST = 98;
+
+	
 	const DATA_TYPE_BYTE = 0;
 	const DATA_TYPE_SHORT = 1;
 	const DATA_TYPE_INT = 2;
