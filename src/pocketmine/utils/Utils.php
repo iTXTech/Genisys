@@ -435,8 +435,7 @@ class Utils{
 				$strongEntropyValues = [
 					is_array($startEntropy) ? hash("sha512", $startEntropy[($rounds + $drop) % count($startEntropy)], true) : hash("sha512", $startEntropy, true), //Get a random index of the startEntropy, or just read it
 					$systemRandom,
-					function_exists("openssl_random_pseudo_bytes") ? openssl_random_pseudo_bytes(64) : str_repeat("\x00", 64),
-					function_exists("mcrypt_create_iv") ? mcrypt_create_iv(64, MCRYPT_DEV_URANDOM) : str_repeat("\x00", 64),
+					openssl_random_pseudo_bytes(64),
 					$value,
 				];
 				$strongEntropy = array_pop($strongEntropyValues);
