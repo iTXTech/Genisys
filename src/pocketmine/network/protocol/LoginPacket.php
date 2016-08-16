@@ -27,6 +27,8 @@ namespace pocketmine\network\protocol;
 class LoginPacket extends DataPacket{
 	const NETWORK_ID = Info::LOGIN_PACKET;
 
+	const MOJANG_PUBKEY = "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE8ELkixyLcwlZryUQcu1TvPOmI2B7vX83ndnWRUaXm74wFfa5f/lwQNTfrLVHa2PmenpGI6JhIMUJaWZrjmMj90NoKNFSNBuKdm8rYiXsfaz3K36x/1U26HpG0ZxK/V1V";
+
 	public $username;
 	public $protocol;
 
@@ -43,29 +45,39 @@ class LoginPacket extends DataPacket{
 		
 		$str = zlib_decode($this->get($this->getInt()), 1024 * 1024 * 64);
 		$this->setBuffer($str, 0);
-		
+
 		$time = time();
-		
-		$chainData = json_decode($this->get($this->getLInt()));
+
+		$chainData = json_decode($this->get($this->getLInt()))->{"chain"};
 		// Start with the trusted one
-		$chainKey = "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE8ELkixyLcwlZryUQcu1TvPOmI2B7vX83ndnWRUaXm74wFfa5f/lwQNTfrLVHa2PmenpGI6JhIMUJaWZrjmMj90NoKNFSNBuKdm8rYiXsfaz3K36x/1U26HpG0ZxK/V1V";
-		foreach($chainData->{"chain"} as $chain){
-			list($verified, $webtoken) = $this->decodeToken($chain, $chainKey);
-			if(isset($webtoken["extraData"])){
-				if(isset($webtoken["extraData"]["displayName"])){
-					$this->username = $webtoken["extraData"]["displayName"];
+		$chainKey = self::MOJANG_PUBKEY;
+		while(!empty($chainData)){
+			foreach($chainData as $index => $chain){
+				list($verified, $webtoken) = $this->decodeToken($chain, $chainKey);
+				if(isset($webtoken["extraData"])){
+					if(isset($webtoken["extraData"]["displayName"])){
+						$this->username = $webtoken["extraData"]["displayName"];
+					}
+					if(isset($webtoken["extraData"]["identity"])){
+						$this->clientUUID = $webtoken["extraData"]["identity"];
+					}
 				}
-				if(isset($webtoken["extraData"]["identity"])){
-					$this->clientUUID = $webtoken["extraData"]["identity"];
+				if($verified){
+					$verified = isset($webtoken["nbf"]) && $webtoken["nbf"] <= $time && isset($webtoken["exp"]) && $webtoken["exp"] > $time;
+				}
+				if($verified and isset($webtoken["identityPublicKey"])){
+					// Looped key chain. #blamemojang
+					if($webtoken["identityPublicKey"] != self::MOJANG_PUBKEY) $chainKey = $webtoken["identityPublicKey"];
+					break;
+				}elseif($chainKey === null){
+					// We have already gave up
+					break;
 				}
 			}
-			if($verified){
-				$verified = isset($webtoken["nbf"]) && $webtoken["nbf"] <= $time && isset($webtoken["exp"]) && $webtoken["exp"] > $time;
-			}
-			if(isset($webtoken["identityPublicKey"]) and $verified){
-				$chainKey = $webtoken["identityPublicKey"];
-			}else{
+			if(!$verified && $chainKey !== null){
 				$chainKey = null;
+			}else{
+				unset($chainData[$index]);
 			}
 		}
 		list($verified, $skinToken) = $this->decodeToken($this->get($this->getLInt()), $chainKey);
