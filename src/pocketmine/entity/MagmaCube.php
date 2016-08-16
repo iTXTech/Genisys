@@ -24,7 +24,7 @@ namespace pocketmine\entity;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class LavaSlime extends Living{
+class MagmaCube extends Living{
 	const NETWORK_ID = 42;
 
 	const DATA_SLIME_SIZE = 16;
@@ -32,13 +32,13 @@ class LavaSlime extends Living{
 	public $dropExp = [1, 4];
 	
 	public function getName() : string{
-		return "LavaSlime";
+		return "Magma Cube";
 	}
 	
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
-		$pk->type = LavaSlime::NETWORK_ID;
+		$pk->type = MagmaCube::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
 		$pk->z = $this->z;

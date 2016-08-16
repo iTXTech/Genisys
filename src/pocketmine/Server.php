@@ -47,8 +47,8 @@ use pocketmine\entity\Human;
 use pocketmine\entity\Husk;
 use pocketmine\entity\IronGolem;
 use pocketmine\entity\Item as DroppedItem;
-use pocketmine\entity\LavaSlime;
 use pocketmine\entity\Lightning;
+use pocketmine\entity\MagmaCube;
 use pocketmine\entity\Minecart;
 use pocketmine\entity\MinecartChest;
 use pocketmine\entity\MinecartHopper;
@@ -3073,8 +3073,8 @@ class Server{
 		Entity::registerEntity(Ghast::class);
 		Entity::registerEntity(Husk::class);
 		Entity::registerEntity(IronGolem::class);
-		Entity::registerEntity(LavaSlime::class); //Magma Cube
 		Entity::registerEntity(Lightning::class);
+		Entity::registerEntity(MagmaCube::class);
 		Entity::registerEntity(Minecart::class);
 		Entity::registerEntity(MinecartChest::class);
 		Entity::registerEntity(MinecartHopper::class);
