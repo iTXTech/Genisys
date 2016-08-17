@@ -1559,7 +1559,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				
 				$add = false;
 				if(!$this->server->allowInventoryCheats and !$this->isCreative()){
-					if(!$this->getFloatingInventory()->canAddItem($item)){
+					if(!$this->getFloatingInventory()->canAddItem($item) or !$this->inventory->canAddItem($item)){
+						//The item is added to the floating inventory to allow client to handle the pickup
+						//We have to also check if it can be added to the real inventory before sending packets.
 						continue;
 					}
 					$add = true;
@@ -1591,7 +1593,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					if($item instanceof Item){
 						$add = false;
 						if(!$this->server->allowInventoryCheats and !$this->isCreative()){
-							if(!$this->getFloatingInventory()->canAddItem($item)){
+							if(!$this->getFloatingInventory()->canAddItem($item) or !$this->inventory->canAddItem($item)){
 								continue;
 							}
 							$add = true;

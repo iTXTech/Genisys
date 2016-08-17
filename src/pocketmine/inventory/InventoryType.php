@@ -74,7 +74,7 @@ class InventoryType{
 		static::$default[static::DROPPER] = new InventoryType(9, "Dropper", 7); //9 CONTAINER
 		static::$default[static::HOPPER] = new InventoryType(5, "Hopper", 8); //5 CONTAINER
 
-		static::$default[static::PLAYER_FLOATING] = new InventoryType(11, "Floating", null); //9 crafting grid placeholders, 1 item clicked on and picked up, 1 spare for slot swaps.
+		static::$default[static::PLAYER_FLOATING] = new InventoryType(36, "Floating", null); //Mirror all slots of main inventory (needed for large item pickups)
 	}
 
 	/**
