@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 17
+ version: 18
 
 level:
  #Set if turn on the weather system
@@ -28,8 +28,6 @@ player:
  experience: true
  #Choose if keep inventory when a player died
  keep-inventory: false
- #The space of inventory
- inventory-num: 36
  #Clear the inventory automatically when change the gamemode into creative
  auto-clear-inventory : true
  #Choose if keep experience when a player died
@@ -166,3 +164,7 @@ ai:
  creeper-explode-destroy-block: false
  #Choose if allow mob auto generate
  mobgenerate: false
+ 
+inventory:
+ #Set this to true if you have problems with anvils. Will process inventory transactions in a vanilla fashion with no anti-cheats or verification.
+ allow-cheats: false

@@ -15,12 +15,13 @@ __Feature-rich Minecraft: Pocket Edition server software__
 
 Introduction
 -------------
-Genisys is a fork of **[PocketMine-MP](https://github.com/PocketMine/PocketMine-MP)** and most of the codes are written by **PocketMine Team**.<br>
+Genisys is a fork of **[PocketMine-MP](https://github.com/PocketMine/PocketMine-MP)** and most of the original code was written by **PocketMine Team**.<br>
 Some of the extended functionality that Genisys offers:
 
 * Extended API for plugins (GeniAPI)
 * Synapse Client support
 * Optional Xbox Live authentication
+* Support for Windows 10 Edition Beta
 
 However, Genisys still has a long way to go. We welcome contributions.
 
