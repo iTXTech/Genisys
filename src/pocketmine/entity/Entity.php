@@ -32,6 +32,8 @@ use pocketmine\block\Water;
 use pocketmine\block\SlimeBlock;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDespawnEvent;
+use pocketmine\event\entity\EntityEffectAddEvent;
+use pocketmine\event\entity\EntityEffectRemoveEvent;
 use pocketmine\event\entity\EntityLevelChangeEvent;
 use pocketmine\event\entity\EntityMotionEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
@@ -378,6 +380,10 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	public function removeEffect($effectId){
+		Server::getInstance()->getPluginManager()->callEvent($ev = new EntityEffectRemoveEvent($this, $effectId));
+		if($ev->isCancelled()){
+			return false;
+		}
 		if(isset($this->effects[$effectId])){
 			$effect = $this->effects[$effectId];
 			unset($this->effects[$effectId]);
@@ -387,6 +393,7 @@ abstract class Entity extends Location implements Metadatable{
 			}
 
 			$this->recalculateEffectColor();
+			return true;
 		}
 	}
 
@@ -399,6 +406,10 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	public function addEffect(Effect $effect){
+		Server::getInstance()->getPluginManager()->callEvent($ev = new EntityEffectAddEvent($this, $effect));
+		if($ev->isCancelled()){
+			return false;
+		}
 		if($effect->getId() === Effect::HEALTH_BOOST){
 			$this->setHealth($this->getHealth() + 4 * ($effect->getAmplifier() + 1));
 		}
@@ -419,6 +430,7 @@ abstract class Entity extends Location implements Metadatable{
 		$this->effects[$effect->getId()] = $effect;
 
 		$this->recalculateEffectColor();
+		return true;
 	}
 
 	protected function recalculateEffectColor(){
