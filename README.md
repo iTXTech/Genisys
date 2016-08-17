@@ -10,6 +10,9 @@ __Feature-rich Minecraft: Pocket Edition server software__
 
 -------------
 
+## Announcement: If you experience OpenSSL-related errors after the XBOX update, please [click here](https://github.com/iTXTech/Genisys/wiki/FAQs).
+
+
 Introduction
 -------------
 Genisys is a fork of **[PocketMine-MP](https://github.com/PocketMine/PocketMine-MP)** and most of the codes are written by **PocketMine Team**.<br>
