@@ -1886,7 +1886,15 @@ class Server{
 				"enable-rcon" => false,
 				"rcon.password" => substr(base64_encode(@Utils::getRandomBytes(20, false)), 3, 10),
 				"auto-save" => true,
+				"online-mode" => false,
 			]);
+
+			if(!$this->getConfigBoolean("online-mode", false)){
+				$this->logger->warning("SERVER IS RUNNING IN OFFLINE/INSECURE MODE!");
+				$this->logger->warning("The server will make no attempt to authenticate usernames. Beware.");
+				$this->logger->warning("While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.");
+				$this->logger->warning("To change this, set \"online-mode\" to \"true\" in the server.properties file.");
+			}
 
 			$this->forceLanguage = $this->getProperty("settings.force-language", false);
 			$this->baseLang = new BaseLang($this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE));

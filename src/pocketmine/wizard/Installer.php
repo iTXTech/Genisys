@@ -135,6 +135,10 @@ LICENSE;
 		}while($port <= 0 or $port > 65535);
 		$config->set("server-port", $port);
 		
+		echo "[*] " . $this->lang->online_mode_info . "\n";
+		echo "[?] " . $this->lang->online_mode . " (y/N): ";
+        $config->set("online-mode", strtolower($this->getInput("y")) == "y");
+		
 		echo "[?] " . $this->lang->level_name . " (" . self::DEFAULT_LEVEL_NAME . "): ";
 		$config->set("level-name", $this->getInput(self::DEFAULT_LEVEL_NAME));
 		
