@@ -45,6 +45,10 @@ class Painting extends Hanging{
 		parent::spawnTo($player);
 	}
 
+	protected function updateMovement(){
+		//Nothing to update, paintings cannot move.
+	}
+
 	public function getDrops(){
 		return [ItemItem::get(ItemItem::PAINTING, 0, 1)];
 	}
