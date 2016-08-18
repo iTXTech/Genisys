@@ -1278,7 +1278,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 			$pk = new AnimatePacket();
 			$pk->eid = 0;
-			$pk->action = 3; //Wake up
+			$pk->action = PlayerAnimationEvent::WAKE_UP;
 			$this->dataPacket($pk);
 		}
 
