@@ -32,11 +32,14 @@ class PlayerQuitEvent extends PlayerEvent{
 	/** @var string */
 	protected $quitMessage;
 	protected $autoSave = true;
+	/** @var string */
+	protected $reason;
 
-	public function __construct(Player $player, $quitMessage, $autoSave = true){
+	public function __construct(Player $player, $quitMessage, $autoSave = true, $reason = "generic reason"){
 		$this->player = $player;
 		$this->quitMessage = $quitMessage;
 		$this->autoSave = $autoSave;
+		$this->reason = $reason;
 	}
 
 	public function setQuitMessage($quitMessage){
@@ -53,6 +56,10 @@ class PlayerQuitEvent extends PlayerEvent{
 
 	public function setAutoSave($value = true){
 		$this->autoSave = (bool) $value;
+	}
+	
+	public function getReason(){
+		return $this->reason;
 	}
 
 }
