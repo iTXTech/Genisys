@@ -48,6 +48,7 @@ abstract class Tile extends Position{
 	const DROPPER = "Dropper";
 	const DAY_LIGHT_DETECTOR = "DLDetector";
 	const CAULDRON = "Cauldron";
+	const HOPPER = "Hopper";
 
 	public static $tileCount = 1;
 
