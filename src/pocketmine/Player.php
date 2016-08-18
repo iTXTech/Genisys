@@ -2801,9 +2801,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 									}
 								}
 								if($arrow === false and $this->isCreative()){
-									$arrow = Item::get(Item::ARROW, 0 , 1);
+									$arrow = Item::get(Item::ARROW, 0, 1);
 								}elseif($arrow === false){
 									break;
+								}
+								
+								$fire = 0;
+								if($this->isOnFire()){
+									$fire = 45 * 60;
+								}elseif($bow->hasEnchantment(Enchantment::TYPE_BOW_FLAME)){
+									$fire = 5 * 20;
 								}
 
 								$damage = 2;
@@ -2826,7 +2833,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 										new FloatTag("", $this->yaw),
 										new FloatTag("", $this->pitch)
 									]),
-									"Fire" => new ShortTag("Fire", $this->isOnFire() ? 45 * 60 : 0),
+									"Fire" => new ShortTag("Fire", $fire),
 									"Potion" => new ShortTag("Potion", $arrow->getDamage()),
 									"damage" => new DoubleTag("damage", $damage)
 								]);
