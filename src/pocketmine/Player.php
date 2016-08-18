@@ -2843,8 +2843,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 									$ev->getProjectile()->setMotion($ev->getProjectile()->getMotion()->multiply($ev->getForce()));
 									if($this->isSurvival()){
 										$this->inventory->removeItem(Item::get(Item::ARROW, $arrow->getDamage(), 1));
-										$bow->setDamage($bow->getDamage() + 1);
-										if($bow->getDamage() >= 385){
+										$bow->useOn(null);
+										if($bow->getDamage() >= $bow->getMaxDurability()){
 											$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 0));
 										}else{
 											$this->inventory->setItemInHand($bow);
