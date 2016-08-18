@@ -45,42 +45,85 @@ class Sheep extends Animal implements Colorable{
 		if(!isset($nbt->Color)){
 			$nbt->Color = new ByteTag("Color", self::getRandomColor());
 		}
+		if(!isset($nbt->Sheared)){
+			$nbt->Sheared = new ByteTag("Sheared", false);
+		}
 		parent::__construct($chunk, $nbt);
 
-		$this->setDataProperty(self::DATA_COLOR_INFO, self::DATA_TYPE_BYTE, $this->getColor());
+		$this->setDataProperty(self::DATA_COLOR_INFO, self::DATA_TYPE_BYTE, $this->getColor() | (((int) $this->isSheared()) << 4));
 	}
 
 	public static function getRandomColor() : int{
-		$rand = "";
-		$rand .= str_repeat(Wool::WHITE . " ", 20);
-		$rand .= str_repeat(Wool::ORANGE . " ", 5);
-		$rand .= str_repeat(Wool::MAGENTA . " ", 5);
-		$rand .= str_repeat(Wool::LIGHT_BLUE . " ", 5);
-		$rand .= str_repeat(Wool::YELLOW . " ", 5);
-		$rand .= str_repeat(Wool::GRAY . " ", 10);
-		$rand .= str_repeat(Wool::LIGHT_GRAY . " ", 10);
-		$rand .= str_repeat(Wool::CYAN . " ", 5);
-		$rand .= str_repeat(Wool::PURPLE . " ", 5);
-		$rand .= str_repeat(Wool::BLUE . " ", 5);
-		$rand .= str_repeat(Wool::BROWN . " ", 5);
-		$rand .= str_repeat(Wool::GREEN . " ", 5);
-		$rand .= str_repeat(Wool::RED . " ", 5);
-		$rand .= str_repeat(Wool::BLACK . " ", 10);
-		$arr = explode(" ", $rand);
-		return intval($arr[mt_rand(0, count($arr) - 1)]);
+		$rand = mt_rand(0, 100000); //Allow 3 decimal places
+		if($rand <= 5000){
+			return Wool::BLACK; //5%
+		}elseif($rand <= 10000){
+			return Wool::GRAY; //5%
+		}elseif($rand <= 15000){
+			return Wool::LIGHT_GRAY; //5%
+		}elseif($rand <= 18000){
+			return Wool::BROWN; //3%
+		}elseif($rand <= 99836){
+			return Wool::WHITE; //81.836%
+		}else{
+			return Wool::PINK; //0.164%
+		}
+	}
+	
+	public function rightClickOn(ItemItem $with): bool{
+		switch($with->getId()){
+			case ItemItem::SHEARS:
+				$this->shear();
+				break;
+			case ItemItem::DYE:
+				$this->setColor((~$with->getDamage()) & 0x0f); #blamemojang for making dye colours the NOT of normal 4-bit colours
+				break;
+			default: 
+				return false;
+		}
+		return true;
+	}
+	
+	public function shear(){
+		if(!$this->isSheared()){
+			$this->setSheared(true);
+			$this->level->dropItem($this, ItemItem::get(ItemItem::WOOL, $this->getColor(), 3));
+		}
+	}
+	
+	public function isSheared(): bool{
+		return (bool) $this->namedtag["Sheared"];
+	}
+
+	/**
+	 * @param bool $sheared
+	 *
+	 * Sets whether the sheep is sheared or not.
+	 */
+	public function setSheared(bool $sheared = true){
+		$this->namedtag["Sheared"] = $sheared;
+		$state = ((int) $sheared) << 4; //will give 0b10000 or 0b00000 for true and false respectively
+		$this->setDataProperty(self::DATA_COLOR_INFO, self::DATA_TYPE_BYTE, $this->getColor() | $state);
 	}
 
 	public function getColor() : int{
-		return (int) $this->namedtag["Color"];
+		return (int) $this->namedtag["Color"] & 0x0f;
 	}
 
 	public function setColor(int $color){
-		$this->namedtag->Color = new ByteTag("Color", $color);
+		//The colour data tag also for some strange reason holds data for shearing. This retains the shear state when changing colours.
+		$shearState = ((int) $this->isSheared()) << 4;
+
+		$this->setDataProperty(self::DATA_COLOR_INFO, self::DATA_TYPE_BYTE, ($color & 0x0f) | $shearState);
+
+		//This has to be set last or the shear state will be lost.
+		$this->namedtag["Color"] = $color & 0x0f;
 	}
 
 	public function getDrops(){
 		$drops = [
-			ItemItem::get(ItemItem::WOOL, $this->getColor(), 1)
+			ItemItem::get(ItemItem::WOOL, $this->getColor(), 1),
+			ItemItem::get(ItemItem::RAW_MUTTON, 0, mt_rand(0, 2))
 		];
 		return $drops;
 	}
