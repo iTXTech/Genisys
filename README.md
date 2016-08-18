@@ -1,15 +1,14 @@
 Genisys
 ===================
 
-###__Feature-rich server software for Minecraft: Pocket Edition & Windows 10 Edition Beta__
+__Feature-rich server software for Minecraft: Pocket Edition & Windows 10 Edition Beta__
 
-[![PayPayl donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=itxtechnologiesllc%40gmail%2ecom&lc=GB&item_name=Genisys&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted)
+[![PayPal donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=itxtechnologiesllc%40gmail%2ecom&lc=GB&item_name=Genisys&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted)
 [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
 [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
 [![Jenkins](https://img.shields.io/jenkins/s/https/ci.itxtech.org/Genisys.svg)](https://ci.itxtech.org/job/Genisys/lastSuccessfulBuild/)
 
--------------
-## Announcement: If you experience OpenSSL-related errors after the XBOX update, please [click here](https://github.com/iTXTech/Genisys/wiki/FAQs).
+### Announcement: If you experience OpenSSL-related errors after the XBOX update, please [click here](https://github.com/iTXTech/Genisys/wiki/FAQs).
 
 
 Introduction
