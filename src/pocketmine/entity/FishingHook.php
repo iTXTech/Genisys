@@ -1,18 +1,21 @@
 <?php
 
+/* This file was taken from ClearSky. 
+ * @link https://github.com/ClearSkyTeam/ClearSky 
+ */
+
 namespace pocketmine\entity;
 
 use pocketmine\event\player\PlayerFishEvent;
+use pocketmine\item\Item as ItemItem;
 use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\Player;
-use pocketmine\item\Item as ItemItem;
 use pocketmine\network\protocol\EntityEventPacket;
-use pocketmine\network\protocol\AddEntityPacket;
+use pocketmine\Player;
 use pocketmine\Server;
 
 class FishingHook extends Projectile{
-	const NETWORK_ID = 77;
+	const NETWORK_ID = self::FISHING_HOOK;
 
 	public $width = 0.25;
 	public $length = 0.25;
@@ -23,7 +26,7 @@ class FishingHook extends Projectile{
 
 	public $data = 0;
 	public $attractTimer = 100;
-	public $coughtTimer = 0;
+	public $caughtTimer = 0;
 	public $damageRod = false;
 
 	public function initEntity(){
@@ -72,15 +75,15 @@ class FishingHook extends Projectile{
 			$hasUpdate = true;
 		}
 		if($this->attractTimer === 0 && mt_rand(0, 100) <= 30){ // chance, that a fish bites
-			$this->coughtTimer = mt_rand(5, 10) * 20; // random delay to catch fish
+			$this->caughtTimer = mt_rand(5, 10) * 20; // random delay to catch fish
 			$this->attractTimer = mt_rand(30, 100) * 20; // reset timer
 			$this->attractFish();
 			if($this->shootingEntity instanceof Player) $this->shootingEntity->sendTip("A fish bites!");
 		}elseif($this->attractTimer > 0){
 			$this->attractTimer--;
 		}
-		if($this->coughtTimer > 0){
-			$this->coughtTimer--;
+		if($this->caughtTimer > 0){
+			$this->caughtTimer--;
 			$this->fishBites();
 		}
 
@@ -110,7 +113,7 @@ class FishingHook extends Projectile{
 	public function reelLine(){
 		$this->damageRod = false;
 
-		if($this->shootingEntity instanceof Player && $this->coughtTimer > 0){
+		if($this->shootingEntity instanceof Player && $this->caughtTimer > 0){
 			$fishes = [ItemItem::RAW_FISH, ItemItem::RAW_SALMON, ItemItem::CLOWN_FISH, ItemItem::PUFFER_FISH];
 			$fish = array_rand($fishes, 1);
 			$item = ItemItem::get($fishes[$fish]);
@@ -132,23 +135,5 @@ class FishingHook extends Projectile{
 		}
 
 		return $this->damageRod;
-	}
-
-	public function spawnTo(Player $player){
-		$pk = new AddEntityPacket();
-		$pk->eid = $this->getId();
-		$pk->type = FishingHook::NETWORK_ID;
-		$pk->x = $this->x;
-		$pk->y = $this->y;
-		$pk->z = $this->z;
-		$pk->speedX = $this->motionX;
-		$pk->speedY = $this->motionY;
-		$pk->speedZ = $this->motionZ;
-		$pk->yaw = $this->yaw;
-		$pk->pitch = $this->pitch;
-		$pk->metadata = $this->dataProperties;
-		$player->dataPacket($pk);
-
-		parent::spawnTo($player);
 	}
 }

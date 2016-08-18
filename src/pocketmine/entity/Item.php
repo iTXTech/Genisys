@@ -26,10 +26,8 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\ItemDespawnEvent;
 use pocketmine\event\entity\ItemSpawnEvent;
 use pocketmine\item\Item as ItemItem;
-
+use pocketmine\level\Level;
 use pocketmine\nbt\NBT;
-
-
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\Network;
@@ -37,7 +35,7 @@ use pocketmine\network\protocol\AddItemEntityPacket;
 use pocketmine\Player;
 
 class Item extends Entity{
-	const NETWORK_ID = 64;
+	const NETWORK_ID = self::DROPPED_ITEM;
 
 	protected $owner = null;
 	protected $thrower = null;
@@ -244,7 +242,10 @@ class Item extends Entity{
 		$player->dataPacket($pk);
 
 		$this->sendData($player);
-
-		parent::spawnTo($player);
+		
+		if(!isset($this->hasSpawned[$player->getLoaderId()]) and isset($player->usedChunks[Level::chunkHash($this->chunk->getX(), $this->chunk->getZ())])){
+			$this->hasSpawned[$player->getLoaderId()] = $player;
+		}
+		//parent::spawnTo($player);
 	}
 }

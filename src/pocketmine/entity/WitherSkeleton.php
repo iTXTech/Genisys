@@ -21,14 +21,27 @@
 
 namespace pocketmine\entity;
 
-class MinecartHopper extends Minecart{
-	const NETWORK_ID = self::MINECART_HOPPER;
+use pocketmine\item\Item as ItemItem;
+use pocketmine\network\protocol\MobEquipmentPacket;
+use pocketmine\Player;
 
+class WitherSkeleton extends Monster{
+	const NETWORK_ID = self::WITHER_SKELETON;
+
+	public $dropExp = [5, 5];
+	
 	public function getName() : string{
-		return "Minecart with Hopper";
+		return "Wither Skeleton";
 	}
+	
+	public function spawnTo(Player $player){
+		parent::spawnTo($player);
 
-	public function getType() : int{
-		return self::TYPE_HOPPER;
+		$pk = new MobEquipmentPacket();
+		$pk->eid = $this->getId();
+		$pk->item = new ItemItem(ItemItem::STONE_SWORD);
+		$pk->slot = 0;
+		$pk->selectedSlot = 0;
+		$player->dataPacket($pk);
 	}
 }

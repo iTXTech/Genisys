@@ -17,22 +17,20 @@
  * @link http://www.pocketmine.net/
  * 
  *
-*/
+ */
 
 namespace pocketmine\entity;
 
 
 use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\item\enchantment\Enchantment;
-use pocketmine\network\Network;
-use pocketmine\network\protocol\AddEntityPacket;
-use pocketmine\Player;
 use pocketmine\math\Vector3;
-use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\Player;
 
 class Zombie extends Monster{
-	const NETWORK_ID = 32;
+	const NETWORK_ID = self::ZOMBIE;
 
 	public $width = 0.6;
 	public $length = 0.6;
@@ -214,31 +212,13 @@ class Zombie extends Monster{
 		return $hasUpdate or !$this->onGround or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001;
 	}
 
-	public function spawnTo(Player $player){
-		$pk = new AddEntityPacket();
-		$pk->eid = $this->getId();
-		$pk->type = Zombie::NETWORK_ID;
-		$pk->x = $this->x;
-		$pk->y = $this->y;
-		$pk->z = $this->z;
-		$pk->speedX = $this->motionX;
-		$pk->speedY = $this->motionY;
-		$pk->speedZ = $this->motionZ;
-		$pk->yaw = $this->yaw;
-		$pk->pitch = $this->pitch;
-		$pk->metadata = $this->dataProperties;
-		$player->dataPacket($pk);
-
-		parent::spawnTo($player);
-	}
-
 	public function getDrops(){
-		$lootingL = 0;
+		$lootingLevel = 0;
 		$cause = $this->lastDamageCause;
 		$drops = [];
 		if($cause instanceof EntityDamageByEntityEvent and $cause->getDamager() instanceof Player){
-			$lootingL = $cause->getDamager()->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
-			if(mt_rand(0, 199) < (5 + 2 * $lootingL)){
+			$lootingLevel = $cause->getDamager()->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
+			if(mt_rand(0, 199) < (5 + 2 * $lootingLevel)){
 				switch(mt_rand(0, 3)){
 					case 0:
 						$drops[] = ItemItem::get(ItemItem::IRON_INGOT, 0, 1);
@@ -251,7 +231,7 @@ class Zombie extends Monster{
 						break;
 				}
 			}
-			$count = mt_rand(0, 2 + $lootingL);
+			$count = mt_rand(0, 2 + $lootingLevel);
 			if($count > 0){
 				$drops[] = ItemItem::get(ItemItem::ROTTEN_FLESH, 0, $count);
 			}

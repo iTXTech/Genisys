@@ -21,18 +21,17 @@
 
 namespace pocketmine\entity;
 
-use pocketmine\item\enchantment\Enchantment;
-use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item as ItemItem;
-use pocketmine\nbt\tag\ByteTag;
-use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\level\format\FullChunk;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 
 class Rabbit extends Animal{
-	const NETWORK_ID = 18;
+	const NETWORK_ID = self::RABBIT;
 
 	const DATA_RABBIT_TYPE = 18;
 	const DATA_JUMP_TYPE = 19;
@@ -82,29 +81,11 @@ class Rabbit extends Animal{
 		return "Rabbit";
 	}
 
-	public function spawnTo(Player $player){
-		$pk = new AddEntityPacket();
-		$pk->eid = $this->getId();
-		$pk->type = Rabbit::NETWORK_ID;
-		$pk->x = $this->x;
-		$pk->y = $this->y;
-		$pk->z = $this->z;
-		$pk->speedX = $this->motionX;
-		$pk->speedY = $this->motionY;
-		$pk->speedZ = $this->motionZ;
-		$pk->yaw = $this->yaw;
-		$pk->pitch = $this->pitch;
-		$pk->metadata = $this->dataProperties;
-		$player->dataPacket($pk);
-
-		parent::spawnTo($player);
-	}
-
 	public function getDrops(){
-		$lootingL = 0;
+		$lootingLevel = 0;
 		$cause = $this->lastDamageCause;
 		if($cause instanceof EntityDamageByEntityEvent and $cause->getDamager() instanceof Player){
-			$lootingL = $cause->getDamager()->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
+			$lootingLevel = $cause->getDamager()->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
 		}
 		$drops = [ItemItem::get(ItemItem::RABBIT_HIDE, 0, mt_rand(0, 1))];
 		if($this->getLastDamageCause() === EntityDamageEvent::CAUSE_FIRE){
@@ -113,11 +94,9 @@ class Rabbit extends Animal{
 			$drops[] = ItemItem::get(ItemItem::RAW_RABBIT, 0, mt_rand(0, 1));
 		}
 		//Rare drop
-		if(mt_rand(1, 200) <= (5 + 2 * $lootingL)){
+		if(mt_rand(1, 200) <= (5 + 2 * $lootingLevel)){
 			$drops[] = ItemItem::get(ItemItem::RABBIT_FOOT, 0, 1);
 		}
 		return $drops;
 	}
-
-
 }

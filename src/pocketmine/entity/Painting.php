@@ -1,19 +1,21 @@
 <?php
+
 /*
  * This file is translated from the Nukkit Project
  * which is written by MagicDroidX
  * @link https://github.com/Nukkit/Nukkit
-*/
+ */
 
 namespace pocketmine\entity;
 
 use pocketmine\event\entity\EntityDamageEvent;
-use pocketmine\network\protocol\AddPaintingPacket;
 use pocketmine\item\Item as ItemItem;
+use pocketmine\level\Level;
+use pocketmine\network\protocol\AddPaintingPacket;
 use pocketmine\Player;
 
 class Painting extends Hanging{
-	const NETWORK_ID = 83;
+	const NETWORK_ID = self::PAINTING;
 
 	private $motive;
 
@@ -42,7 +44,9 @@ class Painting extends Hanging{
 		$pk->title = $this->motive;
 		$player->dataPacket($pk);
 
-		parent::spawnTo($player);
+		if(!isset($this->hasSpawned[$player->getLoaderId()]) and isset($player->usedChunks[Level::chunkHash($this->chunk->getX(), $this->chunk->getZ())])){
+			$this->hasSpawned[$player->getLoaderId()] = $player;
+		}
 	}
 
 	protected function updateMovement(){

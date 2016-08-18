@@ -22,11 +22,10 @@
 namespace pocketmine\entity;
 
 use pocketmine\event\player\PlayerPickupExpOrbEvent;
-use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
 class XPOrb extends Entity{
-	const NETWORK_ID = 69;
+	const NETWORK_ID = self::EXPERIENCE_ORB;
 
 	public $width = 0.25;
 	public $length = 0.25;
@@ -136,22 +135,5 @@ class XPOrb extends Entity{
 	
 	public function getExperience(){
 		return $this->experience;
-	}
-
-	public function spawnTo(Player $player){
-		$this->setDataProperty(self::DATA_NO_AI, self::DATA_TYPE_BYTE, 1);
-		$pk = new AddEntityPacket();
-		$pk->type = XPOrb::NETWORK_ID;
-		$pk->eid = $this->getId();
-		$pk->x = $this->x;
-		$pk->y = $this->y;
-		$pk->z = $this->z;
-		$pk->speedX = $this->motionX;
-		$pk->speedY = $this->motionY;
-		$pk->speedZ = $this->motionZ;
-		$pk->metadata = $this->dataProperties;
-		$player->dataPacket($pk);
-
-		parent::spawnTo($player);
 	}
 }

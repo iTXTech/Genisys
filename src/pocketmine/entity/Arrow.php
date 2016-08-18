@@ -31,7 +31,7 @@ use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
 class Arrow extends Projectile{
-	const NETWORK_ID = 80;
+	const NETWORK_ID = self::ARROW;
 
 	public $width = 0.5;
 	public $length = 0.5;
@@ -95,21 +95,5 @@ class Arrow extends Projectile{
 		$this->timings->stopTiming();
 
 		return $hasUpdate;
-	}
-
-	public function spawnTo(Player $player){
-		$pk = new AddEntityPacket();
-		$pk->type = Arrow::NETWORK_ID;
-		$pk->eid = $this->getId();
-		$pk->x = $this->x;
-		$pk->y = $this->y;
-		$pk->z = $this->z;
-		$pk->speedX = $this->motionX;
-		$pk->speedY = $this->motionY;
-		$pk->speedZ = $this->motionZ;
-		$pk->metadata = $this->dataProperties;
-		$player->dataPacket($pk);
-
-		parent::spawnTo($player);
 	}
 }

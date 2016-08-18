@@ -23,15 +23,14 @@ namespace pocketmine\entity;
 
 use pocketmine\block\Block;
 use pocketmine\block\Rail;
-use pocketmine\item\Item as ItemItem;
-use pocketmine\network\protocol\AddEntityPacket;
-use pocketmine\Player;
 use pocketmine\event\entity\EntityDamageEvent;
-use pocketmine\network\protocol\EntityEventPacket;
+use pocketmine\item\Item as ItemItem;
 use pocketmine\math\Math;
+use pocketmine\network\protocol\EntityEventPacket;
+use pocketmine\Player;
 
 class Minecart extends Vehicle{
-	const NETWORK_ID = 84;
+	const NETWORK_ID = self::MINECART;
 
 	const TYPE_NORMAL = 1;
 	const TYPE_CHEST = 2;
@@ -175,40 +174,4 @@ class Minecart extends Vehicle{
 		}
 		return $nearestRail;
 	}
-
-	public function spawnTo(Player $player){
-		$pk = new AddEntityPacket();
-		$pk->eid = $this->getId();
-		$pk->type = Minecart::NETWORK_ID;
-		$pk->x = $this->x;
-		$pk->y = $this->y;
-		$pk->z = $this->z;
-		$pk->speedX = 0;
-		$pk->speedY = 0;
-		$pk->speedZ = 0;
-		$pk->yaw = 0;
-		$pk->pitch = 0;
-		$pk->metadata = $this->dataProperties;
-		$player->dataPacket($pk);
-
-		parent::spawnTo($player);
-	}
-
-	/*public function attack($damage, EntityDamageEvent $source){
-		parent::attack($damage, $source);
-
-		if(!$source->isCancelled()){
-			$pk = new EntityEventPacket();
-			$pk->eid = $this->id;
-			$pk->event = EntityEventPacket::HURT_ANIMATION;
-			foreach($this->getLevel()->getPlayers() as $player){
-				$player->dataPacket($pk);
-			}
-		}
-	}
-
-	public function getSaveId(){
-		$class = new \ReflectionClass(static::class);
-		return $class->getShortName();
-	}*/
 }
