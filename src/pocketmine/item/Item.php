@@ -180,7 +180,6 @@ class Item implements ItemIds{
 			self::$list[self::WHEAT] = Wheat::class;
 			self::$list[self::BREAD] = Bread::class;
 			self::$list[self::FLINT] = Flint::class;
-			self::$list[self::FLINT] = Flint::class;
 			self::$list[self::RAW_PORKCHOP] = RawPorkchop::class;
 			self::$list[self::COOKED_PORKCHOP] = CookedPorkchop::class;
 			self::$list[self::GOLDEN_APPLE] = GoldenApple::class;
