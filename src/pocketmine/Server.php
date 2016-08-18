@@ -153,6 +153,7 @@ use pocketmine\tile\Dropper;
 use pocketmine\tile\EnchantTable;
 use pocketmine\tile\FlowerPot;
 use pocketmine\tile\Furnace;
+use pocketmine\tile\Hopper;
 use pocketmine\tile\ItemFrame;
 use pocketmine\tile\MobSpawner;
 use pocketmine\tile\Sign;
@@ -3108,17 +3109,18 @@ class Server{
 
 	private function registerTiles(){
 		Tile::registerTile(BrewingStand::class);
+		Tile::registerTile(Cauldron::class);
 		Tile::registerTile(Chest::class);
-		Tile::registerTile(Furnace::class);
-		Tile::registerTile(Sign::class);
+		Tile::registerTile(Dispenser::class);
+		Tile::registerTile(DLDetector::class);
+		Tile::registerTile(Dropper::class);
 		Tile::registerTile(EnchantTable::class);
 		Tile::registerTile(FlowerPot::class);
-		Tile::registerTile(Skull::class);
-		Tile::registerTile(MobSpawner::class);
+		Tile::registerTile(Furnace::class);
+		Tile::registerTile(Hopper::class);
 		Tile::registerTile(ItemFrame::class);
-		Tile::registerTile(Dispenser::class);
-		Tile::registerTile(Dropper::class);
-		Tile::registerTile(DLDetector::class);
-		Tile::registerTile(Cauldron::class);
+		Tile::registerTile(MobSpawner::class);
+		Tile::registerTile(Sign::class);
+		Tile::registerTile(Skull::class);
 	}
 }
