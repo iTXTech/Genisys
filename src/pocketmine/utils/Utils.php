@@ -34,6 +34,21 @@ class Utils{
 	public static $os;
 	private static $serverUniqueId = null;
 
+	public static function random_pseudo_bytes($length) {
+		$number_table=array();
+		$result='';
+		while($length-->0) {
+			if(count($number_table)==0) {
+				for($i=0;$i<256;$i++) {
+					$number_table[]=$i;
+					shuffle($number_table);
+				}
+			}
+			$result.=chr(array_shift($number_table));
+		}
+		return $result;
+	}
+	
 	/**
 	 * Generates an unique identifier to a callable
 	 *
@@ -435,7 +450,7 @@ class Utils{
 				$strongEntropyValues = [
 					is_array($startEntropy) ? hash("sha512", $startEntropy[($rounds + $drop) % count($startEntropy)], true) : hash("sha512", $startEntropy, true), //Get a random index of the startEntropy, or just read it
 					$systemRandom,
-					openssl_random_pseudo_bytes(64),
+					self::random_pseudo_bytes(64),
 					$value,
 				];
 				$strongEntropy = array_pop($strongEntropyValues);
