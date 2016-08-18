@@ -32,7 +32,7 @@ class EntityEffectAddEvent extends EntityEvent implements Cancellable{
 
 	public function __construct(Entity $entity, Effect $effect){
 		$this->entity = $entity;
-		$this->effect = $effect;;
+		$this->effect = $effect;
 	}
 
 }
