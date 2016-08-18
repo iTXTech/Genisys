@@ -2806,6 +2806,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 									break;
 								}
 
+								$damage = 2;
+								if($bow->hasEnchantment(Enchantment::TYPE_BOW_POWER)){
+									$damage += $damage * 0.25 * ($bow->getEnchantment(Enchantment::TYPE_BOW_POWER)->getLevel() + 1);
+								}
+
 								$nbt = new CompoundTag("", [
 									"Pos" => new ListTag("Pos", [
 										new DoubleTag("", $this->x),
@@ -2822,7 +2827,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 										new FloatTag("", $this->pitch)
 									]),
 									"Fire" => new ShortTag("Fire", $this->isOnFire() ? 45 * 60 : 0),
-									"Potion" => new ShortTag("Potion", $arrow->getDamage())
+									"Potion" => new ShortTag("Potion", $arrow->getDamage()),
+									"damage" => new DoubleTag("damage", $damage)
 								]);
 
 								$diff = ($this->server->getTick() - $this->startAction);
