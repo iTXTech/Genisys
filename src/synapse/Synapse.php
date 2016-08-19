@@ -25,6 +25,7 @@ use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\Utils;
 use synapse\event\synapse\SynapseConnectEvent;
+use synapse\event\synapse\SynapseDisconnectEvent;
 use synapse\network\protocol\spp\BroadcastPacket;
 use synapse\network\protocol\spp\ConnectPacket;
 use synapse\network\protocol\spp\DataPacket;
@@ -221,6 +222,8 @@ class Synapse{
 						$this->getLogger()->error($pk->message);
 						break;
 				}
+				
+				$this->server->getPluginManager()->callEvent(new SynapseDisconnectEvent($this, $pk->type, $pk->message));
 				break;
 			case Info::INFORMATION_PACKET:
 				/** @var InformationPacket $pk */
