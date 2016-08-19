@@ -137,7 +137,7 @@ LICENSE;
 		
 		echo "[*] " . $this->lang->online_mode_info . "\n";
 		echo "[?] " . $this->lang->online_mode . " (y/N): ";
-        $config->set("online-mode", strtolower($this->getInput("y")) == "y");
+		$config->set("online-mode", strtolower($this->getInput("y")) == "y");
 		
 		echo "[?] " . $this->lang->level_name . " (" . self::DEFAULT_LEVEL_NAME . "): ";
 		$config->set("level-name", $this->getInput(self::DEFAULT_LEVEL_NAME));
