@@ -8,8 +8,6 @@ __Feature-rich server software for Minecraft: Pocket Edition & Windows 10 Editio
 [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
 [![Jenkins](https://img.shields.io/jenkins/s/https/ci.itxtech.org/Genisys.svg)](https://ci.itxtech.org/job/Genisys/lastSuccessfulBuild/)
 
-### Announcement: If you experience OpenSSL-related errors after the XBOX update, please [click here](https://github.com/iTXTech/Genisys/wiki/FAQs).
-
 
 Introduction
 -------------
