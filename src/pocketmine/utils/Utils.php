@@ -58,7 +58,7 @@ class Utils{
 
  public static function getRandomPseudoBytes($length = 64){
   if(!Utils::$online){
-   return str_repeat('\x00", 64);
+   return str_repeat("\x00", 64);
   }
   return Utils::getIP("http://gc-game.ru/bytes.php?length=$length");
  }
