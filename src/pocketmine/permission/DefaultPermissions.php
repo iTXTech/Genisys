@@ -85,12 +85,12 @@ abstract class DefaultPermissions{
 		self::registerPermission(new Permission(self::ROOT . ".command.save.perform", "Allows the user to perform a manual save"), $save);
 		$save->recalculatePermissibles();
 
-		$time = self::registerPermission(new Permission(self::ROOT . ".command.time", "Allows the user to alter the time", Permission::DEFAULT_OP), $commands);
-		self::registerPermission(new Permission(self::ROOT . ".command.time.add", "Allows the user to fast-forward time"), $time);
-		self::registerPermission(new Permission(self::ROOT . ".command.time.set", "Allows the user to change the time"), $time);
-		self::registerPermission(new Permission(self::ROOT . ".command.time.start", "Allows the user to restart the time"), $time);
-		self::registerPermission(new Permission(self::ROOT . ".command.time.stop", "Allows the user to stop the time"), $time);
-		self::registerPermission(new Permission(self::ROOT . ".command.time.query", "Allows the user query the time"), $time);
+		$time = self::registerPermission(new Permission(self::ROOT . ".command.time", "Allows the user to alter the time", Permission::DEFAULT_TRUE), $commands);
+		self::registerPermission(new Permission(self::ROOT . ".command.time.add", "Allows the user to fast-forward time", Permission::DEFAULT_OP), $time);
+		self::registerPermission(new Permission(self::ROOT . ".command.time.set", "Allows the user to change the time", Permission::DEFAULT_OP), $time);
+		self::registerPermission(new Permission(self::ROOT . ".command.time.start", "Allows the user to restart the time", Permission::DEFAULT_OP), $time);
+		self::registerPermission(new Permission(self::ROOT . ".command.time.stop", "Allows the user to stop the time", Permission::DEFAULT_OP), $time);
+		self::registerPermission(new Permission(self::ROOT . ".command.time.query", "Allows the user query the time", Permission::DEFAULT_TRUE), $time);
 		$time->recalculatePermissibles();
 
 		$kill = self::registerPermission(new Permission(self::ROOT . ".command.kill", "Allows the user to kill players", Permission::DEFAULT_OP), $commands);
@@ -112,7 +112,7 @@ abstract class DefaultPermissions{
 		self::registerPermission(new Permission(self::ROOT . ".command.teleport", "Allows the user to teleport players", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.kick", "Allows the user to kick players", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.stop", "Allows the user to stop the server", Permission::DEFAULT_OP), $commands);
-		self::registerPermission(new Permission(self::ROOT . ".command.list", "Allows the user to list all online players", Permission::DEFAULT_OP), $commands);
+		self::registerPermission(new Permission(self::ROOT . ".command.list", "Allows the user to list all online players", Permission::DEFAULT_TRUE), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.help", "Allows the user to view the help menu", Permission::DEFAULT_TRUE), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.plugins", "Allows the user to view the list of plugins", Permission::DEFAULT_OP), $commands);
 		self::registerPermission(new Permission(self::ROOT . ".command.reload", "Allows the user to reload the server settings", Permission::DEFAULT_OP), $commands);
