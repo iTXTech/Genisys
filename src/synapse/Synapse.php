@@ -24,6 +24,7 @@ namespace synapse;
 use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\Utils;
+use synapse\event\synapse\SynapseConnectEvent;
 use synapse\network\protocol\spp\BroadcastPacket;
 use synapse\network\protocol\spp\ConnectPacket;
 use synapse\network\protocol\spp\DataPacket;
@@ -67,6 +68,7 @@ class Synapse{
 	 */
 	private $description;
 	private $connectionTime = PHP_INT_MAX;
+	private $firstConnected = true;
 
 	public function __construct(Server $server, array $config){
 		self::$obj = $this;
@@ -227,6 +229,9 @@ class Synapse{
 						if($pk->message == InformationPacket::INFO_LOGIN_SUCCESS){
 							$this->logger->info("Login success to {$this->serverIp}:{$this->port}");
 							$this->verified = true;
+							
+							$this->server->getPluginManager()->callEvent(new SynapseConnectEvent($this, $this->firstConnected));
+							$this->firstConnected = false;
 						}elseif($pk->message == InformationPacket::INFO_LOGIN_FAILED){
 							$this->logger->info("Login failed to {$this->serverIp}:{$this->port}");
 						}
