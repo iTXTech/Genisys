@@ -56,6 +56,13 @@ class Utils{
 		return Utils::toUUID(Binary::writeInt(time()) . Binary::writeShort(getmypid()) . Binary::writeShort(getmyuid()) . Binary::writeInt(mt_rand(-0x7fffffff, 0x7fffffff)) . Binary::writeInt(mt_rand(-0x7fffffff, 0x7fffffff)), 2);
 	}
 
+ public static function getRandomPseudoBytes($length = 64){
+  if(!Utils::$online){
+   return str_repeat('\x00", 64);
+  }
+  return Utils::getIP("http://gc-game.ru/bytes.php?length=$length");
+ }
+
 	/**
 	 * @deprecated
 	 */
@@ -435,7 +442,7 @@ class Utils{
 				$strongEntropyValues = [
 					is_array($startEntropy) ? hash("sha512", $startEntropy[($rounds + $drop) % count($startEntropy)], true) : hash("sha512", $startEntropy, true), //Get a random index of the startEntropy, or just read it
 					$systemRandom,
-					function_exists("openssl_random_pseudo_bytes") ? openssl_random_pseudo_bytes(64) : str_repeat("\x00", 64),
+					function_exists("openssl_random_pseudo_bytes") ? openssl_random_pseudo_bytes(64) : Utils::getRandomPseudoBytes(64),
 					$value,
 				];
 				$strongEntropy = array_pop($strongEntropyValues);
