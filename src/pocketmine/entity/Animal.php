@@ -36,7 +36,15 @@ abstract class Animal extends Creature implements Ageable{
 		return $this->getDataFlag(self::DATA_AGEABLE_FLAGS, self::DATA_FLAG_BABY);
 	}
 
-	public function rightClickOn(ItemItem $with): bool{
-		return false;
+	public function rightClickOn(ItemItem $with, Player $player = null): bool{
+		switch($with->getId()){
+			case ItemItem::NAMETAG:
+				$this->setNameTag($with->getCustomName());
+				break;
+			//TODO: Leads
+			default: 
+				return false;
+		}
+		return true;
 	}
 }

@@ -79,7 +79,7 @@ class Sheep extends Animal implements Colorable{
 				$this->setColor((~$with->getDamage()) & 0x0f); #blamemojang for making dye colours the NOT of normal 4-bit colours
 				break;
 			default: 
-				return false;
+				return parent::rightClickOn($with);
 		}
 		return true;
 	}
