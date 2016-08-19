@@ -436,11 +436,6 @@ namespace pocketmine {
 		++$errors;
 	}
 
-	if(!extension_loaded("openssl")){
-		$logger->critical("Unable to find the OpenSSL extension.");
-		++$errors;
-	}
-
 	if($errors > 0){
 		$logger->critical("Please update your PHP from itxtech.org/download, or recompile PHP again.");
 		$logger->shutdown();
