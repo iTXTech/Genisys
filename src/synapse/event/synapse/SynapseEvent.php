@@ -19,7 +19,7 @@
  *
  */
  
-namespace synapse\event\client;
+namespace synapse\event\synapse;
 
 use synapse\Synapse;
 use synapse\event\Event;
