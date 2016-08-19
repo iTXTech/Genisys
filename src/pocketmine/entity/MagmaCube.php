@@ -21,12 +21,8 @@
 
 namespace pocketmine\entity;
 
-class MagmaCube extends Living{
+class MagmaCube extends Slime{
 	const NETWORK_ID = self::MAGMA_CUBE;
-
-	const DATA_SLIME_SIZE = 16;
-
-	public $dropExp = [1, 4];
 	
 	public function getName() : string{
 		return "Magma Cube";
