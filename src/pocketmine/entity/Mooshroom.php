@@ -36,6 +36,25 @@ class Mooshroom extends Animal{
 	public function getName() : string{
 		return "Mooshroom";
 	}
+	
+	public function useItemOn(ItemItem $item): bool{
+		switch($item->getId()){
+			case ItemItem::SHEARS:
+				$this->shear();
+				break;
+			default: return parent::useItemOn($item);
+		}
+		return true;
+	}
+
+	public function shear(){
+		if(!$this->isBaby()){
+			$this->level->dropItem($this, ItemItem::get(ItemItem::RED_MUSHROOM, 0, 5));
+			$normalCow = Entity::createEntity(Entity::COW, $this->chunk, $this->namedtag); //Create a cow in the exact same position with the same data
+			$normalCow->spawnToAll();
+			$this->close();
+		}
+	}
 
 	public function getDrops(){
 		$lootingLevel = 0;

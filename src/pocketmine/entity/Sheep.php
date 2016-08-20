@@ -70,27 +70,27 @@ class Sheep extends Animal implements Colorable{
 		}
 	}
 	
-	public function rightClickOn(ItemItem $with): bool{
-		switch($with->getId()){
+	public function useItemOn(ItemItem $item): bool{
+		switch($item->getId()){
 			case ItemItem::SHEARS:
 				$this->shear();
 				break;
 			case ItemItem::DYE:
-				$this->setColor((~$with->getDamage()) & 0x0f); #blamemojang for making dye colours the NOT of normal 4-bit colours
+				$this->setColor((~$item->getDamage()) & 0x0f); #blamemojang for making dye colours the NOT of normal 4-bit colours
 				break;
 			default: 
-				return parent::rightClickOn($with);
+				return parent::useItemOn($item);
 		}
 		return true;
 	}
 	
 	public function shear(){
-		if(!$this->isSheared()){
+		if(!$this->isSheared() and !$this->isBaby()){
 			$this->setSheared(true);
 			$this->level->dropItem($this, ItemItem::get(ItemItem::WOOL, $this->getColor(), 3));
 		}
 	}
-	
+
 	public function isSheared(): bool{
 		return (bool) $this->namedtag["Sheared"];
 	}

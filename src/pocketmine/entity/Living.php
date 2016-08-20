@@ -136,6 +136,22 @@ abstract class Living extends Entity implements Damageable{
 
 		$this->attackTime = 10; //0.5 seconds cooldown
 	}
+	
+	/**
+	 * @return bool
+	 * Called when a player right-clicks on a mob
+	 */
+	public function useItemOn(ItemItem $item): bool{
+		switch($item->getId()){
+			case ItemItem::NAMETAG:
+				$this->setNameTag($item->getCustomName());
+				break;
+			//TODO: Leads
+			default: 
+				return false;
+		}
+		return true;
+	}
 
 	public function knockBack(Entity $attacker, $damage, $x, $z, $base = 0.4){
 		$f = sqrt($x * $x + $z * $z);
