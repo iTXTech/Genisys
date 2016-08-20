@@ -21,8 +21,9 @@
 
 namespace pocketmine\inventory;
 
-use pocketmine\Player;
+use pocketmine\event\inventory\InventoryTransactionEvent;
 use pocketmine\item\Item;
+use pocketmine\Player;
 
 class SimpleTransactionQueue implements TransactionQueue{
 
@@ -79,8 +80,6 @@ class SimpleTransactionQueue implements TransactionQueue{
 	}
 
 	/**
-	 * @return bool
-	 *
 	 * Handles transaction queue execution
 	 */
 	public function execute(){
@@ -92,11 +91,19 @@ class SimpleTransactionQueue implements TransactionQueue{
 			$this->transactionQueue->enqueue($this->transactionsToRetry->dequeue());
 		}
 
-		while(!$this->transactionQueue->isEmpty()){
+		if(!$this->transactionQueue->isEmpty()){
+			$this->player->getServer()->getPluginManager()->callEvent($ev = new InventoryTransactionEvent($this));
+		}else{
+			return;
+		}
 
+		while(!$this->transactionQueue->isEmpty()){
 			$transaction = $this->transactionQueue->dequeue();
 
-			if(!$transaction->execute($this->player)){
+			if($ev->isCancelled()){
+				$transaction->sendSlotUpdate($this->player); //Send update back to client for cancelled transaction
+				continue;
+			}elseif(!$transaction->execute($this->player)){
 				$transaction->addFailure();
 				if($transaction->getFailures() >= self::DEFAULT_ALLOWED_RETRIES){
 					/* Transaction failed completely after several retries, hold onto it to send a slot update */
@@ -117,7 +124,5 @@ class SimpleTransactionQueue implements TransactionQueue{
 		foreach($failed as $f){
 			$f->sendSlotUpdate($this->player);
 		}
-
-		return true;
 	}
 }
