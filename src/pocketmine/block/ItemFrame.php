@@ -61,7 +61,9 @@ class ItemFrame extends Transparent{
 		}
 
 		if($tile->getItem()->getId() === 0){
-			$tile->setItem(Item::get($item->getId(), $item->getDamage(), 1));
+			$item = clone $item;
+			$item->setCount(1);
+			$tile->setItem($item);
 			if($player instanceof Player){
 				if($player->isSurvival()) {
 					$count = $item->getCount();

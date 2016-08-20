@@ -70,14 +70,16 @@ class ItemFrame extends Spawnable{
 		$nbtItem = NBT::putItemHelper($item);
 		$nbtItem->setName("Item");
 		$this->namedtag->Item = $nbtItem;
-		if($setChanged) $this->setChanged();
+		if($setChanged) {
+			$this->setChanged();
+		}
 	}
 
 	public function getItemDropChance(){
 		return $this->namedtag["ItemDropChance"];
 	}
 
-	public function setItemDropChance($chance = 1.0){
+	public function setItemDropChance(float $chance = 1.0){
 		$this->namedtag->ItemDropChance = new FloatTag("ItemDropChance", $chance);
 	}
 
@@ -90,7 +92,9 @@ class ItemFrame extends Spawnable{
 	}
 
 	public function getSpawnCompound(){
-		if(!isset($this->namedtag->Item)) $this->setItem(Item::get(Item::AIR), false);
+		if(!isset($this->namedtag->Item)){
+			$this->setItem(Item::get(Item::AIR), false);
+		}
 		/** @var CompoundTag $nbtItem */
 		$nbtItem = clone $this->namedtag->Item;
 		$nbtItem->setName("Item");
