@@ -1149,7 +1149,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 *
 	 * @return int|bool
 	 */
-	public function dataPacket(DataPacket $packet, $immediate = false, $needACK = false){
+	public function dataPacket(DataPacket $packet, $needACK = false){
 		if(!$this->connected){
 			return false;
 		}
@@ -1163,7 +1163,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			return false;
 		}
 
-		$identifier = $this->interface->putPacket($this, $packet, $needACK, $immediate);
+		$identifier = $this->interface->putPacket($this, $packet, $needACK, false);
 
 		if($needACK and $identifier !== null){
 			$this->needACK[$identifier] = false;
@@ -1183,7 +1183,29 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @return bool|int
 	 */
 	public function directDataPacket(DataPacket $packet, $needACK = false){
-		return $this->dataPacket($packet, true, $needACK);
+		if($this->connected === false){
+			return false;
+		}
+
+		$timings = Timings::getSendDataPacketTimings($packet);
+		$timings->startTiming();
+		$this->server->getPluginManager()->callEvent($ev = new DataPacketSendEvent($this, $packet));
+		if($ev->isCancelled()){
+			$timings->stopTiming();
+			return false;
+		}
+
+		$identifier = $this->interface->putPacket($this, $packet, $needACK, true);
+
+		if($needACK and $identifier !== null){
+			$this->needACK[$identifier] = false;
+
+			$timings->stopTiming();
+			return $identifier;
+		}
+
+		$timings->stopTiming();
+		return true;
 	}
 
 	/**
