@@ -25,6 +25,7 @@ use synapse\network\protocol\spp\BroadcastPacket;
 use synapse\network\protocol\spp\ConnectPacket;
 use synapse\network\protocol\spp\DataPacket;
 use synapse\network\protocol\spp\DisconnectPacket;
+use synapse\network\protocol\spp\FastPlayerListPacket;
 use synapse\network\protocol\spp\HeartbeatPacket;
 use synapse\network\protocol\spp\Info;
 use synapse\network\protocol\spp\InformationPacket;
@@ -132,5 +133,6 @@ class SynapseInterface{
 		$this->registerPacket(Info::INFORMATION_PACKET, InformationPacket::class);
 		$this->registerPacket(Info::TRANSFER_PACKET, TransferPacket::class);
 		$this->registerPacket(Info::BROADCAST_PACKET, BroadcastPacket::class);
+		$this->registerPacket(Info::FAST_PLAYER_LIST_PACKET, FastPlayerListPacket::class);
 	}
 }

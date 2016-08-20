@@ -33,4 +33,5 @@ class Info{
 	const INFORMATION_PACKET = 0x07;
 	const TRANSFER_PACKET = 0x08;
 	const BROADCAST_PACKET = 0x09;
+	const FAST_PLAYER_LIST_PACKET = 0x0a;
 }
