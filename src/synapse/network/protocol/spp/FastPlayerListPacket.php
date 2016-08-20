@@ -26,7 +26,7 @@ class FastPlayerListPacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putUUID($sendTo);
+		$this->putUUID($this->sendTo);
 		$this->putByte($this->type);
 		$this->putInt(count($this->entries));
 		foreach($this->entries as $d){
