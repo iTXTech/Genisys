@@ -17,22 +17,48 @@
  * @link http://www.pocketmine.net/
  * 
  *
-*/
+ */
 
 namespace pocketmine\entity;
 
 use pocketmine\item\Item as ItemItem;
+use pocketmine\nbt\tag\IntTag;
 
 abstract class Animal extends Creature implements Ageable{
 
 	public function initEntity(){
 		parent::initEntity();
-		if($this->getDataProperty(self::DATA_AGEABLE_FLAGS) === null){
-			$this->setDataProperty(self::DATA_AGEABLE_FLAGS, self::DATA_TYPE_BYTE, 0);
+		if(!isset($this->namedtag["Age"])){
+			$this->namedtag->Age = new IntTag("Age", self::getRandomAge());
 		}
+		$this->setDataProperty(self::DATA_AGEABLE_FLAGS, self::DATA_TYPE_BYTE, $this->isBaby());
+	}
+
+	public function entityBaseTick($tickDiff = 1){
+		$stateChange = false;
+		if($this->isBaby()){
+			$this->namedtag["Age"] += $tickDiff; //Minimum value of -24000
+			$stateChange = true;
+		}
+		//TODO: Breeding time
+		
+		if($this->namedtag["Age"] === 0 and $stateChange){
+			$this->setDataProperty(self::DATA_AGEABLE_FLAGS, self::DATA_TYPE_BYTE, self::DATA_FLAG_ADULT);
+		}
+		
+		return parent::entityBaseTick($tickDiff);
+	}
+	
+	protected static function getRandomAge(): int{
+		$chance = mt_rand(0, 100);
+		if($chance < 5){
+			//Since the wiki has no data for this, I'll go with 5% of mobs from eggs being babies.
+			return mt_rand(-24000, -1);
+		}
+		return 0;
 	}
 
 	public function isBaby(){
-		return $this->getDataFlag(self::DATA_AGEABLE_FLAGS, self::DATA_FLAG_BABY);
+		return $this->namedtag["Age"] < 0; //Less than zero is baby. Zero is adult. Positive is time until mob can breed again.
 	}
 }
