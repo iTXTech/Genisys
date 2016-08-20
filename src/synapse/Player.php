@@ -278,7 +278,7 @@ class Player extends PMPlayer{
 			$pk->sendTo = $this->uuid;
 			$pk->type = $packet->type;
 			foreach($packet->entries as $entry){
-				if(!$packet->type == PlayerListPacket::TYPE_REMOVE){
+				if($packet->type !== PlayerListPacket::TYPE_REMOVE){
 					array_pop($entry);
 					array_pop($entry);
 				}
@@ -296,7 +296,7 @@ class Player extends PMPlayer{
 			$pk->sendTo = $this->uuid;
 			$pk->type = $packet->type;
 			foreach($packet->entries as $entry){
-				if(!$packet->type == PlayerListPacket::TYPE_REMOVE){
+				if($packet->type !== PlayerListPacket::TYPE_REMOVE){
 					array_pop($entry);
 					array_pop($entry);
 				}
