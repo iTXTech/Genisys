@@ -50,6 +50,11 @@ abstract class Projectile extends Entity{
 		if($shootingEntity !== null){
 			$this->setDataProperty(self::DATA_SHOOTER_ID, self::DATA_TYPE_LONG, $shootingEntity->getId());
 		}
+		
+		if(!isset($nbt->damage)){
+			$nbt->damage = new DoubleTag("damage", $this->damage);
+		}
+		
 		parent::__construct($chunk, $nbt);
 	}
 
@@ -64,19 +69,23 @@ abstract class Projectile extends Entity{
 
 		$this->setMaxHealth(1);
 		$this->setHealth(1);
+
 		if(isset($this->namedtag->Age)){
 			$this->age = $this->namedtag["Age"];
 		}
 
-	}
-
-	public function canCollideWith(Entity $entity){
-		return $entity instanceof Living and !$this->onGround;
+		$this->damage = $this->namedtag["damage"];
 	}
 
 	public function saveNBT(){
 		parent::saveNBT();
+
 		$this->namedtag->Age = new ShortTag("Age", $this->age);
+		$this->namedtag->damage = new DoubleTag("damage", $this->damage);
+	}
+
+	public function canCollideWith(Entity $entity){
+		return $entity instanceof Living and !$this->onGround;
 	}
 
 	public function onUpdate($currentTick){

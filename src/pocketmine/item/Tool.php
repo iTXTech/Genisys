@@ -96,6 +96,9 @@ abstract class Tool extends Item{
 					}
 				}
 			}
+			else{
+				$this->meta += 1;
+			}
 		} elseif ($type === 2) {//For Touch. only trigger when OnActivate return true
 			if ($this->isHoe() !== false or $this->id === self::FLINT_STEEL or $this->isShovel() !== false) {
 				$this->meta++;

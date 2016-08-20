@@ -2779,9 +2779,21 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 									}
 								}
 								if($arrow === false and $this->isCreative()){
-									$arrow = Item::get(Item::ARROW, 0 , 1);
+									$arrow = Item::get(Item::ARROW, 0, 1);
 								}elseif($arrow === false){
 									break;
+								}
+								
+								$fire = 0;
+								if($this->isOnFire()){
+									$fire = 45 * 60;
+								}elseif($bow->hasEnchantment(Enchantment::TYPE_BOW_FLAME)){
+									$fire = 5 * 20;
+								}
+
+								$damage = 2;
+								if($bow->hasEnchantment(Enchantment::TYPE_BOW_POWER)){
+									$damage += $damage * 0.25 * ($bow->getEnchantment(Enchantment::TYPE_BOW_POWER)->getLevel() + 1);
 								}
 
 								$nbt = new CompoundTag("", [
@@ -2799,8 +2811,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 										new FloatTag("", $this->yaw),
 										new FloatTag("", $this->pitch)
 									]),
-									"Fire" => new ShortTag("Fire", $this->isOnFire() ? 45 * 60 : 0),
-									"Potion" => new ShortTag("Potion", $arrow->getDamage())
+									"Fire" => new ShortTag("Fire", $fire),
+									"Potion" => new ShortTag("Potion", $arrow->getDamage()),
+									"damage" => new DoubleTag("damage", $damage)
 								]);
 
 								$diff = ($this->server->getTick() - $this->startAction);
@@ -2820,9 +2833,13 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 								}else{
 									$ev->getProjectile()->setMotion($ev->getProjectile()->getMotion()->multiply($ev->getForce()));
 									if($this->isSurvival()){
-										$this->inventory->removeItem(Item::get(Item::ARROW, $arrow->getDamage(), 1));
-										$bow->setDamage($bow->getDamage() + 1);
-										if($bow->getDamage() >= 385){
+										if (!$bow->hasEnchantment(Enchantment::TYPE_BOW_INFINITY)){
+											$this->inventory->removeItem(Item::get(Item::ARROW, $arrow->getDamage(), 1));
+										}
+										
+										$bow->useOn(null);
+										
+										if($bow->getDamage() >= $bow->getMaxDurability()){
 											$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 0));
 										}else{
 											$this->inventory->setItemInHand($bow);

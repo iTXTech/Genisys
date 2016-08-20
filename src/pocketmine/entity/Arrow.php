@@ -51,7 +51,18 @@ class Arrow extends Projectile{
 			$nbt->Potion = new ShortTag("Potion", 0);
 		}
 		parent::__construct($chunk, $nbt, $shootingEntity);
+	}
+	
+	protected function initEntity(){
+		parent::initEntity();
+
 		$this->potionId = $this->namedtag["Potion"];
+	}
+
+	public function saveNBT(){
+		parent::saveNBT();
+
+		$this->namedtag->Potion = new ShortTag("Potion", $this->potionId);
 	}
 
 	public function getPotionId() : int{
