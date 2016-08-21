@@ -97,8 +97,8 @@ class PlayerInventory extends BaseInventory{
 	 * @param int $index
 	 * @param int $slot
 	 *
-		* Move item to hotbar slot. Compatible with old method
- */
+	 * Move item to hotbar slot. Compatible with old method
+	 */
 	public function setHotbarSlotIndex($index, $slot){
 		$i1 = $this->getItem($index);
 		$i2 = $this->getItem($slot);
