@@ -99,7 +99,10 @@ class PlayerInventory extends BaseInventory{
 	 * Changes the linkage of the specified hotbar slot. This should never be done unless it is requested by the client.
 	 */
 	public function setHotbarSlotIndex($index, $slot){
-		trigger_error("Do not attempt to change hotbar links in plugins!", E_USER_DEPRECATED);
+		$i1 = $this->getItem($index);
+		$i2 = $this->getItem($slot);
+		$this->setItem($index, $i2);
+		$this->setItem($slot, $i1);
 	}
 
 	/**
@@ -212,6 +215,7 @@ class PlayerInventory extends BaseInventory{
 	 * @param int $slot
 	 */
 	public function setHeldItemSlot($slot){
+		$this->setHotbarSlotIndex($this->getHeldItemSlot(), $slot);
 	}
 
 	/**
