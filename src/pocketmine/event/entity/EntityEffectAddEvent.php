@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  *  ____            _        _   __  __ _                  __  __ ____
@@ -18,21 +17,32 @@
  *
  *
  */
-
 namespace pocketmine\event\entity;
-
 use pocketmine\entity\Entity;
 use pocketmine\Event;
 use pocketmine\event\Cancellable;
 use pocketmine\entity\Effect;
-
 class EntityEffectAddEvent extends EntityEvent implements Cancellable{
-
 	public static $handlerList = null;
 
+	/** @var Effect */
+	private $effect;
 	public function __construct(Entity $entity, Effect $effect){
 		$this->entity = $entity;
 		$this->effect = $effect;
 	}
-
+	
+	/**
+	 * @return Effect
+	 */
+	public function getEffect() {
+		return $this->effect;
+	}
+	
+	/**
+	 * @param Effect
+	 */
+	public function setEffect(Effect $effect){
+		$this->effect = $effect;
+	}
 }
