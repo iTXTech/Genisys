@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  *
  *  ____            _        _   __  __ _                  __  __ ____
  * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
@@ -19,36 +19,42 @@
  *
  */
 
-namespace pocketmine\event\player;
+namespace pocketmine\event\inventory;
 
 use pocketmine\event\Cancellable;
-use pocketmine\Player;
+use pocketmine\event\Event;
+use pocketmine\inventory\TransactionQueue;
 
 /**
- * Called when a player does an animation
+ * Called when an inventory transaction queue starts execution. 
  */
-class PlayerAnimationEvent extends PlayerEvent implements Cancellable{
+
+class InventoryTransactionEvent extends Event implements Cancellable{
+
 	public static $handlerList = null;
-
-	const ARM_SWING = 1;
-	const WAKE_UP = 3;
-
-	private $animationType;
-
+	
+	/** @var TransactionQueue */
+	private $transactionQueue;
+	
 	/**
-	 * @param Player $player
-	 * @param int    $animation
+	 * @param TransactionQueue $ts
 	 */
-	public function __construct(Player $player, $animation = self::ARM_SWING){
-		$this->player = $player;
-		$this->animationType = $animation;
+	public function __construct(TransactionQueue $transactionQueue){
+		$this->transactionQueue = $transactionQueue;
 	}
 
 	/**
-	 * @return int
+	 * @deprecated
+	 * @return TransactionQueue
 	 */
-	public function getAnimationType(){
-		return $this->animationType;
+	public function getTransaction(){
+		return $this->transactionQueue;
 	}
 
+	/**
+	 * @return TransactionQueue
+	 */
+	public function getQueue(){
+		return $this->transactionQueue;
+	}
 }

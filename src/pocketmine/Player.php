@@ -1289,7 +1289,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 			$pk = new AnimatePacket();
 			$pk->eid = 0;
-			$pk->action = 3; //Wake up
+			$pk->action = PlayerAnimationEvent::WAKE_UP;
 			$this->dataPacket($pk);
 		}
 
@@ -2493,8 +2493,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 					$this->setRotation($packet->yaw, $packet->pitch);
 					$this->newPosition = $newPos;
-					$this->forceMovement = null;
 				}
+				$this->forceMovement = null;
 
 				break;
 			case ProtocolInfo::MOB_EQUIPMENT_PACKET:
@@ -3496,7 +3496,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 
 					$extraItem = $this->inventory->addItem($recipe->getResult());
-					if(count($extraItem) > 0){ //Could not add all the items to our inventory (not enough space)
+					if(count($extraItem) > 0 and !$this->isCreative()){ //Could not add all the items to our inventory (not enough space)
 						foreach($extraItem as $item){
 							$this->level->dropItem($this, $item);
 						}

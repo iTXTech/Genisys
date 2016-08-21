@@ -106,7 +106,7 @@ class LoginPacket extends DataPacket{
 		$tokens = explode(".", $token);
 		list($headB64, $payloadB64, $sigB64) = $tokens;
 
-		if($key !== null){
+		if($key !== null and extension_loaded("openssl")){
 			$sig = base64_decode(strtr($sigB64, '-_', '+/'), true);
 			$rawLen = 48; // ES384
 			for($i = $rawLen; $i > 0 and $sig[$rawLen - $i] == chr(0); $i--) {}
