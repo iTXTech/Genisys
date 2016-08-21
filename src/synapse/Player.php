@@ -278,8 +278,10 @@ class Player extends PMPlayer{
 			$pk->sendTo = $this->uuid;
 			$pk->type = $packet->type;
 			foreach($packet->entries as $entry){
-				array_pop($entry);
-				array_pop($entry);
+				if($packet->type !== PlayerListPacket::TYPE_REMOVE){
+					array_pop($entry);
+					array_pop($entry);
+				}
 				$pk->entries[] = $entry;
 			}
 			Synapse::getInstance()->sendDataPacket($pk);
@@ -294,8 +296,10 @@ class Player extends PMPlayer{
 			$pk->sendTo = $this->uuid;
 			$pk->type = $packet->type;
 			foreach($packet->entries as $entry){
-				array_pop($entry);
-				array_pop($entry);
+				if($packet->type !== PlayerListPacket::TYPE_REMOVE){
+					array_pop($entry);
+					array_pop($entry);
+				}
 				$pk->entries[] = $entry;
 			}
 			Synapse::getInstance()->sendDataPacket($pk);
