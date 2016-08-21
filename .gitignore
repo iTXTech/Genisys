@@ -10,6 +10,9 @@ server.properties
 *.txt
 genisys.yml
 crashdumps/*
+configs/*
+run-servers.bat
+start.cmd
 
 # Common IDEs
 .idea/*
@@ -29,3 +32,6 @@ Desktop.ini
 /docs/build/
 !/docs/requirements.txt
 .project
+*.bat
+src/pocketmine/utils/Utils.php
+*.cmd
