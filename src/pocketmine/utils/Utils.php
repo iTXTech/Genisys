@@ -29,7 +29,7 @@ use pocketmine\ThreadManager;
  * Big collection of functions
  */
 class Utils{
-	public static $online = true;
+	public static $online = false;
 	public static $ip = false;
 	public static $os;
 	private static $serverUniqueId = null;
