@@ -25,7 +25,10 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\DoubleTag;
+use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\Player;
 
 class Slime extends Monster{
@@ -37,9 +40,9 @@ class Slime extends Monster{
 	const SIZE_MEDIUM = 2;
 	const SIZE_BIG = 4;
 
-	public $width = 0.3; //These values are completely wrong. TODO: fix, and different bounding boxes for small/med/large
-	public $length = 0.9;
-	public $height = 5;
+	public $width = 0.51;
+	public $length = 0.51;
+	public $height = 0.51; //Defaults for small slime
 
 	public $dropExp = [1, 4];
 	
@@ -55,6 +58,9 @@ class Slime extends Monster{
 			$this->namedtag->Size = new IntTag("Size", self::getRandomSize());
 		}
 		$this->setDataProperty(self::DATA_SLIME_SIZE, self::DATA_TYPE_BYTE, $this->namedtag["Size"]);
+		$this->width = $this->length = $this->height = 0.51 * $this->getSize();
+		$this->setHealth($this->getSize() ** 2);
+		$this->setMaxHealth($this->getSize() ** 2);
 		parent::initEntity();
 	}
 	
@@ -80,5 +86,36 @@ class Slime extends Monster{
 		}else{
 			return self::SIZE_BIG;
 		}
+	}
+	
+	public function kill(){
+		parent::kill();
+		if(($cause = $this->lastDamageCause) instanceof EntityDamageByEntityEvent and ($player = $cause->getDamager()) instanceof Player and $this->getSize() > self::SIZE_TINY){
+			$randomAmount = mt_rand(2, 4);
+			for($i = 1; $i <= $randomAmount; ++$i){
+				$nbt = clone $this->namedtag;
+				$nbt["Size"] = new IntTag("Size", floor($this->getSize() / 2));
+				$nbt["Pos"] = new ListTag("Pos", [
+					new DoubleTag("", $this->x + ($i & 0x01 === 1 ? 0.5: -0.5)),
+					new DoubleTag("", $this->y),
+					new DoubleTag("", $this->z + ($i & 0x01 === 0 ? 0.5: -0.5))
+				]);
+				$nbt["Rotation"]  = new ListTag("Rotation", [ //Spawn facing player
+					new FloatTag("", ($player->getYaw() < 180 ? $player->getYaw() + 180: $player->getYaw() - 180)), //To spawn facing the player.
+					new FloatTag("", 0)
+				]);
+				$new = Entity::createEntity(static::NETWORK_ID, $this->chunk, $nbt); //To allow this to be used for magma cubes also
+				$new->spawnToAll();
+			}
+		}
+	}
+	
+	public function getDrops(){
+		if($this->getSize() === self::SIZE_TINY){
+			return [
+				ItemItem::get(ItemItem::SLIMEBALL, 0, mt_rand(0, 2))
+			];
+		}
+		return [];
 	}
 }

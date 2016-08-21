@@ -21,10 +21,21 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\item\Item as ItemItem;
+
 class MagmaCube extends Slime{
 	const NETWORK_ID = self::MAGMA_CUBE;
 	
 	public function getName() : string{
 		return "Magma Cube";
+	}
+	
+	public function getDrops(){
+		if($this->getSize() === self::SIZE_TINY){
+			return [
+				ItemItem::get(ItemItem::MAGMA_CREAM, 0, mt_rand(0, 2))
+			];
+		}
+		return [];
 	}
 }
