@@ -160,11 +160,7 @@ class CraftingManager{
 			$this->registerRecipe((new ShapedRecipe(Item::get(Item::TORCH, 0, 4),
 				"C ",
 				"S"
-			))->setIngredient("C", Item::get(Item::COAL, 0, 1))->setIngredient("S", Item::get(Item::STICK, 0, 1)));
-			$this->registerRecipe((new ShapedRecipe(Item::get(Item::TORCH, 0, 4),
-				"C ",
-				"S"
-			))->setIngredient("C", Item::get(Item::COAL, 1, 1))->setIngredient("S", Item::get(Item::STICK, 0, 1)));
+			))->setIngredient("C", Item::get(Item::COAL, null, 1))->setIngredient("S", Item::get(Item::STICK, 0, 1)));
 			$this->registerRecipe((new ShapedRecipe(Item::get(Item::SUGAR, 0, 1),
 				"S"
 			))->setIngredient("S", Item::get(Item::SUGARCANE, 0, 1)));

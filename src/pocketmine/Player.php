@@ -3364,7 +3364,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->floatingInventory = $floatingInventory; //Set player crafting inv to the idea one created in this process
 						$this->floatingInventory->addItem(clone $recipe->getResult()); //Add the result to our picture of the crafting inventory
 					}else{
-						$this->server->getLogger()->debug("Unmatched desktop crafting recipe " . $recipe->getId() . " from player " . $this->getName());
+						$this->server->getLogger()->debug("Unmatched desktop crafting recipe " . $packet->id . " from player " . $this->getName());
 						$this->inventory->sendContents($this);
 						break;
 					}
