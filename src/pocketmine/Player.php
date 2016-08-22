@@ -4274,7 +4274,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @return bool
 	 */
 	public function teleport(Vector3 $pos, $yaw = null, $pitch = null){
-		if(!$this->isOnline()){
+		if(!$this->isOnline() or $this->isSleeping()){
 			return false;
 		}
 
