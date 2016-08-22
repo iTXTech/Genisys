@@ -93,6 +93,10 @@ class TeleportCommand extends VanillaCommand{
 
 			return true;
 		}elseif($target->getLevel() !== null){
+			if($target->isSleeping()){
+				$sender->sendMessage(TextFormat::RED . "Cannot teleport a sleeping player!");
+				return true;
+			}
 			if(count($args) === 4 or count($args) === 6){
 				$pos = 1;
 			}else{
