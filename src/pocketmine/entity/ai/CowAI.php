@@ -133,7 +133,7 @@ class CowAI{
 								$zom['up'] = 0;
 							}
 						}else{
-							$pos2 = new Vector3 ($zom['x'] + $zom['motionx'], $zy - 1, $zom['z'] + $zom['motionz']);  //目标坐标
+							$pos2 = new Vector3 ($zom['x'] + $zom['motionx'], $zy, $zom['z'] + $zom['motionz']);  //目标坐标
 							if($pos2->y - $zom['y'] < 0){
 								$zom['up'] = 1;
 							}else{

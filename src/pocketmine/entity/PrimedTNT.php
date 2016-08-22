@@ -125,7 +125,7 @@ class PrimedTNT extends Entity implements Explosive{
 		}
 
 
-		return $hasUpdate or $this->fuse >= 0 or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001;
+		return $hasUpdate or $this->fuse >= 0 /*or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001*/;
 	}
 
 	public function explode(){

@@ -73,7 +73,7 @@ class TNT extends Solid implements ElectricalAppliance{
 		$tnt = Entity::createEntity("PrimedTNT", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), new CompoundTag("", [
 			"Pos" => new ListTag("Pos", [
 				new DoubleTag("", $this->x + 0.5),
-				new DoubleTag("", $this->y),
+				new DoubleTag("", $this->y + 0.5),
 				new DoubleTag("", $this->z + 0.5)
 			]),
 			"Motion" => new ListTag("Motion", [

@@ -153,7 +153,7 @@ class ZombieAI{
 
 								if ($this->AIHolder->ifjump($zo->getLevel(),$pos2) === false) { //原坐标依然是悬空
 
-									$pos2 = new Vector3 ($zom['x'], $zom['y']-1,$zom['z']);  //下降
+									$pos2 = new Vector3 ($zom['x'], $zom['y'], $zom['z']);  //下降
 									$zom['up'] = 1;
 									$zom['yup'] = 0;
 								}
@@ -167,7 +167,7 @@ class ZombieAI{
 								//}
 							}
 							else {
-								$pos2 = new Vector3 ($zom['x'] + $zom['motionx'], $zy - 1 ,$zom['z'] + $zom['motionz']);  //目标坐标
+								$pos2 = new Vector3 ($zom['x'] + $zom['motionx'], $zy, $zom['z'] + $zom['motionz']);  //目标坐标
 								if ($pos2->y - $zom['y'] < 0) {
 									$zom['up'] = 1;
 								}
@@ -351,7 +351,7 @@ $xxx =0;$zzz=0;
 											$zom['drop'] = false;
 											if ($this->AIHolder->whatBlock($level, $pos0) == "climb") {  //梯子
 												$zy = $pos0->y + 0.7;
-												$pos2 = new Vector3 ($zo->getX(), $zy - 1, $zo->getZ());  //目标坐标
+												$pos2 = new Vector3 ($zo->getX(), $zy, $zo->getZ());  //目标坐标
 											}
 											elseif ($xxx != 0 and $zzz != 0) {  //走向最近距离
 												if ($this->AIHolder->ifjump($zo->getLevel(), new Vector3($zo->getX() + $xxx, $zo->getY() + 1, $zo->getZ()), true) !== false) {
@@ -367,7 +367,7 @@ $xxx =0;$zzz=0;
 											}
 										}
 									} else {
-										$pos2 = new Vector3 ($zo->getX() + $xxx, $zy - 1, $zo->getZ() + $zzz);  //目标坐标
+										$pos2 = new Vector3 ($zo->getX() + $xxx, $zy, $zo->getZ() + $zzz);  //目标坐标
 									}
 									$zo->setPosition($pos2);
 
