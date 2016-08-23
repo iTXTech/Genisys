@@ -2126,6 +2126,14 @@ class Server{
 							continue;
 						}
 						
+						if (isset($clientConfig['is-main-server'])){
+							$clientConfig['isMainServer'] = $clientConfig['is-main-server'];
+						}
+						
+						if (isset($clientConfig['server-password'])){
+							$clientConfig['password'] = $clientConfig['server-password'];
+						}
+						
 						$this->synapses []= new Synapse($this, $clientConfig);
 					}
 				}
