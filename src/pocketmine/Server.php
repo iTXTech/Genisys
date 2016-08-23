@@ -2143,12 +2143,19 @@ class Server{
 			$this->exceptionHandler($e);
 		}
 	}
-
+	
 	/**
 	 * @return Synapse|null
 	 */
 	public function getSynapse(){
 		return count($this->synapses) === 0 ? null : $this->synapses[0];
+	}
+	
+	/**
+	 * @return Synapse[]
+	 */
+	public function getSynapses(){
+		return $this->synapses;
 	}
 
 	/**
