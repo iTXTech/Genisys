@@ -1736,7 +1736,7 @@ class Server{
 	}
 
 	public function isSynapseEnabled() : bool {
-		return (bool) $this->synapseConfig["enabled"];
+		return count($this->synapses) !== 0;
 	}
 
 	/**
