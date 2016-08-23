@@ -3025,7 +3025,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 				if($packet->action === InteractPacket::ACTION_RIGHT_CLICK){
 					if($target instanceof Living){
-						$target->useItemOn($this->inventory->getItemInHand());
+						$target->useItemOn($this->inventory->getItemInHand(), $this);
 					}
 					break;
 				}

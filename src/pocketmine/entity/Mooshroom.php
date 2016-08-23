@@ -26,23 +26,25 @@ use pocketmine\item\Item as ItemItem;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\Player;
 
-class Mooshroom extends Animal{
+class Mooshroom extends Cow{
 	const NETWORK_ID = self::MOOSHROOM;
-
-	public $width = 0.3;
-	public $length = 0.9;
-	public $height = 1.8;
 	
 	public function getName() : string{
 		return "Mooshroom";
 	}
 	
-	public function useItemOn(ItemItem $item): bool{
+	public function useItemOn(ItemItem $item, Player $player): bool{
 		switch($item->getId()){
 			case ItemItem::SHEARS:
 				$this->shear();
 				break;
-			default: return parent::useItemOn($item);
+			case ItemItem::BOWL:
+				if($player->isCreative()){
+					return false;
+				}
+				$player->getInventory()->setItemInHand(ItemItem::get(ItemItem::MUSHROOM_STEW, 0, 1));
+				break;
+			default: return parent::useItemOn($item, $player);
 		}
 		return true;
 	}

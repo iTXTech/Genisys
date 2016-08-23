@@ -29,14 +29,36 @@ use pocketmine\Player;
 class Cow extends Animal{
 	const NETWORK_ID = self::COW;
 
-	public $width = 0.3;
-	public $length = 0.9;
-	public $height = 1.8;
+	public $width = 1.4;
+	public $length = 1.4;
+	public $height = 1.4;
 
 	public $dropExp = [1, 3];
 	
 	public function getName() : string{
 		return "Cow";
+	}
+	
+	public function useItemOn(ItemItem $item, Player $player): bool{
+		switch($item->getId()){
+			case ItemItem::BUCKET:
+				if($player->isCreative()){
+					//Cannot milk cows in creative. This seems dumb, but it holds true in PE and PC vanilla both.
+					return false;
+				}
+				if($item->getDamage() !== 0){ //Need an empty bucket
+					return false;
+				}
+				$inv = $player->getInventory();
+				$new = $inv->getItemInHand();
+				$new->setDamage(1);
+				$inv->setItemInHand($new);
+				//Don't need to send updates to the origin player, that will be handled by the client automatically.
+				break;
+			default:
+				return parent::useItemOn($item, $player);
+		}
+		return true;
 	}
 	
 	public function getDrops(){

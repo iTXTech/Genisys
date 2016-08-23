@@ -70,7 +70,7 @@ class Sheep extends Animal implements Colorable{
 		}
 	}
 	
-	public function useItemOn(ItemItem $item): bool{
+	public function useItemOn(ItemItem $item, Player $player): bool{
 		switch($item->getId()){
 			case ItemItem::SHEARS:
 				$this->shear();
@@ -79,7 +79,7 @@ class Sheep extends Animal implements Colorable{
 				$this->setColor((~$item->getDamage()) & 0x0f); #blamemojang for making dye colours the NOT of normal 4-bit colours
 				break;
 			default: 
-				return parent::useItemOn($item);
+				return parent::useItemOn($item, $player);
 		}
 		return true;
 	}

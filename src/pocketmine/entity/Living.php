@@ -21,21 +21,20 @@
 
 namespace pocketmine\entity;
 
-
+use pocketmine\Player;
+use pocketmine\Server;
 use pocketmine\block\Block;
+use pocketmine\event\Timings;
 use pocketmine\event\entity\EntityDamageByChildEntityEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDeathEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
-use pocketmine\event\Timings;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\network\Network;
 use pocketmine\network\protocol\EntityEventPacket;
-
-use pocketmine\Server;
 use pocketmine\utils\BlockIterator;
 
 abstract class Living extends Entity implements Damageable{
@@ -141,7 +140,7 @@ abstract class Living extends Entity implements Damageable{
 	 * @return bool
 	 * Called when a player right-clicks on a mob
 	 */
-	public function useItemOn(ItemItem $item): bool{
+	public function useItemOn(ItemItem $item, Player $player): bool{
 		switch($item->getId()){
 			case ItemItem::NAMETAG:
 				$this->setNameTag($item->getCustomName());
