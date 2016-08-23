@@ -2111,7 +2111,7 @@ class Server{
 				"updateDServerInfo"
 			]), $this->dserverConfig["timer"]);
 
-			if($this->isSynapseEnabled()){
+			if($this->synapseConfig["enabled"]){
 				//$this->synapse = new Synapse($this, $this->synapseConfig);
 				if ($this->synapseConfig["clients"] === null){
 					$this->synapses []= new Synapse($this, $this->synapseConfig);
