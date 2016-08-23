@@ -386,7 +386,7 @@ class Server{
 	private $recipeList = null;
 
 	/** @var Synapse[] */
-	private $synapses = null;
+	private $synapses = [  ];
 
 	/**
 	 * @return string
