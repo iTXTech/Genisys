@@ -22,15 +22,17 @@
 namespace pocketmine\entity;
 
 use pocketmine\item\Item as ItemItem;
+use pocketmine\level\format\FullChunk;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 
 abstract class Animal extends Creature implements Ageable{
-
-	public function initEntity(){
-		parent::initEntity();
-		if(!isset($this->namedtag["Age"])){
-			$this->namedtag->Age = new IntTag("Age", self::getRandomAge());
+	
+	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+		if(!isset($nbt["Age"])){
+			$nbt->Age = new IntTag("Age", self::getRandomAge());
 		}
+		parent::__construct($chunk, $nbt);
 		$this->setDataProperty(self::DATA_AGEABLE_FLAGS, self::DATA_TYPE_BYTE, $this->isBaby());
 	}
 
@@ -51,7 +53,7 @@ abstract class Animal extends Creature implements Ageable{
 	
 	protected static function getRandomAge(): int{
 		$chance = mt_rand(0, 100);
-		if($chance < 5){
+		if($chance < 10){
 			//Since the wiki has no data for this, I'll go with 5% of mobs from eggs being babies.
 			return mt_rand(-24000, -1);
 		}
