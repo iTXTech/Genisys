@@ -1,44 +1,49 @@
 <?php
 /*
- * Based on the amazing MyOwnWorld written by Zzm !!!
+ * Based on MyOwnWorld written by Zzm
 */
 
 namespace pocketmine\entity\ai;
 
+use pocketmine\Player;
+use pocketmine\Server;
+use pocketmine\entity\Animal;
+use pocketmine\entity\Chicken;
+use pocketmine\entity\Cow;
+use pocketmine\entity\Creeper;
+use pocketmine\entity\Entity;
 use pocketmine\entity\IronGolem;
+use pocketmine\entity\Monster;
 use pocketmine\entity\Mooshroom;
 use pocketmine\entity\Ocelot;
+use pocketmine\entity\Pig;
 use pocketmine\entity\PigZombie;
+use pocketmine\entity\Sheep;
+use pocketmine\entity\Skeleton;
 use pocketmine\entity\SnowGolem;
 use pocketmine\entity\Wolf;
-use pocketmine\event\entity\EntityGenerateEvent;
-use pocketmine\level\Position;
-use pocketmine\level\Level;
-use pocketmine\item\Item;
-use pocketmine\Player;
-use pocketmine\math\Vector3;
-use pocketmine\entity\Entity;
 use pocketmine\entity\Zombie;
-use pocketmine\level\format\FullChunk;
-use pocketmine\scheduler\CallbackTask;
-use pocketmine\event\entity\EntityDeathEvent;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\ListTag;
-use pocketmine\nbt\tag\FloatTag;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityDeathEvent;
+use pocketmine\event\entity\EntityGenerateEvent;
+use pocketmine\item\Item;
+use pocketmine\level\Level;
+use pocketmine\level\Position;
+use pocketmine\level\format\FullChunk;
+use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\DoubleTag;
+use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\ListTag;
+use pocketmine\scheduler\CallbackTask;
 use pocketmine\scheduler\TaskHandler;
-use pocketmine\Server;
-
-use pocketmine\entity\Creeper;
-use pocketmine\entity\Skeleton;
-use pocketmine\entity\Cow;
-use pocketmine\entity\Pig;
-use pocketmine\entity\Sheep;
-use pocketmine\entity\Chicken;
 
 class AIHolder{
+	
+	public static $monsters = [Zombie::NETWORK_ID, Creeper::NETWORK_ID, Skeleton::NETWORK_ID];
+	public static $animals = [Chicken::NETWORK_ID, Cow::NETWORK_ID, Pig::NETWORK_ID, Sheep::NETWORK_ID];
+	
 	public $ZombieAI;
 	public $CreeperAI;
 	public $SkeletonAI;
@@ -879,39 +884,59 @@ class AIHolder{
 
 
 					if($level->getBlock($v3_1)->getID() == 0 and $level->getBlock($v3_2)->getID() == 0){  //找到地面
-						/** @var Entity[] $zoC */
-						$zoC = [];
-						/** @var Entity[] $cowc */
-						$cowc = [];
-						foreach($level->getEntities() as $zo){
-							if($zo instanceof Zombie) $zoC[] = $zo;
-							if($zo instanceof Cow) $cowc[] = $zo;
+						/** @var Entity[] $monsters */
+						$monsters = [];
+						/** @var Entity[] $animals */
+						$animals = [];
+
+						foreach($level->getEntities() as $mob){
+							if($mob instanceof Monster) $monsters[] = $mob;
+							elseif($mob instanceof Animal) $animals[] = $mob;
 						}
 
 
-						if(count($zoC) > $max){
-							for($i = 0; $i < (count($zoC) - $max); $i++) $zoC[$i]->kill();
+						if(count($monsters) > $max){
+							for($i = 0; $i < (count($monsters) - $max); $i++) $monsters[$i]->kill();
 						}elseif($random == 0 && $level->getTime() >= 13500){
 							$pos = new Position($v3->x, $v3->y, $v3->z, $level);
+							$mobId = $level->getDimension() !== Level::DIMENSION_NETHER? self::$monsters[mt_rand(0, count(self::$monsters) - 1)]: PigZombie::NETWORK_ID;
 
-							$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($pos, Zombie::NETWORK_ID, EntityGenerateEvent::CAUSE_AI_HOLDER));
+							$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($pos, $mobId, EntityGenerateEvent::CAUSE_AI_HOLDER));
 							if(!$ev->isCancelled()){
-								$this->spawnZombie($ev->getPosition());
+								$chunk = $level->getChunk($ev->getPosition()->getX() >> 4, $ev->getPosition()->getZ() >> 4);
+								$nbt = $this->getNBT();
+								$nbt["Pos"] = new ListTag("Pos", [
+									new DoubleTag("", $ev->getPosition()->getX()),
+									new DoubleTag("", $ev->getPosition()->getY()),
+									new DoubleTag("", $ev->getPosition()->getZ())
+								]);
+								$e = Entity::createEntity($mobId, $chunk, $nbt);
+								$e->spawnToAll();
 							}
-							//$this->server->getLogger()->info("生成1僵尸");
 						}
 
-						if(count($cowc) > $max){
-							for($i = 0; $i < (count($cowc) - $max); $i++) $cowc[$i]->kill();
-						}elseif($random == 1){
-							$pos = new Position($v3->x, $v3->y, $v3->z, $level);
+						if($level->getDimension() === Level::DIMENSION_NORMAL){
+							if(count($animals) > $max){
+								for($i = 0; $i < (count($animals) - $max); $i++) $animals[$i]->kill();
+							}elseif($random == 1){
+								$pos = new Position($v3->x, $v3->y, $v3->z, $level);
+								$mobId = self::$animals[mt_rand(0, count(self::$animals) - 1)];
 
-							$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($pos, Cow::NETWORK_ID, EntityGenerateEvent::CAUSE_AI_HOLDER));
-							if(!$ev->isCancelled()){
-								$this->spawnCow($ev->getPosition());
+								$this->server->getPluginManager()->callEvent($ev = new EntityGenerateEvent($pos, $mobId, EntityGenerateEvent::CAUSE_AI_HOLDER));
+								if(!$ev->isCancelled()){
+									$chunk = $level->getChunk($ev->getPosition()->getX() >> 4, $ev->getPosition()->getZ() >> 4);
+									$nbt = $this->getNBT();
+									$nbt["Pos"] = new ListTag("Pos", [
+										new DoubleTag("", $ev->getPosition()->getX()),
+										new DoubleTag("", $ev->getPosition()->getY()),
+										new DoubleTag("", $ev->getPosition()->getZ())
+									]);
+									$e = Entity::createEntity($mobId, $chunk, $nbt);
+									$e->spawnToAll();
+								}
 							}
-							//$this->server->getLogger()->info("生成1牛");
 						}
+						
 						break;
 					}
 				}
