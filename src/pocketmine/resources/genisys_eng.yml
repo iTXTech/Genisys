@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 18
+ version: 19
 
 level:
  #Set if turn on the weather system
@@ -101,15 +101,28 @@ redstone:
 synapse:
  #If you want to use Synapse API or connect to a synapse server, enable this
  enabled: false
- server-ip: 127.0.0.1
- server-port: 10305
- #If this client is the lobby or the main server
- is-main-server: true
- server-password: 32bitlongkey
- #Description of this client is the identifier of this client
- description: "A Synapse client"
  #Disable RakLib means that players can only join via Synapse
  disable-rak: false
+ #List of synapse clients
+ clients:
+  #First synapse client
+  - server-ip: 127.0.0.1
+    server-port: 10305
+    #If this client is the lobby or the main server
+    is-main-server: true
+    #Description of this client is the identifier of this client
+    description: "A Synapse client"
+    password: 32bitlongkey
+  #Second synapse client
+  - #You can disable one synapse client
+    enable: false
+    server-ip: 127.0.0.1
+    server-port: 10306
+    #If this client is the lobby or the main server
+    is-main-server: true
+    #Description of this client is the identifier of this client
+    description: "A Synapse client"
+    password: 32bitlongkey #You can use different passwords for different client
 
 dserver:
  #The count of all multi-server unified

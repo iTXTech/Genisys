@@ -385,8 +385,8 @@ class Server{
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
 
-	/** @var Synapse */
-	private $synapse = null;
+	/** @var Synapse[] */
+	private $synapses = null;
 
 	/**
 	 * @return string
@@ -1726,6 +1726,7 @@ class Server{
 			"password" => $this->getAdvancedProperty("synapse.server-password", "123456"),
 			"description" => $this->getAdvancedProperty("synapse.description", "A Synapse client"),
 			"disable-rak" => $this->getAdvancedProperty("synapse.disable-rak", false),
+		    "clients" => $this->getAdvancedProperty("synapse.clients", null)
 		];
 		$this->anvilEnabled = $this->getAdvancedProperty("enchantment.enable-anvil", true);
 		$this->enchantingTableEnabled = $this->getAdvancedProperty("enchantment.enable-enchanting-table", true);
@@ -2111,7 +2112,23 @@ class Server{
 			]), $this->dserverConfig["timer"]);
 
 			if($this->isSynapseEnabled()){
-				$this->synapse = new Synapse($this, $this->synapseConfig);
+				//$this->synapse = new Synapse($this, $this->synapseConfig);
+				if ($this->synapseConfig["clients"] === null){
+					$this->synapses []= new Synapse($this, $this->synapseConfig);
+				}else{
+					$synapseConfigWithoutClient = $this->synapseConfig;
+					unset($synapseConfigWithoutClient["clients"]);
+					
+					foreach ($this->synapseConfig["clients"] as $clientConfig){
+						$clientConfig = array_merge($synapseConfigWithoutClient, $clientConfig);
+						
+						if (!$clientConfig['enabled']){
+							continue;
+						}
+						
+						$this->synapses []= new Synapse($this, $clientConfig);
+					}
+				}
 			}
 
 			if($cfgVer > $advVer){
@@ -2128,10 +2145,10 @@ class Server{
 	}
 
 	/**
-	 * @return Synapse
+	 * @return Synapse|null
 	 */
 	public function getSynapse(){
-		return $this->synapse;
+		return count($this->synapses) === 0 ? null : $this->synapses[0];
 	}
 
 	/**
@@ -2497,8 +2514,11 @@ class Server{
 			}
 
 			if($this->isSynapseEnabled()){
-				$this->getLogger()->debug("Stopping Synapse client");
-				$this->synapse->shutdown();
+				$this->getLogger()->debug("Stopping Synapse clients");
+				
+				foreach ($this->synapses as $synapse){
+					$synapse->shutdown();
+				}
 			}
 
 			//$this->memoryManager->doObjectCleanup();
@@ -2970,7 +2990,9 @@ class Server{
 		Timings::$connectionTimer->startTiming();
 		$this->network->processInterfaces();
 		if($this->isSynapseEnabled()){
-			$this->synapse->tick();
+			foreach ($this->synapses as $synapse){
+				$synapse->tick();
+			}
 		}
 
 		if($this->rcon !== null){

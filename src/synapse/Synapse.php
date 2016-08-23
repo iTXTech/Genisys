@@ -74,7 +74,7 @@ class Synapse{
 		$this->serverIp = $config["server-ip"];
 		$this->port = $config["server-port"];
 		$this->isMainServer = $config["isMainServer"];
-		$this->password = $config["password"];
+		$this->password = $config["server-password"];
 		$this->description = $config["description"];
 		$this->logger = $server->getLogger();
 		$this->interface = new SynapseInterface($this, $this->serverIp, $this->port);
@@ -239,7 +239,7 @@ class Synapse{
 				break;
 			case Info::PLAYER_LOGIN_PACKET:
 				/** @var PlayerLoginPacket $pk */
-				$player = new Player($this->synLibInterface, mt_rand(0, PHP_INT_MAX), $pk->address, $pk->port);
+				$player = new Player($this, $this->synLibInterface, mt_rand(0, PHP_INT_MAX), $pk->address, $pk->port);
 				$player->setUniqueId($pk->uuid);
 				$this->server->addPlayer(spl_object_hash($player), $player);
 				$this->players[$pk->uuid->toBinary()] = $player;

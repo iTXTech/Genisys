@@ -2,7 +2,7 @@
 
 #Phiên bản file cài đặt
 config:
- version: 18
+ version: 19
 
 level:
  #Chỉnh nếu muốn bật/tắt thời tiết (true/false)
@@ -98,19 +98,32 @@ redstone:
  #Đánh số tỷ lệ hoạt động, mặc định: 1 giây
  pulse-frequency: 1
 
+#TODO: Translate
 synapse:
- #Nếu muốn kích hoạt API của Synapse hoặc kết nối vào server Synapse, kích hoạt chế nđộ này
+ #If you want to use Synapse API or connect to a synapse server, enable this
  enabled: false
- server-ip: 127.0.0.1
- server-port: 10305
- #Nếu Client này là server chính hoặc sv lobby
- is-main-server: true
- #Mật khẩu Synapse (có thể tham khảo ở server.properties tại Synapse)
- server-password: 16bitlongkey
- #Mô tả về hệ thống Synapse của bạn
- description: "A Synapse client"
- #Hủy RakLib tức là chỉ có thể vào Synapse mà không vào server này (mặc định là false)
+ #Disable RakLib means that players can only join via Synapse
  disable-rak: false
+ #List of synapse clients
+ clients:
+  #First synapse client
+  - server-ip: 127.0.0.1
+    server-port: 10305
+    #If this client is the lobby or the main server
+    is-main-server: true
+    #Description of this client is the identifier of this client
+    description: "A Synapse client"
+    password: 32bitlongkey
+  #Second synapse client
+  - #You can disable one synapse client
+    enable: false
+    server-ip: 127.0.0.1
+    server-port: 10306
+    #If this client is the lobby or the main server
+    is-main-server: true
+    #Description of this client is the identifier of this client
+    description: "A Synapse client"
+    password: 32bitlongkey #You can use different passwords for different client
 
 dserver:
  #Tất cả các server gộp vào. Bật/tắt để hoạt động (true/false)
