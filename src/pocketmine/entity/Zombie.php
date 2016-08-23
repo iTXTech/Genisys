@@ -26,11 +26,19 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\item\enchantment\Enchantment;
+use pocketmine\level\format\FullChunk;
 use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\ByteTag;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 
 class Zombie extends Monster{
 	const NETWORK_ID = self::ZOMBIE;
+	
+	const DATA_ZOMBIE_SIZE = 12;
+	
+	const DATA_FLAG_ADULT = 0;
+	const DATA_FLAG_BABY = 1;
 
 	public $width = 0.6;
 	public $length = 0.6;
@@ -51,9 +59,21 @@ class Zombie extends Monster{
 	private $attack_r = 1.5; //攻击半径
 	private $fire_r = 1.3; //点燃半径
 	private $hateTicker = 0; //仇恨计时器
+	
+	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+		if(!isset($nbt["IsBaby"])){
+			$nbt->IsBaby = new ByteTag("IsBaby", mt_rand(0, 100) < 5);
+		}
+		parent::__construct($chunk, $nbt);
+		$this->setDataFlag(self::DATA_ZOMBIE_SIZE, self::DATA_TYPE_BYTE, $this->isBaby());
+	}
+	
+	public function isBaby(): bool{
+		return (bool) $this->namedtag["IsBaby"];
+	}
 
 	public function getName() : string{
-		return "Zombie";
+		return ($this->isBaby() ? "Baby ": "") . "Zombie";
 	}
 	
 	public function initEntity(){
