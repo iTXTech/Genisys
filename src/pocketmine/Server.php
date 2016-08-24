@@ -385,8 +385,8 @@ class Server{
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
 
-	/** @var Synapse */
-	private $synapse = null;
+	/** @var Synapse[] */
+	private $synapses = [  ];
 
 	/**
 	 * @return string
@@ -1726,6 +1726,7 @@ class Server{
 			"password" => $this->getAdvancedProperty("synapse.server-password", "123456"),
 			"description" => $this->getAdvancedProperty("synapse.description", "A Synapse client"),
 			"disable-rak" => $this->getAdvancedProperty("synapse.disable-rak", false),
+		    "clients" => $this->getAdvancedProperty("synapse.clients", null)
 		];
 		$this->anvilEnabled = $this->getAdvancedProperty("enchantment.enable-anvil", true);
 		$this->enchantingTableEnabled = $this->getAdvancedProperty("enchantment.enable-enchanting-table", true);
@@ -1735,7 +1736,7 @@ class Server{
 	}
 
 	public function isSynapseEnabled() : bool {
-		return (bool) $this->synapseConfig["enabled"];
+		return count($this->synapses) !== 0;
 	}
 
 	/**
@@ -2110,8 +2111,32 @@ class Server{
 				"updateDServerInfo"
 			]), $this->dserverConfig["timer"]);
 
-			if($this->isSynapseEnabled()){
-				$this->synapse = new Synapse($this, $this->synapseConfig);
+			if($this->synapseConfig["enabled"]){
+				//$this->synapse = new Synapse($this, $this->synapseConfig);
+				if ($this->synapseConfig["clients"] === null){
+					$this->synapses []= new Synapse($this, $this->synapseConfig);
+				}else{
+					$synapseConfigWithoutClient = $this->synapseConfig;
+					unset($synapseConfigWithoutClient["clients"]);
+					
+					foreach ($this->synapseConfig["clients"] as $clientConfig){
+						$clientConfig = array_merge($synapseConfigWithoutClient, $clientConfig);
+						
+						if (!$clientConfig['enabled']){
+							continue;
+						}
+						
+						if (isset($clientConfig['is-main-server'])){
+							$clientConfig['isMainServer'] = $clientConfig['is-main-server'];
+						}
+						
+						if (isset($clientConfig['server-password'])){
+							$clientConfig['password'] = $clientConfig['server-password'];
+						}
+						
+						$this->synapses []= new Synapse($this, $clientConfig);
+					}
+				}
 			}
 
 			if($cfgVer > $advVer){
@@ -2126,12 +2151,19 @@ class Server{
 			$this->exceptionHandler($e);
 		}
 	}
-
+	
 	/**
-	 * @return Synapse
+	 * @return Synapse|null
 	 */
 	public function getSynapse(){
-		return $this->synapse;
+		return count($this->synapses) === 0 ? null : $this->synapses[0];
+	}
+	
+	/**
+	 * @return Synapse[]
+	 */
+	public function getSynapses(){
+		return $this->synapses;
 	}
 
 	/**
@@ -2497,8 +2529,11 @@ class Server{
 			}
 
 			if($this->isSynapseEnabled()){
-				$this->getLogger()->debug("Stopping Synapse client");
-				$this->synapse->shutdown();
+				$this->getLogger()->debug("Stopping Synapse clients");
+				
+				foreach ($this->synapses as $synapse){
+					$synapse->shutdown();
+				}
 			}
 
 			//$this->memoryManager->doObjectCleanup();
@@ -2970,7 +3005,9 @@ class Server{
 		Timings::$connectionTimer->startTiming();
 		$this->network->processInterfaces();
 		if($this->isSynapseEnabled()){
-			$this->synapse->tick();
+			foreach ($this->synapses as $synapse){
+				$synapse->tick();
+			}
 		}
 
 		if($this->rcon !== null){

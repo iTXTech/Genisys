@@ -45,6 +45,7 @@ use pocketmine\network\protocol\SetHealthPacket;
 use pocketmine\network\protocol\SetPlayerGameTypePacket;
 use pocketmine\network\protocol\SetSpawnPositionPacket;
 use pocketmine\network\protocol\SetTimePacket;
+use pocketmine\network\SourceInterface;
 use pocketmine\Player as PMPlayer;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
@@ -55,13 +56,19 @@ use synapse\network\protocol\spp\TransferPacket;
 use synapse\network\protocol\spp\FastPlayerListPacket;
 
 class Player extends PMPlayer{
+	private $synapse;
 	private $isFirstTimeLogin = false;
 	private $lastPacketTime;
-
+	
+	public function __construct(Synapse $synapse, SourceInterface $interface, $clientID, $ip, $port){
+		$this->synapse = $synapse;
+		parent::__construct($interface, $clientID, $ip, $port);
+	}
+	
 	public function handleLoginPacket(PlayerLoginPacket $packet){
 		$this->isFirstTimeLogin = $packet->isFirstTime;
 		$this->server->getPluginManager()->callEvent($ev = new PlayerConnectEvent($this, $this->isFirstTimeLogin));
-		$pk = Synapse::getInstance()->getPacket($packet->cachedLoginPacket);
+		$pk = $this->synapse->getPacket($packet->cachedLoginPacket);
 		$pk->decode();
 		$this->handleDataPacket($pk);
 	}
@@ -235,7 +242,7 @@ class Player extends PMPlayer{
 	}
 
 	public function transfer(string $hash){
-		$clients = Synapse::getInstance()->getClientData();
+		$clients = $this->synapse->getClientData();
 		if(isset($clients[$hash])){
 			foreach($this->getLevel()->getEntities() as $entity){
 				if(isset($entity->hasSpawned[$this->getLoaderId()])){
@@ -245,13 +252,13 @@ class Player extends PMPlayer{
 			$pk = new TransferPacket();
 			$pk->uuid = $this->uuid;
 			$pk->clientHash = $hash;
-			Synapse::getInstance()->sendDataPacket($pk);
+			$this->synapse->sendDataPacket($pk);
 
 			/*$ip = $clients[$hash]["ip"];
 			$port = $clients[$hash]["port"];
 
 			$this->close("", "Transferred to $ip:$port");
-			Synapse::getInstance()->removePlayer($this);*/
+			$this->synapse->removePlayer($this);*/
 		}
 	}
 
@@ -284,7 +291,7 @@ class Player extends PMPlayer{
 				}
 				$pk->entries[] = $entry;
 			}
-			Synapse::getInstance()->sendDataPacket($pk);
+			$this->synapse->sendDataPacket($pk);
 			return;
 		}
 		$this->interface->putPacket($this, $packet, $needACK);
@@ -302,9 +309,16 @@ class Player extends PMPlayer{
 				}
 				$pk->entries[] = $entry;
 			}
-			Synapse::getInstance()->sendDataPacket($pk);
+			$this->synapse->sendDataPacket($pk);
 			return;
 		}
 		$this->interface->putPacket($this, $packet, $needACK, true);
+	}
+	
+	/**
+	 * @return Synapse
+	 */
+	public function getSynapse() : Synapse{
+		return $this->synapse;
 	}
 }

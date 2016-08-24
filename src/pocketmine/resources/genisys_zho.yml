@@ -2,7 +2,7 @@
 
 #設定檔案版本
 config:
- version: 18
+ version: 19
 
 level:
  #設定是否變換天氣
@@ -98,18 +98,32 @@ redstone:
  #設定脈衝頻率, 預設: 1s
  pulse-frequency: 1
 
+#TODO: Translate
 synapse:
- #如果你想使用 Synapse API 或連接到一個synapse伺服器,請將enabled置為true
+ #If you want to use Synapse API or connect to a synapse server, enable this
  enabled: false
- server-ip: 127.0.0.1
- server-port: 10305
- #設置該伺服器是否為接待大廳伺服器或主要伺服器
- is-main-server: true
- server-password: 16bitlongkey
- #設置該伺服器唯一的識別字
- description: "A Synapse client"
- #啟用Disable RakLib設置玩家僅能通過接待大廳伺服器或主要伺服器加入遊戲
+ #Disable RakLib means that players can only join via Synapse
  disable-rak: false
+ #List of synapse clients
+ clients:
+  #First synapse client
+  - server-ip: 127.0.0.1
+    server-port: 10305
+    #If this client is the lobby or the main server
+    is-main-server: true
+    #Description of this client is the identifier of this client
+    description: "A Synapse client"
+    password: 32bitlongkey
+  #Second synapse client
+  - #You can disable one synapse client
+    enable: false
+    server-ip: 127.0.0.1
+    server-port: 10306
+    #If this client is the lobby or the main server
+    is-main-server: true
+    #Description of this client is the identifier of this client
+    description: "A Synapse client"
+    password: 32bitlongkey #You can use different passwords for different client
 
 dserver:
  #多服統一人數
