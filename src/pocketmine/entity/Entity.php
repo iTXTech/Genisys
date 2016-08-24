@@ -414,11 +414,11 @@ abstract class Entity extends Location implements Metadatable{
 	 * @param bool $value
 	 */
 	public function setNameTagVisible($value = true){
-		$this->setDataProperty(self::DATA_SHOW_NAMETAG, self::DATA_TYPE_BYTE, $value ? 1 : 0);
+		$this->setDataProperty(self::DATA_SHOW_NAMETAG, self::DATA_TYPE_BYTE, (bool) $value);
 	}
 
 	public function isSneaking(){
-		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_SNEAKING);
+		return (bool) $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_SNEAKING);
 	}
 
 	public function setSneaking($value = true){
@@ -426,7 +426,7 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	public function isSprinting(){
-		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_SPRINTING);
+		return (bool) $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_SPRINTING);
 	}
 
 	public function setSprinting($value = true){
@@ -527,7 +527,7 @@ abstract class Entity extends Location implements Metadatable{
 			$b = ($color[2] / $count) & 0xff;
 
 			$this->setDataProperty(Entity::DATA_POTION_COLOR, Entity::DATA_TYPE_INT, ($r << 16) + ($g << 8) + $b);
-			$this->setDataProperty(Entity::DATA_POTION_AMBIENT, Entity::DATA_TYPE_BYTE, $ambient ? 1 : 0);
+			$this->setDataProperty(Entity::DATA_POTION_AMBIENT, Entity::DATA_TYPE_BYTE, (bool) $ambient);
 		}else{
 			$this->setDataProperty(Entity::DATA_POTION_COLOR, Entity::DATA_TYPE_INT, 0);
 			$this->setDataProperty(Entity::DATA_POTION_AMBIENT, Entity::DATA_TYPE_BYTE, 0);
@@ -609,8 +609,8 @@ abstract class Entity extends Location implements Metadatable{
 		$this->namedtag->FallDistance = new FloatTag("FallDistance", $this->fallDistance);
 		$this->namedtag->Fire = new ShortTag("Fire", $this->fireTicks);
 		$this->namedtag->Air = new ShortTag("Air", $this->getDataProperty(self::DATA_AIR));
-		$this->namedtag->OnGround = new ByteTag("OnGround", $this->onGround == true ? 1 : 0);
-		$this->namedtag->Invulnerable = new ByteTag("Invulnerable", $this->invulnerable == true ? 1 : 0);
+		$this->namedtag->OnGround = new ByteTag("OnGround", $this->onGround);
+		$this->namedtag->Invulnerable = new ByteTag("Invulnerable", $this->invulnerable);
 
 		if(count($this->effects) > 0){
 			$effects = [];
@@ -620,7 +620,7 @@ abstract class Entity extends Location implements Metadatable{
 					"Amplifier" => new ByteTag("Amplifier", $effect->getAmplifier()),
 					"Duration" => new IntTag("Duration", $effect->getDuration()),
 					"Ambient" => new ByteTag("Ambient", 0),
-					"ShowParticles" => new ByteTag("ShowParticles", $effect->isVisible() ? 1 : 0)
+					"ShowParticles" => new ByteTag("ShowParticles", $effect->isVisible())
 				]);
 			}
 
@@ -770,7 +770,7 @@ abstract class Entity extends Location implements Metadatable{
 			$damage = round($source->getFinalDamage());
 			if($this->getAbsorption() > 0){
 				$absorption = $this->getAbsorption() - $damage;
-				$this->setAbsorption($absorption <= 0 ? 0 : $absorption);
+				$this->setAbsorption(max(0, $absorption));
 				$this->setHealth($this->getHealth() + $absorption);
 			}else{
 				$this->setHealth($this->getHealth() - $damage);
