@@ -190,6 +190,8 @@ class Minecart extends Vehicle{
 	private function getDirectionToMove($railType, $candidateDirection) {
 		switch($railType){
 			case Rail::STRAIGHT_NORTH_SOUTH:
+			case Rail::SLOPED_ASCENDING_NORTH:
+			case Rail::SLOPED_ASCENDING_SOUTH:
 				switch($candidateDirection){
 					case Entity::NORTH:
 					case Entity::SOUTH:
@@ -197,37 +199,11 @@ class Minecart extends Vehicle{
 				}
 				break;
 			case Rail::STRAIGHT_EAST_WEST:
-				switch($candidateDirection){
-					case Entity::WEST:
-					case Entity::EAST:
-						return $candidateDirection;
-				}
-				break;
 			case Rail::SLOPED_ASCENDING_EAST:
-				switch($candidateDirection){
-					case Entity::WEST:
-					case Entity::EAST:
-						return $candidateDirection;
-				}
-				break;
 			case Rail::SLOPED_ASCENDING_WEST:
 				switch($candidateDirection){
 					case Entity::WEST:
 					case Entity::EAST:
-						return $candidateDirection;
-				}
-				break;
-			case Rail::SLOPED_ASCENDING_NORTH:
-				switch($candidateDirection){
-					case Entity::NORTH:
-					case Entity::SOUTH:
-						return $candidateDirection;
-				}
-				break;
-			case Rail::SLOPED_ASCENDING_SOUTH:
-				switch($candidateDirection){
-					case Entity::NORTH:
-					case Entity::SOUTH:
 						return $candidateDirection;
 				}
 				break;
