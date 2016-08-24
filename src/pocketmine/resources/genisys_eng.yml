@@ -63,9 +63,6 @@ server:
  recipes-from-json: false
  #Choose if read creative item from json
  creative-items-from-json: false
- #Choose if minecart is free moving, follow rails or disable
- #-1=disable, 0=free moving, 1=follow rails
- minecart-moving-type: 0
  #Choose if enable movement check (no more pull back)
  check-movement: true
  #Set if enable limited creative (cannot drop item, cannot interact Chests and so on)

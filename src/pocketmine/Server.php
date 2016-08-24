@@ -368,7 +368,6 @@ class Server{
 	public $asyncChunkRequest = true;
 	public $recipesFromJson = false;
 	public $creativeItemsFromJson = false;
-	public $minecartMovingType = 0;
 	public $checkMovement = false;
 	public $keepExperience = false;
 	public $limitedCreative = true;
@@ -1710,7 +1709,6 @@ class Server{
 		$this->asyncChunkRequest = $this->getAdvancedProperty("server.async-chunk-request", true);
 		$this->recipesFromJson = $this->getAdvancedProperty("server.recipes-from-json", false);
 		$this->creativeItemsFromJson = $this->getAdvancedProperty("server.creative-items-from-json", false);
-		$this->minecartMovingType = $this->getAdvancedProperty("server.minecart-moving-type", 0);
 		$this->checkMovement = $this->getAdvancedProperty("server.check-movement", true);
 		$this->limitedCreative = $this->getAdvancedProperty("server.limited-creative", true);
 		$this->chunkRadius = $this->getAdvancedProperty("player.chunk-radius", -1);

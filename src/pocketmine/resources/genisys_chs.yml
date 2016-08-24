@@ -62,9 +62,6 @@ server:
  recipes-from-json: false
  #是否从creativeitems.json读取创造物品
  creative-items-from-json: false
- #设置矿车行为方式
- #-1=禁用矿车移动, 0=自由移动, 1=沿铁轨行驶
- minecart-moving-type: 0
  #是否进行移动检测(不再拉回了)
  check-movement: true
  #是否限制创造某些功能(禁止丢物品, 禁止操作箱子等等)

@@ -63,9 +63,6 @@ server:
  recipes-from-json: false
  #Bật/tắt nếu muốn sử dụng đồ cre qua file json (mặc định: false) (true/false)
  creative-items-from-json: false
- #Chọn nếu muốn sử dụng xe ray tự do, theo đường ray hoặc hủy bỏ (mặc định: 1)
- #-1=disable, 0=free moving, 1=follow rails
- minecart-moving-type: 0
  #Bật/tắt nếu muốn kiểm tra tốc độ (không còn đẩy lùi mỗi khi đi) (true/false)
  check-movement: true
  #Bật/tắt nếu kích hoạt chế độ sáng tạo giới hạn (Không thể rớt đồ, mở rương và hơn thế nữa) (mặc định: false) (true/false)

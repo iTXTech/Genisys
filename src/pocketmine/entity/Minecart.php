@@ -93,49 +93,13 @@ class Minecart extends Vehicle{
 		//parent::onUpdate($currentTick);
 
 		if($this->isAlive()){
-			$movingType = $this->getLevel()->getServer()->minecartMovingType;
-			if($movingType == -1) return false;
-			elseif($movingType == 0){
-				$p = $this->getLinkedEntity();
-				if($p instanceof Player){
-					$this->motionX = -sin($p->getYaw() / 180 * M_PI);
-					$this->motionZ = cos($p->getYaw() / 180 * M_PI);
-				}
-				$target = $this->getLevel()->getBlock($this->add($this->motionX, 0, $this->motionZ)->round());
-				$target2 = $this->getLevel()->getBlock($this->add($this->motionX, 0, $this->motionZ)->floor());
-				if($target->getId() !== ItemItem::AIR or $target2->getId() !== ItemItem::AIR) $this->motionY = $this->gravity * 3;
-				else $this->motionY -= $this->gravity;
-
-				if($this->checkObstruction($this->x, $this->y, $this->z)){
-					$hasUpdate = true;
-				}
-
-				$this->move($this->motionX, $this->motionY, $this->motionZ);
-				$this->updateMovement();
-
-				$friction = 1 - $this->drag;
-
-				if($this->onGround and (abs($this->motionX) > 0.00001 or abs($this->motionZ) > 0.00001)){
-					$friction = $this->getLevel()->getBlock($this->temporalVector->setComponents((int) floor($this->x), (int) floor($this->y - 1), (int) floor($this->z) - 1))->getFrictionFactor() * $friction;
-				}
-
-				$this->motionX *= $friction;
-				$this->motionY *= 1 - $this->drag;
-				$this->motionZ *= $friction;
-
-				if($this->onGround){
-					$this->motionY *= -0.5;
-				}
-			}elseif($movingType == 1){
-				$p = $this->getLinkedEntity();
-				if($p instanceof Player){
-					if ($this->state == Minecart::STATE_INITIAL) {
-						$this->checkIfOnRail();
-					}
-					if ($this->state == Minecart::STATE_ON_RAIL) {
-						$hasUpdate = $this->forwardOnRail($p);
-						$this->updateMovement();
-					}
+			$p = $this->getLinkedEntity();
+			if($p instanceof Player){
+				if($this->state === Minecart::STATE_INITIAL){
+					$this->checkIfOnRail();
+				}elseif($this->state === Minecart::STATE_ON_RAIL){
+					$hasUpdate = $this->forwardOnRail($p);
+					$this->updateMovement();
 				}
 			}
 		}
@@ -164,10 +128,7 @@ class Minecart extends Vehicle{
 	}
 
 	private function isRail($rail) {
-		if ($rail !== null and in_array($rail->getId(), [Block::RAIL, Block::ACTIVATOR_RAIL, Block::DETECTOR_RAIL, Block::POWERED_RAIL])) {
-			return true;
-		}
-		return false;
+		return ($rail !== null and in_array($rail->getId(), [Block::RAIL, Block::ACTIVATOR_RAIL, Block::DETECTOR_RAIL, Block::POWERED_RAIL]));
 	}
 
 	private function getCurrentRail() {
