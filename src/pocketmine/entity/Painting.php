@@ -19,7 +19,7 @@ class Painting extends Hanging{
 
 	private $motive;
 
-	public function initEntity(){
+	protected function initEntity(){
 		$this->setMaxHealth(1);
 		parent::initEntity();
 

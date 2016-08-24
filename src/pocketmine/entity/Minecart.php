@@ -46,7 +46,7 @@ class Minecart extends Vehicle{
 	public $isMoving = false;
 	public $moveSpeed = 0.4;
 
-	public function initEntity(){
+	protected function initEntity(){
 		$this->setMaxHealth(1);
 		$this->setHealth($this->getMaxHealth());
 		parent::initEntity();

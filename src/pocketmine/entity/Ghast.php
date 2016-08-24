@@ -32,7 +32,7 @@ class Ghast extends FlyingAnimal{
 		return "Ghast";
 	}
 
-	public function initEntity(){
+	protected function initEntity(){
 		$this->setMaxHealth(10);
 		parent::initEntity();
 	}

@@ -39,7 +39,7 @@ class Lightning extends Animal{
 		return "Lightning";
 	}
 
-	public function initEntity(){
+	protected function initEntity(){
 		parent::initEntity();
 		$this->setMaxHealth(2);
 		$this->setHealth(2);

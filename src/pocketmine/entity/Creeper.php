@@ -39,7 +39,7 @@ class Creeper extends Monster{
 		return "Creeper";
 	}
 
-	public function initEntity(){
+	protected function initEntity(){
 		parent::initEntity();
 
 		if(!isset($this->namedtag->powered)){

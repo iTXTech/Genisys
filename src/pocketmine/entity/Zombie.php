@@ -76,7 +76,7 @@ class Zombie extends Monster{
 		return ($this->isBaby() ? "Baby ": "") . "Zombie";
 	}
 	
-	public function initEntity(){
+	protected function initEntity(){
 		$this->setMaxHealth(20);
 		parent::initEntity();
 	}

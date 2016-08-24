@@ -50,7 +50,7 @@ class Rabbit extends Animal{
 
 	public $dropExp = [1, 3];
 
-	public function initEntity(){
+	protected function initEntity(){
 		$this->setMaxHealth(3);
 		parent::initEntity();
 	}

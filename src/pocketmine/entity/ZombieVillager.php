@@ -28,7 +28,7 @@ class ZombieVillager extends Zombie{
 	public $length = 0.891;
 	public $height = 2.125;
 
-	public function initEntity(){
+	protected function initEntity(){
 		$this->setMaxHealth(20);
 		parent::initEntity();
 	}

@@ -29,7 +29,7 @@ class FishingHook extends Projectile{
 	public $caughtTimer = 0;
 	public $damageRod = false;
 
-	public function initEntity(){
+	protected function initEntity(){
 		parent::initEntity();
 
 		if(isset($this->namedtag->Data)){

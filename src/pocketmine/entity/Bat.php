@@ -44,7 +44,7 @@ class Bat extends FlyingAnimal{
 		return "Bat";
 	}
 
-	public function initEntity(){
+	protected function initEntity(){
 		$this->setMaxHealth(6);
 		parent::initEntity();
 	}

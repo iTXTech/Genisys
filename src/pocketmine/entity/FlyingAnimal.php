@@ -103,7 +103,7 @@ abstract class FlyingAnimal extends Creature implements Ageable{
         return new Vector3(mt_rand(-1000, 1000) / 1000, mt_rand(-500, 500) / 1000, mt_rand(-1000, 1000) / 1000);
     }
 
-	public function initEntity(){
+	protected function initEntity(){
 		parent::initEntity();
 		if($this->getDataProperty(self::DATA_AGEABLE_FLAGS) === null){
 			$this->setDataProperty(self::DATA_AGEABLE_FLAGS, self::DATA_TYPE_BYTE, 0);

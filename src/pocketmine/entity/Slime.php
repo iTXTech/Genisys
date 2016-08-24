@@ -53,7 +53,7 @@ class Slime extends Monster{
 		parent::__construct($chunk, $nbt);
 	}
 	
-	public function initEntity(){
+	protected function initEntity(){
 		if(!isset($this->namedtag["Size"])){
 			$this->namedtag->Size = new IntTag("Size", self::getRandomSize());
 		}
