@@ -4,6 +4,7 @@
 - Any issues requesting updates to new versions of MCPE will be treated as spam. We do not need spamming with issues to know that there is a new version available.
 - SEARCH EXISTING ISSUES before you open a new one. This INCLUDES searching OUR issue tracker AND Mojang's issue tracker at https://bugs.mojang.com/browse/MCPE. Duplicate issues will be treated as spam and dealt with accordingly.
 - Issues not following this template will also be closed as spam. If you do not supply the information we ask for then your issue cannot be resolved.
+- We DO NOT provide support for issues relating to 3rd-party mods or modded clients in any way, shape or form. Genisys is designed for vanilla MCPE/Win10 ONLY. Issues submitted relating to modded clients will be treated as spam and dealt with accordingly.
 - Repeated spamming will result in a ban. You have been warned!
 -->
 
