@@ -37,6 +37,8 @@ class Leaves extends Transparent{
 	const JUNGLE = 3;
 	const ACACIA = 0;
 	const DARK_OAK = 1;
+	
+	const WOOD_TYPE = self::WOOD;
 
 	protected $id = self::LEAVES;
 
@@ -76,12 +78,12 @@ class Leaves extends Transparent{
 		if(isset($visited[$index])){
 			return false;
 		}
-		if($pos->getId() === self::WOOD){
+		if($pos->getId() === static::WOOD_TYPE){
 			return true;
-		}elseif($pos->getId() === self::LEAVES and $distance < 3){
+		}elseif($pos->getId() === $this->id and $distance < 3){
 			$visited[$index] = true;
 			$down = $pos->getSide(0)->getId();
-			if($down === Item::WOOD){
+			if($down === static::WOOD_TYPE){
 				return true;
 			}
 			if($fromSide === null){
@@ -170,10 +172,10 @@ class Leaves extends Transparent{
 	public function getDrops(Item $item) : array {
 		$drops = [];
 		if($item->isShears() or $item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
-			$drops[] = [Item::LEAVES, $this->meta & 0x03, 1];
+			$drops[] = [$this->id, $this->meta & 0x03, 1];
 		}else{
 			$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
-			$fortunel = $fortunel > 3 ? 3 : $fortunel;
+			$fortunel = min(3, $fortunel);
 			$rates = [20,16,12,10];
 			if(mt_rand(1, $rates[$fortunel]) === 1){ //Saplings
 				$drops[] = [Item::SAPLING, $this->meta & 0x03, 1];
