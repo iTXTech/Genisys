@@ -36,6 +36,8 @@ class XPOrb extends Entity{
 	protected $drag = 0;
 	
 	protected $experience = 0;
+	
+	protected $range = 6;
 
 	public function initEntity(){
 		parent::initEntity();
@@ -66,21 +68,21 @@ class XPOrb extends Entity{
 		}
 		
 		$minDistance = PHP_INT_MAX;
-		$expectedPos = null;
-		foreach($this->getLevel()->getEntities() as $e){
-			if($e instanceof Player and !$e->isSpectator()){
-				if($e->distance($this) <= $minDistance) {
-					$expectedPos = $e;
-					$minDistance = $e->distance($this);
+		$target = null;
+		foreach($this->getViewers() as $p){
+			if(!$p->isSpectator()){
+				if(($dist = $p->distance($this)) < $minDistance and $dist < $this->range){
+					$target = $p;
+					$minDistance = $dist;
 				}
 			} 
 		}
-
-		if($minDistance < PHP_INT_MAX){
+		
+		if($target !== null){
 			$moveSpeed = 0.7;
-			$motX = ($expectedPos->getX() - $this->x) / 8;
-			$motY = ($expectedPos->getY() + $expectedPos->getEyeHeight() - $this->y) / 8;
-			$motZ = ($expectedPos->getZ() - $this->z) / 8;
+			$motX = ($target->getX() - $this->x) / 8;
+			$motY = ($target->getY() + $target->getEyeHeight() - $this->y) / 8;
+			$motZ = ($target->getZ() - $this->z) / 8;
 			$motSqrt = sqrt($motX * $motX + $motY * $motY + $motZ * $motZ);
 			$motC = 1 - $motSqrt;
 		
@@ -98,17 +100,18 @@ class XPOrb extends Entity{
 			}
 
 			if($this->isInsideOfSolid()){
-				$this->setPosition($expectedPos);
+				$this->setPosition($target);
 			}
 
 			if($minDistance <= 1.3){
-				if($this->getLevel()->getServer()->expEnabled){
-					if($this->getExperience() > 0){
+				if($this->getLevel()->getServer()->expEnabled and $target->canPickupExp()){
+					$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new PlayerPickupExpOrbEvent($target, $this->getExperience()));
+					if(!$ev->isCancelled()){
 						$this->kill();
 						$this->close();
-
-						$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new PlayerPickupExpOrbEvent($expectedPos, $this->getExperience()));
-						if(!$ev->isCancelled()) $expectedPos->addExperience($this->getExperience());
+						if($this->getExperience() > 0){
+							$target->addExperience($this->getExperience());
+						}
 					}
 				}
 			}
