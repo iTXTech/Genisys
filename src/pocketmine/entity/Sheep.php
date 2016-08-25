@@ -55,7 +55,7 @@ class Sheep extends Animal implements Colorable{
 		$rand .= str_repeat(Wool::RED . " ", 5);
 		$rand .= str_repeat(Wool::BLACK . " ", 10);
 		$arr = explode(" ", $rand);
-		return $arr[mt_rand(0, count($arr) - 1)];
+		return intval($arr[mt_rand(0, count($arr) - 1)]);
 	}
 
 	public function getColor() : int{
