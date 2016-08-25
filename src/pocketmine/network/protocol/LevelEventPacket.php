@@ -61,7 +61,7 @@ class LevelEventPacket extends DataPacket{
 	
 	//1050 sounds a lot like skeleton walking but different. TODO: find out exactly what it is.
 	const EVENT_SOUND_EXP_PICKUP = 1051;
-	const EVENT_SOUND_BLOCK_PLACE = 1052; //TODO: confirm this
+	const EVENT_SOUND_BLOCK_PLACE = 1052;
 
 	const EVENT_SOUND_BUTTON_CLICK = 3500;
 
