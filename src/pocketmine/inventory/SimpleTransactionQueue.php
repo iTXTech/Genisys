@@ -34,6 +34,9 @@ class SimpleTransactionQueue implements TransactionQueue{
 	protected $transactionQueue;
 	/** @var \SplQueue */
 	protected $transactionsToRetry;
+	
+	/** @var Inventory[] */
+	protected $inventories;
 
 	/** @var float */
 	protected $lastUpdate = -1;
@@ -57,31 +60,25 @@ class SimpleTransactionQueue implements TransactionQueue{
 		return $this->player;
 	}
 
-	public function getTransactionCount(){
-		return $this->transactionCount;
+	public function getInventories(){
+		return $this->inventories;
 	}
 
-	/**
-	 * @return \SplQueue
-	 */
 	public function getTransactions(){
 		return $this->transactionQueue;
 	}
 
-	/**
-	 * @param Transaction $transaction
-	 *
-	 * Adds a transaction to the queue
-	 */
+	public function getTransactionCount(){
+		return $this->transactionCount;
+	}
+
 	public function addTransaction(Transaction $transaction){
 		$this->transactionQueue->enqueue($transaction);
+		$this->inventories[spl_object_hash($transaction)] = $transaction->getInventory();
 		$this->lastUpdate = microtime(true);
 		$this->transactionCount += 1;
 	}
 
-	/**
-	 * Handles transaction queue execution
-	 */
 	public function execute(){
 		/** @var Transaction[] */
 		$failed = [];
@@ -101,7 +98,9 @@ class SimpleTransactionQueue implements TransactionQueue{
 			$transaction = $this->transactionQueue->dequeue();
 
 			if($ev->isCancelled()){
+				$this->transactionCount -= 1;
 				$transaction->sendSlotUpdate($this->player); //Send update back to client for cancelled transaction
+				unset($this->inventories[spl_object_hash($transaction)]);
 				continue;
 			}elseif(!$transaction->execute($this->player)){
 				$transaction->addFailure();
@@ -119,10 +118,12 @@ class SimpleTransactionQueue implements TransactionQueue{
 			$this->transactionCount -= 1;
 			$transaction->setSuccess();
 			$transaction->sendSlotUpdate($this->player);
+			unset($this->inventories[spl_object_hash($transaction)]);
 		}
 
 		foreach($failed as $f){
 			$f->sendSlotUpdate($this->player);
+			unset($this->inventories[spl_object_hash($f)]);
 		}
 	}
 }
