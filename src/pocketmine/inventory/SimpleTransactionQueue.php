@@ -74,7 +74,10 @@ class SimpleTransactionQueue implements TransactionQueue{
 
 	public function addTransaction(Transaction $transaction){
 		$this->transactionQueue->enqueue($transaction);
-		$this->inventories[spl_object_hash($transaction)] = $transaction->getInventory();
+		if($transaction->getInventory() instanceof Inventory){
+			/** For dropping items, the target inventory is open air, a.k.a. null. */
+			$this->inventories[spl_object_hash($transaction)] = $transaction->getInventory();
+		}
 		$this->lastUpdate = microtime(true);
 		$this->transactionCount += 1;
 	}
