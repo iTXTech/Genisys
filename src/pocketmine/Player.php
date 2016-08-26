@@ -351,7 +351,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public function setExperienceAndLevel(int $exp, int $level){
 		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, $level));
 		if(!$ev->isCancelled()){
-			$this->level->addSound(new ExpPickupSound($this, mt_rand(0, 1000)));
 			$this->expLevel = $level;
 			$this->exp = $exp;
 			$this->expCooldown = microtime(true);
