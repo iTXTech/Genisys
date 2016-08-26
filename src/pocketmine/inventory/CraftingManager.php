@@ -732,6 +732,23 @@ class CraftingManager{
 				" G ",
 				"GGG"
 			))->setIngredient("I", Item::get(Item::IRON_BLOCK, 0, 1))->setIngredient("G", Item::get(Item::IRON_INGOT, null, 1)));
+			
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::DISPENSER, 0 ,1),
+				"CCC",
+				"CBC",
+				"CRC"
+			))->setIngredient("C", Item::get(Item::COBBLESTONE, 0, 1))->setIngredient("B", Item::get(Item::BOW, null, 1))->setIngredient("R", Item::get(Item::REDSTONE, null, 1)));
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::DROPPER, 0 ,1),
+				"CCC",
+				"C C",
+				"CRC"
+			))->setIngredient("C", Item::get(Item::COBBLESTONE, 0, 1))->setIngredient("R", Item::get(Item::REDSTONE, null, 1)));
+			
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::HOPPER, 0 ,1),
+				"I I",
+				"ICI",
+				" I "
+			))->setIngredient("C", Item::get(Item::CHEST, 0, 1))->setIngredient("I", Item::get(Item::IRON_INGOT, null, 1)));
 		}
 	}
 
