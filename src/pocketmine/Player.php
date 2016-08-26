@@ -105,7 +105,6 @@ use pocketmine\level\format\FullChunk;
 use pocketmine\level\Level;
 use pocketmine\level\Location;
 use pocketmine\level\Position;
-use pocketmine\level\sound\ExpPickupSound;
 use pocketmine\level\sound\LaunchSound;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector2;
@@ -364,11 +363,25 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	public function setExp(int $exp){
-		return $this->setExperienceAndLevel($exp, $this->level);
+		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, 0));
+		if($ev->isCancelled()){
+			$this->exp = $ev->getExp();
+			$this->calcExpLevel();
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
 	public function setExpLevel(int $level){
-		return $this->setExperienceAndLevel($this->exp, $level);
+		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, 0, $level));
+		if(!$ev->isCancelled()){
+			$this->expLevel = $level;
+			$this->exp = $this->server->getExpectedExperience($level);
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
 	public function getExpectedExperience(){
@@ -392,11 +405,26 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	public function addExperience(int $exp){
-		return $this->setExperienceAndLevel($this->exp + $exp, $this->expLevel);
+		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, 0, PlayerExperienceChangeEvent::ADD_EXPERIENCE));
+		if(!$ev->isCancelled()){
+			$this->exp = $this->exp + $ev->getExp();
+			$this->calcExpLevel();
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
 	public function addExpLevel(int $level){
-		return $this->setExperienceAndLevel($this->exp, $this->expLevel + $level);
+		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, 0, $level, PlayerExperienceChangeEvent::ADD_EXPERIENCE));
+		if(!$ev->isCancelled()){
+			$this->expLevel = $this->expLevel + $ev->getExpLevel();
+			$this->exp = $this->server->getExpectedExperience($this->expLevel);
+			$this->calcExpLevel();
+			$this->updateExperience();
+			return true;
+		}
+		return false;
 	}
 
 	public function getExp(){
@@ -409,6 +437,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	
 	public function canPickupExp(): bool{
 		return microtime(true) - $this->expCooldown > 0.1;
+	}
+	
+	public function resetExpCooldown(){
+		$this->expCooldown = microtime(true);
 	}
 
 	public function updateExperience(){
