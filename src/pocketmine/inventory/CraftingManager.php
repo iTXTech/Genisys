@@ -558,6 +558,12 @@ class CraftingManager{
 				"XX ",
 				"   "
 			))->setIngredient("X", Item::get(Item::QUARTZ, 0, 4)));
+			
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::QUARTZ_STAIRS, 0, 4),
+				"Q  ",
+				"QQ ",
+				"QQQ"
+			))->setIngredient("Q", Item::get(Item::QUARTZ_BLOCK, null)));
 
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BRICK_STAIRS, 0, 4),
 				"P  ",
