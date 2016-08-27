@@ -45,15 +45,29 @@ class LevelEventPacket extends DataPacket{
 	const EVENT_SOUND_ZOMBIE_INFECT = 1016;
 	const EVENT_SOUND_ZOMBIE_HEAL = 1017;
 	const EVENT_SOUND_ENDERMAN_TELEPORT = 1018;
-
+	
+	const EVENT_SOUND_ANVIL_BREAK = 1020; //This sound is played on the anvil's final use, NOT when the block is broken.
 	const EVENT_SOUND_ANVIL_USE = 1021;
 	const EVENT_SOUND_ANVIL_FALL = 1022;
+	
+	const EVENT_SOUND_DROP_ITEM = 1030;
+	const EVENT_SOUND_THROW_PROJECTILE = 1031;
+	
+	const EVENT_SOUND_ITEMFRAME_ADD_ITEM = 1040;
+	const EVENT_SOUND_ITEMFRAME_PLACE = 1041;
+	//1042 is item frame, but cannot tell exactly what.
+	const EVENT_SOUND_ITEMFRAME_DROP_ITEM = 1043;
+	const EVENT_SOUND_ITEMFRAME_ROTATE_ITEM = 1044;
+	
+	//1050 sounds a lot like skeleton walking but different. TODO: find out exactly what it is.
+	const EVENT_SOUND_EXP_PICKUP = 1051;
+	const EVENT_SOUND_BLOCK_PLACE = 1052;
 
 	const EVENT_SOUND_BUTTON_CLICK = 3500;
 
 	const EVENT_PARTICLE_SHOOT = 2000;
 	const EVENT_PARTICLE_DESTROY = 2001;
-	const EVENT_PARTICLE_SPLASH = 2002;
+	const EVENT_PARTICLE_SPLASH = 2002; //This is actually the splash potion sound with particles
 	const EVENT_PARTICLE_EYE_DESPAWN = 2003;
 	const EVENT_PARTICLE_SPAWN = 2004;
 
@@ -63,6 +77,7 @@ class LevelEventPacket extends DataPacket{
 	const EVENT_STOP_THUNDER = 3004;
 
 	const EVENT_SOUND_EXPLODE = 3501;
+	/* 3502-3509 are splash SOUNDS with particles. Probably for cauldrons. */
 	const EVENT_SOUND_SPELL = 3504;
 	const EVENT_SOUND_SPLASH = 3506;
 	const EVENT_SOUND_GRAY_SPLASH = 3507;//TODO: fix name

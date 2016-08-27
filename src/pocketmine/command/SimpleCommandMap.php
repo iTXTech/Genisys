@@ -21,10 +21,10 @@
 
 namespace pocketmine\command;
 
+use pocketmine\command\defaults\BanCidByNameCommand;
 use pocketmine\command\defaults\BanCidCommand;
-use pocketmine\command\defaults\BancidbynameCommand;
 use pocketmine\command\defaults\BanCommand;
-use pocketmine\command\defaults\BanipbynameCommand;
+use pocketmine\command\defaults\BanIpByNameCommand;
 use pocketmine\command\defaults\BanIpCommand;
 use pocketmine\command\defaults\BanListCommand;
 use pocketmine\command\defaults\BiomeCommand;
@@ -100,8 +100,8 @@ class SimpleCommandMap implements CommandMap{
 
 		$this->register("pocketmine", new BanCidCommand("bancid"));
 		$this->register("pocketmine", new PardonCidCommand("pardoncid"));
-		$this->register("pocketmine", new BancidbynameCommand("bancidbyname"));
-		$this->register("pocketmine", new BanipbynameCommand("banipbyname"));
+		$this->register("pocketmine", new BanCidByNameCommand("bancidbyname"));
+		$this->register("pocketmine", new BanIpByNameCommand("banipbyname"));
 
 		$this->register("pocketmine", new LvdatCommand("lvdat"));
 		$this->register("pocketmine", new BiomeCommand("biome"));

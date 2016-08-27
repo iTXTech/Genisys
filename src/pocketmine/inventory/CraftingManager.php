@@ -131,9 +131,6 @@ class CraftingManager{
 				"XX",
 				"XX"
 			))->setIngredient("X", Item::get(Item::SNOWBALL)));
-			$this->registerRecipe((new ShapedRecipe(Item::get(Item::SNOW_LAYER, 0, 6),
-				"X"
-			))->setIngredient("X", Item::get(Item::SNOW_BLOCK, 0, 3)));
 			$this->registerRecipe((new ShapedRecipe(Item::get(Item::STICK, 0, 4),
 				"X ",
 				"X "
@@ -163,14 +160,13 @@ class CraftingManager{
 			$this->registerRecipe((new ShapedRecipe(Item::get(Item::TORCH, 0, 4),
 				"C ",
 				"S"
-			))->setIngredient("C", Item::get(Item::COAL, 0, 1))->setIngredient("S", Item::get(Item::STICK, 0, 1)));
-			$this->registerRecipe((new ShapedRecipe(Item::get(Item::TORCH, 0, 4),
-				"C ",
-				"S"
-			))->setIngredient("C", Item::get(Item::COAL, 1, 1))->setIngredient("S", Item::get(Item::STICK, 0, 1)));
+			))->setIngredient("C", Item::get(Item::COAL, null, 1))->setIngredient("S", Item::get(Item::STICK, 0, 1)));
 			$this->registerRecipe((new ShapedRecipe(Item::get(Item::SUGAR, 0, 1),
 				"S"
 			))->setIngredient("S", Item::get(Item::SUGARCANE, 0, 1)));
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::SNOW_LAYER, 0, 6),
+				"XXX"
+			))->setIngredient("X", Item::get(Item::SNOW_BLOCK, 0, 3)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BED, 0, 1),
 				"WWW",
 				"PPP",
@@ -736,6 +732,23 @@ class CraftingManager{
 				" G ",
 				"GGG"
 			))->setIngredient("I", Item::get(Item::IRON_BLOCK, 0, 1))->setIngredient("G", Item::get(Item::IRON_INGOT, null, 1)));
+			
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::DISPENSER, 0 ,1),
+				"CCC",
+				"CBC",
+				"CRC"
+			))->setIngredient("C", Item::get(Item::COBBLESTONE, 0, 1))->setIngredient("B", Item::get(Item::BOW, null, 1))->setIngredient("R", Item::get(Item::REDSTONE, null, 1)));
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::DROPPER, 0 ,1),
+				"CCC",
+				"C C",
+				"CRC"
+			))->setIngredient("C", Item::get(Item::COBBLESTONE, 0, 1))->setIngredient("R", Item::get(Item::REDSTONE, null, 1)));
+			
+			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::HOPPER, 0 ,1),
+				"I I",
+				"ICI",
+				" I "
+			))->setIngredient("C", Item::get(Item::CHEST, 0, 1))->setIngredient("I", Item::get(Item::IRON_INGOT, null, 1)));
 		}
 	}
 
@@ -1359,6 +1372,9 @@ class CraftingManager{
 		return $this->recipes;
 	}
 
+	public function getRecipesByResult(Item $item){
+		return @array_values($this->recipeLookup[$item->getId() . ":" . $item->getDamage()]) ?? [];
+	}
 	/**
 	 * @return FurnaceRecipe[]
 	 */

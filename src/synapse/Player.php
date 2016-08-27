@@ -36,6 +36,7 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\ChangeDimensionPacket;
 use pocketmine\network\protocol\ContainerSetContentPacket;
 use pocketmine\network\protocol\DataPacket;
+use pocketmine\network\protocol\PlayerListPacket;
 use pocketmine\network\protocol\PlayStatusPacket;
 use pocketmine\network\protocol\RespawnPacket;
 use pocketmine\network\protocol\SetDifficultyPacket;
@@ -51,6 +52,7 @@ use pocketmine\utils\UUID;
 use synapse\event\player\PlayerConnectEvent;
 use synapse\network\protocol\spp\PlayerLoginPacket;
 use synapse\network\protocol\spp\TransferPacket;
+use synapse\network\protocol\spp\FastPlayerListPacket;
 
 class Player extends PMPlayer{
 	private $isFirstTimeLogin = false;
@@ -271,10 +273,38 @@ class Player extends PMPlayer{
 	}
 
 	public function dataPacket(DataPacket $packet, $needACK = false){
+		if($packet instanceof PlayerListPacket){
+			$pk = new FastPlayerListPacket();
+			$pk->sendTo = $this->uuid;
+			$pk->type = $packet->type;
+			foreach($packet->entries as $entry){
+				if($packet->type !== PlayerListPacket::TYPE_REMOVE){
+					array_pop($entry);
+					array_pop($entry);
+				}
+				$pk->entries[] = $entry;
+			}
+			Synapse::getInstance()->sendDataPacket($pk);
+			return;
+		}
 		$this->interface->putPacket($this, $packet, $needACK);
 	}
 
 	public function directDataPacket(DataPacket $packet, $needACK = false){
+		if($packet instanceof PlayerListPacket){
+			$pk = new FastPlayerListPacket();
+			$pk->sendTo = $this->uuid;
+			$pk->type = $packet->type;
+			foreach($packet->entries as $entry){
+				if($packet->type !== PlayerListPacket::TYPE_REMOVE){
+					array_pop($entry);
+					array_pop($entry);
+				}
+				$pk->entries[] = $entry;
+			}
+			Synapse::getInstance()->sendDataPacket($pk);
+			return;
+		}
 		$this->interface->putPacket($this, $packet, $needACK, true);
 	}
 }

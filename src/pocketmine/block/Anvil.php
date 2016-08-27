@@ -79,6 +79,7 @@ class Anvil extends Fallable{
 			}
 
 			$player->addWindow(new AnvilInventory($this));
+			$player->craftingType = Player::CRAFTING_ANVIL;
 		}
 
 		return true;
@@ -88,7 +89,6 @@ class Anvil extends Fallable{
 		$direction = ($player !== null? $player->getDirection(): 0) & 0x03;
 		$this->meta = ($this->meta & 0x0c) | $direction;
 		$this->getLevel()->setBlock($block, $this, true, true);
-		$this->getLevel()->addSound(new AnvilFallSound($this));
 	}
 
 	public function getDrops(Item $item) : array {

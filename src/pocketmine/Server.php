@@ -153,6 +153,7 @@ use pocketmine\tile\Dropper;
 use pocketmine\tile\EnchantTable;
 use pocketmine\tile\FlowerPot;
 use pocketmine\tile\Furnace;
+use pocketmine\tile\Hopper;
 use pocketmine\tile\ItemFrame;
 use pocketmine\tile\MobSpawner;
 use pocketmine\tile\Sign;
@@ -348,7 +349,6 @@ class Server{
 	public $aiConfig = [];
 	public $aiEnabled = false;
 	public $aiHolder = null;
-	public $inventoryNum = 36;
 	public $hungerTimer = 80;
 	public $version;
 	public $allowSnowGolem;
@@ -380,6 +380,7 @@ class Server{
 	public $synapseConfig = [];
 	public $enchantingTableEnabled = true;
 	public $countBookshelf = false;
+	public $allowInventoryCheats = false;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -400,7 +401,7 @@ class Server{
 	public function isRunning(){
 		return $this->isRunning === true;
 	}
-	
+
 	/**
 	 * @return string
 	 * Returns a formatted string of how long the server has been running for
@@ -439,7 +440,7 @@ class Server{
 	public function getPocketMineVersion(){
 		return \pocketmine\VERSION;
 	}
-	
+
 	public function getFormattedVersion($prefix = ""){
 		return (\pocketmine\VERSION !== ""? $prefix . \pocketmine\VERSION : "");
 	}
@@ -1287,7 +1288,7 @@ class Server{
 			return false;
 		}
 
-		$seed = $seed === null ? Binary::readInt(@Utils::getRandomBytes(4, false)) : (int) $seed;
+		$seed = $seed === null ? Binary::readInt(random_bytes(4)) : (int) $seed;
 
 		if(!isset($options["preset"])){
 			$options["preset"] = $this->getConfigString("generator-settings", "");
@@ -1532,7 +1533,7 @@ class Server{
 				$this->operators->remove($opName);
 			}
 		}
-		
+
 		if(($player = $this->getPlayerExact($name)) !== null){
 			$player->recalculatePermissions();
 		}
@@ -1683,7 +1684,6 @@ class Server{
 			"creeperexplode" => $this->getAdvancedProperty("ai.creeper-explode-destroy-block", false),
 			"mobgenerate" => $this->getAdvancedProperty("ai.mobgenerate", false),
 		];
-		$this->inventoryNum = min(91, $this->getAdvancedProperty("player.inventory-num", 36));
 		$this->hungerTimer = $this->getAdvancedProperty("player.hunger-timer", 80);
 		$this->allowSnowGolem = $this->getAdvancedProperty("server.allow-snow-golem", false);
 		$this->allowIronGolem = $this->getAdvancedProperty("server.allow-iron-golem", false);
@@ -1730,6 +1730,8 @@ class Server{
 		$this->anvilEnabled = $this->getAdvancedProperty("enchantment.enable-anvil", true);
 		$this->enchantingTableEnabled = $this->getAdvancedProperty("enchantment.enable-enchanting-table", true);
 		$this->countBookshelf = $this->getAdvancedProperty("enchantment.count-bookshelf", false);
+
+		$this->allowInventoryCheats = $this->getAdvancedProperty("inventory.allow-cheats", false);
 	}
 
 	public function isSynapseEnabled() : bool {
@@ -1817,14 +1819,14 @@ class Server{
 
 			$this->about();
 
-			$this->logger->info("Loading pocketmine.yml...");
+			$this->logger->info("Loading properties and configuration...");
 			if(!file_exists($this->dataPath . "pocketmine.yml")){
 				$content = file_get_contents($this->filePath . "src/pocketmine/resources/pocketmine.yml");
 				@file_put_contents($this->dataPath . "pocketmine.yml", $content);
 			}
 			$this->config = new Config($configPath = $this->dataPath . "pocketmine.yml", Config::YAML, []);
 			$nowLang = $this->getProperty("settings.language", "eng");
-			
+
 			//Crashes unsupported builds without the correct configuration
 			if(strpos(\pocketmine\VERSION, "unsupported") !== false and getenv("GITLAB_CI") === false){
 				if($this->getProperty("settings.enable-testing", false) !== true){
@@ -1838,8 +1840,6 @@ class Server{
 				$this->config->reload();
 				unset($this->propertyCache["settings.language"]);
 			}
-
-			$this->logger->info("Loading genisys.yml...");
 
 			$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
 			if(file_exists($this->filePath . "src/pocketmine/resources/genisys_$lang.yml")){
@@ -1862,7 +1862,6 @@ class Server{
 				$this->generateExpCache($this->expWriteAhead);
 			}
 
-			$this->logger->info("Loading server properties...");
 			$this->properties = new Config($this->dataPath . "server.properties", Config::PROPERTIES, [
 				"motd" => "Minecraft: PE Server",
 				"server-port" => 19132,
@@ -1884,9 +1883,21 @@ class Server{
 				"level-type" => "DEFAULT",
 				"enable-query" => true,
 				"enable-rcon" => false,
-				"rcon.password" => substr(base64_encode(@Utils::getRandomBytes(20, false)), 3, 10),
+				"rcon.password" => substr(base64_encode(random_bytes(20)), 3, 10),
 				"auto-save" => true,
+				"online-mode" => false,
 			]);
+
+			$onlineMode = $this->getConfigBoolean("online-mode", false);
+			if(!extension_loaded("openssl")){
+				$this->logger->warning("The OpenSSL extension is not loaded, and this is required for XBOX authentication to work. If you want to use Xbox Live auth, please update your PHP binaries at itxtech.org/download, or recompile PHP with the OpenSSL extension.");
+				$this->setConfigBool("online-mode", false);
+			}elseif(!$onlineMode){
+				$this->logger->warning("SERVER IS RUNNING IN OFFLINE/INSECURE MODE!");
+				$this->logger->warning("The server will make no attempt to authenticate usernames. Beware.");
+				$this->logger->warning("While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.");
+				$this->logger->warning("To change this, set \"online-mode\" to \"true\" in the server.properties file.");
+			}
 
 			$this->forceLanguage = $this->getProperty("settings.force-language", false);
 			$this->baseLang = new BaseLang($this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE));
@@ -1960,7 +1971,6 @@ class Server{
 			}
 
 			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.networkStart", [$this->getIp() === "" ? "*" : $this->getIp(), $this->getPort()]));
-			define("BOOTUP_RANDOM", @Utils::getRandomBytes(16));
 			$this->serverID = Utils::getMachineUniqueId($this->getIp() . $this->getPort());
 
 			$this->getLogger()->debug("Server unique id: " . $this->getServerUniqueId());
@@ -1979,7 +1989,7 @@ class Server{
 			$this->registerEntities();
 			$this->registerTiles();
 
-			InventoryType::init($this->inventoryNum);
+			InventoryType::init();
 			Block::init();
 			Enchantment::init();
 			Item::init($this->creativeItemsFromJson);
@@ -2101,7 +2111,7 @@ class Server{
 				$this->synapse = new Synapse($this, $this->synapseConfig);
 			}
 
-			if($cfgVer != $advVer){
+			if($cfgVer > $advVer){
 				$this->logger->notice("Your genisys.yml needs update");
 				$this->logger->notice("Current Version: $advVer   Latest Version: $cfgVer");
 			}
@@ -2863,7 +2873,7 @@ class Server{
 
 		$u = Utils::getMemoryUsage(true);
 		$usage = round(($u[0] / 1024) / 1024, 2) . "/" . round(($d[0] / 1024) / 1024, 2) . "/" . round(($u[1] / 1024) / 1024, 2) . "/" . round(($u[2] / 1024) / 1024, 2) . " MB @ " . Utils::getThreadCount() . " threads";
-		
+
 		echo "\x1b]0;" . $this->getName() . $this->getFormattedVersion("-") .
 			" | Online " . count($this->players) . "/" . $this->getMaxPlayers() .
 			" | Memory " . $usage .
@@ -3093,23 +3103,24 @@ class Server{
 		Entity::registerEntity(XPOrb::class);
 		Entity::registerEntity(Zombie::class);
 		Entity::registerEntity(ZombieVillager::class);
-		
+
 		Entity::registerEntity(Human::class, true);
 	}
 
 	private function registerTiles(){
 		Tile::registerTile(BrewingStand::class);
+		Tile::registerTile(Cauldron::class);
 		Tile::registerTile(Chest::class);
-		Tile::registerTile(Furnace::class);
-		Tile::registerTile(Sign::class);
+		Tile::registerTile(Dispenser::class);
+		Tile::registerTile(DLDetector::class);
+		Tile::registerTile(Dropper::class);
 		Tile::registerTile(EnchantTable::class);
 		Tile::registerTile(FlowerPot::class);
-		Tile::registerTile(Skull::class);
-		Tile::registerTile(MobSpawner::class);
+		Tile::registerTile(Furnace::class);
+		Tile::registerTile(Hopper::class);
 		Tile::registerTile(ItemFrame::class);
-		Tile::registerTile(Dispenser::class);
-		Tile::registerTile(Dropper::class);
-		Tile::registerTile(DLDetector::class);
-		Tile::registerTile(Cauldron::class);
+		Tile::registerTile(MobSpawner::class);
+		Tile::registerTile(Sign::class);
+		Tile::registerTile(Skull::class);
 	}
 }

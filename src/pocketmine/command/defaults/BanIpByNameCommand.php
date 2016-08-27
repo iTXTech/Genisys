@@ -7,7 +7,7 @@ use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
-class BanipbynameCommand extends VanillaCommand{
+class BanIpByNameCommand extends VanillaCommand{
 
 	public function __construct($name){
 		parent::__construct(

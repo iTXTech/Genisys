@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  *
  *  ____            _        _   __  __ _                  __  __ ____
  * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
@@ -14,26 +14,25 @@
  * (at your option) any later version.
  *
  * @author PocketMine Team
- * @link http://www.pocketmine.net/
+ * @link   http://www.pocketmine.net/
  *
  *
-*/
-
-namespace pocketmine\inventory;
-
-/**
- * Saves all the information regarding default inventory sizes and types
  */
-interface SlotType{
-	const RESULT = 0;
 
-	const CRAFTING = 1; //Not used in Minecraft: PE yet
+namespace pocketmine\event\entity;
 
-	const ARMOR = 2;
+use pocketmine\entity\Entity;
+use pocketmine\Event;
+use pocketmine\event\Cancellable;
+use pocketmine\entity\Effect;
 
-	const CONTAINER = 3;
+class EntityEffectAddEvent extends EntityEvent implements Cancellable{
 
-	const HOTBAR = 4;
+	public static $handlerList = null;
 
-	const FUEL = 5;
+	public function __construct(Entity $entity, Effect $effect){
+		$this->entity = $entity;
+		$this->effect = $effect;
+	}
+
 }

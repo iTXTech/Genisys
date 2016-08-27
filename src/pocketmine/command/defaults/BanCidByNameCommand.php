@@ -7,7 +7,7 @@ use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
-class BancidbynameCommand extends VanillaCommand{
+class BanCidByNameCommand extends VanillaCommand{
 
 	public function __construct($name){
 		parent::__construct(

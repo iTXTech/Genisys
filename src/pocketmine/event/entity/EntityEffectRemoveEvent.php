@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  *
  *  ____            _        _   __  __ _                  __  __ ____
  * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
@@ -14,48 +14,25 @@
  * (at your option) any later version.
  *
  * @author PocketMine Team
- * @link http://www.pocketmine.net/
+ * @link   http://www.pocketmine.net/
  *
  *
-*/
+ */
 
-namespace pocketmine\inventory;
+namespace pocketmine\event\entity;
 
-interface TransactionGroup{
+use pocketmine\entity\Entity;
+use pocketmine\Event;
+use pocketmine\event\Cancellable;
+use pocketmine\entity\Effect;
 
-	/**
-	 * @return float
-	 */
-	function getCreationTime();
+class EntityEffectRemoveEvent extends EntityEvent implements Cancellable{
 
-	/**
-	 * @return Transaction[]
-	 */
-	function getTransactions();
+	public static $handlerList = null;
 
-	/**
-	 * @return Inventory[]
-	 */
-	function getInventories();
-
-	/**
-	 * @param Transaction $transaction
-	 */
-	function addTransaction(Transaction $transaction);
-
-	/**
-	 * @return bool
-	 */
-	function canExecute();
-
-	/**
-	 * @return bool
-	 */
-	function execute();
-
-	/**
-	 * @return bool
-	 */
-	function hasExecuted();
+	public function __construct(Entity $entity, int $effect){
+		$this->entity = $entity;
+		$this->effect = $effect;
+	}
 
 }

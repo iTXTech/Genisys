@@ -77,7 +77,7 @@ namespace pocketmine {
 	const CODENAME = "Kyrios";
 	const MINECRAFT_VERSION = "v0.15.4 alpha";
 	const MINECRAFT_VERSION_NETWORK = "0.15.4";
-	const GENISYS_API_VERSION = '1.8.0';
+	const GENISYS_API_VERSION = '1.9.1';
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
@@ -437,7 +437,7 @@ namespace pocketmine {
 	}
 
 	if($errors > 0){
-		$logger->critical("Please use the installer provided on the homepage, or recompile PHP again.");
+		$logger->critical("Please update your PHP from itxtech.org/download, or recompile PHP again.");
 		$logger->shutdown();
 		$logger->join();
 		exit(1); //Exit with error
@@ -451,7 +451,7 @@ namespace pocketmine {
 
 	@define("ENDIANNESS", (pack("d", 1) === "\77\360\0\0\0\0\0\0" ? Binary::BIG_ENDIAN : Binary::LITTLE_ENDIAN));
 	@define("INT32_MASK", is_int(0xffffffff) ? 0xffffffff : -1);
-	@ini_set("opcache.mmap_base", bin2hex(Utils::getRandomBytes(8, false))); //Fix OPCache address errors
+	@ini_set("opcache.mmap_base", bin2hex(random_bytes(8))); //Fix OPCache address errors
 
 	$lang = "unknown";
 	if(!file_exists(\pocketmine\DATA . "server.properties") and !isset($opts["no-wizard"])){

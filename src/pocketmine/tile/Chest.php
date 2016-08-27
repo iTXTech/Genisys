@@ -163,6 +163,13 @@ class Chest extends Spawnable implements InventoryHolder, Container, Nameable{
 		return $this->inventory;
 	}
 
+	/**
+	 * @return DoubleChestInventory|null
+	 */
+	public function getDoubleInventory(){
+		return $this->doubleInventory;
+	}
+
 	protected function checkPairing(){
 		if(($pair = $this->getPair()) instanceof Chest){
 			if(!$pair->isPaired()){
@@ -170,10 +177,14 @@ class Chest extends Spawnable implements InventoryHolder, Container, Nameable{
 				$pair->checkPairing();
 			}
 			if($this->doubleInventory === null){
-				if(($pair->x + ($pair->z << 15)) > ($this->x + ($this->z << 15))){ //Order them correctly
-					$this->doubleInventory = new DoubleChestInventory($pair, $this);
+				if(($p = $pair->getDoubleInventory()) instanceof DoubleChestInventory){
+					$this->doubleInventory = $p;
 				}else{
-					$this->doubleInventory = new DoubleChestInventory($this, $pair);
+					if(($pair->x + ($pair->z << 15)) > ($this->x + ($this->z << 15))){ //Order them correctly
+						$this->doubleInventory = new DoubleChestInventory($pair, $this);
+					}else{
+						$this->doubleInventory = new DoubleChestInventory($this, $pair);
+					}
 				}
 			}
 		}else{

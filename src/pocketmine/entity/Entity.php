@@ -32,6 +32,8 @@ use pocketmine\block\Water;
 use pocketmine\block\SlimeBlock;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDespawnEvent;
+use pocketmine\event\entity\EntityEffectAddEvent;
+use pocketmine\event\entity\EntityEffectRemoveEvent;
 use pocketmine\event\entity\EntityLevelChangeEvent;
 use pocketmine\event\entity\EntityMotionEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
@@ -231,7 +233,9 @@ abstract class Entity extends Location implements Metadatable{
 
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
-		assert($chunk !== null and $chunk->getProvider() !== null);
+		if($chunk === null or $chunk->getProvider() === null){
+ 			throw new ChunkException("Invalid garbage Chunk given to Entity");
+		}
 
 		$this->timings = Timings::getEntityTimings($this);
 
@@ -263,7 +267,9 @@ abstract class Entity extends Location implements Metadatable{
 		);
 		$this->setMotion($this->temporalVector->setComponents($this->namedtag["Motion"][0], $this->namedtag["Motion"][1], $this->namedtag["Motion"][2]));
 
-		assert(!is_nan($this->x) and !is_infinite($this->x) and !is_nan($this->y) and !is_infinite($this->y) and !is_nan($this->z) and !is_infinite($this->z));
+		if(is_nan($this->x) or is_infinite($this->x) or is_nan($this->y) or is_infinite($this->y) or is_nan($this->z) or is_infinite($this->z)){
+			throw new \InvalidStateException("Invalid entity coordinates");
+		}
 
 		if(!isset($this->namedtag->FallDistance)){
 			$this->namedtag->FallDistance = new FloatTag("FallDistance", 0);
@@ -378,6 +384,10 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	public function removeEffect($effectId){
+		Server::getInstance()->getPluginManager()->callEvent($ev = new EntityEffectRemoveEvent($this, $effectId));
+		if($ev->isCancelled()){
+			return false;
+		}
 		if(isset($this->effects[$effectId])){
 			$effect = $this->effects[$effectId];
 			unset($this->effects[$effectId]);
@@ -387,6 +397,7 @@ abstract class Entity extends Location implements Metadatable{
 			}
 
 			$this->recalculateEffectColor();
+			return true;
 		}
 	}
 
@@ -399,6 +410,10 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	public function addEffect(Effect $effect){
+		Server::getInstance()->getPluginManager()->callEvent($ev = new EntityEffectAddEvent($this, $effect));
+		if($ev->isCancelled()){
+			return false;
+		}
 		if($effect->getId() === Effect::HEALTH_BOOST){
 			$this->setHealth($this->getHealth() + 4 * ($effect->getAmplifier() + 1));
 		}
@@ -419,6 +434,7 @@ abstract class Entity extends Location implements Metadatable{
 		$this->effects[$effect->getId()] = $effect;
 
 		$this->recalculateEffectColor();
+		return true;
 	}
 
 	protected function recalculateEffectColor(){
@@ -548,7 +564,9 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	protected function initEntity(){
-		assert($this->namedtag instanceof CompoundTag);
+		if(!($this->namedtag instanceof CompoundTag)){
+			throw new \InvalidArgumentException("Expecting CompoundTag, received " . get_class($this->namedtag));
+		}
 
 		if(isset($this->namedtag->CustomName)){
 			$this->setNameTag($this->namedtag["CustomName"]);

@@ -113,6 +113,7 @@ use pocketmine\utils\MainLogger;
 use pocketmine\utils\Random;
 use pocketmine\utils\ReversePriorityQueue;
 use pocketmine\level\particle\Particle;
+use pocketmine\level\sound\BlockPlaceSound;
 use pocketmine\level\sound\Sound;
 use pocketmine\level\particle\DestroyBlockParticle;
 
@@ -1566,6 +1567,8 @@ class Level implements ChunkManager, Metadatable{
 	 * @param Item    $item
 	 * @param Vector3 $motion
 	 * @param int     $delay
+	 *
+	 * @return null|DroppedItem
 	 */
 	public function dropItem(Vector3 $source, Item $item, Vector3 $motion = null, $delay = 10){
 		$motion = $motion === null ? new Vector3(lcg_value() * 0.2 - 0.1, 0.2, lcg_value() * 0.2 - 0.1) : $motion;
@@ -1595,7 +1598,11 @@ class Level implements ChunkManager, Metadatable{
 			]));
 
 			$itemEntity->spawnToAll();
+
+			return $itemEntity;
 		}
+
+		return null;
 	}
 
 	/**
@@ -1919,6 +1926,7 @@ class Level implements ChunkManager, Metadatable{
 		if($hand->place($item, $block, $target, $face, $fx, $fy, $fz, $player) === false){
 			return false;
 		}
+		$this->addSound(new BlockPlaceSound($this->getBlock($block))); //Get updated block, $block is still the original block and cannot be used directly
 
 		if($hand->getId() === Item::SIGN_POST or $hand->getId() === Item::WALL_SIGN){
 

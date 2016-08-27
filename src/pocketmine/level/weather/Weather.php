@@ -71,7 +71,6 @@ class Weather{
 			$this->duration -= $tickDiff;
 			
 			if($this->duration <= 0){
-				
 				$duration = mt_rand(
 						min($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax), 
 						max($this->level->getServer()->weatherRandomDurationMin, $this->level->getServer()->weatherRandomDurationMax));
@@ -84,7 +83,7 @@ class Weather{
 					$this->setWeather($weather, $duration);
 				}
 			}
-			if(($this->weatherNow > 0) and ($this->level->getServer()->lightningTime > 0) and is_int($this->duration / $this->level->getServer()->lightningTime)){
+			if(($this->weatherNow >= self::RAINY_THUNDER) and ($this->level->getServer()->lightningTime > 0) and is_int($this->duration / $this->level->getServer()->lightningTime)){
 				$players = $this->level->getPlayers();
 				if(count($players) > 0){
 					$p = $players[array_rand($players)];
@@ -140,6 +139,7 @@ class Weather{
 				return self::THUNDER;
 			case "rain_thunder":
 			case "rainy_thunder":
+			case "storm":
 				return self::RAINY_THUNDER;
 			default:
 				return self::SUNNY;
@@ -150,44 +150,28 @@ class Weather{
 	 * @return bool
 	 */
 	public function isSunny() : bool{
-		if($this->getWeather() == self::SUNNY){
-			return true;
-		}else{
-			return false;
-		}
+		return $this->getWeather() === self::SUNNY;
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function isRainy() : bool{
-		if($this->getWeather() == self::RAINY){
-			return true;
-		}else{
-			return false;
-		}
+		return $this->getWeather() === self::RAINY;
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function isRainyThunder() : bool{
-		if($this->getWeather() == self::RAINY_THUNDER){
-			return true;
-		}else{
-			return false;
-		}
+		return $this->getWeather() === self::RAINY_THUNDER;
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function isThunder() : bool{
-		if($this->getWeather() == self::THUNDER){
-			return true;
-		}else{
-			return false;
-		}
+		return $this->getWeather() === self::THUNDER;
 	}
 
 	public function getStrength() : array{

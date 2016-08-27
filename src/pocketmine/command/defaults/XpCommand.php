@@ -24,6 +24,7 @@ namespace pocketmine\command\defaults;
 use pocketmine\command\CommandSender;
 use pocketmine\command\ConsoleCommandSender;
 use pocketmine\event\TranslationContainer;
+use pocketmine\level\sound\ExpPickupSound;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
@@ -54,10 +55,12 @@ class XpCommand extends VanillaCommand{
 					$level = rtrim($args[0], "Ll");
 					if(is_numeric($level)){
 						$player->addExpLevel($level);
+						$player->getLevel()->addSound(new ExpPickupSound($player, mt_rand(0, 1000))); //TODO: Find the level-up sound
 						$sender->sendMessage("Successfully added $level Level of experience to $name");
 					}
 				}elseif(is_numeric($args[0])){											//Set Experience
 					$player->addExperience($args[0]);
+					$player->getLevel()->addSound(new ExpPickupSound($player, mt_rand(0, 1000)));
 					$sender->sendMessage("Successfully added $args[0] of experience to $name");
 				}else{
 					$sender->sendMessage("Argument error");
