@@ -354,6 +354,10 @@ class Block extends Position implements BlockIds, Metadatable{
 	 * @return Block
 	 */
 	public static function get($id, $meta = 0, Position $pos = null){
+		if($id > 0xff){
+			trigger_error("BlockID cannot be higher than 255, defaulting to 0", E_USER_NOTICE);
+			$id = 0;
+		}
 		try{
 			$block = self::$list[$id];
 			if($block !== null){
