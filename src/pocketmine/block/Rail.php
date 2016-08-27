@@ -1,9 +1,23 @@
 <?php
 
 /**
- * OpenGenisys Project
- * @author happy163
-*/
+ *
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://itxtech.org
+ *
+ */
 
 namespace pocketmine\block;
 
@@ -12,6 +26,18 @@ use pocketmine\math\Vector3;
 use pocketmine\Player;
 
 class Rail extends Flowable{
+
+	const STRAIGHT_EAST_WEST = 0;
+	const STRAIGHT_NORTH_SOUTH = 1;
+	const SLOPED_ASCENDING_NORTH = 2;
+	const SLOPED_ASCENDING_SOUTH = 3;
+	const SLOPED_ASCENDING_EAST = 4;
+	const SLOPED_ASCENDING_WEST = 5;
+	const CURVED_NORTH_WEST = 7;
+	const CURVED_SOUTH_WEST = 6;
+	const CURVED_SOUTH_EAST = 9;
+	const CURVED_NORTH_EAST = 8;
+
 
 	protected $id = self::RAIL;
 	/** @var Vector3 [] */
