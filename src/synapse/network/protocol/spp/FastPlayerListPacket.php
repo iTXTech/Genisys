@@ -2,7 +2,7 @@
 
 namespace synapse\network\protocol\spp;
 
-use src/pocketmine/utils/BinaryStream;
+use pocketmine/utils/BinaryStream;
 
 class FastPlayerListPacket extends DataPacket{
 	const NETWORK_ID = Info::FAST_PLAYER_LIST_PACKET;
