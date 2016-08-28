@@ -21,8 +21,9 @@
 
 namespace pocketmine\level\generator\normal\biome;
 
-use pocketmine\level\generator\populator\TallGrass;
-use pocketmine\level\generator\populator\Tree;
+use pocketmine\level\generator\normal\populator\Mushroom;
+use pocketmine\level\generator\normal\populator\TallGrass;
+use pocketmine\level\generator\normal\populator\Tree;
 
 class MountainsBiome extends GrassyBiome{
 
@@ -35,8 +36,10 @@ class MountainsBiome extends GrassyBiome{
 
 		$tallGrass = new TallGrass();
 		$tallGrass->setBaseAmount(6);
-
 		$this->addPopulator($tallGrass);
+
+		$mushroom = new Mushroom();
+		$this->addPopulator($mushroom);
 
 		//TODO: add emerald
 

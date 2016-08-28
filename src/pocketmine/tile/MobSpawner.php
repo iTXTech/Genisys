@@ -152,7 +152,7 @@ class MobSpawner extends Spawnable{
 			if($this->getDelay() <= 0){
 				$success = 0;
 				for($i = 0; $i < $this->getSpawnCount(); $i++){
-					$pos = $this->add(mt_rand() / mt_getrandmax() * $this->getSpawnRange(), mt_rand(-1, 1), mt_rand() / mt_getrandmax() * $this->getSpawnRange());
+					$pos = $this->add(mt_rand() / mt_getrandmax() * $this->getSpawnRange(), 1, mt_rand() / mt_getrandmax() * $this->getSpawnRange());
 					$target = $this->getLevel()->getBlock($pos);
 					$ground = $target->getSide(Vector3::SIDE_DOWN);
 					if($target->getId() == Item::AIR && $ground->isTopFacingSurfaceSolid()){
@@ -171,7 +171,7 @@ class MobSpawner extends Spawnable{
 									new DoubleTag("", 0)
 								]),
 								"Rotation" => new ListTag("Rotation", [
-									new FloatTag("", mt_rand() / mt_getrandmax() * 360),
+									new FloatTag("", lcg_value() * 360),
 									new FloatTag("", 0)
 								]),
 							]);
@@ -194,13 +194,22 @@ class MobSpawner extends Spawnable{
 	}
 
 	public function getSpawnCompound(){
-		$c = new CompoundTag("", [
-			new StringTag("id", Tile::MOB_SPAWNER),
-			new IntTag("x", (int) $this->x),
-			new IntTag("y", (int) $this->y),
-			new IntTag("z", (int) $this->z),
-			new IntTag("EntityId", (int) $this->getEntityId())
-		]);
+		if($this->getEntityId() == 0){
+			$c = new CompoundTag("", [
+				new StringTag("id", Tile::MOB_SPAWNER),
+				new IntTag("x", (int) $this->x),
+				new IntTag("y", (int) $this->y),
+				new IntTag("z", (int) $this->z),
+			]);
+		}else{
+			$c = new CompoundTag("", [
+				new StringTag("id", Tile::MOB_SPAWNER),
+				new IntTag("x", (int) $this->x),
+				new IntTag("y", (int) $this->y),
+				new IntTag("z", (int) $this->z),
+				new IntTag("EntityId", (int) $this->getEntityId())
+			]);
+		}
 
 		return $c;
 	}
