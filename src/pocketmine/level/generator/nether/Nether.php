@@ -28,7 +28,6 @@ use pocketmine\block\NetherQuartzOre;
 use pocketmine\block\SoulSand;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\biome\Biome;
-use pocketmine\level\generator\biome\BiomeSelector;
 use pocketmine\level\generator\Generator;
 
 use pocketmine\level\generator\noise\Simplex;
@@ -61,9 +60,6 @@ class Nether extends Generator{
 	private $generationPopulators = [];
 	/** @var Simplex */
 	private $noiseBase;
-
-	/** @var BiomeSelector */
-	private $selector;
 
 	private static $GAUSSIAN_KERNEL = null;
 	private static $SMOOTH_SIZE = 2;

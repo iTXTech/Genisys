@@ -23,14 +23,14 @@ namespace pocketmine\level\generator\nether\biome;
 
 use pocketmine\level\generator\biome\Biome;
 
-class NetherrackBiome extends Biome{
+class HellBiome extends Biome{
 
 	public function __construct(){
 		//Todo:populators
 	}
 
 	public function getName() : string{
-		return "NetherrackBiome";
+		return "HellBiome";
 	}
 
 	public function getColor(){
