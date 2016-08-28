@@ -2,6 +2,8 @@
 
 namespace synapse\network\protocol\spp;
 
+use pocketmine\utils\BinaryStream;
+
 class FastPlayerListPacket extends DataPacket{
 	const NETWORK_ID = Info::FAST_PLAYER_LIST_PACKET;
 
@@ -27,7 +29,7 @@ class FastPlayerListPacket extends DataPacket{
 	public function encode(){
 		$this->reset();
 		$this->putUUID($this->sendTo);
-		$this->putByte($this->type);
+		//$this->putByte($this->type); is added by $this->putUUID($this->sendTo);
 		$this->putInt(count($this->entries));
 		foreach($this->entries as $d){
 			if($this->type === self::TYPE_ADD){
