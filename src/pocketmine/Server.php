@@ -1819,7 +1819,7 @@ class Server{
 
 			$this->about();
 
-			$this->logger->debug("Loading pocketmine.yml...");
+			$this->logger->info("Loading properties and configuration...");
 			if(!file_exists($this->dataPath . "pocketmine.yml")){
 				$content = file_get_contents($this->filePath . "src/pocketmine/resources/pocketmine.yml");
 				@file_put_contents($this->dataPath . "pocketmine.yml", $content);
@@ -1840,8 +1840,6 @@ class Server{
 				$this->config->reload();
 				unset($this->propertyCache["settings.language"]);
 			}
-
-			$this->logger->debug("Loading genisys.yml...");
 
 			$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
 			if(file_exists($this->filePath . "src/pocketmine/resources/genisys_$lang.yml")){
@@ -1864,7 +1862,6 @@ class Server{
 				$this->generateExpCache($this->expWriteAhead);
 			}
 
-			$this->logger->info("Loading server properties...");
 			$this->properties = new Config($this->dataPath . "server.properties", Config::PROPERTIES, [
 				"motd" => "Minecraft: PE Server",
 				"server-port" => 19132,

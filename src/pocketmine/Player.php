@@ -2067,25 +2067,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	public function onPlayerPreLogin(){
-		//TODO: implement auth
-		$this->tryAuthenticate();
-	}
-
-	public function tryAuthenticate(){
 		$pk = new PlayStatusPacket();
 		$pk->status = PlayStatusPacket::LOGIN_SUCCESS;
 		$this->dataPacket($pk);
-		//TODO: implement authentication after it is available
-		$this->authenticateCallback(true);
-	}
-
-	public function authenticateCallback($valid){
-
-		//TODO add more stuff after authentication is available
-		if(!$valid){
-			$this->close("", "disconnectionScreen.invalidSession");
-			return;
-		}
 
 		$this->processLogin();
 	}
