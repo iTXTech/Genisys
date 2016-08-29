@@ -24,6 +24,7 @@ namespace synapse;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Human;
 use pocketmine\event\player\PlayerLoginEvent;
+use pocketmine\event\server\DataPacketSendEvent;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
@@ -287,6 +288,12 @@ class Player extends PMPlayer{
 			Synapse::getInstance()->sendDataPacket($pk);
 			return;
 		}
+		
+		$this->server->getPluginManager()->callEvent($ev = new DataPacketSendEvent($this, $packet));
+		if($ev->isCancelled()){
+			return false;
+		}
+		
 		$this->interface->putPacket($this, $packet, $needACK);
 	}
 
@@ -305,6 +312,12 @@ class Player extends PMPlayer{
 			Synapse::getInstance()->sendDataPacket($pk);
 			return;
 		}
+		
+		$this->server->getPluginManager()->callEvent($ev = new DataPacketSendEvent($this, $packet));
+		if($ev->isCancelled()){
+			return false;
+		}
+		
 		$this->interface->putPacket($this, $packet, $needACK, true);
 	}
 }
