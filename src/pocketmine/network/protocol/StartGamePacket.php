@@ -46,20 +46,21 @@ class StartGamePacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putInt($this->seed);
-		$this->putByte($this->dimension);
-		$this->putInt($this->generator);
-		$this->putInt($this->gamemode);
-		$this->putLong($this->eid);
-		$this->putInt($this->spawnX);
-		$this->putInt($this->spawnY);
-		$this->putInt($this->spawnZ);
+		$this->putVarInt(0); //EntityUniqueID
+		$this->putVarInt($this->eid); //EntityRuntimeID (basically just the normal entityID)
 		$this->putFloat($this->x);
 		$this->putFloat($this->y);
 		$this->putFloat($this->z);
-		$this->putByte(1);
-		$this->putByte(1);
-		$this->putByte(0);
+		$this->putVarInt($this->seed);
+		$this->putByte($this->dimension);
+		$this->putByte($this->generator);
+		$this->putByte($this->gamemode);
+		$this->putByte(0); //Difficulty (TODO)
+		$this->putByte(0); //has been loaded in creative
+		$this->putByte(0); //edu mode
+		$this->putFloat(0); //rain level
+		$this->putFloat(0); //lightning level
+		$this->putByte(0); //commands enabled
 		$this->putString($this->unknown);
 	}
 
