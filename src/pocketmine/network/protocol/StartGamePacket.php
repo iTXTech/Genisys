@@ -27,18 +27,21 @@ namespace pocketmine\network\protocol;
 class StartGamePacket extends DataPacket{
 	const NETWORK_ID = Info::START_GAME_PACKET;
 
+	public $entityUniqueId;
+	public $eid;
+	public $x;
+	public $y;
+	public $z;
 	public $seed;
 	public $dimension;
 	public $generator;
 	public $gamemode;
-	public $eid;
-	public $spawnX;
-	public $spawnY;
-	public $spawnZ;
-	public $x;
-	public $y;
-	public $z;
-	public $unknown;
+	public $difficulty;
+	public $hasBeenLoadedInCreative = true;
+	public $eduMode = false;
+	public $rainLevel = 0;
+	public $lightningLevel = 0;
+	public $commandsEnabled = false; //to prevent client crash (temporary fix)
 
 	public function decode(){
 
@@ -46,7 +49,7 @@ class StartGamePacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putVarInt(0); //EntityUniqueID
+		$this->putVarInt($this->entityUniqueId); //EntityUniqueID
 		$this->putVarInt($this->eid); //EntityRuntimeID (basically just the normal entityID)
 		$this->putFloat($this->x);
 		$this->putFloat($this->y);
@@ -55,13 +58,13 @@ class StartGamePacket extends DataPacket{
 		$this->putByte($this->dimension);
 		$this->putByte($this->generator);
 		$this->putByte($this->gamemode);
-		$this->putByte(0); //Difficulty (TODO)
-		$this->putByte(0); //has been loaded in creative
-		$this->putByte(0); //edu mode
-		$this->putFloat(0); //rain level
-		$this->putFloat(0); //lightning level
-		$this->putByte(0); //commands enabled
-		$this->putString($this->unknown);
+		$this->putByte($this->difficulty); //Difficulty (TODO)
+		$this->putByte($this->hasBeenLoadedInCreative); //has been loaded in creative
+		$this->putByte($this->eduMode); //edu mode
+		$this->putFloat($this->rainLevel); //rain level
+		$this->putFloat($this->lightningLevel); //lightning level
+		$this->putByte($this->commandsEnabled); //commands enabled
+		$this->putString("");
 	}
 
 }
