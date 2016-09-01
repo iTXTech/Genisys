@@ -13,7 +13,7 @@ __Feature-rich server software for Minecraft: Pocket Edition & Windows 10 Editio
 
 Introduction
 -------------
-Genisys is a fork of **[PocketMine-MP](https://github.com/PocketMine/PocketMine-MP)** and most of the original code was written by **PocketMine Team**.<br>
+Genisys is a server software based on **[PocketMine-MP](https://github.com/PocketMine/PocketMine-MP)** with extended functionality. Most of the original code was written by **PocketMine Team**.<br>
 Some of the extended functionality that Genisys offers:
 
 * Extended API for plugins (GeniAPI)
