@@ -61,9 +61,9 @@ class Planks extends Solid{
 			self::BIRCH => "Birch Wood Planks",
 			self::JUNGLE => "Jungle Wood Planks",
 			self::ACACIA => "Acacia Wood Planks",
-			self::DARK_OAK => "Jungle Wood Planks",
-			"",
-			""
+			self::DARK_OAK => "Dark Oak Wood Planks",
+			6 => "Unknown Planks",
+			7 => "Unknown Planks"
 		];
 		return $names[$this->meta & 0x07];
 	}
