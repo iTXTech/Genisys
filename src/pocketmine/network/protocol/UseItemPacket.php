@@ -41,17 +41,17 @@ class UseItemPacket extends DataPacket{
 	public $slot;
 
 	public function decode(){
-		$this->x = $this->getInt();
-		$this->y = $this->getInt();
-		$this->z = $this->getInt();
-		$this->face = $this->getByte();
+		$this->x = $this->getVarInt();
+		$this->y = $this->getVarInt();
+		$this->z = $this->getVarInt();
+		$this->face = $this->getVarInt();
 		$this->fx = $this->getFloat();
 		$this->fy = $this->getFloat();
 		$this->fz = $this->getFloat();
 		$this->posX = $this->getFloat();
 		$this->posY = $this->getFloat();
 		$this->posZ = $this->getFloat();
-		$this->slot = $this->getInt();
+		$this->slot = $this->getVarInt();
 		$this->item = $this->getSlot();
 	}
 

@@ -2306,7 +2306,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$timings->stopTiming();
 			return;
 		}
-
 		switch($packet::NETWORK_ID){
 			case ProtocolInfo::ITEM_FRAME_DROP_ITEM_PACKET:
 				$tile = $this->level->getTile($this->temporalVector->setComponents($packet->x, $packet->y, $packet->z));
@@ -3590,6 +3589,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 				break;
 			default:
+				$this->server->getLogger()->debug("Unhandled inbound packet " . get_class($packet) . " from " . $this->getName());
 				break;
 		}
 

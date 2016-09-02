@@ -23,23 +23,18 @@ namespace pocketmine\network\protocol;
 
 #include <rules/DataPacket.h>
 
+class InventoryActionPacket extends DataPacket{
+	const NETWORK_ID = Info::INVENTORY_ACTION_PACKET;
 
-class AdventureSettingsPacket extends DataPacket{
-	const NETWORK_ID = Info::ADVENTURE_SETTINGS_PACKET;
-
-	public $flags;
-	public $userPermission;
-	public $globalPermission;
+	public $unknown; //varint (unsigned)
+	public $item;
 
 	public function decode(){
-
+		$this->unknown = $this->getUnsignedVarInt();
+		$this->item = $this->getSlot();
 	}
-
+	
 	public function encode(){
-		$this->reset();
-		$this->putUnsignedVarInt($this->flags);
-		$this->putUnsignedVarInt($this->userPermission);
-		//$this->putInt($this->globalPermission);
+		//TODO: find out if this packet is sent by server or not
 	}
-
 }
