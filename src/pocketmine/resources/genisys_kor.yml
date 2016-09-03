@@ -36,7 +36,7 @@ player:
  chunk-radius: -1
 
 nether:
- #지옥이 활성화 된 경우 고르세요. 지옥 레벨이 자동으로 생성됩니다.
+ #지옥이 허용된 경우 고르세요. 지옥 레벨이 자동으로 생성됩니다.
  allow-nether: true
  #지옥 레벨의 이름
  level-name: "nether"
