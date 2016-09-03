@@ -31,6 +31,11 @@ class SetEntityMotionPacket extends DataPacket{
 	// eid, motX, motY, motZ
 	/** @var array[] */
 	public $entities = [];
+	
+	public $eid;
+	public $motionX;
+	public $motionY;
+	public $motionZ;
 
 	public function clean(){
 		$this->entities = [];
@@ -43,13 +48,10 @@ class SetEntityMotionPacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		//$this->putInt(count($this->entities));
-		foreach($this->entities as $d){
-			$this->putLong($d[0]); //eid
-			$this->putFloat($d[1]); //motX
-			$this->putFloat($d[2]); //motY
-			$this->putFloat($d[3]); //motZ
-		}
+		$this->putVarInt($this->eid);
+		$this->putFloat($this->motionX);
+		$this->putFloat($this->motionY);
+		$this->putFloat($this->motionZ);
 	}
 
 }

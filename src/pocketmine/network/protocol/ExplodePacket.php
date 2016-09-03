@@ -48,12 +48,12 @@ class ExplodePacket extends DataPacket{
 		$this->putFloat($this->y);
 		$this->putFloat($this->z);
 		$this->putFloat($this->radius);
-		$this->putInt(count($this->records));
+		$this->putUnsignedVarInt(count($this->records));
 		if(count($this->records) > 0){
 			foreach($this->records as $record){
-				$this->putByte($record->x);
-				$this->putByte($record->y);
-				$this->putByte($record->z);
+				$this->putVarInt($record->x);
+				$this->putVarInt($record->y);
+				$this->putVarInt($record->z);
 			}
 		}
 	}

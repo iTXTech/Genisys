@@ -29,16 +29,19 @@ class AnimatePacket extends DataPacket{
 
 	public $action;
 	public $eid;
+	public $unknownFloat; //TODO: find out what this is for (maybe an amplifier?)
 
 	public function decode(){
-		$this->action = $this->getByte();
-		$this->eid = $this->getLong();
+		$this->action = $this->getVarInt();
+		$this->eid = $this->getVarInt();
+		$this->unknownFloat = $this->getFloat();
 	}
 
 	public function encode(){
 		$this->reset();
-		$this->putByte($this->action);
-		$this->putLong($this->eid);
+		$this->putVarInt($this->action);
+		$this->putVarInt($this->eid);
+		$this->putFloat($this->unknownFloat);
 	}
 
 }

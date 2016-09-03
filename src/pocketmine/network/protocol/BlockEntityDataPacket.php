@@ -33,17 +33,17 @@ class BlockEntityDataPacket extends DataPacket{
 	public $namedtag;
 
 	public function decode(){
-		$this->x = $this->getInt();
-		$this->y = $this->getInt();
-		$this->z = $this->getInt();
+		$this->x = $this->getVarInt();
+		$this->y = $this->getVarInt();
+		$this->z = $this->getVarInt();
 		$this->namedtag = $this->get(true);
 	}
 
 	public function encode(){
 		$this->reset();
-		$this->putInt($this->x);
-		$this->putInt($this->y);
-		$this->putInt($this->z);
+		$this->putVarInt($this->x);
+		$this->putVarInt($this->y);
+		$this->putVarInt($this->z);
 		$this->put($this->namedtag);
 	}
 

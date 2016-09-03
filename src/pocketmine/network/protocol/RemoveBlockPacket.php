@@ -27,16 +27,14 @@ namespace pocketmine\network\protocol;
 class RemoveBlockPacket extends DataPacket{
 	const NETWORK_ID = Info::REMOVE_BLOCK_PACKET;
 
-	public $eid;
 	public $x;
 	public $y;
 	public $z;
 
 	public function decode(){
-		$this->eid = $this->getLong();
-		$this->x = $this->getInt();
-		$this->z = $this->getInt();
-		$this->y = $this->getByte();
+		$this->x = $this->getVarInt();
+		$this->z = $this->getVarInt();
+		$this->y = $this->getVarInt();
 	}
 
 	public function encode(){

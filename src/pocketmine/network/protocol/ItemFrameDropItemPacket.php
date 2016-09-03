@@ -31,9 +31,9 @@ class ItemFrameDropItemPacket extends DataPacket{
 	public $dropItem;
 
 	public function decode(){
-		$this->z = $this->getInt();
-		$this->y = $this->getInt();
-		$this->x = $this->getInt();
+		$this->z = $this->getVarInt();
+		$this->y = $this->getVarInt();
+		$this->x = $this->getVarInt();
 		$this->dropItem = $this->getSlot();
 	}
 

@@ -53,7 +53,8 @@ class AddPlayerPacket extends DataPacket{
 		$this->reset();
 		$this->putUUID($this->uuid);
 		$this->putString($this->username);
-		$this->putLong($this->eid);
+		$this->putVarInt($this->eid); //EntityUniqueID
+		$this->putVarInt($this->eid);
 		$this->putFloat($this->x);
 		$this->putFloat($this->y);
 		$this->putFloat($this->z);
