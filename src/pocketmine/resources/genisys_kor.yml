@@ -1,0 +1,165 @@
+#Genisys고급 설정
+
+#파일의 버전
+config:
+ version: 19
+
+level:
+ #날씨에 대한 설정
+ weather: true
+ #날씨의 확률 설정
+ weather-random-duration-min: 6000
+ weather-random-duration-max: 12000
+ #번개의 확률 설정，기본 설정은 10s, 0 = 사용안함
+ lightning-time: 200
+ #번개가 칠 때 불에 대한 설정
+ lightning-fire: false
+ #불이 다른 블럭으로 옮겨 붙을지에 대한 설정
+ fire-spread: false
+ 
+player:
+ #배고픔에 대한 설정
+ hunger: true
+ #허기로 인하여 피가 닳을 때 최소한 남겨질 생명(1칸은 2입니다)
+ hunger-health: 10
+ #배고픔이 다는 시간, 기본: 80=4sec
+ hunger-timer: 3000
+ #경험지에 대한 설정
+ experience: true
+ #플레이어가 죽을 시에 인벤토리를 저장에 대한 설정
+ keep-inventory: false
+ #게임모드 변경 시에 인벤토리가 자동으로 아이템이 없어질 지에 대한 설정
+ auto-clear-inventory : true
+ #플레이어가 죽을 시에 경험지를 저장에 대한 설정
+ keep-experience: false
+ #플레이어가 접속 시에 크래쉬가 날 경우, 빈칸을 설정하라 10. disable=-1
+ chunk-radius: -1
+
+nether:
+ #지옥을 사용할 지에 대한 설정
+ allow-nether: true
+ #지옥의 레벨 이름
+ level-name: "nether"
+ 
+server:
+ #Pregenerate 경험 데이터，0=disabled
+ experience-cache: 65535
+ #철골렘이 스폰될 지에 관한 설정
+ allow-iron-golem: false
+ #눈골렘이 스폰될 지에 관한 설정
+ allow-snow-golem: false
+ #server.log 파일을 사용하지 않는 설정
+ disable-log: false
+ #핵(날기) 방지에 관한 설정
+ anti-fly: true
+ #비동기 통신 청크에 대한 설정
+ async-chunk-request: true
+ #플레이어가 접속 시/나갈 때에 띄울 창/메시지 설정
+ #0 = 메세지, 1 = 팁, 2 = 팝업창
+ player-msg-type: 0
+ login-msg: "§3@플레이어가 접속하였습니다"
+ logout-msg: "§3@플레이어가 나가셨습니다"
+ #json파일으로부터 레시피를 얻는 설정
+ recipes-from-json: false
+ #json파일으로부터 크레이에티브 아이템을 얻는 설정
+ creative-items-from-json: false
+ #움직임을 지속적으로 관찰하는 설정(no more pull back)
+ check-movement: true
+ #크레이에티브의 설정(아이템을 버릴 수 없다, 상자에 아이템을 넣을 수 없다)
+ limited-creative: true
+ #플럭 파괴 시에 파티클을 추가할 지에 대한 설정
+ destroy-block-particle: true
+ #포션을 던질 수 있는 것에 대한 설정
+ allow-splash-potion: true
+ #고급 명렁어 선택 설정
+ advanced-command-selector: false
+
+enchantment:
+ #모루 사용에 관한 설정
+ enable-anvil: true
+ #인첸트테이블 사용에 관한 설정
+ enable-enchanting-table: true
+ #책장의 수를 세는 것의 설정, 이것은 서버의 렉을 유발할 수도 있습니다
+ #만약 위 옵션이 false 라면, 확률로 결정됩니다 (0~15)
+ count-bookshelf: false
+
+redstone:
+ ##########################################
+ ###레드스톤 시스템은 사용 가능###
+ ##########################################
+ #만약에 true 라면 작동하지 않습니다#
+ ##########################################
+ enable: false
+ #펄스 frequancy를 허락합니다
+ frequency-pulse: false
+ #frequency의 설정, 기존: 1s
+ pulse-frequency: 1
+
+synapse:
+ #만약 당신이 Synapse API 또는 Synapse 서버에 연결하고 싶다면, 이 설정을 키세요: false
+ server-ip: 127.0.0.1
+ server-port: 10305
+ #이 클라이언트는 로비와 메인서버이다
+ is-main-server: true
+ server-password: 32bitlongkey
+ #이 클라이언트는 이 클라언트에 대한 설명입니다
+ description: "A Synapse client"
+ #이 곳은 RakLib으로 플레이어가 Synapse로만 통해 가입가능을 사용하지 않는다
+ disable-rak: false
+
+dserver:
+ #모든 멀티서버의 통일을 한다
+ enable: false
+ #자동 업데이트
+ query-auto-update: false
+ #쿼리를 정기 업데이트한다
+ query-tick-update: true
+ #최대 인원 수를 서버의 이름란에 표시
+ motd-max-players: 0
+ #쿼리에 플레이어가 들어올 수 있는 최대의 숫자 표시，0=Default
+ query-max-players: 0
+ #서버의 이름란에 서버의 접속 인원 표시
+ motd-all-players: false
+ #쿼리에 모든 플레이어의 목록을 표시
+ query-all-players: false
+ #서버의 이름란에 온라인 플레이어의 접속 인원 표시
+ motd-players: false
+ #서버의 이름란에 쿼리에 있는 플레이어의 접속 인원 표시
+ query-players: false
+ #주파수를 업데이트한다 ,20=1초
+ time: 40
+ # 실패할 경우에 다시 시도하는 빈도
+ retry-time: 3
+ #the server list，separate by ';'，e.g. 1.example.com:19132;2.example.com:19133
+ server-list: ""
+ 
+ai:
+ #AI 바꾸기
+ enable: false
+ #좀비의 AI，0=disabled，1=AI 1.0ver，2=new AI(Faultiness)
+ zombie: 1
+ #피그좀비의 AI
+ pigzombie: true
+ #소와 버섯소의 AI
+ cow: true
+ #닭의 AI
+ chicken: true
+ #양의 AI
+ sheep: true
+ #돼지의 AI
+ pig: true
+ #스켈레톤의 AI
+ skeleton: true
+ #크리퍼의 AI
+ creeper: true
+ #철골렘의 AI
+ iron-golem: true
+ #눈골렘의 AI
+ snow-golem: true
+ #크리퍼가 터질 때 블럭을 파괴 시킬지에 대한 설정
+ creeper-explode-destroy-block: false
+ #몬스터가 자동으로 스폰될지에 대한 설정
+ mobgenerate: false
+ 
+inventory:
+ #이것을 true로 한다면, 모루로 인해 인벤토리 오류가 생길 것이다.allow-cheats: false
