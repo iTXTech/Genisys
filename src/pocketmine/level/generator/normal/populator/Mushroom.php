@@ -49,7 +49,7 @@ class Mushroom extends VariableAmountPopulator{
 				$zz = $z - 7 + $random->nextRange(0, 15);
 				$yy = $this->getHighestWorkableBlock($xx, $zz);
 				if($yy !== -1 and $this->canMushroomStay($xx, $yy, $zz)){
-					$this->level->setBlockIdAt($xx, $yy, $zz, (($random->nextRange(0, 4)) == 0 ? Block::RED_MUSHROOM_BLOCK : Block::BROWN_MUSHROOM_BLOCK));
+					$this->level->setBlockIdAt($xx, $yy, $zz, (($random->nextRange(0, 4)) == 0 ? Block::RED_MUSHROOM : Block::BROWN_MUSHROOM));
 				}
 			}
 		}
