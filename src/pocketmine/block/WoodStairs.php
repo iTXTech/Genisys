@@ -46,6 +46,14 @@ class WoodStairs extends Stair{
 		];
 	}
 
+	public function getBurnChance() : int{
+		return 5;
+	}
+
+	public function getBurnAbility() : int{
+		return 20;
+	}
+
 	public function getHardness() {
 		return 2;
 	}
