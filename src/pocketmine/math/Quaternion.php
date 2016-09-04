@@ -99,5 +99,12 @@ class Quaternion{
 		return new Quaternion($this->x / $number, $this->y / $number, $this->z / $number, $this->w / $number);
 	}
 
+	public function length(){
+		return Math::length($this->x, $this->y, $this->z, $this->w);
+	}
 
+	public function normalize(){
+		$length = $this->length();
+		return new Quaternion($this->x / $length, $this->y / $length, $this->z / $length, $this->w / $length);
+	}
 }

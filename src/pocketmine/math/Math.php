@@ -40,4 +40,16 @@ abstract class Math{
 	public static function clamp($value, $low, $high){
 		return min($high, max($low, $value));
 	}
+
+	public static function length(int... $vec){
+		return sqrt(self::lengthSquared($vec));
+	}
+
+	public static function lengthSquared(int... $vec){
+		$lengthSquared = 0;
+		foreach($vec as $comp){
+			$lengthSquared += $comp * $comp;
+		}
+		return $lengthSquared;
+	}
 }

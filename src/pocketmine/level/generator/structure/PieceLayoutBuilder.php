@@ -21,6 +21,7 @@
 
 namespace pocketmine\level\generator\structure;
 
+use pocketmine\math\Matrix3;
 use pocketmine\math\Quaternion;
 use pocketmine\math\Vector3;
 
@@ -74,11 +75,12 @@ class PieceLayoutBuilder extends PieceBuilder{
 
 	private function setBlockId(int $xx, int $zz, int $id){
 		$transformed = $this->transform($xx, $zz);
-		$this->parent->getLevel()->setBlockIdAt($transformed->getFloorX())
+		$this->parent->getLevel()->setBlockIdAt($transformed->getFloorX(), $transformed->getFloorY(), $transformed->getFloorZ(), $id);
 	}
 
 	private function transform(int $x, int $z) : Vector3{
 		$rotPoint = new Vector3($this->rotationPoint->getX(), $this->rotationPoint->getY(), $this->rotationPoint->getZ());
-		????????????????????What??????
+		return Matrix3::createRotation($this->rotation)->transform((new Vector3($x, 0, $z))->subtract($rotPoint))->
+		add($rotPoint)->add($this->position->getX(), $this->position->getY(), $this->position->getZ())->round();
 	}
 }

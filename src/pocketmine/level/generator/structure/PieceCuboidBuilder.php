@@ -94,8 +94,8 @@ class PieceCuboidBuilder extends PieceBuilder{
 		for($xx = $this->min->getX(); $xx <= $endX; $xx++){
 			for($yy = $this->min->getY(); $yy <= $endY; $yy++){
 				for($zz = $this->min->getZ(); $zz <= $endZ; $zz++){
-					if(!$this->ignoreAir or !$this->parent->getLevel()->getBlockIdAt($xx, $yy, $zz) == Block::AIR){
-						$this->parent->getLevel()->setBlockIdAt($xx, $yy, $zz, $this->picker->get($this->isOuter($xx, $yy, $zz)));
+					if(!$this->ignoreAir or !$this->parent->getBlockIdAt($xx, $yy, $zz) == Block::AIR){
+						$this->parent->setBlockIdAt($xx, $yy, $zz, $this->picker->get($this->isOuter($xx, $yy, $zz)));
 					}
 				}
 			}
@@ -112,8 +112,8 @@ class PieceCuboidBuilder extends PieceBuilder{
 					if($this->parent->getRandom()->nextFloat() > $odd){
 						continue;
 					}
-					if(!$this->ignoreAir or !$this->parent->getLevel()->getBlockIdAt($xx, $yy, $zz) == Block::AIR){
-						$this->parent->getLevel()->setBlockIdAt($xx, $yy, $zz, $this->picker->get($this->isOuter($xx, $yy, $zz)));
+					if(!$this->ignoreAir or !$this->parent->getBlockIdAt($xx, $yy, $zz) == Block::AIR){
+						$this->parent->setBlockIdAt($xx, $yy, $zz, $this->picker->get($this->isOuter($xx, $yy, $zz)));
 					}
 				}
 			}
@@ -136,10 +136,10 @@ class PieceCuboidBuilder extends PieceBuilder{
 				for($zz = $this->min->getZ(); $zz <= $endZ; $zz++){
 					$dz = ($zz - $zOffset) / ($zScale * 0.5);
 					if(($dx * $dx + $dy * $dy + $dz * $dz) <= 1.05){
-						if($this->ignoreAir and $this->parent->getLevel()->getBlockIdAt($xx, $yy, $zz) == Block::AIR){
+						if($this->ignoreAir and $this->parent->getBlockIdAt($xx, $yy, $zz) == Block::AIR){
 							continue;
 						}
-						$this->parent->getLevel()->setBlockIdAt($xx, $yy, $zz, $this->picker->get(false));
+						$this->parent->setBlockIdAt($xx, $yy, $zz, $this->picker->get(false));
 					}
 				}
 			}
@@ -157,21 +157,21 @@ class PieceCuboidBuilder extends PieceBuilder{
 			if($yy == $startY or $yy == $endY){
 				for($xx = $startX; $xx <= $endX; $xx++){
 					for($zz = $startZ; $zz <= $endZ; $zz++){
-						if($this->isLiquid($this->parent->getLevel()->getBlockIdAt($xx, $yy, $zz))){
+						if(self::isLiquid($this->parent->getBlockIdAt($xx, $yy, $zz))){
 							return true;
 						}
 					}
 				}
 			}else{
 				for($xx = $startX; $xx <= $endX; $xx++){
-					if($this->isLiquid($this->parent->getLevel()->getBlockIdAt($xx, $yy, $startZ))
-						or $this->isLiquid($this->$this->parent->getLevel()->getBlockIdAt($xx, $yy, $endZ))){
+					if(self::isLiquid($this->parent->getBlockIdAt($xx, $yy, $startZ))
+						or self::isLiquid($this->parent->getBlockIdAt($xx, $yy, $endZ))){
 						return true;
 					}
 				}
 				for($zz = $startZ + 1; $zz < $endZ; $zz++){
-					if($this->isLiquid($this->parent->getLevel()->getBlockIdAt($startX, $yy, $zz))
-						or $this->isLiquid($this->parent->getLevel()->getBlockIdAt($endX, $yy, $zz))){
+					if(self::isLiquid($this->parent->getBlockIdAt($startX, $yy, $zz))
+						or self::isLiquid($this->parent->getBlockIdAt($endX, $yy, $zz))){
 						return true;
 					}
 				}
@@ -180,7 +180,7 @@ class PieceCuboidBuilder extends PieceBuilder{
 		return false;
 	}
 
-	public function isLiquid(int $id) : bool{
+	public static function isLiquid(int $id) : bool{
 		if($id == Block::WATER or $id == Block::LAVA or $id == Block::STILL_LAVA or $id == Block::STILL_WATER){
 			return true;
 		}

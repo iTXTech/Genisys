@@ -21,14 +21,26 @@
 
 namespace pocketmine\level\generator\structure;
 
+use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\object\Object;
 use pocketmine\utils\Random;
 
 abstract class Structure extends Object{
 	/** @var Random */
 	protected $random;
+	/** @var ChunkManager */
+	protected $level;
 
-	public function __construct(Random $random = null){
+	public function __construct(ChunkManager $level, Random $random = null){
 		$this->random = $random;
+		$this->level = $level;
+	}
+
+	public function getLevel(){
+		return $this->level;
+	}
+
+	public function getRandom(){
+		return $this->random;
 	}
 }
