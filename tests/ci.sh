@@ -1,6 +1,10 @@
 #!/bin/bash
 mkdir plugins
 curl -fsSL https://github.com/iTXTech/Genisys-DevTools/releases/download/1.0.0/Genisys-DevTools_v1.0.0.phar -o plugins/Genisys-DevTools.phar
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+    curl -sSL https://api.github.com/repos/iTxTech/Genisys/pulls/"$TRAVIS_PULL_REQUEST" | \
+        php tests/ciDlPlugins.php "$(realpath plugins)"
+fi
 echo Running lint...
 shopt -s globstar
 for file in **/*.php; do
