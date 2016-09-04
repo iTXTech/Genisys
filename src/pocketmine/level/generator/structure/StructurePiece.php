@@ -22,6 +22,7 @@
 namespace pocketmine\level\generator\structure;
 
 use pocketmine\block\Block;
+use pocketmine\level\generator\object\Object;
 use pocketmine\math\Matrix3;
 use pocketmine\math\Quaternion;
 use pocketmine\math\Vector3;
@@ -88,7 +89,8 @@ abstract class StructurePiece{
 	}
 
 	public function attachBlock(int $xx, int $yy, int $zz, int $id){
-		//TODO
+		//TODO: Implement
+		$this->setBlockIdAt($xx, $yy, $zz, $id);
 	}
 
 	public function fillDownwards(int $xx, int $yy, int $zz, int $limit, int $id){
@@ -99,6 +101,38 @@ abstract class StructurePiece{
 			$yy--;
 		}
 	}
-	////////
-	///////
+
+	public function placeObject(int $xx, int $yy, int $zz, Object $object){
+		$transformed = $this->transform($xx, $yy, $zz);
+		if($object->canPlaceObject($this->parent->getLevel(), $transformed->getFloorX(), $transformed->getFloorY(), $transformed->getFloorZ())){
+			$object->placeObject($this->parent->getLevel(), $transformed->getFloorX(), $transformed->getFloorY(), $transformed->getFloorZ());
+		}
+	}
+
+	public function placeDoor(int $xx, int $yy, int $zz, int $doorId, int $face){
+		//TODO: Implement
+		$this->setBlockIdAt($xx, $yy, $zz, $doorId);
+	}
+
+	public function getPosition() : Vector3{
+		return $this->position;
+	}
+
+	public function setPosition(Vector3 $pos){
+		$this->position = $pos;
+	}
+
+	public function getRotation() : Quaternion{
+		return $this->rotation;
+	}
+
+	public abstract function canPlace() : bool;
+
+	public abstract function place();
+
+	public abstract function randomize();
+
+	public abstract function getNextPieces();
+
+	public abstract function getBoundingBox();
 }

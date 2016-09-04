@@ -107,4 +107,10 @@ class Quaternion{
 		$length = $this->length();
 		return new Quaternion($this->x / $length, $this->y / $length, $this->z / $length, $this->w / $length);
 	}
+
+	public static function fromAngleRadAxis($angle, $x, $y, $z){
+		$halfAngle = $angle / 2;
+		$q = sin($halfAngle) / sqrt($x * $x + $y * $y + $z * $z);
+		return new Quaternion($x * $q, $y * $q, $z * $q, cos($halfAngle));
+	}
 }
