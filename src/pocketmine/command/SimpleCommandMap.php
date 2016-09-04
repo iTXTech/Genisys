@@ -86,12 +86,19 @@ class SimpleCommandMap implements CommandMap{
 	 * @var Command[]
 	 */
 	protected $knownCommands = [];
+	
+	/**
+	 * @var bool[]
+	 */
+	protected $commandConfig = [];
 
 	/** @var Server */
 	private $server;
 
 	public function __construct(Server $server){
 		$this->server = $server;
+		/** @var bool[] */
+		$this->commandConfig = $this->server->getProperty("commands");
 		$this->setDefaultCommands();
 	}
 
@@ -112,8 +119,8 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new FillCommand("fill"));
 		$this->register("pocketmine", new PluginsCommand("plugins"));
 		$this->register("pocketmine", new SeedCommand("seed"));
-		$this->register("pocketmine", new HelpCommand("help"));
-		$this->register("pocketmine", new StopCommand("stop"));
+		$this->register("pocketmine", new HelpCommand("help"), null, true);
+		$this->register("pocketmine", new StopCommand("stop"), null, true);
 		$this->register("pocketmine", new TellCommand("tell"));
 		$this->register("pocketmine", new DefaultGamemodeCommand("defaultgamemode"));
 		$this->register("pocketmine", new BanCommand("ban"));
@@ -131,7 +138,7 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new WhitelistCommand("whitelist"));
 		$this->register("pocketmine", new SaveOnCommand("save-on"));
 		$this->register("pocketmine", new SaveOffCommand("save-off"));
-		$this->register("pocketmine", new SaveCommand("save-all"));
+		$this->register("pocketmine", new SaveCommand("save-all"), null, true);
 		$this->register("pocketmine", new GiveCommand("give"));
 		$this->register("pocketmine", new EffectCommand("effect"));
 		$this->register("pocketmine", new EnchantCommand("enchant"));
@@ -144,14 +151,14 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new TeleportCommand("tp"));
 		$this->register("pocketmine", new TimeCommand("time"));
 		$this->register("pocketmine", new TimingsCommand("timings"));
-		$this->register("pocketmine", new ReloadCommand("reload"));
+		$this->register("pocketmine", new ReloadCommand("reload"), null, true);
 		$this->register("pocketmine", new XpCommand("xp"));
 		$this->register("pocketmine", new SetBlockCommand("setblock"));
 
 		if($this->server->getProperty("debug.commands", false)){
-			$this->register("pocketmine", new StatusCommand("status"));
-			$this->register("pocketmine", new GarbageCollectorCommand("gc"));
-			$this->register("pocketmine", new DumpMemoryCommand("dumpmemory"));
+			$this->register("pocketmine", new StatusCommand("status"), null, true);
+			$this->register("pocketmine", new GarbageCollectorCommand("gc"), null, true);
+			$this->register("pocketmine", new DumpMemoryCommand("dumpmemory"), null, true);
 		}
 	}
 
@@ -162,11 +169,16 @@ class SimpleCommandMap implements CommandMap{
 		}
 	}
 
-	public function register($fallbackPrefix, Command $command, $label = null){
+	public function register($fallbackPrefix, Command $command, $label = null, $overrideConfig = false){
 		if($label === null){
 			$label = $command->getName();
 		}
 		$label = strtolower(trim($label));
+		
+		//Check if command was disabled in config and for override
+		if(!(($this->commandConfig[$label] ?? $this->commandConfig["default"] ?? true) or $overrideConfig)){
+			return false;
+		}
 		$fallbackPrefix = strtolower(trim($fallbackPrefix));
 
 		$registered = $this->registerAlias($command, false, $fallbackPrefix, $label);
