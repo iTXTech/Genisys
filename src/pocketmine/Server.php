@@ -133,7 +133,6 @@ use pocketmine\network\SourceInterface;
 use pocketmine\network\upnp\UPnP;
 use pocketmine\permission\BanList;
 use pocketmine\permission\DefaultPermissions;
-use pocketmine\plugin\FolderPluginLoader;
 use pocketmine\plugin\PharPluginLoader;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginLoadOrder;
@@ -1996,7 +1995,6 @@ class Server{
 			Attribute::init();
 			EnchantmentLevelTable::init();
 			Color::init();
-			//TextWrapper::init();
 			$this->craftingManager = new CraftingManager($this->recipesFromJson);
 
 			$this->pluginManager = new PluginManager($this, $this->commandMap);
@@ -2004,7 +2002,6 @@ class Server{
 			$this->pluginManager->setUseTimings($this->getProperty("settings.enable-profiling", false));
 			$this->profilingTickRate = (float) $this->getProperty("settings.profile-report-trigger", 20);
 			$this->pluginManager->registerInterface(PharPluginLoader::class);
-			$this->pluginManager->registerInterface(FolderPluginLoader::class);
 			$this->pluginManager->registerInterface(ScriptPluginLoader::class);
 
 			//set_exception_handler([$this, "exceptionHandler"]);
@@ -2405,7 +2402,6 @@ class Server{
 		}
 
 		$this->pluginManager->registerInterface(PharPluginLoader::class);
-		$this->pluginManager->registerInterface(FolderPluginLoader::class);
 		$this->pluginManager->registerInterface(ScriptPluginLoader::class);
 		$this->pluginManager->loadPlugins($this->pluginPath);
 		$this->enablePlugins(PluginLoadOrder::STARTUP);
@@ -2419,13 +2415,6 @@ class Server{
 	 * @param string $msg
 	 */
 	public function shutdown(bool $restart = false, string $msg = ""){
-		/*if($this->expEnabled){
-			foreach($this->getLevels() as $level){
-				foreach($level->getEntities() as $e){
-					if($e instanceof ExperienceOrb) $e->close();
-				}
-			}
-		}*/
 		/*if($this->isRunning){
 			$killer = new ServerKiller(90);
 			$killer->start();
