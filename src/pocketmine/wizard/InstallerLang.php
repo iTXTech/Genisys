@@ -29,7 +29,8 @@ class InstallerLang{
 		"zho" => "繁體中文",
 		"jpn" => "日本語",
 		"rus" => "Русский",
-		"ita" => "Italiano"
+		"ita" => "Italiano",
+		"kor" => "한국어"	
 	];
 	private $texts = [];
 	private $lang;
