@@ -155,6 +155,17 @@ anonymous-statistics:
  enabled: true
  host: stats.pocketmine.net
 
+commands:
+ #Here you can customize server commands
+ #Specify command names to override the default set here.
+ #If no custom value is defined for a command, the default will be used.
+ #NOTE: Some commands cannot be disabled here, such as the important ones like /stop, /reload, etc.
+ default: true
+ #Set override values per command here
+ #For example, uncommenting the below will disable /plugins and /version
+ #version: false
+ #plugins: false
+
 aliases:
  #Examples:
  #showtheversion: version
