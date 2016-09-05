@@ -77,7 +77,7 @@ class MonsterSpawner extends Solid{
 			new IntTag("x", $block->x),
 			new IntTag("y", $block->y),
 			new IntTag("z", $block->z),
-			new IntTag("EntityId", 0),
+			new IntTag("EntityId", $item->getDamage()),
 		]);
 		
 		if($item->hasCustomBlockData()){
