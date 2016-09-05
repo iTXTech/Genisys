@@ -28,9 +28,8 @@ class Painting extends Hanging{
 
 	public function attack($damage, EntityDamageEvent $source){
 		parent::attack($damage, $source);
-		if($source->isCancelled()){
-			return;
-		}
+
+		$this->close();
 	}
 
 	public function spawnTo(Player $player){
