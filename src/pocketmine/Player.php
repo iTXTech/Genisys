@@ -2214,6 +2214,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 			return;
 		}
+		
+		if(!$this->isConnected()){
+			return;
+		}
 
 		$pk = new PlayStatusPacket();
 		$pk->status = PlayStatusPacket::LOGIN_SUCCESS;
@@ -2440,8 +2444,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 					break;
 				}
-
-				$this->onPlayerPreLogin();
+				
+				if($this->isConnected()){
+					$this->onPlayerPreLogin();
+				}
 
 				break;
 			case ProtocolInfo::MOVE_PLAYER_PACKET:
