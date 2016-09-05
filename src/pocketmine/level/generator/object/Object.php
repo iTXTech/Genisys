@@ -25,6 +25,14 @@
 namespace pocketmine\level\generator\object;
 
 
-abstract class Object{
+use pocketmine\level\ChunkManager;
 
+abstract class Object{
+	public function placeObject(ChunkManager $level, $x, $y, $z){
+
+	}
+
+	public function canPlaceObject(ChunkManager $level, $x, $y, $z){
+
+	}
 }

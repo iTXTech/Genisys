@@ -33,8 +33,8 @@ use pocketmine\item\Item;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\generator\biome\Biome;
-use pocketmine\level\generator\populator\Ore;
-use pocketmine\level\generator\populator\Populator;
+use pocketmine\level\generator\normal\populator\Ore;
+use pocketmine\level\generator\normal\populator\Populator;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
 

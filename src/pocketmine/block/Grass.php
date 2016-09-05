@@ -25,7 +25,7 @@ use pocketmine\event\block\BlockSpreadEvent;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\item\enchantment\enchantment;
-use pocketmine\level\generator\object\TallGrass as TallGrassObject;
+use pocketmine\level\generator\normal\object\TallGrass as TallGrassObject;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\Player;

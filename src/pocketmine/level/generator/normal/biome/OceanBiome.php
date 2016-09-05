@@ -21,19 +21,22 @@
 
 namespace pocketmine\level\generator\normal\biome;
 
-use pocketmine\level\generator\populator\Sugarcane;
-use pocketmine\level\generator\populator\TallGrass;
+use pocketmine\level\generator\normal\populator\Mushroom;
+use pocketmine\level\generator\normal\populator\SugarCane;
+use pocketmine\level\generator\normal\populator\TallGrass;
 
 class OceanBiome extends WateryBiome{
 
 	public function __construct(){
 		parent::__construct();
 
-		$sugarcane = new Sugarcane();
+		$sugarcane = new SugarCane();
 		$sugarcane->setBaseAmount(6);
 		$tallGrass = new TallGrass();
 		$tallGrass->setBaseAmount(5);
+		$mushroom = new Mushroom();
 
+		$this->addPopulator($mushroom);
 		$this->addPopulator($sugarcane);
 		$this->addPopulator($tallGrass);
 
