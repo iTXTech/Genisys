@@ -11,6 +11,8 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\network\protocol\AddPaintingPacket;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\Player;
+use pocketmine\level\particle\DestroyBlockParticle;
+use pocketmine\block\Block;
 
 class Painting extends Hanging{
 	const NETWORK_ID = 83;
@@ -28,8 +30,9 @@ class Painting extends Hanging{
 
 	public function attack($damage, EntityDamageEvent $source){
 		parent::attack($damage, $source);
-
-		$this->close();
+		if($source->isCancelled()) return false;
+		$this->level->addParticle(new DestroyBlockParticle($this->add(0.5), Block::get(Block::LADDER)));
+		$this->kill();
 	}
 
 	public function spawnTo(Player $player){
