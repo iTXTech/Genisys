@@ -18,7 +18,6 @@
  *
  *
 */
-
 namespace pocketmine\command\defaults;
 
 use pocketmine\command\Command;
@@ -42,24 +41,11 @@ class StopCommand extends VanillaCommand{
 			return true;
 		}
 
-		$msg = "";
-		if(isset($args[0])){
-			$msg = $args[0];
-		}
-
-		$restart = false;
-		if(isset($args[1])){
-			if($args[0] == 'force'){
-				$restart = true;
-			}else{
-				$restart = false;
-			}
-		}
-
 		Command::broadcastCommandMessage($sender, new TranslationContainer("commands.stop.start"));
-
-		$sender->getServer()->shutdown($restart, $msg);
+		$sender->getServer()->setshutdownreason(implode(" ", $args));
+		$sender->getServer()->shutdown();
 
 		return true;
 	}
+}
 }
