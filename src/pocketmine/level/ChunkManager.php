@@ -35,7 +35,7 @@ interface ChunkManager{
 	 *
 	 * @return int 0-255
 	 */
-	public function getBlockIdAt(int $x, int $y, int $z) : int;
+	public function getBlockIdAt(int $x, int $y, int $z): int;
 
 	/**
 	 * Sets the raw block id.
@@ -77,7 +77,7 @@ interface ChunkManager{
 	 *
 	 * @return int 0-15
 	 */
-	public function getBlockLightAt($x, $y, $z);
+	public function getBlockLightAt(int $x, int $y, int $z) : int;
 
 	/**
 	 * Updates the light around the block
@@ -86,7 +86,7 @@ interface ChunkManager{
 	 * @param $y
 	 * @param $z
 	 */
-	public function updateBlockLight($x, $y, $z);
+	public function updateBlockLight(int $x, int $y, int $z);
 
 	/**
 	 * Sets the raw block light level.
@@ -96,7 +96,7 @@ interface ChunkManager{
 	 * @param int $z
 	 * @param int $level 0-15
 	 */
-	public function setBlockLightAt($x, $y, $z, $level);
+	public function setBlockLightAt(int $x, int $y, int $z, int $level);
 
 	/**
 	 * @param int $chunkX
@@ -118,5 +118,5 @@ interface ChunkManager{
 	 *
 	 * @return int
 	 */
-	public function getSeed();
+	public function getSeed() : int;
 }

@@ -113,7 +113,7 @@ class SimpleChunkManager implements ChunkManager{
 	 *
 	 * @return int 0-15
 	 */
-	public function getBlockLightAt($x, $y, $z){
+	public function getBlockLightAt(int $x, int $y, int $z) : int{
 		if($chunk = $this->getChunk($x >> 4, $z >> 4)){
 			return $chunk->getBlockLight($x & 0x0f, $y & 0x7f, $z & 0x0f);
 		}
@@ -128,7 +128,7 @@ class SimpleChunkManager implements ChunkManager{
 	 * @param int $z
 	 * @param int $level 0-15
 	 */
-	public function setBlockLightAt($x, $y, $z, $level){
+	public function setBlockLightAt(int $x, int $y, int $z, int $level){
 		if($chunk = $this->getChunk($x >> 4, $z >> 4)){
 			$chunk->setBlockLight($x & 0x0f, $y & 0x7f, $z & 0x0f, $level & 0x0f);
 		}
@@ -141,7 +141,7 @@ class SimpleChunkManager implements ChunkManager{
 	 * @param $y
 	 * @param $z
 	 */
-	public function updateBlockLight($x, $y, $z){
+	public function updateBlockLight(int $x, int $y, int $z){
 		$lightPropagationQueue = new \SplQueue();
 		$lightRemovalQueue = new \SplQueue();
 		$visited = [];
@@ -260,7 +260,7 @@ class SimpleChunkManager implements ChunkManager{
 	 *
 	 * @return int
 	 */
-	public function getSeed(){
+	public function getSeed() : int{
 		return $this->seed;
 	}
 }

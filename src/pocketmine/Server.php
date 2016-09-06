@@ -528,13 +528,6 @@ class Server{
 		return $this->getConfigString("server-ip", "0.0.0.0");
 	}
 
-	/**
-	 * @deprecated
-	 */
-	public function getServerName(){
-		return $this->getConfigString("motd", "Minecraft: PE Server");
-	}
-
 	public function getServerUniqueId(){
 		return $this->serverID;
 	}
@@ -819,56 +812,6 @@ class Server{
 	 */
 	public function getTickUsageAverage(){
 		return round((array_sum($this->useAverage) / count($this->useAverage)) * 100, 2);
-	}
-
-
-	/**
-	 * @deprecated
-	 *
-	 * @param     $address
-	 * @param int $timeout
-	 */
-	public function blockAddress($address, $timeout = 300){
-		$this->network->blockAddress($address, $timeout);
-	}
-
-	/**
-	 * @deprecated
-	 *
-	 * @param $address
-	 * @param $port
-	 * @param $payload
-	 */
-	public function sendPacket($address, $port, $payload){
-		$this->network->sendPacket($address, $port, $payload);
-	}
-
-	/**
-	 * @deprecated
-	 *
-	 * @return SourceInterface[]
-	 */
-	public function getInterfaces(){
-		return $this->network->getInterfaces();
-	}
-
-	/**
-	 * @deprecated
-	 *
-	 * @param SourceInterface $interface
-	 */
-	public function addInterface(SourceInterface $interface){
-		$this->network->registerInterface($interface);
-	}
-
-	/**
-	 * @deprecated
-	 *
-	 * @param SourceInterface $interface
-	 */
-	public function removeInterface(SourceInterface $interface){
-		$interface->shutdown();
-		$this->network->unregisterInterface($interface);
 	}
 
 	/**
@@ -2317,15 +2260,6 @@ class Server{
 	 */
 	public function enablePlugin(Plugin $plugin){
 		$this->pluginManager->enablePlugin($plugin);
-	}
-
-	/**
-	 * @param Plugin $plugin
-	 *
-	 * @deprecated
-	 */
-	public function loadPlugin(Plugin $plugin){
-		$this->enablePlugin($plugin);
 	}
 
 	public function disablePlugins(){
