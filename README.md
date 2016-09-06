@@ -1,3 +1,4 @@
+![Logo](https://lh3.googleusercontent.com/proxy/altb0Vjd2YY1-FWZB9L0qRSnOhNghvKWYnpQVKoGrC-AdXWDNHg5TV51q10FilT6SsQNwZVNY-UPaCtfR_84Gr2N3pqljr1Qeq7H=w120-h120) 
 Genisys
 ===================
 
@@ -7,6 +8,7 @@ __Feature-rich server software for Minecraft: Pocket Edition & Windows 10 Editio
 [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
 [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
 [![Jenkins](https://img.shields.io/jenkins/s/https/ci.itxtech.org/Genisys.svg)](https://ci.itxtech.org/job/Genisys/lastSuccessfulBuild/)
+
 
 ## NOTICE: 0.16 IS NOT SUPPORTED YET. Read #1807 for further information.
 
