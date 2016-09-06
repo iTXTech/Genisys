@@ -37,7 +37,7 @@ class MainLogger extends \AttachableThreadedLogger{
 	private $consoleCallback;
 
 	/** Extra Settings */
-	protected $write = true;
+	protected $write = false;
 
 	public $shouldSendMsg = "";
 	public $shouldRecordMsg = false;
@@ -280,24 +280,23 @@ class MainLogger extends \AttachableThreadedLogger{
 
 	public function run(){
 		$this->shutdown = false;
-		if($this->write){
-			//$this->logResource = file_put_contents($this->logFile, "a+b", FILE_APPEND);
-
-			while($this->shutdown === false){
-				if(!$this->write) break;
-				$this->synchronized(function(){
-					while($this->logStream->count() > 0){
-						$chunk = $this->logStream->shift();
-						$this->logResource = file_put_contents($this->logFile, $chunk, FILE_APPEND);
-					}
-
-					$this->wait(200000);
-				});
-			}
-
-			if($this->logStream->count() > 0){
+		while($this->shutdown === false){
+			$this->synchronized(function(){
 				while($this->logStream->count() > 0){
 					$chunk = $this->logStream->shift();
+					if($this->write){
+						$this->logResource = file_put_contents($this->logFile, $chunk, FILE_APPEND);
+					}
+				}
+
+				$this->wait(200000);
+			});
+		}
+
+		if($this->logStream->count() > 0){
+			while($this->logStream->count() > 0){
+				$chunk = $this->logStream->shift();
+				if($this->write){
 					$this->logResource = file_put_contents($this->logFile, $chunk, FILE_APPEND);
 				}
 			}
