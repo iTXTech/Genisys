@@ -211,12 +211,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	protected $isCrafting = false;
 
-	/**
-	 * @deprecated
-	 * @var array
-	 */
-	public $loginData = [];
-
 	public $creationTime = 0;
 
 	protected $randomClientId;
@@ -1489,31 +1483,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return [];
 	}
 
-	/**
-	 * @deprecated
-	 * @param $entityId
-	 * @param $x
-	 * @param $y
-	 * @param $z
-	 */
-	public function addEntityMotion($entityId, $x, $y, $z){
-
-	}
-
-	/**
-	 * @deprecated
-	 * @param      $entityId
-	 * @param      $x
-	 * @param      $y
-	 * @param      $z
-	 * @param      $yaw
-	 * @param      $pitch
-	 * @param null $headYaw
-	 */
-	public function addEntityMovement($entityId, $x, $y, $z, $yaw, $pitch, $headYaw = null){
-
-	}
-
 	public function setDataProperty($id, $type, $value){
 		if(parent::setDataProperty($id, $type, $value)){
 			$this->sendData($this, [$id => $this->dataProperties[$id]]);
@@ -2404,7 +2373,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				$this->randomClientId = $packet->clientId;
-				$this->loginData = ["clientId" => $packet->clientId, "loginData" => null];
 
 				$this->uuid = UUID::fromString($packet->clientUUID);
 				$this->rawUUID = $this->uuid->toBinary();
