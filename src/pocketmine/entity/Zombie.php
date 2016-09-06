@@ -120,7 +120,7 @@ class Zombie extends Monster{
 			return false;
 		}
 		
-		if($this->getLevel()->getServer()->aiConfig["zombie"] != 2) return parent::onUpdate($currentTick);
+		return parent::onUpdate($currentTick);
 		
 		$this->lastUpdate = $currentTick;
 
