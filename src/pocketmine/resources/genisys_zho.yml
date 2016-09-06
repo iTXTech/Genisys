@@ -2,7 +2,7 @@
 
 #設定檔案版本
 config:
- version: 19
+ version: 20
 
 level:
  #設定是否變換天氣
@@ -133,35 +133,7 @@ dserver:
  retry-times: 3
  #伺服器列表，用;隔開，例如 1.example.com:19132;2.example.com:19133
  server-list: ""
- 
-ai:
- #AI總開關
- enable: false
- #殭屍的AI，0為關閉，1為1.0版AI，2為新AI（不完善）
- zombie: 1
- #殭屍豬人的AI
- pigzombie: true
- #牛和哞菇的AI
- cow: true
- #雞的AI
- chicken: true
- #羊的AI
- sheep: true
- #豬的AI
- pig: true
- #骷髏的AI
- skeleton: true
- #苦力帕的AI
- creeper: true
- #鐵傀儡的AI
- iron-golem: true
- #雪傀儡的AI
- snow-golem: true
- #苦力帕爆炸是否破壞方塊
- creeper-explode-destroy-block: false
- #是否允許自動生成生物
- mobgenerate: false
- 
+
 inventory:
  #Set this to true if you have problems with anvils. Will process inventory transactions in a vanilla fashion with no anti-cheats or verification.
  allow-cheats: false

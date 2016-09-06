@@ -2,7 +2,7 @@
 
 #Phiên bản file cài đặt
 config:
- version: 19
+ version: 20
 
 level:
  #Chỉnh nếu muốn bật/tắt thời tiết (true/false)
@@ -134,35 +134,7 @@ dserver:
  retry-times: 3
  #the server list，Separate by ';'，e.g. 1.example.com:19132;2.example.com:19133
  server-list: ""
- 
-ai:
- #Bật/tắt AI (true/false) (bên dưới là kích hoạt các AI nếu muốn cho vào server, đánh true/false)
- enable: false
- #Zombie'AI，0=hủy bỏ，1=AI 2=AI mới(Siêu nhân)
- zombie: 1
- #AI Zombie Lợn
- pigzombie: true
- #AI bò và bò nấm
- cow: true
- #AI gà
- chicken: true
- #AI cừu
- sheep: true
- #AI lợn
- pig: true
- #AI người xương
- skeleton: true
- #AI Creeper
- creeper: true
- #AI Iron Golem (người sắt)
- iron-golem: true
- #AI Snow Golem (người tuyết)
- snow-golem: true
- #Phá hủy các khối nếu creeper nổ (true/false)
- creeper-explode-destroy-block: false
- #Bật/tắt nếu muốn kích hoạt chế độ mob tự spawn (true/false)
- mobgenerate: false
- 
+
 inventory:
  #Set this to true if you have problems with anvils. Will process inventory transactions in a vanilla fashion with no anti-cheats or verification.
  allow-cheats: false
