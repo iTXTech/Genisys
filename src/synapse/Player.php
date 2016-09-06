@@ -24,6 +24,8 @@ namespace synapse;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Human;
 use pocketmine\event\player\PlayerLoginEvent;
+use pocketmine\event\server\DataPacketSendEvent;
+use pocketmine\event\Timings;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
@@ -273,6 +275,15 @@ class Player extends PMPlayer{
 	}
 
 	public function dataPacket(DataPacket $packet, $needACK = false){
+		$timings = Timings::getSendDataPacketTimings($packet);
+		$timings->startTiming();
+		
+		$this->server->getPluginManager()->callEvent($ev = new DataPacketSendEvent($this, $packet));
+		if($ev->isCancelled()){
+			$timings->stopTiming();
+			return;
+		}
+		
 		if($packet instanceof PlayerListPacket){
 			$pk = new FastPlayerListPacket();
 			$pk->sendTo = $this->uuid;
@@ -285,12 +296,24 @@ class Player extends PMPlayer{
 				$pk->entries[] = $entry;
 			}
 			Synapse::getInstance()->sendDataPacket($pk);
+			$timings->stopTiming();
 			return;
 		}
+		
+		$timings->stopTiming();
 		$this->interface->putPacket($this, $packet, $needACK);
 	}
 
 	public function directDataPacket(DataPacket $packet, $needACK = false){
+		$timings = Timings::getSendDataPacketTimings($packet);
+		$timings->startTiming();
+		
+		$this->server->getPluginManager()->callEvent($ev = new DataPacketSendEvent($this, $packet));
+		if($ev->isCancelled()){
+			$timings->stopTiming();
+			return;
+		}
+		
 		if($packet instanceof PlayerListPacket){
 			$pk = new FastPlayerListPacket();
 			$pk->sendTo = $this->uuid;
@@ -303,8 +326,11 @@ class Player extends PMPlayer{
 				$pk->entries[] = $entry;
 			}
 			Synapse::getInstance()->sendDataPacket($pk);
+			$timings->stopTiming();
 			return;
 		}
+		
+		$timings->stopTiming();
 		$this->interface->putPacket($this, $packet, $needACK, true);
 	}
 }
