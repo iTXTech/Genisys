@@ -41,7 +41,7 @@ abstract class FlyingAnimal extends Creature implements Ageable{
         if($this->closed !== false){
             return false;
         }
-        if ($this->willMove(100) and $this->getLevel()->getServer()->aiEnabled) {
+        if ($this->willMove(100)) {
             if(++$this->switchDirectionTicker === $this->switchDirectionTicks){
                 $this->switchDirectionTicker = 0;
                 if(mt_rand(0, 100) < 50){
