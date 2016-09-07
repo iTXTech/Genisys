@@ -25,14 +25,16 @@ However, Genisys still has a long way to go. We welcome contributions.
 
 Help & Support
 -------------
-If you have an issue, please make sure to check the [FAQs](https://github.com/iTXTech/Genisys/wiki/FAQs) page before opening any issues. We are constantly fixing issues and are continuously updating, so please also ensure that you are up-to-date before opening any issues.
+* __[Documentation](https://docs.itxtech.org)__
 
+If you have an issue, please make sure to check the [FAQs](https://github.com/iTXTech/Genisys/wiki/FAQs) page before opening any issues. We are constantly fixing issues and are continuously updating, so please also ensure that you are up-to-date before opening any issues.
 
 Discussion
 -------------
 * __[Mattermost](https://mattermost.itxtech.org/itxtechnologies/channels/genisys)__
 * __[Gitter](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)__
 * IRC: #genisys at freenode
+* Twitter (**@iTX_PeratX @DylanKTaylor98**)
 
 Get Genisys
 -------------
