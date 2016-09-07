@@ -2446,10 +2446,6 @@ class Server{
 
 		$this->logger->info($this->getLanguage()->translateString("pocketmine.server.startFinished", [round(microtime(true) - \pocketmine\START_TIME, 3)]));
 
-		if(!file_exists($this->getPluginPath() . DIRECTORY_SEPARATOR . "Genisys")){
-			@mkdir($this->getPluginPath() . DIRECTORY_SEPARATOR . "Genisys");
-		}
-
 		$this->tickProcessor();
 		$this->forceShutdown();
 
