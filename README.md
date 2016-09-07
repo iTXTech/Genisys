@@ -25,6 +25,9 @@ However, Genisys still has a long way to go. We welcome contributions.
 
 Help & Support
 -------------
+* __[Official Doxygen-generated Documentation (Google Server)](https://storage.googleapis.com/itx-technologies-141911.appspot.com/docs/genisys/index.html)__
+* __[Latest Doxygen generated from development (Chinese Server)](https://docs.itxtech.org)__
+
 If you have an issue, please make sure to check the [FAQs](https://github.com/iTXTech/Genisys/wiki/FAQs) page before opening any issues. We are constantly fixing issues and are continuously updating, so please also ensure that you are up-to-date before opening any issues.
 
 
@@ -32,7 +35,8 @@ Discussion
 -------------
 * __[Mattermost](https://mattermost.itxtech.org/itxtechnologies/channels/genisys)__
 * __[Gitter](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)__
-* IRC: #genisys at freenode
+* IRC Chat #genisys @ irc.reenode.net
+* Twitter (**__[@iTX_PeratX](https://twitter.com/iTX_PeratX)__ __[@DylanKTaylor98](https://twitter.com/DylanKTaylor98)__**)
 
 Get Genisys
 -------------
