@@ -258,9 +258,9 @@ class SimpleChunkManager implements ChunkManager{
 	/**
 	 * Gets the level seed
 	 *
-	 * @return int
+	 * @return int|string
 	 */
-	public function getSeed() : int{
+	public function getSeed(){
 		return $this->seed;
 	}
 }

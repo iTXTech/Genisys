@@ -116,7 +116,7 @@ interface ChunkManager{
 	/**
 	 * Gets the level seed
 	 *
-	 * @return int
+	 * @return int|string
 	 */
-	public function getSeed() : int;
+	public function getSeed();
 }
