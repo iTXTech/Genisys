@@ -36,7 +36,7 @@ Discussion
 * __[Mattermost](https://mattermost.itxtech.org/itxtechnologies/channels/genisys)__
 * __[Gitter](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)__
 * IRC Chat #genisys @ irc.reenode.net
-* Twitter (**__[@iTX_PeratX](https://twitter.com/iTX_PeratX)__ __[@DylanKTaylor98](https://twitter.com/DylanKTaylor98)__**)
+* Twitter (**__[@iTX_PeratX](https://twitter.com/iTX_PeratX)__
 
 Get Genisys
 -------------
