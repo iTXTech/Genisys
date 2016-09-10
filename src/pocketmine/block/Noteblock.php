@@ -27,7 +27,7 @@ use pocketmine\level\sound\NoteblockSound;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 
-class Noteblock extends Solid implements ElectricalAppliance{
+class Noteblock extends Solid{
 	protected $id = self::NOTEBLOCK;
 
 	public function __construct($meta = 0){

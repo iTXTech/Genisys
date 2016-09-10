@@ -41,7 +41,7 @@ use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 
 
-class Block extends Position implements BlockIds, Metadatable{	
+class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneSource{
 
 	/** @var \SplFixedArray */
 	public static $list = null;
@@ -209,8 +209,8 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::POTATO_BLOCK] = Potato::class;
 			self::$list[self::ANVIL] = Anvil::class;
 
-			self::$list[self::TRAPPED_CHEST] = TrappedChest::class;
-			self::$list[self::REDSTONE_BLOCK] = Redstone::class;
+			//self::$list[self::TRAPPED_CHEST] = TrappedChest::class;
+			//self::$list[self::REDSTONE_BLOCK] = Redstone::class;
 
 			self::$list[self::QUARTZ_BLOCK] = Quartz::class;
 			self::$list[self::QUARTZ_STAIRS] = QuartzStairs::class;
@@ -250,21 +250,21 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::POWERED_RAIL] = PoweredRail::class;
 			self::$list[self::RAIL] = Rail::class;
 
-			self::$list[self::WOODEN_PRESSURE_PLATE] = WoodenPressurePlate::class;
+			/*self::$list[self::WOODEN_PRESSURE_PLATE] = WoodenPressurePlate::class;
 			self::$list[self::STONE_PRESSURE_PLATE] = StonePressurePlate::class;
 			self::$list[self::LIGHT_WEIGHTED_PRESSURE_PLATE] = LightWeightedPressurePlate::class;
-			self::$list[self::HEAVY_WEIGHTED_PRESSURE_PLATE] = HeavyWeightedPressurePlate::class;
+			self::$list[self::HEAVY_WEIGHTED_PRESSURE_PLATE] = HeavyWeightedPressurePlate::class;*/
 			self::$list[self::REDSTONE_WIRE] = RedstoneWire::class;
 			self::$list[self::ACTIVE_REDSTONE_LAMP] = ActiveRedstoneLamp::class;
 			self::$list[self::INACTIVE_REDSTONE_LAMP] = InactiveRedstoneLamp::class;
 			self::$list[self::REDSTONE_TORCH] = RedstoneTorch::class;
 			self::$list[self::UNLIT_REDSTONE_TORCH] = UnlitRedstoneTorch::class;
-			self::$list[self::WOODEN_BUTTON] = WoodenButton::class;
+			/*self::$list[self::WOODEN_BUTTON] = WoodenButton::class;
 			self::$list[self::STONE_BUTTON] = StoneButton::class;
 			self::$list[self::LEVER] = Lever::class;
 			self::$list[self::DAYLIGHT_SENSOR] = DaylightDetector::class;
 			self::$list[self::DAYLIGHT_SENSOR_INVERTED] = DaylightDetectorInverted::class;
-			self::$list[self::NOTEBLOCK] = Noteblock::class;
+			self::$list[self::NOTEBLOCK] = Noteblock::class;*/
 			self::$list[self::SKULL_BLOCK] = SkullBlock::class;
 			self::$list[self::NETHER_QUARTZ_ORE] = NetherQuartzOre::class;
 			self::$list[self::ACTIVATOR_RAIL] = ActivatorRail::class;
@@ -273,10 +273,10 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::TRIPWIRE] = Tripwire::class;
 			self::$list[self::TRIPWIRE_HOOK] = TripwireHook::class;
 			self::$list[self::ITEM_FRAME_BLOCK] = ItemFrame::class;
-			self::$list[self::DISPENSER] = Dispenser::class;
+			/*self::$list[self::DISPENSER] = Dispenser::class;
 			self::$list[self::DROPPER] = Dropper::class;
 			self::$list[self::POWERED_REPEATER_BLOCK] = PoweredRepeater::class;
-			self::$list[self::UNPOWERED_REPEATER_BLOCK] = UnpoweredRepeater::class;
+			self::$list[self::UNPOWERED_REPEATER_BLOCK] = UnpoweredRepeater::class;*/
 			self::$list[self::CAULDRON_BLOCK] = Cauldron::class;
 			self::$list[self::INVISIBLE_BEDROCK] = InvisibleBedrock::class;
 			self::$list[self::HOPPER_BLOCK] = Hopper::class;
@@ -414,6 +414,17 @@ class Block extends Position implements BlockIds, Metadatable{
 	 * @return void
 	 */
 	public function onUpdate($type){
+
+	}
+
+	/**
+	 * Fires a block update on the Block from another Block
+	 *
+	 * @param Block $block
+	 *
+	 * @return void
+	 */
+	public function onUpdateFromBlock(Block $block){
 
 	}
 
@@ -864,5 +875,36 @@ class Block extends Position implements BlockIds, Metadatable{
 		if($this->getLevel() instanceof Level){
 			$this->getLevel()->getBlockMetadata()->removeMetadata($this, $metadataKey, $plugin);
 		}
+	}
+
+	public function isRedstoneConductor() : bool{
+		return false;
+	}
+
+	public function getIndirectRedstonePower(Block $block, int $face, int $powerMode) : int{
+		return $this->getRedstonePower($block);
+	}
+
+	public function hasIndirectRedstonePower(Block $block, int $face, int $powerMode) : bool{
+		return $this->getIndirectRedstonePower($block, $face, $powerMode) > 0;
+	}
+
+	public function getRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : int{
+		if(!$this->isRedstoneConductor()){
+			return self::REDSTONE_POWER_MIN;
+		}
+
+		$power = 0;
+		foreach([Vector3::SIDE_NORTH, Vector3::SIDE_EAST, Vector3::SIDE_SOUTH, Vector3::SIDE_WEST, Vector3::SIDE_DOWN, Vector3::SIDE_UP] as $face){
+			$neigh = $block->getSide($face);
+			if($neigh instanceof RedstoneSource){
+				$power = max($power, $neigh->getDirectRedstonePower($neigh, Vector3::getOppositeSide($face), $powerMode));
+			}
+		}
+		return $power;
+	}
+
+	public function hasRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : bool{
+		return $this->getRedstonePower($block, $powerMode) > 0;
 	}
 }

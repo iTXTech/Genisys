@@ -32,7 +32,7 @@ use pocketmine\Player;
 use pocketmine\tile\Dropper as TileDropper;
 use pocketmine\tile\Tile;
 
-class Dropper extends Solid implements ElectricalAppliance{
+class Dropper extends Solid{
 
 	protected $id = self::DROPPER;
 

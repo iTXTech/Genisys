@@ -29,7 +29,7 @@ use pocketmine\math\Vector3;
 use pocketmine\Player;
 
 
-abstract class Door extends Transparent implements ElectricalAppliance{
+abstract class Door extends Transparent{
 
 	public function canBeActivated() : bool {
 		return true;

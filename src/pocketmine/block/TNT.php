@@ -34,7 +34,7 @@ use pocketmine\nbt\tag\FloatTag;
 use pocketmine\Player;
 use pocketmine\utils\Random;
 
-class TNT extends Solid implements ElectricalAppliance{
+class TNT extends Solid{
 
 	protected $id = self::TNT;
 

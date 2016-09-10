@@ -1112,9 +1112,10 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	/**
-	 * @param Vector3 $pos
+	 * @param Vector3 $p
 	 */
-	public function updateAround(Vector3 $pos){
+	public function updateAround(Vector3 $p){
+		$pos = new Vector3($p->x, $p->y, $p->z);
 		$this->server->getPluginManager()->callEvent($ev = new BlockUpdateEvent($this->getBlock($this->temporalVector->setComponents($pos->x, $pos->y - 1, $pos->z))));
 		if(!$ev->isCancelled()){
 			$ev->getBlock()->onUpdate(self::BLOCK_UPDATE_NORMAL);

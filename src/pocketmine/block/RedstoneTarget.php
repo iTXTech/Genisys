@@ -21,6 +21,6 @@
 
 namespace pocketmine\block;
 
-interface ElectricalAppliance{
-
+interface RedstoneTarget{
+	public function isReceivingPower(Block $block) : bool;
 }
