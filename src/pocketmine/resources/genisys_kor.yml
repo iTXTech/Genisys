@@ -2,7 +2,7 @@
 
 #Version 파일의 버전
 config:
- version: 20
+ version: 19
 
 level:
  #날씨 시스템을 켜는 경우 설정하세요
@@ -57,8 +57,8 @@ server:
  #플레이어가 참여할 때 뜨는 메시지를 고릅니다
  #0 = 메시지, 1 = 팁, 2 = 팝업
  player-msg-type: 0
- login-msg: "§3@player joined the game"
- logout-msg: "§3@player left the game"
+ login-msg: "§3@player님이 게임에 참여했습니다"
+ logout-msg: "§3@player님이 게임을 떠났습니다"
  #레시피를 json에서 가져오는 경우 고르세요
  recipes-from-json: false
  #크리에이티브 아이템을 json에서 가져오는 경우 고르세요
@@ -133,7 +133,35 @@ dserver:
  retry-times: 3
  #서버 목록，';'를 사용하여 분리하세요，예시: 1.example.com:19132;2.example.com:19133
  server-list: ""
-
+ 
+ai:
+ #AI 스위치
+ enable: false
+ #좀비의 AI，0=비활성화，1=AI 1.0 버전，2=새로운 AI(불완전)
+ zombie: 1
+ #좀비 피그맨의 AI
+ pigzombie: true
+ #소와 버섯 소의 AI
+ cow: true
+ #닭의 AI
+ chicken: true
+ #양의 AI
+ sheep: true
+ #돼지의 AI
+ pig: true
+ #스켈레톤의 AI
+ skeleton: true
+ #크리퍼의 AI
+ creeper: true
+ #철 골램의 AI
+ iron-golem: true
+ #눈 골렘의 AI
+ snow-golem: true
+ #크리퍼가 폭발했을 때 블록 파괴
+ creeper-explode-destroy-block: false
+ #몹 자동 생성을 활성화 하는 경우 고르세요
+ mobgenerate: false
+ 
 inventory:
  #모루와 관련된 문제가 있는 경우 true로 설정하세요. 인벤토리 처리를 vanila fashion (기본 방식)으로 치트 방지나 확인 없이 진행합니다.
  allow-cheats: false
