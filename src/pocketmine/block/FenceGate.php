@@ -27,7 +27,7 @@ use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
 use pocketmine\level\sound\DoorSound;
 
-class FenceGate extends Transparent implements ElectricalAppliance{
+class FenceGate extends Transparent{
 
 	protected $id = self::FENCE_GATE;
 

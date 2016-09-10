@@ -21,12 +21,20 @@
 
 namespace pocketmine\block;
 
-use pocketmine\math\Vector3;
+interface IndirectRedstoneSource{
+	const POWER_MODE_ALL = 0;
+	const POWER_MODE_ALL_EXCEPT_WIRE = 1;
 
-interface RedstoneSource extends IndirectRedstoneSource{
-	public function getDirectRedstonePower(Block $block, int $face, int $powerMode) : int;
+	const REDSTONE_POWER_MIN = 0;
+	const REDSTONE_POWER_MAX = 15;
 
-	public function hasDirectRedstonePower(Block $block, int $face, int $powerMode) : bool;
+	public function getIndirectRedstonePower(Block $block, int $face, int $powerMode) : int;
 
-	public function getRedstonePowerStrength(Vector3 $pos) : int;
+	public function hasIndirectRedstonePower(Block $block, int $face, int $powerMode) : bool;
+
+	public function getRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : int;
+
+	public function hasRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : bool;
+
+	public function isRedstoneConductor() : bool;
 }

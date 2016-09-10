@@ -25,7 +25,7 @@ use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\math\Vector3;
 
-class ActiveRedstoneLamp extends Solid implements ElectricalAppliance, SolidLight{
+class ActiveRedstoneLamp extends Solid implements SolidLight{
 	protected $id = self::ACTIVE_REDSTONE_LAMP;
 
 	public function __construct($meta = 0){
