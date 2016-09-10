@@ -1112,10 +1112,10 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	/**
-	 * @param Vector3 $pos
+	 * @param Vector3 $p
 	 */
-	public function updateAround(Vector3 $pos){
-		$pos = $pos->floor();
+	public function updateAround(Vector3 $p){
+		$pos = new Vector3($p->x, $p->y, $p->z);
 		$this->server->getPluginManager()->callEvent($ev = new BlockUpdateEvent($this->getBlock($this->temporalVector->setComponents($pos->x, $pos->y - 1, $pos->z))));
 		if(!$ev->isCancelled()){
 			$ev->getBlock()->onUpdate(self::BLOCK_UPDATE_NORMAL);
@@ -1990,9 +1990,6 @@ class Level implements ChunkManager, Metadatable{
 			for($x = $minX; $x <= $maxX; ++$x){
 				for($z = $minZ; $z <= $maxZ; ++$z){
 					foreach($this->getChunkEntities($x, $z) as $ent){
-						if($ent instanceof Player and $ent->isSpectator()){
-							continue;
-						}
 						if($entity == null){
 							if($ent->boundingBox->intersectsWith($bb)){
 								$nearby[] = $ent;
@@ -2029,9 +2026,6 @@ class Level implements ChunkManager, Metadatable{
 		for($x = $minX; $x <= $maxX; ++$x){
 			for($z = $minZ; $z <= $maxZ; ++$z){
 				foreach($this->getChunkEntities($x, $z) as $ent){
-					if($ent instanceof Player and $ent->isSpectator()){
-						continue;
-					}
 					if($ent !== $entity and $ent->boundingBox->intersectsWith($bb)){
 						$nearby[] = $ent;
 					}
