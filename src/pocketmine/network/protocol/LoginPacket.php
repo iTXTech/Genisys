@@ -35,6 +35,7 @@ class LoginPacket extends DataPacket{
 	public $clientUUID;
 	public $clientId;
 	public $identityPublicKey;
+	public $chainData;
 	public $serverAddress;
 
 	public $skinId = null;
@@ -50,7 +51,7 @@ class LoginPacket extends DataPacket{
 
 		$time = time();
 
-		$chainData = json_decode($this->get($this->getLInt()))->{"chain"};
+		$this->chainData = $chainData = json_decode($this->get($this->getLInt()))->{"chain"};
 		// Start with the trusted one
 		$chainKey = self::MOJANG_PUBKEY;
 		while(!empty($chainData)){
