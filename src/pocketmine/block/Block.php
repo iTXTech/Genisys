@@ -418,17 +418,6 @@ class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneS
 	}
 
 	/**
-	 * Fires a block update on the Block from another Block
-	 *
-	 * @param Block $block
-	 *
-	 * @return void
-	 */
-	public function onUpdateFromBlock(Block $block){
-
-	}
-
-	/**
 	 * Do actions when activated by Item. Returns if it has done anything
 	 *
 	 * @param Item   $item
