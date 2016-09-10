@@ -30,11 +30,23 @@ use pocketmine\utils\RedstoneUtil;
 class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 	protected $id = self::REDSTONE_WIRE;
 
+	private static $updateCube = [];
+
 	/** @var Block[] */
 	private $updateQueue = [];
 
 	public function __construct($meta = 0){
 		parent::__construct(Block::REDSTONE_WIRE, $meta);
+
+		if(self::$updateCube == []){
+			for($i = -1; $i <= 1; $i++){
+				for($j = -1; $j <= 1; $j++){
+					for($k = -1; $k <= 1; $k++){
+						self::$updateCube[] = [$i, $j, $k];
+					}
+				}
+			}
+		}
 	}
 
 	public function getHardness(){
@@ -65,6 +77,13 @@ class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 		}
 	}
 
+	private function updateAround(){
+		$temporalVector = new Vector3();
+		foreach(self::$updateCube as $pos){
+			$this->getLevel()->getBlock($temporalVector->setComponents($this->x + $pos[0], $this->y + $pos[1], $this->z + $pos[2]))->onUpdate(Level::BLOCK_UPDATE_NORMAL);
+		}
+	}
+
 	public function onUpdate($type){
 		if($type == Level::BLOCK_UPDATE_NORMAL or $type == Level::BLOCK_UPDATE_SCHEDULED){
 			if(!Server::getInstance()->redstoneEnabled){
@@ -78,7 +97,7 @@ class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 			}elseif($receiving > $current){
 				$this->meta = $receiving;
 				$this->getLevel()->setBlock($this, $this, false, false);
-				$this->getLevel()->updateAround($this);//TODO: more
+				$this->updateAround();
 			}else{
 				$this->updateQueue = [];
 				$this->disableRedstone($this);
