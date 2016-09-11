@@ -1002,9 +1002,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->setAllowFlight($this->gamemode == 3 || $this->gamemode == 1);
 		
 		$this->setHealth($this->getHealth());
-		if($this->server->foodEnabled) $this->setFood($this->getFood());
-		else $this->setFood(20);
-
+		$this->setFood($this->getFood());
+		
 		$this->server->getPluginManager()->callEvent($ev = new PlayerJoinEvent($this, new TranslationContainer(TextFormat::YELLOW . "%multiplayer.player.joined", [
 			$this->getDisplayName()
 		])));
