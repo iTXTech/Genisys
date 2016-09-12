@@ -164,7 +164,8 @@ class BinaryStream extends \stdClass{
 	 * Reads an unsigned varint from the stream.
 	 */
 	public function getUnsignedVarInt(){
-		$value = 0;
+		return Binary::readUnsignedVarInt($this);
+		/*$value = 0;
 		$i = 0;
 		while((($b = $this->getByte()) & 0x80) !== 0){
 			$value |= ($b & 0x7f) << $i;
@@ -173,23 +174,25 @@ class BinaryStream extends \stdClass{
 				throw new \InvalidArgumentException("Value is too long to be an int32");
 			}
 		}
-		return $value | ($b << $i);
+		return $value | ($b << $i);*/
 	}
 	
 	/**
 	 * Reads a signed varint from the stream.
 	 */
 	public function getVarInt(){
-		$raw = $this->getUnsignedVarInt();
+		return Binary::readVarInt($this);
+		/*$raw = $this->getUnsignedVarInt();
 		$temp = ((($raw << 31) >> 31) ^ $raw) >> 1;
-		return $temp ^ ($raw & (1 << 31));
+		return $temp ^ ($raw & (1 << 31));*/
 	}
 	
 	/**
 	 * Reads an unsigned 64-bit varint from the stream.
 	 */
 	public function getUnsignedVarInt64(){
-		$value = 0;
+		return Binary::readUnsignedVarInt64($this);
+		/*$value = 0;
 		$i = 0;
 		while((($b = $this->getByte()) & 0x80) !== 0){
 			$value |= ($b & 0x7f) << $i;
@@ -198,49 +201,54 @@ class BinaryStream extends \stdClass{
 				throw new \InvalidArgumentException("Value is too long to be an int64");
 			}
 		}
-		return $value | ($b << $i);
+		return $value | ($b << $i);*/
 	}
 	
 	public function getVarInt64(){
-		$raw = $this->getUnsignedVarInt64();
+		return Binary::readVarInt64($this);
+		/*$raw = $this->getUnsignedVarInt64();
 		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
-		return $temp ^ ($raw & 1 << 63);
+		return $temp ^ ($raw & 1 << 63);*/
 	}
 	
 	/**
 	 * Writes an unsigned varint to the stream.
 	 */
 	public function putUnsignedVarInt($v){
-		while($v & 0xFFFFFF80 !== 0){
+		$this->put(Binary::writeUnsignedVarInt($v));
+		/*while($v & 0xFFFFFF80 !== 0){
 			$this->putByte(($v & 0x7f) | 0x80);
 			$v >>= 7;
 		}
-		$this->putByte($v);
+		$this->putByte($v);*/
 	}
 	
 	/**
 	 * Writes a signed varint to the stream.
 	 */
 	public function putVarInt($v){
-		$this->putUnsignedVarInt(($v << 1) ^ ($v >> 31));
+		$this->put(Binary::writeVarInt($v));
+		//$this->putUnsignedVarInt(($v << 1) ^ ($v >> 31));
 	}
 	
 	/**
 	 * Writes a 64-bit unsigned varint to the stream.
 	 */
 	public function putUnsignedVarInt64($v){
-		while($v & 0xFFFFFFFFFFFFFF80 !== 0){
+		$this->put(Binary::writeUnsignedVarInt64($v));
+		/*while($v & 0xFFFFFFFFFFFFFF80 !== 0){
 			$this->putByte(((int) $v & 0x7f) | 0x80);
 			$v >>= 7;
 		}
-		$this->putByte($v);
+		$this->putByte($v);*/
 	}
 	
 	/**
 	 * Writes a 64-bit signed varint to the stream.
 	 */
 	public function putVarInt64($v){
-		$this->putVarInt64(($v << 1) ^ ($v >> 63));
+		$this->put(Binary::writeVarInt64($v));
+		//$this->putVarInt64(($v << 1) ^ ($v >> 63));
 	}
 
 	public function getString(){

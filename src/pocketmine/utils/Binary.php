@@ -447,5 +447,70 @@ class Binary{
 	public static function writeLLong($value){
 		return strrev(self::writeLong($value));
 	}
+	
+	public static function readVarInt($stream){
+		$raw = self::readUnsignedVarInt($stream);
+		$temp = ((($raw << 31) >> 31) ^ $raw) >> 1;
+		return $temp ^ ($raw & (1 << 31));
+	}
+	
+	public static function readVarInt64($stream){
+		$raw = self::readUnsignedVarInt64($stream);
+		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
+		return $temp ^ ($raw & 1 << 63);
+	}
+	
+	public static function readUnsignedVarInt($stream){
+		$value = 0;
+		$i = 0;
+		while((($b = $stream->getByte()) & 0x80) !== 0){
+			$value |= ($b & 0x7f) << $i;
+			$i += 7;
+			if($i > 35){
+				throw new \InvalidArgumentException("Value is too long to be an int64");
+			}
+		}
+		return $value | ($b << $i);
+	}
 
+	public static function readUnsignedVarInt64(BinaryStream $stream){
+		$value = 0;
+		$i = 0;
+		while((($b = $stream->getByte()) & 0x80) !== 0){
+			$value |= ($b & 0x7f) << $i;
+			$i += 7;
+			if($i > 35){
+				throw new \InvalidArgumentException("Value is too long to be an int64");
+			}
+		}
+		return $value | ($b << $i);
+	}
+
+	public static function writeVarInt($v){
+		return self::writeUnsignedVarInt(($v << 1) ^ ($v >> 31));
+	}
+	
+	public static function writeVarInt64($v){
+		return self::writeUnsignedVarInt64(($v << 1) ^ ($v >> 63));
+	}
+
+	public static function writeUnsignedVarInt($v){
+		$buf = "";
+		while($v & 0xFFFFFF80 !== 0){
+			$buf .= self::writeByte(($v & 0x7f) | 0x80);
+			$v >>= 7;
+		}
+		$buf .= self::writeByte($v);
+		return $buf;
+	}
+
+	public static function writeUnsignedVarInt64($v){
+		$buf = "";
+		while($v & 0xFFFFFFFFFFFFFF80 !== 0){
+			$buf .= self::writeByte(((int) $v & 0x7f) | 0x80);
+			$v >>= 7;
+		}
+		$buf .= self::writeByte($v);
+		return $buf;
+	}
 }

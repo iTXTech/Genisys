@@ -596,10 +596,12 @@ class NBT{
 
 	public function getInt(){
 		return $this->endianness === self::BIG_ENDIAN ? Binary::readInt($this->get(4)) : Binary::readLInt($this->get(4));
+		//return Binary::readVarInt($this);
 	}
 
 	public function putInt($v){
 		$this->buffer .= $this->endianness === self::BIG_ENDIAN ? Binary::writeInt($v) : Binary::writeLInt($v);
+		//$this->buffer .= Binary::writeVarInt($v);
 	}
 
 	public function getLong(){

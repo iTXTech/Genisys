@@ -59,12 +59,12 @@ class CraftingDataPacket extends DataPacket{
 	}
 
 	private static function writeShapelessRecipe(ShapelessRecipe $recipe, BinaryStream $stream){
-		$stream->putVarInt($recipe->getIngredientCount());
+		$stream->putUnsignedVarInt($recipe->getIngredientCount());
 		foreach($recipe->getIngredientList() as $item){
 			$stream->putSlot($item);
 		}
 
-		$stream->putVarInt(1);
+		$stream->putUnsignedVarInt(1);
 		$stream->putSlot($recipe->getResult());
 
 		$stream->putUUID($recipe->getId());
@@ -82,7 +82,7 @@ class CraftingDataPacket extends DataPacket{
 			}
 		}
 
-		$stream->putVarInt(1);
+		$stream->putUnsignedVarInt(1);
 		$stream->putSlot($recipe->getResult());
 
 		$stream->putUUID($recipe->getId());
@@ -92,7 +92,8 @@ class CraftingDataPacket extends DataPacket{
 
 	private static function writeFurnaceRecipe(FurnaceRecipe $recipe, BinaryStream $stream){
 		if($recipe->getInput()->getDamage() !== null){ //Data recipe
-			$stream->putVarInt(($recipe->getInput()->getId() << 16) | ($recipe->getInput()->getDamage()));
+			$stream->putVarInt($recipe->getInput()->getDamage());
+			$stream->putVarInt($recipe->getInput()->getId());
 			$stream->putSlot($recipe->getResult());
 
 			return CraftingDataPacket::ENTRY_FURNACE_DATA;
@@ -155,11 +156,9 @@ class CraftingDataPacket extends DataPacket{
 			$entryType = self::writeEntry($d, $writer);
 			if($entryType >= 0){
 				$this->putVarInt($entryType);
-				$this->putVarInt(strlen($writer->getBuffer()));
 				$this->put($writer->getBuffer());
 			}else{
 				$this->putVarInt(-1);
-				$this->putVarInt(0);
 			}
 
 			$writer->reset();
