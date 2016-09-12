@@ -998,7 +998,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		$this->teleport($pos);
-
+		
+		$this->setAllowFlight($this->gamemode == 3 || $this->gamemode == 1);
+		
+		$this->setHealth($this->getHealth());
+		$this->setFood($this->getFood());
+		
 		$this->server->getPluginManager()->callEvent($ev = new PlayerJoinEvent($this, new TranslationContainer(TextFormat::YELLOW . "%multiplayer.player.joined", [
 			$this->getDisplayName()
 		])));
@@ -1009,8 +1014,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			elseif($this->server->playerMsgType === Server::PLAYER_MSG_TYPE_POPUP) $this->server->broadcastPopup(str_replace("@player", $this->getName(), $this->server->playerLoginMsg));
 		}
 
-		$this->setAllowFlight($this->gamemode == 3 || $this->gamemode == 1);
-
 		$this->server->onPlayerLogin($this);
 		$this->spawnToAll();
 
@@ -1019,9 +1022,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			//$this->checkExpLevel();
 			$this->updateExperience();
 		}
-		$this->setHealth($this->getHealth());
-		if($this->server->foodEnabled) $this->setFood($this->getFood());
-		else $this->setFood(20);
 
 		if($this->server->dserverConfig["enable"] and $this->server->dserverConfig["queryAutoUpdate"]) $this->server->updateQuery();
 
