@@ -2,7 +2,7 @@
 
 #Phiên bản file cài đặt
 config:
- version: 20
+ version: 21
 
 level:
  #Chỉnh nếu muốn bật/tắt thời tiết (true/false)
@@ -42,8 +42,6 @@ nether:
  level-name: "nether"
  
 server:
- #Tái tạo lại hệ thống điểm kinh nghiệm，0=hủy bỏ chế độ
- experience-cache: 65535
  #Bật/tắt nếu muốn thêm Iron Golem vào server (true/false)
  allow-iron-golem: false
  #Bật/tắt nếu muốn thêm Snow Golem vào server (true/false)

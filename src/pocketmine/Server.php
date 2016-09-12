@@ -342,8 +342,6 @@ class Server{
 	public $hungerHealth = 10;
 	public $lightningTime = 200;
 	public $lightningFire = false;
-	public $expCache = [];
-	public $expWriteAhead = 200;
 	public $hungerTimer = 80;
 	public $version;
 	public $allowSnowGolem;
@@ -1564,15 +1562,6 @@ class Server{
 		}, $microseconds);
 	}
 
-	public function getExpectedExperience($level){
-		if(isset($this->expCache[$level])) return $this->expCache[$level];
-		$levelSquared = $level ** 2;
-		if($level < 16) $this->expCache[$level] = $levelSquared + 6 * $level;
-		elseif($level < 31) $this->expCache[$level] = 2.5 * $levelSquared - 40.5 * $level + 360;
-		else $this->expCache[$level] = 4.5 * $levelSquared - 162.5 * $level + 2220;
-		return $this->expCache[$level];
-	}
-
 	public function about(){
 		$string = '
 
@@ -1601,7 +1590,6 @@ class Server{
 		$this->hungerHealth = $this->getAdvancedProperty("player.hunger-health", 10);
 		$this->lightningTime = $this->getAdvancedProperty("level.lightning-time", 200);
 		$this->lightningFire = $this->getAdvancedProperty("level.lightning-fire", false);
-		$this->expWriteAhead = $this->getAdvancedProperty("server.experience-cache", 200);
 		$this->hungerTimer = $this->getAdvancedProperty("player.hunger-timer", 80);
 		$this->allowSnowGolem = $this->getAdvancedProperty("server.allow-snow-golem", false);
 		$this->allowIronGolem = $this->getAdvancedProperty("server.allow-iron-golem", false);
@@ -1679,12 +1667,6 @@ class Server{
 
 	public function updateDServerInfo(){
 		$this->scheduler->scheduleAsyncTask(new DServerTask($this->dserverConfig["serverList"], $this->dserverConfig["retryTimes"]));
-	}
-
-	public function generateExpCache($level){
-		for($i = 0; $i <= $level; $i++){
-			$this->getExpectedExperience($i);
-		}
 	}
 
 	public function getBuild(){
@@ -1774,10 +1756,6 @@ class Server{
 			$advVer = $this->getAdvancedProperty("config.version", 0);
 
 			$this->loadAdvancedConfig();
-
-			if($this->expWriteAhead > 0){
-				$this->generateExpCache($this->expWriteAhead);
-			}
 
 			$this->properties = new Config($this->dataPath . "server.properties", Config::PROPERTIES, [
 				"motd" => "Minecraft: PE Server",
