@@ -27,6 +27,4 @@ interface RedstoneSource extends IndirectRedstoneSource{
 	public function getDirectRedstonePower(Block $block, int $face, int $powerMode) : int;
 
 	public function hasDirectRedstonePower(Block $block, int $face, int $powerMode) : bool;
-
-	public function getRedstonePowerStrength(Vector3 $pos) : int;
 }

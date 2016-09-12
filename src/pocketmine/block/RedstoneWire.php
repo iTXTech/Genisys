@@ -215,8 +215,4 @@ class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 				return false;
 		}
 	}
-
-	public function getRedstonePowerStrength(Vector3 $pos) : int{
-		return $this->getLevel()->getBlockTempData($pos);
-	}
 }

@@ -109,8 +109,4 @@ class RedstoneTorch extends Torch implements RedstoneSource, RedstoneTarget{
 		return $this->getDirectRedstonePower($block, $face, $powerMode) > 0;
 	}
 
-
-	public function getRedstonePowerStrength(Vector3 $pos) : int{
-		return $this->isPowered() ? self::REDSTONE_POWER_MAX : self::REDSTONE_POWER_MIN;
-	}
 }
