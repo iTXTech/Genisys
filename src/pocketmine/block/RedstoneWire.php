@@ -24,6 +24,7 @@ namespace pocketmine\block;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
+use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\RedstoneUtil;
 
@@ -59,7 +60,7 @@ class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 
 	public function getDrops(Item $item) : array{
 		return [
-			[$this->id, 0, 1]
+			[Item::REDSTONE_DUST, 0, 1]
 		];
 	}
 
@@ -86,6 +87,13 @@ class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 
 	public function onUpdate($type){
 		if($type == Level::BLOCK_UPDATE_NORMAL or $type == Level::BLOCK_UPDATE_SCHEDULED){
+			if($type == Level::BLOCK_UPDATE_NORMAL){
+				$b = $this->getSide(0);
+				if($b instanceof Transparent){
+					$this->getLevel()->useBreakOn($this);
+					return;
+				}
+			}
 			if(!Server::getInstance()->redstoneEnabled){
 				return;
 			}
@@ -110,6 +118,13 @@ class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 				$this->updateQueue = [];
 			}
 		}
+	}
+
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+		if($this->getSide(0) instanceof Transparent){
+			return false;
+		}
+		return $this->getLevel()->setBlock($this, $this, true, true);
 	}
 
 	public function getIndirectRedstonePower(Block $block, int $face, int $powerMode) : int{

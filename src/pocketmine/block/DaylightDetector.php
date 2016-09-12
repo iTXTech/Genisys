@@ -46,7 +46,7 @@ class DaylightDetector extends Solid implements RedstoneSource{
 	/**
 	 * @return DLDetector
 	 */
-	protected function getTile(){
+	protected function getTile() : DLDetector{
 		$t = $this->getLevel()->getTile($this);
 		if($t instanceof DLDetector){
 			return $t;
@@ -65,6 +65,16 @@ class DaylightDetector extends Solid implements RedstoneSource{
 		$this->id = $this->id == self::DAYLIGHT_SENSOR ? self::DAYLIGHT_SENSOR_INVERTED : self::DAYLIGHT_SENSOR;
 		$this->getLevel()->setBlock($this, $this, false, true);
 		return true;
+	}
+
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+		parent::place($item, $block, $target, $face, $fx, $fy, $fz, $player);
+
+		if($this->getTile() instanceof DLDetector){
+			return true;
+		}
+
+		return false;
 	}
 
 	public function getHardness() {
@@ -90,7 +100,7 @@ class DaylightDetector extends Solid implements RedstoneSource{
 	}
 
 	public function getRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : int{
-		if($this->getLevel()->getHighestBlockAt($this->x, $this->z) != $this->y){
+		if(!$this->getLevel()->canBlockSeeSky($this)){
 			return 0;
 		}
 
