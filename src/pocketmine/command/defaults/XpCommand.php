@@ -55,21 +55,32 @@ class XpCommand extends VanillaCommand{
 		}
 		if($player instanceof Player){
 			$name = $player->getName();
-			if(strcasecmp(substr($args[0], -1), "L") == 0){			//Set Experience Level(with "L" after args[0])
-				$level = rtrim($args[0], "Ll");
-				if(is_numeric($level)){
-					$player->addXpLevel($level);
+			if(strcasecmp(substr($args[0], -1), "L") == 0){ //Set Experience Level(with "L" after args[0])
+				$level = (int) rtrim($args[0], "Ll");
+				if($level > 0){
+					$player->addXpLevel((int) $level);
+					$sender->sendMessage(new TranslationContainer("%commands.xp.success.levels", [$level, $name]));
 					$player->getLevel()->addSound(new ExpPickupSound($player, mt_rand(0, 1000))); //TODO: Find the level-up sound
-					$sender->sendMessage("Successfully added $level Level of experience to $name");
+					return true;
+				}elseif($level < 0){
+					$player->takeXpLevel((int) -$level);
+					$sender->sendMessage(new TranslationContainer("%commands.xp.success.negative.levels", [-$level, $name]));
+					return true;
 				}
-			}elseif(is_numeric($args[0])){											//Set Experience
-				$player->addXp($args[0]);
-				$player->getLevel()->addSound(new ExpPickupSound($player, mt_rand(0, 1000)));
-				$sender->sendMessage("Successfully added $args[0] of experience to $name");
 			}else{
-				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
-				return false;
+				if(($xp = (int) $args[0]) > 0){ //Set Experience
+					$player->addXp((int) $args[0]);
+					$player->getLevel()->addSound(new ExpPickupSound($player, mt_rand(0, 1000)));
+					$sender->sendMessage(new TranslationContainer("%commands.xp.success", [$name, $args[0]]));
+					return true;
+				}elseif($xp < 0){ //Stupid, but this lines up with vanilla behaviour, so...
+					$sender->sendMessage(new TranslationContainer("%commands.xp.failure.withdrawXp"));
+					return true;
+				}
 			}
+			//This statement will only be reached if the command failed
+			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+			return false;
 		}else{
 			$sender->sendMessage(new TranslationContainer(TextFormat::RED . "%commands.generic.player.notFound"));
 			return false;

@@ -61,7 +61,7 @@ class Attribute{
 		self::addAttribute(self::FOLLOW_RANGE, "generic.followRange", 0.00, 2048.00, 16.00, false);
 		self::addAttribute(self::HUNGER, "player.hunger", 0.00, 20.00, 20.00);
 		self::addAttribute(self::ATTACK_DAMAGE, "generic.attackDamage", 0.00, 340282346638528859811704183484516925440.00, 1.00, false);
-		self::addAttribute(self::EXPERIENCE_LEVEL, "player.level", 0.00, 21863.00, 0.00);
+		self::addAttribute(self::EXPERIENCE_LEVEL, "player.level", 0.00, 2147483647.00, 0.00);
 		self::addAttribute(self::EXPERIENCE, "player.experience", 0.00, 1.00, 0.00);
 	}
 
