@@ -53,10 +53,10 @@ class AnvilInventory extends TemporaryInventory{
 			return false;
 		}
 
-		if($player->getExpLevel() < $resultItem->getRepairCost()){ //Not enough exp
+		if($player->getXpLevel() < $resultItem->getRepairCost()){ //Not enough exp
 			return false;
 		}
-		$player->setExpLevel($player->getExpLevel() - $resultItem->getRepairCost());
+		$player->takeXpLevel($resultItem->getRepairCost());
 		
 		$this->clearAll();
 		if(!$player->getServer()->allowInventoryCheats and !$player->isCreative()){
@@ -80,7 +80,6 @@ class AnvilInventory extends TemporaryInventory{
 	}
 
 	public function onClose(Player $who){
-		$who->updateExperience();
 		parent::onClose($who);
 
 		$this->getHolder()->getLevel()->dropItem($this->getHolder()->add(0.5, 0.5, 0.5), $this->getItem(0));
