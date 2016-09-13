@@ -36,9 +36,6 @@ use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\PluginException;
 
-use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\event\entity\EntityDeathEvent;
-
 /**
  * Manages all the plugins, Permissions and Permissibles
  */

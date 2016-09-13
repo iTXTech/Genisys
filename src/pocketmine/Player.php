@@ -64,7 +64,6 @@ use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerCommandPreprocessEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
-use pocketmine\event\player\PlayerExperienceChangeEvent;
 use pocketmine\event\player\PlayerGameModeChangeEvent;
 use pocketmine\event\player\PlayerHungerChangeEvent;
 use pocketmine\event\player\PlayerInteractEvent;
@@ -172,7 +171,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	const ADVENTURE = 2;
 	const SPECTATOR = 3;
 	const VIEW = Player::SPECTATOR;
-	
+
 	const CRAFTING_SMALL = 0;
 	const CRAFTING_BIG = 1;
 	const CRAFTING_ANVIL = 2;
@@ -338,109 +337,106 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		]);
 	}
 
-	protected $expLevel = 0;
-	protected $exp = 0;
-	protected $expCooldown = 0;
-
+	/**
+	 * @deprecated Use Human::setTotalXp($xp), this method will be removed in the future.
+	 */
 	public function setExperienceAndLevel(int $exp, int $level){
-		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, $level));
-		if(!$ev->isCancelled()){
-			$this->expLevel = $level;
-			$this->exp = $exp;
-			$this->expCooldown = microtime(true);
-			$this->calcExpLevel();
-			$this->updateExperience();
-			return true;
-		}
-		return false;
+		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
+		return $this->setTotalXp(self::getTotalXpRequirement($level) + $exp);
 	}
 
+	/**
+	 * @deprecated Use Human::setTotalXp($xp), this method will be removed in the future.
+	 */
 	public function setExp(int $exp){
-		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, 0));
-		if($ev->isCancelled()){
-			$this->exp = $ev->getExp();
-			$this->calcExpLevel();
-			$this->updateExperience();
-			return true;
-		}
-		return false;
+		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
+		return $this->setTotalXp($exp);
 	}
 
+	/**
+	 * @deprecated Use Human::setXpLevel($level), this method will be removed in the future.
+	 */
 	public function setExpLevel(int $level){
-		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, 0, $level));
-		if(!$ev->isCancelled()){
-			$this->expLevel = $level;
-			$this->exp = $this->server->getExpectedExperience($level);
-			$this->updateExperience();
-			return true;
-		}
-		return false;
+		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
+		return $this->setXpLevel($level);
 	}
 
+	/**
+	 * @deprecated Use Human::getTotalXpRequirement($level), this method will be removed in the future.
+	 */
 	public function getExpectedExperience(){
-		return $this->server->getExpectedExperience($this->expLevel + 1);
+		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
+		return self::getTotalXpRequirement($this->getXpLevel() + 1);
 	}
 
+	/**
+	 * @deprecated Use Human::getLevelXpRequirement($level), this method will be removed in the future.
+	 */
 	public function getLevelUpExpectedExperience(){
-		/*if($this->explevel < 16) return 2 * $this->explevel + 7;
-		elseif($this->explevel < 31) return 5 * $this->explevel - 38;
-		else return 9 * $this->explevel - 158;*/
-		return $this->getExpectedExperience() - $this->server->getExpectedExperience($this->expLevel);
+		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
+		return self::getLevelXpRequirement($this->getLevel() + 1);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function calcExpLevel(){
-		while($this->exp >= $this->getExpectedExperience()){
-			$this->expLevel++;
-		}
-		while($this->exp < $this->server->getExpectedExperience($this->expLevel - 1)){
-			$this->expLevel--;
-		}
+		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
 	}
 
+	/**
+	 * @deprecated Use Human::addXp($xp), this method will be removed in the future.
+	 */
 	public function addExperience(int $exp){
-		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, 0, PlayerExperienceChangeEvent::ADD_EXPERIENCE));
-		if(!$ev->isCancelled()){
-			$this->exp = $this->exp + $ev->getExp();
-			$this->calcExpLevel();
-			$this->updateExperience();
-			return true;
-		}
-		return false;
+		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
+		return $this->addXp($exp);
 	}
 
+	/**
+	 * @deprecated Use Human::addXpLevel(), this method will be removed in the future.
+	 */
 	public function addExpLevel(int $level){
-		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, 0, $level, PlayerExperienceChangeEvent::ADD_EXPERIENCE));
-		if(!$ev->isCancelled()){
-			$this->expLevel = $this->expLevel + $ev->getExpLevel();
-			$this->exp = $this->server->getExpectedExperience($this->expLevel);
-			$this->calcExpLevel();
-			$this->updateExperience();
-			return true;
-		}
-		return false;
+		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
+		return $this->addXpLevel($level);
 	}
 
+	/**
+	 * @deprecated Use Human::getTotalXp(), this method will be removed in the future.
+	 */
 	public function getExp(){
-		return $this->exp;
+		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
+		return $this->getTotalXp();
 	}
 
+	/**
+	 * @deprecated Use Human::getXpLevel(), this method will be removed in the future.
+	 */
 	public function getExpLevel(){
-		return $this->expLevel;
-	}
-	
-	public function canPickupExp(): bool{
-		return microtime(true) - $this->expCooldown > 0.1;
-	}
-	
-	public function resetExpCooldown(){
-		$this->expCooldown = microtime(true);
+		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
+		return $this->getXpLevel();
 	}
 
+	/**
+	 * @deprecated Use Human::canPickupXp(), this method will be removed in the future.
+	 */
+	public function canPickupExp(): bool{
+		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
+		return $this->canPickupXp();
+	}
+
+	/**
+	 * @deprecated Use Human::resetXpCooldown(), this method will be removed in the future.
+	 */
+	public function resetExpCooldown(){
+		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
+		$this->resetXpCooldown();
+	}
+
+	/**
+	 * @deprecated
+	 */
 	public function updateExperience(){
-		if($this->getAttributeMap() instanceof AttributeMap){
-			$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE)->setValue(($this->exp - $this->server->getExpectedExperience($this->expLevel)) / ($this->getLevelUpExpectedExperience()), true, true);
-			$this->getAttributeMap()->getAttribute(Attribute::EXPERIENCE_LEVEL)->setValue($this->expLevel, true, true);
-		}
+		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
 	}
 
 	/**
@@ -1015,10 +1011,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->spawnToAll();
 
 		$this->level->getWeather()->sendWeather($this);
-		if($this->server->expEnabled){
-			//$this->checkExpLevel();
-			$this->updateExperience();
-		}
+
 		$this->setHealth($this->getHealth());
 		if($this->server->foodEnabled) $this->setFood($this->getFood());
 		else $this->setFood(20);
@@ -1534,7 +1527,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 			if($entity instanceof Arrow and $entity->hadCollision){
 				$item = Item::get(Item::ARROW, $entity->getPotionId(), 1);
-				
+
 				$add = false;
 				if(!$this->server->allowInventoryCheats and !$this->isCreative()){
 					if(!$this->getFloatingInventory()->canAddItem($item) or !$this->inventory->canAddItem($item)){
@@ -1559,7 +1552,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$pk->eid = 0;
 				$pk->target = $entity->getId();
 				$this->dataPacket($pk);
-				
+
 				if($add){
 					$this->getFloatingInventory()->addItem(clone $item);
 				}
@@ -2126,19 +2119,15 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}else{
 			$nbt["NameTag"] = $this->username;
 		}
-		if(!isset($nbt->Hunger) or !isset($nbt->Experience) or !isset($nbt->ExpLevel) or !isset($nbt->Health) or !isset($nbt->MaxHealth)){
+		if(!isset($nbt->Hunger) or !isset($nbt->Health) or !isset($nbt->MaxHealth)){
 			$nbt->Hunger = new ShortTag("Hunger", 20);
-			$nbt->Experience = new LongTag("Experience", 0);
-			$nbt->ExpLevel = new LongTag("ExpLevel", 0);
 			$nbt->Health = new ShortTag("Health", 20);
 			$nbt->MaxHealth = new ShortTag("MaxHealth", 20);
 		}
 		$this->food = $nbt["Hunger"];
 		$this->setMaxHealth($nbt["MaxHealth"]);
 		Entity::setHealth(($nbt["Health"] <= 0) ? 20 : $nbt["Health"]);
-		$this->exp = ($nbt["Experience"] > 0) ? $nbt["Experience"] : 0;
-		$this->expLevel = ($nbt["ExpLevel"] >= 0) ? $nbt["ExpLevel"] : 0;
-		$this->calcExpLevel();
+
 		$this->gamemode = $nbt["playerGameType"] & 0x03;
 		if($this->server->getForceGamemode()){
 			$this->gamemode = $this->server->getGamemode();
@@ -2185,7 +2174,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 			return;
 		}
-		
+
 		if(!$this->isConnected()){
 			return;
 		}
@@ -2414,7 +2403,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 					break;
 				}
-				
+
 				if($this->isConnected()){
 					$this->onPlayerPreLogin();
 				}
@@ -2898,10 +2887,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->removeAllEffects();
 						$this->setHealth($this->getMaxHealth());
 						$this->setFood(20);
-						if($this->server->expEnabled){
-							$this->updateExperience();
-						}
-
 						$this->starvationTick = 0;
 						$this->foodTick = 0;
 						$this->foodUsageTime = 0;
@@ -4022,10 +4007,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		if($this->server->expEnabled and !$ev->getKeepExperience()){
-			$exp = $this->getExp();
-			$exp = min(100, $exp);
+			$exp = min(91, $this->getTotalXp()); //Max 7 levels of exp dropped
 			$this->getLevel()->spawnXPOrb($this->add(0, 0.2, 0), $exp);
-			$this->setExperienceAndLevel(0, 0);
+			$this->setTotalXp(0, true);
 		}
 
 		if($ev->getDeathMessage() != ""){
