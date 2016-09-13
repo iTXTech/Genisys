@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 20
+ version: 21
 
 level:
  #Set if turn on the weather system
@@ -42,8 +42,6 @@ nether:
  level-name: "nether"
  
 server:
- #Pregenerate the experience data，0=disabled
- experience-cache: 65535
  #Choose if spawning iron golem is allowed
  allow-iron-golem: false
  #Choose if spawning snow golem is allowed
