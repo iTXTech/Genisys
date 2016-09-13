@@ -55,8 +55,8 @@ server:
  #플레이어가 참여할 때 뜨는 메시지를 고릅니다
  #0 = 메시지, 1 = 팁, 2 = 팝업
  player-msg-type: 0
- login-msg: "§3@player joined the game"
- logout-msg: "§3@player left the game"
+ login-msg: "§3@player님이 게임에 참여했습니다"
+ logout-msg: "§3@player님이 게임을 떠났습니다"
  #레시피를 json에서 가져오는 경우 고르세요
  recipes-from-json: false
  #크리에이티브 아이템을 json에서 가져오는 경우 고르세요
