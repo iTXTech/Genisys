@@ -22,6 +22,7 @@
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
+use pocketmine\math\Math;
 use pocketmine\Player;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\StringTag;
@@ -104,14 +105,19 @@ class DaylightDetector extends Solid implements RedstoneSource{
 			return 0;
 		}
 
-		if($this->id == self::DAYLIGHT_SENSOR){
-			$x = $this->getLevel()->getTime() / 1000 + 6;
-			if($x >= 24){
-				$x -= 24;
-			}
+		$i = 15 - $this->getLevel()->calculateSkylightSubtracted(1);
+		$f = $this->getLevel()->getCelestialAngleRadians(1);
 
-			return ($x / 24) * 15;
+		if($this->id == self::DAYLIGHT_SENSOR_INVERTED){
+			$i = 15 - $i;
 		}
-		return 0;//TODO: Inverted
+
+		if($i > 0 and $this->id == self::DAYLIGHT_SENSOR){
+			$f1 = ($f < pi()) ? 0 : pi() * 2;
+			$f = $f + ($f1 - $f) * 0.2;
+			$i = round($i * cos($f));
+		}
+
+		return Math::clamp($i, 0 ,15);
 	}
 }

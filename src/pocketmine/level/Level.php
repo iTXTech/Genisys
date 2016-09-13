@@ -828,7 +828,7 @@ class Level implements ChunkManager, Metadatable{
 
 		foreach($this->moveToSend as $index => $entry){
 			Level::getXZ($index, $chunkX, $chunkZ);
-			foreach($entry as $e) {
+			foreach($entry as $e){
 				$this->addChunkPacket($chunkX, $chunkZ, $e);
 			}
 		}
@@ -881,6 +881,42 @@ class Level implements ChunkManager, Metadatable{
 				}
 			}
 		}
+	}
+
+	public function calculateSkylightSubtracted($partialTicks){
+		$f = $this->getCelestialAngle($partialTicks);
+		$f1 = 1 - (cos($f * pi() * 2) * 2 + 0.5);
+		$f1 = Math::clamp($f1, 0 ,1);
+		$f1 = 1 - $f1;
+		$f1 = ($f1 * (1 - (0 * 5 / 16)));//TODO: Rain
+		$f1 = ($f1 * (1 - (0 * 5 / 16)));//TODO: Thunder
+		$f1 = 1 - $f1;
+		return ($f1 * 11);
+	}
+
+	public function getCelestialAngleRadians($partialTicks){
+		return $this->getCelestialAngle($partialTicks) * pi() * 2;
+	}
+
+	public function getCelestialAngle($partialTicks){
+		return $this->calculateCelestialAngle($this->getTime(), $partialTicks);
+	}
+
+	public function calculateCelestialAngle(int $worldTime, $partialTicks){
+		$i = $worldTime % 24000;
+		$f = ($i + $partialTicks) / 24000 - 0.25;
+
+		if($f < 0){
+			++$f;
+		}
+
+		if($f > 1){
+			--$f;
+		}
+
+		$f1 = 1 - ((cos($f * pi()) + 1) / 2);
+		$f = $f + ($f1 - $f) / 3;
+		return $f;
 	}
 
 	public function sendBlockExtraData(int $x, int $y, int $z, int $id, int $data, array $targets = null){
@@ -1112,10 +1148,10 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	/**
-	 * @param Vector3 $p
+	 * @param Vector3 $pos
 	 */
-	public function updateAround(Vector3 $p){
-		$pos = new Vector3($p->x, $p->y, $p->z);
+	public function updateAround(Vector3 $pos){
+		$pos = $pos->floor();
 		$this->server->getPluginManager()->callEvent($ev = new BlockUpdateEvent($this->getBlock($this->temporalVector->setComponents($pos->x, $pos->y - 1, $pos->z))));
 		if(!$ev->isCancelled()){
 			$ev->getBlock()->onUpdate(self::BLOCK_UPDATE_NORMAL);
@@ -1677,7 +1713,9 @@ class Level implements ChunkManager, Metadatable{
 						$exp = mt_rand(15, 43);
 						break;
 				}
-				if($exp > 0){$this->spawnXPOrb($vector->add(0, 1, 0), $exp);}
+				if($exp > 0){
+					$this->spawnXPOrb($vector->add(0, 1, 0), $exp);
+				}
 			}
 
 		}elseif($item !== null and !$target->isBreakable($item)){
@@ -1764,9 +1802,9 @@ class Level implements ChunkManager, Metadatable{
 	 * @param Vector3 $vector
 	 * @param Item    $item
 	 * @param int     $face
-	 * @param float   $fx     default 0.0
-	 * @param float   $fy     default 0.0
-	 * @param float   $fz     default 0.0
+	 * @param float   $fx default 0.0
+	 * @param float   $fy default 0.0
+	 * @param float   $fz default 0.0
 	 * @param Player  $player default null
 	 *
 	 * @return bool
@@ -1940,9 +1978,9 @@ class Level implements ChunkManager, Metadatable{
 
 			Tile::createTile("Sign", $this->getChunk($block->x >> 4, $block->z >> 4), $nbt);
 		}
-		if ($player != null && $player->isCreative()) {
+		if($player != null && $player->isCreative()){
 			$item->setCount($item->getCount());
-		} else {
+		}else{
 			$item->setCount($item->getCount() - 1);
 		}
 		if($item->getCount() <= 0){
