@@ -2,7 +2,7 @@
 
 #Version 파일의 버전
 config:
- version: 20
+ version: 21
 
 level:
  #날씨 시스템을 켜는 경우 설정하세요
@@ -42,8 +42,6 @@ nether:
  level-name: "nether"
  
 server:
- #경험치 데이터를 미리 생성합니다，0=비활성화
- experience-cache: 65535
  #철 골램을 생성하는 것이 허용된 경우 고르세요
  allow-iron-golem: false
  #눈 골렘을 생성하는 것이 허용된 경우 고르세요
