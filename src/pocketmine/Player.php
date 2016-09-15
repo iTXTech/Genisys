@@ -956,7 +956,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	protected function doFirstSpawn(){
 		$this->spawned = true;
 
-		$this->sendSettings();
 		$this->sendPotionEffects($this);
 		$this->sendData($this);
 
@@ -995,9 +994,19 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$this->teleport($pos);
 
+		$this->allowFlight = (($this->gamemode == 3) or ($this->gamemode == 1));
+		$this->setHealth($this->getHealth());
+		if($this->server->foodEnabled){
+			$this->setFood($this->getFood());
+		}else {
+			$this->setFood(20);
+		}
+
 		$this->server->getPluginManager()->callEvent($ev = new PlayerJoinEvent($this, new TranslationContainer(TextFormat::YELLOW . "%multiplayer.player.joined", [
 			$this->getDisplayName()
 		])));
+
+		$this->sendSettings();
 
 		if(strlen(trim($msg = $ev->getJoinMessage())) > 0){
 			if($this->server->playerMsgType === Server:: PLAYER_MSG_TYPE_MESSAGE) $this->server->broadcastMessage($msg);
@@ -1005,18 +1014,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			elseif($this->server->playerMsgType === Server::PLAYER_MSG_TYPE_POPUP) $this->server->broadcastPopup(str_replace("@player", $this->getName(), $this->server->playerLoginMsg));
 		}
 
-		$this->setAllowFlight($this->gamemode == 3 || $this->gamemode == 1);
-
 		$this->server->onPlayerLogin($this);
 		$this->spawnToAll();
 
 		$this->level->getWeather()->sendWeather($this);
 
-		$this->setHealth($this->getHealth());
-		if($this->server->foodEnabled) $this->setFood($this->getFood());
-		else $this->setFood(20);
-
-		if($this->server->dserverConfig["enable"] and $this->server->dserverConfig["queryAutoUpdate"]) $this->server->updateQuery();
+		if($this->server->dserverConfig["enable"] and $this->server->dserverConfig["queryAutoUpdate"]){
+			$this->server->updateQuery();
+		}
 
 		/*if($this->server->getUpdater()->hasUpdate() and $this->hasPermission(Server::BROADCAST_CHANNEL_ADMINISTRATIVE)){
 			$this->server->getUpdater()->showPlayerUpdate($this);
