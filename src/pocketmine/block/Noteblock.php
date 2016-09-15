@@ -23,11 +23,19 @@ namespace pocketmine\block;
 
 use pocketmine\item\Tool;
 use pocketmine\item\Item;
+use pocketmine\level\Level;
 use pocketmine\level\sound\NoteblockSound;
 use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\ByteTag;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
+use pocketmine\tile\Music as NoteBlockTile;
+use pocketmine\tile\Tile;
+use pocketmine\utils\RedstoneUtil;
 
-class Noteblock extends Solid{
+class Noteblock extends Solid implements RedstoneTarget{
 	protected $id = self::NOTEBLOCK;
 
 	public function __construct($meta = 0){
@@ -50,11 +58,10 @@ class Noteblock extends Solid{
 		return true;
 	}
 
-	public function getStrength(){
-		if($this->meta < 24) $this->meta++;
-		else $this->meta = 0;
-		$this->getLevel()->setBlock($this, $this);
-		return $this->meta * 1;
+	public function onUpdate($type){
+		if($type == Level::BLOCK_UPDATE_NORMAL){
+			$this->getTile()->setPowered($this->isReceivingPower($this));
+		}
 	}
 
 	public function getInstrument(){
@@ -133,14 +140,39 @@ class Noteblock extends Solid{
 		return NoteblockSound::INSTRUMENT_PIANO;
 	}
 
+	private function getTile() : NoteBlockTile{
+		$t = $this->getLevel()->getTile($this);
+		if($t instanceof NoteBlockTile){
+			return $t;
+		}else{
+			$nbt = new CompoundTag("", [
+				new StringTag("id", Tile::NOTE_BLOCK),
+				new IntTag("x", $this->x),
+				new IntTag("y", $this->y),
+				new IntTag("z", $this->z),
+				new ByteTag("powered", 0),
+				new ByteTag("note", 0)
+			]);
+			return Tile::createTile(Tile::NOTE_BLOCK, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+		}
+	}
+
 	public function onActivate(Item $item, Player $player = null){
 		$up = $this->getSide(Vector3::SIDE_UP);
-		if($up->getId() == 0){
-			$this->getLevel()->addSound(new NoteblockSound($this, $this->getInstrument(), $this->getStrength()));
-			return true;
-		}else{
-			return false;
+		if($up->getId() == self::AIR){
+			$this->getTile()->setNote($this->getTile()->getNote() + 1);
+			$this->getTile()->play();
 		}
+		return true;
+	}
+
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+		$this->getTile();
+		return parent::place($item, $block, $target, $face, $fx, $fy, $fz, $player);
+	}
+
+	public function isReceivingPower(Block $block) : bool{
+		return RedstoneUtil::isReceivingPower($block);
 	}
 
 	public function getName() : string{

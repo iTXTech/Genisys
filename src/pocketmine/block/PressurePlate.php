@@ -82,7 +82,7 @@ abstract class PressurePlate extends Flowable implements RedstoneSource{
 
 	public function onEntityCollide(Entity $entity){
 		if($this->canTrigger($entity)){
-			$this->getLevel()->setBlockTempData($this, $this->getLevel()->getServer()->getTick());
+			$this->getLevel()->setBlockCache($this, $this->getLevel()->getServer()->getTick());
 			$this->setPressed(true);
 		}
 	}
@@ -127,7 +127,7 @@ abstract class PressurePlate extends Flowable implements RedstoneSource{
 				return;
 			}
 
-			if(($this->getLevel()->getServer()->getTick() - $this->getLevel()->getBlockTempData($this)) > 1){
+			if(($this->getLevel()->getServer()->getTick() - $this->getLevel()->getBlockCache($this)) > 1){
 				$this->setPressed(false);
 			}else{
 				$this->getLevel()->scheduleUpdate($this, self::TICK_DELAY);

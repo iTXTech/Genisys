@@ -265,7 +265,7 @@ class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneS
 			self::$list[self::LEVER] = Lever::class;*/
 			self::$list[self::DAYLIGHT_SENSOR] = DaylightDetector::class;
 			self::$list[self::DAYLIGHT_SENSOR_INVERTED] = DaylightDetectorInverted::class;
-			//self::$list[self::NOTEBLOCK] = Noteblock::class;
+			self::$list[self::NOTEBLOCK] = Noteblock::class;
 			self::$list[self::SKULL_BLOCK] = SkullBlock::class;
 			self::$list[self::NETHER_QUARTZ_ORE] = NetherQuartzOre::class;
 			self::$list[self::ACTIVATOR_RAIL] = ActivatorRail::class;
