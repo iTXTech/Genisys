@@ -34,6 +34,13 @@ class RedstoneTorch extends Torch implements RedstoneSource, RedstoneTarget{
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
+
+		if(self::$updateQueue == []){
+			self::$updateQueue = [
+				[-1, 0, 0], [1, 0, 0], [0, 0, -1], [0, 0, 1], [0, -1, 0],
+				[-1, 1, 0], [1, 1, 0], [0, 1, -1], [0, 1, 1], [0, 2, 0]
+			];
+		}
 	}
 
 	public function getName() : string{
@@ -54,9 +61,10 @@ class RedstoneTorch extends Torch implements RedstoneSource, RedstoneTarget{
 		];
 	}
 
-	public function setPowered(Block $block, bool $powered){
-		$block->id = $powered ? self::REDSTONE_TORCH_ON : self::REDSTONE_TORCH_OFF;
-		$block->getLevel()->setBlock($block, $block, true, false);
+	public function setPowered(bool $powered){
+		$this->id = $powered ? self::REDSTONE_TORCH_ON : self::REDSTONE_TORCH_OFF;
+		$this->getLevel()->setBlock($this, $this, false, false);
+		$this->updateAround();
 	}
 
 	public function onUpdate($type){
@@ -66,23 +74,14 @@ class RedstoneTorch extends Torch implements RedstoneSource, RedstoneTarget{
 		}elseif($type == Level::BLOCK_UPDATE_SCHEDULED){
 			$receiving = $this->isReceivingPower($this);
 			if($this->isPowered() == $receiving){
-				$this->setPowered($this, !$receiving);
+				$this->setPowered(!$receiving);
 			}
 		}
 	}
 
 	public function isReceivingPower(Block $block) : bool{
-		$faces = [
-			1 => 4,
-			2 => 5,
-			3 => 2,
-			4 => 3,
-			5 => 0,
-			6 => 0,
-			0 => 0,
-		];
-		$attached = $block->getSide($faces[$block->getDamage()]);
-		return RedstoneUtil::isEmittingPower($attached, Vector3::getOppositeSide($faces[$block->getDamage()]));
+		$attached = $block->getSide($this->getAttachedFace());
+		return RedstoneUtil::isEmittingPower($attached, Vector3::getOppositeSide($this->getAttachedFace()));
 	}
 
 	public function getRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : int{
@@ -90,16 +89,7 @@ class RedstoneTorch extends Torch implements RedstoneSource, RedstoneTarget{
 	}
 
 	public function getIndirectRedstonePower(Block $block, int $face, int $powerMode) : int{
-		$faces = [
-			1 => 4,
-			2 => 5,
-			3 => 2,
-			4 => 3,
-			5 => 0,
-			6 => 0,
-			0 => 0,
-		];
-		if($faces[$block->getDamage()] == $face){
+		if($this->getAttachedFace() == $face){
 			return self::REDSTONE_POWER_MIN;
 		}
 		return parent::getIndirectRedstonePower($block, $face, $powerMode);

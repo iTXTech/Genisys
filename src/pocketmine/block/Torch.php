@@ -25,7 +25,7 @@ use pocketmine\item\Item;
 use pocketmine\level\Level;
 use pocketmine\Player;
 
-class Torch extends Flowable{
+class Torch extends Flowable implements Attachable{
 
 	protected $id = self::TORCH;
 
@@ -41,22 +41,25 @@ class Torch extends Flowable{
 		return "Torch";
 	}
 
+	public function getAttachedFace(){
+		$faces = [
+			1 => 4,
+			2 => 5,
+			3 => 2,
+			4 => 3,
+			5 => 0,
+			6 => 0,
+			0 => 0,
+		];
+		return $faces[$this->meta];
+	}
 
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
 			$below = $this->getSide(0);
 			$side = $this->getDamage();
-			$faces = [
-				1 => 4,
-				2 => 5,
-				3 => 2,
-				4 => 3,
-				5 => 0,
-				6 => 0,
-				0 => 0,
-			];
 
-			if($this->getSide($faces[$side])->isTransparent() === true and
+			if($this->getSide($this->getAttachedFace())->isTransparent() === true and
 					!($side === 0 and ($below->getId() === self::FENCE or
 									$below->getId() === self::COBBLE_WALL or
 									$below->getId() == Block::INACTIVE_REDSTONE_LAMP or

@@ -31,19 +31,17 @@ use pocketmine\utils\RedstoneUtil;
 class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 	protected $id = self::REDSTONE_WIRE;
 
-	private static $updateCube = [];
-
 	/** @var Block[] */
-	private $updateQueue = [];
+	private $powerUpdateQueue = [];
 
 	public function __construct($meta = 0){
 		parent::__construct(Block::REDSTONE_WIRE, $meta);
 
-		if(self::$updateCube == []){
+		if(self::$updateQueue == []){
 			for($i = -1; $i <= 1; $i++){
 				for($j = -1; $j <= 1; $j++){
 					for($k = -1; $k <= 1; $k++){
-						self::$updateCube[] = [$i, $j, $k];
+						self::$updateQueue[] = [$i, $j, $k];
 					}
 				}
 			}
@@ -75,17 +73,10 @@ class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 				if($block->getDamage() > 0){
 					$block->meta = 0;
 					$this->getLevel()->setBlock($block, $block, false, false);
-					$this->updateQueue[] = $block;
+					$this->powerUpdateQueue[] = $block;
 					$this->disableRedstone($block);
 				}
 			}
-		}
-	}
-
-	private function updateAround(){
-		$temporalVector = new Vector3();
-		foreach(self::$updateCube as $pos){
-			$this->getLevel()->getBlock($temporalVector->setComponents($this->x + $pos[0], $this->y + $pos[1], $this->z + $pos[2]))->onUpdate(Level::BLOCK_UPDATE_NORMAL);
 		}
 	}
 
@@ -111,15 +102,15 @@ class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 				$this->getLevel()->setBlock($this, $this, false, false);
 				$this->updateAround();
 			}else{
-				$this->updateQueue = [];
+				$this->powerUpdateQueue = [];
 				$this->disableRedstone($this);
 				foreach([Vector3::SIDE_NORTH, Vector3::SIDE_EAST, Vector3::SIDE_SOUTH, Vector3::SIDE_WEST, Vector3::SIDE_DOWN] as $face){
 					$this->disableRedstone($this->getSide($face));
 				}
-				foreach($this->updateQueue as $block){
+				foreach($this->powerUpdateQueue as $block){
 					$block->onUpdate(Level::BLOCK_UPDATE_SCHEDULED);
 				}
-				$this->updateQueue = [];
+				$this->powerUpdateQueue = [];
 			}
 		}
 	}
