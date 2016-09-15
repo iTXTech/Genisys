@@ -32,21 +32,20 @@ use pocketmine\Player;
 
 abstract class PressurePlate extends Flowable implements RedstoneSource{
 	const TICK_DELAY = 20;
-	private static $updateCube = [];
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 
-		if(self::$updateCube == []){
+		if(self::$updateQueue == []){
 			for($i = -1; $i <= 1; $i++){
 				for($j = -1; $j <= 1; $j++){
 					for($k = -1; $k <= 1; $k++){
-						self::$updateCube[] = [$i, $j, $k];
+						self::$updateQueue[] = [$i, $j, $k];
 					}
 				}
 			}
-			self::$updateCube[] = [0, -2, 0];
-			self::$updateCube[] = [0, -1, 0];
+			self::$updateQueue[] = [0, -2, 0];
+			self::$updateQueue[] = [0, -1, 0];
 		}
 	}
 
@@ -56,13 +55,6 @@ abstract class PressurePlate extends Flowable implements RedstoneSource{
 
 	public function isPressed(){
 		return $this->meta == 1;
-	}
-
-	private function updateAround(){
-		$temporalVector = new Vector3();
-		foreach(self::$updateCube as $pos){
-			$this->getLevel()->getBlock($temporalVector->setComponents($this->x + $pos[0], $this->y + $pos[1], $this->z + $pos[2]))->onUpdate(Level::BLOCK_UPDATE_NORMAL);
-		}
 	}
 
 	public function onEntityCollide(Entity $entity){

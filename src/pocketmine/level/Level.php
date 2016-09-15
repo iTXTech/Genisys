@@ -63,7 +63,6 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\Timings;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
-use pocketmine\item\enchantment\enchantment;
 use pocketmine\level\format\Chunk;
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\format\generic\BaseLevelProvider;
@@ -106,7 +105,6 @@ use pocketmine\plugin\Plugin;
 
 use pocketmine\Server;
 use pocketmine\tile\Chest;
-use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
 use pocketmine\utils\LevelException;
 use pocketmine\utils\MainLogger;
@@ -290,6 +288,9 @@ class Level implements ChunkManager, Metadatable{
 	private $blockTempData = [];
 
 	private $dimension = self::DIMENSION_NORMAL;
+	
+	/** @var Vector3 */
+	public $blockUpdateTempVector;
 
 	/**
 	 * This method is internal use only. Do not use this in plugins
@@ -416,6 +417,7 @@ class Level implements ChunkManager, Metadatable{
 		$this->timings = new LevelTimings($this);
 		$this->temporalPosition = new Position(0, 0, 0, $this);
 		$this->temporalVector = new Vector3(0, 0, 0);
+		$this->blockUpdateTempVector = new Vector3(0, 0, 0);
 		$this->tickRate = 1;
 
 		$this->weather = new Weather($this, 0);
@@ -1576,7 +1578,11 @@ class Level implements ChunkManager, Metadatable{
 					$ev->getBlock()->onUpdate(self::BLOCK_UPDATE_NORMAL);
 				}
 
-				$this->updateAround($pos);
+				if($block::$updateQueue == []){
+					$this->updateAround($pos);
+				}else{
+					$block->updateAround();
+				}
 			}
 
 			return true;

@@ -26,6 +26,7 @@ namespace pocketmine\block;
 
 use pocketmine\entity\Entity;
 
+use pocketmine\event\block\BlockUpdateEvent;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\level\Level;
@@ -40,6 +41,8 @@ use pocketmine\plugin\Plugin;
 
 
 class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneSource{
+
+	public static $updateQueue = [];
 
 	/** @var \SplFixedArray */
 	public static $list = null;
@@ -413,6 +416,16 @@ class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneS
 	 */
 	public function onUpdate($type){
 
+	}
+
+	public function updateAround(){
+		foreach(self::$updateQueue as $pos){
+			$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new BlockUpdateEvent(
+				$this->getLevel()->getBlock($this->getLevel()->blockUpdateTempVector->setComponents($this->x + $pos[0], $this->y + $pos[1], $this->z + $pos[2]))));
+			if(!$ev->isCancelled()){
+				$ev->getBlock()->onUpdate(Level::BLOCK_UPDATE_NORMAL);
+			}
+		}
 	}
 
 	/**

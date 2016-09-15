@@ -27,9 +27,10 @@ use pocketmine\level\sound\DoorSound;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
+use pocketmine\utils\RedstoneUtil;
 
 
-abstract class Door extends Transparent{
+abstract class Door extends Transparent implements RedstoneTarget{
 
 	public function canBeActivated() : bool {
 		return true;
@@ -220,9 +221,23 @@ abstract class Door extends Transparent{
 
 				return Level::BLOCK_UPDATE_NORMAL;
 			}
+
+			$powered = $this->isReceivingPower($this);
+			if($powered != $this->isOpen()){
+				$this->setOpen($powered);
+			}
 		}
 
 		return false;
+	}
+
+	public function isReceivingPower(Block $block) : bool{
+		if(($this->getDamage() & 0x08) === 0x08){
+			$halfDoor = $this->getSide(Vector3::SIDE_DOWN);
+		}else{
+			$halfDoor = $this->getSide(Vector3::SIDE_UP);
+		}
+		return (RedstoneUtil::isReceivingPower($halfDoor) or RedstoneUtil::isReceivingPower($this));
 	}
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
@@ -272,11 +287,14 @@ abstract class Door extends Transparent{
 		return true;
 	}
 
-	public function isOpened(){
+	public function isOpen(){
 		return (($this->getFullDamage() & 0x04) > 0);
 	}
 
-	public function onActivate(Item $item, Player $player = null){
+	public function setOpen(bool $opened, Player $player = null) : bool{
+		if($opened == $this->isOpen()){
+			return true;
+		}
 		if(($this->getDamage() & 0x08) === 0x08){ //Top
 			$down = $this->getSide(Vector3::SIDE_DOWN);
 			if($down->getId() === $this->getId()){
@@ -287,7 +305,7 @@ abstract class Door extends Transparent{
 					unset($players[$player->getLoaderId()]);
 				}
 
-				$this->level->addSound(new DoorSound($this));
+				$this->level->addSound(new DoorSound($this), $players);
 				return true;
 			}
 
@@ -299,9 +317,17 @@ abstract class Door extends Transparent{
 			if($player instanceof Player){
 				unset($players[$player->getLoaderId()]);
 			}
-			$this->level->addSound(new DoorSound($this));
+			$this->level->addSound(new DoorSound($this), $players);
 		}
 
 		return true;
+	}
+
+	public function toggleOpen(){
+		return $this->setOpen(!$this->isOpen());
+	}
+
+	public function onActivate(Item $item, Player $player = null){
+		return $this->setOpen(!$this->isOpen(), $player);
 	}
 }

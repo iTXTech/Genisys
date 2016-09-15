@@ -45,6 +45,10 @@ class IronDoor extends Door{
 		return 5;
 	}
 
+	public function getResistance(){
+		return 25;
+	}
+
 	public function getDrops(Item $item) : array {
 		if($item->isPickaxe() >= 1){
 			return [
@@ -56,7 +60,10 @@ class IronDoor extends Door{
 	}
 
 	public function onActivate(Item $item, Player $player = null){
-		if($player instanceof Player) return true;
-		else return parent::onActivate($item, $player);
+		if($player instanceof Player){
+			return true;
+		}else {
+			return parent::onActivate($item, $player);
+		}
 	}
 }

@@ -53,11 +53,6 @@ class RedstoneUtil{
 			return false;
 		}
 
-		//powered itself???Black Man???
-		if($face == -1){
-			return $block->hasRedstonePower($block, $face, $powerMode);
-		}
-
 		if($block instanceof RedstoneSource and $block->hasDirectRedstonePower($block, $face, $powerMode)){
 			return true;
 		}
