@@ -373,7 +373,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 */
 	public function getLevelUpExpectedExperience(){
 		trigger_error("This method is deprecated, do not use it", E_USER_DEPRECATED);
-		return self::getLevelXpRequirement($this->getLevel() + 1);
+		return self::getLevelXpRequirement($this->getXpLevel() + 1);
 	}
 
 	/**

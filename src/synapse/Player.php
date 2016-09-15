@@ -108,19 +108,15 @@ class Player extends PMPlayer{
 			}else{
 				$nbt["NameTag"] = $this->username;
 			}
-			if(!isset($nbt->Hunger) or !isset($nbt->Experience) or !isset($nbt->ExpLevel) or !isset($nbt->Health) or !isset($nbt->MaxHealth)){
+			if(!isset($nbt->Hunger) or !isset($nbt->Health) or !isset($nbt->MaxHealth)){
 				$nbt->Hunger = new ShortTag("Hunger", 20);
-				$nbt->Experience = new LongTag("Experience", 0);
-				$nbt->ExpLevel = new LongTag("ExpLevel", 0);
 				$nbt->Health = new ShortTag("Health", 20);
 				$nbt->MaxHealth = new ShortTag("MaxHealth", 20);
 			}
 			$this->food = $nbt["Hunger"];
 			$this->setMaxHealth($nbt["MaxHealth"]);
 			Entity::setHealth(($nbt["Health"] <= 0) ? 20 : $nbt["Health"]);
-			$this->exp = ($nbt["Experience"] > 0) ? $nbt["Experience"] : 0;
-			$this->expLevel = ($nbt["ExpLevel"] >= 0) ? $nbt["ExpLevel"] : 0;
-			$this->calcExpLevel();
+
 			$this->gamemode = $nbt["playerGameType"] & 0x03;
 			if($this->server->getForceGamemode()){
 				$this->gamemode = $this->server->getGamemode();
