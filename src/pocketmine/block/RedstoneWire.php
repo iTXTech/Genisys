@@ -50,6 +50,10 @@ class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 		}
 	}
 
+	public function getName() : string{
+		return "Redstone Wire";
+	}
+
 	public function getHardness(){
 		return 0;
 	}

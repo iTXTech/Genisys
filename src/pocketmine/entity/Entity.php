@@ -27,7 +27,6 @@ namespace pocketmine\entity;
 use pocketmine\block\Block;
 use pocketmine\block\Fire;
 use pocketmine\block\Portal;
-use pocketmine\block\PressurePlate;
 use pocketmine\block\Water;
 use pocketmine\block\SlimeBlock;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -229,9 +228,6 @@ abstract class Entity extends Location implements Metadatable{
 	protected $linkedType = null;
 
 	protected $riding = null;
-
-	/** @var PressurePlate */
-	protected $activatedPressurePlates = [];
 
 	public $dropExp = [0, 0];
 
@@ -1442,19 +1438,7 @@ abstract class Entity extends Location implements Metadatable{
 
 		foreach($blocksaround = $this->getBlocksAround() as $block){
 			$block->onEntityCollide($this);
-			if($this->getLevel()->getServer()->redstoneEnabled and !$this->isPlayer){
-				if($block instanceof PressurePlate){
-					$this->activatedPressurePlates[Level::blockHash($block->x, $block->y, $block->z)] = $block;
-				}
-			}
 			$block->addVelocityToEntity($this, $vector);
-		}
-
-		if($this->getLevel()->getServer()->redstoneEnabled and !$this->isPlayer){
-			/** @var \pocketmine\block\PressurePlate $block * */
-			foreach($this->activatedPressurePlates as $key => $block){
-				if(!isset($blocksaround[$key])) $block->checkActivation();
-			}
 		}
 
 		if($vector->lengthSquared() > 0){
@@ -1667,15 +1651,6 @@ abstract class Entity extends Location implements Metadatable{
 				$this->level->removeEntity($this);
 			}
 		}
-
-		if($this->getLevel()->getServer()->redstoneEnabled){
-			/** @var \pocketmine\block\PressurePlate $block * */
-			foreach($this->activatedPressurePlates as $key => $block){
-				$block->checkActivation();
-			}
-		}
-
-		$this->activatedPressurePlates = [];
 
 		if($this->attributeMap != null){
 			$this->attributeMap = null;

@@ -36,6 +36,10 @@ class RedstoneTorch extends Torch implements RedstoneSource, RedstoneTarget{
 		$this->meta = $meta;
 	}
 
+	public function getName() : string{
+		return "Redstone Torch";
+	}
+
 	public function isPowered() : bool{
 		return ($this->id == self::REDSTONE_TORCH_ON) ? true : false;
 	}

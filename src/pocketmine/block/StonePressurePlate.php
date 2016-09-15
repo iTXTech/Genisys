@@ -21,10 +21,30 @@
 
 namespace pocketmine\block;
 
+use pocketmine\entity\Entity;
+use pocketmine\item\Item;
+
 class StonePressurePlate extends PressurePlate{
 	protected $id = self::STONE_PRESSURE_PLATE;
 
 	public function getName() : string{
 		return "Stone Pressure Plate";
+	}
+
+	public function canTrigger(Entity $entity) : bool{
+		if($entity instanceof \pocketmine\entity\Item){
+			return false;
+		}
+		return true;
+	}
+
+	public function getDrops(Item $item) : array {
+		if($item->isPickaxe() >= 1){
+			return [
+				[$this->id, 0, 1],
+			];
+		}else{
+			return [];
+		}
 	}
 }

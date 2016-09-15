@@ -26,4 +26,8 @@ use pocketmine\Player;
 
 class DaylightDetectorInverted extends DaylightDetector{
 	protected $id = self::DAYLIGHT_SENSOR_INVERTED;
+
+	public function getName() : string{
+		return "Redstone Sensor Inverted";
+	}
 }
