@@ -38,7 +38,7 @@ class RedstoneUtil{
 		return self::getReceivingPowerLocation($block) != null;
 	}
 
-	public static function getReceivingPowerLocation(Block $block) : Block{
+	public static function getReceivingPowerLocation(Block $block){
 		foreach([Vector3::SIDE_NORTH, Vector3::SIDE_EAST, Vector3::SIDE_SOUTH, Vector3::SIDE_WEST, Vector3::SIDE_DOWN, Vector3::SIDE_UP] as $face){
 			$b = $block->getSide($face);
 			if(self::isEmittingPower($b, Vector3::getOppositeSide($face))){

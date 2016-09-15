@@ -96,7 +96,9 @@ class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 			$receiving = $this->getReceivingPower($this);
 			$current = $this->getRedstonePower($this);
 			if($current == $receiving){
-
+				if($type == Level::BLOCK_UPDATE_SCHEDULED){
+					$this->updateAround();
+				}
 			}elseif($receiving > $current){
 				$this->meta = $receiving;
 				$this->getLevel()->setBlock($this, $this, false, false);

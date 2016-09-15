@@ -209,7 +209,7 @@ abstract class Door extends Transparent implements RedstoneTarget{
 	}
 
 	public function onUpdate($type){
-		if($type === Level::BLOCK_UPDATE_NORMAL){
+		if($type == Level::BLOCK_UPDATE_NORMAL or $type == Level::BLOCK_UPDATE_SCHEDULED){
 			if($this->getSide(Vector3::SIDE_DOWN)->getId() === self::AIR and $this->getSide(Vector3::SIDE_UP) instanceof Door){ //Block underneath the door was broken
 			
 				$this->getLevel()->setBlock($this, new Air(), false, false);
@@ -299,7 +299,7 @@ abstract class Door extends Transparent implements RedstoneTarget{
 			$down = $this->getSide(Vector3::SIDE_DOWN);
 			if($down->getId() === $this->getId()){
 				$meta = $down->getDamage() ^ 0x04;
-				$this->getLevel()->setBlock($down, Block::get($this->getId(), $meta), true);
+				$this->getLevel()->setBlock($down, Block::get($this->getId(), $meta), true, false);
 				$players = $this->getLevel()->getChunkPlayers($this->x >> 4, $this->z >> 4);
 				if($player instanceof Player){
 					unset($players[$player->getLoaderId()]);
@@ -312,7 +312,7 @@ abstract class Door extends Transparent implements RedstoneTarget{
 			return false;
 		}else{
 			$this->meta ^= 0x04;
-			$this->getLevel()->setBlock($this, $this, true);
+			$this->getLevel()->setBlock($this, $this, true, false);
 			$players = $this->getLevel()->getChunkPlayers($this->x >> 4, $this->z >> 4);
 			if($player instanceof Player){
 				unset($players[$player->getLoaderId()]);
@@ -323,7 +323,7 @@ abstract class Door extends Transparent implements RedstoneTarget{
 		return true;
 	}
 
-	public function toggleOpen(){
+	public function toggleOpen() : bool{
 		return $this->setOpen(!$this->isOpen());
 	}
 

@@ -211,7 +211,7 @@ class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneS
 			self::$list[self::ANVIL] = Anvil::class;
 
 			//self::$list[self::TRAPPED_CHEST] = TrappedChest::class;
-			//self::$list[self::REDSTONE_BLOCK] = Redstone::class;
+			self::$list[self::REDSTONE_BLOCK] = Redstone::class;
 
 			self::$list[self::QUARTZ_BLOCK] = Quartz::class;
 			self::$list[self::QUARTZ_STAIRS] = QuartzStairs::class;

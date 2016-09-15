@@ -24,6 +24,7 @@ namespace pocketmine\block;
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
 use pocketmine\level\sound\ClickSound;
+use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Math;
 use pocketmine\math\Vector3;
 use pocketmine\level\Level;
@@ -31,7 +32,7 @@ use pocketmine\level\sound\GenericSound;
 use pocketmine\Player;
 
 abstract class PressurePlate extends Flowable implements RedstoneSource{
-	const TICK_DELAY = 20;
+	const TICK_DELAY = 10;
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
@@ -53,12 +54,35 @@ abstract class PressurePlate extends Flowable implements RedstoneSource{
 		return true;
 	}
 
+	public function getBoundingBox(){
+		if($this->isPressed()){
+			return new AxisAlignedBB(
+				$this->x,
+				$this->y,
+				$this->z,
+				$this->x + 1,
+				$this->y + 0.03125,
+				$this->z + 1
+			);
+		}else{
+			return new AxisAlignedBB(
+				$this->x,
+				$this->y,
+				$this->z,
+				$this->x + 1,
+				$this->y + 0.0625,
+				$this->z + 1
+			);
+		}
+	}
+
 	public function isPressed(){
 		return $this->meta == 1;
 	}
 
 	public function onEntityCollide(Entity $entity){
 		if($this->canTrigger($entity)){
+			$this->getLevel()->setBlockTempData($this, $this->getLevel()->getServer()->getTick());
 			$this->setPressed(true);
 		}
 	}
@@ -103,7 +127,11 @@ abstract class PressurePlate extends Flowable implements RedstoneSource{
 				return;
 			}
 
-			$this->setPressed(false);
+			if(($this->getLevel()->getServer()->getTick() - $this->getLevel()->getBlockTempData($this)) > 1){
+				$this->setPressed(false);
+			}else{
+				$this->getLevel()->scheduleUpdate($this, self::TICK_DELAY);
+			}
 		}
 	}
 
