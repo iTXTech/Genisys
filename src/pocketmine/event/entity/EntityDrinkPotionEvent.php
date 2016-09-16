@@ -21,9 +21,9 @@
 
 namespace pocketmine\event\entity;
 
+use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 use pocketmine\event\Cancellable;
-use pocketmine\item\Item;
 use pocketmine\item\Potion;
 
 class EntityDrinkPotionEvent extends EntityEvent implements Cancellable{

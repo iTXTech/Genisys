@@ -55,6 +55,7 @@ use pocketmine\event\inventory\CraftItemEvent;
 use pocketmine\event\inventory\InventoryCloseEvent;
 use pocketmine\event\inventory\InventoryPickupArrowEvent;
 use pocketmine\event\inventory\InventoryPickupItemEvent;
+use pocketmine\event\player\PlayerExhaustEvent;
 use pocketmine\event\player\PlayerTextPreSendEvent;
 use pocketmine\event\player\PlayerAchievementAwardedEvent;
 use pocketmine\event\player\PlayerAnimationEvent;
@@ -996,11 +997,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$this->allowFlight = (($this->gamemode == 3) or ($this->gamemode == 1));
 		$this->setHealth($this->getHealth());
-		if($this->server->foodEnabled){
-			$this->setFood($this->getFood());
-		}else {
-			$this->setFood(20);
-		}
 
 		$this->server->getPluginManager()->callEvent($ev = new PlayerJoinEvent($this, new TranslationContainer(TextFormat::YELLOW . "%multiplayer.player.joined", [
 			$this->getDisplayName()
@@ -1940,49 +1936,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 			}
 
-			if($this->server->foodEnabled){
-				if($this->starvationTick >= 20){
-					$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_STARVATION, 1);
-					if($this->getHealth() > $this->server->hungerHealth) $this->attack(1, $ev);
-					$this->starvationTick = 0;
-				}
-				if($this->getFood() <= 0){
-					$this->starvationTick++;
-				}
-
-				if($this->isMoving() && $this->isSurvival()){
-					if($this->isSprinting()){
-						$this->foodUsageTime += 500;
-					}else{
-						$this->foodUsageTime += 250;
-					}
-				}
-
-				if($this->foodUsageTime >= 200000 && $this->foodEnabled){
-					$this->foodUsageTime -= 200000;
-					$this->subtractFood(1);
-				}
-
-				if((($currentTick % 80) == 0) and $this->getHealth() < $this->getMaxHealth() && $this->getFood() >= 18 && $this->foodEnabled){
-					$ev = new EntityRegainHealthEvent($this, 1, EntityRegainHealthEvent::CAUSE_EATING);
-					$this->heal(1, $ev);
-				}
-
-				if($this->foodTick >= $this->server->hungerTimer){
-					if($this->foodEnabled){
-						if($this->foodDepletion >= 2){
-							$this->subtractFood(1);
-							$this->foodDepletion = 0;
-						}else{
-							$this->foodDepletion++;
-						}
-					}
-					$this->foodTick = 0;
-				}
-				if($this->getHealth() < $this->getMaxHealth()){
-					$this->foodTick++;
-				}
-			}
 			if($this->getTransactionQueue() !== null){
 				$this->getTransactionQueue()->execute();
 			}
@@ -1993,26 +1946,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->timings->stopTiming();
 
 		return true;
-	}
-
-	public $eatCoolDown = 0;
-
-	public function consumeHeldItem(){
-		//TODO: Move this into entity class so that any mob can eat/drink
-		if($this->eatCoolDown + 2000 >= time() || !$this->spawned){
-			return;
-		}
-		$item = $this->inventory->getItemInHand();
-		if($item instanceof FoodSource or $item instanceof Potion){
-			if($item->canBeConsumedBy($this)){
-				$this->server->getPluginManager()->callEvent($ev = new PlayerItemConsumeEvent($this, $item));
-				if($ev->isCancelled()){
-					$this->inventory->sendContents($this);
-					return;
-				}
-				$item->onConsume($this);
-			}
-		}
 	}
 
 	public function checkNetwork(){
@@ -2722,7 +2655,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 				break;
 			case ProtocolInfo::PLAYER_ACTION_PACKET:
-				//$this->consumeHeldItem();
 				if($this->spawned === false or $this->blocked === true or (!$this->isAlive() and $packet->action !== PlayerActionPacket::ACTION_SPAWN_SAME_DIMENSION and $packet->action !== PlayerActionPacket::ACTION_SPAWN_OVERWORLD)){
 					break;
 				}
@@ -2968,6 +2900,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$this->inventory->setItemInHand($item);
 							$this->inventory->sendHeldItem($this);
 						}
+
+						$this->exhaust(0.025, PlayerExhaustEvent::CAUSE_MINING);
 					}
 					break;
 				}
@@ -3086,12 +3020,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						break;
 					}
 
-					if($item->isTool() and $this->isSurvival()){
-						if($item->useOn($target) and $item->getDamage() >= $item->getMaxDurability()){
-							$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
-						}else{
-							$this->inventory->setItemInHand($item);
+					if($this->isSurvival()){
+						if($item->isTool()){
+							if($item->useOn($target) and $item->getDamage() >= $item->getMaxDurability()){
+								$this->inventory->setItemInHand(Item::get(Item::AIR, 0, 1));
+							}else{
+								$this->inventory->setItemInHand($item);
+							}
 						}
+
+						$this->exhaust(0.3, PlayerExhaustEvent::CAUSE_ATTACK);
 					}
 				}
 
@@ -3123,8 +3061,21 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false); //TODO: check if this should be true
 
 				switch($packet->event){
-					case 9: //Eating
-						$this->consumeHeldItem();
+					case EntityEventPacket::USE_ITEM: //Eating
+						$slot = $this->inventory->getItemInHand();
+
+						if($slot->canBeConsumed()){
+							$ev = new PlayerItemConsumeEvent($this, $slot);
+							if(!$slot->canBeConsumedBy($this)){
+								$ev->setCancelled();
+							}
+							$this->server->getPluginManager()->callEvent($ev);
+							if(!$ev->isCancelled()){
+								$slot->onConsume($this);
+							}else{
+								$this->inventory->sendContents($this);
+							}
+						}
 						break;
 				}
 				break;
@@ -4040,94 +3991,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 	}
 
-	protected $movementSpeed = 0.1;
-
-	/**
-	 * Set movement speed to the player
-	 *
-	 * @param $amount
-	 */
-	public function setMovementSpeed($amount){
-		$this->movementSpeed = $amount;
-		$this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED)->setValue($amount);
-	}
-
-	/**
-	 * Get movement speed of the player
-	 *
-	 * @return float
-	 */
-	public function getMovementSpeed(){
-		return $this->movementSpeed;
-	}
-
-	protected $food = 20;
-
-	protected $foodDepletion = 0;
-
-	protected $foodEnabled = true;
-
-	public function setFoodEnabled($enabled){
-		$this->foodEnabled = $enabled;
-	}
-
-	public function getFoodEnabled(){
-		return $this->foodEnabled;
-	}
-
-	public function setFood(float $amount){
-		if(!$this->server->foodEnabled){
-			$amount = 20;
-		}
-		$amount = min(20, max(0, $amount));
-		$this->server->getPluginManager()->callEvent($ev = new PlayerHungerChangeEvent($this, $amount));
-
-		if($ev->isCancelled()) return false;
-
-		$amount = $ev->getData();
-
-		if($amount <= 6 && !($this->getFood() <= 6)){
-			$this->setDataProperty(self::DATA_FLAG_SPRINTING, self::DATA_TYPE_BYTE, false);
-		}elseif($amount > 6 && !($this->getFood() > 6)){
-			$this->setDataProperty(self::DATA_FLAG_SPRINTING, self::DATA_TYPE_BYTE, true);
-		}
-
-		$this->food = $amount;
-		if($this->getAttributeMap() instanceof AttributeMap){
-			$this->getAttributeMap()->getAttribute(Attribute::HUNGER)->setValue($amount);
-		}else{
-			//Sometimes this function is called before the attribute map is initialized, causing a crash. Not sure how that is even possible. Maybe a plugin?
-		}
-
-		return true;
-	}
-
-	public function getFood() : float{
-		return $this->food;
-	}
-
-	public function subtractFood($amount){
-		if($this->getFood() - $amount <= 6 && !($this->getFood() <= 6)){
-			$this->setDataProperty(self::DATA_FLAG_SPRINTING, self::DATA_TYPE_BYTE, false);
-			//$this->removeEffect(Effect::SLOWNESS);
-		}elseif($this->getFood() - $amount < 6 && !($this->getFood() > 6)){
-			$this->setDataProperty(self::DATA_FLAG_SPRINTING, self::DATA_TYPE_BYTE, true);
-			/*$effect = Effect::getEffect(Effect::SLOWNESS);
-			$effect->setDuration(0x7fffffff);
-			$effect->setAmplifier(2);
-			$effect->setVisible(false);
-			$this->addEffect($effect);*/
-		}
-		if($this->food - $amount < 0) return;
-		$this->setFood($this->getFood() - $amount);
-	}
-
 	public function attack($damage, EntityDamageEvent $source){
 		if(!$this->isAlive()){
-			return false;
+			return;
 		}
 
-		if($this->isCreative() and $source->getCause() !== EntityDamageEvent::CAUSE_SUICIDE and $source->getCause() !== EntityDamageEvent::CAUSE_VOID){
+		if($this->isCreative()
+			and $source->getCause() !== EntityDamageEvent::CAUSE_MAGIC
+			and $source->getCause() !== EntityDamageEvent::CAUSE_SUICIDE
+			and $source->getCause() !== EntityDamageEvent::CAUSE_VOID
+		){
 			$source->setCancelled();
 		}elseif($this->allowFlight and $source->getCause() === EntityDamageEvent::CAUSE_FALL){
 			$source->setCancelled();
@@ -4136,14 +4009,17 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		parent::attack($damage, $source);
 
 		if($source->isCancelled()){
-			return false;
+			return;
 		}elseif($this->getLastDamageCause() === $source and $this->spawned){
 			$pk = new EntityEventPacket();
 			$pk->eid = 0;
 			$pk->event = EntityEventPacket::HURT_ANIMATION;
 			$this->dataPacket($pk);
+
+			if($this->isSurvival()){
+				$this->exhaust(0.3, PlayerExhaustEvent::CAUSE_DAMAGE);
+			}
 		}
-		return true;
 	}
 
 	public function sendPosition(Vector3 $pos, $yaw = null, $pitch = null, $mode = 0, array $targets = null){

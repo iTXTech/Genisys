@@ -20,10 +20,6 @@ level:
 player:
  #배고픔 시스템 스위치
  hunger: true
- #허기로 인하여 생명이 닳을 때 최소 생명
- hunger-health: 10
- #허기 시간 카운터, 기본: 80=4초
- hunger-timer: 3000
  #경험치 시스템을 켜는 경우 고르세요
  experience: true
  #플레이어가 사망하였을때 인벤토리를 유지하려는 경우 고르세요
