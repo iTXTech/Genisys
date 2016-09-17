@@ -20,10 +20,6 @@ level:
 player:
  #Bật/tắt nếu muốn thêm chế độ đói (true/false)
  hunger: true
- #Số máu đói tối đa nếu có người tấn công (mặc định là 20)
- hunger-health: 10
- #Thời gian "tấn công" cơn đói, Mặc định là 80=4 giây
- hunger-timer: 3000
  #Bật/tắt nếu muốn thêm chế độ điểm kinh nghiệm (true/false)
  experience: true
  #Bật/tắt nếu muốn server chết không mất đồ (true/false)

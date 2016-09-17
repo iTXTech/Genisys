@@ -23,6 +23,7 @@ namespace pocketmine\entity;
 
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
+use pocketmine\event\player\PlayerExhaustEvent;
 use pocketmine\network\Network;
 use pocketmine\network\protocol\MobEffectPacket;
 use pocketmine\Player;
@@ -204,8 +205,15 @@ class Effect{
 				}
 				return true;
 			case Effect::REGENERATION:
-			case Effect::HUNGER:
 				if(($interval = (40 >> $this->amplifier)) > 0){
+					return ($this->duration % $interval) === 0;
+				}
+				return true;
+			case Effect::HUNGER:
+				if($this->amplifier < 0){ // prevents hacking with amplifier -1
+					return false;
+				}
+				if(($interval = 20) > 0){
 					return ($this->duration % $interval) === 0;
 				}
 				return true;
@@ -242,10 +250,8 @@ class Effect{
 				}
 				break;
 			case Effect::HUNGER:
-				if($entity instanceof Player){
-					if($entity->getServer()->foodEnabled){
-						$entity->setFood($entity->getFood() - 1);
-					}
+				if($entity instanceof Human){
+					$entity->exhaust(0.5 * $this->amplifier, PlayerExhaustEvent::CAUSE_POTION);
 				}
 				break;
 			case Effect::HEALING:

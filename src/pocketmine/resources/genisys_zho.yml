@@ -20,10 +20,6 @@ level:
 player:
  #是否打開飢餓
  hunger: true
- #飢餓值扣血下限
- hunger-health: 10
- #飢餓值飢餓值計時器，預設80=4秒
- hunger-timer: 3000
  #是否打開經驗系統
  experience: true
  #是否開啟死亡不掉落
