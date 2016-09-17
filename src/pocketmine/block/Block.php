@@ -260,9 +260,9 @@ class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneS
 			self::$list[self::INACTIVE_REDSTONE_LAMP] = InactiveRedstoneLamp::class;
 			self::$list[self::REDSTONE_TORCH] = RedstoneTorch::class;
 			self::$list[self::UNLIT_REDSTONE_TORCH] = UnlitRedstoneTorch::class;
-			/*self::$list[self::WOODEN_BUTTON] = WoodenButton::class;
+			self::$list[self::WOODEN_BUTTON] = WoodenButton::class;
 			self::$list[self::STONE_BUTTON] = StoneButton::class;
-			self::$list[self::LEVER] = Lever::class;*/
+			self::$list[self::LEVER] = Lever::class;
 			self::$list[self::DAYLIGHT_SENSOR] = DaylightDetector::class;
 			self::$list[self::DAYLIGHT_SENSOR_INVERTED] = DaylightDetectorInverted::class;
 			self::$list[self::NOTEBLOCK] = Noteblock::class;

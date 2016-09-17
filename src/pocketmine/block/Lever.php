@@ -41,6 +41,11 @@ class Lever extends Flowable implements RedstoneSource, Attachable{
 		return "Lever";
 	}
 
+	public function onActivate(Item $item, Player $player = null){
+		$this->toggle();
+		return true;
+	}
+
 	public function getAttachedFace(){
 		$faces = [
 			5 => 0,
@@ -116,7 +121,7 @@ class Lever extends Flowable implements RedstoneSource, Attachable{
 	}
 
 	public function hasDirectRedstonePower(Block $block, int $face, int $powerMode) : bool{
-		$this->hasRedstonePower($block, $powerMode) and $this->getAttachedFace() == $face;
+		return $this->hasRedstonePower($block, $powerMode) and $this->getAttachedFace() == $face;
 	}
 
 	public function getIndirectRedstonePower(Block $block, int $face, int $powerMode) : int{
