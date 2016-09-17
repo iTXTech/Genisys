@@ -23,13 +23,22 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
-use pocketmine\math\Vector3;
+use pocketmine\level\Level;
+use pocketmine\utils\RedstoneUtil;
 
-class ActiveRedstoneLamp extends Solid implements SolidLight{
+class ActiveRedstoneLamp extends Solid implements SolidLight, RedstoneTarget{
 	protected $id = self::ACTIVE_REDSTONE_LAMP;
 
-	public function __construct($meta = 0){
-		$this->meta = $meta;
+	public function __construct(){
+		if(self::$updateQueue == []){
+			for($i = -2; $i <= 2; $i++){
+				for($j = -2; $j <= 2; $j++){
+					for($k = -2; $k <= 2; $k++){
+						self::$updateQueue[] = [$i, $j, $k];
+					}
+				}
+			}
+		}
 	}
 
 	public function getName() : string{
@@ -40,12 +49,16 @@ class ActiveRedstoneLamp extends Solid implements SolidLight{
 		return 0.3;
 	}
 
+	public function getResistance(){
+		return 1.5;
+	}
+
 	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
 	}
 
 	public function getLightLevel(){
-		return 15;
+		return $this->isOn() ? IndirectRedstoneSource::REDSTONE_POWER_MAX : IndirectRedstoneSource::REDSTONE_POWER_MIN;
 	}
 
 	public function getDrops(Item $item) : array {
@@ -54,69 +67,25 @@ class ActiveRedstoneLamp extends Solid implements SolidLight{
 		];
 	}
 
-	public function isLightedByAround(){
-		return ($this->meta == 1);
+	public function isOn() : bool{
+		return ($this->id == self::ACTIVE_REDSTONE_LAMP);
 	}
 
-	protected function checkPower(array $ignore = []){
-		if($this->isLightedByAround()){
-			$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP, Vector3::SIDE_DOWN];
-			foreach($sides as $side){
-				if(!in_array($side, $ignore)){
-					/** @var ActiveRedstoneLamp $block */
-					$block = $this->getSide($side);
-					if($block->getId() == $this->id){
-						if(!$block->isLightedByAround()) return true;
-					}
+	public function isReceivingPower(Block $block) : bool{
+		return RedstoneUtil::isReceivingPower($this);
+	}
+
+	public function onUpdate($type){
+		if($type == Level::BLOCK_UPDATE_NORMAL){
+			$power = $this->isReceivingPower($this);
+			if($this->isOn() != $power){
+				if($power){
+					$this->id = self::ACTIVE_REDSTONE_LAMP;
+				}else{
+					$this->id = self::INACTIVE_REDSTONE_LAMP;
 				}
+				$this->getLevel()->setBlock($this, $this, true, true);
 			}
 		}
-		return false;
-	}
-
-	public function lightAround(){
-		$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP, Vector3::SIDE_DOWN];
-		foreach($sides as $side){
-			/** @var InactiveRedstoneLamp $block */
-			$block = $this->getSide($side);
-			if($block->getId() == self::INACTIVE_REDSTONE_LAMP){
-				$block->turnOn();
-			}
-		}
-	}
-
-	protected function turnAroundOff(array $ignore = []){
-		if(!$this->isLightedByAround()){
-			$sides = [Vector3::SIDE_EAST, Vector3::SIDE_WEST, Vector3::SIDE_SOUTH, Vector3::SIDE_NORTH, Vector3::SIDE_UP, Vector3::SIDE_DOWN];
-
-			foreach($sides as $side){
-				if(!in_array($side, $ignore)){
-					/** @var ActiveRedstoneLamp $block */
-					$block = $this->getSide($side);
-					if($block->getId() == $this->id){
-						if($block->isLightedByAround()){
-							if(!$block->checkPower([$this->getOppositeSide($side)])) $block->turnOff();
-						}
-					}
-				}
-			}
-		}
-	}
-
-	public function turnOn(){
-		/*if($this->isLightedByAround()){
-			$this->meta = 0;
-			$this->getLevel()->setBlock($this, $this, true, false);
-			$this->lightAround();
-		}*/
-		$this->meta = 0;
-		$this->getLevel()->setBlock($this, $this, true, false);
-		return true;
-	}
-
-	public function turnOff(){
-		$this->getLevel()->setBlock($this, new InactiveRedstoneLamp(), true, true);
-		//$this->turnAroundOff();
-		return true;
 	}
 }

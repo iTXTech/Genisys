@@ -21,8 +21,6 @@
 
 namespace pocketmine\block;
 
-use pocketmine\math\Vector3;
-
 interface RedstoneSource extends IndirectRedstoneSource{
 	public function getDirectRedstonePower(Block $block, int $face, int $powerMode) : int;
 
