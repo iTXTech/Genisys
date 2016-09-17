@@ -419,11 +419,15 @@ class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneS
 	}
 
 	public function updateAround(){
-		foreach(self::$updateQueue as $pos){
-			$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new BlockUpdateEvent(
-				$this->getLevel()->getBlock($this->getLevel()->blockUpdateTempVector->setComponents($this->x + $pos[0], $this->y + $pos[1], $this->z + $pos[2]))));
-			if(!$ev->isCancelled()){
-				$ev->getBlock()->onUpdate(Level::BLOCK_UPDATE_NORMAL);
+		if(self::$updateQueue == []){
+			$this->getLevel()->updateAround($this);
+		}else{
+			foreach(self::$updateQueue as $pos){
+				$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new BlockUpdateEvent(
+					$this->getLevel()->getBlock($this->getLevel()->blockUpdateTempVector->setComponents($this->x + $pos[0], $this->y + $pos[1], $this->z + $pos[2]))));
+				if(!$ev->isCancelled()){
+					$ev->getBlock()->onUpdate(Level::BLOCK_UPDATE_NORMAL);
+				}
 			}
 		}
 	}

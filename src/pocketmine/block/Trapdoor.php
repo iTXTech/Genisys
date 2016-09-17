@@ -23,11 +23,13 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\level\Level;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
 use pocketmine\level\sound\DoorSound;
+use pocketmine\utils\RedstoneUtil;
 
-class Trapdoor extends Transparent{
+class Trapdoor extends Transparent implements RedstoneTarget{
 
 	protected $id = self::TRAPDOOR;
 
@@ -152,15 +154,35 @@ class Trapdoor extends Transparent{
 		];
 	}
 
-	public function isOpened(){
+	public function isOpen(){
 		return (($this->meta & 0b00001000) === 0);
 	}
 
-	public function onActivate(Item $item, Player $player = \null){
+	public function onActivate(Item $item, Player $player = null){
 		$this->meta ^= 0b00001000;
-		$this->getLevel()->setBlock($this, $this, true);
+		$this->getLevel()->setBlock($this, $this, true, false);
 		$this->level->addSound(new DoorSound($this));
 		return true;
+	}
+
+	public function setOpen(bool $open){
+		if($open != $this->isOpen()){
+			$this->meta ^= 0b00001000;
+			$this->getLevel()->setBlock($this, $this, true, false);
+		}
+	}
+
+	public function onUpdate($type){
+		if($type == Level::BLOCK_UPDATE_NORMAL){
+			$powered = $this->isReceivingPower($this);
+			if($powered != $this->isOpen()){
+				$this->setOpen($powered);
+			}
+		}
+	}
+
+	public function isReceivingPower(Block $block) : bool{
+		return RedstoneUtil::isReceivingPower($block);
 	}
 
 	public function getToolType(){

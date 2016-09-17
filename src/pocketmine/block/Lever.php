@@ -26,7 +26,7 @@ use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 
-class Lever extends RedstoneSource{
+class Lever extends Flowable implements RedstoneSource, Attachable{
 	protected $id = self::LEVER;
 
 	public function __construct($meta = 0){
@@ -41,22 +41,23 @@ class Lever extends RedstoneSource{
 		return "Lever";
 	}
 
+	public function getAttachedFace(){
+		$faces = [
+			5 => 0,
+			6 => 0,
+			3 => 2,
+			1 => 4,
+			4 => 3,
+			2 => 5,
+			0 => 1,
+			7 => 1,
+		];
+		return $faces[$this->isToggled() ? $this->meta ^ 0x08 : $this->meta];
+	}
+
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
-			$side = $this->getDamage();
-			if($this->isActivated()) $side ^= 0x08;
-			$faces = [
-				5 => 0,
-				6 => 0,
-				3 => 2,
-				1 => 4,
-				4 => 3,
-				2 => 5,
-				0 => 1,
-				7 => 1,
-			];
-
-			$block = $this->getSide($faces[$side]);
+			$block = $this->getSide($this->getAttachedFace());
 			if($block->isTransparent()){
 				$this->getLevel()->useBreakOn($this);
 
@@ -83,77 +84,43 @@ class Lever extends RedstoneSource{
 			}else{
 				$this->meta = $faces[$face];
 			}
-			$this->getLevel()->setBlock($block, $this, true, false);
+			$this->getLevel()->setBlock($block, $this, true, true);
 			return true;
 		}
 		return false;
 	}
 
-	public function activate(array $ignore = []){
-		parent::activate($ignore);
-		$side = $this->meta;
-		if($this->isActivated()) $side ^= 0x08;
-		$faces = [
-				5 => 0,
-				6 => 0,
-				3 => 2,
-				1 => 4,
-				4 => 3,
-				2 => 5,
-				0 => 1,
-				7 => 1,
-		];
-
-		$block = $this->getSide($faces[$side])->getSide(Vector3::SIDE_UP);
-		if(!$this->equals($block)){
-			$this->activateBlock($block);
-		}
-
-		$this->checkTorchOn($this->getSide($faces[$side]),[$this->getOppositeSide($faces[$side])]);
-	}
-
-	public function deactivate(array $ignore = []){
-		parent::deactivate($ignore);
-		$side = $this->meta;
-		if($this->isActivated()) $side ^= 0x08;
-		$faces = [
-				5 => 0,
-				6 => 0,
-				3 => 2,
-				1 => 4,
-				4 => 3,
-				2 => 5,
-				0 => 1,
-				7 => 1,
-		];
-
-		$block = $this->getSide($faces[$side])->getSide(Vector3::SIDE_UP);
-		if(!$this->equals($block)){
-			$this->deactivateBlock($block);
-		}
-
-		$this->checkTorchOff($this->getSide($faces[$side]),[$this->getOppositeSide($faces[$side])]);
-	}
-
-	public function onActivate(Item $item, Player $player = null){
-		$this->meta ^= 0x08;
-		$this->getLevel()->setBlock($this, $this, true, false);
-		if($this->isActivated()) $this->activate();
-		else $this->deactivate();
-		return true;
-	}
-
-	public function onBreak(Item $item){
-		if($this->isActivated()){
-			$this->meta ^= 0x08;
-			$this->getLevel()->setBlock($this, $this, true, false);
-			$this->deactivate();
-		}
-		$this->getLevel()->setBlock($this, new Air(), true, false);
-	}
-
-	public function isActivated(Block $from = null){
+	public function isToggled(){
 		return (($this->meta & 0x08) === 0x08);
+	}
+
+	public function setToggled(bool $toggled){
+		if($this->isToggled() != $toggled){
+			$this->meta ^= 0x08;
+			$this->getLevel()->setBlock($this, $this, true, true);
+		}
+	}
+
+	public function toggle(){
+		$toggled = !$this->isToggled();
+		$this->setToggled($toggled);
+		return $toggled;
+	}
+
+	public function getRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : int{
+		return $this->isToggled() ? self::REDSTONE_POWER_MAX : self::REDSTONE_POWER_MIN;
+	}
+
+	public function getDirectRedstonePower(Block $block, int $face, int $powerMode) : int{
+		return $this->hasDirectRedstonePower($block, $face, $powerMode) ? self::REDSTONE_POWER_MAX : self::REDSTONE_POWER_MIN;
+	}
+
+	public function hasDirectRedstonePower(Block $block, int $face, int $powerMode) : bool{
+		$this->hasRedstonePower($block, $powerMode) and $this->getAttachedFace() == $face;
+	}
+
+	public function getIndirectRedstonePower(Block $block, int $face, int $powerMode) : int{
+		return $this->getRedstonePower($block, $powerMode);
 	}
 
 	public function getHardness() {
