@@ -312,7 +312,7 @@ abstract class Door extends Transparent implements RedstoneTarget{
 			return false;
 		}else{
 			$this->meta ^= 0x04;
-			$this->getLevel()->setBlock($this, $this, true, false);
+			$this->getLevel()->setBlock($this, $this, false, false);
 			$players = $this->getLevel()->getChunkPlayers($this->x >> 4, $this->z >> 4);
 			if($player instanceof Player){
 				unset($players[$player->getLoaderId()]);
