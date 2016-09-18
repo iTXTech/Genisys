@@ -81,5 +81,8 @@ class ChestInventory extends ContainerInventory{
 			}
 		}
 		parent::onClose($who);
+		if($this->getHolder()->getBlock() instanceof TrappedChest){
+			$this->getHolder()->getBlock()->updateAround();
+		}
 	}
 }
