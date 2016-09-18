@@ -159,16 +159,15 @@ class Trapdoor extends Transparent implements RedstoneTarget{
 	}
 
 	public function onActivate(Item $item, Player $player = null){
-		$this->meta ^= 0b00001000;
-		$this->getLevel()->setBlock($this, $this, true, false);
-		$this->level->addSound(new DoorSound($this));
+		$this->setOpen(!$this->isOpen());
 		return true;
 	}
 
 	public function setOpen(bool $open){
 		if($open != $this->isOpen()){
 			$this->meta ^= 0b00001000;
-			$this->getLevel()->setBlock($this, $this, true, false);
+			$this->getLevel()->setBlock($this, $this, false, false);
+			$this->level->addSound(new DoorSound($this));
 		}
 	}
 

@@ -178,6 +178,25 @@ class Vector3{
 		}
 	}
 
+	public static function getSideRaw(int $side, array $base = [0, 0, 0]){
+		switch((int) $side){
+			case Vector3::SIDE_DOWN:
+				return [0 + $base[0], -1 + $base[1], 0 + $base[2]];
+			case Vector3::SIDE_UP:
+				return [0 + $base[0], 1 + $base[1], 0 + $base[2]];
+			case Vector3::SIDE_NORTH:
+				return [0 + $base[0], 0 + $base[1], -1 + $base[2]];
+			case Vector3::SIDE_SOUTH:
+				return [0 + $base[0], 0 + $base[1], 1 + $base[2]];
+			case Vector3::SIDE_WEST:
+				return [-1 + $base[0], 0 + $base[1], 0 + $base[2]];
+			case Vector3::SIDE_EAST:
+				return [1 + $base[0], 0 + $base[1], 0 + $base[2]];
+			default:
+				return $base;
+		}
+	}
+
 	public function distance(Vector3 $pos){
 		return sqrt($this->distanceSquared($pos));
 	}

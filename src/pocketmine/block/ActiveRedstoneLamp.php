@@ -84,7 +84,7 @@ class ActiveRedstoneLamp extends Solid implements SolidLight, RedstoneTarget{
 				}else{
 					$this->id = self::INACTIVE_REDSTONE_LAMP;
 				}
-				$this->getLevel()->setBlock($this, $this, true, true);
+				$this->getLevel()->setBlock($this, $this, false, true);
 			}
 		}
 	}

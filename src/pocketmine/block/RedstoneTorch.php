@@ -28,7 +28,7 @@ use pocketmine\math\Vector3;
 use pocketmine\utils\RedstoneUtil;
 
 class RedstoneTorch extends Torch implements RedstoneSource, RedstoneTarget{
-	const TICK_DELAY = 100;
+	const TICK_DELAY = 2;
 
 	protected $id = self::REDSTONE_TORCH_ON;
 

@@ -33,6 +33,21 @@ class Lever extends Flowable implements RedstoneSource, Attachable{
 		$this->meta = $meta;
 	}
 
+	public function getUpdateQueue(){
+		$sides = [0, 1, 2, 3, 4, 5];
+		$queue = [];
+		foreach($sides as $side){
+			$queue[] = Vector3::getSideRaw($side);
+		}
+		$attachedSides = [0, 1, 2, 3, 4, 5];
+		unset($attachedSides[Vector3::getOppositeSide($this->getAttachedFace())]);
+		$base = Vector3::getSideRaw($this->getAttachedFace());
+		foreach($attachedSides as $side){
+			$queue[] = Vector3::getSideRaw($side, $base);
+		}
+		return $queue;
+	}
+
 	public function canBeActivated() : bool {
 		return true;
 	}
