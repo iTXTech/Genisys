@@ -210,7 +210,7 @@ class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneS
 			self::$list[self::POTATO_BLOCK] = Potato::class;
 			self::$list[self::ANVIL] = Anvil::class;
 
-			//self::$list[self::TRAPPED_CHEST] = TrappedChest::class;
+			self::$list[self::TRAPPED_CHEST] = TrappedChest::class;
 			self::$list[self::REDSTONE_BLOCK] = Redstone::class;
 
 			self::$list[self::QUARTZ_BLOCK] = Quartz::class;
@@ -418,11 +418,22 @@ class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneS
 
 	}
 
+	/**
+	 * Gets the update queue of the blocks
+	 */
+	public function getUpdateQueue(){
+		return self::$updateQueue;
+	}
+
+	/**
+	 * Updates around blocks in update queue
+	 */
 	public function updateAround(){
-		if(self::$updateQueue == []){
+		$queue = $this->getUpdateQueue();
+		if($queue == []){
 			$this->getLevel()->updateAround($this);
 		}else{
-			foreach(self::$updateQueue as $pos){
+			foreach($queue as $pos){
 				$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new BlockUpdateEvent(
 					$this->getLevel()->getBlock($this->getLevel()->blockUpdateTempVector->setComponents($this->x + $pos[0], $this->y + $pos[1], $this->z + $pos[2]))));
 				if(!$ev->isCancelled()){
