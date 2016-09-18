@@ -38,7 +38,7 @@ class UpdateAttributesPacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putVarInt($this->entityId);
+		$this->putUnsignedVarInt($this->entityId);
 		$this->putUnsignedVarInt(count($this->entries));
 		foreach($this->entries as $entry){
 			$this->putFloat($entry->getMinValue());

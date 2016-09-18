@@ -31,7 +31,7 @@ class LoginPacket extends DataPacket{
 
 	public $username;
 	public $protocol;
-
+	public $unknownByte;
 	public $clientUUID;
 	public $clientId;
 	public $identityPublicKey;
@@ -45,7 +45,7 @@ class LoginPacket extends DataPacket{
 		if(!in_array($this->protocol, Info::ACCEPTED_PROTOCOLS)){
 			return; //Do not attempt to decode for non-accepted protocols
 		}
-
+		$this->unknownByte = $this->getByte();
 		$str = zlib_decode($this->getString(), 1024 * 1024 * 64);
 		$this->setBuffer($str, 0);
 

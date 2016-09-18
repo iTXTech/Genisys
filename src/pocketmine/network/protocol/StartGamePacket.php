@@ -54,11 +54,13 @@ class StartGamePacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putVarInt($this->entityUniqueId); //EntityUniqueID
-		$this->putVarInt($this->entityRuntimeId); //EntityRuntimeID (basically just the normal entityID)
-		$this->putFloat($this->x);
-		$this->putFloat($this->y);
-		$this->putFloat($this->z);
+		$this->putUnsignedVarInt($this->entityUniqueId); //EntityUniqueID
+		$this->putUnsignedVarInt($this->entityRuntimeId); //EntityRuntimeID (basically just the normal entityID)
+		$this->putLFloat($this->x);
+		$this->putLFloat($this->y);
+		$this->putLFloat($this->z);
+		$this->putLFloat(0); //TODO: find out what these are (yaw/pitch?)
+		$this->putLFloat(0);
 		$this->putVarInt($this->seed); //seed (varint)
 		$this->putVarInt($this->dimension); //dimension (varint)
 		$this->putVarInt($this->generator); //generator (varint)
@@ -70,8 +72,8 @@ class StartGamePacket extends DataPacket{
 		$this->putByte($this->hasBeenLoadedInCreative); //has been loaded in creative (no Xbox achievements (well, this is impossible anyway))
 		$this->putVarInt($this->dayCycleStopTime); //dayCycleStopTime - NOTE: This is the TIME that the world is stopped at. If this is set to a positive number, client will not update world time automatically.
 		$this->putByte($this->eduMode); //edu mode
-		$this->putFloat($this->rainLevel); //rain level
-		$this->putFloat($this->lightningLevel); //lightning level
+		$this->putLFloat($this->rainLevel); //rain level
+		$this->putLFloat($this->lightningLevel); //lightning level
 		$this->putByte($this->commandsEnabled); //commands enabled
 		$this->putString($this->unknown);
 	}
