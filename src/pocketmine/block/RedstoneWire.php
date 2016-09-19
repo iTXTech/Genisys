@@ -31,13 +31,19 @@ use pocketmine\utils\RedstoneUtil;
 class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 	protected $id = self::REDSTONE_WIRE;
 
+	private static $updateQueue = [];
+
+	public function getUpdateQueue(){
+		return self::$updateQueue;
+	}
+
 	/** @var Block[] */
 	private $powerUpdateQueue = [];
 
 	public function __construct($meta = 0){
-		parent::__construct(Block::REDSTONE_WIRE, $meta);
+		$this->meta = $meta;
 
-		if(self::$updateQueue == []){
+		if(count(self::$updateQueue) === 0){
 			for($i = -1; $i <= 1; $i++){
 				for($j = -1; $j <= 1; $j++){
 					for($k = -1; $k <= 1; $k++){

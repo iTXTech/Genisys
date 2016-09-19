@@ -34,10 +34,16 @@ use pocketmine\Player;
 abstract class PressurePlate extends Flowable implements RedstoneSource{
 	const TICK_DELAY = 10;
 
+	protected static $updateQueue = [];
+
+	public function getUpdateQueue(){
+		return self::$updateQueue;
+	}
+
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 
-		if(self::$updateQueue == []){
+		if(count(self::$updateQueue) === 0){
 			for($i = -1; $i <= 1; $i++){
 				for($j = -1; $j <= 1; $j++){
 					for($k = -1; $k <= 1; $k++){

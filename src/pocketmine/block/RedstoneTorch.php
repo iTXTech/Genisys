@@ -32,10 +32,16 @@ class RedstoneTorch extends Torch implements RedstoneSource, RedstoneTarget{
 
 	protected $id = self::REDSTONE_TORCH_ON;
 
+	private static $updateQueue = [];
+
+	public function getUpdateQueue(){
+		return self::$updateQueue;
+	}
+
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 
-		if(self::$updateQueue == []){
+		if(count(self::$updateQueue) === 0){
 			self::$updateQueue = [
 				[-1, 0, 0], [1, 0, 0], [0, 0, -1], [0, 0, 1], [0, -1, 0],
 				[-1, 1, 0], [1, 1, 0], [0, 1, -1], [0, 1, 1], [0, 2, 0]

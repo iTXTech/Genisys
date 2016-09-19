@@ -32,8 +32,27 @@ class WoodenButton extends Flowable implements RedstoneSource, Attachable{
 
 	protected $id = self::WOODEN_BUTTON;
 
+	private static $updateQueue = [];
+
 	public function __construct($meta = 0){
 		$this->meta = $meta;
+
+		if(count(self::$updateQueue) === 0){
+			for($i = 0; $i <= 5; $i++){
+				$sides = [0, 1, 2, 3, 4, 5];
+				$queue = [];
+				foreach($sides as $side){
+					$queue[] = Vector3::getSideRaw($side);
+				}
+				$attachedSides = [0, 1, 2, 3, 4, 5];
+				unset($attachedSides[Vector3::getOppositeSide($i)]);
+				$base = Vector3::getSideRaw($i);
+				foreach($attachedSides as $side){
+					$queue[] = Vector3::getSideRaw($side, $base);
+				}
+				self::$updateQueue[$i] = $queue;
+			}
+		}
 	}
 
 	public function getAttachedFace(){
@@ -49,18 +68,7 @@ class WoodenButton extends Flowable implements RedstoneSource, Attachable{
 	}
 
 	public function getUpdateQueue(){
-		$sides = [0, 1, 2, 3, 4, 5];
-		$queue = [];
-		foreach($sides as $side){
-			$queue[] = Vector3::getSideRaw($side);
-		}
-		$attachedSides = [0, 1, 2, 3, 4, 5];
-		unset($attachedSides[Vector3::getOppositeSide($this->getAttachedFace())]);
-		$base = Vector3::getSideRaw($this->getAttachedFace());
-		foreach($attachedSides as $side){
-			$queue[] = Vector3::getSideRaw($side, $base);
-		}
-		return $queue;
+		return self::$updateQueue[$this->getAttachedFace()];
 	}
 
 	public function onUpdate($type){

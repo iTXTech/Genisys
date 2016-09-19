@@ -29,26 +29,34 @@ use pocketmine\Player;
 class Lever extends Flowable implements RedstoneSource, Attachable{
 	protected $id = self::LEVER;
 
+	private static $updateQueue = [];
+
 	public function __construct($meta = 0){
 		$this->meta = $meta;
+
+		if(count(self::$updateQueue) === 0){
+			for($i = 0; $i <= 5; $i++){
+				$sides = [0, 1, 2, 3, 4, 5];
+				$queue = [];
+				foreach($sides as $side){
+					$queue[] = Vector3::getSideRaw($side);
+				}
+				$attachedSides = [0, 1, 2, 3, 4, 5];
+				unset($attachedSides[Vector3::getOppositeSide($i)]);
+				$base = Vector3::getSideRaw($i);
+				foreach($attachedSides as $side){
+					$queue[] = Vector3::getSideRaw($side, $base);
+				}
+				self::$updateQueue[$i] = $queue;
+			}
+		}
 	}
 
 	public function getUpdateQueue(){
-		$sides = [0, 1, 2, 3, 4, 5];
-		$queue = [];
-		foreach($sides as $side){
-			$queue[] = Vector3::getSideRaw($side);
-		}
-		$attachedSides = [0, 1, 2, 3, 4, 5];
-		unset($attachedSides[Vector3::getOppositeSide($this->getAttachedFace())]);
-		$base = Vector3::getSideRaw($this->getAttachedFace());
-		foreach($attachedSides as $side){
-			$queue[] = Vector3::getSideRaw($side, $base);
-		}
-		return $queue;
+		return self::$updateQueue[$this->getAttachedFace()];
 	}
 
-	public function canBeActivated() : bool {
+	public function canBeActivated() : bool{
 		return true;
 	}
 
@@ -143,7 +151,7 @@ class Lever extends Flowable implements RedstoneSource, Attachable{
 		return $this->getRedstonePower($block, $powerMode);
 	}
 
-	public function getHardness() {
+	public function getHardness(){
 		return 0.5;
 	}
 
@@ -151,9 +159,9 @@ class Lever extends Flowable implements RedstoneSource, Attachable{
 		return 2.5;
 	}
 
-	public function getDrops(Item $item) : array {
+	public function getDrops(Item $item) : array{
 		return [
-			[$this->id, 0 ,1],
+			[$this->id, 0, 1],
 		];
 	}
 }

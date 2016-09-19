@@ -29,8 +29,14 @@ use pocketmine\utils\RedstoneUtil;
 class ActiveRedstoneLamp extends Solid implements SolidLight, RedstoneTarget{
 	protected $id = self::ACTIVE_REDSTONE_LAMP;
 
+	private static $updateQueue = [];
+
+	public function getUpdateQueue(){
+		return self::$updateQueue;
+	}
+
 	public function __construct(){
-		if(self::$updateQueue == []){
+		if(count(self::$updateQueue) === 0){
 			for($i = -2; $i <= 2; $i++){
 				for($j = -2; $j <= 2; $j++){
 					for($k = -2; $k <= 2; $k++){

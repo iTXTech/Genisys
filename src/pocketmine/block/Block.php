@@ -42,8 +42,6 @@ use pocketmine\plugin\Plugin;
 
 class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneSource{
 
-	public static $updateQueue = [];
-
 	/** @var \SplFixedArray */
 	public static $list = null;
 	/** @var \SplFixedArray */
@@ -276,8 +274,8 @@ class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneS
 			self::$list[self::ITEM_FRAME_BLOCK] = ItemFrame::class;
 			self::$list[self::DISPENSER] = Dispenser::class;
 			self::$list[self::DROPPER] = Dropper::class;
-			/*self::$list[self::POWERED_REPEATER_BLOCK] = PoweredRepeater::class;
-			self::$list[self::UNPOWERED_REPEATER_BLOCK] = UnpoweredRepeater::class;*/
+			self::$list[self::POWERED_REPEATER_BLOCK] = PoweredRepeater::class;
+			self::$list[self::UNPOWERED_REPEATER_BLOCK] = UnpoweredRepeater::class;
 			self::$list[self::CAULDRON_BLOCK] = Cauldron::class;
 			self::$list[self::INVISIBLE_BEDROCK] = InvisibleBedrock::class;
 			self::$list[self::HOPPER_BLOCK] = Hopper::class;
@@ -422,7 +420,7 @@ class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneS
 	 * Gets the update queue of the blocks
 	 */
 	public function getUpdateQueue(){
-		return self::$updateQueue;
+		return [];
 	}
 
 	/**
@@ -430,7 +428,7 @@ class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneS
 	 */
 	public function updateAround(){
 		$queue = $this->getUpdateQueue();
-		if($queue == []){
+		if(count($queue) === 0){
 			$this->getLevel()->updateAround($this);
 		}else{
 			foreach($queue as $pos){

@@ -1578,11 +1578,7 @@ class Level implements ChunkManager, Metadatable{
 					$ev->getBlock()->onUpdate(self::BLOCK_UPDATE_NORMAL);
 				}
 
-				if($block::$updateQueue == []){
-					$this->updateAround($pos);
-				}else{
-					$block->updateAround();
-				}
+				$block->updateAround();
 			}
 
 			return true;
