@@ -218,31 +218,36 @@ class Network {
 	public function processBatch(BatchPacket $packet, Player $p) {
 		$str = zlib_decode($packet->payload, 1024 * 1024 * 64); //Max 64MB
 		try {
-			$stream = new BinaryStream($str);
-			$buf = $stream->getString();
+			$len = strlen($str);
 
-			if(strlen($buf) === 0){
+			if($len === 0){
 				throw new \InvalidStateException("Empty or invalid BatchPacket received");
 			}
 
-			if (($pk = $this->getPacket(ord($buf{0}))) !== null) {
-				if ($pk::NETWORK_ID === Info::BATCH_PACKET) {
-					throw new \InvalidStateException("Invalid BatchPacket inside BatchPacket");
-				}
+			$stream = new BinaryStream($str);
 
-				$pk->setBuffer($buf, 1);
+			while($stream->getOffset() < $len){
+				$buf = $stream->getString();
 
-				$pk->decode();
-				$p->handleDataPacket($pk);
+				if (($pk = $this->getPacket(ord($buf{0}))) !== null) {
+					if ($pk::NETWORK_ID === Info::BATCH_PACKET) {
+						throw new \InvalidStateException("Invalid BatchPacket inside BatchPacket");
+					}
 
-				if ($pk->getOffset() <= 0) {
-					return;
+					$pk->setBuffer($buf, 1);
+
+					$pk->decode();
+					$p->handleDataPacket($pk);
+
+					if ($pk->getOffset() <= 0) {
+						return;
+					}
 				}
 			}
-		} catch (\Throwable $e) {
-			if (\pocketmine\DEBUG > 1) {
+		}catch(\Throwable $e){
+			if(\pocketmine\DEBUG > 1){
 				$logger = $this->server->getLogger();
-				if ($logger instanceof MainLogger) {
+				if($logger instanceof MainLogger){
 					$logger->debug("BatchPacket " . " 0x" . bin2hex($packet->payload));
 					$logger->logException($e);
 				}
