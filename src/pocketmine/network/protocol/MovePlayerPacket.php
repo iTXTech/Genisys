@@ -47,26 +47,26 @@ class MovePlayerPacket extends DataPacket{
 	}
 
 	public function decode(){
-		$this->eid = $this->getVarInt();
-		$this->x = $this->getFloat();
-		$this->y = $this->getFloat();
-		$this->z = $this->getFloat();
-		$this->yaw = $this->getFloat();
-		$this->bodyYaw = $this->getFloat();
-		$this->pitch = $this->getFloat();
+		$this->eid = $this->getUnsignedVarInt();
+		$this->x = $this->getLFloat();
+		$this->y = $this->getLFloat();
+		$this->z = $this->getLFloat();
+		$this->yaw = $this->getLFloat();
+		$this->bodyYaw = $this->getLFloat();
+		$this->pitch = $this->getLFloat();
 		$this->mode = $this->getByte();
 		$this->onGround = $this->getByte() > 0;
 	}
 
 	public function encode(){
 		$this->reset();
-		$this->putVarInt($this->eid);
-		$this->putFloat($this->x);
-		$this->putFloat($this->y);
-		$this->putFloat($this->z);
-		$this->putFloat($this->yaw);
-		$this->putFloat($this->bodyYaw); //TODO
-		$this->putFloat($this->pitch);
+		$this->putUnsignedVarInt($this->eid);
+		$this->putLFloat($this->x);
+		$this->putLFloat($this->y);
+		$this->putLFloat($this->z);
+		$this->putLFloat($this->yaw);
+		$this->putLFloat($this->bodyYaw); //TODO
+		$this->putLFloat($this->pitch);
 		$this->putByte($this->mode);
 		$this->putByte($this->onGround > 0);
 	}
