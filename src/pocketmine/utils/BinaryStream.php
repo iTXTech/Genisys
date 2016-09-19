@@ -165,16 +165,6 @@ class BinaryStream extends \stdClass{
 	 */
 	public function getUnsignedVarInt(){
 		return Binary::readUnsignedVarInt($this);
-		/*$value = 0;
-		$i = 0;
-		while((($b = $this->getByte()) & 0x80) !== 0){
-			$value |= ($b & 0x7f) << $i;
-			$i += 7;
-			if($i > 35){
-				throw new \InvalidArgumentException("Value is too long to be an int32");
-			}
-		}
-		return $value | ($b << $i);*/
 	}
 	
 	/**
@@ -182,9 +172,6 @@ class BinaryStream extends \stdClass{
 	 */
 	public function getVarInt(){
 		return Binary::readVarInt($this);
-		/*$raw = $this->getUnsignedVarInt();
-		$temp = ((($raw << 31) >> 31) ^ $raw) >> 1;
-		return $temp ^ ($raw & (1 << 31));*/
 	}
 	
 	/**
@@ -192,23 +179,10 @@ class BinaryStream extends \stdClass{
 	 */
 	public function getUnsignedVarInt64(){
 		return Binary::readUnsignedVarInt64($this);
-		/*$value = 0;
-		$i = 0;
-		while((($b = $this->getByte()) & 0x80) !== 0){
-			$value |= ($b & 0x7f) << $i;
-			$i += 7;
-			if($i > 63){
-				throw new \InvalidArgumentException("Value is too long to be an int64");
-			}
-		}
-		return $value | ($b << $i);*/
 	}
 	
 	public function getVarInt64(){
 		return Binary::readVarInt64($this);
-		/*$raw = $this->getUnsignedVarInt64();
-		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
-		return $temp ^ ($raw & 1 << 63);*/
 	}
 	
 	/**
@@ -216,11 +190,6 @@ class BinaryStream extends \stdClass{
 	 */
 	public function putUnsignedVarInt($v){
 		$this->put(Binary::writeUnsignedVarInt($v));
-		/*while($v & 0xFFFFFF80 !== 0){
-			$this->putByte(($v & 0x7f) | 0x80);
-			$v >>= 7;
-		}
-		$this->putByte($v);*/
 	}
 	
 	/**
@@ -228,7 +197,6 @@ class BinaryStream extends \stdClass{
 	 */
 	public function putVarInt($v){
 		$this->put(Binary::writeVarInt($v));
-		//$this->putUnsignedVarInt(($v << 1) ^ ($v >> 31));
 	}
 	
 	/**
@@ -236,11 +204,6 @@ class BinaryStream extends \stdClass{
 	 */
 	public function putUnsignedVarInt64($v){
 		$this->put(Binary::writeUnsignedVarInt64($v));
-		/*while($v & 0xFFFFFFFFFFFFFF80 !== 0){
-			$this->putByte(((int) $v & 0x7f) | 0x80);
-			$v >>= 7;
-		}
-		$this->putByte($v);*/
 	}
 	
 	/**
@@ -248,7 +211,6 @@ class BinaryStream extends \stdClass{
 	 */
 	public function putVarInt64($v){
 		$this->put(Binary::writeVarInt64($v));
-		//$this->putVarInt64(($v << 1) ^ ($v >> 63));
 	}
 
 	public function getString(){
