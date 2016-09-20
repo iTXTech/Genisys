@@ -31,6 +31,8 @@ class PlayStatusPacket extends DataPacket{
 	const LOGIN_FAILED_CLIENT = 1;
 	const LOGIN_FAILED_SERVER = 2;
 	const PLAYER_SPAWN = 3;
+	const INVALID_TENANT = 4;
+	const EDITION_MISMATCH = 5;
 
 	public $status;
 

@@ -134,6 +134,7 @@ use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\Info as ProtocolInfo;
 use pocketmine\network\protocol\InteractPacket;
+use pocketmine\network\protocol\LoginPacket;
 use pocketmine\network\protocol\MovePlayerPacket;
 use pocketmine\network\protocol\PlayerActionPacket;
 use pocketmine\network\protocol\PlayStatusPacket;
@@ -2211,7 +2212,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pk->dimension = $this->level->getDimension();
 		$pk->generator = 1; //0 old, 1 infinite, 2 flat
 		$pk->worldGamemode = 1; //assume creative for now
-		$pk->difficulty = 0; //TODO: implement this properly
+		$pk->difficulty = $this->server->getDifficulty(); //TODO: implement this properly
 		$pk->spawnX = $spawnPosition->getFloorX();
 		$pk->spawnY = $spawnPosition->getFloorY();
 		$pk->spawnZ = $spawnPosition->getFloorZ();
@@ -2229,19 +2230,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pk->started = $this->level->stopTime == false;
 		$this->dataPacket($pk);
 
-		$pk = new SetSpawnPositionPacket();
-		$pk->x = (int) $spawnPosition->x;
-		$pk->y = (int) $spawnPosition->y;
-		$pk->z = (int) $spawnPosition->z;
-		$this->dataPacket($pk);
-
 		$pk = new SetHealthPacket();
 		$pk->health = $this->getHealth();
 		$this->dataPacket($pk);
 
-		$pk = new SetDifficultyPacket();
-		$pk->difficulty = $this->server->getDifficulty();
-		$this->dataPacket($pk);
 		$this->server->getLogger()->info($this->getServer()->getLanguage()->translateString("pocketmine.player.logIn", [
 			TextFormat::AQUA . $this->username . TextFormat::WHITE,
 			$this->ip,
@@ -2271,7 +2263,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pk->eid = 0;
 		$pk->metadata = [self::DATA_LEAD_HOLDER => [self::DATA_TYPE_LONG, -1]];
 		$this->dataPacket($pk);
-		$this->level->getWeather()->sendWeather($this);
+		$this->level->getWeather()->sendWeather($this); //TODO: Use StartGamePacket for this
 		$this->forceMovement = $this->teleportPosition = $this->getPosition();
 	}
 
@@ -2380,6 +2372,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 					$this->close("", $message, false);
 
+					break;
+				}
+				
+				if($packet->gameEdition !== LoginPacket::EDITION_POCKET){
+					$pk = new PlayStatusPacket();
+					$pk->status = PlayStatusPacket::EDITION_MISMATCH;
+					$this->directDataPacket($pk);
+					$this->close("", "disconnectionScreen.editionMismatch", false);
 					break;
 				}
 

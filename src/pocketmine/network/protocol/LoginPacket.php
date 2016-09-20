@@ -29,9 +29,11 @@ class LoginPacket extends DataPacket{
 
 	const MOJANG_PUBKEY = "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE8ELkixyLcwlZryUQcu1TvPOmI2B7vX83ndnWRUaXm74wFfa5f/lwQNTfrLVHa2PmenpGI6JhIMUJaWZrjmMj90NoKNFSNBuKdm8rYiXsfaz3K36x/1U26HpG0ZxK/V1V";
 
+	const EDITION_POCKET = 0;
+
 	public $username;
 	public $protocol;
-	public $unknownByte;
+	public $gameEdition;
 	public $clientUUID;
 	public $clientId;
 	public $identityPublicKey;
@@ -45,7 +47,7 @@ class LoginPacket extends DataPacket{
 		if(!in_array($this->protocol, Info::ACCEPTED_PROTOCOLS)){
 			return; //Do not attempt to decode for non-accepted protocols
 		}
-		$this->unknownByte = $this->getByte();
+		$this->gameEdition = $this->getByte();
 		$str = zlib_decode($this->getString(), 1024 * 1024 * 64);
 		$this->setBuffer($str, 0);
 

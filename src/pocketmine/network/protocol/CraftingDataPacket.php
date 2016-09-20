@@ -107,14 +107,14 @@ class CraftingDataPacket extends DataPacket{
 
 	private static function writeEnchantList(EnchantmentList $list, BinaryStream $stream){
 
-		$stream->putByte($list->getSize());
+		$stream->putUnsignedVarInt($list->getSize());
 		for($i = 0; $i < $list->getSize(); ++$i){
 			$entry = $list->getSlot($i);
-			$stream->putVarInt($entry->getCost());
-			$stream->putByte(count($entry->getEnchantments()));
+			$stream->putUnsignedVarInt($entry->getCost());
+			$stream->putUnsignedVarInt(count($entry->getEnchantments()));
 			foreach($entry->getEnchantments() as $enchantment){
-				$stream->putVarInt($enchantment->getId());
-				$stream->putVarInt($enchantment->getLevel());
+				$stream->putUnsignedVarInt($enchantment->getId());
+				$stream->putUnsignedVarInt($enchantment->getLevel());
 			}
 			$stream->putString($entry->getRandomName());
 		}

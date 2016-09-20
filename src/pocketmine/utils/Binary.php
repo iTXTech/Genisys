@@ -87,10 +87,12 @@ class Binary{
 	 * @return string
 	 */
 	public static function writeMetadata(array $data){
-		$m = "";
-		return "";
+		//$m = "";
+		//return "";
+		$m = self::writeUnsignedVarInt(count($data));
 		foreach($data as $bottom => $d){
-			$m .= chr(($d[0] << 5) | ($bottom & 0x1F));
+			$m .= self::writeUnsignedVarInt($d[0]);
+			//$m .= chr(($d[0] << 5) | ($bottom & 0x1F));
 			switch($d[0]){
 				case Entity::DATA_TYPE_BYTE:
 					$m .= self::writeByte($d[1]);
@@ -99,26 +101,26 @@ class Binary{
 					$m .= self::writeLShort($d[1]);
 					break;
 				case Entity::DATA_TYPE_INT:
-					$m .= self::writeLInt($d[1]);
+					$m .= self::writeVarInt($d[1]);
 					break;
 				case Entity::DATA_TYPE_FLOAT:
 					$m .= self::writeLFloat($d[1]);
 					break;
 				case Entity::DATA_TYPE_STRING:
-					$m .= self::writeLShort(strlen($d[1])) . $d[1];
+					$m .= self::writeUnsignedVarInt(strlen($d[1])) . $d[1];
 					break;
 				case Entity::DATA_TYPE_SLOT:
-					$m .= self::writeLShort($d[1][0]);
+					$m .= self::writeVarInt($d[1][0]);
 					$m .= self::writeByte($d[1][1]);
-					$m .= self::writeLShort($d[1][2]);
+					$m .= self::writeVarInt($d[1][2]);
 					break;
 				case Entity::DATA_TYPE_POS:
-					$m .= self::writeLInt($d[1][0]);
-					$m .= self::writeLInt($d[1][1]);
-					$m .= self::writeLInt($d[1][2]);
+					$m .= self::writeVarInt($d[1][0]);
+					$m .= self::writeByte($d[1][1]);
+					$m .= self::writeVarInt($d[1][2]);
 					break;
 				case Entity::DATA_TYPE_LONG:
-					$m .= self::writeLLong($d[1]);
+					$m .= self::writeVarInt($d[1]);
 					break;
 			}
 		}
