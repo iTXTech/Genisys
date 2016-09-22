@@ -47,6 +47,7 @@ class StartGamePacket extends DataPacket{
 	public $lightningLevel = 0;
 	public $commandsEnabled = 0; //disabled for now to prevent crash
 	public $unknown; //still no idea what this is for
+	public $worldName = "insert name here";
 
 	public function decode(){
 
@@ -76,6 +77,7 @@ class StartGamePacket extends DataPacket{
 		$this->putLFloat($this->lightningLevel); //lightning level
 		$this->putByte($this->commandsEnabled); //commands enabled
 		$this->putString($this->unknown);
+		$this->putString($this->worldName);
 	}
 
 }
