@@ -31,11 +31,11 @@ class LongTag extends NamedTag{
 		return NBT::TAG_Long;
 	}
 
-	public function read(NBT $nbt){
+	public function read(NBT $nbt, bool $network = false){
 		$this->value = $nbt->getLong();
 	}
 
-	public function write(NBT $nbt){
+	public function write(NBT $nbt, bool $network = false){
 		$nbt->putLong($this->value);
 	}
 }

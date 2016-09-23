@@ -159,6 +159,7 @@ use pocketmine\tile\ItemFrame;
 use pocketmine\tile\Sign;
 use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
+use pocketmine\utils\Binary as BinaryUtils;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\UUID;
 use raklib\Binary;
@@ -4430,7 +4431,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		if(Network::$BATCH_THRESHOLD >= 0){
 			$pk->encode();
 			$batch = new BatchPacket();
-			$batch->payload = zlib_encode(Binary::writeInt(strlen($pk->getBuffer())) . $pk->getBuffer(), ZLIB_ENCODING_DEFLATE, Server::getInstance()->networkCompressionLevel);
+			$batch->payload = zlib_encode(BinaryUtils::writeUnsignedVarInt(strlen($pk->getBuffer())) . $pk->getBuffer(), ZLIB_ENCODING_DEFLATE, Server::getInstance()->networkCompressionLevel);
 			$batch->encode();
 			$batch->isEncoded = true;
 			return $batch;

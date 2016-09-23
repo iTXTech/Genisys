@@ -91,6 +91,7 @@ class Binary{
 		//return "";
 		$m = self::writeUnsignedVarInt(count($data));
 		foreach($data as $bottom => $d){
+			$m .= self::writeVarInt($bottom);
 			$m .= self::writeUnsignedVarInt($d[0]);
 			//$m .= chr(($d[0] << 5) | ($bottom & 0x1F));
 			switch($d[0]){
@@ -476,7 +477,7 @@ class Binary{
 		return $value | ($b << $i);
 	}
 
-	public static function readUnsignedVarInt64(BinaryStream $stream){
+	public static function readUnsignedVarInt64($stream){
 		$value = 0;
 		$i = 0;
 		while((($b = $stream->getByte()) & 0x80) !== 0){

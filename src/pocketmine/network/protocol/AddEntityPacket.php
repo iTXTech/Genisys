@@ -51,24 +51,24 @@ class AddEntityPacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putVarInt($this->eid); //EntityUniqueID - TODO: verify this
-		$this->putVarInt($this->eid);
+		$this->putUnsignedVarInt($this->eid); //EntityUniqueID - TODO: verify this
+		$this->putUnsignedVarInt($this->eid);
 		$this->putUnsignedVarInt($this->type);
-		$this->putFloat($this->x);
-		$this->putFloat($this->y);
-		$this->putFloat($this->z);
-		$this->putFloat($this->speedX);
-		$this->putFloat($this->speedY);
-		$this->putFloat($this->speedZ);
-		$this->putFloat($this->yaw * 0.71111);
-		$this->putFloat($this->pitch * 0.71111);
-		$this->putUnsignedVarInt($this->modifiers);
+		$this->putLFloat($this->x);
+		$this->putLFloat($this->y);
+		$this->putLFloat($this->z);
+		$this->putLFloat($this->speedX);
+		$this->putLFloat($this->speedY);
+		$this->putLFloat($this->speedZ);
+		$this->putLFloat($this->pitch * 0.71111);
+		$this->putLFloat($this->yaw * 0.71111);
+		$this->putUnsignedVarInt($this->modifiers); //attributes?
 		$meta = Binary::writeMetadata($this->metadata);
 		$this->put($meta);
-		$this->putVarInt(count($this->links));
+		$this->putUnsignedVarInt(count($this->links));
 		foreach($this->links as $link){
-			$this->putVarInt($link[0]);
-			$this->putVarInt($link[1]);
+			$this->putUnsignedVarInt($link[0]);
+			$this->putUnsignedVarInt($link[1]);
 			$this->putByte($link[2]);
 		}
 	}
