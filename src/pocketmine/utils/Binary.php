@@ -500,11 +500,19 @@ class Binary{
 
 	public static function writeUnsignedVarInt($v){
 		$buf = "";
-		while($v & 0xFFFFFF80 !== 0){
+		do{
+			$w = $v & 0x7f;
+			if(($v >> 7) !== 0){
+				$w = $v | 0x80;
+			}
+			$buf .= self::writeByte($w);
+			$v >>= 7;
+		}while($v);
+		/*while($v & 0xFFFFFF80 !== 0){
 			$buf .= self::writeByte(($v & 0x7f) | 0x80);
 			$v >>= 7;
 		}
-		$buf .= self::writeByte($v);
+		$buf .= self::writeByte($v);*/
 		return $buf;
 	}
 
