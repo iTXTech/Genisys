@@ -160,7 +160,7 @@ class RedstoneWire extends Flowable implements RedstoneSource, RedstoneTarget{
 		return ($powerMode == self::POWER_MODE_ALL_EXCEPT_WIRE) ? self::REDSTONE_POWER_MIN : $block->getDamage();
 	}
 
-	public function isReceivingPower(Block $block) : bool{
+	public function isReceivingPower() : bool{
 		return $this->getReceivingPower($block) > 0;
 	}
 

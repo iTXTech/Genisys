@@ -85,8 +85,8 @@ class Dropper extends Solid implements RedstoneTarget{
 		return $dropper;
 	}
 
-	public function isReceivingPower(Block $block) : bool{
-		return RedstoneUtil::isReceivingPower($block);
+	public function isReceivingPower() : bool{
+		return RedstoneUtil::isReceivingPower($this);
 	}
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
@@ -135,7 +135,7 @@ class Dropper extends Solid implements RedstoneTarget{
 
 	public function onUpdate($type){
 		if($type == Level::BLOCK_UPDATE_NORMAL){
-			if($this->isReceivingPower($this)){
+			if($this->isReceivingPower()){
 				$dropper = $this->getTile();
 				$this->shootItem($dropper->getInventory(), $dropper->getInventory()->firstOccupied());
 			}

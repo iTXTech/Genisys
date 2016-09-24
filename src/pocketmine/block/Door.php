@@ -222,7 +222,7 @@ abstract class Door extends Transparent implements RedstoneTarget{
 				return Level::BLOCK_UPDATE_NORMAL;
 			}
 
-			$powered = $this->isReceivingPower($this);
+			$powered = $this->isReceivingPower();
 			if($powered != $this->isOpen()){
 				$this->setOpen($powered);
 			}
@@ -231,7 +231,7 @@ abstract class Door extends Transparent implements RedstoneTarget{
 		return false;
 	}
 
-	public function isReceivingPower(Block $block) : bool{
+	public function isReceivingPower() : bool{
 		if(($this->getDamage() & 0x08) === 0x08){
 			$halfDoor = $this->getSide(Vector3::SIDE_DOWN);
 		}else{
@@ -287,7 +287,7 @@ abstract class Door extends Transparent implements RedstoneTarget{
 		return true;
 	}
 
-	public function isOpen(){
+	public function isOpen() : bool{
 		return (($this->getFullDamage() & 0x04) > 0);
 	}
 

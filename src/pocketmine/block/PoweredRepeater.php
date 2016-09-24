@@ -77,10 +77,6 @@ class PoweredRepeater extends Transparent implements RedstoneSource, RedstoneTar
 		return true;
 	}
 
-	public function getStrength(){
-		return 15;
-	}
-
 	public function getDirection() : int{
 		$faces = [
 			0 => 3,
@@ -97,7 +93,7 @@ class PoweredRepeater extends Transparent implements RedstoneSource, RedstoneTar
 
 	public function onUpdate($type){
 		if($type == Level::BLOCK_UPDATE_NORMAL){
-			$receiving = $this->isReceivingPower($this);
+			$receiving = $this->isReceivingPower();
 			if($this->isPowered() != $receiving){
 				$this->getLevel()->setBlockCache($this, $receiving);
 				$this->getLevel()->scheduleUpdate($this, $this->getTickDelay() * 2);
@@ -107,7 +103,7 @@ class PoweredRepeater extends Transparent implements RedstoneSource, RedstoneTar
 			if($this->isLocked()){
 				return;
 			}
-			$receiving = $this->isReceivingPower($this);
+			$receiving = $this->isReceivingPower();
 			if($this->getLevel()->getBlockCache($this) === true){
 				if(!$this->isPowered()){
 					$this->setPowered(true);
@@ -174,8 +170,8 @@ class PoweredRepeater extends Transparent implements RedstoneSource, RedstoneTar
 		return $this->isPowered() and $this->getDirection() == $face;
 	}
 
-	public function isReceivingPower(Block $block) : bool{
+	public function isReceivingPower() : bool{
 		$face = $this->getDirection();
-		return RedstoneUtil::isEmittingPower($block->getSide(Vector3::getOppositeSide($face)), $face);
+		return RedstoneUtil::isEmittingPower($this->getSide(Vector3::getOppositeSide($face)), $face);
 	}
 }

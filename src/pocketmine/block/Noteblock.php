@@ -60,7 +60,7 @@ class Noteblock extends Solid implements RedstoneTarget{
 
 	public function onUpdate($type){
 		if($type == Level::BLOCK_UPDATE_NORMAL){
-			$this->getTile()->setPowered($this->isReceivingPower($this));
+			$this->getTile()->setPowered($this->isReceivingPower());
 		}
 	}
 
@@ -171,8 +171,8 @@ class Noteblock extends Solid implements RedstoneTarget{
 		return parent::place($item, $block, $target, $face, $fx, $fy, $fz, $player);
 	}
 
-	public function isReceivingPower(Block $block) : bool{
-		return RedstoneUtil::isReceivingPower($block);
+	public function isReceivingPower() : bool{
+		return RedstoneUtil::isReceivingPower($this);
 	}
 
 	public function getName() : string{

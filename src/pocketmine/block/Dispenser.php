@@ -71,8 +71,8 @@ class Dispenser extends Solid implements RedstoneTarget{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function isReceivingPower(Block $block) : bool{
-		return RedstoneUtil::isReceivingPower($block);
+	public function isReceivingPower() : bool{
+		return RedstoneUtil::isReceivingPower($this);
 	}
 
 	public function getTile() : TileDispenser{
@@ -140,7 +140,7 @@ class Dispenser extends Solid implements RedstoneTarget{
 
 	public function onUpdate($type){
 		if($type == Level::BLOCK_UPDATE_NORMAL){
-			if($this->isReceivingPower($this)){
+			if($this->isReceivingPower()){
 				$dispenser = $this->getTile();
 				$this->shootItem($dispenser->getInventory(), $dispenser->getInventory()->firstOccupied());
 			}

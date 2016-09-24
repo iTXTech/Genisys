@@ -23,6 +23,7 @@ namespace pocketmine\tile;
 
 use pocketmine\inventory\ChestInventory;
 use pocketmine\inventory\DoubleChestInventory;
+use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
@@ -41,6 +42,10 @@ class Chest extends Spawnable implements InventoryHolder, Container, Nameable{
 	protected $inventory;
 	/** @var DoubleChestInventory */
 	protected $doubleInventory = null;
+
+
+	public function onSlotSet(Inventory $inventory, int $slot, Item $item, Item $before){
+	}
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);

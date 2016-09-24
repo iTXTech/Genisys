@@ -97,7 +97,7 @@ class TNT extends Solid implements RedstoneTarget{
 
 	public function onUpdate($type){
 		if($type == Level::BLOCK_UPDATE_NORMAL){
-			if($this->isReceivingPower($this)){
+			if($this->isReceivingPower()){
 				$this->prime();
 			}
 		}
@@ -120,7 +120,7 @@ class TNT extends Solid implements RedstoneTarget{
 		return false;
 	}
 
-	public function isReceivingPower(Block $block) : bool{
+	public function isReceivingPower() : bool{
 		return RedstoneUtil::isReceivingPower($this);
 	}
 }

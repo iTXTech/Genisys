@@ -22,6 +22,7 @@
 namespace pocketmine\tile;
 
 use pocketmine\inventory\BrewingInventory;
+use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
 use pocketmine\item\Fish;
@@ -59,6 +60,9 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 
 		Item::GUNPOWDER => 0,
 	];
+
+	public function onSlotSet(Inventory $inventory, int $slot, Item $item, Item $before){
+	}
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);

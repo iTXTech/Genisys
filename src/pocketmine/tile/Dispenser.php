@@ -22,6 +22,7 @@
 namespace pocketmine\tile;
 
 use pocketmine\inventory\DispenserInventory;
+use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
@@ -38,6 +39,9 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 
 	/** @var DispenserInventory */
 	protected $inventory;
+
+	public function onSlotSet(Inventory $inventory, int $slot, Item $item, Item $before){
+	}
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);

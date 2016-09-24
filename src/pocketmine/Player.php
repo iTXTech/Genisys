@@ -28,7 +28,6 @@ use pocketmine\command\CommandSender;
 use pocketmine\entity\Animal;
 use pocketmine\entity\Arrow;
 use pocketmine\entity\Attribute;
-use pocketmine\entity\AttributeMap;
 use pocketmine\entity\Boat;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
@@ -47,7 +46,6 @@ use pocketmine\event\entity\EntityCombustByEntityEvent;
 use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
-use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\entity\EntityShootBowEvent;
 use pocketmine\event\entity\ProjectileLaunchEvent;
 use pocketmine\event\inventory\CraftItemEvent;
@@ -65,7 +63,6 @@ use pocketmine\event\player\PlayerCommandPreprocessEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerGameModeChangeEvent;
-use pocketmine\event\player\PlayerHungerChangeEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerItemConsumeEvent;
 use pocketmine\event\player\PlayerJoinEvent;
@@ -92,13 +89,10 @@ use pocketmine\inventory\EnchantInventory;
 use pocketmine\inventory\FurnaceInventory;
 use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
-use pocketmine\inventory\PlayerInventory;
 use pocketmine\inventory\ShapedRecipe;
 use pocketmine\inventory\ShapelessRecipe;
 use pocketmine\item\enchantment\Enchantment;
-use pocketmine\item\FoodSource;
 use pocketmine\item\Item;
-use pocketmine\item\Potion;
 use pocketmine\level\ChunkLoader;
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\Level;
@@ -124,7 +118,6 @@ use pocketmine\network\protocol\AdventureSettingsPacket;
 use pocketmine\network\protocol\AnimatePacket;
 use pocketmine\network\protocol\BatchPacket;
 use pocketmine\network\protocol\ChunkRadiusUpdatedPacket;
-use pocketmine\network\protocol\ContainerClosePacket;
 use pocketmine\network\protocol\ContainerSetContentPacket;
 use pocketmine\network\protocol\ChangeDimensionPacket;
 use pocketmine\network\protocol\DataPacket;
@@ -325,6 +318,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->fishingHook->close();
 		}
 		$this->fishingHook = $entity;
+	}
+
+	public function onSlotSet(Inventory $inventory, int $slot, Item $item, Item $before){
 	}
 
 	public function getItemInHand(){
@@ -643,7 +639,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @return permission\PermissionAttachment
 	 */
 	public function addAttachment(Plugin $plugin, $name = null, $value = null){
-		if($this->perm == null) return false;
+		if($this->perm == null){
+			return false;
+		}
 		return $this->perm->addAttachment($plugin, $name, $value);
 	}
 

@@ -77,13 +77,13 @@ class ActiveRedstoneLamp extends Solid implements SolidLight, RedstoneTarget{
 		return ($this->id == self::ACTIVE_REDSTONE_LAMP);
 	}
 
-	public function isReceivingPower(Block $block) : bool{
+	public function isReceivingPower() : bool{
 		return RedstoneUtil::isReceivingPower($this);
 	}
 
 	public function onUpdate($type){
 		if($type == Level::BLOCK_UPDATE_NORMAL){
-			$power = $this->isReceivingPower($this);
+			$power = $this->isReceivingPower();
 			if($this->isOn() != $power){
 				if($power){
 					$this->id = self::ACTIVE_REDSTONE_LAMP;

@@ -19,8 +19,16 @@
  *
  */
 
-namespace pocketmine\block;
+namespace pocketmine\inventory;
 
-interface RedstoneTarget{
-	public function isReceivingPower() : bool;
+use pocketmine\item\Item;
+
+interface InventoryViewer{
+	/**
+	 * @param Inventory $inventory
+	 * @param int       $slot
+	 * @param Item      $item
+	 * @param Item      $before
+	 */
+	public function onSlotSet(Inventory $inventory, int $slot, Item $item, Item $before);
 }

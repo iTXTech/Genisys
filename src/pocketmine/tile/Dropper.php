@@ -22,6 +22,7 @@
 namespace pocketmine\tile;
 
 use pocketmine\inventory\DropperInventory;
+use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
@@ -38,7 +39,8 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 	/** @var DropperInventory */
 	protected $inventory;
 
-	protected $nextUpdate = 0;
+	public function onSlotSet(Inventory $inventory, int $slot, Item $item, Item $before){
+	}
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);

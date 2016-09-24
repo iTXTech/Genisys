@@ -173,15 +173,15 @@ class Trapdoor extends Transparent implements RedstoneTarget{
 
 	public function onUpdate($type){
 		if($type == Level::BLOCK_UPDATE_NORMAL){
-			$powered = $this->isReceivingPower($this);
+			$powered = $this->isReceivingPower();
 			if($powered != $this->isOpen()){
 				$this->setOpen($powered);
 			}
 		}
 	}
 
-	public function isReceivingPower(Block $block) : bool{
-		return RedstoneUtil::isReceivingPower($block);
+	public function isReceivingPower() : bool{
+		return RedstoneUtil::isReceivingPower($this);
 	}
 
 	public function getToolType(){

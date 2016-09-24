@@ -78,14 +78,14 @@ class RedstoneTorch extends Torch implements RedstoneSource, RedstoneTarget{
 		if($type == Level::BLOCK_UPDATE_NORMAL){
 			$this->getLevel()->scheduleUpdate($this, self::TICK_DELAY);
 		}elseif($type == Level::BLOCK_UPDATE_SCHEDULED){
-			$receiving = $this->isReceivingPower($this);
+			$receiving = $this->isReceivingPower();
 			if($this->isPowered() == $receiving){
 				$this->setPowered(!$receiving);
 			}
 		}
 	}
 
-	public function isReceivingPower(Block $block) : bool{
+	public function isReceivingPower() : bool{
 		$attached = $block->getSide($this->getAttachedFace());
 		return RedstoneUtil::isEmittingPower($attached, Vector3::getOppositeSide($this->getAttachedFace()));
 	}
