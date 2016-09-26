@@ -254,15 +254,13 @@ class BinaryStream extends \stdClass{
 		$auxValue = $this->getVarInt(); //why, Mojang
 		$data = $auxValue >> 8;
 		$cnt = $auxValue & 0xff;
-		//$cnt = $this->getByte();
-		//$data = $this->getByte();
+
 		$nbtLen = $this->getLShort();
 		$nbt = "";
 		if($nbtLen > 0){
 			$nbt = $this->get($nbtLen);
 		}
-var_dump($cnt);
-var_dump($data);
+
 		return Item::get(
 			$id,
 			$data,
@@ -280,8 +278,6 @@ var_dump($data);
 
 		$this->putVarInt($item->getId());
 		$auxValue = ($item->getDamage() << 8) | $item->getCount();
-		//$this->putByte($item->getCount());
-		//$this->putByte($item->getDamage() === null ? -1 : $item->getDamage());
 		$this->putVarInt($auxValue);
 		$nbt = $item->getNetworkCompoundTag();
 		$this->putLShort(strlen($nbt));
