@@ -483,7 +483,7 @@ class Binary{
 		while((($b = $stream->getByte()) & 0x80) !== 0){
 			$value |= ($b & 0x7f) << $i;
 			$i += 7;
-			if($i > 35){
+			if($i > 63){
 				throw new \InvalidArgumentException("Value is too long to be an int64");
 			}
 		}
