@@ -471,7 +471,7 @@ class Binary{
 			$value |= ($b & 0x7f) << $i;
 			$i += 7;
 			if($i > 35){
-				throw new \InvalidArgumentException("Value is too long to be an int64");
+				throw new \InvalidArgumentException("Value is too long to be an int32");
 			}
 		}
 		return $value | ($b << $i);
