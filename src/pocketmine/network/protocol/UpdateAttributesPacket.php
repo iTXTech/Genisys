@@ -44,7 +44,7 @@ class UpdateAttributesPacket extends DataPacket{
 			$this->putLFloat($entry->getMinValue());
 			$this->putLFloat($entry->getMaxValue());
 			$this->putLFloat($entry->getValue());
-			//Sometimes there is a 4th float in here... default?
+			$this->putLFloat($entry->getDefaultValue());
 			$this->putString($entry->getName());
 		}
 	}

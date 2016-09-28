@@ -1820,8 +1820,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return $this->moving;
 	}
 
-	public function sendAttributes(){
-		$entries = $this->attributeMap->needSend();
+	public function sendAttributes(bool $sendAll = false){
+		$entries = $sendAll ? $this->attributeMap->getAll() : $this->attributeMap->needSend();
 		if(count($entries) > 0){
 			$pk = new UpdateAttributesPacket();
 			$pk->entityId = 0;
@@ -2231,9 +2231,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pk->started = $this->level->stopTime == false;
 		$this->dataPacket($pk);
 
-		$pk = new SetHealthPacket();
-		$pk->health = $this->getHealth();
-		$this->dataPacket($pk);
+		$this->sendAttributes(true);
 
 		$this->server->getLogger()->info($this->getServer()->getLanguage()->translateString("pocketmine.player.logIn", [
 			TextFormat::AQUA . $this->username . TextFormat::WHITE,
