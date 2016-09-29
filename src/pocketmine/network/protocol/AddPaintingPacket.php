@@ -43,7 +43,7 @@ class AddPaintingPacket extends DataPacket{
 		$this->putUnsignedVarInt($this->eid); //EntityUniqueID
 		$this->putUnsignedVarInt($this->eid);
 		$this->putVarInt($this->x);
-		$this->putVarInt($this->y);
+		$this->putByte($this->y);
 		$this->putVarInt($this->z);
 		$this->putVarInt($this->direction);
 		$this->putString($this->title);

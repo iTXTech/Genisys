@@ -1418,7 +1418,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		if($this->isFlying()){
 			$flags |= 0x200;
 		}
-
+		$flags |= 0x100;
 		$flags |= 0x02;
 		$flags |= 0x04;
 		$flags |= 0x08;
