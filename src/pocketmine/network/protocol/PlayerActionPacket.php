@@ -53,7 +53,7 @@ class PlayerActionPacket extends DataPacket{
 		$this->eid = $this->getVarInt();
 		$this->action = $this->getVarInt();
 		$this->x = $this->getVarInt();
-		$this->y = $this->getVarInt();
+		$this->y = $this->getByte();
 		$this->z = $this->getVarInt();
 		$this->face = $this->getVarInt();
 	}
@@ -63,7 +63,7 @@ class PlayerActionPacket extends DataPacket{
 		$this->putVarInt($this->eid);
 		$this->putVarInt($this->action);
 		$this->putVarInt($this->x);
-		$this->putVarInt($this->y);
+		$this->putByte($this->y);
 		$this->putVarInt($this->z);
 		$this->putVarInt($this->face);
 	}

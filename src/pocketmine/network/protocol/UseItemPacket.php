@@ -45,12 +45,12 @@ class UseItemPacket extends DataPacket{
 		$this->y = $this->getVarInt();
 		$this->z = $this->getVarInt();
 		$this->face = $this->getVarInt();
-		$this->fx = $this->getFloat();
-		$this->fy = $this->getFloat();
-		$this->fz = $this->getFloat();
-		$this->posX = $this->getFloat();
-		$this->posY = $this->getFloat();
-		$this->posZ = $this->getFloat();
+		$this->fx = $this->getLFloat();
+		$this->fy = $this->getLFloat();
+		$this->fz = $this->getLFloat();
+		$this->posX = $this->getLFloat();
+		$this->posY = $this->getLFloat();
+		$this->posZ = $this->getLFloat();
 		$this->slot = $this->getVarInt();
 		$this->item = $this->getSlot();
 	}

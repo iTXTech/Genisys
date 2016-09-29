@@ -42,15 +42,15 @@ class AddItemEntityPacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putVarInt($this->eid); //EntityUniqueID
-		$this->putVarInt($this->eid);
+		$this->putUnsignedVarInt($this->eid); //EntityUniqueID
+		$this->putUnsignedVarInt($this->eid); //EntityRuntimeID
 		$this->putSlot($this->item);
-		$this->putFloat($this->x);
-		$this->putFloat($this->y);
-		$this->putFloat($this->z);
-		$this->putFloat($this->speedX);
-		$this->putFloat($this->speedY);
-		$this->putFloat($this->speedZ);
+		$this->putLFloat($this->x);
+		$this->putLFloat($this->y);
+		$this->putLFloat($this->z);
+		$this->putLFloat($this->speedX);
+		$this->putLFloat($this->speedY);
+		$this->putLFloat($this->speedZ);
 	}
 
 }

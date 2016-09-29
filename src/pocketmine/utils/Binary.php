@@ -467,14 +467,19 @@ class Binary{
 	public static function readUnsignedVarInt($stream){
 		$value = 0;
 		$i = 0;
-		while((($b = $stream->getByte()) & 0x80) !== 0){
+		do{
+			$value |= ((($b = $stream->getByte()) & 0x7f) << $i);
+			$i += 7;
+			
+		}while($b & 0x80);
+		/*while((($b = $stream->getByte()) & 0x80) !== 0){
 			$value |= ($b & 0x7f) << $i;
 			$i += 7;
 			if($i > 35){
 				throw new \InvalidArgumentException("Value is too long to be an int32");
 			}
-		}
-		return $value | ($b << $i);
+		}*/
+		return $value;
 	}
 
 	public static function readUnsignedVarInt64($stream){

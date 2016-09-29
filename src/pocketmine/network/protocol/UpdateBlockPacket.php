@@ -37,8 +37,8 @@ class UpdateBlockPacket extends DataPacket{
 	const FLAG_ALL_PRIORITY = (self::FLAG_ALL | self::FLAG_PRIORITY);
 
 	public $x;
-	public $z;
 	public $y;
+	public $z;
 	public $blockId;
 	public $blockData;
 	public $flags;
@@ -50,10 +50,10 @@ class UpdateBlockPacket extends DataPacket{
 	public function encode(){
 		$this->reset();
 		$this->putVarInt($this->x);
+		$this->putByte($this->y);
 		$this->putVarInt($this->z);
-		$this->putVarInt($this->y);
-		$this->putVarInt($this->blockId);
-		$this->putVarInt(($this->flags << 4) | $this->blockData);
+		$this->putUnsignedVarInt($this->blockId);
+		$this->putUnsignedVarInt(($this->flags << 4) | $this->blockData);
 	}
 
 }

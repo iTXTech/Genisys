@@ -263,6 +263,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	protected $autoJump = true;
 
 	protected $allowFlight = false;
+	protected $isFlying = false; //FINALLY
 
 	private $needACK = [];
 
@@ -1346,6 +1347,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->gamemode = $gm;
 
 		$this->allowFlight = $this->isCreative();
+		$this->isFlying = $this->isSpectator() or ($this->isFlying and !$this->isSurvival());
 
 		if($this->isSpectator()){
 			$this->despawnFromAll();
@@ -1355,19 +1357,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$this->namedtag->playerGameType = new IntTag("playerGameType", $this->gamemode);
 
-		/*$spawnPosition = $this->getSpawn();
-
-		$pk = new StartGamePacket();
-		$pk->seed = -1;
-		$pk->x = $this->x;
-		$pk->y = $this->y;
-		$pk->z = $this->z;
-		$pk->spawnX = (int)$spawnPosition->x;
-		$pk->spawnY = (int)$spawnPosition->y;
-		$pk->spawnZ = (int)$spawnPosition->z;
-		$pk->generator = 1; //0 old, 1 infinite, 2 flat
-		$pk->gamemode = $this->gamemode & 0x01;
-		$pk->eid = 0;*/
 		$pk = new SetPlayerGameTypePacket();
 		$pk->gamemode = $this->gamemode & 0x01;
 		$this->dataPacket($pk);
@@ -1394,71 +1383,60 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * Sends all the option flags
 	 */
 	public function sendSettings(){
+		//TODO: Move this mess
+
 		/*
 		 bit mask | flag name
 		0x00000001 world_inmutable
 		0x00000002 no_pvp
 		0x00000004 no_pvm
 		0x00000008 no_mvp
-		0x00000010 static_time
-		0x00000020 nametags_visible
-		0x00000040 auto_jump
-		0x00000080 allow_fly
-		0x00000100 noclip
-		0x00000200 ?
-		0x00000400 ?
-		0x00000800 ?
-		0x00001000 ?
-		0x00002000 ?
-		0x00004000 ?
-		0x00008000 ?
-		0x00010000 ?
-		0x00020000 ?
-		0x00040000 ?
-		0x00080000 ?
-		0x00100000 ?
-		0x00200000 ?
-		0x00400000 ?
-		0x00800000 ?
-		0x01000000 ?
-		0x02000000 ?
-		0x04000000 ?
-		0x08000000 ?
-		0x10000000 ?
-		0x20000000 ?
-		0x40000000 ?
-		0x80000000 ?
+		0x00000010 nametags_visible
+		0x00000020 auto_jump
+		0x00000040 allow_fly
+		0x00000080 noclip
+		0x00000100 ?
+		0x00000200 is flying
 		*/
 		$flags = 0;
 		if($this->isAdventure()){
 			$flags |= 0x01; //Do not allow placing/breaking blocks, adventure mode
 		}
 
-		/*if($nametags !== false){
-			$flags |= 0x20; //Show Nametags
-		}*/
-
 		if($this->autoJump){
-			$flags |= 0x40;
+			$flags |= 0x20;
 		}
 
 		if($this->allowFlight){
-			$flags |= 0x80;
+			$flags |= 0x40;
 		}
 
 		if($this->isSpectator()){
-			$flags |= 0x100;
+			$flags |= 0x80;
 		}
 
-		$flags |= 0x02; // No PvP (Remove hit markers client-side).
-		$flags |= 0x04; // No PvM (Remove hit markers client-side).
-		$flags |= 0x08; // No PvE (Remove hit markers client-side).
+		if($this->isFlying()){
+			$flags |= 0x200;
+		}
+
+		$flags |= 0x02;
+		$flags |= 0x04;
+		$flags |= 0x08;
 
 		$pk = new AdventureSettingsPacket();
 		$pk->flags = $flags;
 		$pk->userPermission = 2;
 		$pk->globalPermission = 2;
 		$this->dataPacket($pk);
+	}
+	
+	public function isFlying() : bool{
+		return $this->isFlying;
+	}
+	
+	public function setFlying(bool $flying){
+		$this->isFlying = $flying;
+		$this->sendSettings();
 	}
 
 	public function isSurvival() : bool{
@@ -2428,6 +2406,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 
 				break;
+			case ProtocolInfo::ADVENTURE_SETTINGS_PACKET:
+				//TODO: find out when else this is sent (apart from flight state change)
+				$flightState = (bool) ($packet->flags & 0x200);
+				if($flightState and !$this->allowFlight()){
+					//cheating!
+					$this->kick("Flying is not enabled on this server");
+					break;
+				}
+				$this->isFlying = $flightState;
+				break;
 			case ProtocolInfo::MOVE_PLAYER_PACKET:
 				if($this->linkedEntity instanceof Entity){
 					$entity = $this->linkedEntity;
@@ -2738,6 +2726,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			case ProtocolInfo::PLAYER_ACTION_PACKET:
 				//$this->consumeHeldItem();
 				if($this->spawned === false or $this->blocked === true or (!$this->isAlive() and $packet->action !== PlayerActionPacket::ACTION_SPAWN_SAME_DIMENSION and $packet->action !== PlayerActionPacket::ACTION_SPAWN_OVERWORLD)){
+					echo "wtf?\n";
 					break;
 				}
 
@@ -2748,6 +2737,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					case PlayerActionPacket::ACTION_START_BREAK:
 						//Fixes fire breaking in creative.
 						if(/*$this->lastBreak !== PHP_INT_MAX or */$pos->distanceSquared($this) > 10000){
+							echo "bad distance\n";
 							break;
 						}
 						$target = $this->level->getBlock($pos);

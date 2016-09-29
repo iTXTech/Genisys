@@ -29,7 +29,6 @@ class AdventureSettingsPacket extends DataPacket{
 
 	public $flags;
 	public $userPermission;
-	public $globalPermission;
 
 	public function decode(){
 		$this->flags = $this->getUnsignedVarInt();
@@ -40,7 +39,6 @@ class AdventureSettingsPacket extends DataPacket{
 		$this->reset();
 		$this->putUnsignedVarInt($this->flags);
 		$this->putUnsignedVarInt($this->userPermission);
-		//$this->putInt($this->globalPermission);
 	}
 
 }
