@@ -257,6 +257,7 @@ class BinaryStream extends \stdClass{
 
 		$nbtLen = $this->getLShort();
 		$nbt = "";
+
 		if($nbtLen > 0){
 			$nbt = $this->get($nbtLen);
 		}

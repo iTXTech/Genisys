@@ -408,7 +408,9 @@ class Item implements ItemIds{
 			$this->setNamedTag($tags);
 		}else{
 			if($fromNetwork === true){
-				$this->setNamedTag(self::parseCompoundTag($tags, true));
+				if(strlen($tags) > 0){
+					$this->setNamedTag(self::parseCompoundTag($tags, true));
+				}
 			}else{
 				$this->tags = $tags;
 				$this->cachedNBT = null;

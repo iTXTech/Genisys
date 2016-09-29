@@ -528,7 +528,12 @@ class NBT{
 	}
 
 	public function readTag(bool $network = false){
-		switch($this->getByte()){
+		if($this->feof()){
+			$tagType = -1; //prevent crashes for empty tags -_-
+		}else{
+			$tagType = $this->getByte();
+		}
+		switch($tagType){
 			case NBT::TAG_Byte:
 				$tag = new ByteTag($this->getString($network));
 				$tag->read($this, $network);
