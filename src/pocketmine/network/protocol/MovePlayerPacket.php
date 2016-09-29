@@ -47,10 +47,8 @@ class MovePlayerPacket extends DataPacket{
 	}
 
 	public function decode(){
-		$this->eid = $this->getUnsignedVarInt();
-		$this->x = $this->getLFloat();
-		$this->y = $this->getLFloat();
-		$this->z = $this->getLFloat();
+		$this->eid = $this->getEntityId();
+		$this->getVector3f($this->x, $this->y, $this->z);
 		$this->pitch = $this->getLFloat();
 		$this->yaw = $this->getLFloat();
 		$this->bodyYaw = $this->getLFloat();
@@ -60,10 +58,8 @@ class MovePlayerPacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putUnsignedVarInt($this->eid);
-		$this->putLFloat($this->x);
-		$this->putLFloat($this->y);
-		$this->putLFloat($this->z);
+		$this->putEntityId($this->eid);
+		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putLFloat($this->pitch);
 		$this->putLFloat($this->yaw);
 		$this->putLFloat($this->bodyYaw); //TODO

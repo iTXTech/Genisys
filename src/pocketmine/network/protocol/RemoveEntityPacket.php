@@ -35,7 +35,7 @@ class RemoveEntityPacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putVarInt($this->eid);
+		$this->putEntityId($this->eid);
 	}
 
 }

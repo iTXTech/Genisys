@@ -49,9 +49,7 @@ class UpdateBlockPacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putVarInt($this->x);
-		$this->putByte($this->y);
-		$this->putVarInt($this->z);
+		$this->putBlockCoords($this->x, $this->y, $this->z);
 		$this->putUnsignedVarInt($this->blockId);
 		$this->putUnsignedVarInt(($this->flags << 4) | $this->blockData);
 	}

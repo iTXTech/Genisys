@@ -44,7 +44,7 @@ class MobEffectPacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putVarInt($this->eid);
+		$this->putEntityId($this->eid);
 		$this->putByte($this->eventId);
 		$this->putVarInt($this->effectId);
 		$this->putVarInt($this->amplifier);

@@ -34,7 +34,7 @@ class MobEquipmentPacket extends DataPacket{
 	public $unknown; //byte
 
 	public function decode(){
-		$this->eid = $this->getUnsignedVarInt();
+		$this->eid = $this->getEntityId();
 		$this->item = $this->getSlot();
 		$this->slot = $this->getByte();
 		$this->selectedSlot = $this->getByte();
@@ -43,7 +43,7 @@ class MobEquipmentPacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putUnsignedVarInt($this->eid);
+		$this->putEntityId($this->eid);
 		$this->putSlot($this->item);
 		$this->putByte($this->slot);
 		$this->putByte($this->selectedSlot);

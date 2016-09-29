@@ -31,9 +31,7 @@ class ItemFrameDropItemPacket extends DataPacket{
 	public $dropItem;
 
 	public function decode(){
-		$this->z = $this->getVarInt();
-		$this->y = $this->getVarInt();
-		$this->x = $this->getVarInt();
+		$this->getBlockCoords($this->x, $this->y, $this->z);
 		$this->dropItem = $this->getSlot();
 	}
 

@@ -33,17 +33,17 @@ class AnimatePacket extends DataPacket{
 
 	public function decode(){
 		$this->action = $this->getVarInt();
-		$this->eid = $this->getVarInt();
+		$this->eid = $this->getEntityId();
 		if(!$this->feof()){
-			$this->unknownFloat = $this->getFloat(); //TODO: find out when this is sent (not always! >:-[)
+			$this->unknownFloat = $this->getLFloat(); //TODO: find out when this is sent (not always! >:-[)
 		}
 	}
 
 	public function encode(){
 		$this->reset();
 		$this->putVarInt($this->action);
-		$this->putVarInt($this->eid);
-		$this->putFloat($this->unknownFloat);
+		$this->putEntityId($this->eid);
+		$this->putLFloat($this->unknownFloat);
 	}
 
 }

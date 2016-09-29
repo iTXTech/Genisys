@@ -284,6 +284,38 @@ class BinaryStream extends \stdClass{
 		$this->putLShort(strlen($nbt));
 		$this->put($nbt);
 	}
+	
+	public function getEntityId(){
+		return $this->getVarInt();
+	}
+	
+	public function putEntityId($v){
+		$this->putVarInt($v);
+	}
+
+	public function getBlockCoords(&$x, &$y, &$z){
+		$x = $this->getVarInt();
+		$y = $this->getByte();
+		$z = $this->getVarInt();
+	}
+
+	public function putBlockCoords(int $x, int $y, int $z){
+		$this->putVarInt($x);
+		$this->putByte($y);
+		$this->putVarInt($z);
+	}
+	
+	public function getVector3f(&$x, &$y, &$z){
+		$x = $this->getLFloat();
+		$y = $this->getLFloat();
+		$z = $this->getLFloat();
+	}
+	
+	public function putVector3f(float $x, float $y, float $z){
+		$this->putLFloat($x);
+		$this->putLFloat($y);
+		$this->putLFloat($z);
+	}
 
 	public function feof(){
 		return !isset($this->buffer{$this->offset});

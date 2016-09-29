@@ -44,16 +44,12 @@ class ExplodePacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putFloat($this->x);
-		$this->putFloat($this->y);
-		$this->putFloat($this->z);
-		$this->putFloat($this->radius);
+		$this->putVector3f($this->x, $this->y, $this->z);
+		$this->putLFloat($this->radius);
 		$this->putUnsignedVarInt(count($this->records));
 		if(count($this->records) > 0){
 			foreach($this->records as $record){
-				$this->putVarInt($record->x);
-				$this->putVarInt($record->y);
-				$this->putVarInt($record->z);
+				$this->putBlockCoords($record->x, $record->y, $record->z);
 			}
 		}
 	}

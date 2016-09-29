@@ -39,9 +39,7 @@ class BlockEventPacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putVarInt($this->x);
-		$this->putVarInt($this->y);
-		$this->putVarInt($this->z);
+		$this->putBlockCoords($this->x, $this->y, $this->z);
 		$this->putVarInt($this->case1);
 		$this->putVarInt($this->case2);
 	}

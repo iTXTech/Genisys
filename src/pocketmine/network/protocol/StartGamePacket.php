@@ -33,10 +33,10 @@ class StartGamePacket extends DataPacket{
 	public $y;
 	public $z;
 	public $seed;
-	public $dimension = 0; //overworld
+	public $dimension;
 	public $generator = 1; //default infinite
-	public $worldGamemode = 1; //going to assume this, default gamemode for the world (can be overridden per player as of 0.16)
-	public $difficulty = 0;
+	public $worldGamemode;
+	public $difficulty;
 	public $spawnX;
 	public $spawnY;
 	public $spawnZ;
@@ -47,7 +47,7 @@ class StartGamePacket extends DataPacket{
 	public $lightningLevel = 0;
 	public $commandsEnabled = 0; //disabled for now to prevent crash
 	public $unknown; //still no idea what this is for
-	public $worldName = "insert name here";
+	public $worldName;
 
 	public function decode(){
 
@@ -55,11 +55,9 @@ class StartGamePacket extends DataPacket{
 
 	public function encode(){
 		$this->reset();
-		$this->putUnsignedVarInt($this->entityUniqueId); //EntityUniqueID
-		$this->putUnsignedVarInt($this->entityRuntimeId); //EntityRuntimeID (basically just the normal entityID)
-		$this->putLFloat($this->x);
-		$this->putLFloat($this->y);
-		$this->putLFloat($this->z);
+		$this->putEntityId($this->entityUniqueId); //EntityUniqueID
+		$this->putEntityId($this->entityRuntimeId); //EntityRuntimeID (basically just the normal entityID)
+		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putLFloat(0); //TODO: find out what these are (yaw/pitch?)
 		$this->putLFloat(0);
 		$this->putVarInt($this->seed); //seed (varint)
@@ -67,9 +65,7 @@ class StartGamePacket extends DataPacket{
 		$this->putVarInt($this->generator); //generator (varint)
 		$this->putVarInt($this->worldGamemode);
 		$this->putVarInt($this->difficulty); //Difficulty (TODO)
-		$this->putVarInt($this->spawnX);
-		$this->putVarInt($this->spawnY);
-		$this->putVarInt($this->spawnZ);
+		$this->putBlockCoords($this->spawnX, $this->spawnY, $this->spawnZ);
 		$this->putByte($this->hasBeenLoadedInCreative); //has been loaded in creative (no Xbox achievements (well, this is impossible anyway))
 		$this->putVarInt($this->dayCycleStopTime); //dayCycleStopTime - NOTE: This is the TIME that the world is stopped at. If this is set to a positive number, client will not update world time automatically.
 		$this->putByte($this->eduMode); //edu mode

@@ -89,9 +89,9 @@ class LevelEventPacket extends DataPacket{
 	const EVENT_ADD_PARTICLE_MASK = 0x4000;
 
 	public $evid;
-	public $x;
-	public $y;
-	public $z;
+	public $x = 0; //Weather effects don't have coordinates -_-
+	public $y = 0;
+	public $z = 0;
 	public $data;
 
 	public function decode(){
@@ -101,9 +101,7 @@ class LevelEventPacket extends DataPacket{
 	public function encode(){
 		$this->reset();
 		$this->putVarInt($this->evid);
-		$this->putFloat($this->x);
-		$this->putFloat($this->y);
-		$this->putFloat($this->z);
+		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putVarInt($this->data);
 	}
 

@@ -39,9 +39,7 @@ class SetSpawnPositionPacket extends DataPacket{
 	public function encode(){
 		$this->reset();
 		$this->putVarInt($this->unknownVarInt);
-		$this->putVarInt($this->x);
-		$this->putVarInt($this->y);
-		$this->putVarInt($this->z);
+		$this->putBlockCoords($this->x, $this->y, $this->z);
 	}
 
 }
