@@ -303,4 +303,8 @@ class Player extends PMPlayer{
 		}
 		$this->interface->putPacket($this, $packet, $needACK, true);
 	}
+	
+	public function isFirstLogin(){
+		return $this->isFirstTimeLogin;
+	}
 }
