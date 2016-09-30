@@ -152,7 +152,7 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 			}
 		}else{
 			$logger = $this->server->getLogger();
-			$logger->debug("Unknown packet from " . $this->players[$identifier]->getName() . " 0x" . bin2hex($packet->buffer));
+			$logger->debug("Packet from unknown player: 0x" . bin2hex($packet->buffer));
 		}
 	}
 

@@ -125,7 +125,7 @@ class Binary{
 					break;
 			}
 		}
-		$m .= "\x7f";
+		//$m .= "\x7f";
 
 		return $m;
 	}
