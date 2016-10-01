@@ -200,7 +200,7 @@ class Enchantment{
 			return self::getEnchantment(constant(Enchantment::class . "::TYPE_FISHING_" . strtoupper($name))); 
 		}
 		else{
-		  return new Enchantment(self::TYPE_INVALID, "unknown", 0, 0, 0);
+			return new Enchantment(self::TYPE_INVALID, "unknown", 0, 0, 0);
 	    }
 	}
 
