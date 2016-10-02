@@ -500,7 +500,7 @@ class Level implements ChunkManager, Metadatable{
 	/**
 	 * @return LevelProvider
 	 */
-	final public function getProvider() : LevelProvider{
+	final public function getProvider(){
 		return $this->provider;
 	}
 
