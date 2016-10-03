@@ -429,7 +429,7 @@ class Item implements ItemIds{
 
 	public function getNetworkCompoundTag(){
 		if(($nbt = $this->getNamedTag()) instanceof CompoundTag){
-			return self::writeCompoundTag($this->getNamedTag(), true);
+			return self::writeCompoundTag($nbt, true);
 		}
 		return "";
 	}
