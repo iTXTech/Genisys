@@ -88,7 +88,7 @@ class Binary{
 	 */
 	public static function writeMetadata(array $data){
 		//$m = "";
-		//return "";
+		return "";
 		$m = self::writeUnsignedVarInt(count($data));
 		foreach($data as $bottom => $d){
 			$m .= self::writeVarInt($bottom);
