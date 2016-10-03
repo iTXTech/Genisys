@@ -472,13 +472,7 @@ class Binary{
 			$i += 7;
 			
 		}while($b & 0x80);
-		/*while((($b = $stream->getByte()) & 0x80) !== 0){
-			$value |= ($b & 0x7f) << $i;
-			$i += 7;
-			if($i > 35){
-				throw new \InvalidArgumentException("Value is too long to be an int32");
-			}
-		}*/
+
 		return $value;
 	}
 
@@ -513,11 +507,7 @@ class Binary{
 			$buf .= self::writeByte($w);
 			$v >>= 7;
 		}while($v);
-		/*while($v & 0xFFFFFF80 !== 0){
-			$buf .= self::writeByte(($v & 0x7f) | 0x80);
-			$v >>= 7;
-		}
-		$buf .= self::writeByte($v);*/
+
 		return $buf;
 	}
 
