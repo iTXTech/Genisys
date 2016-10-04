@@ -2155,9 +2155,9 @@ class Server{
 				if(!$p->isEncoded){
 					$p->encode();
 				}
-				$str .= Binary::writeInt(strlen($p->buffer)) . $p->buffer;
+				$str .= Binary::writeUnsignedVarInt(strlen($p->buffer)) . $p->buffer;
 			}else{
-				$str .= Binary::writeInt(strlen($p)) . $p;
+				$str .= Binary::writeUnsignedVarInt(strlen($p)) . $p;
 			}
 		}
 

@@ -84,6 +84,7 @@ use pocketmine\network\protocol\PlayerInputPacket;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\Binary;
+use pocketmine\utils\BinaryStream;
 use pocketmine\utils\MainLogger;
 
 class Network {
@@ -214,22 +215,19 @@ class Network {
 
 	public function processBatch(BatchPacket $packet, Player $p) {
 		$str = zlib_decode($packet->payload, 1024 * 1024 * 64); //Max 64MB
-		$len = strlen($str);
-		$offset = 0;
-		try {
-			while ($offset < $len) {
-				$pkLen = Binary::readInt(substr($str, $offset, 4));
-				$offset += 4;
+		try{
+			$len = strlen($str);
 
-				$buf = substr($str, $offset, $pkLen);
-				$offset += $pkLen;
+			if($len === 0){
+				throw new \InvalidStateException("Empty or invalid BatchPacket received");
+			}
 
-				if(strlen($buf) === 0){
-					throw new \InvalidStateException("Empty or invalid BatchPacket received");
-				}
-				
-				if (($pk = $this->getPacket(ord($buf{0}))) !== null) {
-					if ($pk::NETWORK_ID === Info::BATCH_PACKET) {
+			$stream = new BinaryStream($str);
+
+			while($stream->offset < $len){
+				$buf = $stream->getString();
+				if(($pk = $this->getPacket(ord($buf{0}))) !== null){
+					if($pk::NETWORK_ID === Info::BATCH_PACKET){
 						throw new \InvalidStateException("Invalid BatchPacket inside BatchPacket");
 					}
 
@@ -237,10 +235,6 @@ class Network {
 
 					$pk->decode();
 					$p->handleDataPacket($pk);
-
-					if ($pk->getOffset() <= 0) {
-						return;
-					}
 				}
 			}
 		} catch (\Throwable $e) {
