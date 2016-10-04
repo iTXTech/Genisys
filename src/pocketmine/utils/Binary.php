@@ -451,7 +451,7 @@ class Binary{
 	public static function writeLLong($value){
 		return strrev(self::writeLong($value));
 	}
-	
+
 	public static function readVarInt($stream){
 		$raw = self::readUnsignedVarInt($stream);
 		$temp = ((($raw << 31) >> 31) ^ $raw) >> 1;

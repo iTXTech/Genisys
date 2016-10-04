@@ -239,12 +239,6 @@ class Network {
 					$pk->decode();
 					$p->handleDataPacket($pk);
 
-					/*if ($pk->getOffset() <= 0) {
-						$logger = $this->server->getLogger();
-						$logger->debug("WTF?");
-						var_dump(strlen($stream->getBuffer()) - $stream->getOffset());
-						return;
-					}*/
 				}else{
 					$logger = $this->server->getLogger();
 					$logger->debug("Unknown packet from " . $this->players[$identifier]->getName() . " 0x" . bin2hex($packet->buffer));
