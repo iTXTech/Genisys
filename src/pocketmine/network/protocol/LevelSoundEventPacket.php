@@ -23,19 +23,28 @@ namespace pocketmine\network\protocol;
 
 #include <rules/DataPacket.h>
 
-
-class SetDifficultyPacket extends DataPacket{
-	const NETWORK_ID = Info::SET_DIFFICULTY_PACKET;
-
-	public $difficulty;
+class LevelSoundEventPacket extends DataPacket{
+	const NETWORK_ID = Info::LEVEL_SOUND_EVENT_PACKET;
+	
+	//TODO: find unknowns
+	public $unknownByte;
+	public $x;
+	public $y;
+	public $z;
+	public $unknownVarInt1;
+	public $unknownVarInt2;
+	public $unknownBool;
 
 	public function decode(){
-		$this->difficulty = $this->getInt();
+
 	}
 
 	public function encode(){
 		$this->reset();
-		$this->putUnsignedVarInt($this->difficulty);
+		$this->putByte($this->unknownByte);
+		$this->putVector3f($this->x, $this->y, $this->z);
+		$this->putVarInt($this->unknownVarInt1);
+		$this->putVarInt($this->unknownVarInt2);
+		$this->putByte($this->unknownBool);
 	}
-
 }

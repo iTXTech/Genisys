@@ -24,18 +24,21 @@ namespace pocketmine\network\protocol;
 #include <rules/DataPacket.h>
 
 
-class SetDifficultyPacket extends DataPacket{
-	const NETWORK_ID = Info::SET_DIFFICULTY_PACKET;
+class SpawnExperienceOrbPacket extends DataPacket{
+	const NETWORK_ID = Info::SPAWN_EXPERIENCE_ORB_PACKET;
 
-	public $difficulty;
+	public $x;
+	public $y;
+	public $z;
+	public $amount;
 
 	public function decode(){
-		$this->difficulty = $this->getInt();
+
 	}
 
 	public function encode(){
 		$this->reset();
-		$this->putUnsignedVarInt($this->difficulty);
+		$this->putVector3f($this->x, $this->y, $this->z);
+		$this->putVarInt($this->amount);
 	}
-
 }

@@ -24,18 +24,18 @@ namespace pocketmine\network\protocol;
 #include <rules/DataPacket.h>
 
 
-class SetDifficultyPacket extends DataPacket{
-	const NETWORK_ID = Info::SET_DIFFICULTY_PACKET;
-
-	public $difficulty;
-
+class SetCommandsEnabledPacket extends DataPacket{
+	const NETWORK_ID = Info::SET_COMMANDS_ENABLED_PACKET;
+	
+	public $enabled;
+	
 	public function decode(){
-		$this->difficulty = $this->getInt();
+	
 	}
-
+	
 	public function encode(){
 		$this->reset();
-		$this->putUnsignedVarInt($this->difficulty);
+		$this->putByte($this->enabled);
 	}
 
 }

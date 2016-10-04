@@ -23,19 +23,26 @@ namespace pocketmine\network\protocol;
 
 #include <rules/DataPacket.h>
 
+class AddHangingEntityPacket extends DataPacket{
+	const NETWORK_ID = Info::ADD_HANGING_ENTITY_PACKET;
 
-class SetDifficultyPacket extends DataPacket{
-	const NETWORK_ID = Info::SET_DIFFICULTY_PACKET;
-
-	public $difficulty;
+	public $entityUniqueId;
+	public $entityRuntimeId;
+	public $x;
+	public $y;
+	public $z;
+	public $unknown;
 
 	public function decode(){
-		$this->difficulty = $this->getInt();
+
 	}
 
 	public function encode(){
 		$this->reset();
-		$this->putUnsignedVarInt($this->difficulty);
+		$this->putEntityId($this->entityUniqueId);
+		$this->putEntityId($this->entityRuntimeId);
+		$this->putBlockCoords($this->x, $this->y, $this->z);
+		$this->putVarInt($this->unknown);
 	}
 
 }
