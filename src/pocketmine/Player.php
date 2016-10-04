@@ -3581,6 +3581,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$ev = new PlayerDropItemEvent($this, $item);
 		$this->server->getPluginManager()->callEvent($ev);
 		if($ev->isCancelled()){
+			$p->getFloatingInventory()->removeItem($item);
+			$p->getInventory()->addItem($item);
 			return;
 		}
 
