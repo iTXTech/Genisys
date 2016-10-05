@@ -5,7 +5,7 @@ config:
  version: 21
 
 level:
- #Set if turn on the weather system
+ #Set if weather is allowed
  weather: true
  #Weather random duration
  weather-random-duration-min: 6000
@@ -14,67 +14,67 @@ level:
  lightning-time: 200
  #Set if enable lightning with fire
  lightning-fire: false
- #Set if enable fire spread
+ #Set if fire should spread
  fire-spread: false
- 
+
 player:
- #the switch of hunger system
+ #Set if hunger is allowed
  hunger: true
- #Choose if turn on the experience system
+ #Choose if experience is allowed
  experience: true
- #Choose if keep inventory when a player died
+ #Choose if to keep a player's inventory when they die
  keep-inventory: false
- #Clear the inventory automatically when change the gamemode into creative
+ #Clear the inventory upon gamemode change
  auto-clear-inventory : true
- #Choose if keep experience when a player died
+ #Choose if to keep a player's experience when they die
  keep-experience: false
- #If players get crash when join, set this below 10. disable=-1
+ #If players crash when joining, change this to less than 10. disable=-1
  chunk-radius: -1
 
 nether:
- #Choose if the nether's allowed,the level of nether will generate automatically
+ #Choose if the nether's allowed. The level of nether will generate automatically
  allow-nether: true
  #The name of nether's level
  level-name: "nether"
- 
+
 server:
  #Choose if spawning iron golem is allowed
  allow-iron-golem: false
  #Choose if spawning snow golem is allowed
  allow-snow-golem: false
- #Choose if disable server.log
+ #Choose if server.log is disabled
  disable-log: false
- #Choose if enable auto anti fly
+ #Choose if to enable anti-fly
  anti-fly: true
- #Choose if enable async chunks request
+ #Choose if async chunks request is allowed
  async-chunk-request: true
- #Choose how to remind player when a player join
+ #Choose how to remind players when someone joins
  #0 = Message, 1 = Tip, 2 = Popup
  player-msg-type: 0
  login-msg: "§3@player joined the game"
  logout-msg: "§3@player left the game"
- #Choose if read recipes from json
+ #Choose if to read recipes from json
  recipes-from-json: false
- #Choose if read creative item from json
+ #Choose if to read creative items from json
  creative-items-from-json: false
- #Choose if enable movement check (no more pull back)
+ #Choose if movement check is enabled (no more pull back)
  check-movement: true
- #Set if enable limited creative (cannot drop item, cannot interact Chests and so on)
+ #Set if limited creative is enabled (cannot drop items, cannot open chests and so on)
  limited-creative: true
  #Set if add DestroyBlockParticle
  destroy-block-particle: true
- #Set if enable splash potion
+ #Set if splash potions are enabled
  allow-splash-potion: true
- #Set if enable advanced Command Selector
+ #Set if Advanced Command Selector is enabled
  advanced-command-selector: false
 
 enchantment:
- #Choose if anvil is allowed
+ #Choose if anvils are allowed
  enable-anvil: true
- #Choose if EnchantingTable is allowed
+ #Choose if enchantment tables are allowed
  enable-enchanting-table: true
- #Choose if to count bookshelves, may cause server lag.
- #If this option is false, server will use a random count (0~15)
+ #Choose if to count bookshelves (may cause server lag)
+ #If this option is false, the server will use a random count (0~15)
  count-bookshelf: false
 
 redstone:
@@ -84,9 +84,9 @@ redstone:
  #If not true then the redstone won't work#
  ##########################################
  enable: false
- #Choose if allow frequancy pulse
+ #Choose if frequency pulses are allowed
  frequency-pulse: false
- #Set the frequency of pulse, Default: 1s
+ #Set the frequency of pulse. Default = 1s
  pulse-frequency: 1
 
 synapse:
@@ -105,23 +105,23 @@ synapse:
 dserver:
  #The count of all multi-server unified
  enable: false
- #Query update automatically
+ #Update Query automatically
  query-auto-update: false
- #Query update periodical
+ #Update Query periodically
  query-tick-update: true
- #The max players' number of Motd
+ #The max players' on the MOTD
  motd-max-players: 0
- #The max players' number of query，0=Default
+ #The max players' on the Query. 0=Default
  query-max-players: 0
- #Show the number of all players on motd
+ #Show the number of all players on MOTD
  motd-all-players: false
  #Show the number of all players on Query
  query-all-players: false
- #Show the number of online players on motd
+ #Show the number of online players on MOTD
  motd-players: false
  #Show the number of online players on Query
  query-players: false
- #Update Frequency ,20=1s
+ #Update Frequency. 20=1s
  time: 40
  #Auto-retry times when failed
  retry-times: 3
