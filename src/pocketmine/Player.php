@@ -630,6 +630,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		$this->recalculatePermissions();
+		$this->sendCommandData();
 	}
 
 	/**
@@ -700,6 +701,18 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return $this->perm->getEffectivePermissions();
 	}
 
+	public function sendCommandData(){	
+		$pk = new AvailableCommandsPacket();
+		$data = [];
+		foreach($this->server->getCommandMap()->getCommands() as $command){
+			$data[$command->getName()] = $command->generateJsonData($this);
+		}
+		if(count($data) > 0){
+			//TODO: structure checking
+			$pk->commands = json_encode($data);
+			$this->dataPacket($pk);
+		}
+	}
 
 	/**
 	 * @param SourceInterface $interface
@@ -2147,14 +2160,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$pk->slots = array_merge(Item::getCreativeItems(), $this->personalCreativeItems);
 			$this->dataPacket($pk);
 		}
-		
-		$pk = new AvailableCommandsPacket();
-		$data = [];
-		foreach($this->server->getCommandMap()->getCommands() as $command){
-			$data[$command->getName()] = $command->generateJsonData($this);
-		}
-		$pk->commands = json_encode($data);
-		$this->dataPacket($pk);
+
+		$this->sendCommandData();
 
 		$pk = new SetEntityDataPacket();
 		$pk->eid = 0;
