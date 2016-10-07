@@ -76,6 +76,7 @@ use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerPreLoginEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
+use pocketmine\event\player\PlayerToggleFlightEvent;
 use pocketmine\event\player\PlayerToggleSneakEvent;
 use pocketmine\event\player\PlayerToggleSprintEvent;
 use pocketmine\event\player\PlayerUseFishingRodEvent;
@@ -2348,7 +2349,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$this->kick("Flying is not enabled on this server");
 					break;
 				}else{
-					$this->isFlying = $packet->isFlying;
+					$this->server->getPluginManager()->callEvent($ev = new PlayerToggleFlightEvent($this, $packet->isFlying));
+					if($ev->isCancelled()){
+						$this->sendSettings();
+					}else{
+						$this->isFlying = $ev->isFlying();
+					}
 					break;
 				}
 				break;
