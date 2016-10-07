@@ -1777,10 +1777,7 @@ class Server{
 			]);
 
 			$onlineMode = $this->getConfigBoolean("online-mode", false);
-			if(!extension_loaded("openssl")){
-				$this->logger->warning("The OpenSSL extension is not loaded, and this is required for XBOX authentication to work. If you want to use Xbox Live auth, please update your PHP binaries at itxtech.org/download, or recompile PHP with the OpenSSL extension.");
-				$this->setConfigBool("online-mode", false);
-			}elseif(!$onlineMode){
+if(!$onlineMode){
 				$this->logger->warning("SERVER IS RUNNING IN OFFLINE/INSECURE MODE!");
 				$this->logger->warning("The server will make no attempt to authenticate usernames. Beware.");
 				$this->logger->warning("While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.");
