@@ -1,0 +1,133 @@
+#Конфигурационный файл Genisys
+
+#Версия этого файла
+config:
+ version: 21
+
+level:
+ #Включить ли погоду?
+ weather: true
+ #Weather random duration
+ weather-random-duration-min: 6000
+ weather-random-duration-max: 12000
+ #Random lightning interval，default as 10s, 0 = disable
+ lightning-time: 200
+ #Должен ли появляться огонь при ударе молнии?
+ lightning-fire: false
+ #Включить ли распространение огня?
+ fire-spread: false
+ 
+player:
+ #Включить ли систеиу голода?
+ hunger: true
+ #Включить ли систему опыта?
+ experience: true
+ #Сохранять ли инвентарь игрока при смерти?
+ keep-inventory: false
+ #Очищать ли инвентарь при переходе в режим творчества?
+ auto-clear-inventory : true
+ #Сохранять ли опыт игрока при смерти?
+ keep-experience: false
+ #Если при заходе на сервер игра у игроков крашится, то установите значение, которое будет меньше 10. Отключить=-1
+ chunk-radius: -1
+
+nether:
+ #Включить ад? При включении мир сгенерируется автоматически.
+ allow-nether: true
+ #Имя мира с адом.
+ level-name: "nether"
+ 
+server:
+ #Включить ли спаун железных големов?
+ allow-iron-golem: false
+ #Включить ли спаун снежных големов?
+ allow-snow-golem: false
+ #Отключить ли server.log?
+ disable-log: false
+ #Включить ли анти-полет?
+ anti-fly: true
+ #Choose if enable async chunks request
+ async-chunk-request: true
+ #Choose how to remind player when a player join
+ #0 = Сообщение, 1 = Подсказка, 2 = Поп-ап
+ player-msg-type: 0
+ login-msg: "§3@player вошёл в игру"
+ logout-msg: "§3@player вышел из игры"
+ #Читать ли список крафтов из json?
+ recipes-from-json: false
+ #Читать ли список предметов креатива из json?
+ creative-items-from-json: false
+ #Choose if enable movement check (no more pull back)
+ check-movement: true
+ #Включить ли ограниченный креатив? (нельзя выбрасывать предметы, нельзя открывать сундуки и т.д.)
+ limited-creative: true
+ #Показывать ли частицы ломания блоков? (DestroyBlockParticle)
+ destroy-block-particle: true
+ #Включить ли использование взрывных зелий?
+ allow-splash-potion: true
+ #Set if enable advanced Command Selector
+ advanced-command-selector: false
+
+enchantment:
+ #Включить ли использование наковальни?
+ enable-anvil: true
+ #Включить ли использование стола зачарований?
+ enable-enchanting-table: true
+ #Choose if to count bookshelves, may cause server lag.
+ #If this option is false, server will use a random count (0~15)
+ count-bookshelf: false
+
+redstone:
+ ##############################################
+ ########Включить ли систему редстоуна?########
+ ##############################################
+ # Если не true, то редстоун не будет работать#
+ ##############################################
+ enable: false
+ #Choose if allow frequancy pulse
+ frequency-pulse: false
+ #Set the frequency of pulse, Default: 1s
+ pulse-frequency: 1
+
+synapse:
+ #If you want to use Synapse API or connect to a synapse server, enable this
+ enabled: false
+ server-ip: 127.0.0.1
+ server-port: 10305
+ #If this client is the lobby or the main server
+ is-main-server: true
+ server-password: 32bitlongkey
+ #Description of this client is the identifier of this client
+ description: "A Synapse client"
+ #Disable RakLib means that players can only join via Synapse
+ disable-rak: false
+
+dserver:
+ #The count of all multi-server unified
+ enable: false
+ #Query update automatically
+ query-auto-update: false
+ #Query update periodical
+ query-tick-update: true
+ #The max players' number of Motd
+ motd-max-players: 0
+ #The max players' number of query，0=Default
+ query-max-players: 0
+ #Show the number of all players on motd
+ motd-all-players: false
+ #Show the number of all players on Query
+ query-all-players: false
+ #Show the number of online players on motd
+ motd-players: false
+ #Show the number of online players on Query
+ query-players: false
+ #Update Frequency ,20=1s
+ time: 40
+ #Auto-retry times when failed
+ retry-times: 3
+ #the server list，Separate by ';'，e.g. 1.example.com:19132;2.example.com:19133
+ server-list: ""
+
+inventory:
+ #Set this to true if you have problems with anvils. Will process inventory transactions in a vanilla fashion with no anti-cheats or verification.
+ allow-cheats: false
