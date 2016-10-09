@@ -42,6 +42,7 @@ use pocketmine\entity\Enderman;
 use pocketmine\entity\Entity;
 use pocketmine\entity\FallingSand;
 use pocketmine\entity\FishingHook;
+use pocketmine\entity\FloatingText;
 use pocketmine\entity\Ghast;
 use pocketmine\entity\Human;
 use pocketmine\entity\Husk;
@@ -2936,6 +2937,7 @@ class Server{
 		Entity::registerEntity(Enderman::class);
 		Entity::registerEntity(FallingSand::class);
 		Entity::registerEntity(FishingHook::class);
+        Entity::registerEntity(FloatingText::class);
 		Entity::registerEntity(Ghast::class);
 		Entity::registerEntity(Husk::class);
 		Entity::registerEntity(IronGolem::class);
