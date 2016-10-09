@@ -39,7 +39,6 @@ class FloatingText extends Entity {
         $pk->yaw = 0;
         $pk->pitch = 0;
         $pk->item = ItemItem::get(ItemItem::AIR);
-        //$pk->metadata = $this->dataProperties;
         $pk->metadata = [
             Entity::DATA_FLAGS => [Entity::DATA_TYPE_BYTE, 1 << Entity::DATA_FLAG_INVISIBLE],
             Entity::DATA_NAMETAG => [Entity::DATA_TYPE_STRING, $this->title . ($this->text !== "" ? "\n" . $this->text : "")],
