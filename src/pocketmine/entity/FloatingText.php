@@ -31,7 +31,7 @@ class FloatingText extends Entity {
         $pk->uuid = UUID::fromRandom();
         $pk->type = self::NETWORK_ID;
         $pk->x = $this->x;
-        $pk->y = $this->y;
+        $pk->y = $this->y - 1.62;
         $pk->z = $this->z;
         $pk->speedX = 0;
         $pk->speedY = 0;
