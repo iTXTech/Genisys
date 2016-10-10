@@ -2936,7 +2936,7 @@ class Server{
 		Entity::registerEntity(Egg::class);
 		Entity::registerEntity(Enderman::class);
 		Entity::registerEntity(FallingSand::class);
-		Entity::registerEntity(FishingHook::class);
+        Entity::registerEntity(FishingHook::class);
         Entity::registerEntity(FloatingText::class);
 		Entity::registerEntity(Ghast::class);
 		Entity::registerEntity(Husk::class);
