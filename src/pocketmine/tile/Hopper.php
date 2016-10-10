@@ -99,7 +99,7 @@ class Hopper extends Spawnable implements InventoryHolder, Container, Nameable{
 		$area = clone $this->getBlock()->getBoundingBox(); //Area above hopper to draw items from
 		$area->maxY = ceil($area->maxY) + 1; //Account for full block above, not just 1 + 5/8
 		foreach($this->getLevel()->getChunkEntities($this->getBlock()->x >> 4, $this->getBlock()->z >> 4) as $entity){
-			if(!($entity instanceof DroppedItem)){
+			if(!($entity instanceof DroppedItem) or !$entity->isAlive()){
 				continue;
 			}
 			if(!$entity->boundingBox->intersectsWith($area)){
