@@ -8,7 +8,7 @@ use pocketmine\Player;
 use pocketmine\utils\UUID;
 
 class FloatingText extends Entity {
-    const NETWORK_ID = 80;
+    const NETWORK_ID = 1000; // Just a random unused ID
 
     protected $title;
     protected $text;
