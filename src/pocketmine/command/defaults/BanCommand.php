@@ -50,6 +50,18 @@ class BanCommand extends VanillaCommand{
 		}
 
 		$name = array_shift($args);
+		$len = strlen($name);
+		for($i = 0; $i < $len; ++$i){
+			$c = ord($name{$i});
+			if(($c >= ord("a") and $c <= ord("z")) or ($c >= ord("A") and $c <= ord("Z")) or ($c >= ord("0") and $c <= ord("9")) or $c === ord("_")){
+				continue;
+			}
+
+			$sender->sendMessage(new TranslationContainer("%commands.generic.player.invalidName"));
+
+			return false;
+		}
+
 		if(isset($args[0]) and isset($args[1])){
 			$reason = $args[0];
 			if($args[1] != null and is_numeric($args[1])){
@@ -71,5 +83,21 @@ class BanCommand extends VanillaCommand{
 		Command::broadcastCommandMessage($sender, new TranslationContainer("%commands.ban.success", [$player !== null ? $player->getName() : $name]));
 
 		return true;
+	}
+
+	protected function isValid($name){
+		$valid = true;
+		$len = strlen($name);
+		for($i = 0; $i < $len and $valid; ++$i){
+			$c = ord($name{$i});
+			if(($c >= ord("a") and $c <= ord("z")) or ($c >= ord("A") and $c <= ord("Z")) or ($c >= ord("0") and $c <= ord("9")) or $c === ord("_")){
+				continue;
+			}
+
+			$valid = false;
+			break;
+		}
+
+		return $valid;
 	}
 }
