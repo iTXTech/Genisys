@@ -49,9 +49,9 @@ class BanCommand extends VanillaCommand{
 			return false;
 		}
 
-		$name = array_shift($args);
+		$name = str_replace("|", "", array_shift($args));
 		if(isset($args[0]) and isset($args[1])){
-			$reason = $args[0];
+			$reason = str_replace("|", "", $args[0]);
 			if($args[1] != null and is_numeric($args[1])){
 				$until = new \DateTime('@' . ($args[1] * 86400 + time()));
 			}else{
