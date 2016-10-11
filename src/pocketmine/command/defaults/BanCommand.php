@@ -53,7 +53,7 @@ class BanCommand extends VanillaCommand{
 		if(isset($args[0]) and isset($args[1])){
 			$reason = str_replace("_", "", $args[0]);
 			
-			if(!ctype_alnum($name) OR !ctype_alnum($reason) {
+			if(!ctype_alnum($name) OR !ctype_alnum($reason)) {
 				return false;
 			}
 			
