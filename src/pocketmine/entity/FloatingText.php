@@ -29,7 +29,6 @@ class FloatingText extends Entity {
         $pk = new AddPlayerPacket();
         $pk->eid = $this->getId();
         $pk->uuid = UUID::fromRandom();
-        $pk->type = Arrow::NETWORK_ID;
         $pk->x = $this->x;
         $pk->y = $this->y - 1.62;
         $pk->z = $this->z;
