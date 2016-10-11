@@ -84,20 +84,4 @@ class BanCommand extends VanillaCommand{
 
 		return true;
 	}
-
-	protected function isValid($name){
-		$valid = true;
-		$len = strlen($name);
-		for($i = 0; $i < $len and $valid; ++$i){
-			$c = ord($name{$i});
-			if(($c >= ord("a") and $c <= ord("z")) or ($c >= ord("A") and $c <= ord("Z")) or ($c >= ord("0") and $c <= ord("9")) or $c === ord("_")){
-				continue;
-			}
-
-			$valid = false;
-			break;
-		}
-
-		return $valid;
-	}
 }
