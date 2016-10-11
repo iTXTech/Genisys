@@ -159,6 +159,7 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 							}
 						}
 					}
+					$this->useArmors();
 					break;
 				case self::CAUSE_FALL:
 					//Feather Falling
