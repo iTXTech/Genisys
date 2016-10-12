@@ -21,10 +21,11 @@
 
 namespace pocketmine;
 
-use pocketmine\block\Block;
 use pocketmine\block\Air;
+use pocketmine\block\Block;
 use pocketmine\block\Fire;
 use pocketmine\block\PressurePlate;
+use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\entity\Animal;
 use pocketmine\entity\Arrow;
@@ -1329,17 +1330,24 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/**
 	 * Sets the gamemode, and if needed, kicks the Player.
 	 *
-	 * @param int $gm
+	 * @param int  $gm
+	 * @param bool $client if the client made this change in their GUI
 	 *
 	 * @return bool
 	 */
-	public function setGamemode(int $gm){
+	public function setGamemode(int $gm, bool $client = false){
 		if($gm < 0 or $gm > 3 or $this->gamemode === $gm){
 			return false;
 		}
 
 		$this->server->getPluginManager()->callEvent($ev = new PlayerGameModeChangeEvent($this, $gm));
 		if($ev->isCancelled()){
+			if($client){ //gamemode change by client in the GUI
+				$pk = new SetPlayerGameTypePacket();
+				$pk->gamemode = $this->gamemode & 0x01;
+				$this->dataPacket($pk);
+				$this->sendSettings();
+			}
 			return false;
 		}
 
@@ -1353,6 +1361,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		if($this->isSpectator()){
 			$this->isFlying = true;
 			$this->despawnFromAll();
+
+			// Client automatically turns off flight controls when on the ground.
+			// A combination of this hack and a new AdventureSettings flag FINALLY
+			// fixes spectator flight controls. Thank @robske110 for this hack.
+			$this->teleport($this->temporalVector->setComponents($this->x, $this->y + 0.1, $this->z));
 		}else{
 			if($this->isSurvival()){
 				$this->isFlying = false;
@@ -1364,23 +1377,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$this->namedtag->playerGameType = new IntTag("playerGameType", $this->gamemode);
 
-		/*$spawnPosition = $this->getSpawn();
-
-		$pk = new StartGamePacket();
-		$pk->seed = -1;
-		$pk->x = $this->x;
-		$pk->y = $this->y;
-		$pk->z = $this->z;
-		$pk->spawnX = (int)$spawnPosition->x;
-		$pk->spawnY = (int)$spawnPosition->y;
-		$pk->spawnZ = (int)$spawnPosition->z;
-		$pk->generator = 1; //0 old, 1 infinite, 2 flat
-		$pk->gamemode = $this->gamemode & 0x01;
-		$pk->eid = 0;*/
-		$pk = new SetPlayerGameTypePacket();
-		$pk->gamemode = $this->gamemode & 0x01;
-		$this->dataPacket($pk);
-		$this->sendSettings();
+		if(!$client){ //Gamemode changed by server, do not send for client changes
+			$pk = new SetPlayerGameTypePacket();
+			$pk->gamemode = $this->gamemode & 0x01;
+			$this->dataPacket($pk);
+			$this->sendSettings();
+		}else{
+			Command::broadcastCommandMessage($this, new TranslationContainer("commands.gamemode.success.self", [Server::getGamemodeString($gm)]));
+		}
 
 		if($this->gamemode === Player::SPECTATOR){
 			$pk = new ContainerSetContentPacket();
@@ -3495,6 +3499,18 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$t->spawnTo($this);
 						}
 					}
+				}
+				break;
+			case ProtocolInfo::SET_PLAYER_GAME_TYPE_PACKET:
+				if($packet->gamemode !== $this->gamemode){
+					if(!$this->hasPermission("pocketmine.command.gamemode")){
+						$pk = new SetPlayerGameTypePacket();
+						$pk->gamemode = $this->gamemode & 0x01;
+						$this->dataPacket($pk);
+						$this->sendSettings();
+						break;
+					}
+					$this->setGamemode($packet->gamemode, true);
 				}
 				break;
 			default:
