@@ -22,6 +22,7 @@
 namespace pocketmine\permission;
 
 use pocketmine\Server;
+use pocketmine\utils\Config;
 use pocketmine\utils\MainLogger;
 
 class BanList{
@@ -32,6 +33,9 @@ class BanList{
 	/** @var string */
 	private $file;
 
+	/** @var Config */
+	private $config;
+
 	/** @var bool */
 	private $enabled = true;
 
@@ -40,6 +44,7 @@ class BanList{
 	 */
 	public function __construct($file){
 		$this->file = $file;
+		$this->config = new Config($file, Config::YAML);
 	}
 
 	/**
@@ -130,38 +135,22 @@ class BanList{
 
 	public function load(){
 		$this->list = [];
-		$fp = @fopen($this->file, "r");
-		if(is_resource($fp)){
-			while(($line = fgets($fp)) !== false){
-				if($line{0} !== "#"){
-					$entry = BanEntry::fromString($line);
-					if($entry instanceof BanEntry){
-						$this->list[$entry->getName()] = $entry;
-					}
-				}
+		foreach ($this->config->getAll() as $data){
+			$entry = BanEntry::fromArray($data);
+			if($entry instanceof BanEntry){
+				$this->list[$entry->getName()] = $entry;
 			}
-			fclose($fp);
-		}else{
-			MainLogger::getLogger()->error("Could not load ban list");
 		}
 	}
 
 	public function save($flag = true){
 		$this->removeExpired();
-		$fp = @fopen($this->file, "w");
-		if(is_resource($fp)){
-			if($flag === true){
-				fwrite($fp, "# Updated " . strftime("%x %H:%M", time()) . " by " . Server::getInstance()->getName() . " " . Server::getInstance()->getPocketMineVersion() . "\n");
-				fwrite($fp, "# victim name | ban date | banned by | banned until | reason\n\n");
-			}
-
-			foreach($this->list as $entry){
-				fwrite($fp, $entry->getString() . "\n");
-			}
-			fclose($fp);
-		}else{
-			MainLogger::getLogger()->error("Could not save ban list");
+		$data = [];
+		foreach($this->list as $entry){
+			$data[] = $entry->getArray();
 		}
+		$this->config->setAll($data);
+		$this->config->save();
 	}
 
 }
