@@ -154,6 +154,7 @@ use pocketmine\tile\Furnace;
 use pocketmine\tile\Hopper;
 use pocketmine\tile\ItemFrame;
 use pocketmine\tile\MobSpawner;
+use pocketmine\tile\Music;
 use pocketmine\tile\Sign;
 use pocketmine\tile\Skull;
 use pocketmine\tile\Tile;
@@ -2988,5 +2989,6 @@ class Server{
 		Tile::registerTile(MobSpawner::class);
 		Tile::registerTile(Sign::class);
 		Tile::registerTile(Skull::class);
+		Tile::registerTile(Music::class);
 	}
 }

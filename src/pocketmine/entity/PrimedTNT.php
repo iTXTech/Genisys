@@ -27,6 +27,7 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\ExplosionPrimeEvent;
 use pocketmine\level\Explosion;
 use pocketmine\level\format\FullChunk;
+use pocketmine\level\sound\TNTPrimeSound;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\Network;
@@ -134,6 +135,7 @@ class PrimedTNT extends Entity implements Explosive{
 		$this->server->getPluginManager()->callEvent($ev = new ExplosionPrimeEvent($this, 4, $this->dropItem));
 
 		if(!$ev->isCancelled()){
+			$this->level->addSound(new TNTPrimeSound($this));
 			$explosion = new Explosion($this, $ev->getForce(), $this, $ev->dropItem());
 			if($ev->isBlockBreaking()){
 				$explosion->explodeA();

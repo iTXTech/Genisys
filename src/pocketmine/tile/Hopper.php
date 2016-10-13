@@ -24,6 +24,7 @@ namespace pocketmine\tile;
 use pocketmine\block\Hopper as HopperBlock;
 use pocketmine\entity\Item as DroppedItem;
 use pocketmine\inventory\HopperInventory;
+use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
@@ -34,6 +35,7 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\StringTag;
 
+//TODO: rewrite
 class Hopper extends Spawnable implements InventoryHolder, Container, Nameable{
 	/** @var HopperInventory */
 	protected $inventory;
@@ -43,6 +45,9 @@ class Hopper extends Spawnable implements InventoryHolder, Container, Nameable{
 	
 	/** @var bool */
 	protected $isPowered = false;
+
+	public function onSlotSet(Inventory $inventory, int $slot, Item $item, Item $before){
+	}
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);

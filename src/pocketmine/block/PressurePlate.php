@@ -23,93 +23,134 @@ namespace pocketmine\block;
 
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
+use pocketmine\level\sound\ClickSound;
+use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Math;
 use pocketmine\math\Vector3;
 use pocketmine\level\Level;
 use pocketmine\level\sound\GenericSound;
 use pocketmine\Player;
 
-class PressurePlate extends RedstoneSource{
-	protected $activateTime = 0;
-	protected $canActivate = true;
+abstract class PressurePlate extends Flowable implements RedstoneSource{
+	const TICK_DELAY = 10;
+
+	protected static $updateQueue = [];
+
+	public function getUpdateQueue(){
+		return self::$updateQueue;
+	}
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
+
+		if(count(self::$updateQueue) === 0){
+			for($i = -1; $i <= 1; $i++){
+				for($j = -1; $j <= 1; $j++){
+					for($k = -1; $k <= 1; $k++){
+						self::$updateQueue[] = [$i, $j, $k];
+					}
+				}
+			}
+			self::$updateQueue[] = [0, -2, 0];
+			self::$updateQueue[] = [0, -1, 0];
+		}
 	}
 
 	public function hasEntityCollision(){
 		return true;
 	}
 
-	public function onEntityCollide(Entity $entity){
-		if($this->getLevel()->getServer()->redstoneEnabled and $this->canActivate){
-			if(!$this->isActivated()){
-				$this->meta = 1;
-				$this->getLevel()->setBlock($this, $this, true, false);
-				$this->getLevel()->addSound(new GenericSound($this, 1000));
-			}
-			if(!$this->isActivated() or ($this->isActivated() and ($this->getLevel()->getServer()->getTick() % 30) == 0)){
-				$this->activate();
-			}
+	public function getBoundingBox(){
+		if($this->isPressed()){
+			return new AxisAlignedBB(
+				$this->x,
+				$this->y,
+				$this->z,
+				$this->x + 1,
+				$this->y + 0.03125,
+				$this->z + 1
+			);
+		}else{
+			return new AxisAlignedBB(
+				$this->x,
+				$this->y,
+				$this->z,
+				$this->x + 1,
+				$this->y + 0.0625,
+				$this->z + 1
+			);
 		}
 	}
 
-	public function isActivated(Block $from = null){
-		return ($this->meta == 0) ? false : true;
+	public function isPressed(){
+		return $this->meta == 1;
+	}
+
+	public function onEntityCollide(Entity $entity){
+		if($this->canTrigger($entity)){
+			$this->getLevel()->setBlockCache($this, $this->getLevel()->getServer()->getTick());
+			$this->setPressed(true);
+		}
+	}
+
+	public abstract function canTrigger(Entity $entity) : bool;
+
+	public function setPressed(bool $pressed){
+		if($this->isPressed() != $pressed){
+			$this->meta = $pressed ? 1 : 0;
+			$this->getLevel()->setBlock($this, $this, false, false);
+			$this->getLevel()->addSound(new ClickSound($this));
+			$this->updateAround();
+		}
+		$this->getLevel()->scheduleUpdate($this, self::TICK_DELAY);
+	}
+
+	public function getRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : int{
+		return $this->isPressed() ? self::REDSTONE_POWER_MAX : self::REDSTONE_POWER_MIN;
+	}
+
+	public function getDirectRedstonePower(Block $block, int $face, int $powerMode) : int{
+		return $this->hasDirectRedstonePower($block, $face, $powerMode) ? self::REDSTONE_POWER_MAX : self::REDSTONE_POWER_MIN;
+	}
+
+	public function hasDirectRedstonePower(Block $block, int $face, int $powerMode) : bool{
+		return $this->hasRedstonePower($block, $powerMode) and $face == self::SIDE_DOWN;
+	}
+
+	public function getIndirectRedstonePower(Block $block, int $face, int $powerMode) : int{
+		return $this->getRedstonePower($block, $powerMode);
 	}
 
 	public function onUpdate($type){
-		if($type === Level::BLOCK_UPDATE_NORMAL){
-			$below = $this->getSide(Vector3::SIDE_DOWN);
-			if($below instanceof Transparent){
+		if($type == Level::BLOCK_UPDATE_NORMAL){
+			if($this->getSide(0) instanceof Transparent){
 				$this->getLevel()->useBreakOn($this);
-				return Level::BLOCK_UPDATE_NORMAL;
 			}
 		}
-		/*if($type == Level::BLOCK_UPDATE_SCHEDULED){
-			if($this->isActivated()){
-				if(!$this->isCollided()){
-					$this->meta = 0;
-					$this->getLevel()->setBlock($this, $this, true, false);
-					$this->deactivate();
-					return Level::BLOCK_UPDATE_SCHEDULED;
-				}
+		if($type == Level::BLOCK_UPDATE_SCHEDULED){
+			if(!$this->isPressed()){
+				$this->getLevel()->scheduleUpdate($this, self::TICK_DELAY);
+				return;
 			}
-		}*/
-		return true;
-	}
 
-	public function checkActivation(){
-		if($this->isActivated()){
-			if((($this->getLevel()->getServer()->getTick() - $this->activateTime)) >= 3){
-				$this->meta = 0;
-				$this->getLevel()->setBlock($this, $this, true, false);
-				$this->deactivate();
+			if(($this->getLevel()->getServer()->getTick() - $this->getLevel()->getBlockCache($this)) > 1){
+				$this->setPressed(false);
+			}else{
+				$this->getLevel()->scheduleUpdate($this, self::TICK_DELAY);
 			}
 		}
 	}
-
-	/*public function isCollided(){
-		foreach($this->getLevel()->getEntities() as $p){
-			$blocks = $p->getBlocksAround();
-			if(isset($blocks[Level::blockHash($this->x, $this->y, $this->z)])) return true;
-		}
-		return false;
-	}*/
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$below = $this->getSide(Vector3::SIDE_DOWN);
-		if($below instanceof Transparent) return;
-		else $this->getLevel()->setBlock($block, $this, true, false);
-	}
-
-	public function onBreak(Item $item){
-		if($this->isActivated()){
-			$this->meta = 0;
-			$this->deactivate();
+		if($below instanceof Transparent){
+			return false;
+		}else {
+			$this->getLevel()->setBlock($block, $this, true, false);
+			$this->updateAround();
+			$this->getLevel()->scheduleUpdate($this, self::TICK_DELAY);
+			return true;
 		}
-		$this->canActivate = false;
-		$this->getLevel()->setBlock($this, new Air(), true);
 	}
 
 	public function getHardness() {
@@ -118,5 +159,11 @@ class PressurePlate extends RedstoneSource{
 
 	public function getResistance(){
 		return 2.5;
+	}
+
+	public function getDrops(Item $item) : array{
+		return [
+			[$this->id, 0 ,1]
+		];
 	}
 }

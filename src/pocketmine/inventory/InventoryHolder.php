@@ -21,7 +21,7 @@
 
 namespace pocketmine\inventory;
 
-interface InventoryHolder{
+interface InventoryHolder extends InventoryViewer{
 
 	/**
 	 * Get the object related inventory

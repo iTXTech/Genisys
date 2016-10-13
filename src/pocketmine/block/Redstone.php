@@ -24,7 +24,7 @@ namespace pocketmine\block;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 
-class Redstone extends RedstoneSource{
+class Redstone extends Solid implements RedstoneSource{
 
 	protected $id = self::REDSTONE_BLOCK;
 
@@ -32,24 +32,24 @@ class Redstone extends RedstoneSource{
 
 	}
 
-	public function getBoundingBox() {
-		return Block::getBoundingBox();
+	public function getHardness() {
+		return 3;
 	}
 
-	public function canBeFlowedInto(){
+	public function getResistance(){
+		return 30;
+	}
+
+	public function getDirectRedstonePower(Block $block, int $face, int $powerMode) : int{
+		return 0;
+	}
+
+	public function hasDirectRedstonePower(Block $block, int $face, int $powerMode) : bool{
 		return false;
 	}
 
-	public function isSolid(){
-		return true;
-	}
-
-	public function isActivated(Block $from = null){
-		return true;
-	}
-
-	public function getHardness() {
-		return 5;
+	public function getRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : int{
+		return self::REDSTONE_POWER_MAX;
 	}
 
 	public function getToolType(){

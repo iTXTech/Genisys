@@ -26,4 +26,8 @@ abstract class Solid extends Block{
 	public function isSolid(){
 		return true;
 	}
+
+	public function isRedstoneConductor() : bool{
+		return true;
+	}
 }

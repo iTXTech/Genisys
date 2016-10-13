@@ -27,9 +27,10 @@ use pocketmine\level\sound\DoorSound;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
+use pocketmine\utils\RedstoneUtil;
 
 
-abstract class Door extends Transparent implements ElectricalAppliance{
+abstract class Door extends Transparent implements RedstoneTarget{
 
 	public function canBeActivated() : bool {
 		return true;
@@ -208,7 +209,7 @@ abstract class Door extends Transparent implements ElectricalAppliance{
 	}
 
 	public function onUpdate($type){
-		if($type === Level::BLOCK_UPDATE_NORMAL){
+		if($type == Level::BLOCK_UPDATE_NORMAL or $type == Level::BLOCK_UPDATE_SCHEDULED){
 			if($this->getSide(Vector3::SIDE_DOWN)->getId() === self::AIR and $this->getSide(Vector3::SIDE_UP) instanceof Door){ //Block underneath the door was broken
 			
 				$this->getLevel()->setBlock($this, new Air(), false, false);
@@ -220,9 +221,23 @@ abstract class Door extends Transparent implements ElectricalAppliance{
 
 				return Level::BLOCK_UPDATE_NORMAL;
 			}
+
+			$powered = $this->isReceivingPower();
+			if($powered != $this->isOpen()){
+				$this->setOpen($powered);
+			}
 		}
 
 		return false;
+	}
+
+	public function isReceivingPower() : bool{
+		if(($this->getDamage() & 0x08) === 0x08){
+			$halfDoor = $this->getSide(Vector3::SIDE_DOWN);
+		}else{
+			$halfDoor = $this->getSide(Vector3::SIDE_UP);
+		}
+		return (RedstoneUtil::isReceivingPower($halfDoor) or RedstoneUtil::isReceivingPower($this));
 	}
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
@@ -272,36 +287,47 @@ abstract class Door extends Transparent implements ElectricalAppliance{
 		return true;
 	}
 
-	public function isOpened(){
+	public function isOpen() : bool{
 		return (($this->getFullDamage() & 0x04) > 0);
 	}
 
-	public function onActivate(Item $item, Player $player = null){
+	public function setOpen(bool $opened, Player $player = null) : bool{
+		if($opened == $this->isOpen()){
+			return true;
+		}
 		if(($this->getDamage() & 0x08) === 0x08){ //Top
 			$down = $this->getSide(Vector3::SIDE_DOWN);
 			if($down->getId() === $this->getId()){
 				$meta = $down->getDamage() ^ 0x04;
-				$this->getLevel()->setBlock($down, Block::get($this->getId(), $meta), true);
+				$this->getLevel()->setBlock($down, Block::get($this->getId(), $meta), false, false);
 				$players = $this->getLevel()->getChunkPlayers($this->x >> 4, $this->z >> 4);
 				if($player instanceof Player){
 					unset($players[$player->getLoaderId()]);
 				}
 
-				$this->level->addSound(new DoorSound($this));
+				$this->level->addSound(new DoorSound($this), $players);
 				return true;
 			}
 
 			return false;
 		}else{
 			$this->meta ^= 0x04;
-			$this->getLevel()->setBlock($this, $this, true);
+			$this->getLevel()->setBlock($this, $this, false, false);
 			$players = $this->getLevel()->getChunkPlayers($this->x >> 4, $this->z >> 4);
 			if($player instanceof Player){
 				unset($players[$player->getLoaderId()]);
 			}
-			$this->level->addSound(new DoorSound($this));
+			$this->level->addSound(new DoorSound($this), $players);
 		}
 
 		return true;
+	}
+
+	public function toggleOpen() : bool{
+		return $this->setOpen(!$this->isOpen());
+	}
+
+	public function onActivate(Item $item, Player $player = null){
+		return $this->setOpen(!$this->isOpen(), $player);
 	}
 }

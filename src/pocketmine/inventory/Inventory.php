@@ -212,6 +212,16 @@ interface Inventory{
 	public function onClose(Player $who);
 
 	/**
+	 * @param InventoryViewer $viewer
+	 */
+	public function addViewer(InventoryViewer $viewer);
+
+	/**
+	 * @param InventoryViewer $viewer
+	 */
+	public function removeViewer(InventoryViewer $viewer);
+
+	/**
 	 * @param int    $index
 	 * @param Item   $before
 	 * @param bool   $send

@@ -23,11 +23,13 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
+use pocketmine\level\Level;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
 use pocketmine\level\sound\DoorSound;
+use pocketmine\utils\RedstoneUtil;
 
-class FenceGate extends Transparent implements ElectricalAppliance{
+class FenceGate extends Transparent implements RedstoneTarget{
 
 	protected $id = self::FENCE_GATE;
 
@@ -80,6 +82,15 @@ class FenceGate extends Transparent implements ElectricalAppliance{
 		}
 	}
 
+	public function onUpdate($type){
+		if($type == Level::BLOCK_UPDATE_NORMAL){
+			$powered = $this->isReceivingPower();
+			if($this->isOpen() != $powered){
+				$this->setOpen($powered);
+			}
+		}
+	}
+
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$faces = [
 			0 => 3,
@@ -93,8 +104,24 @@ class FenceGate extends Transparent implements ElectricalAppliance{
 		return true;
 	}
 
-	public function isOpened(){
+	public function isOpen() : bool{
 		return (($this->getDamage() & 0x04) > 0);
+	}
+
+	public function setOpen(bool $open){
+		if($this->isOpen() != $open){
+			$this->meta ^= 0x04;
+			$this->getLevel()->setBlock($this, $this, false, false);
+			$this->level->addSound(new DoorSound($this));
+		}
+	}
+
+	public function toogleOpen(){
+		$this->setOpen(!$this->isOpen());
+	}
+
+	public function isReceivingPower() : bool{
+		return RedstoneUtil::isReceivingPower($this);
 	}
 
 	public function getDrops(Item $item) : array {
@@ -110,9 +137,12 @@ class FenceGate extends Transparent implements ElectricalAppliance{
 			2 => 1,
 			3 => 2,
 		];
-		if($player !== null) $this->meta = ($faces[$player instanceof Player ? $player->getDirection() : 0] & 0x03) | ((~$this->meta) & 0x04);
-		else $this->meta ^= 0x04;
-		$this->getLevel()->setBlock($this, $this, true);
+		if($player !== null){
+			$this->meta = ($faces[$player instanceof Player ? $player->getDirection() : 0] & 0x03) | ((~$this->meta) & 0x04);
+		}else{
+			$this->meta ^= 0x04;
+		}
+		$this->getLevel()->setBlock($this, $this, true, false);
 		$this->level->addSound(new DoorSound($this));
 		return true;
 	}

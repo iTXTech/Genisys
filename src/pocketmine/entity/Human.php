@@ -26,8 +26,8 @@ use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
 use pocketmine\event\player\PlayerExperienceChangeEvent;
 use pocketmine\inventory\FloatingInventory;
+use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
-use pocketmine\inventory\InventoryType;
 use pocketmine\inventory\PlayerInventory;
 use pocketmine\inventory\SimpleTransactionQueue;
 use pocketmine\item\enchantment\Enchantment;
@@ -39,7 +39,6 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ListTag;
-use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\AddPlayerPacket;
 use pocketmine\network\protocol\RemoveEntityPacket;
@@ -80,6 +79,9 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 	protected $totalXp = 0;
 	protected $xpSeed;
 	protected $xpCooldown = 0;
+
+	public function onSlotSet(Inventory $inventory, int $slot, ItemItem $item, ItemItem $before){
+	}
 
 	public function getSkinData(){
 		return $this->skin;

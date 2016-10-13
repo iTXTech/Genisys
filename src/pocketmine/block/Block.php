@@ -26,8 +26,7 @@ namespace pocketmine\block;
 
 use pocketmine\entity\Entity;
 
-
-use pocketmine\event\block\BlockBurnEvent;
+use pocketmine\event\block\BlockUpdateEvent;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\level\Level;
@@ -41,7 +40,7 @@ use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 
 
-class Block extends Position implements BlockIds, Metadatable{	
+class Block extends Position implements BlockIds, Metadatable, IndirectRedstoneSource{
 
 	/** @var \SplFixedArray */
 	public static $list = null;
@@ -415,6 +414,31 @@ class Block extends Position implements BlockIds, Metadatable{
 	 */
 	public function onUpdate($type){
 
+	}
+
+	/**
+	 * Gets the update queue of the blocks
+	 */
+	public function getUpdateQueue(){
+		return [];
+	}
+
+	/**
+	 * Updates around blocks in update queue
+	 */
+	public function updateAround(){
+		$queue = $this->getUpdateQueue();
+		if(count($queue) === 0){
+			$this->getLevel()->updateAround($this);
+		}else{
+			foreach($queue as $pos){
+				$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new BlockUpdateEvent(
+					$this->getLevel()->getBlock($this->getLevel()->blockUpdateTempVector->setComponents($this->x + $pos[0], $this->y + $pos[1], $this->z + $pos[2]))));
+				if(!$ev->isCancelled()){
+					$ev->getBlock()->onUpdate(Level::BLOCK_UPDATE_NORMAL);
+				}
+			}
+		}
 	}
 
 	/**
@@ -864,5 +888,36 @@ class Block extends Position implements BlockIds, Metadatable{
 		if($this->getLevel() instanceof Level){
 			$this->getLevel()->getBlockMetadata()->removeMetadata($this, $metadataKey, $plugin);
 		}
+	}
+
+	public function isRedstoneConductor() : bool{
+		return false;
+	}
+
+	public function getIndirectRedstonePower(Block $block, int $face, int $powerMode) : int{
+		return $this->getRedstonePower($block);
+	}
+
+	public function hasIndirectRedstonePower(Block $block, int $face, int $powerMode) : bool{
+		return $this->getIndirectRedstonePower($block, $face, $powerMode) > 0;
+	}
+
+	public function getRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : int{
+		if(!$this->isRedstoneConductor()){
+			return self::REDSTONE_POWER_MIN;
+		}
+
+		$power = 0;
+		foreach([Vector3::SIDE_NORTH, Vector3::SIDE_EAST, Vector3::SIDE_SOUTH, Vector3::SIDE_WEST, Vector3::SIDE_DOWN, Vector3::SIDE_UP] as $face){
+			$neigh = $block->getSide($face);
+			if($neigh instanceof RedstoneSource){
+				$power = max($power, $neigh->getDirectRedstonePower($neigh, Vector3::getOppositeSide($face), $powerMode));
+			}
+		}
+		return $power;
+	}
+
+	public function hasRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : bool{
+		return $this->getRedstonePower($block, $powerMode) > 0;
 	}
 }

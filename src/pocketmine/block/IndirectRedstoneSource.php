@@ -21,14 +21,20 @@
 
 namespace pocketmine\block;
 
-use pocketmine\item\Item;
-use pocketmine\Player;
-use pocketmine\level\sound\ButtonClickSound;
+interface IndirectRedstoneSource{
+	const POWER_MODE_ALL = 0;
+	const POWER_MODE_ALL_EXCEPT_WIRE = 1;
 
-class StoneButton extends WoodenButton{
-	protected $id = self::STONE_BUTTON;
+	const REDSTONE_POWER_MIN = 0;
+	const REDSTONE_POWER_MAX = 15;
 
-	public function getName() : string{
-		return "Stone Button";
-	}
+	public function getIndirectRedstonePower(Block $block, int $face, int $powerMode) : int;
+
+	public function hasIndirectRedstonePower(Block $block, int $face, int $powerMode) : bool;
+
+	public function getRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : int;
+
+	public function hasRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : bool;
+
+	public function isRedstoneConductor() : bool;
 }

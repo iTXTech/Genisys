@@ -22,6 +22,7 @@
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
+use pocketmine\math\Math;
 use pocketmine\Player;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\StringTag;
@@ -29,23 +30,14 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\tile\Tile;
 use pocketmine\tile\DLDetector;
 
-class DaylightDetector extends RedstoneSource{
+class DaylightDetector extends Solid implements RedstoneSource{
 	protected $id = self::DAYLIGHT_SENSOR;
-	//protected $hasStartedUpdate = false;
+
+	public function __construct(){
+	}
 
 	public function getName() : string{
 		return "Daylight Sensor";
-	}
-
-	public function getBoundingBox(){
-		if($this->boundingBox === null){
-			$this->boundingBox = $this->recalculateBoundingBox();
-		}
-		return $this->boundingBox;
-	}
-
-	public function canBeFlowedInto(){
-		return false;
 	}
 
 	public function canBeActivated() : bool {
@@ -55,7 +47,7 @@ class DaylightDetector extends RedstoneSource{
 	/**
 	 * @return DLDetector
 	 */
-	protected function getTile(){
+	protected function getTile() : DLDetector{
 		$t = $this->getLevel()->getTile($this);
 		if($t instanceof DLDetector){
 			return $t;
@@ -71,31 +63,61 @@ class DaylightDetector extends RedstoneSource{
 	}
 
 	public function onActivate(Item $item, Player $player = null){
-		$this->getLevel()->setBlock($this, new DaylightDetectorInverted(), true, true);
-		$this->getTile()->onUpdate();
+		$this->id = $this->id == self::DAYLIGHT_SENSOR ? self::DAYLIGHT_SENSOR_INVERTED : self::DAYLIGHT_SENSOR;
+		$this->getLevel()->setBlock($this, $this, false, true);
 		return true;
 	}
 
-	public function isActivated(Block $from = null){
-		return $this->getTile()->isActivated();
-	}
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+		parent::place($item, $block, $target, $face, $fx, $fy, $fz, $player);
 
-	public function onBreak(Item $item){
-		$this->getLevel()->setBlock($this, new Air());
-		if($this->isActivated()) $this->deactivate();
+		if($this->getTile() instanceof DLDetector){
+			return true;
+		}
+
+		return false;
 	}
 
 	public function getHardness() {
-		return 0.2;
+		return 3.0;
 	}
 
 	public function getResistance(){
 		return 1;
 	}
 
-	public function getDrops(Item $item) : array {
+	public function getDrops(Item $item) : array {//>=Wood Axe
 		return [
 			[self::DAYLIGHT_SENSOR, 0, 1]
 		];
+	}
+
+	public function getDirectRedstonePower(Block $block, int $face, int $powerMode) : int{
+		return 0;
+	}
+
+	public function hasDirectRedstonePower(Block $block, int $face, int $powerMode) : bool{
+		return false;
+	}
+
+	public function getRedstonePower(Block $block, int $powerMode = self::POWER_MODE_ALL) : int{
+		if(!$this->getLevel()->canBlockSeeSky($this)){
+			return 0;
+		}
+
+		$i = 15 - $this->getLevel()->calculateSkylightSubtracted(1);
+		$f = $this->getLevel()->getCelestialAngleRadians(1);
+
+		if($this->id == self::DAYLIGHT_SENSOR_INVERTED){
+			$i = 15 - $i;
+		}
+
+		if($i > 0 and $this->id == self::DAYLIGHT_SENSOR){
+			$f1 = ($f < pi()) ? 0 : pi() * 2;
+			$f = $f + ($f1 - $f) * 0.2;
+			$i = round($i * cos($f));
+		}
+
+		return Math::clamp($i, 0 ,15);
 	}
 }

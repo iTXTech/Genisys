@@ -21,24 +21,12 @@
 
 namespace pocketmine\tile;
 
-use pocketmine\block\Block;
-use pocketmine\entity\Entity;
 use pocketmine\inventory\DispenserInventory;
+use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
 use pocketmine\level\format\FullChunk;
-use pocketmine\level\particle\SmokeParticle;
-use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\FloatTag;
-use pocketmine\nbt\tag\ShortTag;
-use pocketmine\entity\Item as ItemEntity;
-use pocketmine\entity\Egg;
-use pocketmine\entity\ThrownExpBottle;
-use pocketmine\entity\ThrownPotion;
-use pocketmine\entity\Arrow;
-use pocketmine\entity\Snowball;
 
 
 use pocketmine\nbt\tag\CompoundTag;
@@ -51,6 +39,9 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 
 	/** @var DispenserInventory */
 	protected $inventory;
+
+	public function onSlotSet(Inventory $inventory, int $slot, Item $item, Item $before){
+	}
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
@@ -180,207 +171,6 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 		}
 
 		$this->namedtag->CustomName = new StringTag("CustomName", $str);
-	}
-
-	public function getMotion(){
-		$meta = $this->getBlock()->getDamage();
-		switch($meta){
-			case Vector3::SIDE_DOWN:
-				return [0, -1, 0];
-			case Vector3::SIDE_UP:
-				return [0, 1, 0];
-			case Vector3::SIDE_NORTH:
-				return [0, 0, -1];
-			case Vector3::SIDE_SOUTH:
-				return [0, 0, 1];
-			case Vector3::SIDE_WEST:
-				return [-1, 0, 0];
-			case Vector3::SIDE_EAST:
-				return [1, 0, 0];
-			default:
-				return [0, 0, 0];
-		}
-	}
-
-	public function activate(){
-		$itemIndex = [];
-		for($i = 0; $i < $this->getSize(); $i++){
-			$item = $this->getInventory()->getItem($i);
-			if($item->getId() != Item::AIR){
-				$itemIndex[] = [$i, $item];
-			}
-		}
-		$max = count($itemIndex) - 1;
-		if($max < 0) $itemArr = null;
-		elseif($max == 0) $itemArr = $itemIndex[0];
-		else $itemArr = $itemIndex[mt_rand(0, $max)];
-
-		if(is_array($itemArr)){
-			/** @var Item $item */
-			$item = $itemArr[1];
-			$item->setCount($item->getCount() - 1);
-			$this->getInventory()->setItem($itemArr[0], $item->getCount() > 0 ? $item : Item::get(Item::AIR));
-			$motion = $this->getMotion();
-			$needItem = Item::get($item->getId(), $item->getDamage());
-			$f = 1.5;
-			switch($needItem->getId()){
-				case Item::ARROW:
-					$nbt = new CompoundTag("", [
-						"Pos" => new ListTag("Pos", [
-							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
-							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
-							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
-						]),
-						"Motion" => new ListTag("Motion", [
-							new DoubleTag("", $motion[0]),
-							new DoubleTag("", $motion[1]),
-							new DoubleTag("", $motion[2])
-						]),
-						"Rotation" => new ListTag("Rotation", [
-							new FloatTag("", lcg_value() * 360),
-							new FloatTag("", 0)
-						]),
-						"Fire" => new ShortTag("Fire", 0)
-					]);
-
-					$arrow = Entity::createEntity("Arrow", $this->chunk, $nbt);
-
-					$arrow->setMotion($arrow->getMotion()->multiply($f));
-					$arrow->spawnToAll();
-
-					break;
-				case Item::SNOWBALL:
-					$nbt = new CompoundTag("", [
-						"Pos" => new ListTag("Pos", [
-							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
-							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
-							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
-						]),
-						"Motion" => new ListTag("Motion", [
-							new DoubleTag("", $motion[0]),
-							new DoubleTag("", $motion[1]),
-							new DoubleTag("", $motion[2])
-						]),
-						"Rotation" => new ListTag("Rotation", [
-							new FloatTag("", lcg_value() * 360),
-							new FloatTag("", 0)
-						]),
-					]);
-
-					$snowball = Entity::createEntity("Snowball", $this->chunk, $nbt);
-
-					$snowball->setMotion($snowball->getMotion()->multiply($f));
-					$snowball->spawnToAll();
-
-					break;
-				case Item::EGG:
-					$nbt = new CompoundTag("", [
-						"Pos" => new ListTag("Pos", [
-							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
-							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
-							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
-						]),
-						"Motion" => new ListTag("Motion", [
-							new DoubleTag("", $motion[0]),
-							new DoubleTag("", $motion[1]),
-							new DoubleTag("", $motion[2])
-						]),
-						"Rotation" => new ListTag("Rotation", [
-							new FloatTag("", lcg_value() * 360),
-							new FloatTag("", 0)
-						]),
-					]);
-
-					$egg = Entity::createEntity("Egg", $this->chunk, $nbt);
-
-					$egg->setMotion($egg->getMotion()->multiply($f));
-					$egg->spawnToAll();
-
-					break;
-				case Item::SPLASH_POTION:
-					$nbt = new CompoundTag("", [
-						"Pos" => new ListTag("Pos", [
-							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
-							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
-							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
-						]),
-						"Motion" => new ListTag("Motion", [
-							new DoubleTag("", $motion[0]),
-							new DoubleTag("", $motion[1]),
-							new DoubleTag("", $motion[2])
-						]),
-						"Rotation" => new ListTag("Rotation", [
-							new FloatTag("", lcg_value() * 360),
-							new FloatTag("", 0)
-						]),
-						"PotionId" => new ShortTag("PotionId", $item->getDamage()),
-					]);
-
-					$thrownPotion = Entity::createEntity("ThrownPotion", $this->chunk, $nbt);
-
-					$thrownPotion->setMotion($thrownPotion->getMotion()->multiply($f));
-					$thrownPotion->spawnToAll();
-
-					break;
-				case Item::ENCHANTING_BOTTLE:
-					$nbt = new CompoundTag("", [
-						"Pos" => new ListTag("Pos", [
-							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
-							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
-							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
-						]),
-						"Motion" => new ListTag("Motion", [
-							new DoubleTag("", $motion[0]),
-							new DoubleTag("", $motion[1]),
-							new DoubleTag("", $motion[2])
-						]),
-						"Rotation" => new ListTag("Rotation", [
-							new FloatTag("", lcg_value() * 360),
-							new FloatTag("", 0)
-						]),
-					]);
-
-					$thrownExpBottle = Entity::createEntity("ThrownExpBottle", $this->chunk, $nbt);
-
-					$thrownExpBottle->setMotion($thrownExpBottle->getMotion()->multiply($f));
-					$thrownExpBottle->spawnToAll();
-
-					break;
-				default:
-					$itemTag = NBT::putItemHelper($needItem);
-					$itemTag->setName("Item");
-
-					$nbt = new CompoundTag("", [
-						"Pos" => new ListTag("Pos", [
-							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
-							new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
-							new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
-						]),
-						"Motion" => new ListTag("Motion", [
-							new DoubleTag("", $motion[0]),
-							new DoubleTag("", $motion[1]),
-							new DoubleTag("", $motion[2])
-						]),
-						"Rotation" => new ListTag("Rotation", [
-							new FloatTag("", lcg_value() * 360),
-							new FloatTag("", 0)
-						]),
-						"Health" => new ShortTag("Health", 5),
-						"Item" => $itemTag,
-						"PickupDelay" => new ShortTag("PickupDelay", 10)
-					]);
-
-					$f = 0.3;
-					$itemEntity = new ItemEntity($this->chunk, $nbt, $this);
-					$itemEntity->setMotion($itemEntity->getMotion()->multiply($f));
-					$itemEntity->spawnToAll();
-					break;
-			}
-
-			for($i = 1; $i < 10; $i++){
-				$this->getLevel()->addParticle(new SmokeParticle($this->add($motion[0] * $i * 0.3 + 0.5, $motion[1] == 0 ? 0.5 : $motion[1] * $i * 0.3, $motion[2] * $i * 0.3 + 0.5)));
-			}
-		}
 	}
 
 	public function getSpawnCompound(){

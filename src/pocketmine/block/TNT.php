@@ -24,8 +24,6 @@ namespace pocketmine\block;
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
-use pocketmine\level\sound\TNTPrimeSound;
-use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
@@ -33,8 +31,9 @@ use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\Player;
 use pocketmine\utils\Random;
+use pocketmine\utils\RedstoneUtil;
 
-class TNT extends Solid implements ElectricalAppliance{
+class TNT extends Solid implements RedstoneTarget{
 
 	protected $id = self::TNT;
 
@@ -47,6 +46,10 @@ class TNT extends Solid implements ElectricalAppliance{
 	}
 
 	public function getHardness(){
+		return 0;
+	}
+
+	public function getResistance(){
 		return 0;
 	}
 
@@ -89,21 +92,14 @@ class TNT extends Solid implements ElectricalAppliance{
 		]), $dropItem);
 
 		$tnt->spawnToAll();
-		$this->level->addSound(new TNTPrimeSound($this));
+		$this->getLevel()->setBlock($this, new Air(), true);
 	}
 
 	public function onUpdate($type){
-		if($type == Level::BLOCK_UPDATE_SCHEDULED){
-			$sides = [0, 1, 2, 3, 4, 5];
-			foreach($sides as $side){
-				$block = $this->getSide($side);
-				if($block instanceof RedstoneSource and $block->isActivated($this)){
-					$this->prime();
-					$this->getLevel()->setBlock($this, new Air(), true);
-					break;
-				}
+		if($type == Level::BLOCK_UPDATE_NORMAL){
+			if($this->isReceivingPower()){
+				$this->prime();
 			}
-			return Level::BLOCK_UPDATE_SCHEDULED;
 		}
 		return false;
 	}
@@ -117,11 +113,14 @@ class TNT extends Solid implements ElectricalAppliance{
 	public function onActivate(Item $item, Player $player = null){
 		if($item->getId() === Item::FLINT_STEEL){
 			$this->prime($player);
-			$this->getLevel()->setBlock($this, new Air(), true);
 			$item->useOn($this);
 			return true;
 		}
 
 		return false;
+	}
+
+	public function isReceivingPower() : bool{
+		return RedstoneUtil::isReceivingPower($this);
 	}
 }

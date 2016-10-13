@@ -21,8 +21,8 @@
 
 namespace pocketmine\tile;
 
+use pocketmine\inventory\Inventory;
 use pocketmine\item\Item;
-use pocketmine\Network;
 
 interface Container{
 

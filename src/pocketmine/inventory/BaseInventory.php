@@ -25,7 +25,6 @@ use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityInventoryChangeEvent;
 use pocketmine\event\inventory\InventoryOpenEvent;
 use pocketmine\item\Item;
-use pocketmine\network\Network;
 use pocketmine\network\protocol\ContainerSetContentPacket;
 use pocketmine\network\protocol\ContainerSetSlotPacket;
 use pocketmine\Player;
@@ -45,7 +44,7 @@ abstract class BaseInventory implements Inventory{
 	protected $title;
 	/** @var Item[] */
 	protected $slots = [];
-	/** @var Player[] */
+	/** @var InventoryViewer[] */
 	protected $viewers = [];
 	/** @var InventoryHolder */
 	protected $holder;
@@ -117,6 +116,7 @@ abstract class BaseInventory implements Inventory{
 
 	/**
 	 * @param Item[] $items
+	 * @param bool   $send
 	 */
 	public function setContents(array $items, $send = true){
 		if(count($items) > $this->size){
@@ -400,6 +400,19 @@ abstract class BaseInventory implements Inventory{
 	 * @return Player[]
 	 */
 	public function getViewers(){
+		$viewers = [];
+		foreach($this->viewers as $viewer){
+			if($viewer instanceof Player){
+				$viewers[] = $viewer;
+			}
+		}
+		return $viewers;
+	}
+
+	/**
+	 * @return InventoryViewer[]
+	 */
+	public function getAllViewers(){
 		return $this->viewers;
 	}
 
@@ -425,17 +438,30 @@ abstract class BaseInventory implements Inventory{
 		$this->onClose($who);
 	}
 
+	public function addViewer(InventoryViewer $viewer){
+		$this->viewers[spl_object_hash($viewer)] = $viewer;
+	}
+
+	public function removeViewer(InventoryViewer $viewer){
+		unset($this->viewers[spl_object_hash($viewer)]);
+	}
+
 	public function onOpen(Player $who){
-		$this->viewers[spl_object_hash($who)] = $who;
+		$this->addViewer($who);
 	}
 
 	public function onClose(Player $who){
-		unset($this->viewers[spl_object_hash($who)]);
+		$this->removeViewer($who);
 	}
 
 	public function onSlotChange($index, $before, $send){
 		if($send){
 			$this->sendSlot($index, $this->getViewers());
+		}
+		if($before instanceof Item){
+			foreach($this->getAllViewers() as $viewer){
+				$viewer->onSlotSet($this, $index, $this->getItem($index), $before);
+			}
 		}
 	}
 

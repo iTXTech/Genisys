@@ -63,7 +63,6 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\Timings;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
-use pocketmine\item\enchantment\enchantment;
 use pocketmine\level\format\Chunk;
 use pocketmine\level\format\FullChunk;
 use pocketmine\level\format\generic\BaseLevelProvider;
@@ -106,7 +105,6 @@ use pocketmine\plugin\Plugin;
 
 use pocketmine\Server;
 use pocketmine\tile\Chest;
-use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
 use pocketmine\utils\LevelException;
 use pocketmine\utils\MainLogger;
@@ -287,9 +285,12 @@ class Level implements ChunkManager, Metadatable{
 	/** @var Weather */
 	private $weather;
 
-	private $blockTempData = [];
+	private $blockCachedData = [];
 
 	private $dimension = self::DIMENSION_NORMAL;
+	
+	/** @var Vector3 */
+	public $blockUpdateTempVector;
 
 	/**
 	 * This method is internal use only. Do not use this in plugins
@@ -297,11 +298,11 @@ class Level implements ChunkManager, Metadatable{
 	 * @param Vector3 $pos
 	 * @param         $data
 	 */
-	public function setBlockTempData(Vector3 $pos, $data = null){
-		if($data == null and isset($this->blockTempData[self::blockHash($pos->x, $pos->y, $pos->z)])){
-			unset($this->blockTempData[self::blockHash($pos->x, $pos->y, $pos->z)]);
+	public function setBlockCache(Vector3 $pos, $data = null){
+		if($data == null and isset($this->blockCachedData[self::blockHash($pos->x, $pos->y, $pos->z)])){
+			unset($this->blockCachedData[self::blockHash($pos->x, $pos->y, $pos->z)]);
 		}else{
-			$this->blockTempData[self::blockHash($pos->x, $pos->y, $pos->z)] = $data;
+			$this->blockCachedData[self::blockHash($pos->x, $pos->y, $pos->z)] = $data;
 		}
 	}
 
@@ -311,9 +312,9 @@ class Level implements ChunkManager, Metadatable{
 	 * @param Vector3 $pos
 	 * @return int
 	 */
-	public function getBlockTempData(Vector3 $pos){
-		if(isset($this->blockTempData[self::blockHash($pos->x, $pos->y, $pos->z)])){
-			return $this->blockTempData[self::blockHash($pos->x, $pos->y, $pos->z)];
+	public function getBlockCache(Vector3 $pos){
+		if(isset($this->blockCachedData[self::blockHash($pos->x, $pos->y, $pos->z)])){
+			return $this->blockCachedData[self::blockHash($pos->x, $pos->y, $pos->z)];
 		}
 		return 0;
 	}
@@ -416,6 +417,7 @@ class Level implements ChunkManager, Metadatable{
 		$this->timings = new LevelTimings($this);
 		$this->temporalPosition = new Position(0, 0, 0, $this);
 		$this->temporalVector = new Vector3(0, 0, 0);
+		$this->blockUpdateTempVector = new Vector3(0, 0, 0);
 		$this->tickRate = 1;
 
 		$this->weather = new Weather($this, 0);
@@ -828,7 +830,7 @@ class Level implements ChunkManager, Metadatable{
 
 		foreach($this->moveToSend as $index => $entry){
 			Level::getXZ($index, $chunkX, $chunkZ);
-			foreach($entry as $e) {
+			foreach($entry as $e){
 				$this->addChunkPacket($chunkX, $chunkZ, $e);
 			}
 		}
@@ -881,6 +883,42 @@ class Level implements ChunkManager, Metadatable{
 				}
 			}
 		}
+	}
+
+	public function calculateSkylightSubtracted($partialTicks){
+		$f = $this->getCelestialAngle($partialTicks);
+		$f1 = 1 - (cos($f * pi() * 2) * 2 + 0.5);
+		$f1 = Math::clamp($f1, 0 ,1);
+		$f1 = 1 - $f1;
+		$f1 = ($f1 * (1 - (0 * 5 / 16)));//TODO: Rain
+		$f1 = ($f1 * (1 - (0 * 5 / 16)));//TODO: Thunder
+		$f1 = 1 - $f1;
+		return ($f1 * 11);
+	}
+
+	public function getCelestialAngleRadians($partialTicks){
+		return $this->getCelestialAngle($partialTicks) * pi() * 2;
+	}
+
+	public function getCelestialAngle($partialTicks){
+		return $this->calculateCelestialAngle($this->getTime(), $partialTicks);
+	}
+
+	public function calculateCelestialAngle(int $worldTime, $partialTicks){
+		$i = $worldTime % 24000;
+		$f = ($i + $partialTicks) / 24000 - 0.25;
+
+		if($f < 0){
+			++$f;
+		}
+
+		if($f > 1){
+			--$f;
+		}
+
+		$f1 = 1 - ((cos($f * pi()) + 1) / 2);
+		$f = $f + ($f1 - $f) / 3;
+		return $f;
 	}
 
 	public function sendBlockExtraData(int $x, int $y, int $z, int $id, int $data, array $targets = null){
@@ -1540,7 +1578,7 @@ class Level implements ChunkManager, Metadatable{
 					$ev->getBlock()->onUpdate(self::BLOCK_UPDATE_NORMAL);
 				}
 
-				$this->updateAround($pos);
+				$block->updateAround();
 			}
 
 			return true;
@@ -1677,7 +1715,9 @@ class Level implements ChunkManager, Metadatable{
 						$exp = mt_rand(15, 43);
 						break;
 				}
-				if($exp > 0){$this->spawnXPOrb($vector->add(0, 1, 0), $exp);}
+				if($exp > 0){
+					$this->spawnXPOrb($vector->add(0, 1, 0), $exp);
+				}
 			}
 
 		}elseif($item !== null and !$target->isBreakable($item)){
@@ -1764,9 +1804,9 @@ class Level implements ChunkManager, Metadatable{
 	 * @param Vector3 $vector
 	 * @param Item    $item
 	 * @param int     $face
-	 * @param float   $fx     default 0.0
-	 * @param float   $fy     default 0.0
-	 * @param float   $fz     default 0.0
+	 * @param float   $fx default 0.0
+	 * @param float   $fy default 0.0
+	 * @param float   $fz default 0.0
 	 * @param Player  $player default null
 	 *
 	 * @return bool
@@ -1940,9 +1980,9 @@ class Level implements ChunkManager, Metadatable{
 
 			Tile::createTile("Sign", $this->getChunk($block->x >> 4, $block->z >> 4), $nbt);
 		}
-		if ($player != null && $player->isCreative()) {
+		if($player != null && $player->isCreative()){
 			$item->setCount($item->getCount());
-		} else {
+		}else{
 			$item->setCount($item->getCount() - 1);
 		}
 		if($item->getCount() <= 0){
@@ -1990,9 +2030,6 @@ class Level implements ChunkManager, Metadatable{
 			for($x = $minX; $x <= $maxX; ++$x){
 				for($z = $minZ; $z <= $maxZ; ++$z){
 					foreach($this->getChunkEntities($x, $z) as $ent){
-						if($ent instanceof Player and $ent->isSpectator()){
-							continue;
-						}
 						if($entity == null){
 							if($ent->boundingBox->intersectsWith($bb)){
 								$nearby[] = $ent;
@@ -2029,9 +2066,6 @@ class Level implements ChunkManager, Metadatable{
 		for($x = $minX; $x <= $maxX; ++$x){
 			for($z = $minZ; $z <= $maxZ; ++$z){
 				foreach($this->getChunkEntities($x, $z) as $ent){
-					if($ent instanceof Player and $ent->isSpectator()){
-						continue;
-					}
 					if($ent !== $entity and $ent->boundingBox->intersectsWith($bb)){
 						$nearby[] = $ent;
 					}

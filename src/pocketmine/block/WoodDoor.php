@@ -36,10 +36,6 @@ class WoodDoor extends Door{
 		return "Wood Door Block";
 	}
 
-	public function canBeActivated() : bool {
-		return true;
-	}
-
 	public function getHardness() {
 		return 3;
 	}

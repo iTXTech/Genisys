@@ -21,10 +21,20 @@
 
 namespace pocketmine\block;
 
+use pocketmine\entity\Entity;
+use pocketmine\entity\Item;
+
 class LightWeightedPressurePlate extends PressurePlate{
 	protected $id = self::LIGHT_WEIGHTED_PRESSURE_PLATE;
 
 	public function getName() : string{
 		return "Light Weighted Pressure Plate";
+	}
+
+	public function canTrigger(Entity $entity) : bool{
+		if($entity instanceof Item){
+			return false;
+		}
+		return true;
 	}
 }

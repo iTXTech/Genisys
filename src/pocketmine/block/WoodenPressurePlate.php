@@ -21,10 +21,16 @@
 
 namespace pocketmine\block;
 
+use pocketmine\entity\Entity;
+
 class WoodenPressurePlate extends PressurePlate{
 	protected $id = self::WOODEN_PRESSURE_PLATE;
 
 	public function getName() : string{
 		return "Wooden Pressure Plate";
+	}
+
+	public function canTrigger(Entity $entity) : bool{
+		return true;
 	}
 }
