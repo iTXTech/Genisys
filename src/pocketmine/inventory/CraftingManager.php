@@ -188,10 +188,10 @@ class CraftingManager{
 				"   "
 			))->setIngredient("S", Item::get(Item::STICK, 0, 2))->setIngredient("P", Item::get(Item::WOODEN_PLANK, Planks::OAK, 4)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::NETHER_BRICK_FENCE, 0, 3),
-				"PSP",
-				"PSP",
+				"PPP",
+				"PPP",
 				"   "
-			))->setIngredient("S", Item::get(Item::NETHER_BRICK, 0, 2))->setIngredient("P", Item::get(Item::NETHER_BRICKS, 0, 4)));
+			))->setIngredient("P", Item::get(Item::NETHER_BRICKS, 0, 6)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::FENCE, Planks::SPRUCE, 3),
 				"PSP",
 				"PSP",
