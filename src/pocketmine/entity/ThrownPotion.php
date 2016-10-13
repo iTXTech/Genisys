@@ -51,24 +51,26 @@ class ThrownPotion extends Projectile{
 		unset($this->dataProperties[self::DATA_SHOOTER_ID]);
 		$this->setDataProperty(self::DATA_POTION_ID, self::DATA_TYPE_SHORT, $this->getPotionId());
 	}
-	
+
 	public function getPotionId() : int{
 		return (int) $this->namedtag["PotionId"];
 	}
-	
+
 	public function kill(){
-		$color = Potion::getColor($this->getPotionId());
-		$this->getLevel()->addParticle(new SpellParticle($this, $color[0], $color[1], $color[2]));
-		$players = $this->getViewers();
-		foreach($players as $p) {
-			if($p->distance($this) <= 6){
-				foreach(Potion::getEffectsById($this->getPotionId()) as $effect){
-					$p->addEffect($effect);
+		if($this->isAlive()) {
+			$color = Potion::getColor($this->getPotionId());
+			$this->getLevel()->addParticle(new SpellParticle($this, $color[0], $color[1], $color[2]));
+			$players = $this->getViewers();
+			foreach($players as $p) {
+				if($p->distance($this) <= 6) {
+					foreach(Potion::getEffectsById($this->getPotionId()) as $effect) {
+						$p->addEffect($effect);
+					}
 				}
 			}
+
+			parent::kill();
 		}
-		
-		parent::kill();
 	}
 
 	public function onUpdate($currentTick){
@@ -86,11 +88,10 @@ class ThrownPotion extends Projectile{
 			$this->kill();
 			$this->close();
 			$hasUpdate = true;
-		}
-		
-		if($this->onGround) {
+		} elseif($this->onGround) {
 			$this->kill();
 			$this->close();
+			$hasUpdate = true;
 		}
 
 		$this->timings->stopTiming();
