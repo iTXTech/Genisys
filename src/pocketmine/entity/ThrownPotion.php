@@ -88,10 +88,6 @@ class ThrownPotion extends Projectile{
 			$this->kill();
 			$this->close();
 			$hasUpdate = true;
-		} elseif($this->onGround) {
-			$this->kill();
-			$this->close();
-			$hasUpdate = true;
 		}
 
 		$this->timings->stopTiming();
