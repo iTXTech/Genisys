@@ -1835,17 +1835,34 @@ class Server{
 
 			$this->operators = new Config($this->dataPath . "ops.txt", Config::ENUM);
 			$this->whitelist = new Config($this->dataPath . "white-list.txt", Config::ENUM);
+
 			if(file_exists($this->dataPath . "banned.txt") and !file_exists($this->dataPath . "banned-players.txt")){
 				@rename($this->dataPath . "banned.txt", $this->dataPath . "banned-players.txt");
 			}
-			@touch($this->dataPath . "banned-players.txt");
-			$this->banByName = new BanList($this->dataPath . "banned-players.txt");
+			if(file_exists($this->dataPath . "banned-players.txt") && !file_exists($this->dataPath . "banned-players.yml")){
+				if (BanList::__toYaml($this->dataPath . "banned-players.txt", $this->dataPath . "banned-players.yml")){
+					@rename($this->dataPath . "banned-players.txt", $this->dataPath . "banned-players.txt.old");
+				}
+			}
+			if(file_exists($this->dataPath . "banned-ips.txt") && !file_exists($this->dataPath . "banned-ips.yml")){
+				if (BanList::__toYaml($this->dataPath . "banned-ips.txt", $this->dataPath . "banned-ips.yml")){
+					@rename($this->dataPath . "banned-ips.txt", $this->dataPath . "banned-ips.txt.old");
+				}
+			}
+			if(file_exists($this->dataPath . "banned-cids.txt") && !file_exists($this->dataPath . "banned-cids.yml")){
+				if (BanList::__toYaml($this->dataPath . "banned-cids.txt", $this->dataPath . "banned-cids.yml")){
+					@rename($this->dataPath . "banned-cids.txt", $this->dataPath . "banned-cids.txt.old");
+				}
+			}
+
+			@touch($this->dataPath . "banned-players.yml");
+			$this->banByName = new BanList($this->dataPath . "banned-players.yml");
 			$this->banByName->load();
-			@touch($this->dataPath . "banned-ips.txt");
-			$this->banByIP = new BanList($this->dataPath . "banned-ips.txt");
+			@touch($this->dataPath . "banned-ips.yml");
+			$this->banByIP = new BanList($this->dataPath . "banned-ips.yml");
 			$this->banByIP->load();
 			@touch($this->dataPath . "banned-cids.txt");
-			$this->banByCID = new BanList($this->dataPath . "banned-cids.txt");
+			$this->banByCID = new BanList($this->dataPath . "banned-cids.yml");
 			$this->banByCID->load();
 
 			$this->maxPlayers = $this->getConfigInt("max-players", 20);
