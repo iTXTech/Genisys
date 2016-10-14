@@ -348,6 +348,7 @@ class Server{
 	public $dserverConfig = [];
 	public $dserverPlayers = 0;
 	public $dserverAllPlayers = 0;
+	public $useYamlBan = false;
 	public $redstoneEnabled = false;
 	public $allowFrequencyPulse = true;
 	public $anvilEnabled = false;
@@ -1607,6 +1608,7 @@ class Server{
 			"retryTimes" => $this->getAdvancedProperty("dserver.retry-times", 3),
 			"serverList" => explode(";", $this->getAdvancedProperty("dserver.server-list", ""))
 		];
+		$this->useYamlBan = $this->getAdvancedProperty("server.use-yaml-ban", false);
 		$this->redstoneEnabled = $this->getAdvancedProperty("redstone.enable", false);
 		$this->allowFrequencyPulse = $this->getAdvancedProperty("redstone.allow-frequency-pulse", false);
 		$this->pulseFrequency = $this->getAdvancedProperty("redstone.pulse-frequency", 20);
@@ -1835,17 +1837,41 @@ class Server{
 
 			$this->operators = new Config($this->dataPath . "ops.txt", Config::ENUM);
 			$this->whitelist = new Config($this->dataPath . "white-list.txt", Config::ENUM);
+
 			if(file_exists($this->dataPath . "banned.txt") and !file_exists($this->dataPath . "banned-players.txt")){
 				@rename($this->dataPath . "banned.txt", $this->dataPath . "banned-players.txt");
 			}
-			@touch($this->dataPath . "banned-players.txt");
-			$this->banByName = new BanList($this->dataPath . "banned-players.txt");
+
+			if($this->useYamlBan){
+				if(file_exists($this->dataPath . "banned-players.txt") && !file_exists($this->dataPath . "banned-players.yml")){
+					if (BanList::__toYaml($this->dataPath . "banned-players.txt", $this->dataPath . "banned-players.yml")){
+						@rename($this->dataPath . "banned-players.txt", $this->dataPath . "banned-players.txt.old");
+					}
+				}
+				if(file_exists($this->dataPath . "banned-ips.txt") && !file_exists($this->dataPath . "banned-ips.yml")){
+					if (BanList::__toYaml($this->dataPath . "banned-ips.txt", $this->dataPath . "banned-ips.yml")){
+						@rename($this->dataPath . "banned-ips.txt", $this->dataPath . "banned-ips.txt.old");
+					}
+				}
+				if(file_exists($this->dataPath . "banned-cids.txt") && !file_exists($this->dataPath . "banned-cids.yml")){
+					if (BanList::__toYaml($this->dataPath . "banned-cids.txt", $this->dataPath . "banned-cids.yml")){
+						@rename($this->dataPath . "banned-cids.txt", $this->dataPath . "banned-cids.txt.old");
+					}
+				}
+				$format = '.yml';
+			}else{
+				$format = '.txt';
+			}
+
+			
+			@touch($this->dataPath . "banned-players" . $format);
+			$this->banByName = new BanList($this->dataPath . "banned-players" . $format, $this->useYamlBan);
 			$this->banByName->load();
-			@touch($this->dataPath . "banned-ips.txt");
-			$this->banByIP = new BanList($this->dataPath . "banned-ips.txt");
+			@touch($this->dataPath . "banned-ips" . $format);
+			$this->banByIP = new BanList($this->dataPath . "banned-ips" . $format, $this->useYamlBan);
 			$this->banByIP->load();
 			@touch($this->dataPath . "banned-cids.txt");
-			$this->banByCID = new BanList($this->dataPath . "banned-cids.txt");
+			$this->banByCID = new BanList($this->dataPath . "banned-cids" . $format, $this->useYamlBan);
 			$this->banByCID->load();
 
 			$this->maxPlayers = $this->getConfigInt("max-players", 20);

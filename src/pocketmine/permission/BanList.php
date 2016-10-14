@@ -32,14 +32,19 @@ class BanList{
 	/** @var string */
 	private $file;
 
+	/** @var Config */
+	private $isYaml = false;
+
 	/** @var bool */
 	private $enabled = true;
 
 	/**
 	 * @param string $file
+	 * @param bool $isYaml
 	 */
-	public function __construct($file){
+	public function __construct($file, $isYaml = false){
 		$this->file = $file;
+		$this->isYaml = $isYaml;
 	}
 
 	/**
@@ -130,19 +135,33 @@ class BanList{
 
 	public function load(){
 		$this->list = [];
-		$fp = @fopen($this->file, "r");
-		if(is_resource($fp)){
-			while(($line = fgets($fp)) !== false){
-				if($line{0} !== "#"){
-					$entry = BanEntry::fromString($line);
+
+		if($this->isYaml){
+			$content = file_get_contents($this->file);
+			$data = yaml_parse($content);
+			if(is_array($data)){
+				foreach($data as $array){
+					$entry = BanEntry::fromArray($array);
 					if($entry instanceof BanEntry){
 						$this->list[$entry->getName()] = $entry;
 					}
 				}
 			}
-			fclose($fp);
 		}else{
-			MainLogger::getLogger()->error("Could not load ban list");
+			$fp = @fopen($this->file, "r");
+			if(is_resource($fp)){
+				while(($line = fgets($fp)) !== false){
+					if($line{0} !== "#"){
+						$entry = BanEntry::fromString($line);
+						if($entry instanceof BanEntry){
+							$this->list[$entry->getName()] = $entry;
+						}
+					}
+				}
+				fclose($fp);
+			}else{
+				MainLogger::getLogger()->error("Could not load ban list");
+			}
 		}
 	}
 
@@ -155,12 +174,48 @@ class BanList{
 				fwrite($fp, "# victim name | ban date | banned by | banned until | reason\n\n");
 			}
 
-			foreach($this->list as $entry){
-				fwrite($fp, $entry->getString() . "\n");
+			$toWrite = "";
+			if($this->isYaml){
+				$data = [];
+				foreach($this->list as $entry){
+					$data[] = $entry->getArray();
+				}
+				$toWrite = yaml_emit($data);
+			}else{
+				foreach($this->list as $entry){
+					$toWrite .= $entry->getString() . "\n";
+				}
 			}
+
+			fwrite($fp, $toWrite);
 			fclose($fp);
 		}else{
 			MainLogger::getLogger()->error("Could not save ban list");
+		}
+	}
+
+	public static function __toYaml($old_file, $new_file) {
+		$fp1 = @fopen($old_file, "r");
+		$fp2 = @fopen($new_file, "w");
+		if(is_resource($fp1) && is_resource($fp2)){
+			$data = [];
+			while(($line = fgets($fp1)) !== false){
+				if($line{0} !== "#"){
+					if(strlen($line) >= 2){
+						$str = explode("|", trim($line));
+						$entry = BanEntry::fromArray($str);
+						$data[] = $entry->getArray();
+					}
+				}
+			}
+			fclose($fp1);
+
+			fwrite($fp2, yaml_emit($data));
+			fclose($fp2);
+
+			return true;
+		}else{
+			return false;
 		}
 	}
 

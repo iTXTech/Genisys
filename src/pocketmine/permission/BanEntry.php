@@ -61,6 +61,10 @@ class BanEntry{
 		return $this->expirationDate;
 	}
 
+	public function getConfig(){
+		return $this->config;
+	}
+
 	/**
 	 * @param \DateTime $date
 	 */
@@ -107,18 +111,42 @@ class BanEntry{
 			return null;
 		}else{
 			$str = explode("|", trim($str));
-			$entry = new BanEntry(trim(array_shift($str)));
-			if(count($str) > 0){
-				$entry->setCreated(\DateTime::createFromFormat(self::$format, array_shift($str)));
-				if(count($str) > 0){
-					$entry->setSource(trim(array_shift($str)));
-					if(count($str) > 0){
-						$expire = trim(array_shift($str));
+			return self::fromArray($str);
+		}
+	}
+
+	public function getArray(){
+		$data = [];
+		$data[] = $this->getName();
+		$data[] = $this->getCreated()->format(self::$format);
+		$data[] = $this->getSource();
+		$data[] = $this->getExpires() === null ? "Forever" : $this->getExpires()->format(self::$format);
+		$data[] = $this->getReason();
+
+		return $data;
+	}
+
+	/**
+	 * @param array $data
+	 *
+	 * @return BanEntry
+	 */
+	public static function fromArray(array $data){
+		if(count($data) < 1){
+			return null;
+		}else{
+			$entry = new BanEntry(trim(array_shift($data)));
+			if(count($data) > 0){
+				$entry->setCreated(\DateTime::createFromFormat(self::$format, array_shift($data)));
+				if(count($data) > 0){
+					$entry->setSource(trim(array_shift($data)));
+					if(count($data) > 0){
+						$expire = trim(array_shift($data));
 						if(strtolower($expire) !== "forever" and strlen($expire) > 0){
 							$entry->setExpires(\DateTime::createFromFormat(self::$format, $expire));
 						}
-						if(count($str) > 0){
-							$entry->setReason(trim(array_shift($str)));
+						if(count($data) > 0){
+							$entry->setReason(trim(array_shift($data)));
 						}
 					}
 				}
@@ -127,4 +155,5 @@ class BanEntry{
 			return $entry;
 		}
 	}
+
 }

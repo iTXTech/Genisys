@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 21
+ version: 22
 
 level:
  #Set if weather is allowed
@@ -67,6 +67,8 @@ server:
  allow-splash-potion: true
  #Set if Advanced Command Selector is enabled
  advanced-command-selector: false
+ #Set if use YAML format for ban configs instead of default
+ use-yaml-ban: false
 
 enchantment:
  #Choose if anvils are allowed
