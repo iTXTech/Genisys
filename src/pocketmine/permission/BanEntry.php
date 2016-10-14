@@ -61,10 +61,6 @@ class BanEntry{
 		return $this->expirationDate;
 	}
 
-	public function getConfig(){
-		return $this->config;
-	}
-
 	/**
 	 * @param \DateTime $date
 	 */
