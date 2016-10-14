@@ -32,7 +32,7 @@ class BanList{
 	/** @var string */
 	private $file;
 
-	/** @var Config */
+	/** @var bool */
 	private $isYaml = false;
 
 	/** @var bool */
