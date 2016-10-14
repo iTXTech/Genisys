@@ -82,35 +82,6 @@ class BanEntry{
 		$this->reason = $reason;
 	}
 
-	public function getString(){
-		$str = "";
-		$str .= $this->getName();
-		$str .= "|";
-		$str .= $this->getCreated()->format(self::$format);
-		$str .= "|";
-		$str .= $this->getSource();
-		$str .= "|";
-		$str .= $this->getExpires() === null ? "Forever" : $this->getExpires()->format(self::$format);
-		$str .= "|";
-		$str .= $this->getReason();
-
-		return $str;
-	}
-
-	/**
-	 * @param string $str
-	 *
-	 * @return BanEntry
-	 */
-	public static function fromString($str){
-		if(strlen($str) < 2){
-			return null;
-		}else{
-			$str = explode("|", trim($str));
-			return self::fromArray($str);
-		}
-	}
-
 	public function getArray(){
 		$data = [];
 		$data[] = $this->getName();

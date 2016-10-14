@@ -33,18 +33,14 @@ class BanList{
 	private $file;
 
 	/** @var bool */
-	private $isYaml = false;
-
-	/** @var bool */
 	private $enabled = true;
 
 	/**
 	 * @param string $file
 	 * @param bool $isYaml
 	 */
-	public function __construct($file, $isYaml = false){
+	public function __construct($file){
 		$this->file = $file;
-		$this->isYaml = $isYaml;
 	}
 
 	/**
@@ -135,32 +131,14 @@ class BanList{
 
 	public function load(){
 		$this->list = [];
-
-		if($this->isYaml){
-			$content = file_get_contents($this->file);
-			$data = yaml_parse($content);
-			if(is_array($data)){
-				foreach($data as $array){
-					$entry = BanEntry::fromArray($array);
-					if($entry instanceof BanEntry){
-						$this->list[$entry->getName()] = $entry;
-					}
+		$content = file_get_contents($this->file);
+		$data = yaml_parse($content);
+		if(is_array($data)){
+			foreach($data as $array){
+				$entry = BanEntry::fromArray($array);
+				if($entry instanceof BanEntry){
+					$this->list[$entry->getName()] = $entry;
 				}
-			}
-		}else{
-			$fp = @fopen($this->file, "r");
-			if(is_resource($fp)){
-				while(($line = fgets($fp)) !== false){
-					if($line{0} !== "#"){
-						$entry = BanEntry::fromString($line);
-						if($entry instanceof BanEntry){
-							$this->list[$entry->getName()] = $entry;
-						}
-					}
-				}
-				fclose($fp);
-			}else{
-				MainLogger::getLogger()->error("Could not load ban list");
 			}
 		}
 	}
@@ -174,20 +152,12 @@ class BanList{
 				fwrite($fp, "# victim name | ban date | banned by | banned until | reason\n\n");
 			}
 
-			$toWrite = "";
-			if($this->isYaml){
-				$data = [];
-				foreach($this->list as $entry){
-					$data[] = $entry->getArray();
-				}
-				$toWrite = yaml_emit($data);
-			}else{
-				foreach($this->list as $entry){
-					$toWrite .= $entry->getString() . "\n";
-				}
+			$data = [];
+			foreach($this->list as $entry){
+				$data[] = $entry->getArray();
 			}
 
-			fwrite($fp, $toWrite);
+			fwrite($fp, yaml_emit($data));
 			fclose($fp);
 		}else{
 			MainLogger::getLogger()->error("Could not save ban list");
