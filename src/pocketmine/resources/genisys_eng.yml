@@ -68,7 +68,7 @@ server:
  #Set if Advanced Command Selector is enabled
  advanced-command-selector: false
  #Set if use YAML format for ban configs instead of default
- use-yaml-ban: false
+ use-yaml-ban: true
 
 enchantment:
  #Choose if anvils are allowed
