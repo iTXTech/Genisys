@@ -3,7 +3,6 @@ Genisys
 
 __Feature-rich server software for Minecraft: Pocket Edition & Windows 10 Edition Beta__
 
-[![PayPal donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.me/PeratX)
 [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
 [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
 [![Jenkins](https://img.shields.io/jenkins/s/https/ci.itxtech.org/Genisys.svg)](https://ci.itxtech.org/job/Genisys/lastSuccessfulBuild/)
