@@ -423,9 +423,9 @@ class CraftingManager{
 			))->setIngredient("I", Item::get(Item::IRON_INGOT, 0, 5)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BOOK, 0, 1),
 				"   ",
-				"PP ",
-				"PL "
-			))->setIngredient("P", Item::get(Item::PAPER, 0, 3))->setIngredient("L", Item::get(Item::LEATHER, null, 1)));
+				"PPL",
+				"PLL"
+			))->setIngredient("P", Item::get(Item::PAPER, 0, 3))->setIngredient("L", Item::get(Item::LEATHER, null, 3)));
 			$this->registerRecipe((new BigShapedRecipe(Item::get(Item::BOOKSHELF, 0, 1),
 				"PPP",
 				"BBB",
