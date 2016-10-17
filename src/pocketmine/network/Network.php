@@ -222,13 +222,18 @@ class Network {
 		return $this->server;
 	}
 
-	public function processBatch(BatchPacket $packet, Player $p) {
-		$str = zlib_decode($packet->payload, 1024 * 1024 * 64); //Max 64MB
+	public function processBatch(BatchPacket $packet, Player $p){
 		try{
+			if(strlen($packet->payload) === 0){
+				//prevent zlib_decode errors for incorrectly-decoded packets
+				throw new \InvalidArgumentException("BatchPacket payload is empty or packet decode error");
+			}
+
+			$str = zlib_decode($packet->payload, 1024 * 1024 * 64); //Max 64MB
 			$len = strlen($str);
 
 			if($len === 0){
-				throw new \InvalidStateException("Empty or invalid BatchPacket received");
+				throw new \InvalidStateException("Decoded BatchPacket payload is empty");
 			}
 
 			$stream = new BinaryStream($str);
@@ -247,10 +252,10 @@ class Network {
 					$p->handleDataPacket($pk);
 				}
 			}
-		} catch (\Throwable $e) {
-			if (\pocketmine\DEBUG > 1) {
+		}catch(\Throwable $e){
+			if(\pocketmine\DEBUG > 1){
 				$logger = $this->server->getLogger();
-				if ($logger instanceof MainLogger) {
+				if($logger instanceof MainLogger){
 					$logger->debug("BatchPacket " . " 0x" . bin2hex($packet->payload));
 					$logger->logException($e);
 				}
