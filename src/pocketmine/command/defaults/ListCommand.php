@@ -54,7 +54,7 @@ class ListCommand extends VanillaCommand{
 		}
 		
 		$sender->sendMessage(new TranslationContainer("commands.players.list", [$onlineCount, $sender->getServer()->getMaxPlayers()]));
-		if(($sender instanceof ConsoleCommandSender) and ($onlineCount === 0){
+		if(($sender instanceof ConsoleCommandSender) and ($onlineCount === 0)){
 			return false;
 		}
 		$sender->sendMessage(substr($online, 0, -2));
