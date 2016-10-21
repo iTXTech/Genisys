@@ -125,7 +125,6 @@ abstract class Entity extends Location implements Metadatable{
 	const DATA_SILENT = 4;
 	const DATA_POTION_COLOR = 7;
 	const DATA_POTION_AMBIENT = 8;
-	const DATA_NO_AI = 15;
 	*/
 
 
@@ -138,6 +137,9 @@ abstract class Entity extends Location implements Metadatable{
 	
 	const DATA_FLAG_CAN_SHOW_NAMETAG = 14;
 	const DATA_FLAG_ALWAYS_SHOW_NAMETAG = 15;
+	const DATA_FLAG_IMMOBILE = 16;
+
+	const DATA_FLAG_NOT_UNDERWATER = 30; //Hide bubbles if not underwater
 
 	const SOUTH = 0;
 	const WEST = 1;
@@ -165,9 +167,7 @@ abstract class Entity extends Location implements Metadatable{
 		self::DATA_AIR => [self::DATA_TYPE_SHORT, 400],
 		self::DATA_MAX_AIR => [self::DATA_TYPE_SHORT, 400],
 		self::DATA_NAMETAG => [self::DATA_TYPE_STRING, ""],
-		//self::DATA_SHOW_NAMETAG => [self::DATA_TYPE_BYTE, 1],
 		//self::DATA_SILENT => [self::DATA_TYPE_BYTE, 0],
-		//self::DATA_NO_AI => [self::DATA_TYPE_BYTE, 0],
 		self::DATA_LEAD_HOLDER_EID => [self::DATA_TYPE_LONG, -1],
 		self::DATA_SCALE => [self::DATA_TYPE_FLOAT, 1],
 	];
@@ -371,8 +371,16 @@ abstract class Entity extends Location implements Metadatable{
 	 * @return bool
 	 */
 	public function isNameTagVisible(){
-		return $this->getDataProperty(self::DATA_SHOW_NAMETAG) > 0;
+		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_CAN_SHOW_NAMETAG);
 	}
+
+	/**
+	 * @return bool
+	 */
+	public function isNameTagAlwaysVisible(){
+		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ALWAYS_SHOW_NAMETAG);
+	}
+
 
 	/**
 	 * @param string $name
@@ -385,7 +393,14 @@ abstract class Entity extends Location implements Metadatable{
 	 * @param bool $value
 	 */
 	public function setNameTagVisible($value = true){
-		$this->setDataProperty(self::DATA_SHOW_NAMETAG, self::DATA_TYPE_BYTE, $value ? 1 : 0);
+		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_CAN_SHOW_NAMETAG, $value);
+	}
+
+	/**
+	 * @param bool $value
+	 */
+	public function setNameTagAlwaysVisible($value = true){
+		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ALWAYS_SHOW_NAMETAG, $value);
 	}
 
 	public function isSneaking(){
@@ -406,6 +421,14 @@ abstract class Entity extends Location implements Metadatable{
 			$attr = $this->attributeMap->getAttribute(Attribute::MOVEMENT_SPEED);
 			$attr->setValue($value ? ($attr->getValue() * 1.3) : ($attr->getValue() / 1.3));
 		}
+	}
+
+	public function isImmobile() : bool{
+		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_IMMOBILE);
+	}
+
+	public function setImmobile($value = true) : bool{
+		return $this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_IMMOBILE, $value);
 	}
 
 	/**
@@ -670,14 +693,23 @@ abstract class Entity extends Location implements Metadatable{
 	 * @param array           $data Properly formatted entity data, defaults to everything
 	 */
 	public function sendData($player, array $data = null){
+		if(!is_array($player)){
+			$player = [$player];
+		}
+
 		$pk = new SetEntityDataPacket();
-		$pk->eid = ($player === $this ? 0 : $this->getId());
+		$pk->eid = $this->getId();
 		$pk->metadata = $data === null ? $this->dataProperties : $data;
 
-		if(!is_array($player)){
-			$player->dataPacket($pk);
-		}else{
-			Server::broadcastPacket($player, $pk);
+		foreach($player as $p){
+			if($p === $this){
+				continue;
+			}
+			$p->dataPacket(clone $pk);
+		}
+		if($this instanceof Player){
+			$pk->eid = 0;
+			$this->dataPacket($pk);
 		}
 	}
 
