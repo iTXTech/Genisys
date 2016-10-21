@@ -26,6 +26,7 @@
 namespace pocketmine\utils;
 
 use pocketmine\entity\Entity;
+use pocketmine\item\Item;
 
 class Binary{
 	const BIG_ENDIAN = 0x00;
