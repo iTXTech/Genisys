@@ -2,37 +2,37 @@
 
 #Version of this file
 config:
- version: 21
+ version: 22
 
 level:
- #Set if weather is allowed
+ #Set if weather is enabled (rain may cause lag to older devices)
  weather: true
  #Weather random duration
  weather-random-duration-min: 6000
  weather-random-duration-max: 12000
  #Random lightning interval，default as 10s, 0 = disable
  lightning-time: 200
- #Set if enable lightning with fire
+ #Set if lightning strikes have fire afterwards
  lightning-fire: false
- #Set if fire should spread
+ #Set if fire should spread (trees, etc.)
  fire-spread: false
 
 player:
- #Set if hunger is allowed
+ #Set if hunger is enabled
  hunger: true
- #Choose if experience is allowed
+ #Choose if experience is enabled
  experience: true
- #Choose if to keep a player's inventory when they die
+ #Choose if to keep a player's inventory after they die
  keep-inventory: false
- #Clear the inventory upon gamemode change
+ #Clear the inventory of a player upon them changing their gamemode
  auto-clear-inventory : true
- #Choose if to keep a player's experience when they die
+ #Choose if to keep a player's experience after they die
  keep-experience: false
  #If players crash when joining, change this to less than 10. disable=-1
  chunk-radius: -1
 
 nether:
- #Choose if the nether's allowed. The level of nether will generate automatically
+ #Choose if the nether is allowed. The level of nether will generate automatically
  allow-nether: true
  #The name of nether's level
  level-name: "nether"
@@ -46,20 +46,20 @@ server:
  disable-log: false
  #Choose if to enable anti-fly
  anti-fly: true
- #Choose if async chunks request is allowed
+ #Choose if async chunks request is enabled
  async-chunk-request: true
- #Choose how to remind players when someone joins
+ #Choose how to remind players when someone joins the game
  #0 = Message, 1 = Tip, 2 = Popup
  player-msg-type: 0
  login-msg: "§3@player joined the game"
  logout-msg: "§3@player left the game"
- #Choose if to read recipes from json
+ #Choose if to read recipes from json file
  recipes-from-json: false
- #Choose if to read creative items from json
+ #Choose if to read creative items from json file
  creative-items-from-json: false
- #Choose if movement check is enabled (no more pull back)
+ #Choose if movement check is enabled (no more pull backs when moving fast)
  check-movement: true
- #Set if limited creative is enabled (cannot drop items, cannot open chests and so on)
+ #Set if limited creative is enabled (cannot drop items from hotbar, cannot open chests, and so on)
  limited-creative: true
  #Set if add DestroyBlockParticle
  destroy-block-particle: true
@@ -69,22 +69,22 @@ server:
  advanced-command-selector: false
 
 enchantment:
- #Choose if anvils are allowed
+ #Choose if anvils are enabled
  enable-anvil: true
- #Choose if enchantment tables are allowed
+ #Choose if enchantment tables are enabled
  enable-enchanting-table: true
  #Choose if to count bookshelves (may cause server lag)
  #If this option is false, the server will use a random count (0~15)
  count-bookshelf: false
 
 redstone:
- ##########################################
- ###Choose if redstone system is allowed###
- ##########################################
- #If not true then the redstone won't work#
- ##########################################
+ ################################################
+ ####Choose if the redstone system is enabled####
+ ################################################
+ #If it is false, the redstone system won't work#
+ ################################################
  enable: false
- #Choose if frequency pulses are allowed
+ #Choose if frequency pulses are enabled
  frequency-pulse: false
  #Set the frequency of pulse. Default = 1s
  pulse-frequency: 1
@@ -123,11 +123,11 @@ dserver:
  query-players: false
  #Update Frequency. 20=1s
  time: 40
- #Auto-retry times when failed
+ #Auto-retry # of times when server fails
  retry-times: 3
  #the server list，Separate by ';'，e.g. 1.example.com:19132;2.example.com:19133
  server-list: ""
 
 inventory:
- #Set this to true if you have problems with anvils. Will process inventory transactions in a vanilla fashion with no anti-cheats or verification.
+ #Set this to true if you have problems with anvils. This will process inventory transactions in a vanilla fashion with no anti-cheats or verification.
  allow-cheats: false
