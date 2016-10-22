@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 22
+ version: 21
 
 level:
  #Set if weather is enabled (rain may cause lag to older devices)
