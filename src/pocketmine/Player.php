@@ -2443,11 +2443,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 					$this->level->sendBlocks([$this], [$target, $block], UpdateBlockPacket::FLAG_ALL_PRIORITY);
 					break;
-				}elseif($packet->face === 0xff){
-					if($this->isSpectator()){
-						break;
-					}
-
+				}elseif($packet->face === -1){
 					$aimPos = (new Vector3($packet->x / 32768, $packet->y / 32768, $packet->z / 32768))->normalize();
 
 					if($this->isCreative()){
