@@ -630,6 +630,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		$this->recalculatePermissions();
+		$this->sendSettings();
 		$this->sendCommandData();
 	}
 
