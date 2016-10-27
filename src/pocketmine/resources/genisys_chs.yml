@@ -165,5 +165,5 @@ ai:
  mobgenerate: false
  
 inventory:
- #Set this to true if you have problems with anvils. Will process inventory transactions in a vanilla fashion with no anti-cheats or verification.
+ #如果你有关于铁砧的问题，设置它为true.将会以一个普通的方式处理背包交易没有反作弊和证实
  allow-cheats: false
