@@ -223,7 +223,7 @@ class Player extends PMPlayer{
 
 			$pk = new SetEntityDataPacket();
 			$pk->eid = 0;
-			$pk->metadata = [self::DATA_LEAD_HOLDER => [self::DATA_TYPE_LONG, -1]];
+			$pk->metadata = [self::DATA_LEAD_HOLDER_EID => [self::DATA_TYPE_LONG, -1]];
 			$this->dataPacket($pk);
 
 			$this->forceMovement = $this->teleportPosition = $this->getPosition();
