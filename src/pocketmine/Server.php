@@ -358,7 +358,6 @@ class Server{
 	public $antiFly = false;
 	public $asyncChunkRequest = true;
 	public $recipesFromJson = false;
-	public $creativeItemsFromJson = false;
 	public $checkMovement = false;
 	public $keepExperience = false;
 	public $limitedCreative = true;
@@ -1614,7 +1613,6 @@ class Server{
 		$this->antiFly = $this->getAdvancedProperty("server.anti-fly", true);
 		$this->asyncChunkRequest = $this->getAdvancedProperty("server.async-chunk-request", true);
 		$this->recipesFromJson = $this->getAdvancedProperty("server.recipes-from-json", false);
-		$this->creativeItemsFromJson = $this->getAdvancedProperty("server.creative-items-from-json", false);
 		$this->checkMovement = $this->getAdvancedProperty("server.check-movement", true);
 		$this->limitedCreative = $this->getAdvancedProperty("server.limited-creative", true);
 		$this->chunkRadius = $this->getAdvancedProperty("player.chunk-radius", -1);
@@ -1886,7 +1884,7 @@ class Server{
 			InventoryType::init();
 			Block::init();
 			Enchantment::init();
-			Item::init($this->creativeItemsFromJson);
+			Item::init();
 			Biome::init();
 			Effect::init();
 			Attribute::init();

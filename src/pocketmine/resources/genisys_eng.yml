@@ -55,8 +55,6 @@ server:
  logout-msg: "§3@player left the game"
  #Choose if to read recipes from json
  recipes-from-json: false
- #Choose if to read creative items from json
- creative-items-from-json: false
  #Choose if movement check is enabled (no more pull back)
  check-movement: true
  #Set if limited creative is enabled (cannot drop items, cannot open chests and so on)

@@ -37,7 +37,6 @@ use pocketmine\entity\Skeleton;
 use pocketmine\entity\Spider;
 use pocketmine\entity\Witch;
 use pocketmine\entity\Zombie;
-use pocketmine\inventory\CreativeItems;
 use pocketmine\inventory\Fuel;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\level\Level;
@@ -256,31 +255,21 @@ class Item implements ItemIds{
 
 	private static $creative = [];
 
-	private static function initCreativeItems($readFromJson = false){
+	private static function initCreativeItems(){
 		self::clearCreativeItems();
-		if(!$readFromJson){
-			foreach(CreativeItems::ITEMS as $category){
-				foreach($category as $itemData){
-					if(!isset($itemData["meta"])){
-						$itemData["meta"] = 0;
-					}
-					$item = Item::get($itemData["id"], @$itemData["meta"]);
-					if(isset($itemData["ench"])){
-						//Support multiple enchantments. Unnecessary really but nice to have.
-						foreach($itemData["ench"] as $ench){
-							$item->addEnchantment(Enchantment::getEnchantment($ench["id"])->setLevel($ench["lvl"]));
-						}
-					}
-					self::addCreativeItem($item);
-				}
+
+		$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems.json", Config::JSON, []);
+
+		foreach($creativeItems->getAll() as $data){
+			$item = Item::get($data["id"], $data["damage"]);
+			if($item->getName() === "Unknown"){
+				continue;
 			}
-		}else{
-			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems.json", Config::JSON, []);
-			foreach($creativeItems->getAll() as $item){
-				self::addCreativeItem(Item::get($item["ID"], $item["Damage"]));
+			if(isset($data["nbt"])){
+				$item->setNamedTag(NBT::parseJson(json_encode($data["nbt"])));
 			}
+			self::addCreativeItem($item);
 		}
-		
 	}
 
 	public static function clearCreativeItems(){
@@ -292,8 +281,7 @@ class Item implements ItemIds{
 	}
 	
 	public static function addCreativeItem(Item $item){
-		//Doing it this way allows adding enchanted items to inventory, like enchanted books
-		Item::$creative[] = $item;
+		Item::$creative[] = clone $item;
 	}
 
 	public static function removeCreativeItem(Item $item){

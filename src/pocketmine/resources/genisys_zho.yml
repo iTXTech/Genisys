@@ -54,8 +54,6 @@ server:
  logout-msg: "§3@player 離開了遊戲"
  #是否從recipes.json讀取合成公式
  recipes-from-json: false
- #是否從creativeitems.json讀取創造物品
- creative-items-from-json: false
  #是否進行移動檢測(不再拉回了)
  check-movement: true
  #是否限制創造某些功能(禁止丟物品, 禁止操作箱子等等)
