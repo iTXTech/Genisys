@@ -22,12 +22,10 @@
 namespace pocketmine\level;
 
 use pocketmine\math\Vector3;
+use pocketmine\Server;
 use pocketmine\utils\LevelException;
 
-class Position extends Vector3{
-
-	/** @var Level */
-	public $level = null;
+class WeakPosition extends Position{
 
 	/**
 	 * @param int   $x
@@ -39,40 +37,23 @@ class Position extends Vector3{
 		$this->x = $x;
 		$this->y = $y;
 		$this->z = $z;
-		$this->level = $level;
+		$this->levelId = ($level !== null ? $level->getId() : -1);
 	}
 
 	public static function fromObject(Vector3 $pos, Level $level = null){
-		return new Position($pos->x, $pos->y, $pos->z, $level);
-	}
-	
-	public function add($x, $y = 0, $z = 0){
-		if($x instanceof Vector3){
-			return new Position($this->x + $x->x, $this->y + $x->y, $this->z + $x->z, $this->level);
-		}else{
-			return new Position($this->x + $x, $this->y + $y, $this->z + $z, $this->level);
-		}
+		return new WeakPosition($pos->x, $pos->y, $pos->z, $level);
 	}
 
 	/**
 	 * @return Level
 	 */
 	public function getLevel(){
-		return $this->level;
+		return Server::getInstance()->getLevel($this->levelId);
 	}
 
 	public function setLevel(Level $level){
-		$this->level = $level;
+		$this->levelId = ($level !== null ? $level->getId() : -1);
 		return $this;
-	}
-
-	/**
-	 * Checks if this object has a valid reference to a Level
-	 *
-	 * @return bool
-	 */
-	public function isValid(){
-		return $this->getLevel() !== null;
 	}
 
 	/**
@@ -81,42 +62,17 @@ class Position extends Vector3{
 	 * @param int $side
 	 * @param int $step
 	 *
-	 * @return Position
+	 * @return WeakPosition
 	 *
 	 * @throws LevelException
 	 */
 	public function getSide($side, $step = 1){
-		if(!$this->isValid()){
-			throw new LevelException("Undefined Level reference");
-		}
+		assert($this->isValid());
 
-		return Position::fromObject(parent::getSide($side, $step), $this->level);
+		return WeakPosition::fromObject(parent::getSide($side, $step), $this->level);
 	}
 
 	public function __toString(){
-		return "Position(level=" . ($this->isValid() ? $this->getLevel()->getName() : "null") . ",x=" . $this->x . ",y=" . $this->y . ",z=" . $this->z . ")";
+		return "Weak" . parent::__toString();
 	}
-
-	/**
-	 * @param $x
-	 * @param $y
-	 * @param $z
-	 *
-	 * @return Position
-	 */
-	public function setComponents($x, $y, $z){
-		$this->x = $x;
-		$this->y = $y;
-		$this->z = $z;
-		return $this;
-	}
-
-	public function fromObjectAdd(Vector3 $pos, $x, $y, $z){
-		if($pos instanceof Position){
-			$this->level = $pos->level;
-		}
-		parent::fromObjectAdd($pos, $x, $y, $z);
-		return $this;
-	}
-
 }
