@@ -34,8 +34,6 @@ use pocketmine\nbt\tag\CompoundTag;
 class Boat extends Vehicle{
 	const NETWORK_ID = 90;
 
-	const DATA_WOOD_ID = 20;
-
 	public $height = 0.7;
 	public $width = 1.6;
 
@@ -47,7 +45,7 @@ class Boat extends Vehicle{
 			$nbt->WoodID = new IntTag("WoodID", 0);
 		}
 		parent::__construct($chunk, $nbt);
-		$this->setDataProperty(self::DATA_WOOD_ID, self::DATA_TYPE_BYTE, $this->getWoodID());
+		$this->setDataProperty(self::DATA_VARIANT, self::DATA_TYPE_INT, $this->getWoodID());
 	}
 
 	public function getWoodID() : int{
