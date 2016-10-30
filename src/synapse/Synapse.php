@@ -74,7 +74,7 @@ class Synapse{
 		$this->serverIp = $config["server-ip"];
 		$this->port = $config["server-port"];
 		$this->isMainServer = $config["isMainServer"];
-		$this->password = $config["password"];
+		$this->password = $config["server-password"];
 		$this->description = $config["description"];
 		$this->logger = $server->getLogger();
 		$this->interface = new SynapseInterface($this, $this->serverIp, $this->port);
