@@ -32,7 +32,6 @@ interface Info{
 	 */
 
 	const CURRENT_PROTOCOL = 91;
-	const ACCEPTED_PROTOCOLS = [91];
 
 	const LOGIN_PACKET = 0x01;
 	const PLAY_STATUS_PACKET = 0x02;
