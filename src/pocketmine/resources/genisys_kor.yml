@@ -2,7 +2,7 @@
 
 #Version 파일의 버전
 config:
- version: 21
+ version: 22
 
 level:
  #날씨 시스템을 켜는 경우 설정하세요
@@ -86,19 +86,6 @@ redstone:
  frequency-pulse: false
  #펄스 주파수 설정, 기본: 1초
  pulse-frequency: 1
-
-synapse:
- #Synapse API나 Synapse 서버 연결을 사용하고 싶으신 경우, 이 설정을 활성화 하세요.
- enabled: false
- server-ip: 127.0.0.1
- server-port: 10305
- #이 클라이언트가 로비 또는 메인 서버인 경우
- is-main-server: true
- server-password: 32bitlongkey
- #이 클라이언트의 설명은 이 클라이언트의 식별자입니다
- description: "A Synapse client"
- #RakLib 비활성화는 플레이어가 Synapse를 사용해서만 참여할 수 있음을 의미합니다
- disable-rak: false
 
 dserver:
  #모든 멀티 (다중) 서버의 수 통합
