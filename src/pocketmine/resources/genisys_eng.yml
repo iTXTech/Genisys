@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 21
+ version: 22
 
 level:
  #Set if weather is allowed
@@ -86,19 +86,6 @@ redstone:
  frequency-pulse: false
  #Set the frequency of pulse. Default = 1s
  pulse-frequency: 1
-
-synapse:
- #If you want to use Synapse API or connect to a synapse server, enable this
- enabled: false
- server-ip: 127.0.0.1
- server-port: 10305
- #If this client is the lobby or the main server
- is-main-server: true
- server-password: 32bitlongkey
- #Description of this client is the identifier of this client
- description: "A Synapse client"
- #Disable RakLib means that players can only join via Synapse
- disable-rak: false
 
 dserver:
  #The count of all multi-server unified
