@@ -1625,8 +1625,7 @@ class Server{
 	 * @return bool
 	 */
 	public function isSynapseEnabled() : bool {
-		// TODO: Get this from SynapsePM plugin
-		return false;
+		return $this->getSynapse() !== null;
 	}
 
 	/**
@@ -1997,8 +1996,11 @@ class Server{
 	 * @return Synapse|null
 	 */
 	public function getSynapse(){
-		// TODO: Get this from SynapsePM plugin
-		return null;
+		$plugin = $this->pluginManager->getPlugin('SynapsePM');
+		if ($plugin === null or $plugin->isDisabled()) {
+			return null;
+		}
+		return $plugin->getSynapse();
 	}
 
 	/**
