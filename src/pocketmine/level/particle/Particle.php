@@ -31,7 +31,7 @@ abstract class Particle extends Vector3{
 	const TYPE_SMOKE = 3;
 	const TYPE_EXPLODE = 4;
 	const TYPE_WHITE_SMOKE = 5;
-	const TYPE_FLAME = 6;
+	const TYPE_FLAME = 7;
 	const TYPE_LAVA = 7;
 	const TYPE_LARGE_SMOKE = 8;
 	const TYPE_REDSTONE = 9;
