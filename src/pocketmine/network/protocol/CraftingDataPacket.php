@@ -106,7 +106,9 @@ class CraftingDataPacket extends DataPacket{
 	}
 
 	private static function writeEnchantList(EnchantmentList $list, BinaryStream $stream){
-		//TODO: check this works on 0.16 (cannot currently test)
+		//TODO: new recipe type 4 (not enchanting recipe anymore)
+		return -1;
+		/*
 		$stream->putByte($list->getSize());
 		for($i = 0; $i < $list->getSize(); ++$i){
 			$entry = $list->getSlot($i);
@@ -120,6 +122,7 @@ class CraftingDataPacket extends DataPacket{
 		}
 
 		return CraftingDataPacket::ENTRY_ENCHANT_LIST;
+		*/
 	}
 
 	public function addShapelessRecipe(ShapelessRecipe $recipe){
