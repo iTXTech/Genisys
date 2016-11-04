@@ -174,6 +174,7 @@ abstract class Living extends Entity implements Damageable{
 
 	public function entityBaseTick($tickDiff = 1, $EnchantL = 0){
 		Timings::$timerLivingEntityBaseTick->startTiming();
+		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_BREATHING, !$this->isInsideOfWater());
 
 		$hasUpdate = parent::entityBaseTick($tickDiff);
 
@@ -186,7 +187,7 @@ abstract class Living extends Entity implements Damageable{
 
 			if(!$this->hasEffect(Effect::WATER_BREATHING) and $this->isInsideOfWater()){
 				if($this instanceof WaterAnimal){
-					$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, 1200);
+					$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, 400);
 				}else{
 					$hasUpdate = true;
 					$airTicks = $this->getDataProperty(self::DATA_AIR) - $tickDiff * (4 - $EnchantL);
@@ -210,7 +211,7 @@ abstract class Living extends Entity implements Damageable{
 					}
 					$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, $airTicks);
 				}else{
-					$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, 1200);
+					$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, 400);
 				}
 			}
 		}

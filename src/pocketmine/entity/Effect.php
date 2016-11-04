@@ -331,7 +331,7 @@ class Effect{
 
 		if($this->id === Effect::INVISIBILITY){
 			$entity->setDataFlag(Entity::DATA_FLAGS, Entity::DATA_FLAG_INVISIBLE, true);
-			$entity->setDataProperty(Entity::DATA_SHOW_NAMETAG, Entity::DATA_TYPE_BYTE, 0);
+			$entity->setNameTagVisible(false);
 		}
 	}
 
@@ -355,7 +355,7 @@ class Effect{
 
 		if($this->id === Effect::INVISIBILITY){
 			$entity->setDataFlag(Entity::DATA_FLAGS, Entity::DATA_FLAG_INVISIBLE, false);
-			$entity->setDataProperty(Entity::DATA_SHOW_NAMETAG, Entity::DATA_TYPE_BYTE, 1);
+			$entity->setNameTagVisible(true);
 		}
 	}
 }

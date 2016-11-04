@@ -142,7 +142,7 @@ class XPOrb extends Entity{
 	}
 
 	public function spawnTo(Player $player){
-		$this->setDataProperty(self::DATA_NO_AI, self::DATA_TYPE_BYTE, 1);
+		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_NO_AI, true);
 		$pk = new AddEntityPacket();
 		$pk->type = XPOrb::NETWORK_ID;
 		$pk->eid = $this->getId();

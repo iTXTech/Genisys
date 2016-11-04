@@ -358,7 +358,6 @@ class Server{
 	public $antiFly = false;
 	public $asyncChunkRequest = true;
 	public $recipesFromJson = false;
-	public $creativeItemsFromJson = false;
 	public $checkMovement = false;
 	public $keepExperience = false;
 	public $limitedCreative = true;
@@ -1614,7 +1613,6 @@ class Server{
 		$this->antiFly = $this->getAdvancedProperty("server.anti-fly", true);
 		$this->asyncChunkRequest = $this->getAdvancedProperty("server.async-chunk-request", true);
 		$this->recipesFromJson = $this->getAdvancedProperty("server.recipes-from-json", false);
-		$this->creativeItemsFromJson = $this->getAdvancedProperty("server.creative-items-from-json", false);
 		$this->checkMovement = $this->getAdvancedProperty("server.check-movement", true);
 		$this->limitedCreative = $this->getAdvancedProperty("server.limited-creative", true);
 		$this->chunkRadius = $this->getAdvancedProperty("player.chunk-radius", -1);
@@ -1886,7 +1884,7 @@ class Server{
 			InventoryType::init();
 			Block::init();
 			Enchantment::init();
-			Item::init($this->creativeItemsFromJson);
+			Item::init();
 			Biome::init();
 			Effect::init();
 			Attribute::init();
@@ -2155,9 +2153,9 @@ class Server{
 				if(!$p->isEncoded){
 					$p->encode();
 				}
-				$str .= Binary::writeInt(strlen($p->buffer)) . $p->buffer;
+				$str .= Binary::writeUnsignedVarInt(strlen($p->buffer)) . $p->buffer;
 			}else{
-				$str .= Binary::writeInt(strlen($p)) . $p;
+				$str .= Binary::writeUnsignedVarInt(strlen($p)) . $p;
 			}
 		}
 
@@ -2246,7 +2244,7 @@ class Server{
 		}
 
 
-		$sender->sendMessage(new TranslationContainer(TextFormat::RED . "%commands.generic.notFound"));
+		$sender->sendMessage(new TranslationContainer(TextFormat::GOLD . "%commands.generic.notFound"));
 
 		return false;
 	}
@@ -2598,6 +2596,9 @@ class Server{
 		$pk = new PlayerListPacket();
 		$pk->type = PlayerListPacket::TYPE_ADD;
 		foreach($this->playerList as $player){
+			if($p === $player){
+				continue; //fixes duplicates
+			}
 			$pk->entries[] = [$player->getUniqueId(), $player->getId(), $player->getDisplayName(), $player->getSkinId(), $player->getSkinData()];
 		}
 

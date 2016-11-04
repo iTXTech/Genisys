@@ -55,7 +55,7 @@ class Bat extends FlyingAnimal{
 		}
 		parent::__construct($chunk, $nbt);
 
-		$this->setDataProperty(self::DATA_IS_RESTING, self::DATA_TYPE_BYTE, $this->isResting());
+		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_RESTING, $this->isResting());
 	}
 
 	public function isResting() : int{
