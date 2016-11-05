@@ -26,7 +26,7 @@ use pocketmine\network\protocol\DataPacket;
 
 abstract class Particle extends Vector3{
 
-		const TYPE_BUBBLE = 1;
+	const TYPE_BUBBLE = 1;
 	const TYPE_CRITICAL = 2;
 	const TYPE_SMOKE = 4;
 	const TYPE_EXPLODE = 5;
