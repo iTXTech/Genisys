@@ -6,7 +6,6 @@ __Feature-rich server software for Minecraft: Pocket Edition & Windows 10 Editio
 [![PayPal donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.me/PeratX)
 [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
 [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
-[![Jenkins](https://img.shields.io/jenkins/s/https/ci.itxtech.org/Genisys.svg)](https://ci.itxtech.org/job/Genisys/lastSuccessfulBuild/)
 
 
 Introduction
@@ -23,35 +22,33 @@ However, Genisys still has a long way to go. We welcome contributions.
 
 Help & Support
 -------------
-* __[Official Doxygen-generated Documentation (Google Server)](https://storage.googleapis.com/itx-technologies-141911.appspot.com/docs/genisys/index.html)__
-* __[Latest Doxygen generated from development (Chinese Server)](https://docs.itxtech.org)__
+[Official Doxygen-generated Documentation](https://storage.googleapis.com/itx-technologies-141911.appspot.com/docs/genisys/index.html)
 
 If you have an issue, please make sure to check the [FAQs](https://github.com/iTXTech/Genisys/wiki/FAQs) page before opening any issues. We are constantly fixing issues and are continuously updating, so please also ensure that you are up-to-date before opening any issues.
 
 
 Discussion
 -------------
-* __[Mattermost](https://mattermost.itxtech.org/itxtechnologies/channels/genisys)__
-* __[Gitter](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)__
+* [Mattermost](https://mattermost.itxtech.org/itxtechnologies/channels/genisys)
+* [Gitter](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * IRC Chat #genisys @ irc.freenode.net
-* Twitter (**__[@iTX_PeratX](https://twitter.com/iTX_PeratX)__**)
 
 Get Genisys
 -------------
-* Download from __[GitLab CI](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)__ or __[Jenkins](https://ci.itxtech.org/job/Genisys/lastSuccessfulBuild/)__
-* Installation instructions can be found in the __[wiki](https://github.com/iTXTech/Genisys/wiki)__.
+* Download from [GitLab CI](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
+* Installation instructions can be found in the [wiki](https://github.com/iTXTech/Genisys/wiki).
 
 NOTE: **The master branch is the only officially supported branch.**
 _All other branches are in testing and may be unstable. Do not use builds from other branches unless you are sure you understand the risks._
 
 Tools
 -------------
-* **[Genisys-DevTools](https://github.com/iTXTech/DevTools)** - **Plugin and server development tools plugin**
-* **[Pocket Server](https://github.com/fengberd/MinecraftPEServer)** - **Run PocketMine-MP/Nukkit on Android devices**
+* [Genisys-DevTools](https://github.com/iTXTech/DevTools) - Plugin and server development tools plugin
+* [Pocket Server](https://github.com/fengberd/MinecraftPEServer) - Run PocketMine-MP/Nukkit on Android devices
 
 More
 -------------
-* __[More information](https://github.com/iTXTech/Genisys/wiki/More-information)__
+* [More information](https://github.com/iTXTech/Genisys/wiki/More-information)
 
 Licence
 -------------
