@@ -69,7 +69,12 @@ class EnchantCommand extends VanillaCommand{
 				return true;
 			}
 		}
-
+		$id = $enchantment->getId();
+		$maxLevel = Enchantment::getEnchantMaxLevel($id);
+		if($enchantLevel > $maxLevel or $enchantLevel <= 0){
+			$sender->sendMessage(new TranslationContainer("commands.enchant.maxLevel", [$maxLevel]));
+			return true;
+		}
 		$enchantment->setLevel($enchantLevel);
 
 		$item = $player->getInventory()->getItemInHand();
