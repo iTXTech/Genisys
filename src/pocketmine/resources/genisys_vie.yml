@@ -53,8 +53,6 @@ server:
  player-msg-type: 0
  login-msg: "§3@player joined the game"
  logout-msg: "§3@player left the game"
- #Bật/tắt nếu muốn sử dụng đồ chế tạo qua file json (mặc định: false) (true/false)
- recipes-from-json: false
  #Bật/tắt nếu muốn kiểm tra tốc độ (không còn đẩy lùi mỗi khi đi) (true/false)
  check-movement: true
  #Bật/tắt nếu kích hoạt chế độ sáng tạo giới hạn (Không thể rớt đồ, mở rương và hơn thế nữa) (mặc định: false) (true/false)

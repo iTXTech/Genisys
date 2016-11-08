@@ -53,8 +53,6 @@ server:
  player-msg-type: 0
  login-msg: "§3@player님이 게임에 참여했습니다"
  logout-msg: "§3@player님이 게임을 떠났습니다"
- #레시피를 json에서 가져오는 경우 고르세요
- recipes-from-json: false
  #움직임 확인을 활성화 하는 경우 고르세요 (더 이상 뒤로 당겨지지 않음)
  check-movement: true
  #제한된 크리에이티브를 활성화 하는 경우 설정하세요 (아이템 드롭 불가, 상자 열기 불가 등)

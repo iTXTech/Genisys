@@ -52,8 +52,6 @@ server:
  player-msg-type: 0
  login-msg: "§3@player 加入了游戏"
  logout-msg: "§3@player 退出了游戏"
- #是否从recipes.json读取合成公式
- recipes-from-json: false
  #是否进行移动检测(不再拉回了)
  check-movement: true
  #是否限制创造某些功能(禁止丢物品, 禁止操作箱子等等)

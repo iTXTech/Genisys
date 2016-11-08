@@ -355,7 +355,6 @@ class Server{
 	public $playerLogoutMsg = "";
 	public $antiFly = false;
 	public $asyncChunkRequest = true;
-	public $recipesFromJson = false;
 	public $checkMovement = false;
 	public $keepExperience = false;
 	public $limitedCreative = true;
@@ -1605,7 +1604,6 @@ class Server{
 		$this->getLogger()->setWrite(!$this->getAdvancedProperty("server.disable-log", false));
 		$this->antiFly = $this->getAdvancedProperty("server.anti-fly", true);
 		$this->asyncChunkRequest = $this->getAdvancedProperty("server.async-chunk-request", true);
-		$this->recipesFromJson = $this->getAdvancedProperty("server.recipes-from-json", false);
 		$this->checkMovement = $this->getAdvancedProperty("server.check-movement", true);
 		$this->limitedCreative = $this->getAdvancedProperty("server.limited-creative", true);
 		$this->chunkRadius = $this->getAdvancedProperty("player.chunk-radius", -1);
@@ -1878,7 +1876,7 @@ class Server{
 			Attribute::init();
 			EnchantmentLevelTable::init();
 			Color::init();
-			$this->craftingManager = new CraftingManager($this->recipesFromJson);
+			$this->craftingManager = new CraftingManager();
 
 			$this->pluginManager = new PluginManager($this, $this->commandMap);
 			$this->pluginManager->subscribeToPermission(Server::BROADCAST_CHANNEL_ADMINISTRATIVE, $this->consoleSender);
