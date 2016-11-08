@@ -192,6 +192,8 @@ interface BlockIds{
 	
 	const IRON_TRAPDOOR = 167;
 	
+	const PRISMARINE = 168;
+	
 	const HAY_BALE = 170;
 	const CARPET = 171;
 	const HARDENED_CLAY = 172;
