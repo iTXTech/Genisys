@@ -237,49 +237,6 @@ class CraftingManager{
 		}
 	}
 
-	private function sortAndAddRecipesArray(&$recipes){
-		// Sort the recipes based on the result item name with the bubblesort algoritm.
-		for($i = 0; $i < count($recipes); ++$i){
-			$current = $recipes[$i];
-			$result = $current->getResult();
-			for($j = count($recipes) - 1; $j > $i; --$j){
-				if($this->sort($result, $recipes[$j]->getResult()) > 0){
-					$swap = $current;
-					$current = $recipes[$j];
-					$recipes[$j] = $swap;
-					$result = $current->getResult();
-				}
-			}
-			$this->registerRecipe($current);
-		}
-	}
-
-	private function createOneIngedientRecipe($recipeshape, $resultitem, $resultitemmeta, $resultitemamound, $ingedienttype, $ingredientmeta, $ingredientname, $inventoryType = ""){
-		$ingredientamount = 0;
-		$height = 0;
-		// count how many of the ingredient are in the recipe and check height for big or small recipe.
-		foreach($recipeshape as $line){
-			$height += 1;
-			$width = strlen($line);
-			$ingredientamount += substr_count($line, $ingredientname);
-		}
-		$recipe = null;
-		if($height < 3){
-			// Process small recipe
-			$fullClassName = "pocketmine\\inventory\\" . $inventoryType . "ShapedRecipe";// $ShapeClass."ShapedRecipe";
-			$recipe = ((new $fullClassName(Item::get($resultitem, $resultitemmeta, $resultitemamound),
-				...$recipeshape
-			))->setIngredient($ingredientname, Item::get($ingedienttype, $ingredientmeta, $ingredientamount)));
-		}else{
-			// Process big recipe
-			$fullClassName = "pocketmine\\inventory\\" . $inventoryType . "BigShapedRecipe";
-			$recipe = ((new $fullClassName(Item::get($resultitem, $resultitemmeta, $resultitemamound),
-				...$recipeshape
-			))->setIngredient($ingredientname, Item::get($ingedienttype, $ingredientmeta, $ingredientamount)));
-		}
-		return $recipe;
-	}
-
 	public function sort(Item $i1, Item $i2){
 		if($i1->getId() > $i2->getId()){
 			return 1;
