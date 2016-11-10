@@ -446,7 +446,7 @@ namespace pocketmine {
 	}
 
 	if($errors > 0){
-		$logger->critical("Please update your PHP from itxtech.org/download, or recompile PHP again.");
+		$logger->critical("Please update your PHP from itxtech.org/genisys/get/, or recompile PHP again.");
 		$logger->shutdown();
 		$logger->join();
 		exit(1); //Exit with error
