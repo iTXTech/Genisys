@@ -4337,4 +4337,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return $pk;
 	}
 
+	/**
+	 * @param Effect
+	*/
+	public function addEffect(Effect $effect){//Overwrite
+		if($effect->isBad() && $this->isCreative()){
+			return false;
+		}
+
+		parent::addEffect($effect);
+	}
 }
