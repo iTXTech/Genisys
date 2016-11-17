@@ -23,7 +23,7 @@ namespace pocketmine\tile;
 
 use pocketmine\block\Block;
 use pocketmine\block\DaylightDetector;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\IntTag;
@@ -32,7 +32,7 @@ use pocketmine\level\Level;
 class DLDetector extends Spawnable{
 	private $lastType = 0;
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
 		$this->scheduleUpdate();
 	}

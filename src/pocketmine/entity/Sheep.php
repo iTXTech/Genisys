@@ -26,7 +26,7 @@ use pocketmine\nbt\tag\ByteTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 use pocketmine\item\Item as ItemItem;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\nbt\tag\CompoundTag;
 
 class Sheep extends Animal implements Colorable{
@@ -42,7 +42,7 @@ class Sheep extends Animal implements Colorable{
 		return "Sheep";
 	}
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		if(!isset($nbt->Color)){
 			$nbt->Color = new ByteTag("Color", self::getRandomColor());
 		}

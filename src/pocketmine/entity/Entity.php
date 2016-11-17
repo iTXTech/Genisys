@@ -41,7 +41,6 @@ use pocketmine\event\entity\EntitySpawnEvent;
 use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\Timings;
 use pocketmine\level\format\Chunk;
-use pocketmine\level\format\FullChunk;
 use pocketmine\level\Level;
 use pocketmine\level\Location;
 use pocketmine\level\particle\DestroyBlockParticle;
@@ -276,6 +275,7 @@ abstract class Entity extends Location implements Metadatable{
 	/** 0 no linked 1 linked other 2 be linked */
 	protected $linkedType = null;
 
+
 	protected $riding = null;
 
 	/** @var PressurePlate */
@@ -284,7 +284,7 @@ abstract class Entity extends Location implements Metadatable{
 	public $dropExp = [0, 0];
 
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		if($chunk === null or $chunk->getProvider() === null){
  			throw new ChunkException("Invalid garbage Chunk given to Entity");
 		}
@@ -545,13 +545,13 @@ abstract class Entity extends Location implements Metadatable{
 
 	/**
 	 * @param int|string  $type
-	 * @param FullChunk   $chunk
+	 * @param Chunk   $chunk
 	 * @param CompoundTag $nbt
 	 * @param             $args
 	 *
 	 * @return Entity|Projectile
 	 */
-	public static function createEntity($type, FullChunk $chunk, CompoundTag $nbt, ...$args){
+	public static function createEntity($type, Chunk $chunk, CompoundTag $nbt, ...$args){
 		if(isset(self::$knownEntities[$type])){
 			$class = self::$knownEntities[$type];
 			return new $class($chunk, $nbt, ...$args);

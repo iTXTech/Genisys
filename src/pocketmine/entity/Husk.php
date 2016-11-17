@@ -28,7 +28,7 @@ use pocketmine\network\protocol\AddEntityPacket;
 class Husk extends Zombie{
 	const NETWORK_ID = 47;
 	
-	public function getName(){
+	public function getName() : string{
 		return "Husk";
 	}
 	

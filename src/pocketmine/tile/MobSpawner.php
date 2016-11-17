@@ -31,12 +31,12 @@ use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\Player;
 
 class MobSpawner extends Spawnable{
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
 		if(!isset($nbt->EntityId)){
 			$nbt->EntityId = new IntTag("EntityId", 0);
@@ -69,7 +69,7 @@ class MobSpawner extends Spawnable{
 	public function setEntityId(int $id){
 		$this->namedtag->EntityId->setValue($id);
 		$this->spawnToAll();
-		if($this->chunk instanceof FullChunk){
+		if($this->chunk instanceof Chunk){
 			$this->chunk->setChanged();
 			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
 		}
@@ -145,7 +145,7 @@ class MobSpawner extends Spawnable{
 
 		$this->timings->startTiming();
 
-		if(!($this->chunk instanceof FullChunk)){
+		if(!($this->chunk instanceof Chunk)){
 			return false;
 		}
 		if($this->canUpdate()){

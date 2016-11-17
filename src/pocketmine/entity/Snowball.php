@@ -22,7 +22,7 @@
 namespace pocketmine\entity;
 
 
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\Network;
 use pocketmine\network\protocol\AddEntityPacket;
@@ -38,7 +38,7 @@ class Snowball extends Projectile{
 	protected $gravity = 0.03;
 	protected $drag = 0.01;
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
+	public function __construct(Chunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
 		parent::__construct($chunk, $nbt, $shootingEntity);
 	}
 

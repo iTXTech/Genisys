@@ -26,8 +26,7 @@
 
 namespace pocketmine\tile;
 
-use pocketmine\block\Block;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ShortTag;
@@ -35,8 +34,8 @@ use pocketmine\nbt\tag\StringTag;
 
 class FlowerPot extends Spawnable{
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
-        parent::__construct($chunk, $nbt);
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
+		parent::__construct($chunk, $nbt);
 		if(!isset($nbt->item)){
 			$nbt->item = new ShortTag("item", 0);
 		}

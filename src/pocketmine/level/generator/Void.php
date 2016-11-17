@@ -26,17 +26,17 @@ use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\biome\Biome;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 
 class Void extends Generator{
 	/** @var ChunkManager */
 	private $level;
-	/** @var FullChunk */
+	/** @var Chunk */
 	private $chunk;
 	/** @var Random */
 	private $random;
 	private $options;
-	/** @var FullChunk */
+	/** @var Chunk */
 	private $emptyChunk = null;
 
 	public function getSettings(){

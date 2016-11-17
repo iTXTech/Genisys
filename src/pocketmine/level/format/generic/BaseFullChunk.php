@@ -23,7 +23,7 @@ namespace pocketmine\level\format\generic;
 
 use pocketmine\block\Block;
 use pocketmine\entity\Entity;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\level\format\LevelProvider;
 use pocketmine\level\generator\biome\Biome;
 use pocketmine\level\Level;
@@ -364,7 +364,7 @@ abstract class BaseFullChunk implements FullChunk{
 	}
 
 	public function load($generate = true){
-		return $this->getProvider() === null ? false : $this->getProvider()->getChunk($this->getX(), $this->getZ(), true) instanceof FullChunk;
+		return $this->getProvider() === null ? false : $this->getProvider()->getChunk($this->getX(), $this->getZ(), true) instanceof Chunk;
 	}
 
 	public function unload($save = true, $safe = true){

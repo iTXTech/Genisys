@@ -28,7 +28,7 @@ use pocketmine\math\Vector3;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\item\Item as ItemItem;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\nbt\tag\CompoundTag;
 
 class Boat extends Vehicle{
@@ -40,7 +40,7 @@ class Boat extends Vehicle{
 	public $gravity = 0.5;
 	public $drag = 0.1;
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		if(!isset($nbt->WoodID)){
 			$nbt->WoodID = new IntTag("WoodID", 0);
 		}

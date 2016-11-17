@@ -29,7 +29,7 @@ use pocketmine\event\entity\EntityDamageEvent;
 
 use pocketmine\event\entity\ProjectileHitEvent;
 use pocketmine\item\Potion;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\level\MovingObjectPosition;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
@@ -45,7 +45,7 @@ abstract class Projectile extends Entity{
 
 	public $hadCollision = false;
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
+	public function __construct(Chunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
 		$this->shootingEntity = $shootingEntity;
 		if($shootingEntity !== null){
 			$this->setDataProperty(self::DATA_SHOOTER_ID, self::DATA_TYPE_LONG, $shootingEntity->getId());

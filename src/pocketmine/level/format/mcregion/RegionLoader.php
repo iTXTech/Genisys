@@ -21,7 +21,7 @@
 
 namespace pocketmine\level\format\mcregion;
 
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\generic\GenericChunk;
 use pocketmine\level\format\LevelProvider;
 
 
@@ -114,7 +114,7 @@ class RegionLoader{
 		}
 
 		$chunk = $this->unserializeChunk(fread($this->filePointer, $length - 1));
-		if($chunk instanceof FullChunk){
+		if($chunk instanceof GenericChunk){
 			return $chunk;
 		}else{
 			MainLogger::getLogger()->error("Corrupted chunk detected");
@@ -123,7 +123,7 @@ class RegionLoader{
 	}
 
 	protected function unserializeChunk($data){
-		return Chunk::fromBinary($data, $this->levelProvider);
+		return McRegion::nbtDeserialize($data, $this->levelProvider);
 	}
 
 	public function chunkExists($x, $z){
@@ -163,9 +163,9 @@ class RegionLoader{
 		$this->locationTable[$index][1] = 0;
 	}
 
-	public function writeChunk(FullChunk $chunk){
+	public function writeChunk(GenericChunk $chunk){
 		$this->lastUsed = time();
-		$chunkData = $chunk->toBinary();
+		$chunkData = McRegion::nbtSerialize($chunk);
 		if($chunkData !== false){
 			$this->saveChunk($chunk->getX() - ($this->getX() * 32), $chunk->getZ() - ($this->getZ() * 32), $chunkData);
 		}

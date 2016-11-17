@@ -25,7 +25,7 @@ use pocketmine\inventory\BrewingInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
 use pocketmine\item\Fish;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ListTag;
@@ -60,7 +60,7 @@ class BrewingStand extends Spawnable implements InventoryHolder, Container, Name
 		Item::GUNPOWDER => 0,
 	];
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new BrewingInventory($this);
 

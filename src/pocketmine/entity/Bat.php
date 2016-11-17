@@ -22,7 +22,7 @@
 namespace pocketmine\entity;
 
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
@@ -49,7 +49,7 @@ class Bat extends FlyingAnimal{
 		parent::initEntity();
 	}
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		if(!isset($nbt->isResting)){
 			$nbt->isResting = new ByteTag("isResting", 0);
 		}

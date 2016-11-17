@@ -26,7 +26,7 @@ use pocketmine\entity\Entity;
 use pocketmine\inventory\DispenserInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\level\particle\SmokeParticle;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
@@ -52,7 +52,7 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 	/** @var DispenserInventory */
 	protected $inventory;
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new DispenserInventory($this);
 

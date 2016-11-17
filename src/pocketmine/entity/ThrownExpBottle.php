@@ -22,7 +22,7 @@
 namespace pocketmine\entity;
 
 
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\level\particle\SpellParticle;
 use pocketmine\network\protocol\AddEntityPacket;
@@ -38,7 +38,7 @@ class ThrownExpBottle extends Projectile{
 	protected $gravity = 0.1;
 	protected $drag = 0.15;
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
+	public function __construct(Chunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
 		parent::__construct($chunk, $nbt, $shootingEntity);
 	}
 

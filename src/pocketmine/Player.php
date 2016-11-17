@@ -103,7 +103,7 @@ use pocketmine\item\FoodSource;
 use pocketmine\item\Item;
 use pocketmine\item\Potion;
 use pocketmine\level\ChunkLoader;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\level\Level;
 use pocketmine\level\Location;
 use pocketmine\level\Position;
@@ -4290,21 +4290,17 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->server->getPlayerMetadata()->removeMetadata($this, $metadataKey, $plugin);
 	}
 
-
-	public function onChunkChanged(FullChunk $chunk){
+	public function onChunkChanged(Chunk $chunk){
 		$this->loadQueue[Level::chunkHash($chunk->getX(), $chunk->getZ())] = abs(($this->x >> 4) - $chunk->getX()) + abs(($this->z >> 4) - $chunk->getZ());
 	}
 
-	public function onChunkLoaded(FullChunk $chunk){
-
+	public function onChunkLoaded(Chunk $chunk){
 	}
 
-	public function onChunkPopulated(FullChunk $chunk){
-
+	public function onChunkPopulated(Chunk $chunk){
 	}
 
-	public function onChunkUnloaded(FullChunk $chunk){
-
+	public function onChunkUnloaded(Chunk $chunk){
 	}
 
 	public function onBlockChanged(Vector3 $block){

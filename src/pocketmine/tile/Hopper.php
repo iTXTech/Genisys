@@ -26,7 +26,7 @@ use pocketmine\entity\Item as DroppedItem;
 use pocketmine\inventory\HopperInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
@@ -44,7 +44,7 @@ class Hopper extends Spawnable implements InventoryHolder, Container, Nameable{
 	/** @var bool */
 	protected $isPowered = false;
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new HopperInventory($this);
 
