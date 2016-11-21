@@ -10,11 +10,10 @@ __Feature-rich server software for Minecraft: Pocket Edition & Windows 10 Editio
 
 Introduction
 -------------
-Genisys is a server software based on **[PocketMine-MP](https://github.com/PocketMine/PocketMine-MP)** with extended functionality. Most of the original code was written by **PocketMine Team**.<br>
+Genisys is a server software based on **[PocketMine-MP](https://github.com/pmmp/PocketMine-MP)** with extended functionality. Most of the original code was written by **PocketMine Team**.<br>
 Some of the extended functionality that Genisys offers:
 
 * Extended API for plugins (GeniAPI)
-* Synapse Client support
 * Optional Xbox Live authentication
 * Support for Windows 10 Edition Beta
 
@@ -31,12 +30,13 @@ Discussion
 -------------
 * [Mattermost](https://mattermost.itxtech.org/itxtechnologies/channels/genisys)
 * [Gitter](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-* IRC Chat #genisys @ irc.freenode.net
+* IRC Chat #genisys @ irc.freenode.net [Webchat](http://webchat.freenode.net/?channels=#genisys)
 
 Get Genisys
 -------------
-* Download from [GitLab CI](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
+* Download from [GitLab CI](https://gitlab.com/itxtech/genisys/pipelines?scope=branches).
 * Installation instructions can be found in the [wiki](https://github.com/iTXTech/Genisys/wiki).
+* PHP Binaries and other on [here](https://itxtech.org/genisys/get/).
 
 NOTE: **The master branch is the only officially supported branch.**
 _All other branches are in testing and may be unstable. Do not use builds from other branches unless you are sure you understand the risks._

@@ -18,6 +18,8 @@ Channel rule: **Don't ask to ask, if anyone is here or alive, or uses something.
 
 - **Avoid using GitHub Web Editor.** GitHub Web doesn't provide every Git feature, and using the web editor means you haven't tested the code. It's immediately obvious if you've used the Web editor, and if you do, your PR is likely to be rejected. Also **do not use a mobile device** for code editing.
 
+- **No copy-pasted contents.** Not only license issues exist, you're also ignoring what the author intended to do. Blindly copied content are strongly discouraged. (We recommend the original author to open a PR)
+
 - **Do not consider spamming pull requests.** If you don't know how to squash and force push, use [this site](https://github.com/edx/edx-platform/wiki/How-to-Rebase-a-Pull-Request) to learn how.
 
 - Test your changes before opening a pull request. **Do not submit a PR if the CI fails.**
