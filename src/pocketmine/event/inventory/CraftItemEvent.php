@@ -49,7 +49,11 @@ class CraftItemEvent extends Event implements Cancellable{
 	 * @return Item[]
 	 */
 	public function getInput(){
-		return $this->input;
+		$items = [];
+		foreach($this->input as $i => $item){
+			$items[$i] = clone $item;
+		}
+		return $items;
 	}
 
 	/**
