@@ -2890,6 +2890,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						break 2;
 					case PlayerActionPacket::ACTION_JUMP:
 						break 2;
+					default:
+						assert(false, "Unhandled player action " . $packet->action . " from " . $this->getName());
 				}
 
 				$this->startAction = -1;
