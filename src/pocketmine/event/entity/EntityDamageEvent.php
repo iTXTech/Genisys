@@ -304,9 +304,7 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
 				foreach($this->usedArmors as $index => $cost){
 					$i = $this->entity->getInventory()->getArmorItem($index);
 					if($i->isArmor()){
-						/** @var Armor $i */
-						$i->useOn($i, $cost);
-						$this->entity->getInventory()->setArmorItem($index, $i);
+						$this->entity->getInventory()->damageArmor($index, $cost);
 					}
 				}
 			}
