@@ -30,18 +30,18 @@ class CommandReader extends Thread{
 	/** @var \Threaded */
 	protected $buffer;
 	private $shutdown = false;
-	private $stdin;
 	/** @var MainLogger */
 	private $logger;
 
 	public function __construct($logger){
-		$this->stdin = fopen("php://stdin", "r");
+		$stdin = fopen("php://stdin", "r");
 		$opts = getopt("", ["disable-readline"]);
-		if(extension_loaded("readline") && !isset($opts["disable-readline"]) && (!function_exists("posix_isatty") || posix_isatty($this->stdin))){
+		if(extension_loaded("readline") and !isset($opts["disable-readline"]) and (!function_exists("posix_isatty") or posix_isatty($stdin))){
 			$this->readline = true;
 		}else{
 			$this->readline = false;
 		}
+		fclose($stdin);
 		$this->logger = $logger;
 		$this->buffer = new \Threaded;
 		$this->start();
@@ -60,7 +60,8 @@ class CommandReader extends Thread{
 
 	private function readLine(){
 		if(!$this->readline){
-			$line = trim(fgets($this->stdin));
+			global $stdin;
+			$line = trim(fgets($stdin));
 			if($line !== ""){
 				$this->buffer[] = $line;
 			}
@@ -83,7 +84,6 @@ class CommandReader extends Thread{
 	}
 
 	public function quit(){
-		$this->shutdown();
 		// Windows sucks
 		if(Utils::getOS() !== "win"){
 			parent::quit();
@@ -91,21 +91,23 @@ class CommandReader extends Thread{
 	}
 
 	public function run(){
+		global $stdin;
+		$stdin = fopen("php://stdin", "r");
 		if($this->readline){
 			readline_callback_handler_install("Genisys> ", [$this, "readline_callback"]);
 			$this->logger->setConsoleCallback("readline_redisplay");
 		}
 
 		while(!$this->shutdown){
-			$r = [$this->stdin];
+			$r = [$stdin];
 			$w = null;
 			$e = null;
 			if(stream_select($r, $w, $e, 0, 200000) > 0){
 				// PHP on Windows sucks
-				if(feof($this->stdin)){
+				if(feof($stdin)){
 					if(Utils::getOS() == "win"){
-						$this->stdin = fopen("php://stdin", "r");
-						if(!is_resource($this->stdin)){
+						$stdin = fopen("php://stdin", "r");
+						if(!is_resource($stdin)){
 							break;
 						}
 					}else{
