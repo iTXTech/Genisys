@@ -34,14 +34,8 @@ class CommandReader extends Thread{
 	private $logger;
 
 	public function __construct($logger){
-		$stdin = fopen("php://stdin", "r");
 		$opts = getopt("", ["disable-readline"]);
-		if(extension_loaded("readline") and !isset($opts["disable-readline"]) and (!function_exists("posix_isatty") or posix_isatty($stdin))){
-			$this->readline = true;
-		}else{
-			$this->readline = false;
-		}
-		fclose($stdin);
+		$this->readline = (extension_loaded("readline") and !isset($opts["disable-readline"]));
 		$this->logger = $logger;
 		$this->buffer = new \Threaded;
 		$this->start();
