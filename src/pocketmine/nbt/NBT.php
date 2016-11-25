@@ -24,9 +24,8 @@
  */
 namespace pocketmine\nbt;
 
-use pocketmine\item\Item;
-use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\ByteArrayTag;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\EndTag;
@@ -73,49 +72,6 @@ class NBT{
 	private $offset;
 	public $endianness;
 	private $data;
-
-
-	/**
-	 * @param Item $item
-	 * @param int  $slot
-	 * @return CompoundTag
-	 */
-	public static function putItemHelper(Item $item, $slot = null){
-		$tag = new CompoundTag(null, [
-			"id" => new ShortTag("id", $item->getId()),
-			"Count" => new ByteTag("Count", $item->getCount()),
-			"Damage" => new ShortTag("Damage", $item->getDamage())
-		]);
-
-		if($slot !== null){
-			$tag->Slot = new ByteTag("Slot", (int) $slot);
-		}
-
-		if($item->hasCompoundTag()){
-			$tag->tag = clone $item->getNamedTag();
-			$tag->tag->setName("tag");
-		}
-
-		return $tag;
-	}
-
-	/**
-	 * @param CompoundTag $tag
-	 * @return Item
-	 */
-	public static function getItemHelper(CompoundTag $tag){
-		if(!isset($tag->id) or !isset($tag->Count)){
-			return Item::get(0);
-		}
-
-		$item = Item::get($tag->id->getValue(), !isset($tag->Damage) ? 0 : $tag->Damage->getValue(), $tag->Count->getValue());
-		
-		if(isset($tag->tag) and $tag->tag instanceof CompoundTag){
-			$item->setNamedTag($tag->tag);
-		}
-
-		return $item;
-	}
 
 	public static function matchList(ListTag $tag1, ListTag $tag2){
 		if($tag1->getName() !== $tag2->getName() or $tag1->getCount() !== $tag2->getCount()){

@@ -22,14 +22,11 @@
 namespace pocketmine\entity;
 
 use pocketmine\event\entity\EntityDamageEvent;
-
 use pocketmine\event\entity\ItemDespawnEvent;
 use pocketmine\event\entity\ItemSpawnEvent;
 use pocketmine\item\Item as ItemItem;
-
 use pocketmine\nbt\NBT;
-
-
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\Network;
@@ -74,12 +71,10 @@ class Item extends Entity{
 			$this->close();
 			return;
 		}
-		$this->item = NBT::getItemHelper($this->namedtag->Item);
-		if($this->item->getId() <= 0){
-			$this->close();
-			return;
-		}
 
+		assert($this->namedtag->Item instanceof CompoundTag);
+
+		$this->item = ItemItem::nbtDeserialize($this->namedtag->Item);
 
 		$this->server->getPluginManager()->callEvent(new ItemSpawnEvent($this));
 	}
@@ -166,7 +161,7 @@ class Item extends Entity{
 
 	public function saveNBT(){
 		parent::saveNBT();
-		$this->namedtag->Item = NBT::putItemHelper($this->item);
+		$this->namedtag->Item = $this->item->nbtSerialize();
 		$this->namedtag->Health = new ShortTag("Health", $this->getHealth());
 		$this->namedtag->Age = new ShortTag("Age", $this->age);
 		$this->namedtag->PickupDelay = new ShortTag("PickupDelay", $this->pickupDelay);
