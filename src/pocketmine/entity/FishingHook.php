@@ -29,6 +29,7 @@ use pocketmine\item\Item as ItemItem;
 use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
 class FishingHook extends Projectile{
 	const NETWORK_ID = 77;
@@ -90,11 +91,11 @@ class FishingHook extends Projectile{
 			$this->keepMovement = false;
 			$hasUpdate = true;
 		}
-		if($this->attractTimer === 0 && mt_rand(0, 100) <= 30){ // chance, that a fish bites
-			$this->coughtTimer = mt_rand(5, 10) * 20; // random delay to catch fish
+		if($this->attractTimer === 0 && mt_rand(150, 600) <= 30){ // chance, that a fish bites
+			$this->coughtTimer = mt_rand(1, 1) * 2; // random delay to catch fish
 			$this->attractTimer = mt_rand(30, 100) * 20; // reset timer
 			$this->attractFish();
-			if($this->shootingEntity instanceof Player) $this->shootingEntity->sendTip("A fish bites!");
+			if($this->shootingEntity instanceof Player) $this->shootingEntity->sendPopup(TextFormat::GRAY . "A fish bites!");
 		}elseif($this->attractTimer > 0){
 			$this->attractTimer--;
 		}
@@ -102,7 +103,16 @@ class FishingHook extends Projectile{
 			$this->coughtTimer--;
 			$this->fishBites();
 		}
-
+		if($this->shootingEntity instanceof Player && $this->coughtTimer > 0){
+			$fishes = [ItemItem::RAW_FISH, ItemItem::RAW_SALMON, ItemItem::CLOWN_FISH, ItemItem::PUFFER_FISH, ItemItem::BOW, ItemItem::FISHING_ROD, ItemItem::SADDLE, ItemItem::BOWL, ItemItem::LEATHER, ItemItem::LEATHER_BOOTS, ItemItem::ROTTEN_FLESH, ItemItem::STICK, ItemItem::STRING, ItemItem::BONE, ItemItem::WATER_LILY];
+			$fish = array_rand($fishes, 1);
+			$item = ItemItem::get($fishes[$fish]);
+			$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new PlayerFishEvent($this->shootingEntity, $item, $this));
+			if(!$ev->isCancelled()){
+				$this->shootingEntity->getInventory()->addItem($item);
+				$this->shootingEntity->addExperience(mt_rand(1, 1));
+				$this->damageRod = true;
+			}
 		$this->timings->stopTiming();
 
 		return $hasUpdate;
