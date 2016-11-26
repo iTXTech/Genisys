@@ -2456,7 +2456,7 @@ class Level implements ChunkManager, Metadatable{
 	 * @param Player $p
 	 */
 	public function sendLighting(int $x, int $y, int $z, Player $p){
-		$this->addSound(new ExplodeSound(new Vector3($x,$y,$z)), $this->getPlayers());
+		$this->addSound(new ExplodeSound(new Vector3($x, $y, $z)), $this->getPlayers());
 		$pk = new AddEntityPacket();
 		$pk->type = Lightning::NETWORK_ID;
 		$pk->eid = mt_rand(10000000, 100000000);
