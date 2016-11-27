@@ -19,18 +19,10 @@
  *
  */
 
-/*
- * THIS IS COPIED FROM THE PLUGIN FlowerPot MADE BY @beito123!!
- * https://github.com/beito123/PocketMine-MP-Plugins/blob/master/test%2FFlowerPot%2Fsrc%2Fbeito%2FFlowerPot%2Fomake%2FSkull.php
- *
- */
-
 namespace pocketmine\tile;
 
 use pocketmine\level\format\Chunk;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\IntTag;
-use pocketmine\nbt\tag\StringTag;
+use pocketmine\nbt\tag\{ByteTag, CompoundTag, IntTag, StringTag};
 
 class Skull extends Spawnable{
 
@@ -38,8 +30,16 @@ class Skull extends Spawnable{
 		if(!isset($nbt->SkullType)){
 			$nbt->SkullType = new StringTag("SkullType", 0);
 		}
-
 		parent::__construct($chunk, $nbt);
+	}
+
+	public function setType($type){
+		if($type >= 0 && $type <= 4){
+			$this->namedtag->SkullType = new ByteTag("SkullType", $type);
+			$this->onChanged();
+			return true;
+		}
+		return false;
 	}
 
 	public function saveNBT(){

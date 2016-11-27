@@ -2906,7 +2906,5 @@ class Server{
 		Tile::registerTile(Hopper::class);
 		Tile::registerTile(ItemFrame::class);
 		Tile::registerTile(MobSpawner::class);
-		Tile::registerTile(Sign::class);
-		Tile::registerTile(Skull::class);
 	}
 }
