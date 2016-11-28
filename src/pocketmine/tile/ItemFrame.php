@@ -34,8 +34,7 @@ class ItemFrame extends Spawnable{
 
 	public function __construct(FullChunk $chunk, CompoundTag $nbt){
 		if(!isset($nbt->Item)){
-			$nbt->Item = NBT::putItemHelper(Item::get(Item::AIR));
-			$nbt->Item->setName("Item");
+			$nbt->Item = Item::get(Item::AIR)->nbtSerialize(-1, "Item");
 		}
 
 		if(!isset($nbt->ItemRotation)){
@@ -63,13 +62,11 @@ class ItemFrame extends Spawnable{
 	}
 
 	public function getItem(){
-		return NBT::getItemHelper($this->namedtag->Item);
+		return Item::nbtDeserialize($this->namedtag->Item);
 	}
 
 	public function setItem(Item $item, bool $setChanged = true){
-		$nbtItem = NBT::putItemHelper($item);
-		$nbtItem->setName("Item");
-		$this->namedtag->Item = $nbtItem;
+		$this->namedtag->Item = $item->nbtSerialize(-1, "Item");
 		if($setChanged) {
 			$this->setChanged();
 		}
