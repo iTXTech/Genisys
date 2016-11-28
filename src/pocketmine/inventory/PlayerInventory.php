@@ -62,9 +62,9 @@ class PlayerInventory extends BaseInventory{
 						/* If TrueSlot is not set, leave the slot index as its default which was filled in above
 						 * This only overwrites slot indexes for valid links */
 					}elseif($item["Slot"] >= 100 and $item["Slot"] < 104){ //Armor
-						$this->setItem($this->getSize() + $item["Slot"] - 100, NBT::getItemHelper($item), false);
+						$this->setItem($this->getSize() + $item["Slot"] - 100, Item::nbtDeserialize($item), false);
 					}else{
-						$this->setItem($item["Slot"] - $this->getHotbarSize(), NBT::getItemHelper($item), false);
+						$this->setItem($item["Slot"] - $this->getHotbarSize(), Item::nbtDeserialize($item), false);
 					}
 				}
 			}else{
