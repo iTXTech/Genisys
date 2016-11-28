@@ -1564,8 +1564,6 @@ class Level implements ChunkManager, Metadatable{
 	 */
 	public function dropItem(Vector3 $source, Item $item, Vector3 $motion = null, int $delay = 10){
 		$motion = $motion === null ? new Vector3(lcg_value() * 0.2 - 0.1, 0.2, lcg_value() * 0.2 - 0.1) : $motion;
-		$itemTag = $item->nbtSerialize();
-		$itemTag->setName("Item");
 
 		if($item->getId() > 0 and $item->getCount() > 0){
 			$itemEntity = Entity::createEntity("Item", $this->getChunk($source->getX() >> 4, $source->getZ() >> 4, true), new CompoundTag("", [
@@ -1585,7 +1583,7 @@ class Level implements ChunkManager, Metadatable{
 					new FloatTag("", 0)
 				]),
 				"Health" => new ShortTag("Health", 5),
-				"Item" => $itemTag,
+				"Item" => $item->nbtSerialize(-1, "Item"),
 				"PickupDelay" => new ShortTag("PickupDelay", $delay)
 			]));
 

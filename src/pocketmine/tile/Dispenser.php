@@ -123,7 +123,7 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 		if($i < 0){
 			return Item::get(Item::AIR, 0, 0);
 		}else{
-			return NBT::getItemHelper($this->namedtag->Items[$i]);
+			return Item::nbtDeserialize($this->namedtag->Items[$i]);
 		}
 	}
 
@@ -138,8 +138,6 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 	public function setItem($index, Item $item){
 		$i = $this->getSlotIndex($index);
 
-		$d = NBT::putItemHelper($item, $index);
-
 		if($item->getId() === Item::AIR or $item->getCount() <= 0){
 			if($i >= 0){
 				unset($this->namedtag->Items[$i]);
@@ -150,9 +148,9 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 					break;
 				}
 			}
-			$this->namedtag->Items[$i] = $d;
+			$this->namedtag->Items[$i] = $item->nbtSerialize($index);
 		}else{
-			$this->namedtag->Items[$i] = $d;
+			$this->namedtag->Items[$i] = $item->nbtSerialize($index);
 		}
 
 		return true;
@@ -347,9 +345,6 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 
 					break;
 				default:
-					$itemTag = NBT::putItemHelper($needItem);
-					$itemTag->setName("Item");
-
 					$nbt = new CompoundTag("", [
 						"Pos" => new ListTag("Pos", [
 							new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
@@ -366,7 +361,7 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 							new FloatTag("", 0)
 						]),
 						"Health" => new ShortTag("Health", 5),
-						"Item" => $itemTag,
+						"Item" => $needItem->nbtSerialize(-1, "Item"),
 						"PickupDelay" => new ShortTag("PickupDelay", 10)
 					]);
 
