@@ -1412,7 +1412,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$pk = new SetPlayerGameTypePacket();
 			$pk->gamemode = $this->gamemode & 0x01;
 			$this->dataPacket($pk);
-			$this->sendSettings();
 		}else{
 			Command::broadcastCommandMessage($this, new TranslationContainer("commands.gamemode.success.self", [Server::getGamemodeString($gm)]));
 		}
@@ -1427,6 +1426,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$pk->slots = array_merge(Item::getCreativeItems(), $this->personalCreativeItems);
 			$this->dataPacket($pk);
 		}
+
+		$this->sendSettings();
 
 		$this->inventory->sendContents($this);
 		$this->inventory->sendContents($this->getViewers());
