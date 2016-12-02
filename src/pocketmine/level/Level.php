@@ -2151,13 +2151,8 @@ class Level implements ChunkManager, Metadatable{
 	 *
 	 * @return int 16-bit
 	 */
-<<<<<<< HEAD
-	public function getBlockExtraDataAt(int $x, int $y, int $z): int{
-		return $this->getChunk($x >> 4, $z >> 4, true)->getBlockExtraData($x & 0x0f, $y & 0x7f, $z & 0x0f);
-=======
 	public function getBlockExtraDataAt(int $x, int $y, int $z) : int{
 		return $this->getChunk($x >> 4, $z >> 4, true)->getBlockExtraData($x & 0x0f, $y & Level::Y_MASK, $z & 0x0f);
->>>>>>> 577dbbc... Support 256-block build height and fixed world saving
 	}
 
 	/**
