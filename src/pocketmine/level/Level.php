@@ -2268,16 +2268,6 @@ class Level implements ChunkManager, Metadatable{
 	 * @param int $x
 	 * @param int $z
 	 *
-	 * @return int[]
-	 */
-	public function getBiomeColor(int $x, int $z) : array{
-		return $this->getChunk($x >> 4, $z >> 4, true)->getBiomeColor($x & 0x0f, $z & 0x0f);
-	}
-
-	/**
-	 * @param int $x
-	 * @param int $z
-	 *
 	 * @return int
 	 */
 	public function getHeightMap(int $x, int $z) : int{
@@ -2291,17 +2281,6 @@ class Level implements ChunkManager, Metadatable{
 	 */
 	public function setBiomeId(int $x, int $z, int $biomeId){
 		$this->getChunk($x >> 4, $z >> 4, true)->setBiomeId($x & 0x0f, $z & 0x0f, $biomeId);
-	}
-
-	/**
-	 * @param int $x
-	 * @param int $z
-	 * @param int $R
-	 * @param int $G
-	 * @param int $B
-	 */
-	public function setBiomeColor(int $x, int $z, int $R, int $G, int $B){
-		$this->getChunk($x >> 4, $z >> 4, true)->setBiomeColor($x & 0x0f, $z & 0x0f, $R, $G, $B);
 	}
 
 	/**
