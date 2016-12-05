@@ -122,7 +122,7 @@ class SummonCommand extends VanillaCommand{
 		$entity = null;
 		$type = $args[0];
 		$level = ($sender instanceof Player) ? $sender->getLevel() : $sender->getServer()->getDefaultLevel();
-		$chunk = $level->getChunk(round($x) >> 4, round($z) >> 4);
+		$chunk = $level->getChunk($x >> 4, $z >> 4, true);
 		$nbt = new CompoundTag("", [
 			"Pos" => new ListTag("Pos", [
 				new DoubleTag("", $x),
