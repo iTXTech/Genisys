@@ -2316,7 +2316,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					break;
 				}
 
-				if(!$valid or $this->iusername === "rcon" or $this->iusername === "console"){
+				if(!$valid or $this->iusername === "rcon" or $this->iusername === "console" or $this->iusername === "staff" or $this->iusername === "admin" or $this->iusername === "owner"){
 					$this->close("", "disconnectionScreen.invalidName");
 
 					break;
