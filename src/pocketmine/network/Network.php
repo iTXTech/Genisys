@@ -67,6 +67,7 @@ use pocketmine\network\protocol\MoveEntityPacket;
 use pocketmine\network\protocol\MovePlayerPacket;
 use pocketmine\network\protocol\PlayStatusPacket;
 use pocketmine\network\protocol\PlayerActionPacket;
+use pocketmine\network\protocol\PlayerFallPacket;
 use pocketmine\network\protocol\PlayerInputPacket;
 use pocketmine\network\protocol\PlayerListPacket;
 use pocketmine\network\protocol\RemoveBlockPacket;
@@ -355,6 +356,7 @@ class Network {
 		$this->registerPacket(ProtocolInfo::MOVE_ENTITY_PACKET, MoveEntityPacket::class);
 		$this->registerPacket(ProtocolInfo::MOVE_PLAYER_PACKET, MovePlayerPacket::class);
 		$this->registerPacket(ProtocolInfo::PLAYER_ACTION_PACKET, PlayerActionPacket::class);
+		$this->registerPacket(ProtocolInfo::PLAYER_FALL_PACKET, PlayerFallPacket::class);
 		$this->registerPacket(ProtocolInfo::PLAYER_INPUT_PACKET, PlayerInputPacket::class);
 		$this->registerPacket(ProtocolInfo::PLAYER_LIST_PACKET, PlayerListPacket::class);
 		$this->registerPacket(ProtocolInfo::PLAY_STATUS_PACKET, PlayStatusPacket::class);
