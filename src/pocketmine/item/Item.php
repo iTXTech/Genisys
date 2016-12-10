@@ -588,7 +588,7 @@ class Item implements ItemIds, \JsonSerializable{
 				"lvl" => new ShortTag("lvl", $ench->getLevel())
 			]);
 		}
-		
+
 		$this->setNamedTag($tag);
 		return $this;
 	}
