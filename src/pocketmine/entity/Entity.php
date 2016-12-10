@@ -576,6 +576,10 @@ abstract class Entity extends Location implements Metadatable{
 
 		return false;
 	}
+	
+	public function getKnownEntities() {
+		return self::$knownEntities;
+	}
 
 	/**
 	 * Returns the short save name
