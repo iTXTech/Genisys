@@ -65,6 +65,7 @@ namespace {
 }
 
 namespace pocketmine {
+	use pocketmine\network\protocol\Info as ProtocolInfo;
 	use pocketmine\utils\Binary;
 	use pocketmine\utils\MainLogger;
 	use pocketmine\utils\ServerKiller;
@@ -74,9 +75,7 @@ namespace pocketmine {
 
 	const VERSION = ""; //will be set by CI to a git hash
 	const API_VERSION = "3.0.0-ALPHA2";
-	const CODENAME = "Kyrios";
-	const MINECRAFT_VERSION = "v1.0.0.2 alpha";
-	const MINECRAFT_VERSION_NETWORK = "1.0.0.2";
+	const CODENAME = "Enopoio";
 	const GENISYS_API_VERSION = '2.0.0';
 
 	/*
@@ -132,6 +131,16 @@ namespace pocketmine {
 
 	define('pocketmine\DATA', isset($opts["data"]) ? $opts["data"] . DIRECTORY_SEPARATOR : \getcwd() . DIRECTORY_SEPARATOR);
 	define('pocketmine\PLUGIN_PATH', isset($opts["plugins"]) ? $opts["plugins"] . DIRECTORY_SEPARATOR : \getcwd() . DIRECTORY_SEPARATOR . "plugins" . DIRECTORY_SEPARATOR);
+
+	/**
+	 * @deprecated This constant has moved to {@link \pocketmine\network\protocol\Info} and will be removed from here in the future.
+	 */
+	const MINECRAFT_VERSION = ProtocolInfo::MINECRAFT_VERSION;
+	/**
+	 * @deprecated This constant has moved to {@link \pocketmine\network\protocol\Info} and will be removed from here in the future.
+	 */
+	const MINECRAFT_VERSION_NETWORK = ProtocolInfo::MINECRAFT_VERSION_NETWORK;
+
 
 	Terminal::init();
 
