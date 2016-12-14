@@ -217,6 +217,10 @@ class Item implements ItemIds, \JsonSerializable{
 			self::$list[self::COOKED_CHICKEN] = CookedChicken::class;
 			self::$list[self::GOLD_NUGGET] = GoldNugget::class;
 			self::$list[self::EMERALD] = Emerald::class;
+			self::$list[self::ITEM_FRAME] = ItemFrame::class;
+			self::$list[self::FLOWER_POT] = FlowerPot::class;
+			self::$list[self::CARROT] = Carrot::class;
+			self::$list[self::POTATO] = Potato::class;
 			self::$list[self::BAKED_POTATO] = BakedPotato::class;
 			self::$list[self::PUMPKIN_PIE] = PumpkinPie::class;
 			self::$list[self::NETHER_BRICK] = NetherBrick::class;
@@ -235,7 +239,6 @@ class Item implements ItemIds, \JsonSerializable{
 			self::$list[self::BLAZE_POWDER] = BlazePowder::class;
 			self::$list[self::MAGMA_CREAM] = MagmaCream::class;
 			self::$list[self::GLISTERING_MELON] = GlisteringMelon::class;
-			self::$list[self::ITEM_FRAME] = ItemFrame::class;
 			self::$list[self::ENCHANTED_BOOK] = EnchantedBook::class;
 			self::$list[self::REPEATER] = Repeater::class;
 			self::$list[self::CAULDRON] = Cauldron::class;

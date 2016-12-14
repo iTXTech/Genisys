@@ -22,17 +22,20 @@
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\FloatTag;
-use pocketmine\nbt\tag\IntTag;
-use pocketmine\nbt\tag\ByteTag;
-use pocketmine\nbt\tag\StringTag;
-use pocketmine\tile\Tile;
-use pocketmine\tile\ItemFrame as ItemFrameTile;
+use pocketmine\level\Level;
+use pocketmine\nbt\tag\{
+	ByteTag, 
+	CompoundTag, 
+	FloatTag, 
+	IntTag, 
+	StringTag
+};
 use pocketmine\Player;
+use pocketmine\tile\Tile;
+use pocketmine\tile\ItemFrame as TileItemFrame;
 
-class ItemFrame extends Transparent{
-	protected $id = self::ITEM_FRAME_BLOCK;
+class ItemFrame extends Flowable{
+	protected $id = Block::ITEM_FRAME_BLOCK;
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
@@ -47,99 +50,101 @@ class ItemFrame extends Transparent{
 	}
 
 	public function onActivate(Item $item, Player $player = null){
-		$tile = $this->getLevel()->getTile($this);
-		if(!($tile instanceof ItemFrameTile)){
+		if(!(($tile = $this->level->getTile($this)) instanceof TileItemFrame)){
 			$nbt = new CompoundTag("", [
 				new StringTag("id", Tile::ITEM_FRAME),
-				new IntTag("x", $this->x),
-				new IntTag("y", $this->y),
-				new IntTag("z", $this->z),
-				new ByteTag("ItemRotation", 0),
-				new FloatTag("ItemDropChance", 1.0)
+				new IntTag("x", $block->x),
+				new IntTag("y", $block->y),
+				new IntTag("z", $block->z),
+				new FloatTag("ItemDropChance", 1.0),
+				new ByteTag("ItemRotation", 0)
 			]);
-			$tile = Tile::createTile(Tile::ITEM_FRAME, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+			$tile = Tile::createTile(Tile::ITEM_FRAME, $this->level->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 		}
 
-		if($tile->getItem()->getId() === 0){
-			$item = clone $item;
-			$item->setCount(1);
-			$tile->setItem($item);
-			if($player instanceof Player){
-				if($player->isSurvival()) {
-					$count = $item->getCount();
-					if(--$count <= 0){
-						$player->getInventory()->setItemInHand(Item::get(Item::AIR));
-						return true;
-					}
-
-					$item->setCount($count);
-					$player->getInventory()->setItemInHand($item);
+		if($tile->hasItem()){
+			$tile->setItemRotation(($tile->getItemRotation() + 1) % 8);
+		}else{
+			if($item->getCount() > 0){
+				$frameItem = clone $item;
+				$frameItem->setCount(1);
+				$item->setCount($item->getCount() - 1);
+				$tile->setItem($frameItem);
+				if($player instanceof Player and $player->isSurvival()){
+					$player->getInventory()->setItemInHand($item->getCount() <= 0 ? Item::get(Item::AIR) : $item);
 				}
 			}
-		}else{
-			$itemRot = $tile->getItemRotation();
-			if($itemRot === 7) $itemRot = 0;
-			else $itemRot++;
-			$tile->setItemRotation($itemRot);
 		}
 
 		return true;
 	}
 
 	public function onBreak(Item $item){
-		$this->getLevel()->setBlock($this, new Air(), true, false);
+		if(($tile = $this->level->getTile($this)) instanceof TileItemFrame){
+			//TODO: add events
+			if(lcg_value() <= $tile->getItemDropChance() and $tile->getItem()->getId() !== Item::AIR){
+				$this->level->dropItem($tile->getBlock(), $tile->getItem());
+			}
+		}
+		return parent::onBreak($item);
 	}
 
-	public function getDrops(Item $item) : array{
-		if($this->getLevel()==null){
-			return [];
-		}
-		$tile = $this->getLevel()->getTile($this);
-		if(!$tile instanceof ItemFrameTile){
-			return [
-				[Item::ITEM_FRAME, 0, 1]
+	public function onUpdate($type){
+		if($type === Level::BLOCK_UPDATE_NORMAL){
+			$sides = [
+				0 => 4,
+				1 => 5,
+				2 => 2,
+				3 => 3
 			];
-		}
-		$chance = mt_rand(0, 100);
-		if($chance <= ($tile->getItemDropChance() * 100)){
-			return [
-				[Item::ITEM_FRAME, 0 ,1],
-				[$tile->getItem()->getId(), $tile->getItem()->getDamage(), 1]
-			];
-		}
-		return [
-			[Item::ITEM_FRAME, 0 ,1]
-		];
-	}
-
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
-		if($target->isTransparent() === false and $face > 1 and $block->isSolid() === false){
-			$faces = [
-				2 => 3,
-				3 => 2,
-				4 => 1,
-				5 => 0,
-			];
-			$this->meta = $faces[$face];
-			$this->getLevel()->setBlock($block, $this, true, true);
-			$nbt = new CompoundTag("", [
-				new StringTag("id", Tile::ITEM_FRAME),
-				new IntTag("x", $block->x),
-				new IntTag("y", $block->y),
-				new IntTag("z", $block->z),
-				new ByteTag("ItemRotation", 0),
-				new FloatTag("ItemDropChance", 1.0)
-			]);
-			
-			if($item->hasCustomBlockData()){
-			    foreach($item->getCustomBlockData() as $key => $v){
-				    $nbt->{$key} = $v;
-			    }
-		    }
-		    
-			Tile::createTile(Tile::ITEM_FRAME, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
-			return true;
+			if(!$this->getSide($sides[$this->meta])->isSolid()){
+				$this->level->useBreakOn($this);
+				return Level::BLOCK_UPDATE_NORMAL;
+			}
 		}
 		return false;
 	}
+
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+		if($face === 0 or $face === 1){
+			return false;
+		}
+
+		$faces = [
+			2 => 3,
+			3 => 2,
+			4 => 1,
+			5 => 0
+		];
+
+		$this->meta = $faces[$face];
+		$this->level->setBlock($block, $this, true, true);
+
+		$nbt = new CompoundTag("", [
+			new StringTag("id", Tile::ITEM_FRAME),
+			new IntTag("x", $block->x),
+			new IntTag("y", $block->y),
+			new IntTag("z", $block->z),
+			new FloatTag("ItemDropChance", 1.0),
+			new ByteTag("ItemRotation", 0)
+		]);
+
+		if($item->hasCustomBlockData()){
+			foreach($item->getCustomBlockData() as $key => $v){
+				$nbt->{$key} = $v;
+			}
+		}
+
+		Tile::createTile(Tile::ITEM_FRAME, $this->level->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+
+		return true;
+
+	}
+
+	public function getDrops(Item $item){
+		return [
+			[Item::ITEM_FRAME, 0, 1]
+		];
+	}
+
 }

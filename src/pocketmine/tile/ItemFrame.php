@@ -45,8 +45,12 @@ class ItemFrame extends Spawnable{
 		return "Item Frame";
 	}
 
-	public function getItemRotation(){
+	public function getItemRotation() {
 		return $this->namedtag["ItemRotation"];
+	}
+
+	public function hasItem() : bool{
+		return $this->getItem()->getId() !== Item::AIR;
 	}
 
 	public function setItemRotation(int $itemRotation){
@@ -108,17 +112,6 @@ class ItemFrame extends Spawnable{
 				new FloatTag("ItemDropChance", (float) $this->getItemDropChance())
 			]);
 		}
-	}
-
-	public function dropItem(){
-		if(lcg_value() < $this->getItemDropChance() and $this->hasItem()){
-			$this->level->dropItem($this, $this->getItem());
-		}
-		$this->setItem(null);
-	}
-
-	public function hasItem() : bool{
-		return $this->getItem()->getId() !== Item::AIR;
 	}
 
 }
