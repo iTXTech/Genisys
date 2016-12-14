@@ -36,7 +36,7 @@ class FlowerPot extends Flowable{
 		return "Flower Pot Block";
 	}
 
-	public function getBoundingBox(){
+	protected function recalculateBoundingBox(){
 		return new AxisAlignedBB(
 			$this->x + 0.3125,
 			$this->y,
@@ -112,12 +112,12 @@ class FlowerPot extends Flowable{
 		return false;
 	}
 
-	public function getDrops(Item $item) : array {
-		$items = array([Item::FLOWER_POT, 0, 1]);
-		/** @var FlowerPotTile $tile */
-		if($this->getLevel()!=null && (($tile = $this->getLevel()->getTile($this)) instanceof FlowerPotTile)){
-			if($tile->getFlowerPotItem() !== Item::AIR){
-				$items[] = array($tile->getFlowerPotItem(), $tile->getFlowerPotData(), 1);
+	public function getDrops(Item $item) : array{
+		$items = [[Item::FLOWER_POT, 0, 1]];
+		$tile = $this->getLevel()->getTile($this);
+		if($tile instanceof FlowerPotTile){
+			if(($item = $tile->getItem())->getId() !== Item::AIR){
+				$items[] = [$item->getId(), $item->getDamage(), 1];
 			}
 		}
 		return $items;

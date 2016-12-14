@@ -2855,7 +2855,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->scheduleUpdate();
 						break;
 					case PlayerActionPacket::ACTION_JUMP:
-						break;
+						break 2;
 					case PlayerActionPacket::ACTION_START_SPRINT:
 						$ev = new PlayerToggleSprintEvent($this, true);
 						$this->server->getPluginManager()->callEvent($ev);
@@ -2891,8 +2891,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}else{
 							$this->setSneaking(false);
 						}
-						break 2;
-					case PlayerActionPacket::ACTION_JUMP:
 						break 2;
 					default:
 						assert(false, "Unhandled player action " . $packet->action . " from " . $this->getName());
