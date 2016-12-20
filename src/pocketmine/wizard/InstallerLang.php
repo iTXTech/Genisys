@@ -25,6 +25,7 @@ namespace pocketmine\wizard;
 class InstallerLang{
 	public static $languages = [
 		"eng" => "English",
+		"ces" => "Česky/Czech",
 		"chs" => "简体中文",
 		"zho" => "繁體中文",
 		"jpn" => "日本語",
