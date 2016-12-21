@@ -374,13 +374,7 @@ class Item implements ItemIds, \JsonSerializable{
 		}
 	}
 
-	public function __construct($id, $meta = 0, int $count = 1, string $name = "Unknown"){
-		if(is_string($id)){
-			$item = Item::fromString($id);
-			$id = $item->getId();
-			if($item->getDamage() != $meta) $meta = $item->getDamage();
-			$name = $item->getName();
-		}
+	public function __construct(int $id, int $meta = 0, int $count = 1, string $name = "Unknown"){
 		$this->id = $id & 0xffff;
 		$this->meta = $meta !== -1 ? $meta & 0xffff : -1;
 		$this->count = $count;
