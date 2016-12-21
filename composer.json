@@ -1,0 +1,7 @@
+{
+    "name": "itxtech/genisys",
+    "description": "Feature-rich server software for Minecraft: Pocket Edition based on PocketMine-MP",
+    "type": "project",
+    "license": "LGPL-3.0",
+    "require": {}
+}

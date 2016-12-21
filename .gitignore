@@ -29,3 +29,5 @@ Desktop.ini
 /docs/build/
 !/docs/requirements.txt
 .project
+
+/vendor/
