@@ -252,7 +252,7 @@ class Item implements ItemIds, \JsonSerializable{
 			}
 		}
 
-		self::initCreativeItems($readFromJson);
+		self::initCreativeItems();
 	}
 
 	private static $creative = [];
