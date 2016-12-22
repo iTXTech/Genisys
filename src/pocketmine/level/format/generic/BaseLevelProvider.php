@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types = 1);
+
 namespace pocketmine\level\format\generic;
 
 use pocketmine\level\format\LevelProvider;
@@ -30,6 +32,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\LongTag;
 use pocketmine\nbt\tag\StringTag;
+use pocketmine\utils\ChunkException;
 use pocketmine\utils\LevelException;
 
 abstract class BaseLevelProvider implements LevelProvider{
@@ -40,7 +43,7 @@ abstract class BaseLevelProvider implements LevelProvider{
 	/** @var CompoundTag */
 	protected $levelData;
 
-	public function __construct(Level $level, $path){
+	public function __construct(Level $level, string $path){
 		$this->level = $level;
 		$this->path = $path;
 		if(!file_exists($this->path)){
@@ -64,7 +67,7 @@ abstract class BaseLevelProvider implements LevelProvider{
 		}
 	}
 
-	public function getPath(){
+	public function getPath() : string{
 		return $this->path;
 	}
 
@@ -80,11 +83,11 @@ abstract class BaseLevelProvider implements LevelProvider{
 		return $this->levelData["LevelName"];
 	}
 
-	public function getTime(){
+	public function getTime() : int{
 		return $this->levelData["Time"];
 	}
 
-	public function setTime($value){
+	public function setTime(int $value){
 		$this->levelData->Time = new IntTag("Time", (int) $value);
 	}
 
@@ -96,8 +99,8 @@ abstract class BaseLevelProvider implements LevelProvider{
 		$this->levelData->RandomSeed = new LongTag("RandomSeed", (int) $value);
 	}
 
-	public function getSpawn(){
-		return new Vector3((float) $this->levelData["SpawnX"] + 0.5, (float) $this->levelData["SpawnY"], (float) $this->levelData["SpawnZ"] + 0.5);
+	public function getSpawn() : Vector3{
+		return new Vector3((float) $this->levelData["SpawnX"], (float) $this->levelData["SpawnY"], (float) $this->levelData["SpawnZ"]);
 	}
 
 	public function setSpawn(Vector3 $pos){
@@ -113,7 +116,7 @@ abstract class BaseLevelProvider implements LevelProvider{
 	/**
 	 * @return CompoundTag
 	 */
-	public function getLevelData(){
+	public function getLevelData() : CompoundTag{
 		return $this->levelData;
 	}
 
@@ -126,7 +129,7 @@ abstract class BaseLevelProvider implements LevelProvider{
 		file_put_contents($this->getPath() . "level.dat", $buffer);
 	}
 
-	public function requestChunkTask($x, $z){
+	public function requestChunkTask(int $x, int $z){
 		$chunk = $this->getChunk($x, $z, false);
 		if(!($chunk instanceof GenericChunk)){
 			throw new ChunkException("Invalid Chunk sent");

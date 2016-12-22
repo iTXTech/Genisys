@@ -19,12 +19,15 @@
  *
 */
 
+declare(strict_types = 1);
+
 namespace pocketmine\level\format\anvil;
 
 use pocketmine\level\format\Chunk;
 use pocketmine\level\format\LevelProvider;
 use pocketmine\level\format\generic\GenericChunk;
 use pocketmine\level\format\generic\SubChunk;
+use pocketmine\level\format\mcregion\ChunkRequestTask;
 use pocketmine\level\format\mcregion\McRegion;
 use pocketmine\level\Level;
 use pocketmine\nbt\NBT;
@@ -157,18 +160,14 @@ class Anvil extends McRegion{
 	/** @var RegionLoader[] */
 	protected $regions = [];
 
-	/** @var AnvilChunk[] */
+	/** @var Chunk[] */
 	protected $chunks = [];
 
-	public static function getProviderName(){
+	public static function getProviderName() : string{
 		return "anvil";
 	}
 
-	public static function getProviderOrder(){
-		return self::ORDER_YZX;
-	}
-
-	public static function isValid($path){
+	public static function isValid(string $path) : bool{
 		$isValid = (file_exists($path . "/level.dat") and is_dir($path . "/region/"));
 
 		if($isValid){
@@ -184,7 +183,7 @@ class Anvil extends McRegion{
 		return $isValid;
 	}
 
-	public function requestChunkTask($x, $z) {
+	public function requestChunkTask(int $x, int $z) {
 		$chunk = $this->getChunk($x, $z, false);
 		if(!($chunk instanceof Chunk)) {
 			throw new ChunkException("Invalid Chunk sent");
@@ -230,16 +229,16 @@ class Anvil extends McRegion{
 	}
 
 	/**
-	 * @param $x
-	 * @param $z
+	 * @param int $x
+	 * @param int $z
 	 *
 	 * @return RegionLoader
 	 */
-	protected function getRegion($x, $z){
+	protected function getRegion(int $x, int $z){
 		return $this->regions[Level::chunkHash($x, $z)] ?? null;
 	}
 
-	protected function loadRegion($x, $z){
+	protected function loadRegion(int $x, int $z){
 		if(!isset($this->regions[$index = Level::chunkHash($x, $z)])){
 			$this->regions[$index] = new RegionLoader($this, $x, $z);
 		}
