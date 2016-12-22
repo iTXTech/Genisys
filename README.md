@@ -3,7 +3,6 @@ Genisys
 
 __Feature-rich server software for Minecraft: Pocket Edition & Windows 10 Edition Beta__
 
-[![PayPal donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.me/PeratX)
 [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
 [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
 
@@ -30,7 +29,9 @@ Discussion
 -------------
 * [Mattermost](https://mattermost.itxtech.org/itxtechnologies/channels/genisys)
 * [Gitter](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-* IRC Chat #genisys @ irc.freenode.net [Webchat](http://webchat.freenode.net/?channels=#genisys)
+* [Telegram](https://telegram.me/itxtech_genisys)
+* [Forum](https://forum.itxtech.org/)
+* IRC Chat #genisys @ irc.freenode.net ([Webchat](http://webchat.freenode.net/?channels=#genisys))
 
 Get Genisys
 -------------
