@@ -2726,19 +2726,6 @@ class Level implements ChunkManager, Metadatable{
 			return false;
 		}
 
-		if($this->provider->getProviderName() == "mcregion"){
-			if($chunk->getBiomeColor(0, 0) == [0, 0, 0]){
-				for($x = 0; $x < 16; ++$x){
-					for($z = 0; $z < 16; ++$z){
-						$biome = Biome::getBiome(Biome::PLAINS);
-						$chunk->setBiomeId($x, $z, $biome->getId());
-						$c = $biome->getColor();
-						$chunk->setBiomeColor($x, $z, $c >> 16, ($c >> 8) & 0xff, $c & 0xff);
-					}
-				}
-			}
-		}
-
 		$this->chunks[$index] = $chunk;
 		$chunk->initChunk();
 
