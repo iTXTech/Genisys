@@ -173,8 +173,8 @@ class Effect{
 	 *
 	 * @return $this
 	 */
-	public function setAmplifier($amplifier){
-		$this->amplifier = (int) $amplifier;
+	public function setAmplifier(int $amplifier){
+		$this->amplifier = $amplifier & 0xff;
 		return $this;
 	}
 
