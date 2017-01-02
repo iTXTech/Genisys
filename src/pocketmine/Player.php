@@ -1543,7 +1543,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$pk = new TakeItemEntityPacket();
 				$pk->eid = $this->getId();
 				$pk->target = $entity->getId();
-				Server::broadcastPacket($entity->getViewers(), $pk);
+				$this->server->broadcastPacket($entity->getViewers(), $pk);
 
 				$pk = new TakeItemEntityPacket();
 				$pk->eid = 0;
@@ -1585,7 +1585,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$pk = new TakeItemEntityPacket();
 						$pk->eid = $this->getId();
 						$pk->target = $entity->getId();
-						Server::broadcastPacket($entity->getViewers(), $pk);
+						$this->server->broadcastPacket($entity->getViewers(), $pk);
 
 						$pk = new TakeItemEntityPacket();
 						$pk->eid = 0;
@@ -2788,7 +2788,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$pk->event = EntityEventPacket::USE_ITEM;
 							//$pk;
 							$this->dataPacket($pk);
-							Server::broadcastPacket($this->getViewers(), $pk);
+							$this->server->broadcastPacket($this->getViewers(), $pk);
 
 							if($this->isSurvival()){
 								$slot = $this->inventory->getItemInHand();
@@ -3065,7 +3065,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$pk = new AnimatePacket();
 				$pk->eid = $this->getId();
 				$pk->action = $ev->getAnimationType();
-				Server::broadcastPacket($this->getViewers(), $pk);
+				$this->server->broadcastPacket($this->getViewers(), $pk);
 				break;
 			case ProtocolInfo::SET_HEALTH_PACKET: //Not used
 				break;
@@ -4091,7 +4091,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$pk->mode = $mode;
 
 		if($targets !== null){
-			Server::broadcastPacket($targets, $pk);
+			$this->server->broadcastPacket($targets, $pk);
 		}else{
 			$pk->eid = 0;
 			$this->dataPacket($pk);

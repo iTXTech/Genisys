@@ -539,7 +539,7 @@ class Level implements ChunkManager, Metadatable{
 		}else{
 			if($pk !== null){
 				if(!is_array($pk)){
-					Server::broadcastPacket($players, $pk);
+					$this->server->broadcastPacket($players, $pk);
 				}else{
 					$this->server->batchPackets($players, $pk, false);
 				}
@@ -563,7 +563,7 @@ class Level implements ChunkManager, Metadatable{
 		}else{
 			if($pk !== null){
 				if(!is_array($pk)){
-					Server::broadcastPacket($players, $pk);
+					$this->server->broadcastPacket($players, $pk);
 				}else{
 					$this->server->batchPackets($players, $pk, false);
 				}
@@ -726,7 +726,7 @@ class Level implements ChunkManager, Metadatable{
 		$pk->time = (int) $this->time;
 		$pk->started = $this->stopTime == false;
 
-		Server::broadcastPacket($this->players, $pk);
+		$this->server->broadcastPacket($this->players, $pk);
 	}
 
 	/**
@@ -843,7 +843,7 @@ class Level implements ChunkManager, Metadatable{
 			$chunkPlayers = $this->getChunkPlayers($chunkX, $chunkZ);
 			if(count($chunkPlayers) > 0){
 				foreach($entries as $pk){
-					Server::broadcastPacket($chunkPlayers, $pk);
+					$this->server->broadcastPacket($chunkPlayers, $pk);
 				}
 			}
 		}
@@ -887,7 +887,7 @@ class Level implements ChunkManager, Metadatable{
 		$pk->z = $z + 0.5;
 		$pk->data = ($data << 8) | $id;
 
-		Server::broadcastPacket($targets === null ? $this->getChunkPlayers($x >> 4, $z >> 4) : $targets, $pk);
+		$this->server->broadcastPacket($targets === null ? $this->getChunkPlayers($x >> 4, $z >> 4) : $targets, $pk);
 	}
 
 	/**
@@ -924,7 +924,7 @@ class Level implements ChunkManager, Metadatable{
 					$pk->blockData = $fullBlock & 0xf;
 				}
 				$pk->flags = $first ? $flags : UpdateBlockPacket::FLAG_NONE;
-				Server::broadcastPacket($target, $pk);
+				$this->server->broadcastPacket($target, $pk);
 			}
 		}else{
 			foreach($blocks as $b){
@@ -946,7 +946,7 @@ class Level implements ChunkManager, Metadatable{
 					$pk->blockData = $fullBlock & 0xf;
 				}
 				$pk->flags = $flags;
-				Server::broadcastPacket($target, $pk);
+				$this->server->broadcastPacket($target, $pk);
 			}
 		}
 	}
