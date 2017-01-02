@@ -82,8 +82,8 @@ abstract class Tile extends Position{
 	}
 
 	/**
-	 * @param $type
-	 * @param Chunk $chunk
+	 * @param string      $type
+	 * @param Chunk       $chunk
 	 * @param CompoundTag $nbt
 	 * @param array ...$args
 	 *

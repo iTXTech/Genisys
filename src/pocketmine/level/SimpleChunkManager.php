@@ -239,9 +239,9 @@ class SimpleChunkManager implements ChunkManager{
 	}
 
 	/**
-	 * @param int $chunkX
-	 * @param int $chunkZ
-	 * @param Chunk|null $chunk
+	 * @param int   $chunkX
+	 * @param int   $chunkZ
+	 * @param Chunk $chunk
 	 */
 	public function setChunk(int $chunkX, int $chunkZ, Chunk $chunk = null){
 		if($chunk === null){
