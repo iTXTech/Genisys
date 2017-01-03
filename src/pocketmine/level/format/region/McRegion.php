@@ -67,8 +67,8 @@ class McRegion extends BaseLevelProvider{
 
 		$ids = "";
 		$data = "";
-		$blockLight = "";
 		$skyLight = "";
+		$blockLight = "";
 		$subChunks = $chunk->getSubChunks();
 		for($x = 0; $x < 16; ++$x){
 			for($z = 0; $z < 16; ++$z){
@@ -76,8 +76,8 @@ class McRegion extends BaseLevelProvider{
 					$subChunk = $subChunks[$y];
 					$ids .= $subChunk->getBlockIdColumn($x, $z);
 					$data .= $subChunk->getBlockDataColumn($x, $z);
-					$blockLight .= $subChunk->getBlockLightColumn($x, $z);
 					$skyLight .= $subChunk->getSkyLightColumn($x, $z);
+					$blockLight .= $subChunk->getBlockLightColumn($x, $z);
 				}
 			}
 		}
@@ -141,8 +141,8 @@ class McRegion extends BaseLevelProvider{
 			$subChunks = [];
 			$fullIds = isset($chunk->Blocks) ? $chunk->Blocks->getValue() : str_repeat("\x00", 32768);
 			$fullData = isset($chunk->Data) ? $chunk->Data->getValue() : ($half = str_repeat("\x00", 16384));
-			$fullBlockLight = isset($chunk->BlockLight) ? $chunk->BlockLight->getValue() : $half;
 			$fullSkyLight = isset($chunk->SkyLight) ? $chunk->SkyLight->getValue() : str_repeat("\xff", 16384);
+			$fullBlockLight = isset($chunk->BlockLight) ? $chunk->BlockLight->getValue() : $half;
 
 			for($y = 0; $y < 8; ++$y){
 				$offset = ($y << 4);
@@ -157,19 +157,19 @@ class McRegion extends BaseLevelProvider{
 					$data .= substr($fullData, $offset, 8);
 					$offset += 64;
 				}
-				$blockLight = "";
-				$offset = ($y << 3);
-				for($i = 0; $i < 256; ++$i){
-					$blockLight .= substr($fullBlockLight, $offset, 8);
-					$offset += 64;
-				}
 				$skyLight = "";
 				$offset = ($y << 3);
 				for($i = 0; $i < 256; ++$i){
 					$skyLight .= substr($fullSkyLight, $offset, 8);
 					$offset += 64;
 				}
-				$subChunks[$y] = new SubChunk($ids, $data, $blockLight, $skyLight);
+				$blockLight = "";
+				$offset = ($y << 3);
+				for($i = 0; $i < 256; ++$i){
+					$blockLight .= substr($fullBlockLight, $offset, 8);
+					$offset += 64;
+				}
+				$subChunks[$y] = new SubChunk($ids, $data, $skyLight, $blockLight);
 			}
 
 			if(isset($chunk->BiomeColors)){

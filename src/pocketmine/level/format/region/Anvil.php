@@ -62,8 +62,8 @@ class Anvil extends McRegion{
 				"Y"          => new ByteTag("Y", $y),
 				"Blocks"     => new ByteArrayTag("Blocks",     GenericChunk::reorderByteArray($subChunk->getBlockIdArray())), //Generic in-memory chunks are currrently always XZY
 				"Data"       => new ByteArrayTag("Data",       GenericChunk::reorderNibbleArray($subChunk->getBlockDataArray())),
-				"BlockLight" => new ByteArrayTag("BlockLight", GenericChunk::reorderNibbleArray($subChunk->getBlockLightArray())),
-				"SkyLight"   => new ByteArrayTag("SkyLight",   GenericChunk::reorderNibbleArray($subChunk->getSkyLightArray()))
+				"SkyLight"   => new ByteArrayTag("SkyLight",   GenericChunk::reorderNibbleArray($subChunk->getSkyLightArray())),
+				"BlockLight" => new ByteArrayTag("BlockLight", GenericChunk::reorderNibbleArray($subChunk->getBlockLightArray()))
 			]);
 		}
 
@@ -120,8 +120,8 @@ class Anvil extends McRegion{
 						$subChunks[$subChunk->Y->getValue()] = new SubChunk(
 							GenericChunk::reorderByteArray($subChunk->Blocks->getValue()),
 							GenericChunk::reorderNibbleArray($subChunk->Data->getValue()),
-							GenericChunk::reorderNibbleArray($subChunk->BlockLight->getValue()),
-							GenericChunk::reorderNibbleArray($subChunk->SkyLight->getValue())
+							GenericChunk::reorderNibbleArray($subChunk->SkyLight->getValue()),
+							GenericChunk::reorderNibbleArray($subChunk->BlockLight->getValue())
 						);
 					}
 				}
