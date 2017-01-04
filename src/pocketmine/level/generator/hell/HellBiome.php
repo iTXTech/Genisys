@@ -28,8 +28,4 @@ class HellBiome extends Biome{
 	public function getName() : string{
 		return "Hell";
 	}
-
-	public function getColor(){
-		return 0;
-	}
 }

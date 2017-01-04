@@ -50,8 +50,4 @@ class SwampBiome extends GrassyBiome{
 	public function getName() : string{
 		return "Swamp";
 	}
-
-	public function getColor(){
-		return 0x6a7039;
-	}
 }
