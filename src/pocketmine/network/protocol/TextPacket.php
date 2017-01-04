@@ -45,6 +45,8 @@ class TextPacket extends DataPacket{
 		switch($this->type){
 			case self::TYPE_POPUP:
 			case self::TYPE_CHAT:
+			/** @noinspection PhpMissingBreakStatementInspection */
+			case self::TYPE_WHISPER:
 				$this->source = $this->getString();
 			case self::TYPE_RAW:
 			case self::TYPE_TIP:
@@ -67,6 +69,8 @@ class TextPacket extends DataPacket{
 		switch($this->type){
 			case self::TYPE_POPUP:
 			case self::TYPE_CHAT:
+			/** @noinspection PhpMissingBreakStatementInspection */
+			case self::TYPE_WHISPER:
 				$this->putString($this->source);
 			case self::TYPE_RAW:
 			case self::TYPE_TIP:

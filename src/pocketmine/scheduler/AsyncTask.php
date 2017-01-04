@@ -26,7 +26,11 @@ use pocketmine\Server;
 /**
  * Class used to run async tasks in other threads.
  *
- * WARNING: Do not call PocketMine-MP API methods, or save objects from/on other Threads!!
+ * An AsyncTask does not have its own thread. It is queued into an AsyncPool and executed if there is an async worker
+ * with no AsyncTask running. Therefore, an AsyncTask SHOULD NOT execute for more than a few seconds. For tasks that
+ * run for a long time or infinitely, start another {@link \pocketmine\Thread} instead.
+ *
+ * WARNING: Do not call PocketMine-MP API methods, or save objects (and arrays containing objects) from/on other Threads!!
  */
 abstract class AsyncTask extends \Threaded implements \Collectable{
 

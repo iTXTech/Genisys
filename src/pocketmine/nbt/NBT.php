@@ -448,6 +448,8 @@ class NBT{
 
 
 	/**
+	 * @param bool $network
+	 *
 	 * @return string|bool
 	 */
 	public function write(bool $network = false){

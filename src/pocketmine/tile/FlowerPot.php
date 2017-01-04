@@ -40,7 +40,7 @@ class FlowerPot extends Spawnable{
 		}
 	}
 
-	public function getFlowerPotItem(){
+	public function getFlowerPotItem() {
 		return $this->namedtag["item"];
 	}
 
