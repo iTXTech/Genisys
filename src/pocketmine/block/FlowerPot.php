@@ -76,6 +76,7 @@ class FlowerPot extends Flowable{
 		if($tile instanceof FlowerPotTile){
 			if($tile->getFlowerPotItem() === Item::AIR){
 				switch($item->getId()){
+					/** @noinspection PhpMissingBreakStatementInspection */
 					case Item::TALL_GRASS:
 						if($item->getDamage() === 1){
 							break;
