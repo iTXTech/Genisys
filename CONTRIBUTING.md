@@ -2,12 +2,12 @@
 
 ### Questions
 
-No questions on GitHub. Use Gitter or IRC to ask.  
+No questions on GitHub. Consider one of our [chats](https://github.com/iTXTech/Genisys#discussion).  
 Channel rule: **Don't ask to ask, if anyone is here or alive, or uses something. Just ask, and we'll get moving along. Thanks.**
 
 ### Issues
 
-- **No questions. Use Gitter, Mattermost or IRC to ask questions.**
+- **No questions.** See above.
 - **Follow the template** and provide the information we ask for.
 - Use English properly, or ask someone to examine your words.
 - When posting a feature request, try to describe as much as you can, and don't make it too broad.
