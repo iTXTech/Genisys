@@ -27,11 +27,14 @@ If you have an issue, please make sure to check the [FAQs](https://github.com/iT
 
 Discussion
 -------------
-* [Mattermost](https://mattermost.itxtech.org/itxtechnologies/channels/genisys)
+The following chats are bridged:
+
+* Matrix #genisys:matrix.org ([Webchat](https://riot.im/app/#/room/#genisys:matrix.org))
 * [Gitter](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * [Telegram](https://telegram.me/itxtech_genisys)
-* [Forum](https://forum.itxtech.org/)
-* IRC Chat #genisys @ irc.freenode.net ([Webchat](http://webchat.freenode.net/?channels=#genisys))
+* IRC #genisys @ irc.freenode.net ([Webchat](http://webchat.freenode.net/?channels=#genisys))
+
+[Forum](https://forum.itxtech.org/) is also available.
 
 Get Genisys
 -------------
