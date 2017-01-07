@@ -15,3 +15,16 @@
 <!-- I have tested the code and it works. -->
 
 <!-- Please review things below: -->
+
+<!--
+If you want the Travis-CI build for this pull request to be run with extra plugins,
+please uncomment the following lines, and follow the formats below EXACTLY. Do NOT include any inline or post-line comments.
+-->
+<!-- # Plugins to test with Travis-CI
+- [this-is-the-file-name-in-plugins-folder.php](http://path.to/script-plugin-download)
+- [this-is-a.phar](http://path.to-phar-download)
+- https://file-extensions.will.be/auto-detected/if/only/URL/is/given
+-->
+
+<!-- END -->
+
