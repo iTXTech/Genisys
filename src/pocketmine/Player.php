@@ -916,7 +916,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return $this->spawnPosition instanceof WeakPosition and $this->spawnPosition->isValid();
 	}
 
-	public function sendChunk($x, $z, $payload, $ordering = FullChunkDataPacket::ORDER_COLUMNS){
+	public function sendChunk($x, $z, $payload){
 		if($this->connected === false){
 			return;
 		}
@@ -930,7 +930,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$pk = new FullChunkDataPacket();
 			$pk->chunkX = $x;
 			$pk->chunkZ = $z;
-			$pk->order = $ordering;
 			$pk->data = $payload;
 			$this->batchDataPacket($pk);
 		}
@@ -4321,17 +4320,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	/**
-	 * @param     $chunkX
-	 * @param     $chunkZ
-	 * @param     $payload
-	 * @param int $ordering
+	 * @param $chunkX
+	 * @param $chunkZ
+	 * @param $payload
+	 *
 	 * @return BatchPacket|FullChunkDataPacket
 	 */
-	public static function getChunkCacheFromData($chunkX, $chunkZ, $payload, $ordering = FullChunkDataPacket::ORDER_COLUMNS){
+	public static function getChunkCacheFromData($chunkX, $chunkZ, $payload){
 		$pk = new FullChunkDataPacket();
 		$pk->chunkX = $chunkX;
 		$pk->chunkZ = $chunkZ;
-		$pk->order = $ordering;
 		$pk->data = $payload;
 		if(Network::$BATCH_THRESHOLD >= 0){
 			$pk->encode();
