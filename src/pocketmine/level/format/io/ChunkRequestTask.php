@@ -19,14 +19,14 @@
  *
 */
 
-namespace pocketmine\level\format;
+namespace pocketmine\level\format\io;
 
+use pocketmine\level\format\Chunk;
 use pocketmine\level\Level;
 use pocketmine\nbt\NBT;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
 use pocketmine\tile\Spawnable;
-
 
 class ChunkRequestTask extends AsyncTask{
 

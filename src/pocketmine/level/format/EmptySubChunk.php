@@ -21,7 +21,7 @@
 
 declare(strict_types = 1);
 
-namespace pocketmine\level\format\generic;
+namespace pocketmine\level\format;
 
 use pocketmine\utils\ChunkException;
 

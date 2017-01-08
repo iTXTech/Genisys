@@ -28,7 +28,6 @@ use pocketmine\network\Network;
 use pocketmine\network\protocol\MobEffectPacket;
 use pocketmine\Player;
 
-
 class Effect{
 	const SPEED = 1;
 	const SLOWNESS = 2;
