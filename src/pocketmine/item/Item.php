@@ -27,8 +27,6 @@ namespace pocketmine\item;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\block\Block;
-use pocketmine\block\Fence;
-use pocketmine\block\Flower;
 use pocketmine\entity\CaveSpider;
 use pocketmine\entity\Entity;
 use pocketmine\entity\PigZombie;

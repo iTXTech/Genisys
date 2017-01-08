@@ -22,7 +22,6 @@
 namespace pocketmine\entity;
 
 use pocketmine\Player;
-use pocketmine\math\Vector3;
 use pocketmine\network\protocol\AddEntityPacket;
 
 class Husk extends Zombie{

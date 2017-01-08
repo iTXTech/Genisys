@@ -23,7 +23,6 @@ namespace pocketmine\level\generator\populator;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
-use pocketmine\level\SimpleChunkManager;
 use pocketmine\utils\Random;
 
 class GroundFire extends Populator{

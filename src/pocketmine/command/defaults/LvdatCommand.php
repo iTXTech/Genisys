@@ -21,18 +21,12 @@
 
 namespace pocketmine\command\defaults;
 
-use pocketmine\command\Command;
+
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
 
 use pocketmine\level\format\generic\BaseLevelProvider;
-use pocketmine\level\generator\Generator;
-use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\nbt\tag\LongTag;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\math\Vector3;
 
 class LvdatCommand extends VanillaCommand{
 

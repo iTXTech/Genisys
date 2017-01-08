@@ -24,7 +24,6 @@ namespace pocketmine\tile;
 use pocketmine\level\format\Chunk;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\network\Network;
 use pocketmine\network\protocol\BlockEntityDataPacket;
 use pocketmine\Player;
 

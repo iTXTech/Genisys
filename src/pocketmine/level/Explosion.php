@@ -38,7 +38,6 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
-use pocketmine\network\Network;
 use pocketmine\network\protocol\ExplodePacket;
 
 use pocketmine\utils\Random;

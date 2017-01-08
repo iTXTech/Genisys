@@ -23,7 +23,6 @@ namespace pocketmine\level\generator;
 
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
-use pocketmine\level\generator\biome\Biome;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
 use pocketmine\level\format\Chunk;

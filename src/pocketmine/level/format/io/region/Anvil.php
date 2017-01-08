@@ -24,15 +24,12 @@ declare(strict_types = 1);
 namespace pocketmine\level\format\io\region;
 
 use pocketmine\level\format\Chunk;
-use pocketmine\level\format\io\ChunkRequestTask;
 use pocketmine\level\format\SubChunk;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\{
 	ByteArrayTag, ByteTag, CompoundTag, IntArrayTag, IntTag, ListTag, LongTag
 };
 use pocketmine\Player;
-use pocketmine\tile\Spawnable;
-use pocketmine\utils\BinaryStream;
 use pocketmine\utils\ChunkException;
 use pocketmine\utils\MainLogger;
 

@@ -24,8 +24,6 @@ namespace pocketmine\level\generator\object;
 use pocketmine\block\Block;
 use pocketmine\block\Leaves2;
 use pocketmine\block\Wood2;
-use pocketmine\level\ChunkManager;
-use pocketmine\utils\Random;
 
 class AcaciaTree extends Tree{
 	public function __construct(){

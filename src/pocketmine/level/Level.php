@@ -80,8 +80,6 @@ use pocketmine\math\Vector3;
 use pocketmine\metadata\BlockMetadataStore;
 use pocketmine\metadata\Metadatable;
 use pocketmine\metadata\MetadataValue;
-use pocketmine\nbt\NBT;
-
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\ListTag;
@@ -91,7 +89,6 @@ use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\LongTag;
 use pocketmine\network\protocol\DataPacket;
-use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\LevelEventPacket;
 use pocketmine\network\protocol\MoveEntityPacket;
 use pocketmine\network\protocol\MovePlayerPacket;
@@ -104,7 +101,6 @@ use pocketmine\plugin\Plugin;
 
 use pocketmine\Server;
 use pocketmine\tile\Chest;
-use pocketmine\tile\Spawnable;
 use pocketmine\tile\Tile;
 use pocketmine\utils\LevelException;
 use pocketmine\utils\MainLogger;
@@ -114,9 +110,6 @@ use pocketmine\level\particle\Particle;
 use pocketmine\level\sound\BlockPlaceSound;
 use pocketmine\level\sound\Sound;
 use pocketmine\level\particle\DestroyBlockParticle;
-
-use pocketmine\level\generator\biome\Biome;
-
 use pocketmine\entity\Lightning;
 use pocketmine\entity\XPOrb;
 use pocketmine\level\weather\Weather;

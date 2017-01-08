@@ -23,7 +23,7 @@ declare(strict_types = 1);
 
 namespace pocketmine\level\format;
 
-use pocketmine\utils\ChunkException;
+
 
 class EmptySubChunk extends SubChunk{
 

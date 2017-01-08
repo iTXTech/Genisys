@@ -36,7 +36,6 @@ use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\IntTag;
-use pocketmine\network\Network;
 use pocketmine\network\protocol\ContainerSetDataPacket;
 
 class Furnace extends Spawnable implements InventoryHolder, Container, Nameable{

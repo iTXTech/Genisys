@@ -25,7 +25,6 @@ namespace pocketmine\network\protocol;
 
 
 use pocketmine\inventory\FurnaceRecipe;
-use pocketmine\inventory\MultiRecipe;
 use pocketmine\inventory\ShapedRecipe;
 use pocketmine\inventory\ShapelessRecipe;
 use pocketmine\item\Item;

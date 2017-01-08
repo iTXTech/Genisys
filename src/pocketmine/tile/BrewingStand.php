@@ -24,7 +24,6 @@ namespace pocketmine\tile;
 use pocketmine\inventory\BrewingInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
-use pocketmine\item\Fish;
 use pocketmine\level\format\Chunk;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;

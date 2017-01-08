@@ -43,7 +43,6 @@ use pocketmine\level\particle\InstantEnchantParticle;
 use pocketmine\level\particle\ItemBreakParticle;
 use pocketmine\level\particle\LavaDripParticle;
 use pocketmine\level\particle\LavaParticle;
-use pocketmine\level\particle\Particle;
 use pocketmine\level\particle\PortalParticle;
 use pocketmine\level\particle\RainSplashParticle;
 use pocketmine\level\particle\RedstoneParticle;

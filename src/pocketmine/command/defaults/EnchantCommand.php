@@ -23,12 +23,9 @@ namespace pocketmine\command\defaults;
 
 
 use pocketmine\command\CommandSender;
-use pocketmine\entity\Effect;
-use pocketmine\entity\InstantEffect;
 use pocketmine\event\TranslationContainer;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\utils\TextFormat;
-use pocketmine\Server;
 
 class EnchantCommand extends VanillaCommand{
 

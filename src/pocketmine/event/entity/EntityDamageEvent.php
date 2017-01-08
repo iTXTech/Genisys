@@ -25,7 +25,6 @@ use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 use pocketmine\event\Cancellable;
 use pocketmine\inventory\PlayerInventory;
-use pocketmine\item\Armor;
 use pocketmine\Player;
 use pocketmine\item\Item;
 use pocketmine\item\enchantment\enchantment;

@@ -21,9 +21,7 @@
 
 namespace pocketmine\tile;
 
-use pocketmine\inventory\EnchantInventory;
-use pocketmine\inventory\InventoryHolder;
-use pocketmine\item\Item;
+
 use pocketmine\level\format\Chunk;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;

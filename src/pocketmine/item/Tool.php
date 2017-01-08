@@ -24,7 +24,6 @@ namespace pocketmine\item;
 
 use pocketmine\block\Block;
 use pocketmine\entity\Entity;
-use pocketmine\nbt\tag\ByteTag;
 use pocketmine\item\enchantment\enchantment;
 
 abstract class Tool extends Item{

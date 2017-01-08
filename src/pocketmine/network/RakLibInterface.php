@@ -27,7 +27,6 @@ use pocketmine\network\protocol\Info as ProtocolInfo;
 use pocketmine\network\protocol\Info;
 use pocketmine\Player;
 use pocketmine\Server;
-use pocketmine\utils\MainLogger;
 use raklib\protocol\EncapsulatedPacket;
 use raklib\protocol\PacketReliability;
 use raklib\RakLib;

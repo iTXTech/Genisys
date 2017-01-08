@@ -30,8 +30,6 @@ use pocketmine\nbt\tag\{
 	ByteArrayTag, ByteTag, CompoundTag, IntArrayTag, IntTag, ListTag, LongTag
 };
 use pocketmine\Player;
-use pocketmine\tile\Spawnable;
-use pocketmine\utils\BinaryStream;
 use pocketmine\utils\ChunkException;
 use pocketmine\utils\MainLogger;
 

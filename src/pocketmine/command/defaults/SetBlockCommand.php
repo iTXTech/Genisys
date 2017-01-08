@@ -26,10 +26,8 @@ use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 use pocketmine\math\Vector3;
-use pocketmine\block\Block;
 use pocketmine\item\ItemBlock;
 use pocketmine\item\Item;
-use pocketmine\level\Level;
 
 class SetBlockCommand extends VanillaCommand{
 

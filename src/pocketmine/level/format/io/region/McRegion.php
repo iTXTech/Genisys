@@ -25,7 +25,6 @@ namespace pocketmine\level\format\io\region;
 
 use pocketmine\level\format\Chunk;
 use pocketmine\level\format\io\BaseLevelProvider;
-use pocketmine\level\format\io\ChunkRequestTask;
 use pocketmine\level\format\SubChunk;
 use pocketmine\level\generator\Generator;
 use pocketmine\level\Level;
@@ -34,9 +33,6 @@ use pocketmine\nbt\tag\{
 	ByteArrayTag, ByteTag, CompoundTag, IntArrayTag, IntTag, ListTag, LongTag, StringTag
 };
 use pocketmine\Player;
-use pocketmine\tile\Spawnable;
-use pocketmine\utils\BinaryStream;
-use pocketmine\utils\ChunkException;
 use pocketmine\utils\MainLogger;
 
 class McRegion extends BaseLevelProvider{

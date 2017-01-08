@@ -29,7 +29,6 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\nbt\NBT;
 
 class ItemFrame extends Spawnable{
 

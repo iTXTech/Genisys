@@ -24,7 +24,6 @@ namespace pocketmine\block;
 use pocketmine\event\block\LeavesDecayEvent;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
-use pocketmine\item\Dye;
 use pocketmine\item\enchantment\enchantment;
 use pocketmine\level\Level;
 use pocketmine\Player;

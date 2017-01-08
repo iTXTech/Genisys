@@ -21,7 +21,7 @@
 
 namespace pocketmine\event\entity;
 
-use pocketmine\entity\Entity;
+
 use pocketmine\event\Cancellable;
 use pocketmine\level\Position;
 
