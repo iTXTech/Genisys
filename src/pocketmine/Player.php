@@ -1842,12 +1842,17 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		if($this->spawned){
 			if($this->server->netherEnabled){
 				if(($this->isCreative() or $this->isSurvival() and $this->server->getTick() - $this->portalTime >= 80) and $this->portalTime > 0){
-					if($this->server->netherLevel instanceof Level){
-						if($this->getLevel() != $this->server->netherLevel){
+					$netherLevel = null;
+					if($this->server->isLevelLoaded($this->server->netherName) or $this->server->loadLevel($this->server->netherName)){
+						$netherLevel = $this->server->getLevelByName($this->server->netherName);
+					}
+
+					if($netherLevel instanceof Level){
+						if($this->getLevel() !== $netherLevel){
 							$this->fromPos = $this->getPosition();
 							$this->fromPos->x = ((int) $this->fromPos->x) + 0.5;
 							$this->fromPos->z = ((int) $this->fromPos->z) + 0.5;
-							$this->teleport($this->shouldResPos = $this->server->netherLevel->getSafeSpawn());
+							$this->teleport($this->shouldResPos = $netherLevel->getSafeSpawn());
 						}elseif($this->fromPos instanceof Position){
 							if(!($this->getLevel()->isChunkLoaded($this->fromPos->x, $this->fromPos->z))){
 								$this->getLevel()->loadChunk($this->fromPos->x, $this->fromPos->z);
@@ -1868,7 +1873,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 									break;
 								}
 							}
-							if($tempos == null){
+							if($tempos === null){
 								$tempos = $this->fromPos->add(mt_rand(-2, 2), 0, mt_rand(-2, 2));
 							}
 							$this->teleport($this->shouldResPos = $tempos);
@@ -2810,7 +2815,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						$this->craftingType = self::CRAFTING_SMALL;
 
 						if($this->server->netherEnabled){
-							if($this->level == $this->server->netherLevel){
+							if($this->level === $this->server->getLevelByName($this->server->netherName)){
 								$this->teleport($pos = $this->server->getDefaultLevel()->getSafeSpawn());
 							}
 						}

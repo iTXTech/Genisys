@@ -275,7 +275,6 @@ class Server{
 	public $keepInventory = false;
 	public $netherEnabled = false;
 	public $netherName = "nether";
-	public $netherLevel = null;
 	public $weatherRandomDurationMin = 6000;
 	public $weatherRandomDurationMax = 12000;
 	public $lightningTime = 200;
@@ -1844,14 +1843,6 @@ class Server{
 				$this->forceShutdown();
 
 				return;
-			}
-
-			if($this->netherEnabled){
-				if(!$this->loadLevel($this->netherName)){
-					//$this->logger->info("正在生成地狱 ".$this->netherName);
-					$this->generateLevel($this->netherName, time(), Generator::getGenerator("nether"));
-				}
-				$this->netherLevel = $this->getLevelByName($this->netherName);
 			}
 
 			if($this->getProperty("ticks-per.autosave", 6000) > 0){
