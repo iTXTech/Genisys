@@ -3,7 +3,7 @@ mkdir plugins
 curl -fsSL https://github.com/iTXTech/DevTools/releases/download/v1.1-iTX/DevTools_v1.1-iTX.phar -o plugins/DevTools.phar
 echo Running lint...
 shopt -s globstar
-for file in **/*.php; do
+for file in src/pocketmine/*.php src/pocketmine/**/*.php; do
     OUTPUT=`php -l "$file"`
     [ $? -ne 0 ] && echo -n "$OUTPUT" && exit 1
 done
