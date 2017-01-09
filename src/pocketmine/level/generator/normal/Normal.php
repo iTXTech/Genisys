@@ -202,66 +202,81 @@ class Normal extends Generator{
 		$this->populators[] = $ores;
 	}
 
-	public function generateChunk($chunkX, $chunkZ) {
+	public function generateChunk($chunkX, $chunkZ){
 		$this->random->setSeed(0xdeadbeef ^ ($chunkX << 8) ^ $chunkZ ^ $this->level->getSeed());
+
 		$noise = Generator::getFastNoise3D($this->noiseBase, 16, 128, 16, 4, 8, 4, $chunkX * 16, 0, $chunkZ * 16);
+
 		$chunk = $this->level->getChunk($chunkX, $chunkZ);
+
 		$biomeCache = [];
-		for($x = 0; $x < 16; ++$x) {
-			for($z = 0; $z < 16; ++$z) {
+
+		for($x = 0; $x < 16; ++$x){
+			for($z = 0; $z < 16; ++$z){
 				$minSum = 0;
 				$maxSum = 0;
 				$weightSum = 0;
+
 				$biome = $this->pickBiome($chunkX * 16 + $x, $chunkZ * 16 + $z);
 				$chunk->setBiomeId($x, $z, $biome->getId());
-				for($sx = -self::$SMOOTH_SIZE; $sx <= self::$SMOOTH_SIZE; ++$sx) {
-					for($sz = -self::$SMOOTH_SIZE; $sz <= self::$SMOOTH_SIZE; ++$sz) {
+
+				for($sx = -self::$SMOOTH_SIZE; $sx <= self::$SMOOTH_SIZE; ++$sx){
+					for($sz = -self::$SMOOTH_SIZE; $sz <= self::$SMOOTH_SIZE; ++$sz){
+
 						$weight = self::$GAUSSIAN_KERNEL[$sx + self::$SMOOTH_SIZE][$sz + self::$SMOOTH_SIZE];
-						if($sx === 0 and $sz === 0) {
+
+						if($sx === 0 and $sz === 0){
 							$adjacent = $biome;
-						} else {
+						}else{
 							$index = Level::chunkHash($chunkX * 16 + $x + $sx, $chunkZ * 16 + $z + $sz);
-							if(isset($biomeCache[$index])) {
+							if(isset($biomeCache[$index])){
 								$adjacent = $biomeCache[$index];
-							} else {
+							}else{
 								$biomeCache[$index] = $adjacent = $this->pickBiome($chunkX * 16 + $x + $sx, $chunkZ * 16 + $z + $sz);
 							}
 						}
+
 						$minSum += ($adjacent->getMinElevation() - 1) * $weight;
 						$maxSum += $adjacent->getMaxElevation() * $weight;
+
 						$weightSum += $weight;
 					}
 				}
+
 				$minSum /= $weightSum;
 				$maxSum /= $weightSum;
+
 				$solidLand = false;
-				for($y = 127; $y >= 0; --$y) {
-					$smoothHeight = ($maxSum - $minSum) / 2;
-					for($y = 0; $y < 128; ++$y) {
-						if($y === 0) {
-							$chunk->setBlockId($x, $y, $z, Block::BEDROCK);
-							continue;
-						}
-						// A noiseAdjustment of 1 will guarantee ground, a noiseAdjustment of -1 will guarantee air.
-						//$effHeight = min($y - $smoothHeight - $minSum,
-						$noiseAdjustment = 2 * (($maxSum - $y) / ($maxSum - $minSum)) - 1;
-						// To generate caves, we bring the noiseAdjustment down away from 1.
-						$caveLevel = $minSum - 10;
-						$distAboveCaveLevel = max(0, $y - $caveLevel); // must be positive
-						$noiseAdjustment = min($noiseAdjustment, 0.4 + ($distAboveCaveLevel / 10));
-						$noiseValue = $noise[$x][$z][$y] + $noiseAdjustment;
-						if($noiseValue > 0) {
-							$chunk->setBlockId($x, $y, $z, Block::STONE);
-							$solidLand = true;
-						} elseif($y <= $this->waterHeight && $solidLand == false) {
-							$chunk->setBlockId($x, $y, $z, Block::STILL_WATER);
-						}
+				for($y = 127; $y >= 0; --$y){
+					if($y === 0){
+						$chunk->setBlockId($x, $y, $z, Block::BEDROCK);
+						continue;
+					}
+
+					// A noiseAdjustment of 1 will guarantee ground, a noiseAdjustment of -1 will guarantee air.
+					//$effHeight = min($y - $smoothHeight - $minSum,
+					$noiseAdjustment = 2 * (($maxSum - $y) / ($maxSum - $minSum)) - 1;
+
+
+					// To generate caves, we bring the noiseAdjustment down away from 1.
+					$caveLevel = $minSum - 10;
+					$distAboveCaveLevel = max(0, $y - $caveLevel); // must be positive
+
+					$noiseAdjustment = min($noiseAdjustment, 0.4 + ($distAboveCaveLevel / 10));
+					$noiseValue = $noise[$x][$z][$y] + $noiseAdjustment;
+
+					if($noiseValue > 0){
+						$chunk->setBlockId($x, $y, $z, Block::STONE);
+						$solidLand = true;
+					}elseif($y <= $this->waterHeight && $solidLand == false){
+						$chunk->setBlockId($x, $y, $z, Block::STILL_WATER);
 					}
 				}
 			}
-			foreach($this->generationPopulators as $populator) {
-				$populator->populate($this->level, $chunkX, $chunkZ, $this->random);
-			}
+		}
+
+		foreach($this->generationPopulators as $populator){
+			$populator->populate($this->level, $chunkX, $chunkZ, $this->random);
 		}
 	}
 
