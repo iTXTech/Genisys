@@ -8,7 +8,7 @@ for file in **/*.php; do
     [ $? -ne 0 ] && echo -n "$OUTPUT" && exit 1
 done
 echo Lint done successfully.
-echo -e "version\nms\nstop\n" | php src/pocketmine/PocketMine.php --no-wizard --disable-readline | grep -v "\[DevTools\] Adding "
+echo -e "version\nms\nstop\n" | php src/pocketmine/PocketMine.php --no-wizard --disable-readline --debug.level=2 | grep -v "\[DevTools\] Adding "
 if ls plugins/DevTools_OUTPUT/Genisys*.phar >/dev/null 2>&1; then
     echo Server packaged successfully.
 else
