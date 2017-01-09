@@ -526,7 +526,7 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		}
 		$hasUpdate = parent::entityBaseTick($tickDiff, $EnchantL);
 
-		if($this->server->foodEnabled){
+		if($this->isAlive()){
 			$food = $this->getFood();
 			$health = $this->getHealth();
 			if($food >= 18){
