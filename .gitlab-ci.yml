@@ -3,6 +3,9 @@ image: itxtech/docker-env-genisys
 stages:
  - package
 
+before-script:
+ - git submodule update --init --recursive
+
 phar:
   stage: package
   script:
