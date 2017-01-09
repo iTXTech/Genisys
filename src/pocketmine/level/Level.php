@@ -274,6 +274,8 @@ class Level implements ChunkManager, Metadatable{
 	/** @var Generator */
 	private $generatorInstance;
 
+	private $closed = false;
+
 	/** @var Weather */
 	private $weather;
 
@@ -496,7 +498,12 @@ class Level implements ChunkManager, Metadatable{
 		return $this->levelId;
 	}
 
+	public function isClosed() : bool{
+		return $this->closed;
+	}
+
 	public function close(){
+		assert(!$this->closed, "Tried to close a level which is already closed");
 
 		if($this->getAutoSave()){
 			$this->save();
@@ -513,6 +520,8 @@ class Level implements ChunkManager, Metadatable{
 		$this->blockMetadata = null;
 		$this->blockCache = [];
 		$this->temporalPosition = null;
+
+		$this->closed = true;
 	}
 
 	public function addSound(Sound $sound, array $players = null){
