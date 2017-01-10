@@ -142,7 +142,7 @@ abstract class Projectile extends Entity{
 					$motion = sqrt($this->motionX ** 2 + $this->motionY ** 2 + $this->motionZ ** 2);
 					$damage = ceil($motion * $this->damage);
 
-					if($this instanceof Arrow and $this->isCritical){
+					if($this instanceof Arrow and $this->isCritical()){
 						$damage += mt_rand(0, (int) ($damage / 2) + 1);
 					}
 
@@ -154,7 +154,7 @@ abstract class Projectile extends Entity{
 
 					if($movingObjectPosition->entityHit->attack($ev->getFinalDamage(), $ev) === true){
 						if($this instanceof Arrow and $this->getPotionId() != 0){
-							foreach(Potion::getEffectsById($this->potionId - 1) as $effect){
+							foreach(Potion::getEffectsById($this->getPotionId() - 1) as $effect){
 								$movingObjectPosition->entityHit->addEffect($effect->setDuration($effect->getDuration() / 8));
 							}
 						}

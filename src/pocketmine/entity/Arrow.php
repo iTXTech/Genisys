@@ -54,6 +54,10 @@ class Arrow extends Projectile{
 		$this->potionId = $this->namedtag["Potion"];
 	}
 
+	public function isCritical() : bool{
+		return $this->isCritical;
+	}
+
 	public function getPotionId() : int{
 		return $this->potionId;
 	}
