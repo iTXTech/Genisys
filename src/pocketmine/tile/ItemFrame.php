@@ -33,10 +33,9 @@ use pocketmine\nbt\tag\StringTag;
 class ItemFrame extends Spawnable{
 
 	public function __construct(Chunk $chunk, CompoundTag $nbt) {
-		if(!isset($nbt->Item)) {
+		if(!isset($nbt->Item) or !($nbt->Item instanceof CompoundTag)) {
 			$nbt->Item = Item::get(Item::AIR)->nbtSerialize(-1, "Item");
 		}
-
 		parent::__construct($chunk, $nbt);
 	}
 
@@ -54,7 +53,7 @@ class ItemFrame extends Spawnable{
 
 	public function setItemRotation(int $itemRotation){
 		$this->namedtag->ItemRotation = new ByteTag("ItemRotation", $itemRotation);
-		$this->setChanged();
+		$this->onChanged();
 	}
 
 	public function getItem(){
@@ -64,7 +63,7 @@ class ItemFrame extends Spawnable{
 	public function setItem(Item $item, bool $setChanged = true){
 		$this->namedtag->Item = $item->nbtSerialize(-1, "Item");
 		if($setChanged) {
-			$this->setChanged();
+			$this->onChanged();
 		}
 	}
 
@@ -74,14 +73,6 @@ class ItemFrame extends Spawnable{
 
 	public function setItemDropChance(float $chance = 1.0){
 		$this->namedtag->ItemDropChance = new FloatTag("ItemDropChance", $chance);
-	}
-
-	private function setChanged(){
-		$this->spawnToAll();
-		if($this->chunk instanceof Chunk){
-			$this->chunk->setChanged();
-			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
-		}
 	}
 
 	public function getSpawnCompound() {

@@ -19,10 +19,6 @@
  *
  */
 
-/*
- * Copied from @beito123's FlowerPot plugin
- */
-
 namespace pocketmine\tile;
 
 use pocketmine\level\format\Chunk;
@@ -37,10 +33,10 @@ use pocketmine\utils\Color;
 class Cauldron extends Spawnable{
 
 	public function __construct(Chunk $chunk, CompoundTag $nbt){
-		if(!isset($nbt->PotionId)){
+		if(!isset($nbt->PotionId) or !($nbt->PotionId instanceof ShortTag)){
 			$nbt->PotionId = new ShortTag("PotionId", 0xffff);
 		}
-		if(!isset($nbt->SplashPotion)){
+		if(!isset($nbt->SplashPotion) or !($nbt->SplashPotion instanceof ByteTag)){
 			$nbt->SplashPotion = new ByteTag("SplashPotion", 0);
 		}
 		if(!isset($nbt->Items) or !($nbt->Items instanceof ListTag)){
@@ -55,12 +51,7 @@ class Cauldron extends Spawnable{
 
 	public function setPotionId($potionId){
 		$this->namedtag->PotionId = new ShortTag("PotionId", $potionId);
-
-		$this->spawnToAll();
-		if($this->chunk){
-			$this->chunk->setChanged();
-			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
-		}
+		$this->onChanged();
 	}
 
 	public function hasPotion(){
@@ -73,12 +64,7 @@ class Cauldron extends Spawnable{
 
 	public function setSplashPotion($bool){
 		$this->namedtag->SplashPotion = new ByteTag("SplashPotion", ($bool == true) ? 1 : 0);
-
-		$this->spawnToAll();
-		if($this->chunk){
-			$this->chunk->setChanged();
-			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
-		}
+		$this->onChanged();
 	}
 
 	public function getCustomColor(){//
@@ -115,24 +101,14 @@ class Cauldron extends Spawnable{
 			$color = ($r << 16 | $g << 8 | $b) & 0xffffff;
 		}
 		$this->namedtag->CustomColor = new IntTag("CustomColor", $color);
-
-		$this->spawnToAll();
-		if($this->chunk){
-			$this->chunk->setChanged();
-			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
-		}
+		$this->onChanged();
 	}
 
 	public function clearCustomColor(){
 		if(isset($this->namedtag->CustomColor)){
 			unset($this->namedtag->CustomColor);
 		}
-
-		$this->spawnToAll();
-		if($this->chunk){
-			$this->chunk->setChanged();
-			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
-		}
+		$this->onChanged();
 	}
 
 	public function getSpawnCompound(){

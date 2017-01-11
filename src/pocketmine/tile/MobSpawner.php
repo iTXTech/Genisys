@@ -37,26 +37,25 @@ use pocketmine\Player;
 class MobSpawner extends Spawnable{
 
 	public function __construct(Chunk $chunk, CompoundTag $nbt){
-		parent::__construct($chunk, $nbt);
-		if(!isset($nbt->EntityId)){
+		if(!isset($nbt->EntityId) or !($nbt->EntityId instanceof IntTag)){
 			$nbt->EntityId = new IntTag("EntityId", 0);
 		}
-		if(!isset($nbt->SpawnCount)){
+		if(!isset($nbt->SpawnCount) or !($nbt->SpawnCount instanceof IntTag)){
 			$nbt->SpawnCount = new IntTag("SpawnCount", 4);
 		}
-		if(!isset($nbt->SpawnRange)){
+		if(!isset($nbt->SpawnRange) or !($nbt->SpawnRange instanceof IntTag)){
 			$nbt->SpawnRange = new IntTag("SpawnRange", 4);
 		}
-		if(!isset($nbt->MinSpawnDelay)){
+		if(!isset($nbt->MinSpawnDelay) or !($nbt->MinSpawnDelay instanceof IntTag)){
 			$nbt->MinSpawnDelay = new IntTag("MinSpawnDelay", 200);
 		}
-		if(!isset($nbt->MaxSpawnDelay)){
+		if(!isset($nbt->MaxSpawnDelay) or !($nbt->MaxSpawnDelay instanceof IntTag)){
 			$nbt->MaxSpawnDelay = new IntTag("MaxSpawnDelay", 799);
 		}
-		if(!isset($nbt->Delay)){
+		if(!isset($nbt->Delay) or !($nbt->Delay instanceof IntTag)){
 			$nbt->Delay = new IntTag("Delay", mt_rand($nbt->MinSpawnDelay->getValue(), $nbt->MaxSpawnDelay->getValue()));
 		}
-
+		parent::__construct($chunk, $nbt);
 		if($this->getEntityId() > 0){
 			$this->scheduleUpdate();
 		}
@@ -68,11 +67,7 @@ class MobSpawner extends Spawnable{
 
 	public function setEntityId(int $id){
 		$this->namedtag->EntityId->setValue($id);
-		$this->spawnToAll();
-		if($this->chunk instanceof Chunk){
-			$this->chunk->setChanged();
-			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
-		}
+		$this->onChanged();
 		$this->scheduleUpdate();
 	}
 

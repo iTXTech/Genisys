@@ -74,7 +74,7 @@ class FlowerPot extends Flowable{
 	public function onActivate(Item $item, Player $player = null){
 		$tile = $this->getLevel()->getTile($this);
 		if($tile instanceof FlowerPotTile){
-			if($tile->getFlowerPotItem() === Item::AIR){
+			if($tile->getItem() === Item::AIR){
 				switch($item->getId()){
 					/** @noinspection PhpMissingBreakStatementInspection */
 					case Item::TALL_GRASS:
@@ -88,7 +88,7 @@ class FlowerPot extends Flowable{
 					case Item::BROWN_MUSHROOM:
 					case Item::RED_MUSHROOM:
 					case Item::CACTUS:
-						$tile->setFlowerPotData($item->getId(), $item->getDamage());
+						$tile->setItem($item);
 						$this->setDamage($item->getId());
 						$this->getLevel()->setBlock($this, $this, true, false);
 						if($player->isSurvival()){

@@ -128,11 +128,15 @@ abstract class Tile extends Position{
 		return self::$shortNames[static::class];
 	}
 
+	/** @noinspection PhpMissingParentConstructorInspection
+	 *
+	 * @param Chunk       $chunk
+	 * @param CompoundTag $nbt
+	 */
 	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		assert($chunk !== null and $chunk->getProvider() !== null);
 
 		$this->timings = Timings::getTileEntityTimings($this);
-
 		$this->server = $chunk->getProvider()->getLevel()->getServer();
 		$this->chunk = $chunk;
 		$this->setLevel($chunk->getProvider()->getLevel());
