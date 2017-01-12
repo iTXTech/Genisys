@@ -51,8 +51,6 @@ class FishingHook extends Projectile{
 		if(isset($this->namedtag->Data)){
 			$this->data = $this->namedtag["Data"];
 		}
-
-		// $this->setDataProperty(FallingSand::DATA_BLOCK_INFO, self::DATA_TYPE_INT, $this->getData());
 	}
 
 	public function __construct(Chunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
@@ -113,7 +111,7 @@ class FishingHook extends Projectile{
 			$pk = new EntityEventPacket();
 			$pk->eid = $this->shootingEntity->getId();//$this or $this->shootingEntity
 			$pk->event = EntityEventPacket::FISH_HOOK_HOOK;
-			Server::broadcastPacket($this->shootingEntity->hasSpawned, $pk);
+			$this->server->broadcastPacket($this->shootingEntity->hasSpawned, $pk);
 		}
 	}
 
@@ -122,7 +120,7 @@ class FishingHook extends Projectile{
 			$pk = new EntityEventPacket();
 			$pk->eid = $this->shootingEntity->getId();//$this or $this->shootingEntity
 			$pk->event = EntityEventPacket::FISH_HOOK_BUBBLE;
-			Server::broadcastPacket($this->shootingEntity->hasSpawned, $pk);
+			$this->server->broadcastPacket($this->shootingEntity->hasSpawned, $pk);
 		}
 	}
 
