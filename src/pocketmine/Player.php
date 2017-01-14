@@ -1606,6 +1606,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		if($this->server->checkMovement){
 			if(($distanceSquared / ($tickDiff ** 2)) > 200){
+				$this->server->getLogger()->warning($this->getName() . " moved too fast, reverting movement");
 				$revert = true;
 			}else{
 				if($this->chunk === null or !$this->chunk->isGenerated()){
@@ -1622,6 +1623,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 			}
 		}else{
+			//WTF is this. TODO: remove, and movement-check fixes
 			if($this->chunk === null or !$this->chunk->isGenerated()){
 				$chunk = $this->level->getChunk($newPos->x >> 4, $newPos->z >> 4, false);
 				if($chunk === null or !$chunk->isGenerated()){
