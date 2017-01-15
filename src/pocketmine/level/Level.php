@@ -111,8 +111,6 @@ use pocketmine\Server;
 use pocketmine\tile\Chest;
 use pocketmine\tile\Tile;
 use pocketmine\utils\Binary;
-use pocketmine\utils\LevelException;
-use pocketmine\utils\MainLogger;
 use pocketmine\utils\Random;
 use pocketmine\utils\ReversePriorityQueue;
 
@@ -2813,9 +2811,7 @@ class Level implements ChunkManager, Metadatable{
 		}catch(\Throwable $e){
 			$logger = $this->server->getLogger();
 			$logger->error($this->server->getLanguage()->translateString("pocketmine.level.chunkUnloadError", [$e->getMessage()]));
-			if($logger instanceof MainLogger){
-				$logger->logException($e);
-			}
+			$logger->logException($e);
 		}
 
 		unset($this->chunks[$index]);
