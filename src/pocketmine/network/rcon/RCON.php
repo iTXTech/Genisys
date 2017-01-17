@@ -30,8 +30,8 @@ namespace pocketmine\network\rcon;
 
 use pocketmine\command\RemoteConsoleCommandSender;
 use pocketmine\event\server\RemoteServerCommandEvent;
-use pocketmine\utils\Utils;
 use pocketmine\Server;
+use pocketmine\utils\Utils;
 
 class RCON{
 	const PROTOCOL_VERSION = 3;

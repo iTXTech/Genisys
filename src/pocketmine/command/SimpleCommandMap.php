@@ -47,8 +47,8 @@ use pocketmine\command\defaults\ListCommand;
 use pocketmine\command\defaults\LvdatCommand;
 use pocketmine\command\defaults\MeCommand;
 use pocketmine\command\defaults\OpCommand;
-use pocketmine\command\defaults\PardonCommand;
 use pocketmine\command\defaults\PardonCidCommand;
+use pocketmine\command\defaults\PardonCommand;
 use pocketmine\command\defaults\PardonIpCommand;
 use pocketmine\command\defaults\ParticleCommand;
 use pocketmine\command\defaults\PluginsCommand;
@@ -73,7 +73,6 @@ use pocketmine\command\defaults\VersionCommand;
 use pocketmine\command\defaults\WeatherCommand;
 use pocketmine\command\defaults\WhitelistCommand;
 use pocketmine\command\defaults\XpCommand;
-
 use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
 use pocketmine\Server;

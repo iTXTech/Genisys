@@ -24,8 +24,7 @@ namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
-
-use pocketmine\level\format\generic\BaseLevelProvider;
+use pocketmine\level\format\io\BaseLevelProvider;
 use pocketmine\nbt\tag\StringTag;
 
 class LvdatCommand extends VanillaCommand{

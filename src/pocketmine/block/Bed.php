@@ -62,7 +62,7 @@ class Bed extends Transparent{
 	public function onActivate(Item $item, Player $player = null){
 		if($this->getLevel()->getDimension() == Level::DIMENSION_NETHER){
 			$explosion = new Explosion($this, 6, $this);
-			$explosion->explode();
+			$explosion->explodeA();
 			return true;
 		}
 

@@ -11,15 +11,15 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\level\Level;
-use pocketmine\math\Vector3;
-use pocketmine\Player;
-use pocketmine\tile\Tile;
 use pocketmine\math\AxisAlignedBB;
-use pocketmine\nbt\tag\StringTag;
+use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ShortTag;
-use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\StringTag;
+use pocketmine\Player;
 use pocketmine\tile\FlowerPot as FlowerPotTile;
+use pocketmine\tile\Tile;
 
 class FlowerPot extends Flowable{
 	protected $id = Block::FLOWER_POT_BLOCK;

@@ -53,11 +53,11 @@ use pocketmine\level\format\io\region\McRegion;
 use pocketmine\level\format\io\region\PMAnvil;
 use pocketmine\level\generator\biome\Biome;
 use pocketmine\level\generator\Flat;
-use pocketmine\level\generator\Void;
 use pocketmine\level\generator\Generator;
 use pocketmine\level\generator\hell\Nether;
 use pocketmine\level\generator\normal\Normal;
 use pocketmine\level\generator\normal\Normal2;
+use pocketmine\level\generator\Void;
 use pocketmine\level\Level;
 use pocketmine\metadata\EntityMetadataStore;
 use pocketmine\metadata\LevelMetadataStore;
@@ -66,9 +66,9 @@ use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\LongTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
@@ -1445,7 +1445,7 @@ class Server{
 
 	§3Genisys§f is a custom version of §bPocketMine-MP§f, modified by §5iTX Technologies LLC§f
 	Version: §6' . $this->getPocketMineVersion() . '§f
-	Target client version: §b' . \pocketmine\MINECRAFT_VERSION . '§f
+	Target client version: §b' . ProtocolInfo::MINECRAFT_VERSION . '§f
 	Source code: §dhttps://github.com/iTXTech/Genisys§f
 	';
 	
@@ -1874,18 +1874,6 @@ class Server{
 		}catch(\Throwable $e){
 			$this->exceptionHandler($e);
 		}
-	}
-
-	/**
-	 * @deprecated Use SynapsePM plugin instead
-	 * @return Synapse|null
-	 */
-	public function getSynapse(){
-		$plugin = $this->pluginManager->getPlugin('SynapsePM');
-		if ($plugin === null or $plugin->isDisabled()) {
-			return null;
-		}
-		return $plugin->getSynapse();
 	}
 
 	/**

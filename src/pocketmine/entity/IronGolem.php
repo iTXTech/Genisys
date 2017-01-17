@@ -21,9 +21,9 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\item\Item as ItemItem;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
-use pocketmine\item\Item as ItemItem;
 
 class IronGolem extends Animal{
 	const NETWORK_ID = 20;

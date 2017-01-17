@@ -24,10 +24,10 @@ namespace pocketmine\tile;
 use pocketmine\block\Block;
 use pocketmine\block\DaylightDetector;
 use pocketmine\level\format\Chunk;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\StringTag;
-use pocketmine\nbt\tag\IntTag;
 use pocketmine\level\Level;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\StringTag;
 
 class DLDetector extends Spawnable{
 	private $lastType = 0;

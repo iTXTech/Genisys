@@ -22,13 +22,13 @@
 namespace pocketmine\entity;
 
 use pocketmine\event\player\PlayerFishEvent;
+use pocketmine\item\Item as ItemItem;
 use pocketmine\level\format\Chunk;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\Player;
-use pocketmine\item\Item as ItemItem;
-use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\network\protocol\AddEntityPacket;
-use pocketmine\Server;
+use pocketmine\network\protocol\EntityEventPacket;
+use pocketmine\Player;
+
 
 class FishingHook extends Projectile{
 	const NETWORK_ID = 77;
@@ -134,7 +134,7 @@ class FishingHook extends Projectile{
 			$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new PlayerFishEvent($this->shootingEntity, $item, $this));
 			if(!$ev->isCancelled()){
 				$this->shootingEntity->getInventory()->addItem($item);
-				$this->shootingEntity->addExperience(mt_rand(1, 6));
+				$this->shootingEntity->addXp(mt_rand(1, 6));
 				$this->damageRod = true;
 			}
 		}

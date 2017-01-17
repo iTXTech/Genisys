@@ -22,9 +22,9 @@
 namespace pocketmine\inventory;
 
 use pocketmine\item\Item;
+use pocketmine\math\Vector2;
 use pocketmine\Server;
 use pocketmine\utils\UUID;
-use pocketmine\math\Vector2;
 
 class ShapedRecipeFromJson extends ShapedRecipe{
 	/** @var Item */

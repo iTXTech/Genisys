@@ -23,7 +23,7 @@ namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
-use pocketmine\level\format\mcregion\McRegion;
+use pocketmine\level\format\io\region\McRegion;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
 use pocketmine\Player;

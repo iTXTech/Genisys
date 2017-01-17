@@ -22,12 +22,12 @@
 namespace pocketmine\entity;
 
 use pocketmine\block\Wool;
-use pocketmine\nbt\tag\ByteTag;
-use pocketmine\network\protocol\AddEntityPacket;
-use pocketmine\Player;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\level\format\Chunk;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\network\protocol\AddEntityPacket;
+use pocketmine\Player;
 
 class Sheep extends Animal implements Colorable{
 	const NETWORK_ID = 13;

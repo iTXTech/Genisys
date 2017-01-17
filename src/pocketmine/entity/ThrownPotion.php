@@ -21,13 +21,13 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\item\Potion;
 use pocketmine\level\format\Chunk;
 use pocketmine\level\particle\SpellParticle;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
-use pocketmine\item\Potion;
 
 class ThrownPotion extends Projectile{
 	const NETWORK_ID = 86;

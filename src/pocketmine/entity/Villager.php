@@ -21,8 +21,8 @@
 
 namespace pocketmine\entity;
 
-use pocketmine\nbt\tag\ByteTag;
 use pocketmine\level\format\Chunk;
+use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;

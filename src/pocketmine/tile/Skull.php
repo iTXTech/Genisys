@@ -22,7 +22,9 @@
 namespace pocketmine\tile;
 
 use pocketmine\level\format\Chunk;
-use pocketmine\nbt\tag\{ByteTag, CompoundTag, IntTag, StringTag};
+use pocketmine\nbt\tag\{
+	ByteTag, CompoundTag, IntTag, StringTag
+};
 
 class Skull extends Spawnable{
 

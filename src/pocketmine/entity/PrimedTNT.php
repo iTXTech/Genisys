@@ -23,7 +23,6 @@ namespace pocketmine\entity;
 
 
 use pocketmine\event\entity\EntityDamageEvent;
-
 use pocketmine\event\entity\ExplosionPrimeEvent;
 use pocketmine\level\Explosion;
 use pocketmine\level\format\Chunk;

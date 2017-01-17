@@ -21,10 +21,9 @@
 
 namespace pocketmine\event\entity;
 
-use pocketmine\entity\Entity;
-use pocketmine\Event;
-use pocketmine\event\Cancellable;
 use pocketmine\entity\Effect;
+use pocketmine\entity\Entity;
+use pocketmine\event\Cancellable;
 
 class EntityEffectAddEvent extends EntityEvent implements Cancellable{
 

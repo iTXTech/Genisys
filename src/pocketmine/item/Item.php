@@ -24,8 +24,6 @@
  */
 namespace pocketmine\item;
 
-use pocketmine\Player;
-use pocketmine\Server;
 use pocketmine\block\Block;
 use pocketmine\entity\CaveSpider;
 use pocketmine\entity\Entity;
@@ -45,6 +43,8 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
+use pocketmine\Player;
+use pocketmine\Server;
 use pocketmine\utils\Config;
 
 class Item implements ItemIds, \JsonSerializable{

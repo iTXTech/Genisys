@@ -28,8 +28,8 @@ use pocketmine\block\Block;
 use pocketmine\block\Fire;
 use pocketmine\block\Portal;
 use pocketmine\block\PressurePlate;
-use pocketmine\block\Water;
 use pocketmine\block\SlimeBlock;
+use pocketmine\block\Water;
 use pocketmine\entity\Item as DroppedItem;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDespawnEvent;
@@ -55,9 +55,9 @@ use pocketmine\metadata\MetadataValue;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\MobEffectPacket;
@@ -527,6 +527,8 @@ abstract class Entity extends Location implements Metadatable{
 			$this->recalculateEffectColor();
 			return true;
 		}
+
+		return false;
 	}
 
 	public function getEffect($effectId){
@@ -552,7 +554,7 @@ abstract class Entity extends Location implements Metadatable{
 		if(isset($this->effects[$effect->getId()])){
 			$oldEffect = $this->effects[$effect->getId()];
 			if(($effect->getAmplifier() <= ($oldEffect->getAmplifier())) and $effect->getDuration() < $oldEffect->getDuration()){
-				return;
+				return false;
 			}
 			$effect->add($this, true, $oldEffect);
 		}else{

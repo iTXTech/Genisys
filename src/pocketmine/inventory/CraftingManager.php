@@ -22,10 +22,10 @@ namespace pocketmine\inventory;
 
 use pocketmine\item\Item;
 use pocketmine\item\Potion;
-use pocketmine\utils\UUID;
 use pocketmine\Server;
-use pocketmine\utils\MainLogger;
 use pocketmine\utils\Config;
+use pocketmine\utils\MainLogger;
+use pocketmine\utils\UUID;
 
 class CraftingManager{
 	/** @var Recipe[] */

@@ -21,7 +21,6 @@
 
 namespace pocketmine\block;
 
-use pocketmine\Player;
 use pocketmine\entity\IronGolem;
 use pocketmine\entity\SnowGolem;
 use pocketmine\item\Item;
@@ -30,6 +29,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\ListTag;
+use pocketmine\Player;
 
 class Pumpkin extends Solid{
 
@@ -102,7 +102,7 @@ class Pumpkin extends Solid{
 					}elseif($block4->getId() == Item::IRON_BLOCK and $block5->getId() == Item::IRON_BLOCK and $block2->getId() == Item::AIR and $block3->getId() == Item::AIR){
 						$level->setBlock($block4, new Air());
 						$level->setBlock($block5, new Air());
-					}else return;
+					}else return false;
 					$level->setBlock($block, new Air());
 					$level->setBlock($block0, new Air());
 					$level->setBlock($block1, new Air());

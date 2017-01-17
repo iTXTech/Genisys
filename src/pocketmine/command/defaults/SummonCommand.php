@@ -22,15 +22,15 @@
 namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
+use pocketmine\entity\Entity;
 use pocketmine\event\TranslationContainer;
 use pocketmine\nbt\NBT;
-use pocketmine\Player;
-use pocketmine\entity\Entity;
-use pocketmine\utils\TextFormat;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\ListTag;
+use pocketmine\Player;
+use pocketmine\utils\TextFormat;
 
 class SummonCommand extends VanillaCommand{
 

@@ -23,11 +23,11 @@ namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
+use pocketmine\item\Item;
+use pocketmine\item\ItemBlock;
+use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
-use pocketmine\math\Vector3;
-use pocketmine\item\ItemBlock;
-use pocketmine\item\Item;
 
 class SetBlockCommand extends VanillaCommand{
 

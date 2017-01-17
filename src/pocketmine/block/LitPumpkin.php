@@ -21,7 +21,6 @@
 
 namespace pocketmine\block;
 
-use pocketmine\Player;
 use pocketmine\entity\IronGolem;
 use pocketmine\entity\SnowGolem;
 use pocketmine\item\Item;
@@ -30,6 +29,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\ListTag;
+use pocketmine\Player;
 
 class LitPumpkin extends Solid implements SolidLight{
 

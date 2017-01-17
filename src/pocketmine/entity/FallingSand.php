@@ -28,7 +28,6 @@ use pocketmine\block\SnowLayer;
 use pocketmine\event\entity\EntityBlockChangeEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
-
 use pocketmine\item\Item as ItemItem;
 use pocketmine\level\sound\AnvilFallSound;
 use pocketmine\math\Vector3;

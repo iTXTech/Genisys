@@ -21,7 +21,7 @@
 
 namespace pocketmine\item;
 
-use pocketmine\block\block;
+use pocketmine\block\Block;
 
 class Redstone extends Item{
 	public function __construct($meta = 0, $count = 1){

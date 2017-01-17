@@ -25,7 +25,6 @@ use pocketmine\item\Item;
 use pocketmine\level\Level;
 use pocketmine\network\protocol\BlockEventPacket;
 use pocketmine\Player;
-
 use pocketmine\tile\Chest;
 
 class DoubleChestInventory extends ChestInventory implements InventoryHolder{

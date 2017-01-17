@@ -21,13 +21,12 @@
 
 namespace pocketmine\item;
 
-use pocketmine\Server;
-use pocketmine\Player;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Human;
 use pocketmine\event\entity\EntityDrinkPotionEvent;
 use pocketmine\network\protocol\EntityEventPacket;
+use pocketmine\Player;
 
 class Potion extends Item{
 

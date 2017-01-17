@@ -24,7 +24,7 @@ namespace pocketmine\item;
 
 use pocketmine\block\Block;
 use pocketmine\entity\Entity;
-use pocketmine\item\enchantment\enchantment;
+use pocketmine\item\enchantment\Enchantment;
 
 abstract class Tool extends Item{
 	const TIER_WOODEN = 1;

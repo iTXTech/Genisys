@@ -23,12 +23,12 @@ namespace pocketmine\entity;
 
 
 use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\item\Item as ItemItem;
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\Item as ItemItem;
+use pocketmine\math\Vector3;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
-use pocketmine\math\Vector3;
-use pocketmine\event\entity\EntityDamageEvent;
 
 class Zombie extends Monster{
 	const NETWORK_ID = 32;
@@ -103,7 +103,7 @@ class Zombie extends Monster{
 				$player = $p;
 			}
 		}
-		return (($dis <= $this->hate_r) ? $p : false);
+		return (($dis <= $this->hate_r) ? $player : false);
 	}
 	
 	private function getVelY(){

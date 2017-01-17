@@ -24,8 +24,7 @@ declare(strict_types = 1);
 namespace pocketmine\command;
 
 use pocketmine\Thread;
-use pocketmine\utils\MainLogger;
-use pocketmine\utils\Utils;
+
 
 class CommandReader extends Thread{
 
