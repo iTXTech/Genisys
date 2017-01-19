@@ -3584,36 +3584,21 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * Sends a direct chat message to a player
 	 *
 	 * @param string|TextContainer $message
-	 * @return bool
 	 */
 	public function sendMessage($message){
-
 		if($message instanceof TextContainer){
-
 			if($message instanceof TranslationContainer){
 				$this->sendTranslation($message->getText(), $message->getParameters());
 				return false;
 			}
 
 			$message = $message->getText();
-
 		}
 
-		$mes = explode("\n", $this->server->getLanguage()->translateString($message));
-
-		foreach($mes as $m){
-			if($m !== ""){
-				$this->server->getPluginManager()->callEvent($ev = new PlayerTextPreSendEvent($this, $m, PlayerTextPreSendEvent::MESSAGE));
-				if(!$ev->isCancelled()){
-					$pk = new TextPacket();
-					$pk->type = TextPacket::TYPE_RAW;
-					$pk->message = $ev->getMessage();
-					$this->dataPacket($pk);
-				}
-			}
-		}
-
-		return true;
+		$pk = new TextPacket();
+		$pk->type = TextPacket::TYPE_RAW;
+		$pk->message = $this->server->getLanguage()->translateString($message);
+		$this->dataPacket($pk);
 	}
 
 	public function sendTranslation($message, array $parameters = []){
