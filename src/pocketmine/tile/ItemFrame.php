@@ -60,11 +60,9 @@ class ItemFrame extends Spawnable{
 		return Item::nbtDeserialize($this->namedtag->Item);
 	}
 
-	public function setItem(Item $item, bool $setChanged = true){
+	public function setItem(Item $item){
 		$this->namedtag->Item = $item->nbtSerialize(-1, "Item");
-		if($setChanged) {
-			$this->onChanged();
-		}
+		$this->onChanged();
 	}
 
 	public function getItemDropChance(){
