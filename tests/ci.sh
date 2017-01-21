@@ -1,8 +1,7 @@
 #!/bin/bash
 mkdir plugins
-curl -o DevTools.zip "https://jenkins.pmmp.io/job/PocketMine-MP%20DevTools/lastSuccessfulBuild/artifact/*zip*/artifacts.zip"
-unzip DevTools.zip
-mv archive/*.phar plugins
+git clone https://github.com/pmmp/PocketMine-DevTools.git -b api3
+php PocketMine-DevTools/src/DevTools/ConsoleScript.php --make "./PocketMine-DevTools" --relative "./PocketMine-DevTools" --out "./plugins/DevTools.phar"
 echo Running lint...
 shopt -s globstar
 for file in src/pocketmine/*.php src/pocketmine/**/*.php; do
