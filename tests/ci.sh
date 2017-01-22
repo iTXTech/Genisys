@@ -1,6 +1,8 @@
 #!/bin/bash
 mkdir plugins
-curl -fsSL https://github.com/iTXTech/DevTools/releases/download/v1.1-iTX/DevTools_v1.1-iTX.phar -o plugins/DevTools.phar
+mkdir plugins
+git clone https://github.com/pmmp/PocketMine-DevTools.git -b master
+php PocketMine-DevTools/src/DevTools/ConsoleScript.php --make "./PocketMine-DevTools" --relative "./PocketMine-DevTools" --out "./plugins/DevTools.phar"
 echo Running lint...
 shopt -s globstar
 for file in **/*.php; do
@@ -8,7 +10,7 @@ for file in **/*.php; do
     [ $? -ne 0 ] && echo -n "$OUTPUT" && exit 1
 done
 echo Lint done successfully.
-echo -e "version\nms\nstop\n" | php src/pocketmine/PocketMine.php --no-wizard --disable-readline | grep -v "\[DevTools\] Adding "
+echo -e "version\nmakeserver\nstop\n" | php src/pocketmine/PocketMine.php --no-wizard --disable-readline | grep -v "\[DevTools\] Adding "
 if ls plugins/DevTools_OUTPUT/Genisys*.phar >/dev/null 2>&1; then
     echo Server packaged successfully.
 else
