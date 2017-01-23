@@ -113,6 +113,7 @@ use pocketmine\utils\MainLogger;
 use pocketmine\utils\Random;
 use pocketmine\utils\ReversePriorityQueue;
 use pocketmine\level\particle\Particle;
+use pocketmine\level\sound\ExplodeSound;
 use pocketmine\level\sound\BlockPlaceSound;
 use pocketmine\level\sound\Sound;
 use pocketmine\level\particle\DestroyBlockParticle;
@@ -2453,6 +2454,7 @@ class Level implements ChunkManager, Metadatable{
 	 * @param Player $p
 	 */
 	public function sendLighting(int $x, int $y, int $z, Player $p){
+		$this->addSound(new ExplodeSound(new Vector3($x, $y, $z)), $this->getPlayers());
 		$pk = new AddEntityPacket();
 		$pk->type = Lightning::NETWORK_ID;
 		$pk->eid = mt_rand(10000000, 100000000);
@@ -2488,7 +2490,8 @@ class Level implements ChunkManager, Metadatable{
 		]);
 
 		$chunk = $this->getChunk($pos->x >> 4, $pos->z >> 4, false);
-
+		$this->addSound(new ExplodeSound($pos), $this->getPlayers());
+		
 		$lightning = new Lightning($chunk, $nbt);
 		$lightning->spawnToAll();
 
