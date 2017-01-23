@@ -1,5 +1,12 @@
 #!/bin/bash
 
+#  _____   _____   __   _   _   _____  __    __  _____
+# /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+# | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+# | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+# | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+# \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+# 
 # This is the start.sh file for Genisys
 # Please input ./start.sh to start server
 
@@ -42,7 +49,7 @@ if [ "$PHP_BINARY" == "" ]; then
 	elif type php 2>/dev/null; then
 		PHP_BINARY=$(type -p php)
 	else
-		echo "[ERROR] Couldn't find a working PHP binary, please use the installer."
+		echo "Error> Couldn't find a working PHP binary, please use the installer."
 		exit 1
 	fi
 fi
@@ -57,7 +64,9 @@ if [ "$POCKETMINE_FILE" == "" ]; then
 	elif [ -f ./src/pocketmine/PocketMine.php ]; then
 		POCKETMINE_FILE="./src/pocketmine/PocketMine.php"
 	else
-		echo "[ERROR] Couldn't find a valid Genisys installation."
+		echo "Error> Couldn't find a valid Genisys installation."
+		echo "Info> Please find and put in this directory valid Genisys installation."
+		echo "Tip> Genisys installation file can be found on: github.com/iTXTech/php-build-scripts/blob/master/linux-build-install.sh"
 		exit 1
 	fi
 fi
@@ -75,5 +84,5 @@ while [ "$LOOPS" -eq 0 ] || [ "$DO_LOOP" == "yes" ]; do
 done
 
 if [ ${LOOPS} -gt 1 ]; then
-	echo "[INFO] Restarted $LOOPS times"
+	echo "Info> Restarted $LOOPS times"
 fi
