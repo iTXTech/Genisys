@@ -34,20 +34,21 @@ use pocketmine\nbt\tag\StringTag;
 
 abstract class Tile extends Position{
 
-	const SIGN = "Sign";
-	const CHEST = "Chest";
-	const FURNACE = "Furnace";
-	const FLOWER_POT = "FlowerPot";
-	const MOB_SPAWNER = "MobSpawner";
-	const SKULL = "Skull";
 	const BREWING_STAND = "BrewingStand";
-	const ENCHANT_TABLE = "EnchantTable";
-	const ITEM_FRAME = "ItemFrame";
-	const DISPENSER = "Dispenser";
-	const DROPPER = "Dropper";
-	const DAY_LIGHT_DETECTOR = "DLDetector";
 	const CAULDRON = "Cauldron";
+	const CHEST = "Chest";
+	const DISPENSER = "Dispenser";
+	const DAY_LIGHT_DETECTOR = "DLDetector";
+	const DROPPER = "Dropper";
+	const ENCHANT_TABLE = "EnchantTable";
+	const ENDER_CHEST = "EnderChest";
+	const FLOWER_POT = "FlowerPot";
+	const FURNACE = "Furnace";
 	const HOPPER = "Hopper";
+	const ITEM_FRAME = "ItemFrame";
+	const MOB_SPAWNER = "MobSpawner";
+	const SIGN = "Sign";
+	const SKULL = "Skull";
 
 	public static $tileCount = 1;
 
@@ -77,6 +78,7 @@ abstract class Tile extends Position{
 		self::registerTile(DLDetector::class);
 		self::registerTile(Dropper::class);
 		self::registerTile(EnchantTable::class);
+		self::registerTile(EnderChest::class);
 		self::registerTile(FlowerPot::class);
 		self::registerTile(Furnace::class);
 		self::registerTile(Hopper::class);
