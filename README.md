@@ -49,7 +49,7 @@ _All other branches are in testing and may be unstable. Do not use builds from o
 
 Tools
 -------------
-* [Genisys-DevTools](https://github.com/iTXTech/DevTools) - Plugin and server development tools plugin
+* [DevTools](https://github.com/pmmp/PocketMine-DevTools) - Plugin and server development tools plugin
 * [Pocket Server](https://github.com/fengberd/MinecraftPEServer) - Run PocketMine-MP/Nukkit on Android devices
 
 More
