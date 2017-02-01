@@ -25,8 +25,8 @@ use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
 use pocketmine\math\Vector2;
 use pocketmine\math\Vector3;
-use pocketmine\utils\VectorIterator;
 use pocketmine\utils\Random;
+use pocketmine\utils\VectorIterator;
 
 class BigTree extends Tree{
 	public $overridable = [

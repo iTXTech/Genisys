@@ -21,13 +21,13 @@
 
 namespace pocketmine\entity;
 
-use pocketmine\level\format\FullChunk;
+use pocketmine\item\Potion;
+use pocketmine\level\format\Chunk;
 use pocketmine\level\particle\SpellParticle;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
-use pocketmine\item\Potion;
 
 class ThrownPotion extends Projectile{
 	const NETWORK_ID = 86;
@@ -41,7 +41,7 @@ class ThrownPotion extends Projectile{
 	protected $gravity = 0.1;
 	protected $drag = 0.05;
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
+	public function __construct(Chunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
 		if(!isset($nbt->PotionId)){
 			$nbt->PotionId = new ShortTag("PotionId", Potion::AWKWARD);
 		}

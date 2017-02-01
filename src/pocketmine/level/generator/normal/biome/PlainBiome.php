@@ -21,13 +21,13 @@
 
 namespace pocketmine\level\generator\normal\biome;
 
-use pocketmine\level\generator\populator\TallGrass;
-use pocketmine\level\generator\populator\LilyPad;
-use pocketmine\level\generator\populator\WaterPit;
 use pocketmine\block\Block;
 use pocketmine\block\Flower as FlowerBlock;
 use pocketmine\level\generator\populator\Flower;
+use pocketmine\level\generator\populator\LilyPad;
 use pocketmine\level\generator\populator\Sugarcane;
+use pocketmine\level\generator\populator\TallGrass;
+use pocketmine\level\generator\populator\WaterPit;
 
 class PlainBiome extends GrassyBiome{
 

@@ -23,7 +23,7 @@ namespace pocketmine\level\sound;
 
 use pocketmine\block\Block;
 use pocketmine\network\protocol\LevelEventPacket;
- 
+
 class BlockPlaceSound extends GenericSound{
 	
 	protected $data;

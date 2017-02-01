@@ -21,9 +21,10 @@
 
 namespace pocketmine\block;
 
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
-use pocketmine\item\enchantment\enchantment;
+
 
 class NetherQuartzOre extends Solid{
 	protected $id = self::NETHER_QUARTZ_ORE;

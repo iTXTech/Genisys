@@ -24,12 +24,12 @@ declare(strict_types=1);
 namespace pocketmine\level;
 
 use pocketmine\block\Block;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\math\Vector3;
 
 class SimpleChunkManager implements ChunkManager{
 
-	/** @var FullChunk[] */
+	/** @var Chunk[] */
 	protected $chunks = [];
 
 	protected $seed;
@@ -55,7 +55,7 @@ class SimpleChunkManager implements ChunkManager{
 	 */
 	public function getBlockIdAt(int $x, int $y, int $z) : int{
 		if($chunk = $this->getChunk($x >> 4, $z >> 4)){
-			return $chunk->getBlockId($x & 0xf, $y & 0x7f, $z & 0xf);
+			return $chunk->getBlockId($x & 0xf, $y & Level::Y_MASK, $z & 0xf);
 		}
 		return 0;
 	}
@@ -70,7 +70,7 @@ class SimpleChunkManager implements ChunkManager{
 	 */
 	public function setBlockIdAt(int $x, int $y, int $z, int $id){
 		if($chunk = $this->getChunk($x >> 4, $z >> 4)){
-			$chunk->setBlockId($x & 0xf, $y & 0x7f, $z & 0xf, $id);
+			$chunk->setBlockId($x & 0xf, $y & Level::Y_MASK, $z & 0xf, $id);
 		}
 	}
 
@@ -85,7 +85,7 @@ class SimpleChunkManager implements ChunkManager{
 	 */
 	public function getBlockDataAt(int $x, int $y, int $z) : int{
 		if($chunk = $this->getChunk($x >> 4, $z >> 4)){
-			return $chunk->getBlockData($x & 0xf, $y & 0x7f, $z & 0xf);
+			return $chunk->getBlockData($x & 0xf, $y & Level::Y_MASK, $z & 0xf);
 		}
 		return 0;
 	}
@@ -100,7 +100,7 @@ class SimpleChunkManager implements ChunkManager{
 	 */
 	public function setBlockDataAt(int $x, int $y, int $z, int $data){
 		if($chunk = $this->getChunk($x >> 4, $z >> 4)){
-			$chunk->setBlockData($x & 0xf, $y & 0x7f, $z & 0xf, $data);
+			$chunk->setBlockData($x & 0xf, $y & Level::Y_MASK, $z & 0xf, $data);
 		}
 	}
 
@@ -232,18 +232,18 @@ class SimpleChunkManager implements ChunkManager{
 	 * @param int $chunkX
 	 * @param int $chunkZ
 	 *
-	 * @return FullChunk|null
+	 * @return Chunk|null
 	 */
 	public function getChunk(int $chunkX, int $chunkZ){
 		return isset($this->chunks[$index = Level::chunkHash($chunkX, $chunkZ)]) ? $this->chunks[$index] : null;
 	}
 
 	/**
-	 * @param int $chunkX
-	 * @param int $chunkZ
-	 * @param FullChunk $chunk
+	 * @param int   $chunkX
+	 * @param int   $chunkZ
+	 * @param Chunk $chunk
 	 */
-	public function setChunk(int $chunkX, int $chunkZ, FullChunk $chunk = null){
+	public function setChunk(int $chunkX, int $chunkZ, Chunk $chunk = null){
 		if($chunk === null){
 			unset($this->chunks[Level::chunkHash($chunkX, $chunkZ)]);
 			return;

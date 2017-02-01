@@ -46,8 +46,8 @@ class Obsidian extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getHardness() {
-		return 50;
+	public function getHardness(){
+		return 35;
 	}
 
 	public function getDrops(Item $item) : array {

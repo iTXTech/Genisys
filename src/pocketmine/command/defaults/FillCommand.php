@@ -21,15 +21,15 @@
 
 namespace pocketmine\command\defaults;
 
-use pocketmine\command\Command;
+
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
+use pocketmine\item\Item;
+use pocketmine\item\ItemBlock;
+use pocketmine\level\Level;
+use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
-use pocketmine\math\Vector3;
-use pocketmine\item\ItemBlock;
-use pocketmine\item\Item;
-use pocketmine\level\Level;
 
 class FillCommand extends VanillaCommand{
 
@@ -91,6 +91,8 @@ class FillCommand extends VanillaCommand{
 			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
 			return false;
 		}
+
+		return false;
 	}
 
 	private function setBlock(Vector3 $p, Level $lvl, ItemBlock $b, int $meta = 0) : bool{

@@ -26,7 +26,7 @@ use pocketmine\entity\Item as DroppedItem;
 use pocketmine\inventory\HopperInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
@@ -44,8 +44,13 @@ class Hopper extends Spawnable implements InventoryHolder, Container, Nameable{
 	/** @var bool */
 	protected $isPowered = false;
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
+		if(!isset($nbt->TransferCooldown) or !($nbt->TransferCooldown instanceof IntTag)){
+			$nbt->TransferCooldown = new IntTag("TransferCooldown", 0);
+		}
+
 		parent::__construct($chunk, $nbt);
+
 		$this->inventory = new HopperInventory($this);
 
 		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)){
@@ -56,17 +61,12 @@ class Hopper extends Spawnable implements InventoryHolder, Container, Nameable{
 		for($i = 0; $i < $this->getSize(); ++$i){
 			$this->inventory->setItem($i, $this->getItem($i));
 		}
-		$this->namedtag->TransferCooldown = new IntTag("TransferCooldown", 0);
 
 		$this->scheduleUpdate();
 	}
 
 	public function close(){
 		if($this->closed === false){
-			foreach($this->getInventory()->getViewers() as $player){
-				$player->removeWindow($this->getInventory());
-			}
-
 			foreach($this->getInventory()->getViewers() as $player){
 				$player->removeWindow($this->getInventory());
 			}

@@ -22,9 +22,9 @@
 namespace pocketmine\block;
 
 use pocketmine\event\block\BlockGrowEvent;
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
-use pocketmine\item\enchantment\enchantment;
 use pocketmine\Player;
 use pocketmine\Server;
 

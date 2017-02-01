@@ -8,15 +8,15 @@
 namespace pocketmine\item;
 
 use pocketmine\block\Block;
+use pocketmine\entity\Painting as PaintingEntity;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
-use pocketmine\Player;
-use pocketmine\entity\Painting as PaintingEntity;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\ListTag;
-use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\ListTag;
+use pocketmine\nbt\tag\StringTag;
+use pocketmine\Player;
 
 class Painting extends Item{
 	public function __construct($meta = 0, $count = 1){
@@ -122,7 +122,7 @@ class Painting extends Item{
 				$count = $item->getCount();
 				if(--$count <= 0){
 					$player->getInventory()->setItemInHand(Item::get(Item::AIR));
-					return;
+					return true;
 				}
 
 				$item->setCount($count);

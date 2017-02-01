@@ -117,7 +117,9 @@ class Binary{
 					break;
 				case Entity::DATA_TYPE_POS:
 					//TODO: change this implementation (use objects)
-					$stream->putBlockCoords($d[1][0], $d[1][1], $d[1][2]); //x, y, z
+					$stream->putVarInt($d[1][0]); //x
+					$stream->putVarInt($d[1][1]); //y (SIGNED)
+					$stream->putVarInt($d[1][2]); //z
 					break;
 				case Entity::DATA_TYPE_LONG:
 					$stream->putVarInt($d[1]); //TODO: varint64 support
@@ -166,14 +168,17 @@ class Binary{
 					break;
 				case Entity::DATA_TYPE_SLOT:
 					//TODO: use objects directly
+					$value = [];
 					$item = $stream->getSlot();
 					$value[0] = $item->getId();
 					$value[1] = $item->getCount();
 					$value[2] = $item->getDamage();
 					break;
 				case Entity::DATA_TYPE_POS:
-					$value = [0, 0, 0];
-					$stream->getBlockCoords($value[0], $value[1], $value[2]);
+					$value = [];
+					$value[0] = $stream->getVarInt(); //x
+					$value[1] = $stream->getVarInt(); //y (SIGNED)
+					$value[2] = $stream->getVarInt(); //z
 					break;
 				case Entity::DATA_TYPE_LONG:
 					$value = $stream->getVarInt(); //TODO: varint64 proper support
@@ -355,18 +360,28 @@ class Binary{
 		return pack("V", $value);
 	}
 
-	public static function readFloat($str){
+	public static function readFloat($str, int $accuracy = -1){
 		self::checkLength($str, 4);
-		return ENDIANNESS === self::BIG_ENDIAN ? unpack("f", $str)[1] : unpack("f", strrev($str))[1];
+		$value = ENDIANNESS === self::BIG_ENDIAN ? unpack("f", $str)[1] : unpack("f", strrev($str))[1];
+		if($accuracy > -1){
+			return round($value, $accuracy);
+		}else{
+			return $value;
+		}
 	}
 
 	public static function writeFloat($value){
 		return ENDIANNESS === self::BIG_ENDIAN ? pack("f", $value) : strrev(pack("f", $value));
 	}
 
-	public static function readLFloat($str){
+	public static function readLFloat($str, int $accuracy = -1){
 		self::checkLength($str, 4);
-		return ENDIANNESS === self::BIG_ENDIAN ? unpack("f", strrev($str))[1] : unpack("f", $str)[1];
+		$value = ENDIANNESS === self::BIG_ENDIAN ? unpack("f", strrev($str))[1] : unpack("f", $str)[1];
+		if($accuracy > -1){
+			return round($value, $accuracy);
+		}else{
+			return $value;
+		}
 	}
 
 	public static function writeLFloat($value){

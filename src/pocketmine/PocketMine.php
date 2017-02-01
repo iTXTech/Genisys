@@ -65,6 +65,8 @@ namespace {
 }
 
 namespace pocketmine {
+
+	use pocketmine\network\protocol\Info as ProtocolInfo;
 	use pocketmine\utils\Binary;
 	use pocketmine\utils\MainLogger;
 	use pocketmine\utils\ServerKiller;
@@ -73,11 +75,9 @@ namespace pocketmine {
 	use pocketmine\wizard\Installer;
 
 	const VERSION = ""; //will be set by CI to a git hash
-	const API_VERSION = "2.1.0";
-	const CODENAME = "Kyrios";
-	const MINECRAFT_VERSION = "v0.16.0.5 alpha";
-	const MINECRAFT_VERSION_NETWORK = "0.16.0.5";
-	const GENISYS_API_VERSION = '1.9.3';
+	const API_VERSION = "3.0.0-ALPHA3";
+	const CODENAME = "Enopoio";
+	const GENISYS_API_VERSION = '2.0.0';
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
@@ -132,6 +132,16 @@ namespace pocketmine {
 
 	define('pocketmine\DATA', isset($opts["data"]) ? $opts["data"] . DIRECTORY_SEPARATOR : \getcwd() . DIRECTORY_SEPARATOR);
 	define('pocketmine\PLUGIN_PATH', isset($opts["plugins"]) ? $opts["plugins"] . DIRECTORY_SEPARATOR : \getcwd() . DIRECTORY_SEPARATOR . "plugins" . DIRECTORY_SEPARATOR);
+
+	/**
+	 * @deprecated This constant has moved to {@link \pocketmine\network\protocol\Info} and will be removed from here in the future.
+	 */
+	const MINECRAFT_VERSION = ProtocolInfo::MINECRAFT_VERSION;
+	/**
+	 * @deprecated This constant has moved to {@link \pocketmine\network\protocol\Info} and will be removed from here in the future.
+	 */
+	const MINECRAFT_VERSION_NETWORK = ProtocolInfo::MINECRAFT_VERSION_NETWORK;
+
 
 	Terminal::init();
 
@@ -473,23 +483,38 @@ namespace pocketmine {
 	}*/
 
 	ThreadManager::init();
-	$server = new Server($autoloader, $logger, \pocketmine\PATH, \pocketmine\DATA, \pocketmine\PLUGIN_PATH, $lang);
+	new Server($autoloader, $logger, \pocketmine\PATH, \pocketmine\DATA, \pocketmine\PLUGIN_PATH, $lang);
 
 	$logger->info("Stopping other threads");
-
-	foreach(ThreadManager::getInstance()->getAll() as $id => $thread){
-		$logger->debug("Stopping " . (new \ReflectionClass($thread))->getShortName() . " thread");
-		$thread->quit();
-	}
 
 	$killer = new ServerKiller(8);
 	$killer->start();
 
+	$erroredThreads = 0;
+
+	foreach(ThreadManager::getInstance()->getAll() as $id => $thread){
+		$logger->debug("Stopping " . $thread->getThreadName() . " thread");
+		try{
+			$thread->quit();
+			$logger->debug($thread->getThreadName() . " thread stopped successfully.");
+		}catch(\ThreadException $e){
+			++$erroredThreads;
+			$logger->debug("Could not stop " . $thread->getThreadName() . " thread: " . $e->getMessage());
+		}
+	}
+
 	$logger->shutdown();
 	$logger->join();
 
-	echo "Server has stopped" . Terminal::$FORMAT_RESET . "\n";
+	echo Terminal::$FORMAT_RESET . PHP_EOL;
 
-	exit(0);
+	if($erroredThreads > 0){
+		if(\pocketmine\DEBUG > 1){
+			echo "Some threads could not be stopped, performing a force-kill" . PHP_EOL . PHP_EOL;
+		}
+		kill(getmypid());
+	}else{
+		exit(0);
+	}
 
 }

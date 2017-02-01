@@ -12,7 +12,7 @@ genisys.yml
 crashdumps/*
 
 # Common IDEs
-.idea/*
+.idea/
 nbproject/*
 
 # Windows image file caches

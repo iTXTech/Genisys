@@ -19,15 +19,10 @@
  *
  */
 
-/*
- * Originally by @beito123
- * https://github.com/beito123/PocketMine-MP-Plugins/blob/master/test%2FFlowerPot%2Fsrc%2Fbeito%2FFlowerPot%2Fomake%2FSkull.php
- */
-
 namespace pocketmine\tile;
 
-use pocketmine\block\Block;
-use pocketmine\level\format\FullChunk;
+use pocketmine\item\Item;
+use pocketmine\level\format\Chunk;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ShortTag;
@@ -35,33 +30,24 @@ use pocketmine\nbt\tag\StringTag;
 
 class FlowerPot extends Spawnable{
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
-        parent::__construct($chunk, $nbt);
-		if(!isset($nbt->item)){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
+		if(!isset($nbt->item) or !($nbt->item instanceof ShortTag)){
 			$nbt->item = new ShortTag("item", 0);
 		}
-		if(!isset($nbt->mData)){
+		if(!isset($nbt->mData) or !($nbt->mData instanceof IntTag)){
 			$nbt->mData = new IntTag("mData", 0);
 		}
+		parent::__construct($chunk, $nbt);
 	}
 
-	public function getFlowerPotItem(){
-		return $this->namedtag["item"];
+	public function getItem() : Item{
+		return Item::get((int) ($this->namedtag["item"] ?? 0), (int) ($this->namedtag["mData"] ?? 0));
 	}
 
-	public function getFlowerPotData(){
-		return $this->namedtag["mData"];
-	}
-
-	public function setFlowerPotData($item, $data){
-		$this->namedtag->item = new ShortTag("item", (int) $item);
-		$this->namedtag->mData = new IntTag("mData", (int) $data);
-		$this->spawnToAll();
-		if($this->chunk){
-			$this->chunk->setChanged();
-			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
-		}
-		return true;
+	public function setItem(Item $item){
+		$this->namedtag["item"] = $item->getId();
+		$this->namedtag["mData"] = $item->getDamage();
+		$this->onChanged();
 	}
 
 	public function getSpawnCompound(){
@@ -70,8 +56,8 @@ class FlowerPot extends Spawnable{
 			new IntTag("x", (int) $this->x),
 			new IntTag("y", (int) $this->y),
 			new IntTag("z", (int) $this->z),
-			new ShortTag("item", (int) $this->namedtag["item"]),
-			new IntTag("mData", (int) $this->namedtag["mData"])
+			$this->namedtag->item,
+			$this->namedtag->mData
 		]);
 	}
 }

@@ -21,12 +21,12 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\Item as ItemItem;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\network\protocol\MobEquipmentPacket;
-use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\Player;
-use pocketmine\item\Item as ItemItem;
-use pocketmine\item\enchantment\Enchantment;
 
 class PigZombie extends Monster{
 	const NETWORK_ID = 36;

@@ -21,8 +21,8 @@
 
 namespace pocketmine\block;
 
-use pocketmine\level\Level;
 use pocketmine\item\Item;
+use pocketmine\level\Level;
 use pocketmine\Player;
 
 class DeadBush extends Flowable{

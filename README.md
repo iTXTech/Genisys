@@ -1,6 +1,8 @@
 Genisys
 ===================
 
+### This is a development branch, please do not use on production.
+
 __Feature-rich server software for Minecraft: Pocket Edition & Windows 10 Edition Beta__
 
 [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
@@ -47,7 +49,7 @@ _All other branches are in testing and may be unstable. Do not use builds from o
 
 Tools
 -------------
-* [Genisys-DevTools](https://github.com/iTXTech/DevTools) - Plugin and server development tools plugin
+* [DevTools](https://github.com/pmmp/PocketMine-DevTools) - Plugin and server development tools plugin
 * [Pocket Server](https://github.com/fengberd/MinecraftPEServer) - Run PocketMine-MP/Nukkit on Android devices
 
 More

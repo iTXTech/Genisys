@@ -21,8 +21,8 @@
 
 namespace pocketmine\entity;
 
-use pocketmine\Player;
 use pocketmine\network\protocol\AddEntityPacket;
+use pocketmine\Player;
 
 class Witch extends Monster{
 	const NETWORK_ID = 45;

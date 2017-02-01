@@ -24,6 +24,7 @@ namespace pocketmine\level\generator\populator;
 use pocketmine\block\Block;
 use pocketmine\level\ChunkManager;
 use pocketmine\utils\Random;
+
 //TODO: Remove
 class WaterPit extends Populator{
 	/** @var ChunkManager */

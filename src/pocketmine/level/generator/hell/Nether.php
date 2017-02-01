@@ -30,16 +30,13 @@ use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\biome\Biome;
 use pocketmine\level\generator\biome\BiomeSelector;
 use pocketmine\level\generator\Generator;
-
 use pocketmine\level\generator\noise\Simplex;
-
 use pocketmine\level\generator\object\OreType;
 use pocketmine\level\generator\populator\GroundFire;
 use pocketmine\level\generator\populator\NetherGlowStone;
 use pocketmine\level\generator\populator\NetherLava;
 use pocketmine\level\generator\populator\NetherOre;
 use pocketmine\level\generator\populator\Populator;
-
 use pocketmine\math\Vector3 as Vector3;
 use pocketmine\utils\Random;
 
@@ -141,13 +138,6 @@ class Nether extends Generator{
 
 				$biome = Biome::getBiome(Biome::HELL);
 				$chunk->setBiomeId($x, $z, $biome->getId());
-				$color = [0, 0, 0];
-				$bColor = $biome->getColor();
-				$color[0] += (($bColor >> 16) ** 2);
-				$color[1] += ((($bColor >> 8) & 0xff) ** 2);
-				$color[2] += (($bColor & 0xff) ** 2);
-
-				$chunk->setBiomeColor($x, $z, $color[0], $color[1], $color[2]);
 
 				for($y = 0; $y < 128; ++$y){
 					if($y === 0 or $y === 127){

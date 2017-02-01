@@ -23,8 +23,8 @@ namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
-use pocketmine\utils\TextFormat;
 use pocketmine\Player;
+use pocketmine\utils\TextFormat;
 
 class BiomeCommand extends VanillaCommand{
 
@@ -74,34 +74,6 @@ class BiomeCommand extends VanillaCommand{
 				}else{
 					$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.noPos"));
 				}
-			}elseif($args[0] == "color"){
-				$color = isset($args[1]) ? $args[1] : "146,188,89";//1=草原("146,188,89"),2=沙漠(251,183,19)"130,180,147"
-				$a = explode(",", $color);
-				//var_dump($a);
-				if(count($a) != 3){
-					$sender->sendMessage(TextFormat::RED . new TranslationContainer("pocketmine.command.biome.wrongCol"));
-					return false;
-				}
-				if(isset($sender->selectedPos[0]) and isset($sender->selectedPos[1])){
-					if($sender->selectedLev[0] !== $sender->selectedLev[1]){
-						$sender->sendMessage(TextFormat::RED . new TranslationContainer("pocketmine.command.biome.wrongLev"));
-						return false;
-					}
-					$x1 = min($sender->selectedPos[0][0], $sender->selectedPos[1][0]);
-					$z1 = min($sender->selectedPos[0][1], $sender->selectedPos[1][1]);
-					$x2 = max($sender->selectedPos[0][0], $sender->selectedPos[1][0]);
-					$z2 = max($sender->selectedPos[0][1], $sender->selectedPos[1][1]);
-					for($x = $x1; $x <= $x2; $x++){
-						for($z = $z1; $z <= $z2; $z++){
-							$level = $sender->getLevel();
-							$level->setBiomeColor($x, $z, $a[0], $a[1], $a[2]);
-						}
-					}
-					//$sender->selectedPos = array();
-					$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.color", [$a[0], $a[1], $a[2]]));
-				}else{
-					$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.noPos"));
-				}
 			}elseif($args[0] == "pos1"){
 				$x = floor($sender->getX());
 				$z = floor($sender->getZ());
@@ -120,8 +92,7 @@ class BiomeCommand extends VanillaCommand{
 				$x = floor($sender->getX());
 				$z = floor($sender->getZ());
 				$biome = $sender->getLevel()->getBiomeId($x, $z);
-				$color = $sender->getLevel()->getBiomeColor($x, $z);
-				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.get", [$biome, $color[0], $color[1], $color[2]]));
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.get", [$biome]));
 			}else{
 				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
 				return true;

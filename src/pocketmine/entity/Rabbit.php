@@ -21,14 +21,14 @@
 
 namespace pocketmine\entity;
 
-use pocketmine\item\enchantment\Enchantment;
-use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item as ItemItem;
+use pocketmine\level\format\Chunk;
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\network\protocol\AddEntityPacket;
-use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
 class Rabbit extends Animal{
@@ -56,7 +56,7 @@ class Rabbit extends Animal{
 		parent::initEntity();
 	}
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		if(!isset($nbt->RabbitType)){
 			$nbt->RabbitType = new ByteTag("RabbitType", $this->getRandomRabbitType());
 		}

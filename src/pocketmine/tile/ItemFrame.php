@@ -2,6 +2,7 @@
 
 /*
  *
+<<<<<<< HEAD
  *  _____   _____   __   _   _   _____  __    __  _____
  * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
  * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
@@ -22,29 +23,19 @@
 namespace pocketmine\tile;
 
 use pocketmine\item\Item;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\nbt\NBT;
 
 class ItemFrame extends Spawnable{
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
-		if(!isset($nbt->Item)){
+	public function __construct(Chunk $chunk, CompoundTag $nbt) {
+		if(!isset($nbt->Item) or !($nbt->Item instanceof CompoundTag)) {
 			$nbt->Item = Item::get(Item::AIR)->nbtSerialize(-1, "Item");
 		}
-
-		if(!isset($nbt->ItemRotation)){
-			$nbt->ItemRotation = new ByteTag("ItemRotation", 0);
-		}
-
-		if(!isset($nbt->ItemDropChance)){
-			$nbt->ItemDropChance = new FloatTag("ItemDropChance", 1.0);
-		}
-
 		parent::__construct($chunk, $nbt);
 	}
 
@@ -52,24 +43,26 @@ class ItemFrame extends Spawnable{
 		return "Item Frame";
 	}
 
-	public function getItemRotation(){
+	public function getItemRotation() {
 		return $this->namedtag["ItemRotation"];
+	}
+
+	public function hasItem() : bool{
+		return $this->getItem()->getId() !== Item::AIR;
 	}
 
 	public function setItemRotation(int $itemRotation){
 		$this->namedtag->ItemRotation = new ByteTag("ItemRotation", $itemRotation);
-		$this->setChanged();
+		$this->onChanged();
 	}
 
 	public function getItem(){
 		return Item::nbtDeserialize($this->namedtag->Item);
 	}
 
-	public function setItem(Item $item, bool $setChanged = true){
+	public function setItem(Item $item){
 		$this->namedtag->Item = $item->nbtSerialize(-1, "Item");
-		if($setChanged) {
-			$this->setChanged();
-		}
+		$this->onChanged();
 	}
 
 	public function getItemDropChance(){
@@ -80,22 +73,14 @@ class ItemFrame extends Spawnable{
 		$this->namedtag->ItemDropChance = new FloatTag("ItemDropChance", $chance);
 	}
 
-	private function setChanged(){
-		$this->spawnToAll();
-		if($this->chunk instanceof FullChunk){
-			$this->chunk->setChanged();
-			$this->level->clearChunkCache($this->chunk->getX(), $this->chunk->getZ());
-		}
-	}
-
-	public function getSpawnCompound(){
-		if(!isset($this->namedtag->Item)){
+	public function getSpawnCompound() {
+		if(!isset($this->namedtag->Item)) {
 			$this->setItem(Item::get(Item::AIR), false);
 		}
 		/** @var CompoundTag $nbtItem */
 		$nbtItem = clone $this->namedtag->Item;
 		$nbtItem->setName("Item");
-		if($nbtItem["id"] == 0){
+		if($nbtItem["id"] == 0) {
 			return new CompoundTag("", [
 				new StringTag("id", Tile::ITEM_FRAME),
 				new IntTag("x", (int) $this->x),
@@ -104,7 +89,7 @@ class ItemFrame extends Spawnable{
 				new ByteTag("ItemRotation", 0),
 				new FloatTag("ItemDropChance", (float) $this->getItemDropChance())
 			]);
-		}else{
+		} else {
 			return new CompoundTag("", [
 				new StringTag("id", Tile::ITEM_FRAME),
 				new IntTag("x", (int) $this->x),
@@ -116,4 +101,5 @@ class ItemFrame extends Spawnable{
 			]);
 		}
 	}
+
 }

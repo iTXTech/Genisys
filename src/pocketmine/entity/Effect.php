@@ -24,10 +24,8 @@ namespace pocketmine\entity;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
-use pocketmine\network\Network;
 use pocketmine\network\protocol\MobEffectPacket;
 use pocketmine\Player;
-
 
 class Effect{
 	const SPEED = 1;
@@ -173,8 +171,8 @@ class Effect{
 	 *
 	 * @return $this
 	 */
-	public function setAmplifier($amplifier){
-		$this->amplifier = (int) $amplifier;
+	public function setAmplifier(int $amplifier){
+		$this->amplifier = $amplifier & 0xff;
 		return $this;
 	}
 

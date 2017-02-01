@@ -22,10 +22,10 @@
 
 namespace pocketmine\item;
 
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\utils\Color;
-use pocketmine\item\enchantment\enchantment;
 
 abstract class Armor extends Item{
 	const TIER_LEATHER = 1;

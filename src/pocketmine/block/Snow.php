@@ -21,8 +21,8 @@
 
 namespace pocketmine\block;
 
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item;
-use pocketmine\item\enchantment\enchantment;
 
 class Snow extends Solid{
 

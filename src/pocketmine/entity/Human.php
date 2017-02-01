@@ -25,9 +25,9 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
 use pocketmine\event\player\PlayerExperienceChangeEvent;
+use pocketmine\inventory\EnderChestInventory;
 use pocketmine\inventory\FloatingInventory;
 use pocketmine\inventory\InventoryHolder;
-use pocketmine\inventory\InventoryType;
 use pocketmine\inventory\PlayerInventory;
 use pocketmine\inventory\SimpleTransactionQueue;
 use pocketmine\item\enchantment\Enchantment;
@@ -39,7 +39,6 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ListTag;
-use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\protocol\AddPlayerPacket;
 use pocketmine\network\protocol\RemoveEntityPacket;
@@ -57,6 +56,9 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 
 	/** @var PlayerInventory */
 	protected $inventory;
+
+	/** @var EnderChestInventory */
+	protected $enderChestInventory;
 
 	/** @var FloatingInventory */
 	protected $floatingInventory;
@@ -326,7 +328,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 	}
 
 	public function recalculateXpProgress() : float{
-		$this->setXpProgress($this->getRemainderXp() / self::getLevelXpRequirement($this->getXpLevel()));
+		$this->setXpProgress($progress = $this->getRemainderXp() / self::getLevelXpRequirement($this->getXpLevel()));
+		return $progress;
 	}
 
 	public function getXpSeed() : int{
@@ -417,6 +420,10 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		return $this->inventory;
 	}
 
+	public function getEnderChestInventory(){
+		return $this->enderChestInventory;
+	}
+
 	public function getFloatingInventory(){
 		return $this->floatingInventory;
 	}
@@ -436,6 +443,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 
 		$inventoryContents = ($this->namedtag->Inventory ?? null);
 		$this->inventory = new PlayerInventory($this, $inventoryContents);
+
+		$this->enderChestInventory = new EnderChestInventory($this, ($this->namedtag->EnderChestInventory ?? null));
 
 		//Virtual inventory for desktop GUI crafting and anti-cheat transaction processing
 		$this->floatingInventory = new FloatingInventory($this);
@@ -528,7 +537,7 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		}
 		$hasUpdate = parent::entityBaseTick($tickDiff, $EnchantL);
 
-		if($this->server->foodEnabled){
+		if($this->isAlive()){
 			$food = $this->getFood();
 			$health = $this->getHealth();
 			if($food >= 18){
@@ -609,6 +618,16 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 				$item = $this->inventory->getItem($this->inventory->getSize() + $slot - 100);
 				if($item instanceof ItemItem and $item->getId() !== ItemItem::AIR){
 					$this->namedtag->Inventory[$slot] = $item->nbtSerialize($slot);
+				}
+			}
+		}
+
+		$this->namedtag->EnderChestInventory = new ListTag("EnderChestInventory", []);
+		$this->namedtag->Inventory->setTagType(NBT::TAG_Compound);
+		if($this->enderChestInventory !== null){
+			for($slot = 0; $slot < $this->enderChestInventory->getSize(); $slot++){
+				if(($item = $this->enderChestInventory->getItem($slot)) instanceof ItemItem){
+					$this->namedtag->EnderChestInventory[$slot] = $item->nbtSerialize($slot);
 				}
 			}
 		}

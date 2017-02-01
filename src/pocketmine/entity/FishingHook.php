@@ -22,13 +22,13 @@
 namespace pocketmine\entity;
 
 use pocketmine\event\player\PlayerFishEvent;
-use pocketmine\level\format\FullChunk;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\Player;
 use pocketmine\item\Item as ItemItem;
-use pocketmine\network\protocol\EntityEventPacket;
+use pocketmine\level\format\Chunk;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\protocol\AddEntityPacket;
-use pocketmine\Server;
+use pocketmine\network\protocol\EntityEventPacket;
+use pocketmine\Player;
+
 
 class FishingHook extends Projectile{
 	const NETWORK_ID = 77;
@@ -51,11 +51,9 @@ class FishingHook extends Projectile{
 		if(isset($this->namedtag->Data)){
 			$this->data = $this->namedtag["Data"];
 		}
-
-		// $this->setDataProperty(FallingSand::DATA_BLOCK_INFO, self::DATA_TYPE_INT, $this->getData());
 	}
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
+	public function __construct(Chunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
 		parent::__construct($chunk, $nbt, $shootingEntity);
 	}
 
@@ -113,7 +111,7 @@ class FishingHook extends Projectile{
 			$pk = new EntityEventPacket();
 			$pk->eid = $this->shootingEntity->getId();//$this or $this->shootingEntity
 			$pk->event = EntityEventPacket::FISH_HOOK_HOOK;
-			Server::broadcastPacket($this->shootingEntity->hasSpawned, $pk);
+			$this->server->broadcastPacket($this->shootingEntity->hasSpawned, $pk);
 		}
 	}
 
@@ -122,7 +120,7 @@ class FishingHook extends Projectile{
 			$pk = new EntityEventPacket();
 			$pk->eid = $this->shootingEntity->getId();//$this or $this->shootingEntity
 			$pk->event = EntityEventPacket::FISH_HOOK_BUBBLE;
-			Server::broadcastPacket($this->shootingEntity->hasSpawned, $pk);
+			$this->server->broadcastPacket($this->shootingEntity->hasSpawned, $pk);
 		}
 	}
 
@@ -136,7 +134,7 @@ class FishingHook extends Projectile{
 			$this->getLevel()->getServer()->getPluginManager()->callEvent($ev = new PlayerFishEvent($this->shootingEntity, $item, $this));
 			if(!$ev->isCancelled()){
 				$this->shootingEntity->getInventory()->addItem($item);
-				$this->shootingEntity->addExperience(mt_rand(1, 6));
+				$this->shootingEntity->addXp(mt_rand(1, 6));
 				$this->damageRod = true;
 			}
 		}

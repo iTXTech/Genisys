@@ -24,11 +24,7 @@
  */
 namespace pocketmine\item;
 
-use pocketmine\Player;
-use pocketmine\Server;
 use pocketmine\block\Block;
-use pocketmine\block\Fence;
-use pocketmine\block\Flower;
 use pocketmine\entity\CaveSpider;
 use pocketmine\entity\Entity;
 use pocketmine\entity\PigZombie;
@@ -47,6 +43,8 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
+use pocketmine\Player;
+use pocketmine\Server;
 use pocketmine\utils\Config;
 
 class Item implements ItemIds, \JsonSerializable{
@@ -217,6 +215,10 @@ class Item implements ItemIds, \JsonSerializable{
 			self::$list[self::COOKED_CHICKEN] = CookedChicken::class;
 			self::$list[self::GOLD_NUGGET] = GoldNugget::class;
 			self::$list[self::EMERALD] = Emerald::class;
+			self::$list[self::ITEM_FRAME] = ItemFrame::class;
+			self::$list[self::FLOWER_POT] = FlowerPot::class;
+			self::$list[self::CARROT] = Carrot::class;
+			self::$list[self::POTATO] = Potato::class;
 			self::$list[self::BAKED_POTATO] = BakedPotato::class;
 			self::$list[self::PUMPKIN_PIE] = PumpkinPie::class;
 			self::$list[self::NETHER_BRICK] = NetherBrick::class;
@@ -235,7 +237,6 @@ class Item implements ItemIds, \JsonSerializable{
 			self::$list[self::BLAZE_POWDER] = BlazePowder::class;
 			self::$list[self::MAGMA_CREAM] = MagmaCream::class;
 			self::$list[self::GLISTERING_MELON] = GlisteringMelon::class;
-			self::$list[self::ITEM_FRAME] = ItemFrame::class;
 			self::$list[self::ENCHANTED_BOOK] = EnchantedBook::class;
 			self::$list[self::REPEATER] = Repeater::class;
 			self::$list[self::CAULDRON] = Cauldron::class;
@@ -318,14 +319,8 @@ class Item implements ItemIds, \JsonSerializable{
 		return -1;
 	}
 
-	public static function get($id, $meta = 0, int $count = 1, $tags = "") : Item{
+	public static function get(int $id, int $meta = 0, int $count = 1, string $tags = "") : Item{
 		try{
-			if(is_string($id)){
-				$item = Item::fromString($id);
-				$item->setCount($count);
-				$item->setDamage($meta);
-				return $item;
-			}
 			$class = self::$list[$id];
 			if($class === null){
 				return (new Item($id, $meta, $count))->setCompoundTag($tags);
@@ -373,15 +368,9 @@ class Item implements ItemIds, \JsonSerializable{
 		}
 	}
 
-	public function __construct($id, $meta = 0, int $count = 1, string $name = "Unknown"){
-		if(is_string($id)){
-			$item = Item::fromString($id);
-			$id = $item->getId();
-			if($item->getDamage() != $meta) $meta = $item->getDamage();
-			$name = $item->getName();
-		}
+	public function __construct(int $id, int $meta = 0, int $count = 1, string $name = "Unknown"){
 		$this->id = $id & 0xffff;
-		$this->meta = $meta !== null ? $meta & 0xffff : null;
+		$this->meta = $meta !== -1 ? $meta & 0xffff : -1;
 		$this->count = $count;
 		$this->name = $name;
 		if(!isset($this->block) and $this->id <= 0xff and isset(Block::$list[$this->id])){
@@ -394,7 +383,7 @@ class Item implements ItemIds, \JsonSerializable{
 		if($tags instanceof CompoundTag){
 			$this->setNamedTag($tags);
 		}else{
-			$this->tags = $tags;
+			$this->tags = (string) $tags;
 			$this->cachedNBT = null;
 		}
 
@@ -404,12 +393,12 @@ class Item implements ItemIds, \JsonSerializable{
 	/**
 	 * @return string
 	 */
-	public function getCompoundTag(){
+	public function getCompoundTag() : string{
 		return $this->tags;
 	}
 
 	public function hasCompoundTag() : bool{
-		return $this->tags !== "" and $this->tags !== null;
+		return $this->tags !== "";
 	}
 
 	public function hasCustomBlockData() : bool{
@@ -829,12 +818,16 @@ class Item implements ItemIds, \JsonSerializable{
 		return $this->id;
 	}
 
-	final public function getDamage(){
+	final public function getDamage() : int{
 		return $this->meta;
 	}
 
-	public function setDamage($meta){
-		$this->meta = $meta !== null ? $meta & 0xFFFF : null;
+	public function setDamage(int $meta){
+		$this->meta = $meta !== -1 ? $meta & 0xFFFF : -1;
+	}
+
+	public function hasAnyDamageValue() : bool{
+		return $this->meta === -1;
 	}
 
 	public function getMaxStackSize() : int{
@@ -986,8 +979,8 @@ class Item implements ItemIds, \JsonSerializable{
 	/**
 	 * Serializes the item to an NBT CompoundTag
 	 *
-	 * @param int $slot optional, the inventory slot of the item
-	 * @param string $tagName optional, the tag name
+	 * @param int    $slot optional, the inventory slot of the item
+	 * @param string $tagName the name to assign to the CompoundTag object
 	 *
 	 * @return CompoundTag
 	 */

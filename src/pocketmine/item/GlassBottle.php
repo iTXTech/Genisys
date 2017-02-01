@@ -22,9 +22,9 @@
 namespace pocketmine\item;
 
 use pocketmine\block\Block;
+use pocketmine\event\player\PlayerGlassBottleEvent;
 use pocketmine\level\Level;
 use pocketmine\Player;
-use pocketmine\event\player\PlayerGlassBottleEvent;
 
 class GlassBottle extends Item{
 	public function __construct($meta = 0, $count = 1){
