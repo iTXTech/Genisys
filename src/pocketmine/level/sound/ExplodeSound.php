@@ -26,6 +26,6 @@ use pocketmine\network\protocol\LevelEventPacket;
 
 class ExplodeSound extends GenericSound{
 	public function __construct(Vector3 $pos, $pitch = 0){
-		parent::__construct($pos, LevelEventPacket::EVENT_SOUND_EXPLODE, $pitch);
+		parent::__construct($pos, LevelEventPacket::EVENT_CAULDRON_EXPLODE, $pitch);
 	}
 }
