@@ -3468,7 +3468,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * Drops the specified item in front of the player.
 	 */
 	public function dropItem(Item $item){
-		if($this->spawned === false or $this->blocked === true or !$this->isAlive()){
+		if($this->spawned === false or !$this->isAlive()){
 			return;
 		}
 
