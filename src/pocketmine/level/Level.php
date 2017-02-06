@@ -1204,7 +1204,7 @@ class Level implements ChunkManager, Metadatable{
 	/**
 	 * @param Entity        $entity
 	 * @param AxisAlignedBB $bb
-	 * @param boolean       $entities
+	 * @param bool          $entities
 	 *
 	 * @return AxisAlignedBB[]
 	 */
@@ -1339,7 +1339,7 @@ class Level implements ChunkManager, Metadatable{
 	 * Gets the Block object on the Vector3 location
 	 *
 	 * @param Vector3 $pos
-	 * @param boolean $cached
+	 * @param bool    $cached
 	 *
 	 * @return Block
 	 */

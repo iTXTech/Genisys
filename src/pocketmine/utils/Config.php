@@ -25,8 +25,6 @@ use pocketmine\Server;
 
 
 /**
- * Class Config
- *
  * Config Class for simple config manipulation of multiple formats.
  */
 class Config{
@@ -47,9 +45,9 @@ class Config{
 
 	/** @var string */
 	private $file;
-	/** @var boolean */
+	/** @var bool */
 	private $correct = false;
-	/** @var integer */
+	/** @var int */
 	private $type = Config::DETECT;
 
 	public static $formats = [
@@ -167,7 +165,7 @@ class Config{
 	}
 
 	/**
-	 * @return boolean
+	 * @return bool
 	 */
 	public function check(){
 		return $this->correct === true;
@@ -176,7 +174,7 @@ class Config{
 	/**
 	 * @param bool $async
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function save($async = false){
 		if($this->correct === true){
@@ -223,7 +221,7 @@ class Config{
 	/**
 	 * @param $k
 	 *
-	 * @return boolean|mixed
+	 * @return bool|mixed
 	 */
 	public function __get($k){
 		return $this->get($k);
@@ -240,7 +238,7 @@ class Config{
 	/**
 	 * @param $k
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function __isset($k){
 		return $this->exists($k);
@@ -314,7 +312,7 @@ class Config{
 	 * @param       $k
 	 * @param mixed $default
 	 *
-	 * @return boolean|mixed
+	 * @return bool|mixed
 	 */
 	public function get($k, $default = false){
 		return ($this->correct and isset($this->config[$k])) ? $this->config[$k] : $default;
@@ -344,7 +342,7 @@ class Config{
 	 * @param      $k
 	 * @param bool $lowercase If set, searches Config in single-case / lowercase.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function exists($k, $lowercase = false){
 		if($lowercase === true){
@@ -383,7 +381,7 @@ class Config{
 	 * @param $default
 	 * @param $data
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	private function fillDefaults($default, &$data){
 		$changed = 0;
