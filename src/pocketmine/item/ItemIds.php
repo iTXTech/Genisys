@@ -192,6 +192,8 @@
 	const LEAD = 420; const LEASH = 420;
 	const NAMETAG = 421;
 	
+	const PRISMARINE_CRYSTALS = 422;
+	
 	const RAW_MUTTON = 423;
 	const COOKED_MUTTON = 424;
 	

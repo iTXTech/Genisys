@@ -96,6 +96,7 @@ class Item implements ItemIds, \JsonSerializable{
 			self::$list[self::MELON_SEEDS] = MelonSeeds::class;
 			self::$list[self::MUSHROOM_STEW] = MushroomStew::class;
 			self::$list[self::RABBIT_STEW] = RabbitStew::class;
+			self::$list[self::PRISMARINE_CRYSTALS] = PrismarineCrystals::class;
 			self::$list[self::BEETROOT_SOUP] = BeetrootSoup::class;
 			self::$list[self::CARROT] = Carrot::class;
 			self::$list[self::POTATO] = Potato::class;
