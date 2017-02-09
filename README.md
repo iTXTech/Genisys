@@ -1,8 +1,6 @@
 Genisys
 ===================
 
-### This is a development branch, please do not use on production.
-
 __Feature-rich server software for Minecraft: Pocket Edition & Windows 10 Edition Beta__
 
 [![Travis-CI](https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
