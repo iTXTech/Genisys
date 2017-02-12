@@ -37,7 +37,6 @@ class CommandReader extends Thread{
 	private $shutdown = false;
 
 	private $type = self::TYPE_STREAM;
-	private $lastLine = -1;
 
 	public function __construct(){
 		$this->buffer = new \Threaded;
@@ -91,6 +90,7 @@ class CommandReader extends Thread{
 	/**
 	 * Checks if the specified stream is a FIFO pipe.
 	 *
+	 * @param resource $stream
 	 * @return bool
 	 */
 	private function isPipe($stream) : bool{
