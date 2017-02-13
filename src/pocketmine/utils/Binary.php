@@ -22,7 +22,6 @@
 /**
  * Methods for working with binary strings
  */
- 
 namespace pocketmine\utils;
 
 
