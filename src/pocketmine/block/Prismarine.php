@@ -40,7 +40,7 @@ class Prismarine extends Solid{
 		return 1.5;
 	}
 
-	public function getName(){
+	public function getName() : string{
 		static $names = [
 			self::NORMAL => "Prismarine",
 			self::DARK => "Dark Prismarine",
@@ -53,7 +53,7 @@ class Prismarine extends Solid{
 		return Tool::TYPE_PICKAXE;
 	}
 
-	public function getDrops(Item $item){
+	public function getDrops(Item $item) : array{
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			return [
 				[$this->id, $this->meta & 0x03, 1],

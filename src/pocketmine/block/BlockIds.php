@@ -153,6 +153,7 @@ interface BlockIds{
 	const COCOA_BLOCK = 127, COCOA_PODS = 127;
 	const SANDSTONE_STAIRS = 128;
 	const EMERALD_ORE = 129;
+	const ENDER_CHEST = 130;
 
 	const TRIPWIRE_HOOK = 131;
 	const TRIPWIRE = 132;
