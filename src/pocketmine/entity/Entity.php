@@ -1823,13 +1823,6 @@ abstract class Entity extends Location implements Metadatable{
 			}
 		}
 
-		if($this->getLevel()->getServer()->redstoneEnabled){
-			/** @var \pocketmine\block\PressurePlate $block * */
-			foreach($this->activatedPressurePlates as $key => $block){
-				$block->checkActivation();
-			}
-		}
-
 		$this->activatedPressurePlates = [];
 
 		if($this->attributeMap != null){
