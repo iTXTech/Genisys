@@ -110,8 +110,6 @@ class FenceGate extends Transparent implements ElectricalAppliance{
 			2 => 1,
 			3 => 2,
 		];
-		if($player !== null) $this->meta = ($faces[$player instanceof Player ? $player->getDirection() : 0] & 0x03) | ((~$this->meta) & 0x04);
-		else $this->meta ^= 0x04;
 		$this->getLevel()->setBlock($this, $this, true);
 		$this->level->addSound(new DoorSound($this));
 		return true;
