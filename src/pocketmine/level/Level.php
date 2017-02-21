@@ -1082,7 +1082,7 @@ class Level implements ChunkManager, Metadatable{
 
 	public function saveChunks(){
 		foreach($this->chunks as $chunk){
-			if($chunk->hasChanged()){
+			if($chunk->hasChanged() and $chunk->isGenerated()){
 				$this->provider->setChunk($chunk->getX(), $chunk->getZ(), $chunk);
 				$this->provider->saveChunk($chunk->getX(), $chunk->getZ());
 				$chunk->setChanged(false);
@@ -2755,7 +2755,7 @@ class Level implements ChunkManager, Metadatable{
 
 		try{
 			if($chunk !== null){
-				if($trySave and $this->getAutoSave()){
+				if($trySave and $this->getAutoSave() and $chunk->isGenerated()){
 					$entities = 0;
 					foreach($chunk->getEntities() as $e){
 						if($e instanceof Player){
