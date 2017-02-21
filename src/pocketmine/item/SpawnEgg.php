@@ -23,7 +23,6 @@ namespace pocketmine\item;
 
 use pocketmine\block\Block;
 use pocketmine\entity\Entity;
-use pocketmine\level\format\Chunk;
 use pocketmine\level\Level;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
@@ -45,12 +44,6 @@ class SpawnEgg extends Item{
 		if($target->getId() == Block::MONSTER_SPAWNER){
 			return true;
 		}else{
-			$entity = null;
-			$chunk = $level->getChunk($block->getX() >> 4, $block->getZ() >> 4);
-
-			if(!($chunk instanceof Chunk)){
-				return false;
-			}
 			$nbt = new CompoundTag("", [
 				"Pos" => new ListTag("Pos", [
 					new DoubleTag("", $block->getX() + 0.5),
@@ -72,17 +65,18 @@ class SpawnEgg extends Item{
 				$nbt->CustomName = new StringTag("CustomName", $this->getCustomName());
 			}
 
-			$entity = Entity::createEntity($this->meta, $chunk, $nbt);
+			$entity = Entity::createEntity($this->meta, $level, $nbt);
 
 			if($entity instanceof Entity){
 				if($player->isSurvival()){
 					--$this->count;
 				}
 				$entity->spawnToAll();
+
 				return true;
 			}
-		}
 
-		return false;
+			return false;
+		}
 	}
 }

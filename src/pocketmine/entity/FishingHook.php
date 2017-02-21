@@ -23,7 +23,7 @@ namespace pocketmine\entity;
 
 use pocketmine\event\player\PlayerFishEvent;
 use pocketmine\item\Item as ItemItem;
-use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\network\protocol\EntityEventPacket;
@@ -53,8 +53,8 @@ class FishingHook extends Projectile{
 		}
 	}
 
-	public function __construct(Chunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
-		parent::__construct($chunk, $nbt, $shootingEntity);
+	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
+		parent::__construct($level, $nbt, $shootingEntity);
 	}
 
 	public function setData($id){

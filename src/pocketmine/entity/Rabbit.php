@@ -25,7 +25,7 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item as ItemItem;
-use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\protocol\AddEntityPacket;
@@ -56,11 +56,11 @@ class Rabbit extends Animal{
 		parent::initEntity();
 	}
 
-	public function __construct(Chunk $chunk, CompoundTag $nbt){
+	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->RabbitType)){
 			$nbt->RabbitType = new ByteTag("RabbitType", $this->getRandomRabbitType());
 		}
-		parent::__construct($chunk, $nbt);
+		parent::__construct($level, $nbt);
 
 		$this->setDataProperty(self::DATA_RABBIT_TYPE, self::DATA_TYPE_BYTE, $this->getRabbitType());
 	}

@@ -21,7 +21,7 @@
 
 namespace pocketmine\tile;
 
-use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
@@ -32,7 +32,7 @@ use pocketmine\utils\Color;
 
 class Cauldron extends Spawnable{
 
-	public function __construct(Chunk $chunk, CompoundTag $nbt){
+	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->PotionId) or !($nbt->PotionId instanceof ShortTag)){
 			$nbt->PotionId = new ShortTag("PotionId", 0xffff);
 		}
@@ -42,7 +42,7 @@ class Cauldron extends Spawnable{
 		if(!isset($nbt->Items) or !($nbt->Items instanceof ListTag)){
 			$nbt->Items = new ListTag("Items", []);
 		}
-		parent::__construct($chunk, $nbt);
+		parent::__construct($level, $nbt);
 	}
 
 	public function getPotionId(){

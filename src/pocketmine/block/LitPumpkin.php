@@ -69,7 +69,7 @@ class LitPumpkin extends Solid implements SolidLight{
 					$level->setBlock($block, new Air());
 					$level->setBlock($block0, new Air());
 					$level->setBlock($block1, new Air());
-					$golem = new SnowGolem($player->getLevel()->getChunk($this->getX() >> 4, $this->getZ() >> 4), new CompoundTag("", [
+					$golem = new SnowGolem($player->getLevel(), new CompoundTag("", [
 						"Pos" => new ListTag("Pos", [
 							new DoubleTag("", $this->x),
 							new DoubleTag("", $this->y),
@@ -106,7 +106,7 @@ class LitPumpkin extends Solid implements SolidLight{
 					$level->setBlock($block, new Air());
 					$level->setBlock($block0, new Air());
 					$level->setBlock($block1, new Air());
-					$golem = new IronGolem($player->getLevel()->getChunk($this->getX() >> 4, $this->getZ() >> 4), new CompoundTag("", [
+					$golem = new IronGolem($player->getLevel(), new CompoundTag("", [
 						"Pos" => new ListTag("Pos", [
 							new DoubleTag("", $this->x),
 							new DoubleTag("", $this->y),

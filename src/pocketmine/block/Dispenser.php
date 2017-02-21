@@ -95,7 +95,7 @@ class Dispenser extends Solid{
 			}
 		}
 
-		Tile::createTile(Tile::DISPENSER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+		Tile::createTile(Tile::DISPENSER, $this->getLevel(), $nbt);
 
 		return true;
 	}
@@ -122,7 +122,7 @@ class Dispenser extends Solid{
 					new IntTag("z", $this->z)
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
-				$dispenser = Tile::createTile(Tile::DISPENSER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+				$dispenser = Tile::createTile(Tile::DISPENSER, $this->getLevel(), $nbt);
 			}
 
 			if($player->isCreative() and $player->getServer()->limitedCreative){

@@ -23,7 +23,7 @@ namespace pocketmine\entity;
 
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Item as ItemItem;
-use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
@@ -40,11 +40,11 @@ class Boat extends Vehicle{
 	public $gravity = 0.5;
 	public $drag = 0.1;
 
-	public function __construct(Chunk $chunk, CompoundTag $nbt){
+	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->WoodID)){
 			$nbt->WoodID = new IntTag("WoodID", 0);
 		}
-		parent::__construct($chunk, $nbt);
+		parent::__construct($level, $nbt);
 		$this->setDataProperty(self::DATA_VARIANT, self::DATA_TYPE_INT, $this->getWoodID());
 	}
 

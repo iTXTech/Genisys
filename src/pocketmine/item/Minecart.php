@@ -40,7 +40,7 @@ class Minecart extends Item{
 	}
 
 	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
-		$minecart = new MinecartEntity($player->getLevel()->getChunk($block->getX() >> 4, $block->getZ() >> 4), new CompoundTag("", [
+		$minecart = new MinecartEntity($player->getLevel(), new CompoundTag("", [
 			"Pos" => new ListTag("Pos", [
 				new DoubleTag("", $block->getX()),
 				new DoubleTag("", $block->getY() + 0.8),

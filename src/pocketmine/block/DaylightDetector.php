@@ -66,7 +66,7 @@ class DaylightDetector extends RedstoneSource{
 				new IntTag("y", $this->y),
 				new IntTag("z", $this->z)
 			]);
-			return Tile::createTile(Tile::DAY_LIGHT_DETECTOR, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+			return Tile::createTile(Tile::DAY_LIGHT_DETECTOR, $this->getLevel(), $nbt);
 		}
 	}
 

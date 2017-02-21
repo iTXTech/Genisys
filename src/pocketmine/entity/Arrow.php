@@ -22,7 +22,7 @@
 namespace pocketmine\entity;
 
 use pocketmine\item\Potion;
-use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 use pocketmine\level\particle\CriticalParticle;
 use pocketmine\level\particle\MobSpellParticle;
 use pocketmine\nbt\tag\CompoundTag;
@@ -45,12 +45,12 @@ class Arrow extends Projectile{
 	protected $isCritical;
 	protected $potionId;
 
-	public function __construct(Chunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null, $critical = false){
+	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null, $critical = false){
 		$this->isCritical = (bool) $critical;
 		if(!isset($nbt->Potion)){
 			$nbt->Potion = new ShortTag("Potion", 0);
 		}
-		parent::__construct($chunk, $nbt, $shootingEntity);
+		parent::__construct($level, $nbt, $shootingEntity);
 		$this->potionId = $this->namedtag["Potion"];
 	}
 

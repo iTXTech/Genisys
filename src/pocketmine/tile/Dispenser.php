@@ -27,7 +27,7 @@ use pocketmine\entity\Item as ItemEntity;
 use pocketmine\inventory\DispenserInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
-use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 use pocketmine\level\particle\SmokeParticle;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
@@ -44,8 +44,8 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 	/** @var DispenserInventory */
 	protected $inventory;
 
-	public function __construct(Chunk $chunk, CompoundTag $nbt){
-		parent::__construct($chunk, $nbt);
+	public function __construct(Level $level, CompoundTag $nbt){
+		parent::__construct($level, $nbt);
 		$this->inventory = new DispenserInventory($this);
 		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)){
 			$this->namedtag->Items = new ListTag("Items", []);
@@ -225,27 +225,27 @@ class Dispenser extends Spawnable implements InventoryHolder, Container, Nameabl
 			switch($needItem->getId()){
 				case Item::ARROW:
 					$nbt->Fire = new ShortTag("Fire", 0);
-					$entity = Entity::createEntity("Arrow", $this->chunk, $nbt);
+					$entity = Entity::createEntity("Arrow", $this->getLevel(), $nbt);
 					break;
 				case Item::SNOWBALL:
-					$entity = Entity::createEntity("Snowball", $this->chunk, $nbt);
+					$entity = Entity::createEntity("Snowball", $this->getLevel(), $nbt);
 					break;
 				case Item::EGG:
-					$entity = Entity::createEntity("Egg", $this->chunk, $nbt);
+					$entity = Entity::createEntity("Egg", $this->getLevel(), $nbt);
 					break;
 				case Item::SPLASH_POTION:
 					$nbt->PotionId = new ShortTag("PotionId", $item->getDamage());
-					$entity = Entity::createEntity("ThrownPotion", $this->chunk, $nbt);
+					$entity = Entity::createEntity("ThrownPotion", $this->getLevel(), $nbt);
 					break;
 				case Item::ENCHANTING_BOTTLE:
-					$entity = Entity::createEntity("ThrownExpBottle", $this->chunk, $nbt);
+					$entity = Entity::createEntity("ThrownExpBottle", $this->getLevel(), $nbt);
 					break;
 				default:
 					$nbt->Health = new ShortTag("Health", 5);
 					$nbt->Item = $needItem->nbtSerialize(-1, "Item");
 					$nbt->PickupDelay = new ShortTag("PickupDelay", 10);
 					$f = 0.3;
-					$entity = new ItemEntity($this->chunk, $nbt, $this);
+					$entity = new ItemEntity($this->getLevel(), $nbt, $this);
 					break;
 			}
 

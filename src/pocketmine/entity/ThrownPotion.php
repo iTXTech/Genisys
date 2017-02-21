@@ -22,7 +22,7 @@
 namespace pocketmine\entity;
 
 use pocketmine\item\Potion;
-use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 use pocketmine\level\particle\SpellParticle;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ShortTag;
@@ -41,12 +41,12 @@ class ThrownPotion extends Projectile{
 	protected $gravity = 0.1;
 	protected $drag = 0.05;
 
-	public function __construct(Chunk $chunk, CompoundTag $nbt, Entity $shootingEntity = null){
+	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
 		if(!isset($nbt->PotionId)){
 			$nbt->PotionId = new ShortTag("PotionId", Potion::AWKWARD);
 		}
 
-		parent::__construct($chunk, $nbt, $shootingEntity);
+		parent::__construct($level, $nbt, $shootingEntity);
 
 		unset($this->dataProperties[self::DATA_SHOOTER_ID]);
 		$this->setDataProperty(self::DATA_POTION_ID, self::DATA_TYPE_SHORT, $this->getPotionId());

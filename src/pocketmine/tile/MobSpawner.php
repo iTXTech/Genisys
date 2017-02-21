@@ -25,6 +25,7 @@ use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityGenerateEvent;
 use pocketmine\item\Item;
 use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
@@ -36,7 +37,7 @@ use pocketmine\Player;
 
 class MobSpawner extends Spawnable{
 
-	public function __construct(Chunk $chunk, CompoundTag $nbt){
+	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->EntityId) or !($nbt->EntityId instanceof IntTag)){
 			$nbt->EntityId = new IntTag("EntityId", 0);
 		}
@@ -55,7 +56,7 @@ class MobSpawner extends Spawnable{
 		if(!isset($nbt->Delay) or !($nbt->Delay instanceof IntTag)){
 			$nbt->Delay = new IntTag("Delay", mt_rand($nbt->MinSpawnDelay->getValue(), $nbt->MaxSpawnDelay->getValue()));
 		}
-		parent::__construct($chunk, $nbt);
+		parent::__construct($level, $nbt);
 		if($this->getEntityId() > 0){
 			$this->scheduleUpdate();
 		}
@@ -170,7 +171,7 @@ class MobSpawner extends Spawnable{
 									new FloatTag("", 0)
 								]),
 							]);
-							$entity = Entity::createEntity($this->getEntityId(), $this->chunk, $nbt);
+							$entity = Entity::createEntity($this->getEntityId(), $this->getLevel(), $nbt);
 							$entity->spawnToAll();
 						}
 					}

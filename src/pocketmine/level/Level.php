@@ -78,7 +78,6 @@ use pocketmine\level\generator\LightPopulationTask;
 use pocketmine\level\generator\PopulationTask;
 use pocketmine\level\particle\DestroyBlockParticle;
 use pocketmine\level\particle\Particle;
-use pocketmine\level\sound\BlockPlaceSound;
 use pocketmine\level\sound\Sound;
 use pocketmine\level\weather\Weather;
 use pocketmine\math\AxisAlignedBB;
@@ -1543,7 +1542,7 @@ class Level implements ChunkManager, Metadatable{
 		$motion = $motion === null ? new Vector3(lcg_value() * 0.2 - 0.1, 0.2, lcg_value() * 0.2 - 0.1) : $motion;
 
 		if($item->getId() > 0 and $item->getCount() > 0){
-			$itemEntity = Entity::createEntity("Item", $this->getChunk($source->getX() >> 4, $source->getZ() >> 4, true), new CompoundTag("", [
+			$itemEntity = Entity::createEntity("Item", $this, new CompoundTag("", [
 				"Pos" => new ListTag("Pos", [
 					new DoubleTag("", $source->getX()),
 					new DoubleTag("", $source->getY()),
@@ -2295,11 +2294,10 @@ class Level implements ChunkManager, Metadatable{
 				}
 			}
 			unset($this->chunkPopulationQueue[$index]);
-			$chunk->setProvider($this->provider);
 			$this->setChunk($x, $z, $chunk, false);
 			$chunk = $this->getChunk($x, $z, false);
-			if($chunk !== null and ($oldChunk === null or $oldChunk->isPopulated() === false) and $chunk->isPopulated() and $chunk->getProvider() !== null){
-				$this->server->getPluginManager()->callEvent(new ChunkPopulateEvent($chunk));
+			if($chunk !== null and ($oldChunk === null or $oldChunk->isPopulated() === false) and $chunk->isPopulated()){
+				$this->server->getPluginManager()->callEvent(new ChunkPopulateEvent($this, $chunk));
 
 				foreach($this->getChunkLoaders($x, $z) as $loader){
 					$loader->onChunkPopulated($chunk);
@@ -2308,10 +2306,8 @@ class Level implements ChunkManager, Metadatable{
 		}elseif(isset($this->chunkGenerationQueue[$index]) or isset($this->chunkPopulationLock[$index])){
 			unset($this->chunkGenerationQueue[$index]);
 			unset($this->chunkPopulationLock[$index]);
-			$chunk->setProvider($this->provider);
 			$this->setChunk($x, $z, $chunk, false);
 		}else{
-			$chunk->setProvider($this->provider);
 			$this->setChunk($x, $z, $chunk, false);
 		}
 		Timings::$generationCallbackTimer->stopTiming();
@@ -2409,9 +2405,7 @@ class Level implements ChunkManager, Metadatable{
 			]),
 		]);
 
-		$chunk = $this->getChunk($pos->x >> 4, $pos->z >> 4, false);
-
-		$lightning = new Lightning($chunk, $nbt);
+		$lightning = new Lightning($this, $nbt);
 		$lightning->spawnToAll();
 
 		return $lightning;
@@ -2444,9 +2438,7 @@ class Level implements ChunkManager, Metadatable{
 				"Experience" => new LongTag("Experience", $exp),
 			]);
 
-			$chunk = $this->getChunk($pos->x >> 4, $pos->z >> 4, false);
-
-			$expOrb = new XPOrb($chunk, $nbt);
+			$expOrb = new XPOrb($this, $nbt);
 			$expOrb->spawnToAll();
 
 			return $expOrb;
@@ -2698,15 +2690,9 @@ class Level implements ChunkManager, Metadatable{
 		}
 
 		$this->chunks[$index] = $chunk;
-		$chunk->initChunk();
+		$chunk->initChunk($this);
 
-		if($chunk->getProvider() !== null){
-			$this->server->getPluginManager()->callEvent(new ChunkLoadEvent($chunk, !$chunk->isGenerated()));
-		}else{
-			$this->unloadChunk($x, $z, false);
-			$this->timings->syncChunkLoadTimer->stopTiming();
-			return false;
-		}
+		$this->server->getPluginManager()->callEvent(new ChunkLoadEvent($this, $chunk, !$chunk->isGenerated()));
 
 		if(!$chunk->isLightPopulated() and $chunk->isPopulated() and $this->getServer()->getProperty("chunk-ticking.light-updates", false)){
 			$this->getServer()->getScheduler()->scheduleAsyncTask(new LightPopulationTask($this, $chunk));
@@ -2757,10 +2743,10 @@ class Level implements ChunkManager, Metadatable{
 
 		$index = Level::chunkHash($x, $z);
 
-		$chunk = $this->getChunk($x, $z);
+		$chunk = $this->chunks[$index] ?? null;
 
-		if($chunk !== null and $chunk->getProvider() !== null){
-			$this->server->getPluginManager()->callEvent($ev = new ChunkUnloadEvent($chunk));
+		if($chunk !== null){
+			$this->server->getPluginManager()->callEvent($ev = new ChunkUnloadEvent($this, $chunk));
 			if($ev->isCancelled()){
 				$this->timings->doChunkUnload->stopTiming();
 				return false;

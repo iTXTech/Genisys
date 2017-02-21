@@ -23,7 +23,7 @@ namespace pocketmine\entity;
 
 use pocketmine\block\Wool;
 use pocketmine\item\Item as ItemItem;
-use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\protocol\AddEntityPacket;
@@ -42,11 +42,11 @@ class Sheep extends Animal implements Colorable{
 		return "Sheep";
 	}
 
-	public function __construct(Chunk $chunk, CompoundTag $nbt){
+	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->Color)){
 			$nbt->Color = new ByteTag("Color", self::getRandomColor());
 		}
-		parent::__construct($chunk, $nbt);
+		parent::__construct($level, $nbt);
 
 		$this->setDataProperty(self::DATA_COLOR_INFO, self::DATA_TYPE_BYTE, $this->getColor());
 	}

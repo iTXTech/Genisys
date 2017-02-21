@@ -74,7 +74,7 @@ class EnchantingTable extends Transparent{
 			}
 		}
 
-		Tile::createTile(Tile::ENCHANT_TABLE, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+		Tile::createTile(Tile::ENCHANT_TABLE, $this->getLevel(), $nbt);
 
 		return true;
 	}
@@ -131,7 +131,7 @@ class EnchantingTable extends Transparent{
 				}
 
 				/** @var EnchantTable $enchantTable */
-				$enchantTable = Tile::createTile(Tile::ENCHANT_TABLE, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+				$enchantTable = Tile::createTile(Tile::ENCHANT_TABLE, $this->getLevel(), $nbt);
 			}
 			$player->addWindow(new EnchantInventory($this));
 			$player->craftingType = Player::CRAFTING_ENCHANT;

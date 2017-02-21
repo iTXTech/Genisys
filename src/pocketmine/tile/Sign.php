@@ -22,7 +22,7 @@
 namespace pocketmine\tile;
 
 use pocketmine\event\block\SignChangeEvent;
-use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
@@ -31,8 +31,8 @@ use pocketmine\utils\TextFormat;
 
 class Sign extends Spawnable{
 
-	public function __construct(Chunk $chunk, CompoundTag $nbt){
-		if(!isset($nbt->Text1) or !($nbt->Text1 instanceof StringTag)){
+	public function __construct(Level $level, CompoundTag $nbt){
+		if(!isset($nbt->Text1)){
 			$nbt->Text1 = new StringTag("Text1", "");
 		}
 		if(!isset($nbt->Text2) or !($nbt->Text2 instanceof StringTag)){
@@ -44,7 +44,8 @@ class Sign extends Spawnable{
 		if(!isset($nbt->Text4) or !($nbt->Text4 instanceof StringTag)){
 			$nbt->Text4 = new StringTag("Text4", "");
 		}
-		parent::__construct($chunk, $nbt);
+
+		parent::__construct($level, $nbt);
 	}
 
 	public function saveNBT(){

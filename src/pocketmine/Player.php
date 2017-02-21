@@ -1988,7 +1988,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->server->saveOfflinePlayerData($this->username, $nbt, true);
 		}
 
-		parent::__construct($this->level->getChunk($nbt["Pos"][0] >> 4, $nbt["Pos"][2] >> 4, true), $nbt);
+		parent::__construct($this->level, $nbt);
 		$this->loggedIn = true;
 		$this->server->addOnlinePlayer($this);
 
@@ -2370,7 +2370,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 								]);
 
 								$f = 0.6;
-								$this->fishingHook = new FishingHook($this->chunk, $nbt, $this);
+								$this->fishingHook = new FishingHook($this->getLevel(), $nbt, $this);
 								$this->fishingHook->setMotion($this->fishingHook->getMotion()->multiply($f));
 								$this->fishingHook->spawnToAll();
 							}
@@ -2398,7 +2398,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						]);
 
 						$f = 1.5;
-						$snowball = Entity::createEntity("Snowball", $this->chunk, $nbt, $this);
+						$snowball = Entity::createEntity("Snowball", $this->getLevel(), $nbt, $this);
 						$snowball->setMotion($snowball->getMotion()->multiply($f));
 						if($this->isSurvival()){
 							$item->setCount($item->getCount() - 1);
@@ -2434,7 +2434,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						]);
 
 						$f = 1.5;
-						$egg = Entity::createEntity("Egg", $this->chunk, $nbt, $this);
+						$egg = Entity::createEntity("Egg", $this->getLevel(), $nbt, $this);
 						$egg->setMotion($egg->getMotion()->multiply($f));
 						if($this->isSurvival()){
 							$item->setCount($item->getCount() - 1);
@@ -2470,7 +2470,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						]);
 
 						$f = 1.1;
-						$thrownExpBottle = new ThrownExpBottle($this->chunk, $nbt, $this);
+						$thrownExpBottle = new ThrownExpBottle($this->getLevel(), $nbt, $this);
 						$thrownExpBottle->setMotion($thrownExpBottle->getMotion()->multiply($f));
 						if($this->isSurvival()){
 							$item->setCount($item->getCount() - 1);
@@ -2507,7 +2507,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						]);
 
 						$f = 1.1;
-						$thrownPotion = new ThrownPotion($this->chunk, $nbt, $this);
+						$thrownPotion = new ThrownPotion($this->getLevel(), $nbt, $this);
 						$thrownPotion->setMotion($thrownPotion->getMotion()->multiply($f));
 						if($this->isSurvival()){
 							$item->setCount($item->getCount() - 1);
@@ -2607,7 +2607,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 								$diff = ($this->server->getTick() - $this->startAction);
 								$p = $diff / 20;
 								$f = min((($p ** 2) + $p * 2) / 3, 1) * 2;
-								$ev = new EntityShootBowEvent($this, $bow, Entity::createEntity("Arrow", $this->chunk, $nbt, $this, $f == 2 ? true : false), $f);
+								$ev = new EntityShootBowEvent($this, $bow, Entity::createEntity("Arrow", $this->getLevel(), $nbt, $this, $f == 2 ? true : false), $f);
 
 								if($f < 0.1 or $diff < 5){
 									$ev->setCancelled();

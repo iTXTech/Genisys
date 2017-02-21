@@ -43,7 +43,7 @@ class Boat extends Item{
 	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
 		$realPos = $block->getSide($face);
 
-		$boat = new BoatEntity($player->getLevel()->getChunk($realPos->getX() >> 4, $realPos->getZ() >> 4), new CompoundTag("", [
+		$boat = new BoatEntity($player->getLevel(), new CompoundTag("", [
 			"Pos" => new ListTag("Pos", [
 				new DoubleTag("", $realPos->getX() + 0.5),
 				new DoubleTag("", $realPos->getY()),

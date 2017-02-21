@@ -153,7 +153,7 @@ class PopulationTask extends AsyncTask{
 				return;
 			}
 
-			$chunk = Chunk::fastDeserialize($this->chunk, $level->getProvider());
+			$chunk = Chunk::fastDeserialize($this->chunk);
 
 			if($chunk === null){
 				//TODO error
@@ -166,7 +166,7 @@ class PopulationTask extends AsyncTask{
 				}
 				$c = $this->{"chunk$i"};
 				if($c !== null){
-					$c = Chunk::fastDeserialize($c, $level->getProvider());
+					$c = Chunk::fastDeserialize($c);
 					$level->generateChunkCallback($c->getX(), $c->getZ(), $c);
 				}
 			}

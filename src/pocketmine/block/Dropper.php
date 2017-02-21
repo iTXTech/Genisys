@@ -95,7 +95,7 @@ class Dropper extends Solid implements ElectricalAppliance{
 			}
 		}
 
-		Tile::createTile(Tile::DROPPER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+		Tile::createTile(Tile::DROPPER, $this->getLevel(), $nbt);
 
 		return true;
 	}
@@ -122,7 +122,7 @@ class Dropper extends Solid implements ElectricalAppliance{
 					new IntTag("z", $this->z)
 				]);
 				$nbt->Items->setTagType(NBT::TAG_Compound);
-				$dropper = Tile::createTile(Tile::DROPPER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+				$dropper = Tile::createTile(Tile::DROPPER, $this->getLevel(), $nbt);
 			}
 
 			if($player->isCreative() and $player->getServer()->limitedCreative){

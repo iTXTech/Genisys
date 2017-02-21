@@ -84,9 +84,8 @@ class Cauldron extends Solid{
 				$nbt->{$key} = $v;
 			}
 		}
-		
-		$chunk = $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4);
-		$tile = Tile::createTile("Cauldron", $chunk, $nbt);//
+
+		$tile = Tile::createTile("Cauldron", $this->getLevel(), $nbt);
 		$this->getLevel()->setBlock($block, $this, true, true);
 		return true;
 	}

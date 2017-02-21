@@ -86,7 +86,7 @@ class MonsterSpawner extends Solid{
 			}
 		}
 		
-		Tile::createTile(Tile::MOB_SPAWNER, $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
+		Tile::createTile(Tile::MOB_SPAWNER, $this->getLevel(), $nbt);
 		return true;
 	}
 

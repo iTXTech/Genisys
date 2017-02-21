@@ -26,7 +26,7 @@ use pocketmine\entity\Item as DroppedItem;
 use pocketmine\inventory\HopperInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
-use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
@@ -44,12 +44,12 @@ class Hopper extends Spawnable implements InventoryHolder, Container, Nameable{
 	/** @var bool */
 	protected $isPowered = false;
 
-	public function __construct(Chunk $chunk, CompoundTag $nbt){
+	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->TransferCooldown) or !($nbt->TransferCooldown instanceof IntTag)){
 			$nbt->TransferCooldown = new IntTag("TransferCooldown", 0);
 		}
 
-		parent::__construct($chunk, $nbt);
+		parent::__construct($level, $nbt);
 
 		$this->inventory = new HopperInventory($this);
 

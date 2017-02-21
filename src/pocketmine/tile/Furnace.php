@@ -28,7 +28,7 @@ use pocketmine\inventory\FurnaceInventory;
 use pocketmine\inventory\FurnaceRecipe;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
-use pocketmine\level\format\Chunk;
+use pocketmine\level\Level;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
@@ -41,8 +41,8 @@ class Furnace extends Spawnable implements InventoryHolder, Container, Nameable{
 	/** @var FurnaceInventory */
 	protected $inventory;
 
-	public function __construct(Chunk $chunk, CompoundTag $nbt){
-		if(!isset($nbt->BurnTime) or !($nbt->BurnTime instanceof ShortTag) or $nbt["BurnTime"] < 0){
+	public function __construct(Level $level, CompoundTag $nbt){
+		if(!isset($nbt->BurnTime) or $nbt["BurnTime"] < 0){
 			$nbt->BurnTime = new ShortTag("BurnTime", 0);
 		}
 		if(!isset($nbt->CookTime) or !($nbt->CookTime instanceof ShortTag) or $nbt["CookTime"] < 0 or ($nbt["BurnTime"] === 0 and $nbt["CookTime"] > 0)){
@@ -52,7 +52,8 @@ class Furnace extends Spawnable implements InventoryHolder, Container, Nameable{
 			$nbt->MaxTime = new ShortTag("BurnTime", $nbt["BurnTime"]);
 			$nbt->BurnTicks = new ShortTag("BurnTicks", 0);
 		}
-		parent::__construct($chunk, $nbt);
+
+		parent::__construct($level, $nbt);
 		$this->inventory = new FurnaceInventory($this);
 		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)){
 			$this->namedtag->Items = new ListTag("Items", []);
