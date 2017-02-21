@@ -182,7 +182,8 @@ abstract class Living extends Entity implements Damageable{
 				$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_SUFFOCATION, 1);
 				$this->attack($ev->getFinalDamage(), $ev);
 			}
-
+			$maxAir = 400 + $EnchantL * 300;
+			$this->setDataProperty(self::DATA_MAX_AIR, self::DATA_TYPE_SHORT, $maxAir);
 			if(!$this->hasEffect(Effect::WATER_BREATHING) and $this->isInsideOfWater()){
 				if($this instanceof WaterAnimal){
 					$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, 400);
@@ -195,9 +196,7 @@ abstract class Living extends Entity implements Damageable{
 						$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_DROWNING, 2);
 						$this->attack($ev->getFinalDamage(), $ev);
 					}
-					$maxAir = 400 + $EnchantL * 300;
 					$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, min($airTicks,$maxAir));
-					$this->setDataProperty(self::DATA_MAX_AIR, self::DATA_TYPE_SHORT, 400 + $EnchantL * 300);
 				}
 			}else{
 				if($this instanceof WaterAnimal){
@@ -211,9 +210,7 @@ abstract class Living extends Entity implements Damageable{
 					}
 					$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, $airTicks);
 				}else{
-					$maxAir = 400 + $EnchantL * 300;
 					$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, $maxAir);
-					$this->setDataProperty(self::DATA_MAX_AIR, self::DATA_TYPE_SHORT, $maxAir);
 				}
 			}
 		}
