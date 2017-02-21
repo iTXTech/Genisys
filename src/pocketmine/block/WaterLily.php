@@ -23,7 +23,6 @@ namespace pocketmine\block;
 
 
 use pocketmine\item\Item;
-
 use pocketmine\level\Level;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector3;
@@ -46,7 +45,11 @@ class WaterLily extends Flowable{
 	}
 
 	public function getHardness() {
-		return 0.6;
+		return 0;
+	}
+
+	public function getResistance(){
+		return 0;
 	}
 
 	public function canPassThrough(){

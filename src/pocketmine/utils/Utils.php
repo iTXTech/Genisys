@@ -50,34 +50,6 @@ class Utils{
 	}
 
 	/**
-	 * @deprecated
-	 */
-	public static function randomUUID(){
-		return Utils::toUUID(Binary::writeInt(time()) . Binary::writeShort(getmypid()) . Binary::writeShort(getmyuid()) . Binary::writeInt(mt_rand(-0x7fffffff, 0x7fffffff)) . Binary::writeInt(mt_rand(-0x7fffffff, 0x7fffffff)), 2);
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public static function dataToUUID(...$params){
-		return Utils::toUUID(hash("md5", implode($params), true), 3);
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public static function toUUID($data, $version = 2, $fixed = "8"){
-		if(strlen($data) !== 16){
-			throw new \InvalidArgumentException("Data must be 16 bytes");
-		}
-
-		$hex = bin2hex($data);
-
-		//xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx 8-4-4-12
-		return substr($hex, 0, 8) . "-" . substr($hex, 8, 4) . "-" . hexdec($version) . substr($hex, 13, 3) . "-" . $fixed{0} . substr($hex, 17, 3) . "-" . substr($hex, 20, 12);
-	}
-
-	/**
 	 * Gets this machine / server instance unique ID
 	 * Returns a hash, the first 32 characters (or 16 if raw)
 	 * will be an identifier that won't change frequently.
@@ -159,9 +131,9 @@ class Utils{
 		}elseif(Utils::$ip !== false and $force !== true){
 			return Utils::$ip;
 		}
-		$ip = trim(strip_tags(Utils::getURL("http://checkip.dyndns.org/")));
-		if(preg_match('#Current IP Address\: ([0-9a-fA-F\:\.]*)#', $ip, $matches) > 0){
-			Utils::$ip = $matches[1];
+		$ip = trim(strip_tags(Utils::getURL("https://api.ipify.org")));
+		if($ip){
+			Utils::$ip = $ip;
 		}else{
 			$ip = Utils::getURL("http://www.checkip.org/");
 			if(preg_match('#">([0-9a-fA-F\:\.]*)</span>#', $ip, $matches) > 0){
@@ -357,122 +329,6 @@ class Utils{
 		}
 
 		return preg_replace('#([^\x20-\x7E])#', '.', $str);
-	}
-
-	/**
-	 * This function tries to get all the entropy available in PHP, and distills it to get a good RNG.
-	 *
-	 *
-	 * @param int    $length       default 16, Number of bytes to generate
-	 * @param bool   $secure       default true, Generate secure distilled bytes, slower
-	 * @param bool   $raw          default true, returns a binary string if true, or an hexadecimal one
-	 * @param string $startEntropy default null, adds more initial entropy
-	 * @param int    &$rounds      Will be set to the number of rounds taken
-	 * @param int    &$drop        Will be set to the amount of dropped bytes
-	 *
-	 * @return string
-	 */
-	public static function getRandomBytes($length = 16, $secure = true, $raw = true, $startEntropy = "", &$rounds = 0, &$drop = 0){
-		static $lastRandom = "";
-		$output = "";
-		$length = abs((int) $length);
-		$secureValue = "";
-		$rounds = 0;
-		$drop = 0;
-		while(!isset($output{$length - 1})){
-			//some entropy, but works ^^
-			$weakEntropy = [
-				is_array($startEntropy) ? implode($startEntropy) : $startEntropy,
-				__DIR__,
-				PHP_OS,
-				microtime(),
-				(string) lcg_value(),
-				(string) PHP_MAXPATHLEN,
-				PHP_SAPI,
-				(string) PHP_INT_MAX . "." . PHP_INT_SIZE,
-				serialize($_SERVER),
-				get_current_user(),
-				(string) memory_get_usage() . "." . memory_get_peak_usage(),
-				php_uname(),
-				phpversion(),
-				zend_version(),
-				(string) getmypid(),
-				(string) getmyuid(),
-				(string) mt_rand(),
-				(string) getmyinode(),
-				(string) getmygid(),
-				(string) rand(),
-				function_exists("zend_thread_id") ? ((string) zend_thread_id()) : microtime(),
-				function_exists("getrusage") ? implode(getrusage()) : microtime(),
-				function_exists("sys_getloadavg") ? implode(sys_getloadavg()) : microtime(),
-				serialize(get_loaded_extensions()),
-				sys_get_temp_dir(),
-				(string) disk_free_space("."),
-				(string) disk_total_space("."),
-				uniqid(microtime(), true),
-				file_exists("/proc/cpuinfo") ? file_get_contents("/proc/cpuinfo") : microtime(),
-			];
-
-			shuffle($weakEntropy);
-			$value = hash("sha512", implode($weakEntropy), true);
-			$lastRandom .= $value;
-			foreach($weakEntropy as $k => $c){ //mixing entropy values with XOR and hash randomness extractor
-				$value ^= hash("sha256", $c . microtime() . $k, true) . hash("sha256", mt_rand() . microtime() . $k . $c, true);
-				$value ^= hash("sha512", ((string) lcg_value()) . $c . microtime() . $k, true);
-			}
-			unset($weakEntropy);
-
-			if($secure === true){
-
-				if(file_exists("/dev/urandom")){
-					$fp = fopen("/dev/urandom", "rb");
-					$systemRandom = fread($fp, 64);
-					fclose($fp);
-				}else{
-					$systemRandom = str_repeat("\x00", 64);
-				}
-
-				$strongEntropyValues = [
-					is_array($startEntropy) ? hash("sha512", $startEntropy[($rounds + $drop) % count($startEntropy)], true) : hash("sha512", $startEntropy, true), //Get a random index of the startEntropy, or just read it
-					$systemRandom,
-					function_exists("openssl_random_pseudo_bytes") ? openssl_random_pseudo_bytes(64) : str_repeat("\x00", 64),
-					function_exists("mcrypt_create_iv") ? mcrypt_create_iv(64, MCRYPT_DEV_URANDOM) : str_repeat("\x00", 64),
-					$value,
-				];
-				$strongEntropy = array_pop($strongEntropyValues);
-				foreach($strongEntropyValues as $value){
-					$strongEntropy = $strongEntropy ^ $value;
-				}
-				$value = "";
-				//Von Neumann randomness extractor, increases entropy
-				$bitcnt = 0;
-				for($j = 0; $j < 64; ++$j){
-					$a = ord($strongEntropy{$j});
-					for($i = 0; $i < 8; $i += 2){
-						$b = ($a & (1 << $i)) > 0 ? 1 : 0;
-						if($b != (($a & (1 << ($i + 1))) > 0 ? 1 : 0)){
-							$secureValue |= $b << $bitcnt;
-							if($bitcnt == 7){
-								$value .= chr($secureValue);
-								$secureValue = 0;
-								$bitcnt = 0;
-							}else{
-								++$bitcnt;
-							}
-							++$drop;
-						}else{
-							$drop += 2;
-						}
-					}
-				}
-			}
-			$output .= substr($value, 0, min($length - strlen($output), $length));
-			unset($value);
-			++$rounds;
-		}
-		$lastRandom = hash("sha512", $lastRandom, true);
-
-		return $raw === false ? bin2hex($output) : $output;
 	}
 
 	/*

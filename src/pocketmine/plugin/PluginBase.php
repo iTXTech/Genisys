@@ -204,7 +204,6 @@ abstract class PluginBase implements Plugin{
 		$out = $this->dataFolder . $filename;
 		if(!file_exists(dirname($out))){
 			mkdir(dirname($out), 0755, true);
-			mkdir($this->dataFolder, 0755, true);
 		}
 
 		if(file_exists($out) and $replace !== true){
@@ -218,7 +217,7 @@ abstract class PluginBase implements Plugin{
 	}
 
 	/**
-	 * Returns all the resources incrusted on the plugin
+	 * Returns all the resources packaged with the plugin
 	 *
 	 * @return string[]
 	 */

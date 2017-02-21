@@ -22,6 +22,7 @@
 namespace pocketmine\block;
 
 use pocketmine\event\block\LeavesDecayEvent;
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\level\Level;
@@ -35,6 +36,8 @@ class Leaves extends Transparent{
 	const JUNGLE = 3;
 	const ACACIA = 0;
 	const DARK_OAK = 1;
+	
+	const WOOD_TYPE = self::WOOD;
 
 	protected $id = self::LEAVES;
 
@@ -48,6 +51,14 @@ class Leaves extends Transparent{
 
 	public function getToolType(){
 		return Tool::TYPE_SHEARS;
+	}
+
+	public function getBurnChance() : int{
+		return 30;
+	}
+
+	public function getBurnAbility() : int{
+		return 60;
 	}
 
 	public function getName() : string{
@@ -66,12 +77,12 @@ class Leaves extends Transparent{
 		if(isset($visited[$index])){
 			return false;
 		}
-		if($pos->getId() === self::WOOD){
+		if($pos->getId() === static::WOOD_TYPE){
 			return true;
-		}elseif($pos->getId() === self::LEAVES and $distance < 3){
+		}elseif($pos->getId() === $this->id and $distance < 3){
 			$visited[$index] = true;
 			$down = $pos->getSide(0)->getId();
-			if($down === Item::WOOD){
+			if($down === static::WOOD_TYPE){
 				return true;
 			}
 			if($fromSide === null){
@@ -159,17 +170,20 @@ class Leaves extends Transparent{
 
 	public function getDrops(Item $item) : array {
 		$drops = [];
-		if($item->isShears()){
-			$drops[] = [Item::LEAVES, $this->meta & 0x03, 1];
+		if($item->isShears() or $item->getEnchantmentLevel(Enchantment::TYPE_MINING_SILK_TOUCH) > 0){
+			$drops[] = [$this->id, $this->meta & 0x03, 1];
 		}else{
-			if(mt_rand(1, 20) === 1){ //Saplings
+			$fortunel = $item->getEnchantmentLevel(Enchantment::TYPE_MINING_FORTUNE);
+			$fortunel = min(3, $fortunel);
+			$rates = [20,16,12,10];
+			if(mt_rand(1, $rates[$fortunel]) === 1){ //Saplings
 				$drops[] = [Item::SAPLING, $this->meta & 0x03, 1];
 			}
-			if(($this->meta & 0x03) === self::OAK and mt_rand(1, 200) === 1){ //Apples
+			$rates = [200,180,160,120];
+			if(($this->meta & 0x03) === self::OAK and mt_rand(1, $rates[$fortunel]) === 1){ //Apples
 				$drops[] = [Item::APPLE, 0, 1];
 			}
 		}
-
 		return $drops;
 	}
 }

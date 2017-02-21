@@ -27,7 +27,6 @@ namespace pocketmine\network\query;
 
 use pocketmine\Server;
 use pocketmine\utils\Binary;
-use pocketmine\utils\Utils;
 
 class QueryHandler{
 	private $server, $lastToken, $token, $longData, $shortData, $timeout;
@@ -65,7 +64,7 @@ class QueryHandler{
 
 	public function regenerateToken(){
 		$this->lastToken = $this->token;
-		$this->token = @Utils::getRandomBytes(16, false);
+		$this->token = random_bytes(16);
 	}
 
 	public static function getTokenString($token, $salt){

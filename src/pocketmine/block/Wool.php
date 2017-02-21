@@ -78,4 +78,12 @@ class Wool extends Solid{
 		return $names[$this->meta & 0x0f];
 	}
 
+	public function getBurnChance() : int{
+		return 30;
+	}
+
+	public function getBurnAbility() : int{
+		return 60;
+	}
+
 }

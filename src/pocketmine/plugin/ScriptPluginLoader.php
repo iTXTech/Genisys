@@ -24,7 +24,6 @@ namespace pocketmine\plugin;
 use pocketmine\event\plugin\PluginDisableEvent;
 use pocketmine\event\plugin\PluginEnableEvent;
 use pocketmine\Server;
-use pocketmine\utils\PluginException;
 
 /**
  * Simple script loader, not for plugin development
@@ -94,9 +93,13 @@ class ScriptPluginLoader implements PluginLoader{
 				$insideHeader = true;
 			}
 
-			if(preg_match("/^[ \t]+\\*[ \t]+@([a-zA-Z]+)[ \t]+(.*)$/", $line, $matches) > 0){
+			if(preg_match("/^[ \t]+\\*[ \t]+@([a-zA-Z]+)([ \t]+(.*))?$/", $line, $matches) > 0){
 				$key = $matches[1];
-				$content = trim($matches[2]);
+				$content = trim($matches[3] ?? "");
+
+				if($key === "notscript"){
+					return null;
+ 				}
 
 				$data[$key] = $content;
 			}
@@ -115,7 +118,7 @@ class ScriptPluginLoader implements PluginLoader{
 	/**
 	 * Returns the filename patterns that this loader accepts
 	 *
-	 * @return array
+	 * @return string
 	 */
 	public function getPluginFilters(){
 		return "/\\.php$/i";

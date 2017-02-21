@@ -1,5 +1,23 @@
 <?php
 
+/*
+ *
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
+ *
+ *
+*/
 
 namespace pocketmine;
 
@@ -26,12 +44,19 @@ class CrashDump{
 		$this->path = $this->server->getCrashPath() . "CrashDump_" . date("D_M_j-H.i.s-T_Y", $this->time) . ".log";
 		$this->fp = @fopen($this->path, "wb");
 		if(!is_resource($this->fp)){
-			throw new RuntimeException("Could not create Crash Dump");
+			throw new \RuntimeException("Could not create Crash Dump");
 		}
 		$this->data["time"] = $this->time;
 		$this->addLine($this->server->getName() . " Crash Dump " . date("D M j H:i:s T Y", $this->time));
 		$this->addLine();
-		$this->baseCrash();
+		try{
+			$this->baseCrash();
+		}catch(\Exception $e){
+			//Attempt to fix incomplete crashdumps
+			$this->addLine("CrashDump crashed while generating base crash data");
+			$this->addLine();
+		}
+		
 		$this->generalData();
 		$this->pluginsData();
 
@@ -68,7 +93,6 @@ class CrashDump{
 		if(class_exists("pocketmine\\plugin\\PluginManager", false)){
 			$this->addLine();
 			$this->addLine("Loaded plugins:");
-			$this->addLine("加载的插件:");
 			$this->data["plugins"] = [];
 			foreach($this->server->getPluginManager()->getPlugins() as $p){
 				$d = $p->getDescription();
@@ -164,7 +188,6 @@ class CrashDump{
 		if(strpos($error["file"], "src/pocketmine/") === false and strpos($error["file"], "src/raklib/") === false and file_exists($error["fullFile"])){
 			$this->addLine();
 			$this->addLine("THIS CRASH WAS CAUSED BY A PLUGIN");
-			$this->addLine("此次出错由插件引起");
 			$this->data["plugin"] = true;
 
 			$reflection = new \ReflectionClass(PluginBase::class);
@@ -205,8 +228,6 @@ class CrashDump{
 	private function generalData(){
 		$version = new VersionString();
 		$this->data["general"] = [];
-		$this->data["general"]["version"] = $version->get(false);
-		$this->data["general"]["build"] = $version->getBuild();
 		$this->data["general"]["protocol"] = Info::CURRENT_PROTOCOL;
 		$this->data["general"]["api"] = \pocketmine\API_VERSION;
 		$this->data["general"]["git"] = \pocketmine\GIT_COMMIT;
@@ -216,11 +237,15 @@ class CrashDump{
 		$this->data["general"]["zend"] = zend_version();
 		$this->data["general"]["php_os"] = PHP_OS;
 		$this->data["general"]["os"] = Utils::getOS();
-		$this->addLine("Genisys version: " . $version->get(false) . " #" . $version->getBuild() . " [Protocol " . Info::CURRENT_PROTOCOL . "; API " . API_VERSION . "]");
+		$this->addLine("Genisys version: " . \pocketmine\GIT_COMMIT . " [Protocol " . Info::CURRENT_PROTOCOL . "; API " . API_VERSION . "]");
 		$this->addLine("uname -a: " . php_uname("a"));
 		$this->addLine("PHP version: " . phpversion());
 		$this->addLine("Zend version: " . zend_version());
 		$this->addLine("OS : " . PHP_OS . ", " . Utils::getOS());
+		$this->addLine();
+		$this->addLine("Server uptime: " . $this->server->getUptime());
+		$this->addLine("Number of loaded worlds: " . count($this->server->getLevels()));
+		$this->addLine("Players online: ".count($this->server->getOnlinePlayers())."/".$this->server->getMaxPlayers());
 	}
 
 	public function addLine($line = ""){

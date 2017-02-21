@@ -1,26 +1,37 @@
 <?php
 
 /*
- * PocketMine-iTX Genisys
- * @author PocketMine-iTX Team & iTX Technologies LLC.
- * @link http://mcper.cn 
- *       http://mcpe.asia 
- *       http://pl.zxda.net
+ *
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
+ *
+ *
 */
 
 namespace pocketmine\block;
 
-use pocketmine\item\Item;
-use pocketmine\item\Tool;
-use pocketmine\Player;
 use pocketmine\entity\IronGolem;
 use pocketmine\entity\SnowGolem;
+use pocketmine\item\Item;
+use pocketmine\item\Tool;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\ListTag;
+use pocketmine\Player;
 
-class LitPumpkin extends Solid{
+class LitPumpkin extends Solid implements SolidLight{
 
 	protected $id = self::LIT_PUMPKIN;
 
@@ -59,17 +70,17 @@ class LitPumpkin extends Solid{
 					$level->setBlock($block0, new Air());
 					$level->setBlock($block1, new Air());
 					$golem = new SnowGolem($player->getLevel()->getChunk($this->getX() >> 4, $this->getZ() >> 4), new CompoundTag("", [
-						"Pos" => new EnumTag("Pos", [
+						"Pos" => new ListTag("Pos", [
 							new DoubleTag("", $this->x),
 							new DoubleTag("", $this->y),
 							new DoubleTag("", $this->z)
 						]),
-						"Motion" => new EnumTag("Motion", [
+						"Motion" => new ListTag("Motion", [
 							new DoubleTag("", 0),
 							new DoubleTag("", 0),
 							new DoubleTag("", 0)
 						]),
-						"Rotation" => new EnumTag("Rotation", [
+						"Rotation" => new ListTag("Rotation", [
 							new FloatTag("", 0),
 							new FloatTag("", 0)
 						]),
@@ -91,22 +102,22 @@ class LitPumpkin extends Solid{
 					}elseif($block4->getId() == Item::IRON_BLOCK and $block5->getId() == Item::IRON_BLOCK and $block2->getId() == Item::AIR and $block3->getId() == Item::AIR){
 						$level->setBlock($block4, new Air());
 						$level->setBlock($block5, new Air());
-					}else return;
+					}else return true;
 					$level->setBlock($block, new Air());
 					$level->setBlock($block0, new Air());
 					$level->setBlock($block1, new Air());
 					$golem = new IronGolem($player->getLevel()->getChunk($this->getX() >> 4, $this->getZ() >> 4), new CompoundTag("", [
-						"Pos" => new EnumTag("Pos", [
+						"Pos" => new ListTag("Pos", [
 							new DoubleTag("", $this->x),
 							new DoubleTag("", $this->y),
 							new DoubleTag("", $this->z)
 						]),
-						"Motion" => new EnumTag("Motion", [
+						"Motion" => new ListTag("Motion", [
 							new DoubleTag("", 0),
 							new DoubleTag("", 0),
 							new DoubleTag("", 0)
 						]),
-						"Rotation" => new EnumTag("Rotation", [
+						"Rotation" => new ListTag("Rotation", [
 							new FloatTag("", 0),
 							new FloatTag("", 0)
 						]),

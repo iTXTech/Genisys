@@ -25,7 +25,10 @@ namespace pocketmine\block;
 use pocketmine\item\Tool;
 
 class Sand extends Fallable{
-
+	
+	const NORMAL = 0;
+	const RED = 1;
+	
 	protected $id = self::SAND;
 
 	public function __construct($meta = 0){

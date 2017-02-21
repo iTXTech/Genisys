@@ -6,13 +6,13 @@ timings/*
 *.log
 *.phar
 server.properties
-pocketmine.yml
+/pocketmine.yml
 *.txt
 genisys.yml
 crashdumps/*
 
 # Common IDEs
-.idea/*
+.idea/
 nbproject/*
 
 # Windows image file caches
@@ -28,3 +28,4 @@ Desktop.ini
 # Sphinx-doc
 /docs/build/
 !/docs/requirements.txt
+.project

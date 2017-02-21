@@ -1,0 +1,9 @@
+[submodule "src/raklib"]
+	path = src/raklib
+	url = https://github.com/pmmp/RakLib.git
+[submodule "src/spl"]
+	path = src/spl
+	url = https://github.com/pmmp/PocketMine-SPL.git
+[submodule "tests/plugins/PocketMine-DevTools"]
+	path = tests/plugins/PocketMine-DevTools
+	url = https://github.com/pmmp/PocketMine-DevTools.git

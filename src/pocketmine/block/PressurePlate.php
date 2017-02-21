@@ -1,19 +1,31 @@
 <?php
-/**
- * Author: PeratX
- * Time: 2015/12/11 17:29
- ]
 
+/*
+ *
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://itxtech.org
+ *
  */
 
 namespace pocketmine\block;
 
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
-use pocketmine\math\Math;
-use pocketmine\math\Vector3;
 use pocketmine\level\Level;
 use pocketmine\level\sound\GenericSound;
+use pocketmine\math\Vector3;
 use pocketmine\Player;
 
 class PressurePlate extends RedstoneSource{
@@ -30,18 +42,18 @@ class PressurePlate extends RedstoneSource{
 
 	public function onEntityCollide(Entity $entity){
 		if($this->getLevel()->getServer()->redstoneEnabled and $this->canActivate){
-			if(!$this->isActivated() or ($this->isActivated() and ($this->getLevel()->getServer()->getTick() % ($this->getLevel()->getServer()->getTicksPerSecondAverage() * 1.5)) == 0)){
+			if(!$this->isActivated()){
 				$this->meta = 1;
 				$this->getLevel()->setBlock($this, $this, true, false);
-				$this->activate();
 				$this->getLevel()->addSound(new GenericSound($this, 1000));
-				//$this->activateTime = $this->getLevel()->getServer()->getTick();
-				$this->getLevel()->scheduleUpdate($this, $this->getLevel()->getServer()->getTicksPerSecondAverage() * 1.5);
+			}
+			if(!$this->isActivated() or ($this->isActivated() and ($this->getLevel()->getServer()->getTick() % 30) == 0)){
+				$this->activate();
 			}
 		}
 	}
 
-	public function isActivated(){
+	public function isActivated(Block $from = null){
 		return ($this->meta == 0) ? false : true;
 	}
 
@@ -97,5 +109,13 @@ class PressurePlate extends RedstoneSource{
 		}
 		$this->canActivate = false;
 		$this->getLevel()->setBlock($this, new Air(), true);
+	}
+
+	public function getHardness() {
+		return 0.5;
+	}
+
+	public function getResistance(){
+		return 2.5;
 	}
 }

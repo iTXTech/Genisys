@@ -26,27 +26,29 @@ namespace pocketmine\tile;
 
 use pocketmine\event\Timings;
 use pocketmine\level\format\Chunk;
-use pocketmine\level\format\FullChunk;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\utils\ChunkException;
 
 abstract class Tile extends Position{
-	const SIGN = "Sign";
-	const CHEST = "Chest";
-	const FURNACE = "Furnace";
-	const FLOWER_POT = "FlowerPot";
-	const MOB_SPAWNER = "MobSpawner";
-	const SKULL = "Skull";
+
 	const BREWING_STAND = "BrewingStand";
-	const ENCHANT_TABLE = "EnchantTable";
-	const ITEM_FRAME = "ItemFrame";
+	const CAULDRON = "Cauldron";
+	const CHEST = "Chest";
 	const DISPENSER = "Dispenser";
-	const DROPPER = "Dropper";
 	const DAY_LIGHT_DETECTOR = "DLDetector";
+	const DROPPER = "Dropper";
+	const ENCHANT_TABLE = "EnchantTable";
+	const ENDER_CHEST = "EnderChest";
+	const FLOWER_POT = "FlowerPot";
+	const FURNACE = "Furnace";
+	const HOPPER = "Hopper";
+	const ITEM_FRAME = "ItemFrame";
+	const MOB_SPAWNER = "MobSpawner";
+	const SIGN = "Sign";
+	const SKULL = "Skull";
 
 	public static $tileCount = 1;
 
@@ -57,9 +59,6 @@ abstract class Tile extends Position{
 	public $chunk;
 	public $name;
 	public $id;
-	public $x;
-	public $y;
-	public $z;
 	public $attach;
 	public $metadata;
 	public $closed = false;
@@ -71,15 +70,33 @@ abstract class Tile extends Position{
 	/** @var \pocketmine\event\TimingsHandler */
 	public $tickTimer;
 
+	public static function init(){
+		self::registerTile(BrewingStand::class);
+		self::registerTile(Cauldron::class);
+		self::registerTile(Chest::class);
+		self::registerTile(Dispenser::class);
+		self::registerTile(DLDetector::class);
+		self::registerTile(Dropper::class);
+		self::registerTile(EnchantTable::class);
+		self::registerTile(EnderChest::class);
+		self::registerTile(FlowerPot::class);
+		self::registerTile(Furnace::class);
+		self::registerTile(Hopper::class);
+		self::registerTile(ItemFrame::class);
+		self::registerTile(MobSpawner::class);
+		self::registerTile(Sign::class);
+		self::registerTile(Skull::class);
+	}
+
 	/**
-	 * @param string    $type
-	 * @param FullChunk $chunk
-	 * @param CompoundTag  $nbt
-	 * @param           $args
+	 * @param string      $type
+	 * @param Chunk       $chunk
+	 * @param CompoundTag $nbt
+	 * @param array ...$args
 	 *
-	 * @return Tile
+	 * @return null
 	 */
-	public static function createTile($type, FullChunk $chunk, CompoundTag $nbt, ...$args){
+	public static function createTile($type, Chunk $chunk, CompoundTag $nbt, ...$args){
 		if(isset(self::$knownTiles[$type])){
 			$class = self::$knownTiles[$type];
 			return new $class($chunk, $nbt, ...$args);
@@ -113,13 +130,15 @@ abstract class Tile extends Position{
 		return self::$shortNames[static::class];
 	}
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
-		if($chunk === null or $chunk->getProvider() === null){
-			throw new ChunkException("Invalid garbage Chunk given to Tile");
-		}
+	/** @noinspection PhpMissingParentConstructorInspection
+	 *
+	 * @param Chunk       $chunk
+	 * @param CompoundTag $nbt
+	 */
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
+		assert($chunk !== null and $chunk->getProvider() !== null);
 
 		$this->timings = Timings::getTileEntityTimings($this);
-
 		$this->server = $chunk->getProvider()->getLevel()->getServer();
 		$this->chunk = $chunk;
 		$this->setLevel($chunk->getProvider()->getLevel());
@@ -170,7 +189,7 @@ abstract class Tile extends Position{
 		if(!$this->closed){
 			$this->closed = true;
 			unset($this->level->updateTiles[$this->id]);
-			if($this->chunk instanceof FullChunk){
+			if($this->chunk instanceof Chunk){
 				$this->chunk->removeTile($this);
 			}
 			if(($level = $this->getLevel()) instanceof Level){

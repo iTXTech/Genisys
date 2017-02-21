@@ -1,9 +1,22 @@
 <?php
-/**
- * Author: PeratX
- * Time: 2015/12/13 19:35
- ]
 
+/*
+ *
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://itxtech.org
+ *
  */
 
 namespace pocketmine\block;
@@ -12,7 +25,7 @@ use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\math\Vector3;
 
-class ActiveRedstoneLamp extends Solid implements ElectricalAppliance{
+class ActiveRedstoneLamp extends Solid implements ElectricalAppliance, SolidLight{
 	protected $id = self::ACTIVE_REDSTONE_LAMP;
 
 	public function __construct($meta = 0){
@@ -102,7 +115,7 @@ class ActiveRedstoneLamp extends Solid implements ElectricalAppliance{
 	}
 
 	public function turnOff(){
-		$this->getLevel()->setBlock($this, new InactiveRedstoneLamp(), true, false);
+		$this->getLevel()->setBlock($this, new InactiveRedstoneLamp(), true, true);
 		//$this->turnAroundOff();
 		return true;
 	}

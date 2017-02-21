@@ -1,13 +1,32 @@
 <?php
+
+/*
+ *
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://itxtech.org
+ *
+ */
+
 namespace pocketmine\command\defaults;
 
-use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
 use pocketmine\level\Level;
+use pocketmine\level\weather\Weather;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
-use pocketmine\level\weather\WeatherManager;
 
 class WeatherCommand extends VanillaCommand{
 
@@ -32,16 +51,21 @@ class WeatherCommand extends VanillaCommand{
 		}
 
 		if($sender instanceof Player){
-			$wea = (int)$args[0];
+			$wea = Weather::getWeatherFromString($args[0]);
+			if(!isset($args[1])) $duration = mt_rand(min($sender->getServer()->weatherRandomDurationMin, $sender->getServer()->weatherRandomDurationMax), max($sender->getServer()->weatherRandomDurationMin, $sender->getServer()->weatherRandomDurationMax));
+			else $duration = (int) $args[1];
 			if($wea >= 0 and $wea <= 3){
-				if(WeatherManager::isRegistered($sender->getLevel())){
-					$sender->getLevel()->getWeather()->setWeather($wea);
+				$sender->getLevel()->getWeather()->setWeather($wea, $duration);
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.weather.changed", [$sender->getLevel()->getFolderName()]));
+				return true;
+				/*if(WeatherManager::isRegistered($sender->getLevel())){
+					$sender->getLevel()->getWeather()->setWeather($wea, $duration);
 					$sender->sendMessage(new TranslationContainer("pocketmine.command.weather.changed", [$sender->getLevel()->getFolderName()]));
 					return true;
 				}else{
 					$sender->sendMessage(new TranslationContainer("pocketmine.command.weather.noregistered", [$sender->getLevel()->getFolderName()]));
 					return false;
-				}
+				}*/
 			}else{
 				$sender->sendMessage(TextFormat::RED . "%pocketmine.command.weather.invalid");
 				return false;
@@ -49,7 +73,7 @@ class WeatherCommand extends VanillaCommand{
 		}
 
 		if(count($args) < 2){
-			$sender->sendMessage(TextFormat::RED . "%pocketmine.command.weather.wrong");
+			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
 			return false;
 		}
 
@@ -59,21 +83,24 @@ class WeatherCommand extends VanillaCommand{
 			return false;
 		}
 
-		$wea = (int)$args[1];
+		$wea = Weather::getWeatherFromString($args[1]);
+		if(!isset($args[1])) $duration = mt_rand(min($sender->getServer()->weatherRandomDurationMin, $sender->getServer()->weatherRandomDurationMax), max($sender->getServer()->weatherRandomDurationMin, $sender->getServer()->weatherRandomDurationMax));
+		else $duration = (int) $args[1];
 		if($wea >= 0 and $wea <= 3){
-			if(WeatherManager::isRegistered($level)){
-				$level->getWeather()->setWeather($wea);
+			$level->getWeather()->setWeather($wea, $duration);
+			$sender->sendMessage(new TranslationContainer("pocketmine.command.weather.changed", [$level->getFolderName()]));
+			return true;
+			/*if(WeatherManager::isRegistered($level)){
+				$level->getWeather()->setWeather($wea, $duration);
 				$sender->sendMessage(new TranslationContainer("pocketmine.command.weather.changed", [$level->getFolderName()]));
 				return true;
 			}else{
 				$sender->sendMessage(new TranslationContainer("pocketmine.command.weather.noregistered", [$level->getFolderName()]));
 				return false;
-			}
+			}*/
 		}else{
 			$sender->sendMessage(TextFormat::RED . "%pocketmine.command.weather.invalid");
 			return false;
 		}
-
-		return true;
 	}
 }

@@ -21,6 +21,7 @@
 
 namespace pocketmine\event\player;
 
+use pocketmine\entity\FishingHook;
 use pocketmine\event\Cancellable;
 use pocketmine\item\Item;
 use pocketmine\Player;
@@ -35,9 +36,13 @@ class PlayerFishEvent extends PlayerEvent implements Cancellable{
 	/** @var Item */
 	private $item;
 
+	/** @var FishingHook */
+	private $hook;
+
 	/**
 	 * @param Player $player
 	 * @param Item   $item
+	 * @param        $fishingHook
 	 */
 	public function __construct(Player $player, Item $item, $fishingHook = null){
 		$this->player = $player;

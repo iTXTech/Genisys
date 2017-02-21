@@ -301,12 +301,11 @@ class MemoryManager{
 
 	public function dumpServerMemory($outputFolder, $maxNesting, $maxStringSize){
 		gc_disable();
-
+		ini_set("memory_limit",-1);
 		if(!file_exists($outputFolder)){
 			mkdir($outputFolder, 0777, true);
 		}
-
-		$this->server->getLogger()->notice("[Dump] After the memory dump is done, the server might crash");
+		$this->server->getLogger()->notice("[Dump] After the memory dump is done, the server will shut down");
 
 		$obData = fopen($outputFolder . "/objects.js", "wb+");
 
@@ -377,6 +376,8 @@ class MemoryManager{
 
 			echo "[Dump] Wrote " . count($objects) . " objects\n";
 		}while($continue);
+		
+		fclose($obData);
 
 		file_put_contents($outputFolder . "/staticProperties.js", json_encode($staticProperties, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 		file_put_contents($outputFolder . "/serverEntry.js", json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
@@ -385,8 +386,6 @@ class MemoryManager{
 		echo "[Dump] Finished!\n";
 
 		gc_enable();
-
-		$this->server->forceShutdown();
 	}
 
 	private function continueDump($from, &$data, &$objects, &$refCounts, $recursion, $maxNesting, $maxStringSize){
@@ -416,7 +415,7 @@ class MemoryManager{
 				$this->continueDump($value, $data[$key], $objects, $refCounts, $recursion + 1, $maxNesting, $maxStringSize);
 			}
 		}elseif(is_string($from)){
-			$data = "(string) len(".strlen($from).") " . substr(Utils::printable($from), 0, $maxStringSize);
+			$data = "(string) len(". strlen($from) .") " . substr(Utils::printable($from), 0, $maxStringSize);
 		}elseif(is_resource($from)){
 			$data = "(resource) " . print_r($from, true);
 		}else{

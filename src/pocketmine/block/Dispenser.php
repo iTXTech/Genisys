@@ -1,21 +1,32 @@
 <?php
-/**
- * Author: PeratX
- * QQ: 1215714524
- * Time: 2016/2/3 15:40
 
-
+/*
  *
- * OpenGenisys Project
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://itxtech.org
+ *
  */
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 use pocketmine\tile\Dispenser as TileDispenser;
@@ -42,7 +53,7 @@ class Dispenser extends Solid{
 	}
 
 	public function getToolType(){
-		return Tool::TYPE_AXE;
+		return Tool::TYPE_PICKAXE;
 	}
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
@@ -66,7 +77,7 @@ class Dispenser extends Solid{
 
 		$this->getLevel()->setBlock($block, $this, true, true);
 		$nbt = new CompoundTag("", [
-			new EnumTag("Items", []),
+			new ListTag("Items", []),
 			new StringTag("id", Tile::DISPENSER),
 			new IntTag("x", $this->x),
 			new IntTag("y", $this->y),
@@ -104,7 +115,7 @@ class Dispenser extends Solid{
 				$dispenser = $t;
 			}else{
 				$nbt = new CompoundTag("", [
-					new EnumTag("Items", []),
+					new ListTag("Items", []),
 					new StringTag("id", Tile::DISPENSER),
 					new IntTag("x", $this->x),
 					new IntTag("y", $this->y),

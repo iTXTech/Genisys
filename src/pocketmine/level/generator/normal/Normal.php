@@ -39,18 +39,13 @@ use pocketmine\block\Stone;
 use pocketmine\level\ChunkManager;
 use pocketmine\level\generator\biome\Biome;
 use pocketmine\level\generator\biome\BiomeSelector;
-use pocketmine\level\generator\GenerationChunkManager;
-use pocketmine\level\generator\GenerationManager;
 use pocketmine\level\generator\Generator;
-use pocketmine\level\generator\noise\Perlin;
 use pocketmine\level\generator\noise\Simplex;
-use pocketmine\level\generator\normal\biome\NormalBiome;
 use pocketmine\level\generator\object\OreType;
+use pocketmine\level\generator\populator\Cave;
 use pocketmine\level\generator\populator\GroundCover;
 use pocketmine\level\generator\populator\Ore;
 use pocketmine\level\generator\populator\Populator;
-use pocketmine\level\generator\populator\TallGrass;
-use pocketmine\level\generator\populator\Tree;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3 as Vector3;
 use pocketmine\utils\Random;
@@ -59,21 +54,21 @@ class Normal extends Generator{
 	const NAME = "Normal";
 
 	/** @var Populator[] */
-	private $populators = [];
+	protected $populators = [];
 	/** @var ChunkManager */
-	private $level;
+	protected $level;
 	/** @var Random */
-	private $random;
-	private $waterHeight = 62;
-	private $bedrockDepth = 5;
+	protected $random;
+	protected $waterHeight = 62;
+	protected $bedrockDepth = 5;
 
 	/** @var Populator[] */
-	private $generationPopulators = [];
+	protected $generationPopulators = [];
 	/** @var Simplex */
-	private $noiseBase;
+	protected $noiseBase;
 
 	/** @var BiomeSelector */
-	private $selector;
+	protected $selector;
 
 	private static $GAUSSIAN_KERNEL = null;
 	private static $SMOOTH_SIZE = 2;
@@ -103,6 +98,10 @@ class Normal extends Generator{
 
 	public function getName() : string{
 		return self::NAME;
+	}
+
+	public function getWaterHeight() : int{
+		return $this->waterHeight;
 	}
 
 	public function getSettings(){
@@ -183,6 +182,9 @@ class Normal extends Generator{
 		$cover = new GroundCover();
 		$this->generationPopulators[] = $cover;
 
+		$cave = new Cave();
+		$this->populators[] = $cave;
+
 		$ores = new Ore();
 		$ores->setOreTypes([
 			new OreType(new CoalOre(), 20, 16, 0, 128),
@@ -217,7 +219,6 @@ class Normal extends Generator{
 
 				$biome = $this->pickBiome($chunkX * 16 + $x, $chunkZ * 16 + $z);
 				$chunk->setBiomeId($x, $z, $biome->getId());
-				$color = [0, 0, 0];
 
 				for($sx = -self::$SMOOTH_SIZE; $sx <= self::$SMOOTH_SIZE; ++$sx){
 					for($sz = -self::$SMOOTH_SIZE; $sz <= self::$SMOOTH_SIZE; ++$sz){
@@ -237,10 +238,6 @@ class Normal extends Generator{
 
 						$minSum += ($adjacent->getMinElevation() - 1) * $weight;
 						$maxSum += $adjacent->getMaxElevation() * $weight;
-						$bColor = $adjacent->getColor();
-						$color[0] += (($bColor >> 16) ** 2) * $weight;
-						$color[1] += ((($bColor >> 8) & 0xff) ** 2) * $weight;
-						$color[2] += (($bColor & 0xff) ** 2) * $weight;
 
 						$weightSum += $weight;
 					}
@@ -248,8 +245,6 @@ class Normal extends Generator{
 
 				$minSum /= $weightSum;
 				$maxSum /= $weightSum;
-
-				$chunk->setBiomeColor($x, $z, sqrt($color[0] / $weightSum), sqrt($color[1] / $weightSum), sqrt($color[2] / $weightSum));
 
 				$solidLand = false;
 				for($y = 127; $y >= 0; --$y){

@@ -25,8 +25,6 @@ use pocketmine\Server;
 
 
 /**
- * Class Config
- *
  * Config Class for simple config manipulation of multiple formats.
  */
 class Config{
@@ -47,9 +45,9 @@ class Config{
 
 	/** @var string */
 	private $file;
-	/** @var boolean */
+	/** @var bool */
 	private $correct = false;
-	/** @var integer */
+	/** @var int */
 	private $type = Config::DETECT;
 
 	public static $formats = [
@@ -73,7 +71,7 @@ class Config{
 	/**
 	 * @param string $file     Path of the file to be loaded
 	 * @param int    $type     Config type to load, -1 by default (detect)
-	 * @param array  $default  Array with the default values, will be set if not existent
+	 * @param array  $default  Array with the default values that will be written to the file if it did not exist
 	 * @param null   &$correct Sets correct to true if everything has been loaded correctly
 	 */
 	public function __construct($file, $type = Config::DETECT, $default = [], &$correct = null){
@@ -88,7 +86,6 @@ class Config{
 		$this->config = [];
 		$this->nestedCache = [];
 		$this->correct = false;
-		$this->load($this->file);
 		$this->load($this->file, $this->type);
 	}
 
@@ -168,7 +165,7 @@ class Config{
 	}
 
 	/**
-	 * @return boolean
+	 * @return bool
 	 */
 	public function check(){
 		return $this->correct === true;
@@ -177,7 +174,7 @@ class Config{
 	/**
 	 * @param bool $async
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function save($async = false){
 		if($this->correct === true){
@@ -224,7 +221,7 @@ class Config{
 	/**
 	 * @param $k
 	 *
-	 * @return boolean|mixed
+	 * @return bool|mixed
 	 */
 	public function __get($k){
 		return $this->get($k);
@@ -241,7 +238,7 @@ class Config{
 	/**
 	 * @param $k
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function __isset($k){
 		return $this->exists($k);
@@ -315,50 +312,10 @@ class Config{
 	 * @param       $k
 	 * @param mixed $default
 	 *
-	 * @return boolean|mixed
+	 * @return bool|mixed
 	 */
 	public function get($k, $default = false){
 		return ($this->correct and isset($this->config[$k])) ? $this->config[$k] : $default;
-	}
-
-	/**
-	 * @param string $path
-	 *
-	 * @deprecated
-	 *
-	 * @return mixed
-	 */
-	public function getPath($path){
-		$currPath =& $this->config;
-		foreach(explode(".", $path) as $component){
-			if(isset($currPath[$component])){
-				$currPath =& $currPath[$component];
-			}else{
-				$currPath = null;
-			}
-		}
-
-		return $currPath;
-	}
-
-	/**
-	 *
-	 * @deprecated
-	 *
-	 * @param string $path
-	 * @param mixed  $value
-	 */
-	public function setPath($path, $value){
-		$currPath =& $this->config;
-		$components = explode(".", $path);
-		$final = array_pop($components);
-		foreach($components as $component){
-			if(!isset($currPath[$component])){
-				$currPath[$component] = [];
-			}
-			$currPath =& $currPath[$component];
-		}
-		$currPath[$final] = $value;
 	}
 
 	/**
@@ -367,6 +324,11 @@ class Config{
 	 */
 	public function set($k, $v = true){
 		$this->config[$k] = $v;
+		foreach($this->nestedCache as $nestedKey => $nvalue){
+			if(substr($nestedKey, 0, strlen($k) + 1) === ($k . ".")){
+				unset($this->nestedCache[$nestedKey]);
+  			}
+		}
 	}
 
 	/**
@@ -380,7 +342,7 @@ class Config{
 	 * @param      $k
 	 * @param bool $lowercase If set, searches Config in single-case / lowercase.
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function exists($k, $lowercase = false){
 		if($lowercase === true){
@@ -419,7 +381,7 @@ class Config{
 	 * @param $default
 	 * @param $data
 	 *
-	 * @return integer
+	 * @return int
 	 */
 	private function fillDefaults($default, &$data){
 		$changed = 0;

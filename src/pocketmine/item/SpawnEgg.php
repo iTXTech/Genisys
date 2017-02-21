@@ -23,15 +23,14 @@ namespace pocketmine\item;
 
 use pocketmine\block\Block;
 use pocketmine\entity\Entity;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\level\Level;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
-use pocketmine\tile\MobSpawner;
 
 class SpawnEgg extends Item{
 	public function __construct($meta = 0, $count = 1){
@@ -49,22 +48,21 @@ class SpawnEgg extends Item{
 			$entity = null;
 			$chunk = $level->getChunk($block->getX() >> 4, $block->getZ() >> 4);
 
-			if(!($chunk instanceof FullChunk)){
+			if(!($chunk instanceof Chunk)){
 				return false;
 			}
-
 			$nbt = new CompoundTag("", [
-				"Pos" => new EnumTag("Pos", [
+				"Pos" => new ListTag("Pos", [
 					new DoubleTag("", $block->getX() + 0.5),
 					new DoubleTag("", $block->getY()),
 					new DoubleTag("", $block->getZ() + 0.5)
 				]),
-				"Motion" => new EnumTag("Motion", [
+				"Motion" => new ListTag("Motion", [
 					new DoubleTag("", 0),
 					new DoubleTag("", 0),
 					new DoubleTag("", 0)
 				]),
-				"Rotation" => new EnumTag("Rotation", [
+				"Rotation" => new ListTag("Rotation", [
 					new FloatTag("", lcg_value() * 360),
 					new FloatTag("", 0)
 				]),

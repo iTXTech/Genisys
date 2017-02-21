@@ -2,136 +2,109 @@
 
 #Version of this file
 config:
- version: 11
+ version: 23
 
 level:
- #Set if turn on the weather system
+ #Set if weather is enabled (rain may cause lag to older devices)
  weather: true
- #Weather switch interval
- weather-change-time: 6000
- #Weather Duration，default as 1 min
- weather-last-time: 1200
- #Random lightning interval，default as 10s
+ #Weather random duration
+ weather-random-duration-min: 6000
+ weather-random-duration-max: 12000
+ #Random lightning interval，default as 10s, 0 = disable
  lightning-time: 200
- 
+ #Set if lightning strikes have fire afterwards
+ lightning-fire: false
+ #Set if fire should spread (trees, etc.)
+ fire-spread: false
+
 player:
- #the switch of hunger system
+ #Set if hunger is enabled
  hunger: true
- #Minimum health when someone is attacking by being hungry
- hunger-health: 10
- #Hunger Time-Counter, Default: 80=4sec
- hunger-timer: 3000
- #Choose if turn on the experience system
+ #Choose if experience is enabled
  experience: true
- #Choose if keep inventory when a player died
+ #Choose if to keep a player's inventory after they die
  keep-inventory: false
- #The space of inventory
- inventory-num: 36
- #Clear the inventory automatically when change the gamemode into creative
+ #Clear the inventory of a player upon them changing their gamemode
  auto-clear-inventory : true
- #Choose if keep experience when a player died
+ #Choose if to keep a player's experience after they die
  keep-experience: false
+ #If players crash when joining, change this to less than 10. disable=-1
+ chunk-radius: -1
 
 nether:
- #Choose if the nether's allowed,the level of nether will generate automatically
+ #Choose if the nether is allowed. The level of nether will generate automatically
  allow-nether: true
  #The name of nether's level
  level-name: "nether"
- 
+
 server:
- #Pregenerate the experience data，0=disabled
- experience-cache: 65535
  #Choose if spawning iron golem is allowed
  allow-iron-golem: false
  #Choose if spawning snow golem is allowed
  allow-snow-golem: false
- #Choose if anvil and enchanttable are allowed
- allow-anvilandenchanttable: false
- #Choose if disable server.log
+ #Choose if server.log is disabled
  disable-log: false
- #Choose if enable auto anti fly
- anti-fly: true
- #Choose if enable async chunks request
- async-chunk-request: true
- #Choose how to remind player when a player join
+ #Choose how to remind players when someone joins the game
  #0 = Message, 1 = Tip, 2 = Popup
  player-msg-type: 0
  login-msg: "§3@player joined the game"
  logout-msg: "§3@player left the game"
- #Choose if read recipes from json
- recipes-from-json: false
- #Choose if read creative item from json
- creative-items-from-json: false
- #Choose if minecart is free moving, follow rails or disable
- #-1=disable, 0=free moving, 1=follow rails
- minecart-moving-type: 0
- #Choose if enable movement check (no more pull back)
- check-movement: true
- #Set if enable limited creative (cannot drop item, cannot interact Chests and so on)
+ #Set if limited creative is enabled (cannot drop items from hotbar, cannot open chests, and so on)
  limited-creative: true
+ #Set if add DestroyBlockParticle
+ destroy-block-particle: true
+ #Set if splash potions are enabled
+ allow-splash-potion: true
+ #Set if Advanced Command Selector is enabled
+ advanced-command-selector: false
+
+enchantment:
+ #Choose if anvils are enabled
+ enable-anvil: true
+ #Choose if enchantment tables are enabled
+ enable-enchanting-table: true
+ #Choose if to count bookshelves (may cause server lag)
+ #If this option is false, the server will use a random count (0~15)
+ count-bookshelf: false
 
 redstone:
- ##########################################
- ###Choose if redstone system is allowed###
- ##########################################
- #If not true then the redstone won't work#
- ##########################################
+ ################################################
+ ####Choose if the redstone system is enabled####
+ ################################################
+ #If it is false, the redstone system won't work#
+ ################################################
  enable: false
- #Choose if allow frequancy pulse
+ #Choose if frequency pulses are enabled
  frequency-pulse: false
- #Set the frequency of pulse, Default: 1s
+ #Set the frequency of pulse. Default = 1s
  pulse-frequency: 1
 
 dserver:
  #The count of all multi-server unified
  enable: false
- #Query update automatically
+ #Update Query automatically
  query-auto-update: false
- #Query update periodical
+ #Update Query periodically
  query-tick-update: true
- #The max players' number of Motd
+ #The max players' on the MOTD
  motd-max-players: 0
- #The max players' number of query，0=Default
+ #The max players' on the Query. 0=Default
  query-max-players: 0
- #Show the number of all players on motd
+ #Show the number of all players on MOTD
  motd-all-players: false
  #Show the number of all players on Query
  query-all-players: false
- #Show the number of online players on motd
+ #Show the number of online players on MOTD
  motd-players: false
  #Show the number of online players on Query
  query-players: false
- #Update Frequency ,20=1s
+ #Update Frequency. 20=1s
  time: 40
- #Auto-retry times when failed
+ #Auto-retry # of times when server fails
  retry-times: 3
  #the server list，Separate by ';'，e.g. 1.example.com:19132;2.example.com:19133
  server-list: ""
- 
-ai:
- #AI switch
- enable: false
- #Zombie'AI，0=disabled，1=AI 1.0ver，2=new AI(Faultiness)
- zombie: 1
- #PigZombie's AI
- pigzombie: true
- #the AI of cow and mushroom cow
- cow: true
- #Chicken's AI
- chicken: true
- #Sheep's AI
- sheep: true
- #Pigs' AI
- pig: true
- #Skeleton's AI
- skeleton: true
- #Creeper's AI
- creeper: true
- #Iron golem's AI
- iron-golem: true
- #Snow golem's AI
- snow-golem: true
- #Destory blocks if creeper exploded
- creeper-explode-destroy-block: false
- #Choose if allow mob auto generate
- mobgenerate: false
+
+inventory:
+ #Set this to true if you have problems with anvils. This will process inventory transactions in a vanilla fashion with no anti-cheats or verification.
+ allow-cheats: false

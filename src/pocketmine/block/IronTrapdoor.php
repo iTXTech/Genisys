@@ -1,9 +1,22 @@
 <?php
-/**
- * Author: PeratX
- * Time: 2015/12/6 14:22
- ]
 
+/*
+ *
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://itxtech.org
+ *
  */
 
 namespace pocketmine\block;
@@ -11,11 +24,16 @@ namespace pocketmine\block;
 class IronTrapdoor extends Trapdoor {
 	protected $id = self::IRON_TRAPDOOR;
 
-	public function __construct($meta = 0) {
-		$this->meta = $meta;
-	}
-
-	public function getName() {
+	public function getName() : string{
 		return "Iron Trapdoor";
 	}
+
+	public function getHardness() {
+		return 5;
+	}
+
+	public function getResistance(){
+		return 25;
+	}
+
 }

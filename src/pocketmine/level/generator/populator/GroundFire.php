@@ -49,6 +49,7 @@ class GroundFire extends Populator{
 			//echo "Fire to $x, $y, $z\n";
 			if($y !== -1 and $this->canGroundFireStay($x, $y, $z)){
 				$this->level->setBlockIdAt($x, $y, $z, Block::FIRE);
+				$this->level->updateBlockLight($x, $y, $z);
 			}
 		}
 	}

@@ -214,6 +214,7 @@ interface Inventory{
 	/**
 	 * @param int    $index
 	 * @param Item   $before
+	 * @param bool   $send
 	 */
-	public function onSlotChange($index, $before);
+	public function onSlotChange($index, $before, $send);
 }

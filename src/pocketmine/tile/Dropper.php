@@ -1,32 +1,41 @@
 <?php
-/**
- * Author: PeratX
- * QQ: 1215714524
- * Time: 2016/2/3 15:44
 
-
+/*
  *
- * OpenGenisys Project
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://itxtech.org
+ *
  */
+
 namespace pocketmine\tile;
 
 use pocketmine\block\Block;
+use pocketmine\entity\Item as ItemEntity;
 use pocketmine\inventory\DropperInventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\format\Chunk;
 use pocketmine\level\particle\SmokeParticle;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
-use pocketmine\nbt\tag\ShortTag;
-use pocketmine\entity\Item as ItemEntity;
-
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\IntTag;
-
+use pocketmine\nbt\tag\ListTag;
+use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 
 class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
@@ -36,19 +45,16 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 
 	protected $nextUpdate = 0;
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		parent::__construct($chunk, $nbt);
 		$this->inventory = new DropperInventory($this);
-
-		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof EnumTag)){
-			$this->namedtag->Items = new EnumTag("Items", []);
+		if(!isset($this->namedtag->Items) or !($this->namedtag->Items instanceof ListTag)){
+			$this->namedtag->Items = new ListTag("Items", []);
 			$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		}
-
 		for($i = 0; $i < $this->getSize(); ++$i){
 			$this->inventory->setItem($i, $this->getItem($i));
 		}
-
 		$this->scheduleUpdate();
 	}
 
@@ -66,7 +72,7 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 	}
 
 	public function saveNBT(){
-		$this->namedtag->Items = new EnumTag("Items", []);
+		$this->namedtag->Items = new ListTag("Items", []);
 		$this->namedtag->Items->setTagType(NBT::TAG_Compound);
 		for($index = 0; $index < $this->getSize(); ++$index){
 			$this->setItem($index, $this->inventory->getItem($index));
@@ -107,7 +113,7 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 		if($i < 0){
 			return Item::get(Item::AIR, 0, 0);
 		}else{
-			return NBT::getItemHelper($this->namedtag->Items[$i]);
+			return Item::nbtDeserialize($this->namedtag->Items[$i]);
 		}
 	}
 
@@ -122,8 +128,6 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 	public function setItem($index, Item $item){
 		$i = $this->getSlotIndex($index);
 
-		$d = NBT::putItemHelper($item, $index);
-
 		if($item->getId() === Item::AIR or $item->getCount() <= 0){
 			if($i >= 0){
 				unset($this->namedtag->Items[$i]);
@@ -134,9 +138,9 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 					break;
 				}
 			}
-			$this->namedtag->Items[$i] = $d;
+			$this->namedtag->Items[$i] = $item->nbtSerialize($index);
 		}else{
-			$this->namedtag->Items[$i] = $d;
+			$this->namedtag->Items[$i] = $item->nbtSerialize($index);
 		}
 
 		return true;
@@ -212,7 +216,7 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 				case Block::TRAPPED_CHEST:
 				case Block::DROPPER:
 				case Block::DISPENSER:
-				case Block::BREWING_STAND:
+				case Block::BREWING_STAND_BLOCK:
 				case Block::FURNACE:
 					$t = $this->getLevel()->getTile($block);
 					/** @var Chest|Dispenser|Dropper|BrewingStand|Furnace $t */
@@ -224,27 +228,23 @@ class Dropper extends Spawnable implements InventoryHolder, Container, Nameable{
 					}
 			}
 
-			$itemTag = NBT::putItemHelper($needItem);
-			$itemTag->setName("Item");
-
-
 			$nbt = new CompoundTag("", [
-				"Pos" => new EnumTag("Pos", [
+				"Pos" => new ListTag("Pos", [
 					new DoubleTag("", $this->x + $motion[0] * 2 + 0.5),
 					new DoubleTag("", $this->y + ($motion[1] > 0 ? $motion[1] : 0.5)),
 					new DoubleTag("", $this->z + $motion[2] * 2 + 0.5)
 				]),
-				"Motion" => new EnumTag("Motion", [
+				"Motion" => new ListTag("Motion", [
 					new DoubleTag("", $motion[0]),
 					new DoubleTag("", $motion[1]),
 					new DoubleTag("", $motion[2])
 				]),
-				"Rotation" => new EnumTag("Rotation", [
+				"Rotation" => new ListTag("Rotation", [
 					new FloatTag("", lcg_value() * 360),
 					new FloatTag("", 0)
 				]),
 				"Health" => new ShortTag("Health", 5),
-				"Item" => $itemTag,
+				"Item" => $needItem->nbtSerialize(-1, "Item"),
 				"PickupDelay" => new ShortTag("PickupDelay", 10)
 			]);
 

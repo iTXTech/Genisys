@@ -33,11 +33,6 @@ use pocketmine\event\TimingsHandler;
 use pocketmine\permission\Permissible;
 use pocketmine\permission\Permission;
 use pocketmine\Server;
-use pocketmine\utils\MainLogger;
-use pocketmine\utils\PluginException;
-
-use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\event\entity\EntityDeathEvent;
 
 /**
  * Manages all the plugins, Permissions and Permissibles
@@ -71,7 +66,7 @@ class PluginManager{
 	protected $defaultPermsOp = [];
 
 	/**
-	 * @var Permissible[]
+	 * @var Permissible[][]
 	 */
 	protected $permSubs = [];
 
@@ -120,7 +115,7 @@ class PluginManager{
 	/**
 	 * @param string $loaderName A PluginLoader class name
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function registerInterface($loaderName){
 		if(is_subclass_of($loaderName, PluginLoader::class)){
@@ -218,16 +213,44 @@ class PluginManager{
 							$compatible = false;
 							//Check multiple dependencies
 							foreach($description->getCompatibleApis() as $version){
+								//Format: majorVersion.minorVersion.patch (3.0.0)
+								//    or: majorVersion.minorVersion.patch-devBuild (3.0.0-alpha1)
+								if($version !== $this->server->getApiVersion()){
+									$pluginApi = array_pad(explode("-", $version), 2, ""); //0 = version, 1 = suffix (optional)
+									$serverApi = array_pad(explode("-", $this->server->getApiVersion()), 2, "");
+
+									if(strtoupper($pluginApi[1]) !== strtoupper($serverApi[1])){ //Different release phase (alpha vs. beta) or phase build (alpha.1 vs alpha.2)
+										continue;
+									}
+
+									$pluginNumbers = array_map("intval", explode(".", $pluginApi[0]));
+									$serverNumbers = array_map("intval", explode(".", $serverApi[0]));
+
+									if($pluginNumbers[0] !== $serverNumbers[0]){ //Completely different API version
+										continue;
+									}
+
+									if($pluginNumbers[1] > $serverNumbers[1]){ //If the plugin requires new API features, being backwards compatible
+										continue;
+									}
+								}
+
+								$compatible = true;
+								break;
+							}
+
+							$compatiblegeniapi = false;
+							foreach($description->getCompatibleGeniApis() as $version){
 								//Format: majorVersion.minorVersion.patch
 								$version = array_map("intval", explode(".", $version));
-								$apiVersion = array_map("intval", explode(".", $this->server->getApiVersion()));
+								$apiVersion = array_map("intval", explode(".", $this->server->getGeniApiVersion()));
 								//Completely different API version
 								if($version[0] > $apiVersion[0]){
 									continue;
 								}
 								//If the plugin uses new API
-								if($version[0] <= $apiVersion[0]){
-									$compatible = true;
+								if($version[0] < $apiVersion[0]){
+									$compatiblegeniapi = true;
 									break;
 								}
 								//If the plugin requires new API features, being backwards compatible
@@ -235,12 +258,21 @@ class PluginManager{
 									continue;
 								}
 
-								$compatible = true;
+								if($version[1] == $apiVersion[1] and $version[2] > $apiVersion[2]){
+									continue;
+								}
+
+								$compatiblegeniapi = true;
 								break;
 							}
 
 							if($compatible === false){
 								$this->server->getLogger()->error($this->server->getLanguage()->translateString("pocketmine.plugin.loadError", [$name, "%pocketmine.plugin.incompatibleAPI"]));
+								continue;
+							}
+
+							if($compatiblegeniapi === false){
+								$this->server->getLogger()->error("Could not load plugin '{$description->getName()}': Incompatible GeniAPI version");
 								continue;
 							}
 
@@ -381,7 +413,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param boolean $op
+	 * @param bool $op
 	 *
 	 * @return Permission[]
 	 */
@@ -422,7 +454,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param boolean $op
+	 * @param bool $op
 	 */
 	private function dirtyPermissibles($op){
 		foreach($this->getDefaultPermSubscriptions($op) as $p){
@@ -480,7 +512,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param boolean     $op
+	 * @param bool        $op
 	 * @param Permissible $permissible
 	 */
 	public function subscribeToDefaultPerms($op, Permissible $permissible){
@@ -492,7 +524,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param boolean     $op
+	 * @param bool        $op
 	 * @param Permissible $permissible
 	 */
 	public function unsubscribeFromDefaultPerms($op, Permissible $permissible){
@@ -504,7 +536,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param boolean $op
+	 * @param bool $op
 	 *
 	 * @return Permissible[]
 	 */
@@ -683,11 +715,6 @@ class PluginManager{
 					]));
 				$this->server->getLogger()->logException($e);
 			}
-		}
-
-		if($this->server->getAIHolder() != null) {
-			if($event instanceof EntityDeathEvent) $this->server->getAIHolder()->MobDeath($event);
-			if($event instanceof EntityDamageByEntityEvent) $this->server->getAIHolder()->EntityDamage($event);
 		}
 	}
 

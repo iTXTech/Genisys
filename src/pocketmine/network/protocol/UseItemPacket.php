@@ -30,6 +30,7 @@ class UseItemPacket extends DataPacket{
 	public $x;
 	public $y;
 	public $z;
+	public $blockId;
 	public $face;
 	public $item;
 	public $fx;
@@ -38,24 +39,19 @@ class UseItemPacket extends DataPacket{
 	public $posX;
 	public $posY;
 	public $posZ;
+	public $slot;
 
 	public function decode(){
-		$this->x = $this->getInt();
-		$this->y = $this->getInt();
-		$this->z = $this->getInt();
-		$this->face = $this->getByte();
-		$this->fx = $this->getFloat();
-		$this->fy = $this->getFloat();
-		$this->fz = $this->getFloat();
-		$this->posX = $this->getFloat();
-		$this->posY = $this->getFloat();
-		$this->posZ = $this->getFloat();
-
+		$this->getBlockCoords($this->x, $this->y, $this->z);
+		$this->blockId = $this->getUnsignedVarInt();
+		$this->face = $this->getVarInt();
+		$this->getVector3f($this->fx, $this->fy, $this->fz);
+		$this->getVector3f($this->posX, $this->posY, $this->posZ);
+		$this->slot = $this->getVarInt();
 		$this->item = $this->getSlot();
 	}
 
 	public function encode(){
 
 	}
-
 }

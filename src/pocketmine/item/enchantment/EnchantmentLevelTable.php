@@ -1,18 +1,27 @@
 <?php
-/**
- * Author: PeratX
- * QQ: 1215714524
- * Time: 2016/2/1 8:49
 
-
+/*
  *
- * OpenGenisys Project
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
- * Translated from Nukkit Project
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://itxtech.org
+ *
  */
+
 namespace pocketmine\item\enchantment;
 
-use pocketmine\item\Armor;
+
 use pocketmine\item\Item;
 use pocketmine\utils\Range;
 
@@ -186,7 +195,7 @@ class EnchantmentLevelTable{
 		$enchantmentIds = [];
 
 		if($item->getId() == Item::BOOK){
-			$enchantmentIds = self::$map;
+			$enchantmentIds = array_keys(self::$map);
 		}elseif($item->isArmor()){
 			$enchantmentIds[] = Enchantment::TYPE_ARMOR_PROTECTION; 
 			$enchantmentIds[] = Enchantment::TYPE_ARMOR_FIRE_PROTECTION; 

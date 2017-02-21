@@ -69,7 +69,7 @@ class Air extends Transparent{
 	}
 
 	public function getHardness() {
-		return -1;
+		return 0;
 	}
 
 	public function getResistance(){

@@ -11,14 +11,15 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\level\Level;
-use pocketmine\math\Vector3;
-use pocketmine\Player;
-use pocketmine\tile\Tile;
 use pocketmine\math\AxisAlignedBB;
-use pocketmine\nbt\tag\StringTag;
-use pocketmine\nbt\tag\IntTag;
+use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\nbt\tag\ShortTag;
+use pocketmine\nbt\tag\StringTag;
+use pocketmine\Player;
 use pocketmine\tile\FlowerPot as FlowerPotTile;
+use pocketmine\tile\Tile;
 
 class FlowerPot extends Flowable{
 	protected $id = Block::FLOWER_POT_BLOCK;
@@ -35,11 +36,11 @@ class FlowerPot extends Flowable{
 		return "Flower Pot Block";
 	}
 
-	public function getBoundingBox(){//todo fix...
+	protected function recalculateBoundingBox(){
 		return new AxisAlignedBB(
-			$this->x - 0.6875,
-			$this->y - 0.375,
-			$this->z - 0.6875,
+			$this->x + 0.3125,
+			$this->y,
+			$this->z + 0.3125,
 			$this->x + 0.6875,
 			$this->y + 0.375,
 			$this->z + 0.6875
@@ -54,25 +55,28 @@ class FlowerPot extends Flowable{
 				new IntTag("x", $block->x),
 				new IntTag("y", $block->y),
 				new IntTag("z", $block->z),
-				new IntTag("item", 0),
+				new ShortTag("item", 0),
 				new IntTag("data", 0),
 			]);
+			
+			if($item->hasCustomBlockData()){
+			    foreach($item->getCustomBlockData() as $key => $v){
+				    $nbt->{$key} = $v;
+			    }
+		    }
+		    
 			$pot = Tile::createTile("FlowerPot", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), $nbt);
 			return true;
 		}
 		return false;
 	}
 
-	/*public function onBreak(Item $item){
-		$this->getLevel()->setBlock($this, new Air(), true, true, true);
-		return true;
-	}*/
-
 	public function onActivate(Item $item, Player $player = null){
 		$tile = $this->getLevel()->getTile($this);
 		if($tile instanceof FlowerPotTile){
-			if($tile->getFlowerPotItem() === Item::AIR){
+			if($tile->getItem() === Item::AIR){
 				switch($item->getId()){
+					/** @noinspection PhpMissingBreakStatementInspection */
 					case Item::TALL_GRASS:
 						if($item->getDamage() === 1){
 							break;
@@ -84,7 +88,7 @@ class FlowerPot extends Flowable{
 					case Item::BROWN_MUSHROOM:
 					case Item::RED_MUSHROOM:
 					case Item::CACTUS:
-						$tile->setFlowerPotData($item->getId(), $item->getDamage());
+						$tile->setItem($item);
 						$this->setDamage($item->getId());
 						$this->getLevel()->setBlock($this, $this, true, false);
 						if($player->isSurvival()){
@@ -109,12 +113,12 @@ class FlowerPot extends Flowable{
 		return false;
 	}
 
-	public function getDrops(Item $item) : array {
-		$items = array([Item::FLOWER_POT, 0, 1]);
-		/** @var FlowerPotTile $tile */
-		if(($tile = $this->getLevel()->getTile($this)) instanceof FlowerPotTile){
-			if($tile->getFlowerPotItem() !== Item::AIR){
-				$items[] = array($tile->getFlowerPotItem(), $tile->getFlowerPotData(), 1);
+	public function getDrops(Item $item) : array{
+		$items = [[Item::FLOWER_POT, 0, 1]];
+		$tile = $this->getLevel()->getTile($this);
+		if($tile instanceof FlowerPotTile){
+			if(($item = $tile->getItem())->getId() !== Item::AIR){
+				$items[] = [$item->getId(), $item->getDamage(), 1];
 			}
 		}
 		return $items;

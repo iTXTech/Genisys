@@ -23,23 +23,22 @@ namespace pocketmine\level;
 
 use pocketmine\block\Block;
 use pocketmine\entity\Entity;
+use pocketmine\event\block\BlockUpdateEvent;
 use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityExplodeEvent;
-use pocketmine\event\block\BlockUpdateEvent;
 use pocketmine\item\Item;
+use pocketmine\level\particle\HugeExplodeSeedParticle;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Math;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\FloatTag;
-use pocketmine\network\Network;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\network\protocol\ExplodePacket;
-
 use pocketmine\utils\Random;
 
 class Explosion{
@@ -55,30 +54,20 @@ class Explosion{
 	public $stepLen = 0.3;
 	/** @var Entity|Block */
 	private $what;
+	private $dropItem;
 
-	public function __construct(Position $center, $size, $what = null){
+	public function __construct(Position $center, $size, $what = null, bool $dropItem = true){
 		$this->level = $center->getLevel();
 		$this->source = $center;
 		$this->size = max($size, 0);
 		$this->what = $what;
-	}
-
-	/**
-	 * @deprecated
-	 * @return bool
-	 */
-	public function explode(){
-		if($this->explodeA()){
-			return $this->explodeB();
-		}
-
-		return false;
+		$this->dropItem = $dropItem;
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function explodeA(){
+	public function explodeA() : bool{
 		if($this->size < 0.1){
 			return false;
 		}
@@ -104,7 +93,7 @@ class Explosion{
 							$vBlock->x = $pointerX >= $x ? $x : $x - 1;
 							$vBlock->y = $pointerY >= $y ? $y : $y - 1;
 							$vBlock->z = $pointerZ >= $z ? $z : $z - 1;
-							if($vBlock->y < 0 or $vBlock->y > 127){
+							if($vBlock->y < 0 or $vBlock->y >= Level::Y_MAX){
 								break;
 							}
 							$block = $this->level->getBlock($vBlock);
@@ -129,7 +118,7 @@ class Explosion{
 		return true;
 	}
 
-	public function explodeB(){
+	public function explodeB() : bool{
 		$send = [];
 		$updateBlocks = [];
 
@@ -175,7 +164,9 @@ class Explosion{
 					$ev = new EntityDamageEvent($entity, EntityDamageEvent::CAUSE_BLOCK_EXPLOSION, $damage);
 				}
 
-				$entity->attack($ev->getFinalDamage(), $ev);
+				if($entity->attack($ev->getFinalDamage(), $ev) === true){
+					$ev->useArmors();
+				}
 				$entity->setMotion($motion->multiply($impact));
 			}
 		}
@@ -187,24 +178,24 @@ class Explosion{
 			if($block->getId() === Block::TNT){
 				$mot = (new Random())->nextSignedFloat() * M_PI * 2;
 				$tnt = Entity::createEntity("PrimedTNT", $this->level->getChunk($block->x >> 4, $block->z >> 4), new CompoundTag("", [
-					"Pos" => new EnumTag("Pos", [
+					"Pos" => new ListTag("Pos", [
 						new DoubleTag("", $block->x + 0.5),
 						new DoubleTag("", $block->y),
 						new DoubleTag("", $block->z + 0.5)
 					]),
-					"Motion" => new EnumTag("Motion", [
+					"Motion" => new ListTag("Motion", [
 						new DoubleTag("", -sin($mot) * 0.02),
 						new DoubleTag("", 0.2),
 						new DoubleTag("", -cos($mot) * 0.02)
 					]),
-					"Rotation" => new EnumTag("Rotation", [
+					"Rotation" => new ListTag("Rotation", [
 						new FloatTag("", 0),
 						new FloatTag("", 0)
 					]),
 					"Fuse" => new ByteTag("Fuse", mt_rand(10, 30))
 				]));
 				$tnt->spawnToAll();
-			}elseif(mt_rand(0, 100) < $yield){
+			}elseif($this->dropItem and mt_rand(0, 100) < $yield){
 				foreach($block->getDrops($air) as $drop){
 					$this->level->dropItem($block->add(0.5, 0.5, 0.5), Item::get(...$drop));
 				}
@@ -234,6 +225,8 @@ class Explosion{
 		$pk->radius = $this->size;
 		$pk->records = $send;
 		$this->level->addChunkPacket($source->x >> 4, $source->z >> 4, $pk);
+
+		$this->level->addParticle(new HugeExplodeSeedParticle($source));
 
 		return true;
 	}

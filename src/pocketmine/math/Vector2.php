@@ -20,11 +20,8 @@
 */
 
 namespace pocketmine\math;
+use pocketmine\utils\Random;
 
-/**
- * WARNING: This class is available on the PocketMine-MP Zephir project.
- * If this class is modified, remember to modify the PHP C extension.
- */
 class Vector2{
 	public $x;
 	public $y;
@@ -131,4 +128,7 @@ class Vector2{
 		return "Vector2(x=" . $this->x . ",y=" . $this->y . ")";
 	}
 
+	public static function createRandomDirection(Random $random){
+		return VectorMath::getDirection2D($random->nextFloat() * 2 * pi());
+	}
 }

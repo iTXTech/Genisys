@@ -30,4 +30,8 @@ class WoodenShovel extends Tool{
 	public function isShovel(){
 		return Tool::TIER_WOODEN;
 	}
+
+	public function getAttackDamage(){
+		return 2;
+	}
 }

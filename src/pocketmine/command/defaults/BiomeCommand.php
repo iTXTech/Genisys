@@ -1,24 +1,33 @@
 <?php
-/**
- * Author: PeratX
- * QQ: 1215714524
- * Time: 2016/1/10 21:30
 
-
+/*
  *
- * OpenGenisys Project
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
- * Copied from Weather_boybook
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://itxtech.org
+ *
  */
+
 namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
-use pocketmine\utils\TextFormat;
 use pocketmine\Player;
+use pocketmine\utils\TextFormat;
 
 class BiomeCommand extends VanillaCommand{
-	
+
 	public function __construct($name){
 		parent::__construct(
 			$name,
@@ -43,12 +52,12 @@ class BiomeCommand extends VanillaCommand{
 				$biome = isset($args[1]) ? $args[1] : 1;//默认改成草原
 				if(isset($sender->selectedPos[0]) and isset($sender->selectedPos[1])){
 					if(is_numeric($biome) === false){
-						$sender->sendMessage(TextFormat::RED . "%pocketmine.command.biome.wrongBio");
+						$sender->sendMessage(TextFormat::RED . new TranslationContainer("pocketmine.command.biome.wrongBio"));
 						return false;
 					}
-					$biome=(int) $biome;
+					$biome = (int) $biome;
 					if($sender->selectedLev[0] !== $sender->selectedLev[1]){
-						$sender->sendMessage(TextFormat::RED . "%pocketmine.command.biome.wrongLev");
+						$sender->sendMessage(TextFormat::RED . new TranslationContainer("pocketmine.command.biome.wrongLev"));
 						return false;
 					}
 					$x1 = min($sender->selectedPos[0][0], $sender->selectedPos[1][0]);
@@ -61,64 +70,37 @@ class BiomeCommand extends VanillaCommand{
 							$level->setBiomeId($x, $z, $biome);
 						}
 					}
-					$sender->sendMessage(TextFormat::GREEN . "$pocketmine.command.biome.set" . "$biome");
+					$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.set", [$biome]));
 				}else{
-					$sender->sendMessage("%pocketmine.command.biome.noPos");
-				}
-			}elseif($args[0] == "color"){
-				$color = isset($args[1]) ? $args[1] : "146,188,89";//1=草原("146,188,89"),2=沙漠(251,183,19)"130,180,147"
-				$a = explode(",", $color);
-				var_dump($a);
-				if(count($a) != 3){
-					$sender->sendMessage(TextFormat::RED . "%pocketmine.command.biome.wrongCol");
-					return false;
-				} 
-				if(isset($sender->selectedPos[0]) and isset($sender->selectedPos[1])){
-					if($sender->selectedLev[0] !== $sender->selectedLev[1]){
-						$sender->sendMessage(TextFormat::RED . "%pocketmine.command.biome.wrongLev");
-						return false;
-					}
-					$x1 = min($sender->selectedPos[0][0], $sender->selectedPos[1][0]);
-					$z1 = min($sender->selectedPos[0][1], $sender->selectedPos[1][1]);
-					$x2 = max($sender->selectedPos[0][0], $sender->selectedPos[1][0]);
-					$z2 = max($sender->selectedPos[0][1], $sender->selectedPos[1][1]);
-					for($x = $x1; $x <= $x2; $x++){
-						for($z = $z1; $z <= $z2; $z++){
-							$level = $sender->getLevel();
-							$level->setBiomeColor($x, $z, $a[0], $a[1], $a[2]);
-						}
-					}
-					//$sender->selectedPos = array();
-					$sender->sendMessage(TextFormat::GREEN . "%pocketmine.command.biome.color" . "$a[0], $a[1], $a[2]");
-				}else{
-					$sender->sendMessage("%pocketmine.command.biome.noPos");
+					$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.noPos"));
 				}
 			}elseif($args[0] == "pos1"){
-				$x = (int) $sender->getX();
-				$z = (int) $sender->getZ();
-				$sender->selectedLev[0] = $sender->getlevel();
+				$x = floor($sender->getX());
+				$z = floor($sender->getZ());
+				$sender->selectedLev[0] = $sender->getLevel();
 				$sender->selectedPos[0][0] = $x;
 				$sender->selectedPos[0][1] = $z;
-				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.posset", [$sender->selectedLev[0]->getname(), $x, $z, "1"]));
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.posset", [$sender->selectedLev[0]->getName(), $x, $z, "1"]));
 			}elseif($args[0] == "pos2"){
-				$x = (int) $sender->getX();
-				$z = (int) $sender->getZ();
-				$sender->selectedLev[1] = $sender->getlevel();
+				$x = floor($sender->getX());
+				$z = floor($sender->getZ());
+				$sender->selectedLev[1] = $sender->getLevel();
 				$sender->selectedPos[1][0] = $x;
 				$sender->selectedPos[1][1] = $z;
-				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.posset", [$sender->selectedLev[1]->getname(), $x, $z, "2"]));
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.posset", [$sender->selectedLev[1]->getName(), $x, $z, "2"]));
 			}elseif($args[0] == "get"){
-				$x = (int) $sender->getX();
-				$z = (int) $sender->getZ();
+				$x = floor($sender->getX());
+				$z = floor($sender->getZ());
 				$biome = $sender->getLevel()->getBiomeId($x, $z);
-				$color = $sender->getLevel()->getBiomeColor($x, $z);
-				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.get", [$biome, $color[0], $color[1], $color[2]]));
+				$sender->sendMessage(new TranslationContainer("pocketmine.command.biome.get", [$biome]));
+			}else{
+				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+				return true;
 			}
 		}else{
-			$sender->sendMessage("%commands.generic.runingame");
+			$sender->sendMessage(new TranslationContainer("commands.generic.runingame"));
 			return false;
 		}
-		$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
 		return true;
 	}
 }

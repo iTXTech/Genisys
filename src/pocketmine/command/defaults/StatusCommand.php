@@ -22,6 +22,7 @@
 namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
+use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Utils;
 
@@ -45,35 +46,16 @@ class StatusCommand extends VanillaCommand{
 		$rUsage = Utils::getRealMemoryUsage();
 
 		$server = $sender->getServer();
-		$sender->sendMessage(TextFormat::GREEN . "---- " . TextFormat::WHITE . "%pocketmine.command.status.title" . TextFormat::GREEN . " ----");
-		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.status.player" . TextFormat::GREEN ." ". \count($sender->getServer()->getOnlinePlayers()) . "/" . $sender->getServer()->getMaxPlayers());
-
-		$time = microtime(true) - \pocketmine\START_TIME;
-
-		$seconds = floor($time % 60);
-		$minutes = null;
-		$hours = null;
-		$days = null;
-
-		if($time >= 60){
-			$minutes = floor(($time % 3600) / 60);
-			if($time >= 3600){
-				$hours = floor(($time % (3600 * 24)) / 3600);
-				if($time >= 3600 * 24){
-					$days = floor($time / (3600 * 24));
-				}
+		$onlineCount = 0;
+		foreach($sender->getServer()->getOnlinePlayers() as $player){
+			if($player->isOnline() and (!($sender instanceof Player) or $sender->canSee($player))){
+				++$onlineCount;
 			}
 		}
+		$sender->sendMessage(TextFormat::GREEN . "---- " . TextFormat::WHITE . "%pocketmine.command.status.title" . TextFormat::GREEN . " ----");
+		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.status.player" . TextFormat::GREEN ." ". $onlineCount . "/" . $sender->getServer()->getMaxPlayers());
 
-		$uptime = ($minutes !== null ?
-				($hours !== null ?
-					($days !== null ?
-						"$days %pocketmine.command.status.days "
-						: "") . "$hours %pocketmine.command.status.hours "
-					: "") . "$minutes %pocketmine.command.status.minutes "
-				: "") . "$seconds %pocketmine.command.status.seconds";
-
-		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.status.uptime " . TextFormat::RED . $uptime);
+		$sender->sendMessage(TextFormat::GOLD . "%pocketmine.command.status.uptime " . TextFormat::RED . $sender->getServer()->getUptime());
 
 		$tpsColor = TextFormat::GREEN;
 		if($server->getTicksPerSecondAverage() < 10){

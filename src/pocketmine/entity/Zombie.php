@@ -23,12 +23,12 @@ namespace pocketmine\entity;
 
 
 use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item as ItemItem;
-use pocketmine\network\Network;
+use pocketmine\math\Vector3;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
-use pocketmine\math\Vector3;
-use pocketmine\event\entity\EntityDamageEvent;
 
 class Zombie extends Monster{
 	const NETWORK_ID = 32;
@@ -103,7 +103,7 @@ class Zombie extends Monster{
 				$player = $p;
 			}
 		}
-		return (($dis <= $this->hate_r) ? $p : false);
+		return (($dis <= $this->hate_r) ? $player : false);
 	}
 	
 	private function getVelY(){
@@ -119,7 +119,7 @@ class Zombie extends Monster{
 			return false;
 		}
 		
-		if($this->getLevel()->getServer()->aiConfig["zombie"] != 2) return parent::onUpdate($currentTick);
+		return parent::onUpdate($currentTick);
 		
 		$this->lastUpdate = $currentTick;
 
@@ -128,8 +128,12 @@ class Zombie extends Monster{
 		$hasUpdate = parent::onUpdate($currentTick);
 
 		if($this->isAlive()){
-			$time = $this->getLevel()->getTime();
-			if(($time >= 0 and $time < 14000) or $time >= 23000) $this->setOnFire(2); //僵尸起火
+			/* Don't use time directly
+			 * Instead, get remainder of current time divided by 24,000
+			 * This tells us the time of day, which is what we really need
+			 */
+			$timeOfDay = abs($this->getLevel()->getTime() % 24000);
+			if(0 < $timeOfDay and $timeOfDay < 13000) $this->setOnFire(2); //僵尸起火
 			
 			$p = $this->getNearestPlayer();//找到最近的可以被仇恨的玩家
 			if(!$p) {
@@ -228,10 +232,13 @@ class Zombie extends Monster{
 	}
 
 	public function getDrops(){
+		$lootingL = 0;
+		$cause = $this->lastDamageCause;
 		$drops = [];
-		if($this->lastDamageCause instanceof EntityDamageByEntityEvent and $this->lastDamageCause->getEntity() instanceof Player){
-			if(mt_rand(0, 199) < 5){
-				switch(mt_rand(0, 2)){
+		if($cause instanceof EntityDamageByEntityEvent and $cause->getDamager() instanceof Player){
+			$lootingL = $cause->getDamager()->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
+			if(mt_rand(0, 199) < (5 + 2 * $lootingL)){
+				switch(mt_rand(0, 3)){
 					case 0:
 						$drops[] = ItemItem::get(ItemItem::IRON_INGOT, 0, 1);
 						break;
@@ -242,6 +249,10 @@ class Zombie extends Monster{
 						$drops[] = ItemItem::get(ItemItem::POTATO, 0, 1);
 						break;
 				}
+			}
+			$count = mt_rand(0, 2 + $lootingL);
+			if($count > 0){
+				$drops[] = ItemItem::get(ItemItem::ROTTEN_FLESH, 0, $count);
 			}
 		}
 

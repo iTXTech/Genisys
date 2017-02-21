@@ -25,6 +25,8 @@ namespace pocketmine\block;
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
 use pocketmine\level\Level;
+use pocketmine\level\particle\SmokeParticle;
+use pocketmine\level\sound\FizzSound;
 use pocketmine\math\Vector3;
 
 abstract class Liquid extends Transparent{
@@ -177,7 +179,7 @@ abstract class Liquid extends Transparent{
 		$vector->z += $flow->z;
 	}
 
-	public function tickRate(){
+	public function tickRate() : int{
 		if($this instanceof Water){
 			return 5;
 		}elseif($this instanceof Lava){
@@ -258,15 +260,18 @@ abstract class Liquid extends Transparent{
 			if($bottomBlock->canBeFlowedInto() or $bottomBlock instanceof Liquid){
 				if($this instanceof Lava and $bottomBlock instanceof Water){
 					$this->getLevel()->setBlock($bottomBlock, Block::get(Item::STONE), true);
+					$this->triggerLavaMixEffects($bottomBlock);
 					return;
 				}
 
 				if($decay >= 8){
-					$this->getLevel()->setBlock($bottomBlock, Block::get($this->id, $decay), true);
-					$this->getLevel()->scheduleUpdate($bottomBlock, $this->tickRate());
+					//$this->getLevel()->setBlock($bottomBlock, Block::get($this->id, $decay), true);
+					//$this->getLevel()->scheduleUpdate($bottomBlock, $this->tickRate());
+					$this->flowIntoBlock($bottomBlock, $decay);
 				}else{
-					$this->getLevel()->setBlock($bottomBlock, Block::get($this->id, $decay + 8), true);
-					$this->getLevel()->scheduleUpdate($bottomBlock, $this->tickRate());
+					//$this->getLevel()->setBlock($bottomBlock, Block::get($this->id, $decay + 8), true);
+					//$this->getLevel()->scheduleUpdate($bottomBlock, $this->tickRate());
+					$this->flowIntoBlock($bottomBlock, $decay | 0x08);
 				}
 			}elseif($decay >= 0 and ($decay === 0 or !$bottomBlock->canBeFlowedInto())){
 				$flags = $this->getOptimalFlowDirections();
@@ -306,7 +311,9 @@ abstract class Liquid extends Transparent{
 
 	private function flowIntoBlock(Block $block, $newFlowDecay){
 		if($block->canBeFlowedInto()){
-			if($block->getId() > 0){
+			if($block instanceof Lava){
+				$this->triggerLavaMixEffects($block);
+			}elseif($block->getId() > 0){
 				$this->getLevel()->useBreakOn($block);
 			}
 
@@ -443,6 +450,7 @@ abstract class Liquid extends Transparent{
 				}elseif($this->getDamage() <= 4){
 					$this->getLevel()->setBlock($this, Block::get(Item::COBBLESTONE), true);
 				}
+				$this->triggerLavaMixEffects($this);
 			}
 		}
 	}
@@ -453,5 +461,18 @@ abstract class Liquid extends Transparent{
 
 	public function getDrops(Item $item) : array {
 		return [];
+	}
+
+	/**
+	 * Creates fizzing sound and smoke. Used when lava flows over block or mixes with water.
+	 *
+	 * @param Vector3 $pos
+	 */
+	protected function triggerLavaMixEffects(Vector3 $pos){
+		$this->getLevel()->addSound(new FizzSound($pos->add(0.5, 0.5, 0.5), 2.5 + mt_rand(0, 1000) / 1000 * 0.8));
+
+		for($i = 0; $i < 8; ++$i){
+			$this->getLevel()->addParticle(new SmokeParticle($pos->add(mt_rand(0, 80) / 100, 0.5, mt_rand(0, 80) / 100)));
+		}
 	}
 }

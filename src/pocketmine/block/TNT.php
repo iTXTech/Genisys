@@ -23,15 +23,17 @@ namespace pocketmine\block;
 
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
+use pocketmine\level\Level;
+use pocketmine\level\sound\TNTPrimeSound;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\EnumTag;
 use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\Player;
 use pocketmine\utils\Random;
 
-class TNT extends Solid{
+class TNT extends Solid implements ElectricalAppliance{
 
 	protected $id = self::TNT;
 
@@ -43,40 +45,79 @@ class TNT extends Solid{
 		return "TNT";
 	}
 
-	public function getHardness() {
+	public function getHardness(){
 		return 0;
 	}
 
-	public function canBeActivated() : bool {
+	public function canBeActivated() : bool{
 		return true;
+	}
+
+	public function getBurnChance() : int{
+		return 15;
+	}
+
+	public function getBurnAbility() : int{
+		return 100;
+	}
+
+	public function prime(Player $player = null){
+		$this->meta = 1;
+		if($player != null and $player->isCreative()){
+			$dropItem = false;
+		}else{
+			$dropItem = true;
+		}
+		$mot = (new Random())->nextSignedFloat() * M_PI * 2;
+		$tnt = Entity::createEntity("PrimedTNT", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), new CompoundTag("", [
+			"Pos" => new ListTag("Pos", [
+				new DoubleTag("", $this->x + 0.5),
+				new DoubleTag("", $this->y),
+				new DoubleTag("", $this->z + 0.5)
+			]),
+			"Motion" => new ListTag("Motion", [
+				new DoubleTag("", -sin($mot) * 0.02),
+				new DoubleTag("", 0.2),
+				new DoubleTag("", -cos($mot) * 0.02)
+			]),
+			"Rotation" => new ListTag("Rotation", [
+				new FloatTag("", 0),
+				new FloatTag("", 0)
+			]),
+			"Fuse" => new ByteTag("Fuse", 80)
+		]), $dropItem);
+
+		$tnt->spawnToAll();
+		$this->level->addSound(new TNTPrimeSound($this));
+	}
+
+	public function onUpdate($type){
+		if($type == Level::BLOCK_UPDATE_SCHEDULED){
+			$sides = [0, 1, 2, 3, 4, 5];
+			foreach($sides as $side){
+				$block = $this->getSide($side);
+				if($block instanceof RedstoneSource and $block->isActivated($this)){
+					$this->prime();
+					$this->getLevel()->setBlock($this, new Air(), true);
+					break;
+				}
+			}
+			return Level::BLOCK_UPDATE_SCHEDULED;
+		}
+		return false;
+	}
+
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+		$this->getLevel()->setBlock($this, $this, true, false);
+
+		$this->getLevel()->scheduleUpdate($this, 40);
 	}
 
 	public function onActivate(Item $item, Player $player = null){
 		if($item->getId() === Item::FLINT_STEEL){
-			$item->useOn($this);
+			$this->prime($player);
 			$this->getLevel()->setBlock($this, new Air(), true);
-
-			$mot = (new Random())->nextSignedFloat() * M_PI * 2;
-			$tnt = Entity::createEntity("PrimedTNT", $this->getLevel()->getChunk($this->x >> 4, $this->z >> 4), new CompoundTag("", [
-				"Pos" => new EnumTag("Pos", [
-					new DoubleTag("", $this->x + 0.5),
-					new DoubleTag("", $this->y),
-					new DoubleTag("", $this->z + 0.5)
-				]),
-				"Motion" => new EnumTag("Motion", [
-					new DoubleTag("", -sin($mot) * 0.02),
-					new DoubleTag("", 0.2),
-					new DoubleTag("", -cos($mot) * 0.02)
-				]),
-				"Rotation" => new EnumTag("Rotation", [
-					new FloatTag("", 0),
-					new FloatTag("", 0)
-				]),
-				"Fuse" => new ByteTag("Fuse", 80)
-			]));
-
-			$tnt->spawnToAll();
-
+			$item->useOn($this);
 			return true;
 		}
 

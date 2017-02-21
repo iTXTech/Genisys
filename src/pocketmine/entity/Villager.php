@@ -21,9 +21,8 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\level\format\Chunk;
 use pocketmine\nbt\tag\ByteTag;
-use pocketmine\nbt\tag\IntTag;
-use pocketmine\level\format\FullChunk;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
@@ -34,7 +33,7 @@ class Villager extends Creature implements NPC, Ageable{
 	const PROFESSION_PRIEST = 2;
 	const PROFESSION_BLACKSMITH = 3;
 	const PROFESSION_BUTCHER = 4;
-	const PROFESSION_GENERIC = 5;
+	//const PROFESSION_GENERIC = 5;
 
 	const NETWORK_ID = 15;
 
@@ -48,9 +47,9 @@ class Villager extends Creature implements NPC, Ageable{
 		return "Villager";
 	}
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		if(!isset($nbt->Profession)){
-			$nbt->Profession = new ByteTag("Profession", mt_rand(0, 5));
+			$nbt->Profession = new ByteTag("Profession", mt_rand(0, 4));
 		}
 
 		parent::__construct($chunk, $nbt);
@@ -61,7 +60,7 @@ class Villager extends Creature implements NPC, Ageable{
 	protected function initEntity(){
 		parent::initEntity();
 		if(!isset($this->namedtag->Profession)){
-			$this->setProfession(self::PROFESSION_GENERIC);
+			$this->setProfession(self::PROFESSION_FARMER);
 		}
 	}
 
@@ -93,10 +92,11 @@ class Villager extends Creature implements NPC, Ageable{
 	}
 
 	public function getProfession() : int{
-		return (int) $this->namedtag["Profession"];
+		$pro = (int) $this->namedtag["Profession"];
+		return min(4, max(0, $pro));
 	}
 
 	public function isBaby(){
-		return $this->getDataFlag(self::DATA_AGEABLE_FLAGS, self::DATA_FLAG_BABY);
+		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_BABY);
 	}
 }

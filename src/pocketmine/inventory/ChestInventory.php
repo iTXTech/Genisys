@@ -25,7 +25,6 @@ use pocketmine\block\TrappedChest;
 use pocketmine\level\Level;
 use pocketmine\network\protocol\BlockEventPacket;
 use pocketmine\Player;
-
 use pocketmine\tile\Chest;
 
 class ChestInventory extends ContainerInventory{
@@ -38,6 +37,18 @@ class ChestInventory extends ContainerInventory{
 	 */
 	public function getHolder(){
 		return $this->holder;
+	}
+
+	public function getContents($withAir = false){
+		if($withAir){
+			$contents = [];
+			for($i = 0; $i < $this->getSize(); ++$i){
+				$contents[$i] = $this->getItem($i);
+			}
+
+			return $contents;
+		}
+		return parent::getContents();
 	}
 
 	public function onOpen(Player $who){

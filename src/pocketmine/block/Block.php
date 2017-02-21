@@ -2,11 +2,11 @@
 
 /*
  *
- *  ____            _        _   __  __ _                  __  __ ____  
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,7 +15,7 @@
  *
  * @author PocketMine Team
  * @link http://www.pocketmine.net/
- * 
+ *
  *
 */
 
@@ -25,8 +25,6 @@
 namespace pocketmine\block;
 
 use pocketmine\entity\Entity;
-
-
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\level\Level;
@@ -40,275 +38,7 @@ use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 
 
-class Block extends Position implements Metadatable{
-	const AIR = 0;
-	const STONE = 1;
-	const GRASS = 2;
-	const DIRT = 3;
-	const COBBLESTONE = 4;
-	const COBBLE = 4;
-	const PLANK = 5;
-	const PLANKS = 5;
-	const WOODEN_PLANK = 5;
-	const WOODEN_PLANKS = 5;
-	const SAPLING = 6;
-	const SAPLINGS = 6;
-	const BEDROCK = 7;
-	const WATER = 8;
-	const STILL_WATER = 9;
-	const LAVA = 10;
-	const STILL_LAVA = 11;
-	const SAND = 12;
-	const GRAVEL = 13;
-	const GOLD_ORE = 14;
-	const IRON_ORE = 15;
-	const COAL_ORE = 16;
-	const WOOD = 17;
-	const TRUNK = 17;
-	const LOG = 17;
-	const LEAVES = 18;
-	const LEAVE = 18;
-	const SPONGE = 19;
-	const GLASS = 20;
-	const LAPIS_ORE = 21;
-	const LAPIS_BLOCK = 22;
-
-	const SANDSTONE = 24;
-
-	const DISPENSER = 23;
-
-	const NOTEBLOCK = 25;
-
-	const BED_BLOCK = 26;
-
-	const POWERED_RAIL = 27;
-	const DETECTOR_RAIL = 28;
-	const COBWEB = 30;
-	const TALL_GRASS = 31;
-	const BUSH = 32;
-	const DEAD_BUSH = 32;
-	const WOOL = 35;
-	const DANDELION = 37;
-	const ROSE = 38;
-	const POPPY = 38;
-	const RED_FLOWER = 38;
-	const BROWN_MUSHROOM = 39;
-	const RED_MUSHROOM = 40;
-	const GOLD_BLOCK = 41;
-	const IRON_BLOCK = 42;
-	const DOUBLE_SLAB = 43;
-	const DOUBLE_SLABS = 43;
-	const SLAB = 44;
-	const SLABS = 44;
-	const BRICKS = 45;
-	const BRICKS_BLOCK = 45;
-	const TNT = 46;
-	const BOOKSHELF = 47;
-	const MOSS_STONE = 48;
-	const MOSSY_STONE = 48;
-	const OBSIDIAN = 49;
-	const TORCH = 50;
-	const FIRE = 51;
-	const MONSTER_SPAWNER = 52;
-	const WOOD_STAIRS = 53;
-	const WOODEN_STAIRS = 53;
-	const OAK_WOOD_STAIRS = 53;
-	const OAK_WOODEN_STAIRS = 53;
-	const CHEST = 54;
-
-	const REDSTONE_WIRE = 55;
-	const DIAMOND_ORE = 56;
-	const DIAMOND_BLOCK = 57;
-	const CRAFTING_TABLE = 58;
-	const WORKBENCH = 58;
-	const WHEAT_BLOCK = 59;
-	const FARMLAND = 60;
-	const FURNACE = 61;
-	const BURNING_FURNACE = 62;
-	const LIT_FURNACE = 62;
-	const SIGN_POST = 63;
-	const DOOR_BLOCK = 64;
-	const WOODEN_DOOR_BLOCK = 64;
-	const WOOD_DOOR_BLOCK = 64;
-	const LADDER = 65;
-
-	const COBBLE_STAIRS = 67;
-	const COBBLESTONE_STAIRS = 67;
-	const WALL_SIGN = 68;
-
-	const IRON_DOOR_BLOCK = 71;
-
-	const LEVER = 69;
-	const STONE_PRESSURE_PLATE = 70;
-	const WOODEN_PRESSURE_PLATE = 72;
-	const REDSTONE_ORE = 73;
-	const GLOWING_REDSTONE_ORE = 74;
-	const LIT_REDSTONE_ORE = 74;
-
-	const UNLIT_REDSTONE_TORCH = 75;
-	const REDSTONE_TORCH = 76;
-	const STONE_BUTTON = 77;
-	const SNOW = 78;
-	const SNOW_LAYER = 78;
-	const ICE = 79;
-	const SNOW_BLOCK = 80;
-	const CACTUS = 81;
-	const CLAY_BLOCK = 82;
-	const REEDS = 83;
-	const SUGARCANE_BLOCK = 83;
-
-	const FENCE = 85;
-	const PUMPKIN = 86;
-	const NETHERRACK = 87;
-	const SOUL_SAND = 88;
-	const GLOWSTONE = 89;
-	const GLOWSTONE_BLOCK = 89;
-
-	const PORTAL = 90;
-	const LIT_PUMPKIN = 91;
-	const JACK_O_LANTERN = 91;
-	const CAKE_BLOCK = 92;
-
-	const TRAPDOOR = 96;
-	const WOODEN_TRAPDOOR = 96;
-	const WOOD_TRAPDOOR = 96;
-
-	const MONSTER_EGG_BLOCK = 97;
-
-	const STONE_BRICKS = 98;
-	const STONE_BRICK = 98;
-
-	const BROWN_MUSHROOM_BLOCK = 99;
-	const RED_MUSHROOM_BLOCK = 100;
-
-	const IRON_BAR = 101;
-	const IRON_BARS = 101;
-	const GLASS_PANE = 102;
-	const GLASS_PANEL = 102;
-	const MELON_BLOCK = 103;
-	const PUMPKIN_STEM = 104;
-	const MELON_STEM = 105;
-	const VINE = 106;
-	const VINES = 106;
-	const FENCE_GATE = 107;
-	const BRICK_STAIRS = 108;
-	const STONE_BRICK_STAIRS = 109;
-	const MYCELIUM = 110;
-	const WATER_LILY = 111;
-	const LILY_PAD = 111;
-	const NETHER_BRICKS = 112;
-	const NETHER_BRICK_BLOCK = 112;
-
-	const NETHER_BRICKS_STAIRS = 114;
-
-	const ENCHANTING_TABLE = 116;
-	const ENCHANT_TABLE = 116;
-	const ENCHANTMENT_TABLE = 116;
-
-	const BREWING_STAND = 117;
-	const END_PORTAL_FRAME = 120;
-	const END_STONE = 121;
-
-	const INACTIVE_REDSTONE_LAMP = 123;
-	const ACTIVE_REDSTONE_LAMP = 124;
-
-	const DROPPER = 125;
-
-	const ACTIVATOR_RAIL = 126;
-	const COCOA_BLOCK = 127;
-	const SANDSTONE_STAIRS = 128;
-	const EMERALD_ORE = 129;
-
-	const TRIPWIRE_HOOK = 131;
-	const TRIPWIRE = 132;
-	const EMERALD_BLOCK = 133;
-	const SPRUCE_WOOD_STAIRS = 134;
-	const SPRUCE_WOODEN_STAIRS = 134;
-	const BIRCH_WOOD_STAIRS = 135;
-	const BIRCH_WOODEN_STAIRS = 135;
-	const JUNGLE_WOOD_STAIRS = 136;
-	const JUNGLE_WOODEN_STAIRS = 136;
-
-	const COBBLE_WALL = 139;
-	const STONE_WALL = 139;
-	const COBBLESTONE_WALL = 139;
-
-	const FLOWER_POT_BLOCK = 140;
-	const CARROT_BLOCK = 141;
-	const POTATO_BLOCK = 142;
-
-	const WOODEN_BUTTON = 143;
-
-	const SKULL_BLOCK = 144;
-
-	const ANVIL = 145;
-	const TRAPPED_CHEST = 146;
-
-	const LIGHT_WEIGHTED_PRESSURE_PLATE = 147;
-	const HEAVY_WEIGHTED_PRESSURE_PLATE = 148;
-	const DAYLIGHT_SENSOR = 151;
-	const DAYLIGHT_SENSOR_INVERTED = 178;
-	const REDSTONE_BLOCK = 152;
-
-	const NETHER_QUARTZ_ORE = 153;
-	const QUARTZ_BLOCK = 155;
-	const QUARTZ_STAIRS = 156;
-	const DOUBLE_WOOD_SLAB = 157;
-	const DOUBLE_WOODEN_SLAB = 157;
-	const DOUBLE_WOOD_SLABS = 157;
-	const DOUBLE_WOODEN_SLABS = 157;
-	const WOOD_SLAB = 158;
-	const WOODEN_SLAB = 158;
-	const WOOD_SLABS = 158;
-	const WOODEN_SLABS = 158;
-	const STAINED_CLAY = 159;
-	const STAINED_HARDENED_CLAY = 159;
-
-	const LEAVES2 = 161;
-	const LEAVE2 = 161;
-	const WOOD2 = 162;
-	const TRUNK2 = 162;
-	const LOG2 = 162;
-	const ACACIA_WOOD_STAIRS = 163;
-	const ACACIA_WOODEN_STAIRS = 163;
-	const DARK_OAK_WOOD_STAIRS = 164;
-	const DARK_OAK_WOODEN_STAIRS = 164;
-        const SLIME_BLOCK = 165;
-	const IRON_TRAPDOOR = 167;
-	const HAY_BALE = 170;
-	const CARPET = 171;
-	const HARDENED_CLAY = 172;
-	const COAL_BLOCK = 173;
-
-	const PACKED_ICE = 174;
-	const DOUBLE_PLANT = 175;
-
-	const FENCE_GATE_SPRUCE = 183;
-	const FENCE_GATE_BIRCH = 184;
-	const FENCE_GATE_JUNGLE = 185;
-	const FENCE_GATE_DARK_OAK = 186;
-	const FENCE_GATE_ACACIA = 187;
-
-	const SPRUCE_DOOR_BLOCK = 193;
-	const BIRCH_DOOR_BLOCK = 194;
-	const JUNGLE_DOOR_BLOCK = 195;
-	const ACACIA_DOOR_BLOCK = 196;
-	const DARK_OAK_DOOR_BLOCK = 197;
-
-	const GRASS_PATH = 198;
-
-	const ITEM_FRAME_BLOCK = 199;
-
-	const PODZOL = 243;
-	const BEETROOT_BLOCK = 244;
-	const STONECUTTER = 245;
-	const GLOWING_OBSIDIAN = 246;
-	const NETHER_REACTOR = 247;
-	const CAMERA = 439;
-
-	const NETHER_BRICK_FENCE = 113;
-
-	const RAIL = 66;
+class Block extends Position implements BlockIds, Metadatable{	
 
 	/** @var \SplFixedArray */
 	public static $list = null;
@@ -331,32 +61,6 @@ class Block extends Position implements Metadatable{
 
 	/** @var AxisAlignedBB */
 	public $boundingBox = null;
-
-	/**
-	 * Backwards-compatibility with old way to define block properties
-	 *
-	 * @deprecated
-	 *
-	 * @param string $key
-	 *
-	 * @return mixed
-	 */
-	public function __get($key){
-		static $map = [
-			"hardness" => "getHardness",
-			"lightLevel" => "getLightLevel",
-			"frictionFactor" => "getFrictionFactor",
-			"name" => "getName",
-			"isPlaceable" => "canBePlaced",
-			"isReplaceable" => "canBeReplaced",
-			"isTransparent" => "isTransparent",
-			"isSolid" => "isSolid",
-			"isFlowable" => "canBeFlowedInto",
-			"isActivable" => "canBeActivated",
-			"hasEntityCollision" => "hasEntityCollision"
-		];
-		return isset($map[$key]) ? $this->{$map[$key]}() : null;
-	}
 
 	public static function init(){
 		if(self::$list === null){
@@ -391,6 +95,8 @@ class Block extends Position implements Metadatable{
 			self::$list[self::LAPIS_ORE] = LapisOre::class;
 			self::$list[self::LAPIS_BLOCK] = Lapis::class;
 			self::$list[self::SANDSTONE] = Sandstone::class;
+			self::$list[self::RED_SANDSTONE] = RedSandstone::class;
+			self::$list[self::RED_SANDSTONE_STAIRS] = RedSandstoneStairs::class;
 			self::$list[self::BED_BLOCK] = Bed::class;
 			self::$list[self::COBWEB] = Cobweb::class;
 			self::$list[self::TALL_GRASS] = TallGrass::class;
@@ -404,6 +110,8 @@ class Block extends Position implements Metadatable{
 			self::$list[self::IRON_BLOCK] = Iron::class;
 			self::$list[self::DOUBLE_SLAB] = DoubleSlab::class;
 			self::$list[self::SLAB] = Slab::class;
+			self::$list[self::RED_SANDSTONE_SLAB] = RedSandstoneSlab::class;
+			self::$list[self::DOUBLE_RED_SANDSTONE_SLAB] = DoubleRedSandstoneSlab::class;
 			self::$list[self::BRICKS_BLOCK] = Bricks::class;
 			self::$list[self::TNT] = TNT::class;
 			self::$list[self::BOOKSHELF] = Bookshelf::class;
@@ -455,6 +163,7 @@ class Block extends Position implements Metadatable{
 			self::$list[self::CAKE_BLOCK] = Cake::class;
 
 			self::$list[self::TRAPDOOR] = Trapdoor::class;
+			self::$list[self::IRON_TRAPDOOR] = IronTrapdoor::class;
 
 			self::$list[self::STONE_BRICKS] = StoneBricks::class;
 			
@@ -477,14 +186,15 @@ class Block extends Position implements Metadatable{
 
 			self::$list[self::PORTAL] = Portal::class;
 			self::$list[self::NETHER_BRICKS_STAIRS] = NetherBrickStairs::class;
-
+			self::$list[self::NETHER_WART_BLOCK] = NetherWart::class;
 			self::$list[self::ENCHANTING_TABLE] = EnchantingTable::class;
 
-			self::$list[self::BREWING_STAND] = BrewingStand::class;
+			self::$list[self::BREWING_STAND_BLOCK] = BrewingStand::class;
 			self::$list[self::END_PORTAL_FRAME] = EndPortalFrame::class;
 			self::$list[self::END_STONE] = EndStone::class;
 			self::$list[self::SANDSTONE_STAIRS] = SandstoneStairs::class;
 			self::$list[self::EMERALD_ORE] = EmeraldOre::class;
+			self::$list[self::ENDER_CHEST] = EnderChest::class;
 
 			self::$list[self::EMERALD_BLOCK] = Emerald::class;
 			self::$list[self::SPRUCE_WOOD_STAIRS] = SpruceWoodStairs::class;
@@ -511,7 +221,10 @@ class Block extends Position implements Metadatable{
 			self::$list[self::ACACIA_WOOD_STAIRS] = AcaciaWoodStairs::class;
 			self::$list[self::DARK_OAK_WOOD_STAIRS] = DarkOakWoodStairs::class;
 
-self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
+			self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
+			self::$list[self::PRISMARINE] = Prismarine::class;
+			self::$list[self::SEA_LANTERN] = SeaLantern::class;
+
 			self::$list[self::HAY_BALE] = HayBale::class;
 			self::$list[self::CARPET] = Carpet::class;
 			self::$list[self::HARDENED_CLAY] = HardenedClay::class;
@@ -525,6 +238,8 @@ self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 			self::$list[self::FENCE_GATE_JUNGLE] = FenceGateJungle::class;
 			self::$list[self::FENCE_GATE_DARK_OAK] = FenceGateDarkOak::class;
 			self::$list[self::FENCE_GATE_ACACIA] = FenceGateAcacia::class;
+
+			self::$list[self::ITEM_FRAME_BLOCK] = ItemFrame::class;
 
 			self::$list[self::GRASS_PATH] = GrassPath::class;
 
@@ -563,6 +278,11 @@ self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 			self::$list[self::ITEM_FRAME_BLOCK] = ItemFrame::class;
 			self::$list[self::DISPENSER] = Dispenser::class;
 			self::$list[self::DROPPER] = Dropper::class;
+			self::$list[self::POWERED_REPEATER_BLOCK] = PoweredRepeater::class;
+			self::$list[self::UNPOWERED_REPEATER_BLOCK] = UnpoweredRepeater::class;
+			self::$list[self::CAULDRON_BLOCK] = Cauldron::class;
+			self::$list[self::INVISIBLE_BEDROCK] = InvisibleBedrock::class;
+			self::$list[self::HOPPER_BLOCK] = Hopper::class;
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){
@@ -585,7 +305,7 @@ self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 							}else{
 								self::$lightFilter[$id] = 1;
 							}
-						}elseif($block->getId() == Block::GLOWSTONE){
+						}elseif($block instanceof SolidLight){
 							self::$lightFilter[$id] = 1;
 						}else{
 							self::$lightFilter[$id] = 15;
@@ -611,6 +331,10 @@ self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 	 * @return Block
 	 */
 	public static function get($id, $meta = 0, Position $pos = null){
+		if($id > 0xff){
+			trigger_error("BlockID cannot be higher than 255, defaulting to 0", E_USER_NOTICE);
+			$id = 0;
+		}
 		try{
 			$block = self::$list[$id];
 			if($block !== null){
@@ -670,6 +394,10 @@ self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 		return true;
 	}
 
+	public function tickRate() : int{
+		return 10;
+	}
+
 	/**
 	 * Do the actions needed so the block is broken with the Item
 	 *
@@ -686,10 +414,10 @@ self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 	 *
 	 * @param int $type
 	 *
-	 * @return void
+	 * @return int|bool
 	 */
 	public function onUpdate($type){
-
+		return false;
 	}
 
 	/**
@@ -716,6 +444,44 @@ self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 	 */
 	public function getResistance(){
 		return $this->getHardness() * 5;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getBurnChance() : int{
+		return 0;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getBurnAbility() : int{
+		return 0;
+	}
+
+	public function isTopFacingSurfaceSolid(){
+		if($this->isSolid()){
+			return true;
+		}else{
+			if($this instanceof Stair and ($this->getDamage() &4) == 4){
+				return true;
+			}elseif($this instanceof Slab and ($this->getDamage() & 8) == 8){
+				return true;
+			}elseif($this instanceof SnowLayer and ($this->getDamage() & 7) == 7){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function canNeighborBurn(){
+		for($face = 0; $face < 5; $face++){
+			if($this->getSide($face)->getBurnChance() > 0){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -753,8 +519,6 @@ self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 	}
 
 	/**
-	 * AKA: Block->canBeReplaced()
-	 *
 	 * @return bool
 	 */
 	public function canBeReplaced(){
@@ -795,6 +559,10 @@ self::$list[self::SLIME_BLOCK] = SlimeBlock::class;
 	}
 
 	public function deactivate(){
+		return false;
+	}
+
+	public function isActivated(Block $from = null){
 		return false;
 	}
 

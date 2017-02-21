@@ -53,6 +53,14 @@ class Wood extends Solid{
 		return $names[$this->meta & 0x03];
 	}
 
+	public function getBurnChance() : int{
+		return 5;
+	}
+
+	public function getBurnAbility() : int{
+		return 10;
+	}
+
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		$faces = [
 			0 => 0,

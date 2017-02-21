@@ -24,6 +24,8 @@ settings:
  #Set this approximately to your number of cores.
  #If set to auto, it'll try to detect the number of cores (or use 2)
  async-workers: auto
+ #Enables use of non-production, development builds. WARNING: DO NOT enable this unless you are sure you know what you are doing.
+ enable-testing: false
 
 memory:
  #Global soft memory limit in megabytes. Set to 0 to disable
@@ -85,17 +87,30 @@ network:
  upnp-forwarding: false
 
 debug:
+ #To enable assertion execution, set zend.assertions in your php.ini to 1
+ assertions:
+  #Warn if assertions are enabled in php.ini, due to assertions may impact on runtime performance if enabled.
+  warn-if-enabled: true
+  #Enable throwing exceptions when assertions fail, will allow obtaining more detailed information on the failed assertion, but may cause a server crash.
+  #If set to false, a warning will be raised instead of throwing an exception.
+  throw-exception: false
  #If > 1, it will show debug messages in the console
  level: 1
  #Enables /status, /gc
  commands: true
 
+player:
+ #Choose whether to enable player data saving.
+ save-player-data: true
+ anti-cheat:
+  #If false, will try to prevent speed and noclip cheats. May cause movement issues with some blocks which are not yet properly implemented.
+  allow-movement-cheats: false
+  #If false, times block breaks to ensure players are not cheating. May cause issues with some blocks which are not yet properly implemented.
+  allow-instabreak: false
+
 level-settings:
  #The default format that levels will use when created
- default-format: mcregion
- #If true, converts from a format that is not the default to the default format on load
- #NOTE: This is currently not implemented
- convert-format: false
+ default-format: pmanvil
  #Automatically change levels tick rate to maintain 20 ticks per second
  auto-tick-rate: false
  auto-tick-rate-limit: 20
@@ -113,15 +128,20 @@ chunk-sending:
  spawn-threshold: 28
  #Save a serialized copy of the chunk in memory for faster sending
  #Useful in mostly-static worlds where lots of players join at the same time
- cache-chunks: true
+ cache-chunks: false
+ #Use AsyncTasks for serializing chunks for sending.
+ async-chunk-request: false
 
 chunk-ticking:
  #Max amount of chunks processed each tick
- per-tick: 0
+ per-tick: 16
  #Radius of chunks around a player to tick
- tick-radius: 0
+ tick-radius: 3
  light-updates: false
  clear-tick-list: true
+ #IDs of blocks not to perform random ticking on.
+ disable-block-ticking:
+  #- 2 # grass
 
 chunk-generation:
  #Max. amount of chunks in the waiting queue to be generated
@@ -153,16 +173,16 @@ anonymous-statistics:
  enabled: true
  host: stats.pocketmine.net
 
-auto-updater:
- enabled: false
- on-update:
-  warn-console: false
-  warn-ops: false
- #Can be development, beta or stable.
- preferred-channel: stable
- #If using a development version, it will suggest changing the channel
- suggest-channels: false
- host: www.pocketmine.net
+commands:
+ #Here you can customize server commands
+ #Specify command names to override the default set here.
+ #If no custom value is defined for a command, the default will be used.
+ #NOTE: Some commands cannot be disabled here, such as the important ones like /stop, /reload, etc.
+ default: true
+ #Set override values per command here
+ #For example, uncommenting the below will disable /plugins and /version
+ #version: false
+ #plugins: false
 
 aliases:
  #Examples:

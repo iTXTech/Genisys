@@ -1,27 +1,38 @@
 <?php
 
-/**
- * OpenGenisys Project
+/*
  *
- * @author PeratX
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://itxtech.org
+ *
  */
 
 namespace pocketmine\entity;
 
+use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\item\Item as ItemItem;
+use pocketmine\level\format\Chunk;
+use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
 use pocketmine\network\protocol\AddEntityPacket;
-use pocketmine\Player;
-use pocketmine\math\Vector3;
-use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\network\protocol\EntityEventPacket;
-use pocketmine\item\Item as ItemItem;
-use pocketmine\level\format\FullChunk;
-use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\Player;
 
 class Boat extends Vehicle{
 	const NETWORK_ID = 90;
-
-	const DATA_WOOD_ID = 20;
 
 	public $height = 0.7;
 	public $width = 1.6;
@@ -29,12 +40,12 @@ class Boat extends Vehicle{
 	public $gravity = 0.5;
 	public $drag = 0.1;
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Chunk $chunk, CompoundTag $nbt){
 		if(!isset($nbt->WoodID)){
 			$nbt->WoodID = new IntTag("WoodID", 0);
 		}
 		parent::__construct($chunk, $nbt);
-		$this->setDataProperty(self::DATA_WOOD_ID, self::DATA_TYPE_BYTE, $this->getWoodID());
+		$this->setDataProperty(self::DATA_VARIANT, self::DATA_TYPE_INT, $this->getWoodID());
 	}
 
 	public function getWoodID() : int{
@@ -115,8 +126,9 @@ class Boat extends Vehicle{
 
 
 	public function getDrops(){
-		$drops[] = ItemItem::get(ItemItem::BOAT, 0, 1);
-		return $drops;
+		return [
+			ItemItem::get(ItemItem::BOAT, 0, 1)
+		];
 	}
 
 	public function getSaveId(){

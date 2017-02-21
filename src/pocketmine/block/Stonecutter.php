@@ -23,7 +23,6 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
-use pocketmine\Player;
 
 //TODO: check orientation
 class Stonecutter extends Solid{
@@ -40,18 +39,6 @@ class Stonecutter extends Solid{
 
 	public function getToolType(){
 		return Tool::TYPE_PICKAXE;
-	}
-
-	public function canBeActivated() : bool {
-		return true;
-	}
-
-	public function onActivate(Item $item, Player $player = null){
-		if($player instanceof Player){
-			$player->craftingType = 2;
-		}
-
-		return true;
 	}
 
 	public function getDrops(Item $item) : array {

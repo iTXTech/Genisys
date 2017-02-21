@@ -28,6 +28,13 @@ use pocketmine\Player;
 class DoublePlant extends Flowable{
 
 	protected $id = self::DOUBLE_PLANT;
+	
+	const SUNFLOWER = 0;
+	const LILAC = 1;
+	const DOUBLE_TALLGRASS = 2;
+	const LARGE_FERN = 3;
+	const ROSE_BUSH = 4;
+	const PEONY = 5;
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
@@ -52,7 +59,7 @@ class DoublePlant extends Flowable{
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
 			if($this->getSide(0)->isTransparent() === true && !$this->getSide(0) instanceof DoublePlant){ //Replace with common break method
-				$this->getLevel()->setBlock($this, new Air(), false, false, true);
+				$this->getLevel()->setBlock($this, new Air(), false, false);
 
 				return Level::BLOCK_UPDATE_NORMAL;
 			}
@@ -72,22 +79,19 @@ class DoublePlant extends Flowable{
 		return false;
 	}
 
-	public function onBreak(Item $item) : array{
+	public function onBreak(Item $item){
 		$up = $this->getSide(1);
 		$down = $this->getSide(0);
 		if(($this->meta & 0x08) === 0x08){ // This is the Top part of flower
 			if($up->getId() === $this->id and $up->meta !== 0x08){ // Checks if the block ID and meta are right
 				$this->getLevel()->setBlock($up, new Air(), true, true);
-			}
-			elseif($down->getId() === $this->id and $down->meta !== 0x08){
+			}elseif($down->getId() === $this->id and $down->meta !== 0x08){
 				$this->getLevel()->setBlock($down, new Air(), true, true);
 			}
-		}
-		else{ // Bottom Part of flower
+		}else{ // Bottom Part of flower
 			if($up->getId() === $this->id and ($up->meta & 0x08) === 0x08){
 				$this->getLevel()->setBlock($up, new Air(), true, true);
-			}
-			elseif($down->getId() === $this->id and ($down->meta & 0x08) === 0x08){
+			}elseif($down->getId() === $this->id and ($down->meta & 0x08) === 0x08){
 				$this->getLevel()->setBlock($down, new Air(), true, true);
 			}
 		}
@@ -95,9 +99,9 @@ class DoublePlant extends Flowable{
 
 	public function getDrops(Item $item) : array{
 		if(($this->meta & 0x08) !== 0x08){
-			return [[Item::DOUBLE_PLANT,$this->meta,1]];
-		}
-		else
+			return [[Item::DOUBLE_PLANT, $this->meta, 1]];
+		}else{
 			return [];
+		}
 	}
 }

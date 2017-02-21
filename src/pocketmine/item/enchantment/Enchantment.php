@@ -180,11 +180,22 @@ class Enchantment{
 		return new Enchantment(self::TYPE_INVALID, "unknown", 0, 0, 0);
 	}
 
-	public static function getEffectByName($name){
+	public static function getEnchantmentByName($name){
 		if(defined(Enchantment::class . "::TYPE_" . strtoupper($name))){
 			return self::getEnchantment(constant(Enchantment::class . "::TYPE_" . strtoupper($name)));
-		}
-		return null;
+		}elseif(defined(Enchantment::class . "::TYPE_WEAPON_" . strtoupper($name))){
+			return self::getEnchantment(constant(Enchantment::class . "::TYPE_WEAPON_" . strtoupper($name))); 
+		}elseif(defined(Enchantment::class . "::TYPE_ARMOR_" . strtoupper($name))){
+			return self::getEnchantment(constant(Enchantment::class . "::TYPE_ARMOR_" . strtoupper($name))); 
+		}elseif(defined(Enchantment::class . "::TYPE_MINING_" . strtoupper($name))){
+			return self::getEnchantment(constant(Enchantment::class . "::TYPE_MINING_" . strtoupper($name))); 
+		}elseif(defined(Enchantment::class . "::TYPE_BOW_" . strtoupper($name))){
+			return self::getEnchantment(constant(Enchantment::class . "::TYPE_BOW_" . strtoupper($name))); 
+		}elseif(defined(Enchantment::class . "::TYPE_FISHING_" . strtoupper($name))){
+			return self::getEnchantment(constant(Enchantment::class . "::TYPE_FISHING_" . strtoupper($name))); 
+		}else{
+			return new Enchantment(self::TYPE_INVALID, "unknown", 0, 0, 0);
+	    }
 	}
 
 	public static function getEnchantAbility(Item $item){
@@ -260,6 +271,50 @@ class Enchantment{
 		return 0;
 	}
 
+	public static function getEnchantMaxLevel(int $enchantmentId){
+		switch($enchantmentId){
+			case self::TYPE_ARMOR_PROTECTION:
+			case self::TYPE_ARMOR_FIRE_PROTECTION:
+			case self::TYPE_ARMOR_FALL_PROTECTION:
+			case self::TYPE_ARMOR_EXPLOSION_PROTECTION:
+			case self::TYPE_ARMOR_PROJECTILE_PROTECTION:
+				return 4;
+			case self::TYPE_ARMOR_THORNS:
+				return 3;
+			case self::TYPE_WATER_BREATHING:
+			case self::TYPE_WATER_SPEED:
+				return 3;
+			case self::TYPE_WATER_AFFINITY:
+				return 1;
+			case self::TYPE_WEAPON_SHARPNESS:
+			case self::TYPE_WEAPON_SMITE:
+			case self::TYPE_WEAPON_ARTHROPODS:
+				return 5;
+			case self::TYPE_WEAPON_KNOCKBACK:
+			case self::TYPE_WEAPON_FIRE_ASPECT:
+				return 2;
+			case self::TYPE_WEAPON_LOOTING:
+				return 3;
+			case self::TYPE_MINING_EFFICIENCY:
+				return 5;
+			case self::TYPE_MINING_SILK_TOUCH:
+				return 1;
+			case self::TYPE_MINING_DURABILITY:
+			case self::TYPE_MINING_FORTUNE:
+				return 3;
+			case self::TYPE_BOW_POWER:
+				return 5;
+			case self::TYPE_BOW_KNOCKBACK:
+				return 2;
+			case self::TYPE_BOW_FLAME:
+			case self::TYPE_BOW_INFINITY:
+				return 1;
+			case self::TYPE_FISHING_FORTUNE:
+			case self::TYPE_FISHING_LURE:
+				return 3;
+		}
+		return 999;
+	}
 
 	private $id;
 	private $level = 1;
@@ -304,13 +359,20 @@ class Enchantment{
 		return $this->level;
 	}
 
-	public function setLevel($level){
-		$this->level = (int) $level;
+	public function setLevel(int $level){
+		$this->level = $level;
 
 		return $this;
 	}
 
-	public static function generateName(){
+	public function equals(Enchantment $ent){
+		if($ent->getId() == $this->getId() and $ent->getLevel() == $this->getLevel() and $ent->getActivationType() == $this->getActivationType() and $ent->getRarity() == $this->getRarity()){
+			return true;
+		}
+		return false;
+	}
+
+	public static function getRandomName(){
 		$count = mt_rand(3, 6);
 		$set = [];
 		while(count($set) < $count){

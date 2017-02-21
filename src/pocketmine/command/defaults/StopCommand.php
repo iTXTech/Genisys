@@ -41,19 +41,18 @@ class StopCommand extends VanillaCommand{
 		if(!$this->testPermission($sender)){
 			return true;
 		}
-
-		$restart = \Null;
+		$restart = false;
 		if(isset($args[0])){
 			if($args[0] == 'force'){
-				$restart = \true;
+				$restart = true;
+				array_shift($args);
 			}else{
-				$restart = \false;
+				$restart = false;
 			}
 		}
-
 		Command::broadcastCommandMessage($sender, new TranslationContainer("commands.stop.start"));
-
-		$sender->getServer()->shutdown($restart);
+		$msg = implode(" ", $args);
+		$sender->getServer()->shutdown($restart, $msg);
 
 		return true;
 	}

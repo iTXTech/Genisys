@@ -41,8 +41,9 @@ abstract class Tree{
 	public $trunkBlock = Block::LOG;
 	public $leafBlock = Block::LEAVES;
 	public $treeHeight = 7;
+	public $leafType = 0;
 
-	public static function growTree(ChunkManager $level, $x, $y, $z, Random $random, $type = 0){
+	public static function growTree(ChunkManager $level, $x, $y, $z, Random $random, $type = 0, bool $noBigTree = true){
 		switch($type){
 			case Sapling::SPRUCE:
 				$tree = new SpruceTree();
@@ -57,14 +58,19 @@ abstract class Tree{
 			case Sapling::JUNGLE:
 				$tree = new JungleTree();
 				break;
+			case Sapling::ACACIA:
+				$tree = new AcaciaTree();
+				break;
+			case Sapling::DARK_OAK:
+				$tree = new DarkOakTree();
+				break;
 			case Sapling::OAK:
 			default:
-				$tree = new OakTree();
-				/*if($random->nextRange(0, 9) === 0){
+				if(!$noBigTree and $random->nextRange(0, 9) === 0){
 					$tree = new BigTree();
-				}else{*/
-
-				//}
+				}else{
+					$tree = new OakTree();
+				}
 				break;
 		}
 		if($tree->canPlaceObject($level, $x, $y, $z, $random)){
@@ -107,7 +113,7 @@ abstract class Tree{
 					}
 					if(!Block::$solid[$level->getBlockIdAt($xx, $yy, $zz)]){
 						$level->setBlockIdAt($xx, $yy, $zz, $this->leafBlock);
-						$level->setBlockDataAt($xx, $yy, $zz, $this->type);
+						$level->setBlockDataAt($xx, $yy, $zz, $this->leafType);
 					}
 				}
 			}

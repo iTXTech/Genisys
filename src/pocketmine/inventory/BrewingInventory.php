@@ -1,14 +1,24 @@
 <?php
-/**
- * Author: PeratX
- * Time: 2016/1/2 23:32
 
-
+/*
  *
- * OpenGenisys Project
+ *  _____   _____   __   _   _   _____  __    __  _____
+ * /  ___| | ____| |  \ | | | | /  ___/ \ \  / / /  ___/
+ * | |     | |__   |   \| | | | | |___   \ \/ /  | |___
+ * | |  _  |  __|  | |\   | | | \___  \   \  /   \___  \
+ * | |_| | | |___  | | \  | | |  ___| |   / /     ___| |
+ * \_____/ |_____| |_|  \_| |_| /_____/  /_/     /_____/
  *
- * Merged from ImagicalMine
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author iTX Technologies
+ * @link https://itxtech.org
+ *
  */
+
 namespace pocketmine\inventory;
 
 use pocketmine\item\Item;
@@ -37,9 +47,10 @@ class BrewingInventory extends ContainerInventory{
 		return $this->getItem(0);
 	}
 
-	public function onSlotChange($index, $before){
-		parent::onSlotChange($index, $before);
+	public function onSlotChange($index, $before, $send){
+		parent::onSlotChange($index, $before, $send);
 
 		$this->getHolder()->scheduleUpdate();
+		$this->getHolder()->updateSurface();
 	}
 }

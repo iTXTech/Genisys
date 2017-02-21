@@ -23,13 +23,11 @@ namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
+use pocketmine\item\Item;
+use pocketmine\item\ItemBlock;
+use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
-use pocketmine\math\Vector3;
-use pocketmine\block\Block;
-use pocketmine\item\ItemBlock;
-use pocketmine\item\Item;
-use pocketmine\level\Level;
 
 class SetBlockCommand extends VanillaCommand{
 
@@ -81,7 +79,7 @@ class SetBlockCommand extends VanillaCommand{
 			if($z{0} === "~"){
 				if((is_numeric(trim($z, "~")) or trim($z, "~") === "") and ($sender instanceof Player)) $z = (int)round(trim($z, "~") + $sender->z);
 			}elseif(is_numeric($z)){
-				$y = (int)round($z);
+				$z = (int)round($z);
 			}else{
 				$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
 				return false;
