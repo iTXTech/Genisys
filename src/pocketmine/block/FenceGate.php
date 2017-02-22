@@ -81,13 +81,7 @@ class FenceGate extends Transparent implements ElectricalAppliance{
 	}
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
-		$faces = [
-			0 => 3,
-			1 => 0,
-			2 => 1,
-			3 => 2,
-		];
-		$this->meta = $faces[$player instanceof Player ? $player->getDirection() : 0] & 0x03;
+		$this->meta = ($player instanceof Player ? ($player->getDirection() - 1) & 0x03 : 0);
 		$this->getLevel()->setBlock($block, $this, true, true);
 
 		return true;
@@ -104,14 +98,12 @@ class FenceGate extends Transparent implements ElectricalAppliance{
 	}
 
 	public function onActivate(Item $item, Player $player = null){
-		$faces = [
-			0 => 3,
-			1 => 0,
-			2 => 1,
-			3 => 2,
-		];
-		if($player !== null) $this->meta = ($faces[$player instanceof Player ? $player->getDirection() : 0] & 0x03) | ((~$this->meta) & 0x04);
-		else $this->meta ^= 0x04;
+		$this->meta = (($this->meta ^ 0x04) & ~0x02);
+
+		if($player !== null){
+			$this->meta |= (($player->getDirection() - 1) & 0x02);
+		}
+
 		$this->getLevel()->setBlock($this, $this, true);
 		$this->level->addSound(new DoorSound($this));
 		return true;
