@@ -134,9 +134,7 @@ class BaseTransaction implements Transaction{
 
 	/**
 	 * Returns the change in inventory resulting from this transaction
-	 * @return Item[
-	 *				"in" => items added to the inventory
-	 *				"out" => items removed from the inventory
+	 * @return array ("in" => items added to the inventory, "out" => items removed from the inventory)
 	 * ]
 	 */
 	public function getChange(){

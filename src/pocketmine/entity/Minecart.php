@@ -316,7 +316,7 @@ class Minecart extends Vehicle{
 							return true;
 						}
 						break;
-					case ENTITY::SOUTH:
+					case Entity::SOUTH:
 						// Headed south down
 						$diff = $this->x - $this->getFloorX();
 						if($diff !== 0 and $diff >= .5){

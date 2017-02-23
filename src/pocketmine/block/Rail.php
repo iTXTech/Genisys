@@ -71,7 +71,7 @@ class Rail extends Flowable{
 	}
 
 	public function isBlock(Block $block){
-		if($block instanceof AIR){
+		if($block instanceof Air){
 			return false;
 		}
 		return $block;

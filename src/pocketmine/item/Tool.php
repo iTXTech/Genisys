@@ -52,7 +52,7 @@ abstract class Tool extends Item{
 	 * TODO: Move this to each item
 	 *
 	 * @param Entity|Block $object
-	 * @param 1 for break|2 for Touch $type
+	 * @param int          $type 1 for break, 2 for touch
 	 *
 	 * @return bool
 	 */

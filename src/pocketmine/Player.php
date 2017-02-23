@@ -551,10 +551,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 * @param string $name
 	 * @param bool   $value
 	 *
-	 * @return permission\PermissionAttachment
+	 * @return permission\PermissionAttachment|null
 	 */
 	public function addAttachment(Plugin $plugin, $name = null, $value = null){
-		if($this->perm == null) return false;
+		if($this->perm == null) return null;
 		return $this->perm->addAttachment($plugin, $name, $value);
 	}
 
@@ -3680,6 +3680,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/**
 	 * Handles player data saving
+	 *
+	 * @param bool $async
 	 */
 	public function save($async = false){
 		if($this->closed){

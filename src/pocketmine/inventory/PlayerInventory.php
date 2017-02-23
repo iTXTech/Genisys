@@ -96,6 +96,9 @@ class PlayerInventory extends BaseInventory{
 	 * @deprecated
 	 *
 	 * Changes the linkage of the specified hotbar slot. This should never be done unless it is requested by the client.
+	 *
+	 * @param int $index
+	 * @param int $slot
 	 */
 	public function setHotbarSlotIndex($index, $slot){
 		if($this->getHolder()->getServer()->getProperty("settings.deprecated-verbose") !== false){

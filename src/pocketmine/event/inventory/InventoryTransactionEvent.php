@@ -37,7 +37,7 @@ class InventoryTransactionEvent extends Event implements Cancellable{
 	private $transactionQueue;
 	
 	/**
-	 * @param TransactionQueue $ts
+	 * @param TransactionQueue $transactionQueue
 	 */
 	public function __construct(TransactionQueue $transactionQueue){
 		$this->transactionQueue = $transactionQueue;

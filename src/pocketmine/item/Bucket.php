@@ -74,7 +74,7 @@ class Bucket extends Item{
 			if(!$ev->isCancelled()){
 				//Only disallow water placement in the Nether, allow other liquids to be placed
 				//In vanilla, water buckets are emptied when used in the Nether, but no water placed.
-				if(!($player->getLevel()->getDimension() === Level::DIMENSION_NETHER and $targetBlock->getID() === self::WATER)){
+				if(!($player->getLevel()->getDimension() === Level::DIMENSION_NETHER and $targetBlock->getId() === self::WATER)){
 					$player->getLevel()->setBlock($block, $targetBlock, true, true);
 				}
 				if($player->isSurvival()){

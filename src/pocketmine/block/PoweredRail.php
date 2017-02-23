@@ -67,7 +67,7 @@ class PoweredRail extends Rail{
 	}
 
 	public function isBlock(Block $block){
-		if($block instanceof AIR){
+		if($block instanceof Air){
 			return false;
 		}
 		return $block;

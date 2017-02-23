@@ -116,6 +116,7 @@ abstract class BaseInventory implements Inventory{
 
 	/**
 	 * @param Item[] $items
+	 * @param bool   $send
 	 */
 	public function setContents(array $items, $send = true){
 		if(count($items) > $this->size){
