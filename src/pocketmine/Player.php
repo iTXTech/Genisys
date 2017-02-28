@@ -3668,6 +3668,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		$this->inventory = null;
+		$this->floatingInventory = null;
+		$this->enderChestInventory = null;
 		$this->transactionQueue = null;
 
 		$this->chunk = null;

@@ -36,7 +36,7 @@ class EnderChestInventory extends ContainerInventory{
 
 	public function __construct(Human $owner, $contents = null){
 		$this->owner = $owner;
-		parent::__construct(new FakeBlockMenu($this, $owner), InventoryType::get(InventoryType::ENDER_CHEST));
+		parent::__construct(new FakeBlockMenu($this, $owner->getPosition()), InventoryType::get(InventoryType::ENDER_CHEST));
 
 		if($contents !== null){
 			if($contents instanceof ListTag){ //Saved data to be loaded into the inventory

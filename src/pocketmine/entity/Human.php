@@ -46,7 +46,7 @@ use pocketmine\Player;
 use pocketmine\utils\UUID;
 
 class Human extends Creature implements ProjectileSource, InventoryHolder{
-	
+
 	const DATA_PLAYER_FLAG_SLEEP = 1;
 	const DATA_PLAYER_FLAG_DEAD = 2; //TODO: CHECK
 
@@ -706,9 +706,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 				foreach($this->getFloatingInventory()->getContents() as $craftingItem){
 					$this->level->dropItem($this, $craftingItem);
 				}
-			}else{
-				$this->server->getLogger()->debug("Attempted to drop a null crafting inventory\n");
 			}
+
 			if(!($this instanceof Player) or $this->loggedIn){
 				foreach($this->inventory->getViewers() as $viewer){
 					$viewer->removeWindow($this->inventory);
