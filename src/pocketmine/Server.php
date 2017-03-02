@@ -431,8 +431,19 @@ class Server{
 	/**
 	 * @return int
 	 */
-	public function getViewDistance(){
-		return max(56, $this->getProperty("chunk-sending.max-chunks", 256));
+	public function getViewDistance() : int{
+		return max(2, $this->getConfigInt("view-distance", 8));
+	}
+
+	/**
+	 * Returns a view distance up to the currently-allowed limit.
+	 *
+	 * @param int $distance
+	 *
+	 * @return int
+	 */
+	public function getAllowedViewDistance(int $distance) : int{
+		return max(2, min($distance, $this->memoryManager->getViewDistance($this->getViewDistance())));
 	}
 
 	/**
@@ -1639,6 +1650,7 @@ class Server{
 				"rcon.password" => substr(base64_encode(random_bytes(20)), 3, 10),
 				"auto-save" => true,
 				"online-mode" => false,
+				"view-distance" => 8
 			]);
 
 			$onlineMode = $this->getConfigBoolean("online-mode", false);

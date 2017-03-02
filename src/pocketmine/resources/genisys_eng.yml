@@ -2,7 +2,7 @@
 
 #Version of this file
 config:
- version: 23
+ version: 24
 
 level:
  #Set if weather is enabled (rain may cause lag to older devices)
@@ -28,8 +28,6 @@ player:
  auto-clear-inventory : true
  #Choose if to keep a player's experience after they die
  keep-experience: false
- #If players crash when joining, change this to less than 10. disable=-1
- chunk-radius: -1
 
 nether:
  #Choose if the nether is allowed. The level of nether will generate automatically
