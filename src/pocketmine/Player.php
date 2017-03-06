@@ -2529,7 +2529,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$thrownPotion->spawnToAll();
 						}
 					}elseif($item->getId() === Item::ENDER_PEARL){
-						if(($time = microtime(true)) - $this->lastEnderPearlUse >= 1){
+						if(floor(($time = microtime(true)) - $this->lastEnderPearlUse) >= 1){
 							$nbt = new CompoundTag("", [
 								"Pos" => new ListTag("Pos", [
 									new DoubleTag("", $this->x),
