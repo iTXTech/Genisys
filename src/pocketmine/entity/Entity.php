@@ -80,8 +80,6 @@ abstract class Entity extends Location implements Metadatable{
 	const DATA_TYPE_STRING = 4;
 	const DATA_TYPE_SLOT = 5;
 	const DATA_TYPE_POS = 6;
-	//const DATA_TYPE_ROTATION = 8;
-	//const DATA_TYPE_LONG = 8;
 	const DATA_TYPE_LONG = 7;
 	const DATA_TYPE_VECTOR3F = 8;
 
@@ -465,21 +463,21 @@ abstract class Entity extends Location implements Metadatable{
 	public function setNameTagAlwaysVisible($value = true){
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ALWAYS_SHOW_NAMETAG, $value);
 	}
-	
+
 	/**
 	 * @return float
 	 */
 	public function getScale(): float{
 		return $this->getDataProperty(self::DATA_SCALE);
 	}
-	
+
 	/**
 	 * @param float $value
 	 */
 	public function setScale(float $value){
 		$this->setDataProperty(self::DATA_SCALE, self::DATA_TYPE_FLOAT, $value);
 	}
-	
+
 	public function isSneaking(){
 		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_SNEAKING);
 	}
@@ -1110,7 +1108,7 @@ abstract class Entity extends Location implements Metadatable{
 			$this->lastYaw = $this->yaw;
 			$this->lastPitch = $this->pitch;
 
-			$this->addMovement($this->x, $this->y + $this->getEyeHeight(), $this->z, $this->yaw, $this->pitch, $this->yaw);
+			$this->level->addEntityMovement($this->chunk->getX(), $this->chunk->getZ(), $this->id, $this->x, $this->y + $this->getEyeHeight(), $this->z, $this->yaw, $this->pitch, $this->yaw);
 		}
 
 		if($diffMotion > 0.0025 or ($diffMotion > 0.0001 and $this->getMotion()->lengthSquared() <= 0.0001)){ //0.05 ** 2
@@ -1120,10 +1118,6 @@ abstract class Entity extends Location implements Metadatable{
 
 			$this->level->addEntityMotion($this->chunk->getX(), $this->chunk->getZ(), $this->id, $this->motionX, $this->motionY, $this->motionZ);
 		}
-	}
-
-	public function addMovement($x, $y, $z, $yaw, $pitch, $headYaw = null){
-		$this->level->addEntityMovement($this->chunk->getX(), $this->chunk->getZ(), $this->id, $x, $y, $z, $yaw, $pitch, $headYaw === null ? $yaw : $headYaw);
 	}
 
 	/**
@@ -1606,7 +1600,7 @@ abstract class Entity extends Location implements Metadatable{
 		}
 
 		if($this->getLevel()->getServer()->redstoneEnabled and !$this->isPlayer){
-			/** @var \pocketmine\block\PressurePlate $block * */
+			/** @var \pocketmine\block\PressurePlate $block **/
 			foreach($this->activatedPressurePlates as $key => $block){
 				if(!isset($blocksaround[$key])) $block->checkActivation();
 			}
