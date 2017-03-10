@@ -43,8 +43,8 @@ class EnderPearl extends Projectile{
 	}
 
 	public function kill(){
-		if($this->isAlive() and $this->shootingEntity instanceof Player){
-			if($this->y > 0){
+		if($this->isAlive()){
+			if($this->shootingEntity instanceof Player and $this->y > 0){
 				$this->shootingEntity->attack(5, new EntityDamageEvent($this->shootingEntity, EntityDamageEvent::CAUSE_FALL, 5));
 				$this->shootingEntity->teleport($this->getPosition());
 			}
