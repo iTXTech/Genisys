@@ -240,6 +240,7 @@ class Item implements ItemIds, \JsonSerializable{
 			self::$list[self::REPEATER] = Repeater::class;
 			self::$list[self::CAULDRON] = Cauldron::class;
 			self::$list[self::ROTTEN_FLESH] = RottenFlesh::class;
+			self::$list[self::ENDER_PEARL] = EnderPearl::class;
 			self::$list[self::ENCHANTED_GOLDEN_APPLE] = EnchantedGoldenApple::class;
 			self::$list[self::RAW_MUTTON] = RawMutton::class;
 			self::$list[self::COOKED_MUTTON] = CookedMutton::class;

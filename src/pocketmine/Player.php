@@ -32,6 +32,7 @@ use pocketmine\entity\Arrow;
 use pocketmine\entity\Attribute;
 use pocketmine\entity\Boat;
 use pocketmine\entity\Effect;
+use pocketmine\entity\EnderPearl;
 use pocketmine\entity\Entity;
 use pocketmine\entity\FishingHook;
 use pocketmine\entity\Human;
@@ -274,6 +275,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/** @var Item[] */
 	protected $personalCreativeItems = [];
+
+	/** @var int */
+	protected $lastEnderPearlUse = 0;
 
 	public function linkHookToPlayer(FishingHook $entity){
 		if($entity->isAlive()){
@@ -2513,6 +2517,45 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							}
 						}else{
 							$thrownPotion->spawnToAll();
+						}
+					}elseif($item->getId() === Item::ENDER_PEARL){
+						if(floor(($time = microtime(true)) - $this->lastEnderPearlUse) >= 1){
+							$nbt = new CompoundTag("", [
+								"Pos" => new ListTag("Pos", [
+									new DoubleTag("", $this->x),
+									new DoubleTag("", $this->y + $this->getEyeHeight()),
+									new DoubleTag("", $this->z)
+								]),
+								"Motion" => new ListTag("Motion", [
+									new DoubleTag("", -sin($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI)),
+									new DoubleTag("", -sin($this->pitch / 180 * M_PI)),
+									new DoubleTag("", cos($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI))
+								]),
+								"Rotation" => new ListTag("Rotation", [
+									new FloatTag("", $this->yaw),
+									new FloatTag("", $this->pitch)
+								]),
+							]);
+
+							$f = 1.1;
+							$enderPearl = new EnderPearl($this->getLevel(), $nbt, $this);
+							$enderPearl->setMotion($enderPearl->getMotion()->multiply($f));
+							if($this->isSurvival()){
+								$item->setCount($item->getCount() - 1);
+								$this->inventory->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
+							}
+							if($enderPearl instanceof Projectile){
+								$this->server->getPluginManager()->callEvent($projectileEv = new ProjectileLaunchEvent($enderPearl));
+								if($projectileEv->isCancelled()){
+									$enderPearl->kill();
+								}else{
+									$enderPearl->spawnToAll();
+									$this->level->addSound(new LaunchSound($this), $this->getViewers());
+									$this->lastEnderPearlUse = $time;
+								}
+							}else{
+								$enderPearl->spawnToAll();
+							}
 						}
 					}
 
