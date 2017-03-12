@@ -1818,12 +1818,18 @@ abstract class Entity extends Location implements Metadatable{
 			if($this->linkedType != 0){
 				$this->linkedEntity->setLinked(0, $this);
 			}
+
 			if($this->chunk !== null){
 				$this->chunk->removeEntity($this);
+				$this->chunk = null;
 			}
-			if($this->level !== null){
-				$this->level->removeEntity($this);
+
+			if($this->getLevel() !== null){
+				$this->getLevel()->removeEntity($this);
+				$this->setLevel(null);
 			}
+
+			$this->namedtag = null;
 		}
 
 		$this->activatedPressurePlates = [];
