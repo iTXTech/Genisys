@@ -1,0 +1,24 @@
+version: '1.0'
+steps:
+  fetch_submodules:
+    title: Fetch submodules
+    image: codefreshio/git-image:latest
+    commands:
+      - git submodule update --init --recursive
+  build_testing_image:
+    title: Building image for testing
+    type: build
+    image_name: genisys-ci-test
+    working_directory: ${{main_clone}}/ci
+  test_and_package:
+    title: Lint and package
+    image: ${{build_testing_image}}
+    commands:
+      - sed -i "s/const VERSION \?= \?\"\(.*\)\"/const VERSION = \"\1$([ ${{CF_BRANCH}} != master ] && echo unsupported-)${{CF_SHORT_REVISION}}\"/" src/pocketmine/PocketMine.php
+      - sed -i "/GIT_COMMIT/s/0000000000000000000000000000000000000000/${{CF_REVISION}}/" src/pocketmine/PocketMine.php
+      - ./ci/run.sh
+  cleanup:
+    title: Git cleanup
+    image: codefreshio/git-image:latest
+    commands:
+      - git clean -xfd

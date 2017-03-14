@@ -10,14 +10,14 @@ while getopts "p:" OPTION 2> /dev/null; do
 	esac
 done
 
-./tests/lint.sh -p "$PHP_BINARY"
+./ci/lint.sh -p "$PHP_BINARY"
 
 if [ $? -ne 0 ]; then
 	echo Lint scan failed!
 	exit 1
 fi
 
-cp -r tests/plugins plugins
+cp -r ci/plugins plugins
 "$PHP_BINARY" -dphar.readonly=0 ./plugins/PocketMine-DevTools/src/DevTools/ConsoleScript.php --make ./plugins/PocketMine-DevTools --relative ./plugins/PocketMine-DevTools --out ./plugins/DevTools.phar
 rm -rf ./plugins/PocketMine-DevTools
 

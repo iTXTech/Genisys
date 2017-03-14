@@ -1596,7 +1596,7 @@ class Server{
 			$nowLang = $this->getProperty("settings.language", "eng");
 
 			//Crashes unsupported builds without the correct configuration
-			if(strpos(\pocketmine\VERSION, "unsupported") !== false and getenv("GITLAB_CI") === false){
+			if(strpos(\pocketmine\VERSION, "unsupported") !== false and getenv("CI") === false){
 				if($this->getProperty("settings.enable-testing", false) !== true){
 					throw new ServerException("This build is not intended for production use. You may set 'settings.enable-testing: true' under pocketmine.yml to allow use of non-production builds. Do so at your own risk and ONLY if you know what you are doing.");
 				}else{
