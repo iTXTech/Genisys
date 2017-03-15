@@ -1,7 +1,7 @@
 version: '1.0'
 steps:
   fetch_submodules:
-    title: Fetch submodules
+    title: Fetching submodules
     image: codefreshio/git-image:latest
     commands:
       - git submodule update --init --recursive
@@ -17,8 +17,29 @@ steps:
       - sed -i "s/const VERSION \?= \?\"\(.*\)\"/const VERSION = \"\1$([ ${{CF_BRANCH}} != master ] && echo unsupported-)${{CF_SHORT_REVISION}}\"/" src/pocketmine/PocketMine.php
       - sed -i "/GIT_COMMIT/s/0000000000000000000000000000000000000000/${{CF_REVISION}}/" src/pocketmine/PocketMine.php
       - ./ci/run.sh
+  doxygen:
+    title: Generating docs
+    image: kalledk/doxygen
+    commands:
+      - doxygen
+    when:
+      branch:
+        only:
+          - master
+  deploy:
+    title: Deploying to Google Cloud Storage
+    image: google/cloud-sdk
+    commands:
+      - gcloud auth activate-service-account <(echo ${{GCP_SERVICE_ACCOUNT}})
+      - gsutil -m -h "Cache-Control:public, max-age=21600" rsync -c -d -r -x ".*\\.md5$|.*\\.map$" html "gs://itx-technologies-141911.appspot.com/docs/genisys"
+      - gsutil -m acl set -r public-read "gs://itx-technologies-141911.appspot.com/docs/genisys"
+      - gsutil -m -h "Cache-Control:public, max-age=21600" cp -a public-read "plugins/DevTools/Genisys*.phar" "gs://itx-technologies-141911.appspot.com/genisys/Genisys-latest.phar"
+    when:
+      branch:
+        only:
+          - master
   cleanup:
-    title: Git cleanup
+    title: Cleaning up working directory
     image: codefreshio/git-image:latest
     commands:
       - git clean -xfd
