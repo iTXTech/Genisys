@@ -11,10 +11,8 @@ RUN buildDeps=" \
 	&& echo "phar.readonly = off" > /usr/local/etc/php/conf.d/phar.ini \
 	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps
 
-RUN groupadd -r genisys && useradd -r -g genisys genisys
-RUN mkdir -p /srv/genisys
-ADD Genisys.phar
-RUN chown -R genisys:genisys /srv/genisys
+ADD Genisys.phar /srv/genisys/
+RUN groupadd -r genisys && useradd -r -g genisys genisys && mkdir -p /srv/genisys && chown -R genisys:genisys /srv/genisys
 VOLUME /srv/genisys
 WORKDIR /srv/genisys
 USER genisys
