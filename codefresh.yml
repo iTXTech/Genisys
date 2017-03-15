@@ -26,7 +26,11 @@ steps:
   push_production_image:
     title: Pushing image to quay.io
     type: push
-    image: ${{build_production_image}}
+    candidate: ${{build_production_image}}
+    registry: quay.io
+    credentials:
+      username: itxtech+genisys
+      password: ${{QUAY_ROBOT_TOKEN}}
   doxygen:
     title: Generating docs
     image: kalledk/doxygen
