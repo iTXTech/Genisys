@@ -38,17 +38,21 @@ class EnderPearl extends Projectile{
 	protected $gravity = 0.03;
 	protected $drag = 0.01;
 
+	private $hasTeleportedShooter = false;
+
 	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
 		parent::__construct($level, $nbt, $shootingEntity);
 	}
 
-	public function kill(){
-		if($this->isAlive() and $this->shootingEntity instanceof Player){
-			if($this->y > 0){
+	public function teleportShooter(){
+		if(!$this->hasTeleportedShooter){
+			$this->hasTeleportedShooter = true;
+			if($this->shootingEntity instanceof Player and $this->y > 0){
 				$this->shootingEntity->attack(5, new EntityDamageEvent($this->shootingEntity, EntityDamageEvent::CAUSE_FALL, 5));
 				$this->shootingEntity->teleport($this->getPosition());
 			}
-			parent::kill();
+
+			$this->kill();
 		}
 	}
 
@@ -62,7 +66,7 @@ class EnderPearl extends Projectile{
 		$hasUpdate = parent::onUpdate($currentTick);
 
 		if($this->age > 1200 or $this->isCollided){
-			$this->kill();
+			$this->teleportShooter();
 			$hasUpdate = true;
 		}
 

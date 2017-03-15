@@ -41,6 +41,8 @@ class ThrownPotion extends Projectile{
 	protected $gravity = 0.1;
 	protected $drag = 0.05;
 
+	private $hasSplashed = false;
+
 	public function __construct(Level $level, CompoundTag $nbt, Entity $shootingEntity = null){
 		if(!isset($nbt->PotionId)){
 			$nbt->PotionId = new ShortTag("PotionId", Potion::AWKWARD);
@@ -56,8 +58,9 @@ class ThrownPotion extends Projectile{
 		return (int) $this->namedtag["PotionId"];
 	}
 
-	public function kill(){
-		if($this->isAlive()) {
+	public function splash(){
+		if(!$this->hasSplashed){
+			$this->hasSplashed = true;
 			$color = Potion::getColor($this->getPotionId());
 			$this->getLevel()->addParticle(new SpellParticle($this, $color[0], $color[1], $color[2]));
 			$players = $this->getViewers();
@@ -69,7 +72,7 @@ class ThrownPotion extends Projectile{
 				}
 			}
 
-			parent::kill();
+			$this->kill();
 		}
 	}
 
@@ -85,8 +88,7 @@ class ThrownPotion extends Projectile{
 		$this->age++;
 
 		if($this->age > 1200 or $this->isCollided){
-			$this->kill();
-			$this->close();
+			$this->splash();
 			$hasUpdate = true;
 		}
 
