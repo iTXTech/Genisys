@@ -9,12 +9,13 @@ RUN buildDeps=" \
 	&& pecl install channel://pecl.php.net/pthreads-3.1.6 channel://pecl.php.net/weakref-0.3.2 channel://pecl.php.net/yaml-2.0.0 \
 	&& docker-php-ext-enable pthreads weakref yaml \
 	&& echo "phar.readonly = off" > /usr/local/etc/php/conf.d/phar.ini \
+    && echo "zend.assertions = -1" > /usr/local/etc/php/conf.d/assertions.ini \
 	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps
 
-ADD Genisys.phar /srv/genisys/
+ADD Genisys.phar /
 RUN groupadd -r genisys && useradd -r -g genisys genisys && mkdir -p /srv/genisys && chown -R genisys:genisys /srv/genisys
 VOLUME /srv/genisys
 WORKDIR /srv/genisys
 USER genisys
 EXPOSE 19132/udp
-CMD ["php", "/srv/genisys/Genisys.phar"]
+CMD ["php", "/Genisys.phar"]
