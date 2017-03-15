@@ -28,12 +28,11 @@ steps:
           - master
   deploy:
     title: Deploying to Google Cloud Storage
-    image: google/cloud-sdk
+    image: quay.io/ishitatsuyuki/cloud-sdk
     commands:
       - echo "${{GCP_SERVICE_ACCOUNT}}" | base64 --decode --ignore-garbage > gcp-service-account.json
       - gcloud auth activate-service-account --key-file=gcp-service-account.json
-      - gsutil -q -m -h "Cache-Control:public, max-age=21600" rsync -c -d -r -x ".*\\.md5$|.*\\.map$" html "gs://itx-technologies-141911.appspot.com/docs/genisys"
-      - gsutil -q -m acl set -r public-read "gs://itx-technologies-141911.appspot.com/docs/genisys"
+      - gsutil -q -m -h "Cache-Control:public, max-age=21600" rsync -a public-read -c -d -r -x ".*\\.md5$|.*\\.map$" html "gs://itx-technologies-141911.appspot.com/docs/genisys"
       - gsutil -q -m -h "Cache-Control:public, max-age=21600" cp -a public-read "plugins/DevTools/Genisys*.phar" "gs://itx-technologies-141911.appspot.com/genisys/Genisys-latest.phar"
     when:
       branch:
