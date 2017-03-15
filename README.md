@@ -38,7 +38,7 @@ The following chats are bridged:
 
 Get Genisys
 -------------
-* Download from [GitLab CI](https://gitlab.com/itxtech/genisys/pipelines?scope=branches).
+* Download the [latest build](https://storage.googleapis.com/itx-technologies-141911.appspot.com/genisys/Genisys-latest.phar).
 * Installation instructions can be found in the [wiki](https://github.com/iTXTech/Genisys/wiki).
 * PHP Binaries and other on [here](https://itxtech.org/genisys/get/).
 
