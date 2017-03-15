@@ -28,6 +28,7 @@ steps:
     type: push
     candidate: ${{build_production_image}}
     registry: quay.io
+    tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     credentials:
       username: itxtech+genisys
       password: ${{QUAY_ROBOT_TOKEN}}
