@@ -1,5 +1,19 @@
 FROM php:7.0-zts
 
+RUN groupadd -r genisys && useradd -r -g genisys genisys
+
+# grab gosu for easy step-down from root
+ENV GOSU_VERSION 1.10
+RUN set -x \
+	&& curl -sSLo /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture)" \
+	&& curl -sSLo /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$(dpkg --print-architecture).asc" \
+	&& export GNUPGHOME="$(mktemp -d)" \
+	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+	&& gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
+	&& rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
+	&& chmod +x /usr/local/bin/gosu \
+	&& gosu nobody true
+
 RUN buildDeps=" \
 		libyaml-dev \
 	" \
@@ -13,9 +27,14 @@ RUN buildDeps=" \
 	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps
 
 ADD Genisys.phar /
-RUN groupadd -r genisys && useradd -r -g genisys genisys && mkdir -p /srv/genisys && chown -R genisys:genisys /srv/genisys
+
+RUN mkdir -p /srv/genisys && chown genisys:genisys /srv/genisys
 VOLUME /srv/genisys
 WORKDIR /srv/genisys
-USER genisys
+
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
+ENTRYPOINT ["docker-entrypoint.sh"]
+
 EXPOSE 19132/udp
 CMD ["php", "/Genisys.phar"]
