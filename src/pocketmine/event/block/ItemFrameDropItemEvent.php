@@ -34,7 +34,7 @@ class ItemFrameDropItemEvent extends BlockEvent implements Cancellable{
 	private $player;
 	/** @var  Item */
 	private $item;
-	/** @var  ItemFrame */
+	/** @var ItemFrame $itemFrame */
 	private $itemFrame;
 
 	public function __construct(Player $player, Block $block, ItemFrame $itemFrame, Item $item){
