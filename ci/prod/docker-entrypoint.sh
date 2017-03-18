@@ -7,7 +7,7 @@ fi
 # allow the container to be started with `--user`
 if [ "$1" = 'php' ] && [ "$2" = '/Genisys.phar' ] && [ "$(id -u)" = '0' ]; then
 	chown -R genisys .
-	exec gosu genisys "$BASH_SOURCE" "$@"
+	exec su-exec genisys "$BASH_SOURCE" "$@"
 fi
 
 exec "$@"
