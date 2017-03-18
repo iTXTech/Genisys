@@ -17,6 +17,8 @@ RUN set -xe \
 	&& docker-php-source delete \
 	&& apk del .build-deps
 
+RUN apk add --no-cache --virtual .genisys-rundeps ncurses
+
 ADD Genisys.phar /
 
 RUN mkdir -p /srv/genisys && chown genisys:genisys /srv/genisys
