@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 PHP_BINARY="php"
 
