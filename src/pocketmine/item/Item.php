@@ -592,6 +592,7 @@ class Item implements ItemIds, \JsonSerializable{
 		}
 
 		$this->setNamedTag($tag);
+		return $this;
 	}
 
 	/**
