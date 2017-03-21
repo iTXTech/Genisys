@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 PHP_BINARY="php"
 
@@ -12,7 +12,7 @@ done
 
 echo Running PHP lint scans...
 
-OUTPUT=`find ./src/pocketmine -name "*.php" -print0 | xargs -0 -n1 php -l`
+OUTPUT=`find ./src/pocketmine -name "*.php" -print0 | xargs -0 -n1 -P4 php -l`
 
 if [ $? -ne 0 ]; then
 	echo $OUTPUT | grep -v "No syntax errors"
