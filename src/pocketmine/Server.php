@@ -105,6 +105,7 @@ use pocketmine\utils\TextFormat;
 use pocketmine\utils\Utils;
 use pocketmine\utils\UUID;
 use pocketmine\utils\VersionString;
+use pocketmine\event\server\RawPacketReceiveEvent;
 
 /**
  * The class that manages everything
@@ -2583,6 +2584,9 @@ class Server{
 	public function handlePacket($address, $port, $payload){
 		try{
 			if(strlen($payload) > 2 and substr($payload, 0, 2) === "\xfe\xfd" and $this->queryHandler instanceof QueryHandler){
+				$ev = new RawPacketReceiveEvent($address, $port, $payload);
+				$this->getPluginManager()->callEvent($ev);
+				if(!$ev->isCancelled())
 				$this->queryHandler->handle($address, $port, $payload);
 			}
 		}catch(\Throwable $e){

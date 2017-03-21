@@ -98,6 +98,7 @@ use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\BinaryStream;
 use pocketmine\utils\MainLogger;
+use pocketmine\event\server\RawPacketSendEvent;
 
 class Network {
 
@@ -287,6 +288,9 @@ class Network {
 	 * @param string $payload
 	 */
 	public function sendPacket($address, $port, $payload) {
+		$ev = new RawPacketSendEvent($address, $port, $payload);
+		$this->server->getPluginManager()->callEvent($ev);
+		if(! $ev->isCancelled())
 		foreach ($this->advancedInterfaces as $interface) {
 			$interface->sendRawPacket($address, $port, $payload);
 		}
