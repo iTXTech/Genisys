@@ -42,6 +42,7 @@ use pocketmine\entity\Minecart;
 use pocketmine\entity\Projectile;
 use pocketmine\entity\ThrownExpBottle;
 use pocketmine\entity\ThrownPotion;
+use pocketmine\event\block\ItemFrameDropItemEvent;
 use pocketmine\event\entity\EntityCombustByEntityEvent;
 use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -3321,7 +3322,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 				$tile = $this->level->getTile($this->temporalVector->setComponents($packet->x, $packet->y, $packet->z));
 				if($tile instanceof ItemFrame){
-					if($this->isSpectator()){
+					$this->server->getPluginManager()->callEvent($ev = new ItemFrameDropItemEvent($this, $tile->getBlock(), $tile, $tile->getItem()));
+
+					if($this->isSpectator() or $ev->isCancelled()){
 						$tile->spawnTo($this);
 						break;
 					}
