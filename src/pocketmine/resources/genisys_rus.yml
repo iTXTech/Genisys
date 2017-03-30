@@ -1,0 +1,134 @@
+#Конфигурационный файл Genisys
+
+#Версия этого файла
+config:
+ version: 21
+
+level:
+ #Включить ли погоду?
+ weather: true
+ #Случайное время продолжительности погоды (мин. и макс. значение)
+ weather-random-duration-min: 6000
+ weather-random-duration-max: 12000
+ #Random lightning interval，default as 10s, 0 = disable
+ lightning-time: 200
+ #Должен ли появляться огонь при ударе молнии?
+ lightning-fire: false
+ #Включить ли распространение огня?
+ fire-spread: false
+ 
+player:
+ #Включить ли систему голода?
+ hunger: true
+ #Включить ли систему опыта?
+ experience: true
+ #Сохранять ли инвентарь игрока при смерти?
+ keep-inventory: false
+ #Очищать ли инвентарь при переходе в режим творчества?
+ auto-clear-inventory : true
+ #Сохранять ли опыт игрока при смерти?
+ keep-experience: false
+ #Если при заходе на сервер игра у игроков крашится, то установите значение, которое будет меньше 10. Отключить=-1
+ chunk-radius: -1
+
+nether:
+ #Включить ад? При включении мир сгенерируется автоматически.
+ allow-nether: true
+ #Имя мира с адом.
+ level-name: "nether"
+ 
+server:
+ #Включить ли спаун железных големов?
+ allow-iron-golem: false
+ #Включить ли спаун снежных големов?
+ allow-snow-golem: false
+ #Отключить ли server.log?
+ disable-log: false
+ #Включить ли анти-полет?
+ anti-fly: true
+ #Загружать чанки асинхронно?
+ async-chunk-request: true
+ #Как оповещать игроков при входе/выходе других игроков?
+ #0 = Сообщение, 1 = Подсказка над инвентарем (ближе к хотбару), 2 = Поп-ап (выше хотбара)
+ player-msg-type: 0
+ login-msg: "§3@player вошёл в игру"
+ logout-msg: "§3@player вышел из игры"
+ #Читать ли список крафтов из json?
+ recipes-from-json: false
+ #Читать ли список предметов креатива из json?
+ creative-items-from-json: false
+ #Включить ли проверку передвижений игроков? (больше не будет отбрасываний)
+ check-movement: true
+ #Включить ли ограниченный креатив? (нельзя выбрасывать предметы, нельзя открывать сундуки и т.д.)
+ limited-creative: true
+ #Показывать ли частицы ломания блоков? (DestroyBlockParticle)
+ destroy-block-particle: true
+ #Включить ли использование взрывных зелий?
+ allow-splash-potion: true
+ #Использовать ли улучшеный селектор команд? (@a и т.п.)
+ advanced-command-selector: false
+
+enchantment:
+ #Включить ли использование наковальни?
+ enable-anvil: true
+ #Включить ли использование стола зачарований?
+ enable-enchanting-table: true
+ #Считать ли количество книжных полок рядом со столом? Сервер может зависать.
+ #Если false, то будет использоваться случайное количество (0~15)
+ count-bookshelf: false
+
+redstone:
+ ##############################################
+ ########Включить ли систему редстоуна?########
+ ##############################################
+ ##Если не true, то редстоун не будет работать#
+ ##############################################
+ enable: false
+ #Включить ли пульсирование?
+ frequency-pulse: false
+ #Частота пульсирования, по умолчанию: 1с.
+ pulse-frequency: 1
+
+synapse:
+ #Если вы хотите использовать Synapse API или подключаться к серверу Synapse, включите это.
+ enabled: false
+ server-ip: 127.0.0.1
+ server-port: 10305
+ #If this client is the lobby or the main server
+ is-main-server: true
+ #Пароль сервера
+ server-password: 32bitlongkey
+ #Описание клиента. Это - идентификатор клиента.
+ description: "A Synapse client"
+ #Отключить RakLib? Отключение означает, что игроки смогут подключиться только через Synapse
+ disable-rak: false
+
+dserver:
+ #Включить ли Query нескольких серверов?
+ enable: false
+ #Обновлять Query автоматически?
+ query-auto-update: false
+ #Обновлять Query периодически?
+ query-tick-update: true
+ #Максимальное количество игроков в MOTD, 0= по умолчанию
+ motd-max-players: 0
+ #Максимальное количество игроков в Query, 0= по умолчанию
+ query-max-players: 0
+ #Показывать максимальное количество игроков в MOTD?
+ motd-all-players: false
+ #Показывать максимальное количество игроков в Query?
+ query-all-players: false
+ #Показывать количество игроков онлайн в Query?
+ motd-players: false
+ #Показывать количество игроков онлайн в Query?
+ query-players: false
+ #Частота обновления, 20 = 1с.
+ time: 40
+ #Сколько раз пытаться ещё раз обновить после неудачной попытки?
+ retry-times: 3
+ #Список серверов, разделитель - ';'，например "1.example.com:19132;2.example.com:19133"
+ server-list: ""
+
+inventory:
+ #Установите на true, если у вас проблемы с наковальнями. Тразнакции с инвентарем будут проходить без анти-чита или верификации.
+ allow-cheats: false
