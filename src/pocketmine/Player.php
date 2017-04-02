@@ -322,6 +322,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return $this->inventory->getItemInHand();
 	}
 
+	private static $damegeTimeList = ['0.05' => 0, '0.1' => 0.2, '0.15' => 0.4, '0.2' => 0.6, '0.25' => 0.8];
+	
+	protected $lastDamegeTime = 0;
+	
 	public function getLeaveMessage(){
 		return new TranslationContainer(TextFormat::YELLOW . "%multiplayer.player.left", [
 			$this->getDisplayName()
@@ -2770,6 +2774,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						}
 					}
 
+					$timeDiff = microtime(true) - $this->lastDamegeTime;					
+					$this->lastDamegeTime = microtime(true);
+					
+					foreach (self::$damegeTimeList as $time => $koef) {
+						if ($timeDiff <= $time) {							
+							$damage[EntityDamageEvent::MODIFIER_BASE] *= $koef;
+							break;
+						}
+					}
+					
 					$ev = new EntityDamageByEntityEvent($this, $target, EntityDamageEvent::CAUSE_ENTITY_ATTACK, $damage, 0.4 + $item->getEnchantmentLevel(Enchantment::TYPE_WEAPON_KNOCKBACK) * 0.15);
 					if($cancelled){
 						$ev->setCancelled();
