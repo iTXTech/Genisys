@@ -45,4 +45,3 @@ class RawChicken extends Food{
 		}
 	}
 }
-
