@@ -2,7 +2,7 @@ Genisys
 ===================
 
 __Feature-rich server software for Minecraft: Pocket Edition & Windows 10 Edition Beta__
- If you want to continue using genisys or sth like this,go here: https://github.com/AkeKyA/Genisys[![Travis-CI]
+ If you want to continue using genisys or sth like this,go here: https://github.com/AkeKyA/Genisys
  Or you can try to use tesseract(fork/spoon of pmmp and genisys)
 (https://img.shields.io/travis/iTXTech/Genisys/master.svg)](https://travis-ci.org/iTXTech/Genisys)
 [![GitLab CI](https://gitlab.com/itxtech/genisys/badges/master/build.svg)](https://gitlab.com/itxtech/genisys/pipelines?scope=branches)
