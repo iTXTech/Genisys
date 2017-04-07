@@ -22,6 +22,7 @@
 namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
+use pocketmine\command\ConsoleCommandSender;
 use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
 
@@ -51,8 +52,11 @@ class ListCommand extends VanillaCommand{
 				++$onlineCount;
 			}
 		}
-
+		
 		$sender->sendMessage(new TranslationContainer("commands.players.list", [$onlineCount, $sender->getServer()->getMaxPlayers()]));
+		if(($sender instanceof ConsoleCommandSender) and ($onlineCount === 0)){
+			return false;
+		}
 		$sender->sendMessage(substr($online, 0, -2));
 
 		return true;
