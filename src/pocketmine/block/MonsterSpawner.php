@@ -91,6 +91,8 @@ class MonsterSpawner extends Solid{
 	}
 
 	public function getDrops(Item $item) : array {
-		return [];
+		return [
+			[Item::MONSTER_SPAWNER, $this->meta, 1],
+		];
 	}
 }
