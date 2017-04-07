@@ -161,6 +161,18 @@ abstract class Tile extends Position{
 		$this->namedtag->y = new IntTag("y", $this->y);
 		$this->namedtag->z = new IntTag("z", $this->z);
 	}
+        
+    public function getX(){
+            return $this->x;
+    }
+
+    public function getY(){
+            return $this->y;
+    }
+
+    public function getZ(){
+            return $this->z;
+    }
 
 	/**
 	 * @return \pocketmine\block\Block
