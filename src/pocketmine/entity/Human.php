@@ -543,7 +543,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 			if($food >= 18){
 				$this->foodTickTimer++;
 				if($this->foodTickTimer >= 80 and $health < $this->getMaxHealth()){
-					$this->heal(1, new EntityRegainHealthEvent($this, 1, EntityRegainHealthEvent::CAUSE_SATURATION));
+					$ev = new EntityRegainHealthEvent($this, 1, EntityRegainHealthEvent::CAUSE_SATURATION);
+					if(!$ev->isCancelled()) $this->heal(1, $ev);
 					$this->exhaust(3.0, PlayerExhaustEvent::CAUSE_HEALTH_REGEN);
 					$this->foodTickTimer = 0;
 
