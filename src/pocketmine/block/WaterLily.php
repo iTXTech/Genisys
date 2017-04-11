@@ -28,7 +28,7 @@ use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 
-class WaterLily extends Flowable{
+class WaterLily extends Transparent{
 
 	protected $id = self::WATER_LILY;
 
@@ -37,7 +37,7 @@ class WaterLily extends Flowable{
 	}
 
 	public function isSolid(){
-		return false;
+		return true;
 	}
 
 	public function getName() : string{
