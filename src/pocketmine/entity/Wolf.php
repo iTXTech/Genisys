@@ -22,6 +22,9 @@
 namespace pocketmine\entity;
 
 use pocketmine\network\protocol\AddEntityPacket;
+use pocketmine\nbt\tag\IntTag;
+use pocketmine\network\Network;
+use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
 class Wolf extends Animal{
@@ -53,5 +56,19 @@ class Wolf extends Animal{
 		$player->dataPacket($pk);
 
 		parent::spawnTo($player);
+	}
+**
+	 * Sets the Wold profession
+	 *
+	 * @param $profession
+	 */
+	public function setProfession($profession){
+		$this->namedtag->Profession = new IntTag("Profession", $profession);
+	}
+	public function getProfession(){
+		return $this->namedtag["Profession"];
+	}
+	public function isBaby(){
+		return $this->getDataFlag(self::DATA_AGEABLE_FLAGS, self::DATA_FLAG_BABY);
 	}
 }
