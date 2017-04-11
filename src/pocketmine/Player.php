@@ -216,6 +216,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	/** @var Vector3 */
 	protected $sleeping = null;
 	protected $clientID = null;
+	protected $authenticated = null;
+	protected $chainData = [];
 
 	private $loaderId = null;
 
@@ -330,8 +332,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	/**
 	 * This might disappear in the future.
-	 * Please use getUniqueId() instead (IP + clientId + name combo, in the future it'll change to real UUID for online
-	 * auth)
+	 * Please use getUniqueId() (IP + clientId + name combo) or getIdentityPublicKey() (Xbox key) instead!
 	 */
 	public function getClientId(){
 		return $this->randomClientId;
@@ -339,6 +340,24 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	public function getClientSecret(){
 		return $this->clientSecret;
+	}
+	
+	/**
+	 * Returns if the player is authenticated.
+	 *
+	 * @return bool
+	*/
+	public function isAuthenticated(){
+		return $this->authenticated;
+	}
+	
+	/**
+	 * This contains additional data recived in the LoginPacket
+	 *
+	 * @return array
+	*/
+	public function getChainData(){
+		return $this->chainData;
 	}
 
 	public function isBanned(){
@@ -2127,8 +2146,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->setNameTag($this->username);
 				$this->iusername = strtolower($this->username);
 				$this->protocol = $packet->protocol;
-
-				if($this->server->getConfigBoolean("online-mode", false) && $packet->identityPublicKey === null){
+				$this->authenticated = $packet->identityPublicKey !== null;
+				$this->chainData = $packet->chainData;
+				
+				if($this->server->getConfigBoolean("online-mode", false) && !$this->isAuthenticated()){
 					$this->kick("disconnectionScreen.notAuthenticated", false);
 					break;
 				}
