@@ -936,6 +936,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		}
 
 		$this->teleport($pos);
+		
+		$this->setAllowFlight($this->gamemode == 3 || $this->gamemode == 1);
 
 		$this->allowFlight = (($this->gamemode == 3) or ($this->gamemode == 1));
 		$this->setHealth($this->getHealth());
