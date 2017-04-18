@@ -2266,7 +2266,6 @@ class Server{
 		$this->logger->info($this->getLanguage()->translateString("pocketmine.server.startFinished", [round(microtime(true) - \pocketmine\START_TIME, 3)]));
 
 		$this->tickProcessor();
-		$this->forceShutdown();
 
 		gc_collect_cycles();
 	}
