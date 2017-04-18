@@ -18,7 +18,6 @@
  *
  *
 */
-
 namespace pocketmine\command\defaults;
 
 use pocketmine\command\Command;
