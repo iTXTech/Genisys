@@ -676,13 +676,14 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 			$pk->speedZ = $this->motionZ;
 			$pk->yaw = $this->yaw;
 			$pk->pitch = $this->pitch;
-			$pk->item = $this->getInventory()->getItemInHand();
+		//	$pk->item = $this->getInventory()->getItemInHand(); //not work
+			$pk->item = ItemItem::get(ItemItem::AIR, 0, 0);
 			$pk->metadata = $this->dataProperties;
 			$player->dataPacket($pk);
 
 			$this->sendLinkedData();
 
-			$this->inventory->sendArmorContents($player);
+		//	$this->inventory->sendArmorContents($player); //not work
 
 			if(!($this instanceof Player)){
 				$this->server->removePlayerListData($this->getUniqueId(), [$player]);
