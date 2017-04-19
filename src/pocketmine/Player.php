@@ -3513,7 +3513,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 			$this->connected = false;
 			if(strlen($this->getName()) > 0){
-				$this->server->getPluginManager()->callEvent($ev = new PlayerQuitEvent($this, $message, true));
+				$this->server->getPluginManager()->callEvent($ev = new PlayerQuitEvent($this, $message, true, $reason));
 				if($this->loggedIn === true and $ev->getAutoSave()){
 					$this->save();
 				}
