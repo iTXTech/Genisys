@@ -58,7 +58,7 @@ class CaveCommand extends VanillaCommand{
 
 		//0:旋转角度 1:洞穴长度 2:分叉数 3:洞穴强度
 		if(count($args) != 8){
-			$sender->sendMessage(new TranslationContainer("commands.generic.usage", [$this->usageMessage]));
+			$sender->sendMessage(new TranslationContainer("commands.cave.usage", [$this->usageMessage]));
 
 			return false;
 		}
