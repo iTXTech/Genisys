@@ -35,6 +35,7 @@ use pocketmine\event\level\LevelInitEvent;
 use pocketmine\event\level\LevelLoadEvent;
 use pocketmine\event\server\QueryRegenerateEvent;
 use pocketmine\event\server\ServerCommandEvent;
+use pocketmine\event\server\ServerShutdownEvent;
 use pocketmine\event\Timings;
 use pocketmine\event\TimingsHandler;
 use pocketmine\event\TranslationContainer;
@@ -2154,6 +2155,8 @@ class Server{
 			$killer->start();
 			$killer->kill();
 		}*/
+		$this->getPluginManager()->callEvent($ev = new ServerShutdownEvent());
+		if($ev->isCancelled(true)) return;
 		$this->isRunning = false;
 		if($msg != ""){
 			$this->propertyCache["settings.shutdown-message"] = $msg;
