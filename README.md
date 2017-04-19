@@ -22,6 +22,7 @@ Help & Support
 
 If you have an issue, please make sure to check the [FAQs](https://github.com/iTXTech/Genisys/wiki/FAQs) page before opening any issues. We are constantly fixing issues and are continuously updating, so please also ensure that you are up-to-date before opening any issues.
 
+For those experiencing crashing issues due to unsupported blocks, make sure to join your server through BlockLauncher (available on Google Play), and remove the blocks (which will show as update blocks). 
 
 Discussion
 -------------
