@@ -134,7 +134,7 @@ class Enchantment{
 
 
 	/** @var Enchantment[] */
-	protected static $enchantments;
+	public static $enchantments;
 
 	public static function init(){
 		self::$enchantments = new \SplFixedArray(256);
@@ -323,7 +323,7 @@ class Enchantment{
 	private $activationType;
 	private $slot;
 
-	private function __construct($id, $name, $rarity, $activationType, $slot){
+	public function __construct($id, $name, $rarity, $activationType, $slot){
 		$this->id = (int) $id;
 		$this->name = (string) $name;
 		$this->rarity = (int) $rarity;
