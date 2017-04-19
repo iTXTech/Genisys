@@ -272,6 +272,11 @@ class Effect{
 					$entity->attack($ev->getFinalDamage(), $ev);
 				}
 				break;
+			case Effect::ABSORPTION:
+				if($entity instanceof Player){
+					$entity->setMaxHealth(20 + $this->amplifier);
+				}
+				break;
 			case Effect::SATURATION:
 				if($entity instanceof Player){
 					if($entity->getServer()->foodEnabled) {
@@ -279,6 +284,7 @@ class Effect{
 					}
 				}
 				break;
+			
 		}
 	}
 
@@ -354,6 +360,9 @@ class Effect{
 		if($this->id === Effect::INVISIBILITY){
 			$entity->setDataFlag(Entity::DATA_FLAGS, Entity::DATA_FLAG_INVISIBLE, false);
 			$entity->setNameTagVisible(true);
+		}
+		if($this->id === Effect::ABSORPTION){
+			$entity->setMaxHealth(20);
 		}
 	}
 }
