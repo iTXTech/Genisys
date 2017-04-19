@@ -29,6 +29,10 @@ class Wood2 extends Wood{
 
 	protected $id = self::WOOD2;
 
+	public function __construct($meta = 0){
+		$this->meta = $meta;
+	}
+
 	public function getName() : string{
 		static $names = [
 			0 => "Acacia Wood",
