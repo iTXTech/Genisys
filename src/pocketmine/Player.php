@@ -199,6 +199,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	protected $randomClientId;
 
+	protected $identityPublicKey;
+
 	protected $protocol;
 
 	/** @var Vector3 */
@@ -2079,6 +2081,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		return $this->protocol;
 	}
 
+	public function isAuthenticated(){
+		return ($this->identityPublicKey !== null);
+	}
+
 	/**
 	 * Handles a Minecraft packet
 	 * TODO: Separate all of this in handlers
@@ -2127,6 +2133,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->setNameTag($this->username);
 				$this->iusername = strtolower($this->username);
 				$this->protocol = $packet->protocol;
+				$this->identityPublicKey = $packet->identityPublicKey;
 
 				if($this->server->getConfigBoolean("online-mode", false) && $packet->identityPublicKey === null){
 					$this->kick("disconnectionScreen.notAuthenticated", false);
