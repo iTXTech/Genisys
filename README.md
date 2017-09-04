@@ -1,5 +1,6 @@
 Genisys
 ===================
+__We're ended. Thanks for support. You can still download last builds.__
 
 __Feature-rich server software for Minecraft: Pocket Edition & Windows 10 Edition Beta__
 
